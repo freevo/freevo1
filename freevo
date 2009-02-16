@@ -2,7 +2,7 @@
 # -*- coding: iso-8859-1 -*-
 # vim:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=python:
 # -----------------------------------------------------------------------
-# freevo - the main entry point to the whole suite of applications
+# The main entry point to the whole suite of applications
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -34,54 +34,30 @@ import os
 import sys
 import time
 import pprint
-from subprocess import Popen, PIPE
 
+from subprocess import Popen, PIPE
+from optparse import Option, BadOptionError, OptionValueError, OptionParser, IndentedHelpFormatter
 from stat import *
 from signal import *
 
+FREEVO = 'freevo'
 
-cmdfile = None
-def _debug_(message, level=1):
-    global debug
-    if debug >= level:
-        print message
+defaults = {
+    'trace': 0,
+    'debug': 0,
+    'dry_run': False,
+}
 
-
-def _gdb_script_(message):
-    global debug
-    global cmdfile
-    if debug < 1:
-        return
-    print >>cmdfile, message
-
-
-def show_help():
-    """
-    show how to use this script
-    """
-    helper_list = ''
-    for helper in os.listdir(os.environ['FREEVO_HELPERS']):
-        if helper.endswith('.py') and not helper == '__init__.py':
-            helper_list += '  ' + helper[:-3] + '\n'
-
-    print '''\
-freevo [ script | options]
-options:
-  -fs            start freevo in a new x session in full-screen
-  --doc          create api documentation (for developers)
-  --trace        activate full trace (useful for debugging)
-  --profile      activate cProfile and write stats to /tmp
-  setup          run freevo setup to scan your environment
-  start          start freevo as daemon in background
-  stop           stop the current freevo process
+help_usage = """
+freevo [options] [script] [action]
 
 freevo can start the following scripts, use --help on these
 scripts to get more informations about options.
 
-%s
+  %s
 
 Example: freevo imdb --help"
-         freevo webserver start"
+         freevo webserver --daemon"
 
 You can also create a symbolic link to freevo with the name of the
 script you want to execute. E.g. put a link imdb pointing to freevo
@@ -90,10 +66,98 @@ in your path to access the imdb helper script
 Example: ln -s /path/to/freevo imdb
          imdb --help
 
-Before running freevo the first time, you need to run \'freevo setup\'
+Before running freevo the first time, you need to run 'freevo setup'
 After that, you can run freevo without parameter.
-    ''' % helper_list
-    sys.exit(0)
+
+action:
+  setup          run freevo setup to scan your environment
+  prompt         start python with the freevo environment
+  runapp         run an application"""
+
+help_description = ""
+
+help_epilog = ""
+
+class MyOptionParser(OptionParser):
+    """
+    Extend OptionParser to allow unknown arguments to be passed to the child process
+    """
+    def __init__(self,
+                 usage=None,
+                 option_list=None,
+                 option_class=Option,
+                 version=None,
+                 conflict_handler="error",
+                 description=None,
+                 formatter=None,
+                 add_help_option=True,
+                 prog=None,
+                 epilog=None):
+        OptionParser.__init__(self, usage, option_list, option_class, version, conflict_handler, description,
+            formatter, add_help_option, prog, epilog)
+
+    def _process_args(self, largs, rargs, values):
+        """_process_args(largs : [string],
+                         rargs : [string],
+                         values : Values)
+
+        Process command-line arguments and populate 'values', consuming
+        options and arguments from 'rargs'.  If 'allow_interspersed_args' is
+        false, stop at the first non-option argument.  If true, accumulate any
+        interspersed non-option arguments in 'largs'.
+        """
+        while rargs:
+            try:
+                arg = rargs[0]
+                # We handle bare "--" explicitly, and bare "-" is handled by the
+                # standard arg handler since the short arg case ensures that the
+                # len of the opt string is greater than 1.
+                if arg == '--':
+                    del rargs[0]
+                    return
+                elif arg[0:2] == '--':
+                    # process a single long option (possibly with value(s))
+                    self._process_long_opt(rargs, values)
+                elif arg[:1] == '-' and len(arg) > 1:
+                    # process a cluster of short options (possibly with
+                    # value(s) for the last one only)
+                    self._process_short_opts(rargs, values)
+                elif self.allow_interspersed_args:
+                    largs.append(arg)
+                    del rargs[0]
+                else:
+                    return                  # stop now, leave this arg in rargs
+            except BadOptionError:
+                #print 'arg', arg, rargs
+                if arg.find('=') != -1:
+                    # remove the duplicated argument for a long_opt
+                    del rargs[0]
+                largs.append(arg)
+
+
+def _debug_(message, level=1):
+    if defaults['dry_run'] or defaults['debug'] >= level:
+        print message
+
+
+cmdfile = None
+def _gdb_script_(message):
+    global cmdfile
+    if defaults['debug'] < 1:
+        return
+    print >>cmdfile, message
+
+
+def get_helpers():
+    """
+    Find the helpers from the helper directory
+    """
+    helper_list = []
+    for helper in os.listdir(os.environ['FREEVO_HELPERS']):
+        if helper.endswith('.py') and not helper == '__init__.py':
+            helper_list.append(helper[:-3])
+
+    return helper_list
 
 
 def get_python(check_freevo):
@@ -207,6 +271,9 @@ def stop(name, arg):
     """
     stop running process 'name'
     """
+    _debug_('stop(name=%r, arg=%r)' % (name, arg))
+    if opts.dry_run:
+        return 1
     fname, pid = getpid(name, arg)
     if not pid:
         _debug_('cannot kill %r no pid' % (name))
@@ -236,19 +303,19 @@ def stop(name, arg):
             _debug_('%s NOT removed' % (fname))
 
 
-def start(name, arg, bg, store=1):
+def start(name, arg, daemon, store=1):
     """
     start a process
     """
-    global cmdfile, debug
-    _debug_('start(name=%r, arg=%r, bg=%r, store=%r)' % (name, arg, bg, store))
-    if debug >= 2:
+    global cmdfile, opts
+    _debug_('start(name=%r, arg=%r, daemon=%r, store=%r)' % (name, arg, daemon, store))
+    if opts.debug >= 2:
         _gdb_script_('cat > freevo-gdb << _END_')
         _gdb_script_('b main')
         _gdb_script_('r %s' % ' '.join(arg[1:]))
         _gdb_script_('_END_')
         _gdb_script_('gdb -x freevo-gdb %s' % (arg[0]))
-    elif debug >= 1:
+    elif opts.debug >= 1:
         _gdb_script_('%s -m pdb %s' % (arg[0], ' '.join(arg[1:])))
     if cmdfile:
         cmdfile.close()
@@ -265,7 +332,7 @@ def start(name, arg, bg, store=1):
             f.write(str(pid)+'\n')
             f.close()
 
-        if not bg:
+        if not daemon:
             try:
                 os.waitpid(pid, 0)
             except KeyboardInterrupt:
@@ -277,25 +344,59 @@ def start(name, arg, bg, store=1):
                 if store and os.path.isfile(f.name):
                     os.unlink(f.name)
     else:
+        if opts.debug:
+            _debug_('os.execvp(', arg[0], arg, ')')
+        if opts.dry_run:
+            return
         os.execvp(arg[0], arg)
+
+
+def parse_options(defaults, versions):
+    """
+    Parse command line options
+    """
+    if versions['__version__'].endswith('-svn'):
+        version = versions['__version__'][:-4] + ' r' + versions['__revision__']
+    else:
+        version = versions['__version__']
+
+    formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+    parser = MyOptionParser(conflict_handler='resolve', formatter=formatter,
+        usage=help_usage % '\n  '.join(get_helpers()), version='%prog-' + version)
+    #parser.add_option('-v', '--verbose', action='count', dest='verbosity', default=0,
+    #    help='set the level of verbosity')
+    parser.add_option('-d', '--debug', action='count', dest='debug', default=0,
+        help='set the level of debuging')
+    parser.add_option('-t', '--trace', action='count', default=0,
+        help='activate full trace (useful for debugging)')
+    parser.add_option('--dry-run', action='store_true', default=False,
+        help='do not run the module, print the actions')
+    parser.add_option('-f', '--force-fs', action='store_true', metavar='SVR', default=False,
+        help='run freevo in a new x session in full-screen')
+    parser.add_option('--server-layout', action='store', metavar='LAYOUT', default=None,
+        help='X server layout [default:%default]')
+    parser.add_option('-p', '--profile', action='store_true', default=False,
+        help='activate profile and write stats to /tmp [default:%default]')
+    parser.add_option('--daemon', action='store_true', default=False,
+        help='run freevo or a helper as a daemon [default:%default]')
+    parser.add_option('--stop', action='store_true', default=False,
+        help='stop freevo or a helper [default:%default]')
+    parser.add_option('--execute', action='store', metavar='SRC', default=None,
+        help='execute a script under the freevo environment [default:%default]')
+    parser.add_option('--doc', action='store_true', default=False,
+        help='generate the API documentation [default:%default]')
+
+    opts, args = parser.parse_args()
+
+    if opts.daemon and opts.stop:
+        parser.error('--daemon and --stop are mutually exclusive')
+
+    return opts, args
+
 
 #--------------------------------------------------------------------------------
 # Main block
 #--------------------------------------------------------------------------------
-debug = 0
-while '--debug' in sys.argv or '-d' in sys.argv:
-    debug += 1
-    if '--debug' in sys.argv:
-        sys.argv.remove('--debug')
-    else:
-        sys.argv.remove('-d')
-if debug >= 2:
-    cmdfile = open('freevo-gdb.sh', 'w')
-    print >>cmdfile,'#!/bin/bash'
-elif debug >= 1:
-    cmdfile = open('freevo-pdb.sh', 'w')
-    print >>cmdfile,'#!/bin/bash'
-
 freevo_script = os.path.abspath(sys.argv[0])
 if os.path.islink(freevo_script):
     freevo_script = os.readlink(freevo_script)
@@ -305,12 +406,14 @@ if os.path.isdir(os.path.join(os.path.dirname(freevo_script), 'src/plugins')):
     # we start freevo from a directory
     #
     dname = os.path.dirname(freevo_script)
-    freevo_python  = os.path.join(dname, 'src')
-    freevo_helpers = os.path.join(dname, 'src/helpers')
-    freevo_locale  = os.path.join(dname, 'i18n')
-    freevo_share   = os.path.join(dname, 'share')
-    freevo_contrib = os.path.join(dname, 'contrib')
-    freevo_config  = os.path.join(dname, 'freevo_config.py')
+    freevo_python   = os.path.join(dname, 'src')
+    freevo_version  = os.path.join(dname, 'src/version.py')
+    freevo_revision = os.path.join(dname, 'src/revision.py')
+    freevo_helpers  = os.path.join(dname, 'src/helpers')
+    freevo_locale   = os.path.join(dname, 'i18n')
+    freevo_share    = os.path.join(dname, 'share')
+    freevo_contrib  = os.path.join(dname, 'contrib')
+    freevo_config   = os.path.join(dname, 'freevo_config.py')
 
     if os.path.isfile(os.path.join(dname, 'runtime/runapp')):
         #
@@ -326,15 +429,13 @@ if os.path.isdir(os.path.join(os.path.dirname(freevo_script), 'src/plugins')):
             preload = preload[:-1]
         os.environ['FREEVO_PRELOADS'] = preload
         # FIXME: use FREEVO_PRELOADS in runapp to avoid chdirs
-
     else:
         #
         # no runtime, get best python version
         #
         python = get_python(0)
         if not python:
-            print 'Can\'t find python >= 2.4'
-            sys.exit(0)
+            sys.exit("Can't find python >= 2.4")
         python = [ python ]
         runapp = ''
 else:
@@ -347,21 +448,51 @@ else:
                 freevo_script = os.path.join(path, freevo_script)
     python, freevo_python = get_python(1)
     if not python:
-        print 'can\'t find python version with installed freevo'
-        sys.exit(0)
-    freevo_helpers = os.path.join(freevo_python, 'helpers')
+        sys.exit("Can't find python version with installed freevo")
+
+    freevo_version  = os.path.join(freevo_python, 'version.py')
+    freevo_revision = os.path.join(freevo_python, 'revision.py')
+    freevo_helpers  = os.path.join(freevo_python, 'helpers')
     dname = os.path.abspath(os.path.join(os.path.dirname(freevo_script), '../'))
-    freevo_locale  = os.path.join(dname, 'share/locale')
-    freevo_share   = os.path.join(dname, 'share/freevo')
-    freevo_contrib = os.path.join(freevo_share, 'contrib')
-    freevo_config  = os.path.join(freevo_share, 'freevo_config.py')
-    runapp         = ''
-    python = [ python ]
+    freevo_locale   = os.path.join(dname, 'share/locale')
+    freevo_share    = os.path.join(dname, 'share/freevo')
+    freevo_contrib  = os.path.join(freevo_share, 'contrib')
+    freevo_config   = os.path.join(freevo_share, 'freevo_config.py')
+    runapp          = ''
+    python          = [ python ]
+
 
 # add the variables from above into environ so Freevo can use them, too
 for var in ('runapp', 'freevo_script', 'freevo_python', 'freevo_locale',
             'freevo_share', 'freevo_contrib', 'freevo_config', 'freevo_helpers'):
     os.environ[var.upper()] = eval(var)
+versions = {}
+execfile(freevo_version, {}, versions)
+execfile(freevo_revision, {}, versions)
+
+
+# check the args
+(opts, args) = parse_options(defaults, versions)
+defaults.update(opts.__dict__)
+
+if opts.debug:
+    pprint.pprint(opts.__dict__)
+    pprint.pprint(args)
+
+opt_trace = [ '--trace' ] * opts.trace
+opt_debug = [ '--debug' ] * opts.debug
+opt_server_layout = opts.server_layout and [ opts.server_layout ] or []
+
+if opts.debug >= 2:
+    cmdfile = open('freevo-gdb.sh', 'w')
+    print >>cmdfile,'#!/bin/bash'
+elif opts.debug >= 1:
+    cmdfile = open('freevo-pdb.sh', 'w')
+    print >>cmdfile,'#!/bin/bash'
+
+# add the variables from above into environ so Freevo can use them, too
+for var in ('runapp', 'freevo_script', 'freevo_python', 'freevo_locale',
+            'freevo_share', 'freevo_contrib', 'freevo_config', 'freevo_helpers'):
     _debug_('%s=%r' % (var.upper(), os.environ[var.upper()]))
     _gdb_script_('export %s=%s' % (var.upper(), os.environ[var.upper()]))
 
@@ -373,10 +504,8 @@ else:
 _debug_('%s=%r' % ('PYTHONPATH', os.environ['PYTHONPATH']))
 _gdb_script_('export %s=%s' % ('PYTHONPATH', os.environ['PYTHONPATH']))
 
-
 # extend PATH to make sure the basics are there
-os.environ['PATH'] = '%s:/usr/bin:/bin:/usr/local/bin:' % os.environ['PATH'] + \
-                     '/usr/X11R6/bin/:/sbin:/usr/sbin'
+os.environ['PATH'] = '%s:/usr/bin:/bin:/usr/local/bin:' % os.environ['PATH'] + '/usr/X11R6/bin/:/sbin:/usr/sbin'
 _debug_('%s=%r' % ('PATH', os.environ['PATH']))
 _gdb_script_('export %s=%s' % ('PATH', os.environ['PATH']))
 
@@ -389,64 +518,24 @@ _debug_('%s=%r' % ('USER', os.environ['USER']))
 _debug_('%s=%r' % ('HOME', os.environ['HOME']))
 
 # now check what and how we should start freevo
-bg    = 0 # start in background
-proc  = [ os.path.abspath(os.path.join(freevo_python, 'main.py')) ]
-name  = os.path.splitext(os.path.basename(os.path.abspath(sys.argv[0])))[0]
-check = 1 # check running instance
-profile = 0
+daemon = 0 # start in background
+proc   = [ os.path.abspath(os.path.join(freevo_python, 'main.py')) ]
+name   = os.path.splitext(os.path.basename(os.path.abspath(sys.argv[0])))[0]
+check  = 1 # check running instance
 
-if '--profile' in sys.argv or '-p' in sys.argv:
-    profile = 1
-    if '--profile' in sys.argv:
-        sys.argv.remove('--profile')
-    else:
-        sys.argv.remove('-p')
+arg = len(args) >= 1 and args[0] or None
 
-if len(sys.argv) > 1:
-    arg = sys.argv[1]
-else:
-    arg = ''
+_debug_('arg:', arg)
+_debug_('args:', args)
 
-# check the args
-
-if arg in ('--help', '-h'):
-    # show help
-    show_help()
-
-if arg == 'stop':
-    # stop running freevo
-    if not stop(name, python + proc):
-        print 'freevo not running'
-    sys.exit(0)
-
-elif arg == 'start':
-    # start freevo in background
-    sys.argv = [ sys.argv[0] ]
-    bg = 1
-
-elif arg == '-fs':
-    # start X server and run freevo, ignore everything else for now
-    server_num = 0
-    while 1:
-        if not os.path.exists('/tmp/.X11-unix/X' + str(server_num)):
-            break
-        server_num += 1
-    sys.stdin.close()
-    os.execvp('xinit', [ 'xinit', freevo_script, '--force-fs',  '--', ':'+str(server_num) ] + sys.argv[2:])
-
-elif arg == 'execute':
-    # execute a python script
-    proc  = sys.argv[2:]
-    check = 0
-
-elif arg == 'setup':
+if arg == 'setup':
     # run setup
-    proc = [ os.path.join(freevo_python, 'setup_freevo.py') ] + sys.argv[2:]
+    proc = [ os.path.join(freevo_python, 'setup_freevo.py') ] + args[1:]
 
 elif arg == 'prompt':
     # only run python inside the freevo env
     proc = []
-    profile = 0
+    opts.profile = 0
     check = 0
 
 elif arg == 'runapp':
@@ -456,56 +545,72 @@ elif arg == 'runapp':
     proc       = sys.argv[3:]
     check      = 0
 
-elif arg and name == 'freevo' and not arg.startswith('-'):
-    # start a helper. arg is the name of the script in
-    # the helpers directory
-    name     = arg
-    proc     = [ os.path.join(freevo_python, 'helpers', name + '.py') ]
-    if len(sys.argv) > 2:
-        if sys.argv[2] == 'stop':
-            if not stop(name, python + proc):
-                print '%s not running' % name
-            sys.exit(0)
-        if sys.argv[2] == 'start':
-            bg = 1
-            sys.argv = [ sys.argv[0] ]
-        else:
-            sys.argv = [ sys.argv[0] ] + sys.argv[2:]
+elif opts.execute:
+    # execute a python script
+    proc  = [ opts.execute ] + args
+    check = 0
 
-elif arg and name == 'freevo' and not (arg in ['--force-fs', '--trace', '--doc']):
-    # ok, don't know about that arg, freevo should be started, but
-    # it's also no freevo arg
-    print 'unknown command line option: %s' % sys.argv[1:]
-    print
-    show_help()
+elif name == FREEVO:
+    if arg and not arg.startswith('-'):
+        # start a helper. arg is the name of the script in
+        # the helpers directory
+        name = arg
+        proc = [ os.path.join(freevo_python, 'helpers', name + '.py') ]
+        
+        if opts.daemon:
+            daemon = 1
+        elif opts.stop:
+            if not stop(name, python + proc):
+                sys.exit('%s not running' % name)
+            sys.exit(0)
+    else:
+        if opts.force_fs:
+            # start X server and run freevo, ignore everything else for now
+            server_num = 0
+            while 1:
+                if not os.path.exists('/tmp/.X11-unix/X' + str(server_num)):
+                    break
+                server_num += 1
+            sys.stdin.close()
+            if opts.debug:
+                _debug_('os.execvp(', 'xinit', [ 'xinit', freevo_script, '--force-fs' ] + opt_trace + opt_debug + \
+                    [ '--', ':'+str(server_num) ] + opt_server_layout, ')')
+            if opts.dry_run:
+                sys.exit(0)
+            os.execvp('xinit', [ 'xinit', freevo_script, '--force-fs' ] + opt_trace + opt_debug +
+                [ '--', ':'+str(server_num) ] + opt_server_layout)
+        elif opts.daemon:
+            # start freevo in background
+            daemon = 1
+        elif opts.stop:
+            # stop running freevo
+            if not stop(name, python + proc):
+                sys.exit('freevo not running')
+            sys.exit(0)
+        else:
+            proc = proc + opt_trace + opt_debug
 
 else:
     # arg for freevo
-    proc += sys.argv[1:]
+    proc += args + opt_trace + opt_debug
 
-
-if name != 'freevo':
-    proc = [ os.path.join(freevo_python, 'helpers', name + '.py') ] +  sys.argv[1:]
+if name != FREEVO:
+    proc = [ os.path.join(freevo_python, 'helpers', name + '.py') ] + args
     if not os.path.isfile(proc[0]):
         if os.path.isfile(name):
             name = os.path.splitext(os.path.basename(name))[0]
             proc = proc[1:]
         else:
-            proc = [ os.path.join(freevo_python, 'helpers', name + '.py') ] +  sys.argv[1:]
-            print 'can\'t find helper %s' % name
-            sys.exit(1)
+            proc = [ os.path.join(freevo_python, 'helpers', name + '.py') ] + args
+            sys.exit("Can't find helper %s" % name)
 
 if check and getpid(name, python + proc)[1]:
-    if name != 'freevo':
-        print '%s still running, run \'freevo %s stop\' to stop' % (name, name)
-    else:
-        print 'freevo still running, run \'freevo stop\' to stop'
-    sys.exit(0)
+    sys.exit("%s still running, run 'freevo %s --stop' to stop" % (name, name))
 
-if profile:
+if opts.profile:
     if sys.hexversion > 0x02050000:
         python += ['-m', 'cProfile', '-o', '/tmp/%s.stats' % name]
     else:
         python += ['-m', 'profile', '-o', '/tmp/%s.stats' % name]
 
-start(name, python+proc, bg, check)
+start(name, python+proc, daemon, check)

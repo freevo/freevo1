@@ -36,6 +36,8 @@ os.environ['LD_PRELOAD'] = ''
 import sys, time
 import traceback
 import signal
+from optparse import Option, OptionValueError, OptionParser, IndentedHelpFormatter
+import pprint
 
 try:
     from xml.utils import qp_xml
@@ -364,10 +366,17 @@ def signal_handler():
     shutdown(exit=True)
 
 
+frames = {}
 def tracefunc(frame, event, arg, _indent=[0]):
     """
     function to trace and time everything inside freevo for debugging
     """
+    # ignore non-freevo calls
+    if frame.f_code.co_filename.find('/freevo/') == -1:
+        return tracefunc
+    # ignore debugging calls
+    if frame.f_code.co_name == '_debug_function_':
+        return tracefunc
     spacer = '  '
     if event == 'call':
         filename = frame.f_code.co_filename
@@ -402,53 +411,94 @@ def tracefunc(frame, event, arg, _indent=[0]):
     return tracefunc
 
 
+main_usage = """
+%prog [options]
+
+Main freevo module"""
+
+def parse_options(defaults, version):
+    """
+    Parse command line options
+    """
+    print 'version:', version
+    formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+    parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage=main_usage, version='freevo-'+version)
+    #parser.add_option('-v', '--verbose', action='count', default=0,
+    #    help='set the level of verbosity [default:%default]')
+    parser.add_option('-d', '--debug', action='count', dest='debug', default=0,
+        help='set the level of debuging')
+    parser.add_option('-t', '--trace', action='count', default=0,
+        help='activate full trace (useful for debugging)')
+    parser.add_option('-f', '--force-fs', action='store_true', default=False,
+        help='force X11 to start full-screen [default:%default]')
+    parser.add_option('-t', '--trace', action='store_true', default=False,
+        help='enable function tracing; debug level 2 [default:%default]')
+    parser.add_option('--doc', action='store_true', default=False,
+        help='generate API documentation [default:%default]')
+    return parser.parse_args()
+
+
 #
 # Freevo main function
 #
+_version = ''
+try:
+    try:
+        import freevo.version as version
+        import freevo.revision as revision
+    except ImportError:
+        import version
+        import revision
+    _version = '%s' % version.__version__
+    _version = _version.replace('-svn', ' r%s' % revision.__revision__)
+except ImportError:
+    pass
 
 # parse arguments
-if len(sys.argv) >= 2:
+defaults = { }
+(opts, args) = parse_options(defaults, _version)
+defaults.update(opts.__dict__)
+pprint.pprint(defaults)
 
+if opts.force_fs:
     # force fullscreen mode
     # deactivate screen blanking and set osd to fullscreen
-    if sys.argv[1] == '--force-fs':
-        _debug_('os.system(\'xset -dpms s off\')')
-        os.system('xset -dpms s off')
-        if config.OSD_X11_CURSORS is not None:
-            _debug_('os.system(\'xsetroot -cursor %s\')' % config.OSD_X11_CURSORS)
-            os.system('xsetroot -cursor %s' % config.OSD_X11_CURSORS)
-        config.START_FULLSCREEN_X = 1
+    _debug_('os.system(\'xset -dpms s off\')')
+    os.system('xset -dpms s off')
+    if config.OSD_X11_CURSORS is not None:
+        _debug_('os.system(\'xsetroot -cursor %s\')' % config.OSD_X11_CURSORS)
+        os.system('xsetroot -cursor %s' % config.OSD_X11_CURSORS)
+    config.START_FULLSCREEN_X = 1
 
+if opts.trace:
     # activate a trace function
-    if sys.argv[1] == '--trace':
-        tracefd = open(os.path.join(config.FREEVO_LOGDIR, 'trace.txt'), 'w')
-        sys.settrace(tracefunc)
-        config.DEBUG = 2
+    tracefd = open(os.path.join(config.FREEVO_LOGDIR, 'trace.txt'), 'w')
+    sys.settrace(tracefunc)
+    config.DEBUG = 2
 
+if opts.doc:
     # create api doc for Freevo and move it to Docs/api
-    if sys.argv[1] == '--doc':
-        import pydoc
-        import re
-        for file in util.match_files_recursively('src/', ['py' ]):
-            # doesn't work for everything :-(
-            if file not in ( 'src/tv/record_server.py', ) and \
-                   file.find('src/www') == -1 and \
-                   file.find('src/helpers') == -1:
-                file = re.sub('/', '.', file)
-                try:
-                    pydoc.writedoc(file[4:-3])
-                except:
-                    pass
-        try:
-            os.mkdir('Docs/api')
-        except:
-            pass
-        for file in util.match_files('.', ['html', ]):
-            print 'moving %s' % file
-            os.rename(file, 'Docs/api/%s' % file)
-        print
-        print 'wrote api doc to \'Docs/api\''
-        shutdown(exit=True)
+    import pydoc
+    import re
+    for file in util.match_files_recursively('src/', ['py' ]):
+        # doesn't work for everything :-(
+        if file not in ( 'src/tv/record_server.py', ) and \
+               file.find('src/www') == -1 and file.find('src/helpers') == -1:
+            file = re.sub('/', '.', file)
+            try:
+                pydoc.writedoc(file[4:-3])
+            except:
+                pass
+    try:
+        os.mkdir('Docs/api')
+    except:
+        pass
+    for file in util.match_files('.', ['html', ]):
+        print 'moving %s' % file
+        os.rename(file, 'Docs/api/%s' % file)
+    print
+    print 'wrote api doc to \'Docs/api\''
+    shutdown(exit=True)
 
 
 try:
@@ -467,18 +517,6 @@ try:
     # prepare the skin
     skin.prepare()
 
-    _version = ''
-    try:
-        try:
-            import freevo.version as version
-            import freevo.revision as revision
-        except ImportError:
-            import version
-            import revision
-        _version = '%s' % version.__version__
-        _version = _version.replace('-svn', ' r%s' % revision.__revision__)
-    except ImportError:
-        pass
     # Fire up splashscreen and load the plugins
     splash = Splashscreen(_('Starting Freevo-%s, please wait ...') % _version)
     skin.register('splashscreen', ('screen', splash))
