@@ -46,33 +46,32 @@ __doc__="""EncodingClient, an interface to EncodingServer
             to use EncodingServer.
 
             Some information about EncodingServer(and EncodingClient):
-            - It is an extensive frontend to mencoder (but extending it beyond mencoder is a
+            - It is an extensive front-end to mencoder (but extending it beyond mencoder is a
                 future possibility.
-            - It is geared towards user-friendlyness by automizing and auto-detecting odvious
-                or trivial options and settings. Some assuptions are made and some settings are
+            - It is geared towards user-friendliness by automatizing and auto-detecting obvious
+                or trivial options and settings. Some assumptions are made and some settings are
                 not changeable, but where encoding parameter choices are made, quality is preferred
                 above speed.
-            - It currently only supports DVD/DVD-on-Disc as input formats. This wil change soon.
             - Options and preferences are dynamically generated (this is not 100% true yet) in order
-                to give users and frontend developpers an easier job.
-            - The encodingsuite is fully network-capable, but not network-aware. This means you can run
+                to give users and front-end developers an easier job.
+            - The encoding suite is fully network-capable, but not network-aware. This means you can run
                 both client and server on different machines, but you have to make sure that the files/paths
                 you pass to the server are available from the servers environment.
             - In order te preserve quality, no rescaling is currently done on the video, instead
                 a flag is added by mencoder to indicate proper rescaling on playback. Rescaling
                 will be introduced in a future version.
-            - There is no specefic order in wich you have to call the functions to make and customize an
+            - There is no specific order in which you have to call the functions to make and customize an
                 encodingjob, except that it is necessary to call setContainer first if you want to
                 use another container then "avi".
-            - Once the job has been queued, it is impossible to change it's properties anymore.
+            - Once the job has been queued, it is impossible to change it's properties any more.
 
             The functions in this module have a behaviour similar to Freevo's RecordServer. Each function
             returns a tuple. The first element of this tuple is a boolean value.
             If this value is false, then the function failed to execute somewhere along the way.
             In this case the second tuple contains a string further specifying the error.
             IF the boolean value is true, the function succeeded, and the second carries the return value.
-            Depending on the function itself, this can be an object holding specefic values that where queried,
-                or a simple string stating everything went OK (usefull for debugging).
+            Depending on the function itself, this can be an object holding specific values that where queried,
+                or a simple string stating everything went OK (useful for debugging).
 
 
 """
@@ -86,7 +85,9 @@ class EncodingClientActions:
     def __init__(self):
         """ """
         _debug_('%s.__init__()' % (self.__class__,), 2)
-        self.channel = kaa.rpc2.connect((config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT), config.ENCODINGSERVER_SECRET, retry=1)
+        socket = (config.ENCODINGSERVER_IP, config.ENCODINGSERVER_PORT)
+        self.channel = kaa.rpc2.connect(socket, config.ENCODINGSERVER_SECRET, retry=1)
+        #kaa.inprogress(self.channel).wait()
 
     #--------------------------------------------------------------------------------
     # encoding server calls using a coroutine and the wait method
@@ -135,7 +136,7 @@ class EncodingClientActions:
         """
         Get a list of possible video codecs (depending on the input and container format)
 
-        This returns a list with plain strings, each identifiyng a video codec, like
+        This returns a list with plain strings, each identifying a video codec, like
         MPEG4(divx), Xvid etc. Currently only MPEG4 is available. The strings are user-readable.
         """
         return self._encodingserver_call('getVideoCodecCAP')
@@ -145,7 +146,7 @@ class EncodingClientActions:
         """
         Get a list of possible audio codecs (depending on the input and container format)
 
-        This returns a list with plain strings, each identifiyng a audio codec, like
+        This returns a list with plain strings, each identifying a audio codec, like
         MP3, Ogg, etc. Currently only MP3 is available. The strings are user-readable.
         """
         return self._encodingserver_call('getAudioCodecCAP')
@@ -166,7 +167,7 @@ class EncodingClientActions:
     def initEncodingJob(self, source, output, friendlyname="", title=None, rmsource=False):
         """Initialize the encodingjob.
 
-        This function returns an idnr (integer) if successful
+        This function returns an idnr (integer).
 
         This call can take some time (10 seconds on average) before returning, because the
         encodingserver analyzes the video during this call.
@@ -174,7 +175,7 @@ class EncodingClientActions:
         @param source: is the source video you want to have encoded
         @param output: is the name of the resulting encoded file you want
         @param friendlyname: is a "friendly name" to assign to this encoding job
-        @param title: is obligatory if you have a dvd/dvd-on-disc, in wich case you need
+        @param title: is obligatory if you have a dvd/dvd-on-disc, in which case you need
             to specify a title (integer)
         @param rmsource: sets whether to remove the source video on completion (boolean)
         """
@@ -192,6 +193,17 @@ class EncodingClientActions:
         return self._encodingserver_call('setContainer', idnr, container)
 
 
+    def waitCropDetect(self, idnr):
+        """Uses MPlayer to detect video cropping
+
+        This call can take some time (10 seconds on average) before returning, because the
+        encodingserver analyzes the video during this call.
+        """
+        if not idnr :
+            return (False, "EncodingClient: no idnr or container")
+        return self._encodingserver_call('waitCropDetect', idnr)
+
+
     def setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """Set a video codec
 
@@ -199,8 +211,8 @@ class EncodingClientActions:
             returned by getVideoCodecCAP.
         @param tgtsize: is the target size of the encoded file, in megabytes (this includes
             audio data and container format overhead)
-        @param multipass: is a boolean. Set this to True if you want multipass encoding
-            (1 pass, 2 video passes). The default is no multipass (1 video)
+        @param multipass: is a boolean. Set this to True if you want multi-pass encoding
+            (1 pass, 2 video passes). The default is no multi-pass (1 video)
         @param vbitrate: is the video bitrate, if it is not 0 then this value is used instead
             of using the tgtsize.
         """
@@ -240,7 +252,7 @@ class EncodingClientActions:
         filters - a dictionary with filters you want to have enabled and there settings.
         The structure of this dict is almost identical to the dict getVideoFiltersCAP returns,
         except you should replace the list of options with the options you need. The value assigned
-        to each keyword is thus a string (wich means you cannot choose more then 1 option/setting) per
+        to each keyword is thus a string (which means you cannot choose more then 1 option/setting) per
         video filter.
         """
         if not (idnr or filters):
@@ -293,7 +305,7 @@ class EncodingClientActions:
         status is the current status of the encoding job, represented by an integer
             - 0 Not set (this job hasn't started encoding). Never used in this context
             - 1 Audio pass in progress
-            - 2 First (analyzing) video pass (only used in multipass encoding)
+            - 2 First (analyzing) video pass (only used in multi-pass encoding)
             - 3 Final video pass
             - 4 Postmerge (not used atm). Final merging or similar processing in progress
 
@@ -335,8 +347,11 @@ if __name__ == '__main__':
     from time import sleep
 
     idnr = None
+    startclock = time.clock()
     es = EncodingClientActions()
+    print time.clock() - startclock
     kaa.inprogress(es.channel).wait()
+    print time.clock() - startclock
     if function == 'test2':
         result = es.ping()
         print 'ping:', result
@@ -377,29 +392,32 @@ if __name__ == '__main__':
         print es.startQueue()
 
     elif function == "test":
-        (result, response) = connectionTest('connection test')
-        print 'result: %s, response: %s ' % (result, response)
-        print getProgress()
+        result = es.ping()
+        print 'result: %s' % (result)
+        print es.getProgress()
 
     elif function == "runtest":
-        #(status, idnr) = initEncodingJob('/storage/video/dvd/BRUCE_ALMIGHTY/', 'bam.avi', 'lala', 17)
-        (status, idnr) = initEncodingJob('/dev/cdrom', '/home/rdc/fogu.avi', 'lala', 1)
+        source = '/freevo/video/movies/04_S\'_Häsli_goht_velore.mpg'
+        result = es.initEncodingJob(source, 'movie.avi', 'MyMovie')
+        print 'initEncodingJob:', result
+        if not result[0]:
+            raise result[1]
+        idnr = result[1]
         print "Job has idnr num: %s" % idnr
-        print idnr
         #sleep(5)
-        (status, codec) = getVideoCodecCAP(idnr)
+        (status, codec) = es.getVideoCodecCAP()
         print codec[0]
         print codec[1]
-        print setVideoCodec(idnr, codec[1], 1400, True, 0)
+        print es.setVideoCodec(idnr, codec[1], 1400, True, 0)
         #print setVideoFilters(idnr, {'Denoise': 'HQ denoise'})
         #sleep(5)
-        print queueIt(idnr, True)
+        print es.queueIt(idnr, True)
         sleep(5)
-        print getProgress()
+        print es.getProgress()
         sleep(5)
-        print getProgress()
+        print es.getProgress()
         sleep(5)
-        print getProgress()
+        print es.getProgress()
 
     else:
         print 'function %s not defined' % (function,)

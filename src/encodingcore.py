@@ -207,7 +207,7 @@ class EncodingJob:
     @ivar afilters: list of audio filters
     @ivar cls: codec job list
     @ivar percentage: mencoders current percentage
-    @ivar trem: mencoders current trem
+    @ivar trem: mencoders current time remaining
     @ivar status: current job status
     @ivar pid: job process id
     @ivar ana: is the source anamorphic?
@@ -227,7 +227,7 @@ class EncodingJob:
         @param output: output file name
         @param friendlyname: name of the job
         @param idnr: job id number
-        @param titlenum: titlenum number to reencode
+        @param titlenum: titlenum number to re-encode
         @param rmsource: remove the source
         """
         _debug_('encodingcore.EncodingJob.__init__(%s, %s, %s, %s, %s, %s)' % \
@@ -262,7 +262,7 @@ class EncodingJob:
 
         self.acodec = mappings['lists']['audiocodecs'][0]
         self.abrate = 128
-        self.afilters = {} # Not used atm, might be used in the future
+        self.afilters = {} # Not used ATM, might be used in the future
 
         self.cls = []
 
@@ -289,18 +289,18 @@ class EncodingJob:
                 if self.info:
                     self._analyze_source()
                 else:
-                    print 'Failed to analyse "%s" kaa.metadata.parse()'  % self.source
+                    _debug_('Failed to analyse "%s" kaa.metadata.parse()'  % self.source, DERROR)
                     self.failed = True
                     self.finishedanalyze = True
             except Exception, e:
-                print 'Failed to analyse "%s": %s' % (self.source, e)
+                _debug_('Failed to analyse "%s": %s' % (self.source, e), DERROR)
                 self.failed = True
                 self.finishedanalyze = True
 
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def setTimeslice(self, timeslice):
-        "Set the encoding timeslice"
+        "Set the encoding time-slice"
         self.timeslice = timeslice
         assert(type(timeslice) == type([]))
         assert(len(timeslice) == 2)
@@ -346,7 +346,7 @@ class EncodingJob:
         if vbitrate:
             self.tgtsize = 0
         else:
-            self.tgtsize = (int(tgtsize) * 1024) #filesize is internally stored in kB
+            self.tgtsize = (int(tgtsize) * 1024) #file size is internally stored in kB
         self.multipass = multipass
         self.vbitrate = vbitrate
         self.altprofile = altprofile
@@ -354,7 +354,7 @@ class EncodingJob:
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def setAudioCodec(self, acodec, abrate=128):
-        """Set audio codec & bitrate"""
+        """Set audio codec & bit rate"""
         if acodec not in self.encodingopts.getAudioCodecList():
             return 'Unknown audio codec %r' % acodec
 
@@ -387,7 +387,7 @@ class EncodingJob:
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def _CalcVideoBR(self):
-        """Calculates the video bitrate"""
+        """Calculates the video bit rate"""
 
         _debug_('_CalcVideoBR: tgtsize=%s vbitrate=%s' % (self.tgtsize, self.vbitrate), 2)
         if self.vbitrate > 0:
@@ -428,7 +428,6 @@ class EncodingJob:
             else:
                 self.length = 600
                 _debug_('Video length not found, using %s' % (self.length))
-        self._cropdetect()
 
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
@@ -443,8 +442,6 @@ class EncodingJob:
         else:
             arguments += [ self.source ]
 
-        _debug_('_run(mplayer, arguments, self._identify_parse, None, 0, None)', 2)
-        _debug_(' '.join([mplayer]+arguments))
         self._run(mplayer, arguments, self._identify_parse, None, 0, None)
 
 
@@ -473,7 +470,7 @@ class EncodingJob:
         """Detect cropping, contains pieces of QuickRip
 
         Function is always called because cropping is a good thing, and we can pass our ideal values
-        back to the client wich can verify them visually if needed.
+        back to the client which can verify them visually if needed.
         """
         start = 0
         if self.timeslice[0]:
@@ -613,7 +610,7 @@ class EncodingJob:
                     self.crop = crop
 
 
-        #make the final crop outputs a resolution wich is a multiple of 16, v and h ....
+        #make the final crop outputs a resolution which is a multiple of 16, v and h ....
         crop = split(self.crop, ':')
         adjustedcrop = []
         for res in crop[0:2]:
@@ -635,7 +632,7 @@ class EncodingJob:
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def _GenerateCLMencoder(self):
         """Generate the command line(s) to be executed, using MEncoder for encoding"""
-        #calculate the videobitrate
+        #calculate the video bit rate
         self._CalcVideoBR()
 
         #for single passes
@@ -674,7 +671,7 @@ class EncodingJob:
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def _GCLMVideopass(self, passnr):
-        """Returns video pass specefic part of mencoder cl"""
+        """Returns video pass specific part of mencoder cl"""
         vf = copy(self.vfilters)
         vfilter = ''
         vpass = ''
@@ -692,7 +689,7 @@ class EncodingJob:
             if self.vcodec == 'MPEG 4 (lavc)' and passnr == 1:
                 vpass = vpass + ':turbo'
 
-        #generate videofilters first, NI completly yet
+        #generate videofilters first, NI completely yet
         if self.crop != None:
             vf += [ 'crop=%s' % self.crop ]
 
@@ -700,7 +697,7 @@ class EncodingJob:
         #if we didn't find cropping we have no res, so no tricks
         if self.vcodec == 'XviD' and self.crop:
             if self.ana:
-                #calculate a decent resized picturesize, res must still be a multiple of 16
+                #calculate a decent resized picture size, res must still be a multiple of 16
                 yscaled = (self.cropres[1] * 0.703125)
                 rounded = yscaled % 16
                 yscaled -= rounded
@@ -838,7 +835,7 @@ class EncodingJob:
         seek to remove data
         """
         #(passtype, title) = data
-        # re_progress is precompiled at the beginning of this file, to speed up
+        # re_progress is pre-compiled at the beginning of this file, to speed up
         s = re_progress.search(line)
         if s:
             self.percentage = s.group(1)
@@ -861,7 +858,7 @@ class EncodingJob:
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def _wait(self, timeout=10):
         """
-        Wait for the thread to finish in timeout seconds
+        Wait for the thread to finish in time-out seconds
         If the thread has not finished the kill it
         """
         self.thread.join(timeout)
@@ -894,10 +891,9 @@ class CommandThread(Thread): # seek to remove data andor crop (not really used)
     def run(self):
         _debug_(' '.join(self.command))
         self.process = Popen(self.command, stdout=PIPE, stderr=PIPE, close_fds=True, universal_newlines=True)
-        output = self.process.stdout
-
         _debug_('%s thread running with PID %s' % (self.command[0], self.process.pid))
 
+        output = self.process.stdout
         totallines = []
         while self.process.poll() is None:
             line = output.readline().strip()
@@ -1066,7 +1062,6 @@ class EncodingQueue:
 
         _debug_('Started job %s, %s on PID %s' % (self.currentjob.idnr, \
             status[self.currentjob.status], self.currentjob.pid), DINFO)
-        _debug_('Encoder Command is "%s"' % ' '.join(self.currentjob.cls[0]), DINFO)
 
 
 

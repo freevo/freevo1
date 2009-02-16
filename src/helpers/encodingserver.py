@@ -124,16 +124,22 @@ class EncodingServer:
         idnr = int((time.time() / random.random()) / 100)
         _debug_('idnr=%s' % (idnr), 2)
         self.jobs[idnr] = EncodingJob(source, output, friendlyname, idnr, chapter, rmsource)
+        _debug_('Initialized job %s (idnr: %s)' % (friendlyname, idnr), DINFO)
+        if self.jobs[idnr].failed:
+            return (False, 0)
+        return (True, idnr)
 
+
+    @kaa.rpc.expose('waitCropDetect')
+    def _waitCropDetect(self, idnr):
         #wait for the analyzing to end
+        status = self.jobs[idnr]._CropDetect()
         while not self.jobs[idnr].finishedanalyze:
             time.sleep(0.1)
         if self.jobs[idnr].finishedanalyze and self.jobs[idnr].failed:
-            _debug_('Analysis failed')
-            return (False, 10)
-
-        _debug_('Initialized job %s (idnr: %s)' % (friendlyname, idnr), DINFO)
-        return (True, idnr)
+            _debug_('Crop detection failed')
+            return (False, 'Crop detection failed')
+        return (True, 'Ended successfully crop detection.')
 
 
     @kaa.rpc.expose('setContainer')
@@ -164,7 +170,7 @@ class EncodingServer:
         """ set the audio codec """
         _debug_('_setAudioCodec(idnr=%r, acodec=%r, abrate=%r)' % (idnr, acodec, abrate), 2)
         if not (acodec or abrate):
-            return (False, 'EncodingServer::setAudioCodec: no codec or bitrate given')
+            return (False, 'EncodingServer::setAudioCodec: no codec or bit rate given')
 
         status = self.jobs[idnr].setAudioCodec(acodec, abrate)
         if not status:

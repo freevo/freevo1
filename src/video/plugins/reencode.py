@@ -156,9 +156,9 @@ class PluginInterface(plugin.ItemPlugin):
         menu_items += [ menu.MenuItem(_('Modify End Time'), action=self.mod_end_time) ]
         menu_items += [ menu.MenuItem(_('Modify Resolution'), action=self.mod_resolution) ]
         menu_items += [ menu.MenuItem(_('Modify Video Codec'), action=self.mod_videocodec) ]
-        menu_items += [ menu.MenuItem(_('Modify Video Bitrate'), action=self.mod_videobitrate) ]
+        menu_items += [ menu.MenuItem(_('Modify Video Bit Rate'), action=self.mod_videobitrate) ]
         menu_items += [ menu.MenuItem(_('Modify Audio Codec'), action=self.mod_audiocodec) ]
-        menu_items += [ menu.MenuItem(_('Modify Audio Bitrate'), action=self.mod_audiobitrate) ]
+        menu_items += [ menu.MenuItem(_('Modify Audio Bit Rate'), action=self.mod_audiobitrate) ]
         menu_items += [ menu.MenuItem(_('Modify Number of passes'), action=self.mod_numpasses) ]
         menu_items += [ menu.MenuItem(_('Modify Number of Encoder Threads'), action=self.mod_numthreads) ]
         menu_items += [ menu.MenuItem(_('Modify Video Filter (not implemented)'), action=self.mod_videofilter) ]
@@ -420,16 +420,28 @@ class PluginInterface(plugin.ItemPlugin):
         box = PopupBox(text=_('Please wait, analyzing video...'))
         box.show()
         (status, resp) = self.server.initEncodingJob(self.source, self.output, self.title)
-        _debug_('initEncodingJob:status:%s resp:%s' % (status, resp))
-        box.destroy()
-        if not status:
-            self.error(resp)
-            return
-
         idnr = resp
+        _debug_('initEncodingJob:status:%s resp:%s' % (status, resp))
+        if not status:
+            box.destroy()
+            self.error(_('Failed to analyze video.'))
+            return
 
         (status, resp) = self.server.setTimeslice(idnr, self.timeslice)
         _debug_('setTimeslice:status:%s resp:%s' % (status, resp))
+        if not status:
+            box.destroy()
+            self.error(resp)
+            return
+
+        (status, resp) = self.server.waitCropDetect(idnr)
+        _debug_('WaitCropDetect:status:%s resp:%s' % (status, resp))
+        if not status:
+            box.destroy()
+            self.error(resp)
+            return
+
+        box.destroy()
         if not status:
             self.error(resp)
             return
@@ -469,7 +481,7 @@ class PluginInterface(plugin.ItemPlugin):
         #(status, resp) = self.server.setVideoFilters(idnr, vfilters)
         #_debug_('setVideoFilters:status:%s resp:%s' % (status, resp))
 
-        #And finally, qeue and start the job
+        #And finally, queue and start the job
         (status, resp) = self.server.queueIt(idnr, True)
         _debug_('queueIt:status:%s resp:%s' % (status, resp))
 
