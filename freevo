@@ -371,10 +371,12 @@ def parse_options(defaults, versions):
         help='activate full trace (useful for debugging)')
     parser.add_option('--dry-run', action='store_true', default=False,
         help='do not run the module, print the actions')
-    parser.add_option('-f', '--force-fs', action='store_true', metavar='SVR', default=False,
+    parser.add_option('-f', '--fullscreen', action='store_true', default=False,
         help='run freevo in a new x session in full-screen')
     parser.add_option('--server-layout', action='store', metavar='LAYOUT', default=None,
         help='X server layout [default:%default]')
+    parser.add_option('--force-fs', action='store_true', default=False,
+        help='run freevo in full-screen')
     parser.add_option('-p', '--profile', action='store_true', default=False,
         help='activate profile and write stats to /tmp [default:%default]')
     parser.add_option('--daemon', action='store_true', default=False,
@@ -525,8 +527,8 @@ check  = 1 # check running instance
 
 arg = len(args) >= 1 and args[0] or None
 
-_debug_('arg:', arg)
-_debug_('args:', args)
+_debug_('arg:%r' % arg)
+_debug_('args:%r' % args)
 
 if arg == 'setup':
     # run setup
@@ -564,7 +566,7 @@ elif name == FREEVO:
                 sys.exit('%s not running' % name)
             sys.exit(0)
     else:
-        if opts.force_fs:
+        if opts.fullscreen:
             # start X server and run freevo, ignore everything else for now
             server_num = 0
             while 1:
@@ -572,13 +574,13 @@ elif name == FREEVO:
                     break
                 server_num += 1
             sys.stdin.close()
-            if opts.debug:
-                _debug_('os.execvp(', 'xinit', [ 'xinit', freevo_script, '--force-fs' ] + opt_trace + opt_debug + \
-                    [ '--', ':'+str(server_num) ] + opt_server_layout, ')')
+            print type(proc)
+            args = [ 'xinit', freevo_script, '--force-fs' ] + \
+                opt_trace + opt_debug + [ '--', ':'+str(server_num) ] + opt_server_layout
+            _debug_('os.execvp(%r, %r)' % ('xinit', args))
             if opts.dry_run:
                 sys.exit(0)
-            os.execvp('xinit', [ 'xinit', freevo_script, '--force-fs' ] + opt_trace + opt_debug +
-                [ '--', ':'+str(server_num) ] + opt_server_layout)
+            os.execvp('xinit', args)
         elif opts.daemon:
             # start freevo in background
             daemon = 1
@@ -605,7 +607,7 @@ if name != FREEVO:
             sys.exit("Can't find helper %s" % name)
 
 if check and getpid(name, python + proc)[1]:
-    sys.exit("%s still running, run 'freevo %s --stop' to stop" % (name, name))
+    sys.exit("%s still running, run '%s --stop' to stop" % (name, name))
 
 if opts.profile:
     if sys.hexversion > 0x02050000:
