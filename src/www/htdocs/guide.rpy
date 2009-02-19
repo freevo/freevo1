@@ -32,15 +32,14 @@
 import sys, string
 import time
 
-from www.web_types import HTMLResource, FreevoResource
 from twisted.web.woven import page
 
 import config
 import util.tv_util as tv_util
 import util
 import tv.epg_xmltv
-from tv.record_client import RecordClient
 from twisted.web import static
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
 DEBUG = 0
 
@@ -49,7 +48,7 @@ FALSE = 0
 
 class GuideResource(FreevoResource):
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
     def makecategorybox(self, chanlist):
@@ -141,7 +140,7 @@ class GuideResource(FreevoResource):
             mfrprevguide = 0
 
         guide = tv.epg_xmltv.get_guide()
-        (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+        (status, schedule) = self.recordclient().getScheduledRecordingsNow()
         if status:
             program_list = schedule.getProgramList()
 
@@ -209,7 +208,7 @@ class GuideResource(FreevoResource):
                     status = 'program'
 
                     if status:
-                        (result, reason) = self.recordclient.isProgScheduledNow(prog, schedule)
+                        (result, reason) = self.recordclient().isProgScheduledNow(prog, schedule)
                         if result:
                             status = 'scheduled'
                             really_now = time.time()

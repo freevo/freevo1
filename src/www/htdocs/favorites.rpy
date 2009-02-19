@@ -33,10 +33,9 @@ import sys, time, string
 import urllib
 
 import config
-from tv.record_client import RecordClient
 import util.tv_util as tv_util
 
-from www.web_types import HTMLResource, FreevoResource
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
 TRUE = 1
 FALSE = 0
@@ -44,17 +43,17 @@ FALSE = 0
 
 class FavoritesResource(FreevoResource):
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
     def _render(self, request):
         fv = HTMLResource()
         form = request.args
 
-        server_available = self.recordclient.pingNow()
+        server_available = self.recordclient().pingNow()
         if not server_available:
             fv.printHeader(_('Favorites'), 'styles/main.css', selected=_('Favorites'))
-            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient.recordserverdown])
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient().recordserverdown])
             return String(fv.res)
 
         action = fv.formValue(form, 'action')
@@ -74,18 +73,18 @@ class FavoritesResource(FreevoResource):
             onlyNew = fv.formValue(form, 'onlyNew')
 
         if action == 'remove':
-            self.recordclient.removeFavoriteNow(name)
+            self.recordclient().removeFavoriteNow(name)
         elif action == 'add':
-            self.recordclient.addEditedFavoriteNow(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
+            self.recordclient().addEditedFavoriteNow(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
         elif action == 'edit':
-            self.recordclient.removeFavoriteNow(oldname)
-            self.recordclient.addEditedFavoriteNow(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
+            self.recordclient().removeFavoriteNow(oldname)
+            self.recordclient().addEditedFavoriteNow(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
         elif action == 'bump':
-            self.recordclient.adjustPriorityNow(name, priority)
+            self.recordclient().adjustPriorityNow(name, priority)
         else:
             pass
 
-        (status, favorites) = self.recordclient.getFavoritesNow()
+        (status, favorites) = self.recordclient().getFavoritesNow()
 
 
         days = {
@@ -149,7 +148,7 @@ class FavoritesResource(FreevoResource):
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             if config.TV_RECORD_DUPLICATE_DETECTION:
-                (tempStatus, tempFav) = self.recordclient.getFavoriteNow(fav.name)
+                (tempStatus, tempFav) = self.recordclient().getFavoriteNow(fav.name)
                 if hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 1:
                     cell = 'ALLOW'
                 elif hasattr(tempFav,'allowDuplicates') and int(tempFav.allowDuplicates) == 0:
@@ -159,7 +158,7 @@ class FavoritesResource(FreevoResource):
                 fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
             if config.TV_RECORD_ONLY_NEW_DETECTION:
-                (tempStatus, tempFav) = self.recordclient.getFavoriteNow(fav.name)
+                (tempStatus, tempFav) = self.recordclient().getFavoriteNow(fav.name)
                 if hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 1:
                     cell = 'ONLY NEW'
                 elif hasattr(tempFav,'onlyNew') and int(tempFav.onlyNew) == 0:

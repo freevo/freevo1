@@ -36,9 +36,8 @@ import sys, os, string, urllib, re, types
 # needed to put these here to suppress its output
 import config, util
 import util.tv_util as tv_util
-from tv.record_client import RecordClient
 
-from www.web_types import HTMLResource, FreevoResource
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 from twisted.web import static
 
 TRUE = 1
@@ -48,7 +47,7 @@ FALSE = 0
 class LibraryResource(FreevoResource):
     isLeaf=1
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
     def is_access_allowed(self, dir_str):
@@ -294,7 +293,7 @@ class LibraryResource(FreevoResource):
             favre = ''
             favs = []
             if action_mediatype == 'movies' or action_mediatype == 'rectv':
-                (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+                (status, schedule) = self.recordclient().getScheduledRecordingsNow()
                 if status:
                     progs = schedule.getProgramList()
                     f = lambda a, b: cmp(a.start, b.start)
@@ -314,7 +313,7 @@ class LibraryResource(FreevoResource):
             
                 #generate our favorites regular expression
                 favre = ''
-                (status, favorites) = self.recordclient.getFavoritesNow()
+                (status, favorites) = self.recordclient().getFavoritesNow()
                 if status:
                     favs = favorites.values()
                 else:

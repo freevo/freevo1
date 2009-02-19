@@ -33,13 +33,13 @@ import sys, time
 
 import tv.epg_xmltv
 import tv.epg_types
-from tv.record_client import RecordClient
 from www.wap_types import WapResource, FreevoWapResource
+from www.web_types import RecordClientResource
 import _strptime as strptime
 
 class WRecResource(FreevoWapResource):
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
     def _render(self, request):
@@ -73,7 +73,7 @@ class WRecResource(FreevoWapResource):
                 prog.title = "Wap Recorded"
                 prog.start = starttime
                 prog.stop = stoptime
-                self.recordclient.scheduleRecordingNow(prog)
+                self.recordclient().scheduleRecordingNow(prog)
                 fv.res += '  <card id="card3" title="Freevo">\n'
                 fv.res += '   <p><strong>Rec. Sheduled</strong><br/>\n'
                 fv.res += '          Date : %s<br/>\n' % startdate
@@ -98,9 +98,9 @@ class WRecResource(FreevoWapResource):
                 fv.res += '  <timer value="30"/>\n'
                 fv.res += '   <p><big><strong>Freevo WAP Sheduler</strong></big></p>\n'
 
-                server_available = self.recordclient.pingNow()
+                server_available = self.recordclient().pingNow()
                 if not server_available:
-                    fv.res += '<p>'+_('ERROR')+': '+self.recordclient.recordserverdown+'</p>\n'
+                    fv.res += '<p>'+_('ERROR')+': '+self.recordclient().recordserverdown+'</p>\n'
                 else:
                     fv.res += '   <p>Record Server online!</p>\n'
 

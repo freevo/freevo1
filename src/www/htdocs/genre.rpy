@@ -33,8 +33,7 @@ import sys, time, string
 
 import config
 import util
-from tv.record_client import RecordClient
-from www.web_types import HTMLResource, FreevoResource
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 import tv.epg_xmltv
 
 TRUE = 1
@@ -42,7 +41,7 @@ FALSE = 0
 
 class GenreResource(FreevoResource):
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
 # need sub to get list of possible categories
@@ -63,11 +62,11 @@ class GenreResource(FreevoResource):
         fv = HTMLResource()
         form = request.args
 
-        server_available = self.recordclient.pingNow()
+        server_available = self.recordclient().pingNow()
         if not server_available:
             fv.printHeader(_('TV Genre for %s') % time.strftime('%a %b %d', time.localtime(mfrguidestart)), \
                 config.WWW_STYLESHEET, config.WWW_JAVASCRIPT)
-            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient.recordserverdown])
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient().recordserverdown])
             return String(fv.res)
 
         mfrguidestart = time.time()
@@ -91,7 +90,7 @@ class GenreResource(FreevoResource):
         category = fv.formValue(form, 'category')
 
         guide = tv.epg_xmltv.get_guide()
-        (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+        (status, schedule) = self.recordclient().getScheduledRecordingsNow()
         if not status:
             fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+_('No program schedule')])
             return String(fv.res)
@@ -158,7 +157,7 @@ class GenreResource(FreevoResource):
 
                     # use counter to see if we have data
                     gotdata += 1
-                    (result, reason) = self.recordclient.isProgScheduledNow(prog, schedule)
+                    (result, reason) = self.recordclient().isProgScheduledNow(prog, schedule)
                     if result:
                         status = 'scheduled'
                         really_now = time.time()

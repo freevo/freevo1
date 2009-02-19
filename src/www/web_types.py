@@ -38,6 +38,7 @@ import socket
 
 from twisted.web.woven import page
 from twisted.web.resource import Resource
+from tv.record_client import RecordClient
 from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
@@ -46,6 +47,30 @@ TRUE = 1
 FALSE = 0
 
 
+_singleton = None
+
+def RecordClientResource():
+    global _singleton
+
+    # One-time init
+    if _singleton is None:
+        _singleton = RecordClientActions()
+
+    return _singleton
+
+
+
+class RecordClientActions:
+    def __init__(self):
+        import kaa
+        self.recordclient = RecordClient()
+        kaa.inprogress(self.recordclient.channel).wait()
+
+    def __call__(self):
+        return RecordClientResource().recordclient
+
+
+        
 class FreevoPage(page.Page):
 
     @benchmark(benchmarking & 0x04, benchmarkcall)
@@ -517,7 +542,8 @@ class HTMLResource:
            <style type="text/css" media="screen">
             table.remote { width: auto; }
             td.remote    { padding: 0px; }
-            button.remote { width: 60px; height: 18px; background: #eee; font-size: 12px; text-align: center; padding: 0; }
+            button.remote { width: 60px; height: 18px; background: #eee; font-size: 12px;
+                text-align: center; padding: 0; }
             button.remote:hover { background: #fed; }
            </style>
 

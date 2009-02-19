@@ -31,19 +31,17 @@
 # -----------------------------------------------------------------------
 
 import sys, os, stat, string, urllib, re, types, socket
-
+from twisted.web import static
 
 # needed to put these here to suppress its output
 import config, util
 import util.tv_util as tv_util
 import util.fxdparser as fxdparser
 import util.mediainfo
-from tv.record_client import RecordClient
 import kaa.imlib2 as imlib2
 import kaa.metadata as metadata
 
-from www.web_types import HTMLResource, FreevoResource
-from twisted.web import static
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 from benchmark import benchmark
 benchmarking = config.DEBUG_BENCHMARKING
 benchmarkcall = config.DEBUG_BENCHMARKCALL
@@ -63,7 +61,7 @@ class LibraryResource(FreevoResource):
         self.allowed_dirs.extend(config.AUDIO_ITEMS)
         self.allowed_dirs.extend( [ ('Recorded TV', config.TV_RECORD_DIR) ])
         self.allowed_dirs.extend(config.IMAGE_ITEMS)
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
     @benchmark(benchmarking & 0x04, benchmarkcall)
@@ -355,7 +353,7 @@ class LibraryResource(FreevoResource):
             favre = ''
             favs = []
             if action_mediatype == 'movies' or action_mediatype == 'rectv':
-                (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+                (status, schedule) = self.recordclient().getScheduledRecordingsNow()
                 if status:
                     progs = schedule.getProgramList()
                     f = lambda a, b: cmp(a.start, b.start)
@@ -375,7 +373,7 @@ class LibraryResource(FreevoResource):
 
                 #generate our favorites regular expression
                 favre = ''
-                (status, favorites) = self.recordclient.getFavoritesNow()
+                (status, favorites) = self.recordclient().getFavoritesNow()
                 if status:
                     favs = favorites.values()
                 else:

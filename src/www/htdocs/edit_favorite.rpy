@@ -32,11 +32,9 @@
 import sys, time, string
 
 import config
-from tv.record_types import Favorite
 import tv.epg_xmltv
-from tv.record_client import RecordClient
-
-from www.web_types import HTMLResource, FreevoResource
+from tv.record_types import Favorite
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
 TRUE = 1
 FALSE = 0
@@ -44,14 +42,14 @@ FALSE = 0
 
 class EditFavoriteResource(FreevoResource):
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
     def _render(self, request):
         fv = HTMLResource()
         form = request.args
 
-        server_available = self.recordclient.pingNow()
+        server_available = self.recordclient().pingNow()
         if not server_available:
             fv.printHeader(_('Edit Favorite'), 'styles/main.css')
             fv.printMessagesFinish([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is not available') ])
@@ -68,14 +66,14 @@ class EditFavoriteResource(FreevoResource):
         if isinstance( name, str ):
             name = Unicode( name, 'latin-1' )
 
-        (status, favorites) = self.recordclient.getFavoritesNow()
+        (status, favorites) = self.recordclient().getFavoritesNow()
         if status:
             num_favorites = len(favorites)
         else:
             num_favorites = 0
 
         if action == 'add' and chan and start:
-            (result, prog) = self.recordclient.findProgNow(chan, start)
+            (result, prog) = self.recordclient().findProgNow(chan, start)
 
             if not result:
                 fv.printHeader('Edit Favorite', 'styles/main.css')
@@ -91,7 +89,7 @@ class EditFavoriteResource(FreevoResource):
 
             fav = Favorite(prog.title, prog, TRUE, TRUE, TRUE, priority, FALSE)
         elif action == 'edit' and name:
-            (result, fav) = self.recordclient.getFavoriteNow(name)
+            (result, fav) = self.recordclient().getFavoriteNow(name)
         else:
             pass
 
@@ -283,13 +281,13 @@ class EditFavoriteResource(FreevoResource):
 
 
         if config.TV_RECORD_DUPLICATE_DETECTION:
-            (tempStatus, tempFav) = self.recordclient.getFavoriteNow(fav.name)
+            (tempStatus, tempFav) = self.recordclient().getFavoriteNow(fav.name)
             if hasattr(tempFav, 'allowDuplicates'):
                 fv.res += 'document.editfavorite.allowDuplicates.options[%s].selected=true\n' % \
                     abs(int(tempFav.allowDuplicates)-1)
 
         if config.TV_RECORD_ONLY_NEW_DETECTION:
-            (tempStatus, tempFav) = self.recordclient.getFavoriteNow(fav.name)
+            (tempStatus, tempFav) = self.recordclient().getFavoriteNow(fav.name)
             if hasattr(tempFav, 'onlyNew'):
                 fv.res += 'document.editfavorite.onlyNew.options[%s].selected=true\n' % int(tempFav.onlyNew)
 

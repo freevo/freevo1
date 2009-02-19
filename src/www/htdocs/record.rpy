@@ -33,16 +33,15 @@ import sys, time
 import util.tv_util as tv_util
 
 import config
-from tv.record_client import RecordClient
 
-from www.web_types import HTMLResource, FreevoResource
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
 TRUE = 1
 FALSE = 0
 
 class RecordResource(FreevoResource):
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
     def _render(self, request):
         fv = HTMLResource()
@@ -55,14 +54,14 @@ class RecordResource(FreevoResource):
         start = fv.formValue(form, 'start')
         action = fv.formValue(form, 'action')
 
-        server_available = self.recordclient.pingNow()
+        server_available = self.recordclient().pingNow()
         if not server_available:
             fv.printHeader(_('Scheduled Recordings'), 'styles/main.css')
-            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient.recordserverdown])
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient().recordserverdown])
             return String(fv.res)
 
         if action == 'remove':
-            (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+            (status, schedule) = self.recordclient().getScheduledRecordingsNow()
             if status:
                 progs = schedule.getProgramList()
 
@@ -72,9 +71,9 @@ class RecordResource(FreevoResource):
                         prog = what
 
                 if prog:
-                    self.recordclient.removeScheduledRecordingNow(prog)
+                    self.recordclient().removeScheduledRecordingNow(prog)
         elif action == 'add':
-            (status, prog) = self.recordclient.findProgNow(chan, start)
+            (status, prog) = self.recordclient().findProgNow(chan, start)
 
             if not status:
                 fv.printHeader('Scheduled Recordings', 'styles/main.css')
@@ -85,12 +84,12 @@ class RecordResource(FreevoResource):
                        (' <i>(%s)</i>' % String(prog))])
                 return String(fv.res)
 
-            self.recordclient.scheduleRecordingNow(prog)
+            self.recordclient().scheduleRecordingNow(prog)
 
-        (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+        (status, schedule) = self.recordclient().getScheduledRecordingsNow()
         if status:
             progs = schedule.getProgramList()
-            (status, favorites) = self.recordclient.getFavoritesNow()
+            (status, favorites) = self.recordclient().getFavoritesNow()
 
         fv.printHeader(_('Scheduled Recordings'), 'styles/main.css', selected=_('Scheduled Recordings'))
 
@@ -113,7 +112,7 @@ class RecordResource(FreevoResource):
         for prog in progl:
             status = 'basic'
 
-            (isFav, message) = self.recordclient.isProgAFavoriteNow(prog, favorites)
+            (isFav, message) = self.recordclient().isProgAFavoriteNow(prog, favorites)
             if isFav:
                 status = 'favorite'
             if hasattr(prog, 'isRecording') and prog.isRecording:

@@ -31,7 +31,6 @@
 import sys, time
 
 import tv.epg_xmltv, tv.epg_types
-from tv.record_client import RecordClient
 
 # Use the alternate strptime module which seems to handle time zones
 #
@@ -42,7 +41,7 @@ else:
     import _strptime as strptime
 
 
-from www.web_types import HTMLResource, FreevoResource
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
 TRUE = 1
 FALSE = 0
@@ -57,7 +56,7 @@ MINPICKUP = 70
 
 class ManualRecordResource(FreevoResource):
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
     def rc_handler(self, result):
@@ -69,10 +68,10 @@ class ManualRecordResource(FreevoResource):
         fv = HTMLResource()
         form = request.args
 
-        server_available = self.recordclient.pingNow()
+        server_available = self.recordclient().pingNow()
         if not server_available:
             fv.printHeader(_('Manual Record'), 'styles/main.css',selected=_("Manual Record"))
-            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient.recordserverdown])
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient().recordserverdown])
             return String(fv.res)
 
         curtime_epoch = time.time()
@@ -127,7 +126,7 @@ class ManualRecordResource(FreevoResource):
                             prog.start = starttime
                             prog.stop = stoptime
                             # use ri to add to schedule
-                            self.recordclient.scheduleRecording(self.rc_handler, prog)
+                            self.recordclient().scheduleRecording(self.rc_handler, prog)
                             return '<html><head><meta HTTP-EQUIV="REFRESH" CONTENT="0;URL=record.rpy"></head></html>'
                     else:
                         errormsg = _("start time is not before stop time.")

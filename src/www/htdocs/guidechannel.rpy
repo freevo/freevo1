@@ -33,15 +33,14 @@ import sys, string
 import time
 import datetime
 
-from www.web_types import HTMLResource, FreevoResource
 from twisted.web.woven import page
+from twisted.web import static
 
 import util.tv_util as tv_util
 import util
 import config
 import tv.epg_xmltv
-from tv.record_client import RecordClient
-from twisted.web import static
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 from www.configlib import *
 
 DEBUG = 0
@@ -51,7 +50,7 @@ FALSE = 0
 
 class GuideResource(FreevoResource):
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
     def GetChannelList(self, guide):
@@ -88,7 +87,7 @@ class GuideResource(FreevoResource):
             program_tip = 'Scheduled Program : %s' %  Unicode(sch_prog.sub_title)
 
         if self.got_schedule:
-            (result, reason) = self.recordclient.isProgScheduledNow(prog, self.schedule)
+            (result, reason) = self.recordclient().isProgScheduledNow(prog, self.schedule)
             if result:
                 status = 'programlinerecord'
                 if self.currenttime > prog.start  and self.currenttime < prog.stop:
@@ -195,7 +194,7 @@ class GuideResource(FreevoResource):
         form = request.args
 
         self.guide = tv.epg_xmltv.get_guide()
-        (self.got_schedule, self.schedule) = self.recordclient.getScheduledRecordingsNow()
+        (self.got_schedule, self.schedule) = self.recordclient().getScheduledRecordingsNow()
         self.currenttime = time.time()
 
         fv.printHeader(_('TV Guide'), config.WWW_STYLESHEET, config.WWW_JAVASCRIPT, selected=_('TV Guide'))

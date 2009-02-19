@@ -33,8 +33,7 @@ import sys, time
 import util.tv_util as tv_util
 
 import config
-from tv.record_client import RecordClient
-from www.web_types import HTMLResource, FreevoResource
+from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
 TRUE = 1
 FALSE = 0
@@ -42,17 +41,17 @@ FALSE = 0
 
 class SearchResource(FreevoResource):
     def __init__(self):
-        self.recordclient = RecordClient()
+        self.recordclient = RecordClientResource()
 
 
     def _render(self, request):
         fv = HTMLResource()
         form = request.args
 
-        server_available = self.recordclient.pingNow()
+        server_available = self.recordclient().pingNow()
         if not server_available:
             fv.printHeader(_('Search Results'), 'styles/main.css', selected=_('Search'))
-            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient.recordserverdown])
+            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+self.recordclient().recordserverdown])
             return String(fv.res)
 
         find = fv.formValue(form, 'find')
@@ -61,11 +60,11 @@ class SearchResource(FreevoResource):
         else:
             movies_only = 0
 
-        (got_matches, progs) = self.recordclient.findMatchesNow(find, movies_only)
+        (got_matches, progs) = self.recordclient().findMatchesNow(find, movies_only)
 
         if got_matches:
-            (status, favorites) = self.recordclient.getFavoritesNow()
-            (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+            (status, favorites) = self.recordclient().getFavoritesNow()
+            (status, schedule) = self.recordclient().getScheduledRecordingsNow()
             if status:
                 rec_progs = schedule.getProgramList()
 
@@ -100,7 +99,7 @@ class SearchResource(FreevoResource):
                         if hasattr(rp, 'isRecording') and rp.isRecording:
                             status = 'recording'
 
-                if self.recordclient.isProgAFavoriteNow(prog, favorites):
+                if self.recordclient().isProgAFavoriteNow(prog, favorites):
                     status = 'favorite'
 
 
