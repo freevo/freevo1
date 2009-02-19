@@ -255,6 +255,7 @@ def getpid(name, arg):
                 len(proc_arg)>2 and arg[1] != proc_arg[1]) or \
                 len(proc_arg)>3 and arg[2] != proc_arg[2]):
                 # different proc I guess
+                _debug_('proc_arg=%r' % (proc_arg,))
                 try:
                     os.unlink(fname)
                 except OSError:
@@ -272,35 +273,35 @@ def stop(name, arg):
     stop running process 'name'
     """
     _debug_('stop(name=%r, arg=%r)' % (name, arg))
-    if opts.dry_run:
-        return 1
+    #if opts.dry_run:
+    #    return 1
     fname, pid = getpid(name, arg)
     if not pid:
         _debug_('cannot kill %r no pid' % (name))
         return 0
-    try:
-        for signal in (SIGINT, SIGTERM, SIGKILL):
-            try:
-                _debug_('trying to kill %r pid=%r with signal=%r' % (name, pid, signal))
-                os.kill(pid, signal)
-                for i in range(10):
-                    if getpid(name, arg)[1] == 0:
-                        _debug_('killed %r pid=%r with signal=%r (%r)' % (name, pid, signal, i))
-                        break
-                    time.sleep(0.1)
 
-            except OSError, e:
-                _debug_('kill(pid=%r signal=%r): %s' % (pid, signal, e))
-                pass
-            if getpid(name, arg)[1] == 0:
-                return 1
-        return 0
-    finally:
+    if opts.dry_run:
+        return 1
+    for signal in (SIGTERM, SIGINT, SIGKILL):
         try:
-            os.unlink(fname)
-            _debug_('%s removed' % (fname))
+            _debug_('trying to kill %r pid=%r with signal=%r' % (name, pid, signal))
+            os.kill(pid, signal)
+            for i in range(12):
+                if getpid(name, arg)[1] == 0:
+                    _debug_('killed %r pid=%r with signal=%r (%r)' % (name, pid, signal, i))
+                    break
+                time.sleep(0.1)
         except OSError, e:
-            _debug_('%s NOT removed' % (fname))
+            _debug_('kill(pid=%r signal=%r): %s' % (pid, signal, e))
+            pass
+        if getpid(name, arg)[1] == 0:
+            try:
+                os.unlink(fname)
+                _debug_('%s removed' % (fname))
+            except OSError, e:
+                _debug_('%s NOT removed' % (fname))
+            return 1
+    return 0
 
 
 def start(name, arg, daemon, store=1):
@@ -321,6 +322,7 @@ def start(name, arg, daemon, store=1):
         cmdfile.close()
         os.chmod(cmdfile.name, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)
 
+    # should close stdout and stderr for a daemon
     pid = os.fork()
     if pid:
         if store:
@@ -375,8 +377,8 @@ def parse_options(defaults, versions):
         help='run freevo in a new x session in full-screen')
     parser.add_option('--server-layout', action='store', metavar='LAYOUT', default=None,
         help='X server layout [default:%default]')
-    parser.add_option('--force-fs', action='store_true', default=False,
-        help='run freevo in full-screen')
+    #parser.add_option('--force-fs', action='store_true', default=False,
+    #    help='run freevo in full-screen')
     parser.add_option('-p', '--profile', action='store_true', default=False,
         help='activate profile and write stats to /tmp [default:%default]')
     parser.add_option('--daemon', action='store_true', default=False,
@@ -477,9 +479,8 @@ execfile(freevo_revision, {}, versions)
 (opts, args) = parse_options(defaults, versions)
 defaults.update(opts.__dict__)
 
-if opts.debug:
-    pprint.pprint(opts.__dict__)
-    pprint.pprint(args)
+_debug_('opts:%r' % (opts.__dict__,))
+_debug_('args:%r' % (args,))
 
 opt_trace = [ '--trace' ] * opts.trace
 opt_debug = [ '--debug' ] * opts.debug
