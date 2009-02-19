@@ -128,7 +128,7 @@ class PluginInterface(plugin.MimetypePlugin):
                             x.subitems.append(VideoItem(filename, x))
                             hidden_files.append(filename)
 
-            if parent.media:
+            if parent and parent.media:
                 file_id = String(parent.media.id) + file[len(os.path.join(parent.media.mountdir, "")):]
                 try:
                     x.mplayer_options = discset_information[file_id]
