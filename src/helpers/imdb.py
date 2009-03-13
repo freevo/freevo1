@@ -100,6 +100,10 @@ if __name__ == "__main__":
     search_arg = ''
 
     (opts, args) = parse_options({})
+    if args[0] == 'imdb':
+        args.pop(0)
+    _debug_('opts=%r' % (opts,))
+    _debug_('args=%r' % (args,))
 
     # check the aruments
     if opts.search and opts.guess:

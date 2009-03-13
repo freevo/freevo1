@@ -166,6 +166,7 @@ class FxdImdb:
         name = re.sub('([0-9])([a-zA-Z])', point_maker, name.lower())
         name = re.sub(',', ' ', name)
 
+        _debug_('name=%s season=%s episode=%s' % (name, season, episode))
         if label:
             for r in config.IMDB_REMOVE_FROM_LABEL:
                 try:
@@ -269,11 +270,13 @@ class FxdImdb:
 
         self.id = id
 
+        _debug_('id=%s season=%s episode=%s' % (id, season, episode))
         if season is None or episode is None:
-            episodeid = None
+            episodeid = id
         else:
             # This is a TV series, lets use a special search
             url = 'http://www.imdb.com/title/tt%s/episodes' % id
+            _debug_('url=%r' % (url,))
             req = urllib2.Request(url, txdata, txheaders)
 
             try:
@@ -285,7 +288,8 @@ class FxdImdb:
             idpage.close()
 
         # do the standard search
-        url = 'http://www.imdb.com/title/tt%s' % id
+        url = 'http://www.imdb.com/title/tt%s' % episodeid
+        _debug_('url=%r' % (url,))
         req = urllib2.Request(url, txdata, txheaders)
 
         try:
@@ -304,6 +308,7 @@ class FxdImdb:
         self.parse_data(idpage, id, episodeid, season, episode)
         idpage.close()
 
+        _debug_('episodeid=%s' % (episodeid,))
         return episodeid
 
 
@@ -860,12 +865,14 @@ class FxdImdb:
 
         m = re.compile('.*Season %s, Episode %s.*\/tt([0-9]+)' % (season, episode))
 
-        for episode in soup.findAll('h4'):
+        for episode in soup.findAll('h3'):
             info = m.search(str(episode))
             if info:
                 episodeid = info.group(1)
+                _debug_('episodeid=%r' % (episodeid,))
                 return episodeid
 
+        _debug_('id=%r' % (id,))
         return id
 
 
