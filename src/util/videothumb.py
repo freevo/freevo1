@@ -73,8 +73,8 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     if pos != None:
         args.append(str(pos))
 
-    _debug_('%r' % ([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args))
-    out = popen3.stdout([os.environ['FREEVO_SCRIPT'], 'execute', os.path.abspath(__file__) ] + args)
+    _debug_('%r' % ([os.environ['FREEVO_SCRIPT'], '--execute=%s' % os.path.abspath(__file__) ] + args))
+    out = popen3.stdout([os.environ['FREEVO_SCRIPT'], '--execute=%s' % os.path.abspath(__file__) ] + args)
     if out:
         for line in out:
             _debug_('%s' % line, 2)

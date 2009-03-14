@@ -36,6 +36,7 @@ import sys
 import config
 import pylirc
 import time
+from optparse import Option, BadOptionError, OptionValueError, OptionParser, IndentedHelpFormatter
 
 def start():
     try:
@@ -48,30 +49,44 @@ def start():
         print 'WARNING: %s not found!' % config.LIRCRC
         sys.exit(0)
 
+
 def stop():
     pylirc.exit()
 
 
+def parse_options():
+    """
+    Parse command line options
+    """
+    import version, revision
+    _version = version.__version__
+    if _version.endswith('-svn'):
+        _version = _version.split('-svn')[0] + ' r%s' % revision.__revision__
+    formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=36, width=100, short_first=0)
+    parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="""
+Freevo helper script to start Freevo on lirc command.  Everytime Freevo is not
+running and EXIT or POWER is pressed, this script will start Freevo. If the
+display in freevo.conf is x11 or dga, this script will start Freevo in a new X
+session.""", version='%prog ' + _version)
+    parser.add_option('--start', action='store_true', default=False,
+        help='start the daemon [default:%default]')
+    parser.add_option('--stop', action='store_true', default=False,
+        help='stop the daemon [default:%default]')
+    return parser.parse_args()
 
-if __name__ == "__main__":
-    if len(sys.argv)>1 and sys.argv[1] == '--help':
-        print 'Freevo helper script to start Freevo on lirc command.'
-        print 'Everytime Freevo is not running and EXIT or POWER is pressed,'
-        print 'this script will start Freevo. If the display in freevo.conf'
-        print 'is x11 or dga, this script will start Freevo in a new'
-        print 'X session.'
-        print 'usage: freevo daemon [ start | stop ]'
-        sys.exit(0)
+
+if __name__ == '__main__':
+    (options, args) = parse_options()
 
 
 start()
-while 1:
+while True:
     time.sleep(1)
     code = pylirc.nextcode();
     if code and code[0] in ( 'EXIT', 'POWER' ):
         stop()
         if config.CONF.display in ( 'x11', 'dga' ):
-            options = '-fs'
+            options = '--fullscreen'
         else:
             options = ''
 

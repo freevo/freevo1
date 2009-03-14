@@ -117,8 +117,8 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
         # realy exit, we are called by the signal handler
         sys.exit(0)
 
-    _debug_('%s stop' % os.environ['FREEVO_SCRIPT'], 2)
-    os.system('%s stop' % os.environ['FREEVO_SCRIPT'])
+    _debug_('%s --stop' % os.environ['FREEVO_SCRIPT'], 2)
+    os.system('%s --stop' % os.environ['FREEVO_SCRIPT'])
 
     # Just wait until we're dead. SDL cannot be polled here anyway.
     while 1:

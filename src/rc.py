@@ -654,7 +654,7 @@ class EventHandler:
         repeat: if true, call the function later again
         timer:  timer * 0.01 seconds when to call the function
         """
-        _debug_('EventHandler.register(function=%r, repeat=%r, timer=%r, arg=%r)' % (function, repeat, timer, arg))
+        _debug_('EventHandler.register(function=%r, repeat=%r, timer=%r, arg=%r)' % (function, repeat, timer, arg), 2)
         self.lock.acquire()
         try:
             if timer == SHUTDOWN:
