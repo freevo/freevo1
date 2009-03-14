@@ -1237,6 +1237,7 @@ CACHE_IMAGES = 1
 # southafrica, argentina, canada-cable, russia
 #
 # TV_SETTINGS = 'NORM INPUT CHANLIST DEVICE'
+# eg: TV_SETTINGS = 'ntsc television us-cable /dev/video0'
 
 #
 # Video input device
