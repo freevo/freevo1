@@ -35,6 +35,7 @@ are a member of a series are placed in a series menu and the menu placed
 at the top level.
 """
 
+from gui.PopupBox import PopupBox
 import os
 import os.path
 import datetime
@@ -56,9 +57,14 @@ from item import Item
 from playlist import Playlist
 from directory import DirItem
 from event import *
-from gui import ConfirmBox, AlertBox, ProgressBox
+from gui import ConfirmBox, AlertBox, ProgressBox, PopupBox
 from menu import MenuItem, Menu
 from video import VideoItem
+from tv.record_client import RecordClient
+from tv.programitem import ProgramItem
+from tv.epg_types import TvProgram
+from tv.record_types import Favorite
+from tv.favoriteitem import FavoriteItem
 
 disk_manager = None
 
@@ -165,10 +171,10 @@ class RecordingsDirectory(Item):
 
         self.blue_action = (self.configure, _('Configure directory'))
 
+
     # ======================================================================
     # actions
     # ======================================================================
-
     def actions(self):
         """
         return a list of actions for this item
@@ -312,6 +318,7 @@ class RecordingsDirectory(Item):
         self.browse(arg='update')
         return None
 
+
     def load_settings(self):
         """
         document me
@@ -325,6 +332,7 @@ class RecordingsDirectory(Item):
                 print "fxd file %s corrupt" % self.settings_fxd
                 traceback.print_exc()
 
+
     def save_settings(self):
         """
         document me
@@ -336,6 +344,7 @@ class RecordingsDirectory(Item):
         except:
             print "fxd file %s corrupt" % self.settings_fxd
             traceback.print_exc()
+
 
     def read_settings_fxd(self, fxd, node):
         """
@@ -411,9 +420,6 @@ class RecordedProgramItem(VideoItem):
 
         self.set_icon()
 
-    # ======================================================================
-    # actions
-    # ======================================================================
 
     def actions(self):
         """
@@ -423,6 +429,8 @@ class RecordedProgramItem(VideoItem):
         items = actions[0:2]
         items.append((self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')))
         items.append((self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched')))
+        items.append(MenuItem(_('Search for more of this program'), search_for_more, (self, self.video_item.name)))
+        items.append(MenuItem(_('Add to favorites'), add_to_favorites, (self, self.video_item.name)))
         items = items + actions[2:]
         return items
 
@@ -560,6 +568,7 @@ class RecordedProgramItem(VideoItem):
 
         return self.name
 
+
     def id(self):
         return self.sort('date+name')
 
@@ -582,19 +591,17 @@ class Series(Item):
         self.update(items)
 
 
-    # ======================================================================
-    # actions
-    # ======================================================================
-
     def actions(self):
         """
         return the default action
         """
         return [
             (self.browse, _('Browse episodes')),
-            (self.confirm_delete, _('Delete all episodes')),
+            (self.play_all, _('Play all episodes')),
             (self.mark_all_to_keep, _('Keep all episodes')),
-            (self.play_all, _('Play all episodes'))
+            (self.confirm_delete, _('Delete all episodes')),
+            MenuItem(_('Search for more of this program'), search_for_more, (self, self.name)),
+            MenuItem( _('Add to favorites'), add_to_favorites, (self, self.name)),
         ]
 
 
@@ -688,6 +695,10 @@ class Series(Item):
             menuw.refresh(reload=True)
 
 
+    def add_to_favorites(self, arg=None, menuw=None):
+        pass
+
+
     def update(self, items):
         """
         Update the list of programs that make up this series.
@@ -741,6 +752,7 @@ class Series(Item):
         self.watched = watched
         self.keep = keep
 
+
     def __getitem__(self, key):
         """
         Returns the number of episodes when
@@ -776,8 +788,10 @@ class Series(Item):
 
         return self.name
 
+
     def id(self):
         return 'series:' + self.name
+
 
     def eventhandler(self, event, menuw=None):
         """
@@ -821,7 +835,6 @@ class DiskManager(plugin.DaemonPlugin):
         self.update_recordings()
 
 
-
     def poll(self):
         """
         Check that the available disk space is greater than TVRM_MINIMUM_DISK_FREE
@@ -830,6 +843,7 @@ class DiskManager(plugin.DaemonPlugin):
         self.check_space()
 
         self.check_recordings()
+
 
     def set_update_menu(self, obj, menu, menuw):
         """
@@ -903,12 +917,18 @@ class DiskManager(plugin.DaemonPlugin):
                     # just in case only some of the item files have been deleted, add the
                     # existing ones back into the added files so a new item is created for
                     # those files.
-                    for itemfile in rpitem.files.files + [rpitem.files.fxd_file, rpitem.files.edl_file, rpitem.files.image]:
+                    for itemfile in rpitem.files.files + [rpitem.files.fxd_file, rpitem.files.edl_file,
+                        rpitem.files.image]:
                         if itemfile in files:
                             added_files.add(itemfile)
                     deleted = True
                     break
             if not deleted:
+                # Make sure we reset the name, in case the penultimate episode
+                # of a series is deleted, resulting in the last episode being
+                # promoted to the top level list. If we don't do this the item
+                # keeps the episode title not the series title.
+                rpitem.name = rpitem.video_item.name
                 rpitems.append(rpitem)
 
         # Parse only the added files.
@@ -1058,3 +1078,51 @@ def get_status_sort_order(watched, keep):
     elif watched:
         order = orders[STATUS_ORDER_WATCHED]
     return order
+
+
+def search_for_more(arg=None, menuw=None):
+    parent, title = arg
+    # this might take some time, thus we open a popup messages
+    _debug_(String('searching for: %s' % title), 2)
+    pop = PopupBox(text=_('Searching, please wait...'))
+    pop.show()
+
+    # do the search
+    (status, matches) = RecordClient().findMatchesNow(title)
+    pop.destroy()
+    if status:
+        items = []
+        _debug_('search found %s matches' % len(matches), 2)
+        # sort by start times
+        f = lambda a, b: cmp(a.start, b.start)
+        matches.sort(f)
+        for prog in matches:
+            items.append(ProgramItem(parent, prog, context='search'))
+    elif matches == 'no matches':
+        # there have been no matches
+        msgtext = _('No matches found for %s') % self.title
+        AlertBox(text=msgtext).show()
+        return
+    else:
+        # something else went wrong
+        msgtext = _('Search failed') +(':\n%s' % matches)
+        AlertBox(text=msgtext).show()
+        return
+
+    # create a menu from the search result
+    search_menu = Menu(_('Search Results'), items, item_types='tv program menu')
+    # do not return from the search list to the submenu
+    # where the search was initiated
+    menuw.delete_submenu(refresh = False)
+    menuw.pushmenu(search_menu)
+    menuw.refresh()
+
+
+def add_to_favorites(arg=None, menuw=None):
+    parent, title = arg
+    if menuw:
+        menuw.delete_submenu(refresh=False)
+    prog = TvProgram(title=title)
+    fav = Favorite(title, prog, priority=-1)
+    fav_item = FavoriteItem(parent, fav, fav_action='add')
+    fav_item.display_submenu(menuw=menuw)
