@@ -51,7 +51,7 @@ class XMLnode:
         self.attr_list = []
         attr = attr or []
         for name, val in attr:
-            self.attr_list.append(((None, name), val))
+            self.attr_list.append((('', name), val))
         self.attrs = self
         self.children = []
         self.first_cdata = first_cdata
@@ -59,6 +59,18 @@ class XMLnode:
 
     def items(self):
         return self.attr_list
+
+    def has_key(self, to_find):
+        for key, value in self.attr_list:
+            if to_find == key:
+                return True
+        return False
+
+    def __getitem__(self, to_find):
+        for key, value in self.attr_list:
+            if to_find == key:
+                return value
+        raise KeyError(to_find)
 
 
 class FXDtree(qp_xml.Parser):

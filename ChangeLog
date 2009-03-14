@@ -11,18 +11,17 @@ X is the category and #nnnnnnn is the tracker number.
 (B)ugs             http://sourceforge.net/tracker/?group_id=46652&atid=446895
 (F)eature requests http://sourceforge.net/tracker/?group_id=46652&atid=446898
 
-
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
-svn co svn://svn.freevo.org/freevo/branches/rel-1-7/freevo freevo-1.7.x
 
-== Release 1.8.4 (2009-01-24) ==
+== Release 1.8.4 (2009-??-??) ==
 --------------------------------
 
  * New skinable dialogs (F#2308911)
  * New "freevo cache" option --cropdetect to detect and add crop options to fxd files (F#)
+ * New rtorrent module to allow torrents to be downloaded from freevo (F#2580403)
+ * New OSD dialog screen designer (F#2621369)
  * New screen-saver module, "life" (F#2371097)
  * New screen-saver module, "flames" (F#2376752)
- * New rtorrent module to allow torrents to be downloaded from freevo (F#2580403)
  * Updated ivtv_xine_tv plugin with a record menu screen, xine-ui patch required (F#2373921)
  * Updated play state dialogues with time elapsed / total time (F#2594055)
  * Updated encoding crop detection (F#2500046)

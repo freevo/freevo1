@@ -68,6 +68,11 @@ def get_definition(name):
 def register_widget_style(name, states):
     widget_styles[name] = states
 
+def unregister_widget_style(name):
+    global widget_styles
+    if name in widget_styles:
+        del widget_styles[name]
+
 def get_widget_style(name):
     if name in widget_styles:
         return widget_styles[name]
@@ -122,7 +127,7 @@ class OSDDialog(object):
             try:
                 obj.render(self.image, value_dict)
             except:
-                _debug_('Caught exception while processing OSD element!' + traceback.format_exc())
+                report_error('Caught exception while processing OSD element!' + traceback.format_exc())
         return self.image
 
     def finish(self):
@@ -161,7 +166,11 @@ class OSDText(OSDObject):
 
 
     def render(self, image, value_dict):
-        to_render = eval(self.expr, globals(), value_dict)
+        try:
+            to_render = eval(self.expr, globals(), value_dict)
+        except:
+            report_error('Failed to evalutate text expression \"%s\"' % self.expr)
+            to_render = ''
         x = eval_or_int(self.pos[0], value_dict)
         y = eval_or_int(self.pos[1], value_dict)
         self.__drawstring(image, to_render, (x,y), self.size,
@@ -388,12 +397,21 @@ class OSDImage(OSDObject):
 
 
     def render(self, image, value_dict):
-        if eval(self.expr, value_dict):
+        try:
+            should_draw = eval(self.expr, value_dict)
+        except:
+            report_error('Failed to evalutate display expression \"%s\"' % self.expr)
+            should_draw = False
 
+        if should_draw:
+            to_draw = None
             if self.image_expr:
-                image_name = eval(self.image_expr, value_dict)
-                image_name = find_image(image_name)
-                to_draw = get_image(image_name, self.scale, self.size)
+                try:
+                    image_name = eval(self.image_expr, value_dict)
+                    image_name = find_image(image_name)
+                    to_draw = get_image(image_name, self.scale, self.size)
+                except:
+                    report_error('Failed to evalutate image expression \"%s\"' % self.image_expr)
             else:
                 to_draw = self.image
             if to_draw:
@@ -411,21 +429,24 @@ class OSDPercent(OSDImage):
         self.vertical = vertical
 
     def render(self, image, value_dict):
-        percent = min(1.0, max(0.0, eval(self.expr, value_dict)))
+        try:
+            percent = min(1.0, max(0.0, eval(self.expr, value_dict)))
+        except:
+            report_error('Failed to evaluate percent expression \"%s\"' % self.expr)
 
         if self.vertical:
             im_x = 0
-            x = self.pos[0]
+            x = eval_or_int(self.pos[0], value_dict)
             w = self.size[0]
             h = int(float(self.size[1]) * percent)
             im_y = self.size[1] - h
-            y = self.pos[1] + im_y
+            y = eval_or_int(self.pos[1], value_dict) + im_y
 
         else:
             im_x = 0
             im_y = 0
-            x = self.pos[0]
-            y = self.pos[1]
+            x = eval_or_int(self.pos[0], value_dict)
+            y = eval_or_int(self.pos[1], value_dict)
             w = int(float(self.size[0]) * percent)
             h = self.size[1]
 
@@ -455,7 +476,7 @@ class OSDWidget(OSDObject):
             self.render_widget(self.image, model)
             image.blend(self.image, dst_pos=self.pos)
         else:
-            _debug_('Model (%s) not found, not drawn!' % self.name, DWARNING)
+            report_error('Model (%s) not found!' % self.name)
         self.first_render = False
 
     def finish(self):
@@ -492,7 +513,7 @@ class OSDWidget(OSDObject):
                     self.cached_objects.append(obj)
                     obj.prepare()
             else:
-                _debug_('State (%s) not defined in widget style %s' % (state, self.style), DWARNING)
+                report_error('State (%s) not defined in widget style %s' % (state, self.style))
 
         for obj in self.cached_objects:
             obj.render(image, {'model':model})
@@ -530,7 +551,6 @@ class OSDMenu(OSDWidget):
     def render_widget(self, image, model):
         if self.first_render:
             model.layout(self.items_per_page, self.pos, self.size)
-
 
         super(OSDMenu, self).render_widget(image, model)
 
@@ -642,7 +662,7 @@ def find_image(filename):
         if vfs.isfile("%s.jpg" % dfile):
             return vfs.abspath("%s.jpg" % dfile)
 
-    _debug_('osd error: can\'t find image \"%s\"' % filename, DWARNING)
+    report_error('Can\'t find image \"%s\"' % filename)
 
     if config.DEBUG:
         _debug_('image search path is:')
@@ -650,3 +670,8 @@ def find_image(filename):
             _debug_(dir)
 
     return ''
+
+def _report_error(error):
+    _debug_(error, DWARNING)
+
+report_error = _report_error

@@ -306,6 +306,9 @@ class GraphicsDisplay(Display):
         self._lock.acquire()
         if self.current_dialog:
             self.current_dialog.finish()
+            self.current_dialog = None
+            self.hide_dialog_timer.stop()
+            self.hide_image()
             if self.waiting[dialogs.Dialog.NORMAL_PRIORITY]:
                 dialog, duration, prepared = self.waiting[dialogs.Dialog.NORMAL_PRIORITY]
                 dialog.finish()

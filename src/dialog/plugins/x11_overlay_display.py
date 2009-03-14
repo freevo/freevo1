@@ -28,10 +28,13 @@
 #
 # -----------------------------------------------------------------------
 
+import os
+
 import osd
 import config
 import plugin
 import dialog
+
 
 from dialog.display import GraphicsDisplay
 from dialog.dialogs import VolumeDialog, MessageDialog
@@ -46,10 +49,21 @@ class PluginInterface(plugin.Plugin):
     """
     def __init__(self):
         if x11_available:
-            dialog.set_overlay_display(X11GraphicsDisplay())
+            self.display = X11GraphicsDisplay()
+            dialog.set_overlay_display(self.display)
             plugin.Plugin.__init__(self)
         else:
             self.reason = reason
+
+    def shutdown1(self):
+        if x11_available:
+            # Nasty hack to kill the connection
+            self.display.window = None
+            import kaa.display.x11
+            del kaa.display.x11._default_x11_display
+            kaa.display.x11._default_x11_display = None
+            
+
 
 if config.CONF.display in ('x11', 'xv'):
     try:

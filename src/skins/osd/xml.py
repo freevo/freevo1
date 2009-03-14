@@ -78,8 +78,8 @@ def attr_color(node, attr, default, allow_names=True):
     return the attribute as tuple of 3 or 4 values
     """
     if node.attrs.has_key(('', attr)):
-
-        components = node.attrs[('', attr)].split(',', 4)
+        value = node.attrs[('', attr)]
+        components = value.split(',', 4)
         if len(components) == 4:
             result = (int(components[0]),
                       int(components[1]),
@@ -92,7 +92,11 @@ def attr_color(node, attr, default, allow_names=True):
                       int(components[2]))
             return result
         else:
-            return str(node.attrs[('', attr)])
+            if value:
+                return str(value)
+            else:
+                # When a empty string is supplied return the default.
+                return default
     return default
 
 
@@ -101,7 +105,7 @@ def attr_bool(node, attr, default):
     return the attribute as bool
     """
     if node.attrs.has_key(('', attr)):
-        value = node.attrs[('', attr)]
+        value = node.attrs[('', attr)].title()
         return bool(eval(value))
     return default
 
@@ -284,17 +288,15 @@ def parse_style_state(snode, scale):
 
     return objects
 
-def parse_widget_styles(wsnode, scale):
-    for node in wsnode.children:
-        if node.name == 'widgetstyle':
-            name = attr_str(node, 'name', '')
-            style_states = {}
-            for snode in node.children:
-                if snode.name == 'widgetstate':
-                    state_name = attr_str(snode, 'state', '')
-                    style_states[state_name] = parse_style_state(snode, scale)
+def parse_widget_style(node, scale):
+    name = attr_str(node, 'name', '')
+    style_states = {}
+    for snode in node.children:
+        if snode.name == 'widgetstate':
+            state_name = attr_str(snode, 'state', '')
+            style_states[state_name] = parse_style_state(snode, scale)
 
-            widget_styles[name] = style_states
+    widget_styles[name] = style_states
 
 
 def instantiate_widget_styles():
@@ -328,11 +330,15 @@ def parse_color(node):
     global colors
     label = attr_str(node, 'label', '')
     value = attr_color(node, 'value', (0 , 0, 0), False)
+    _debug_('Color %s = %r' % (label, value))
     colors[label] = value
 
 def resolve_color(color):
+    _debug_('Resolving %r type = %r' % (color, type(color)))
     if isinstance(color, str):
+        _debug_('Colors %r' %(colors.keys()))
         if color in colors:
+            _debug_('Resolved %s to %r' % (color, colors[color]))
             return colors[color]
         else:
             _debug_('Color %s not found!' % color)
@@ -369,8 +375,8 @@ def osds_callback(fxd, node):
         elif node.name == 'osd':
             dialog = Dialog(node, scale)
             dialog_definitions[dialog.name] = dialog
-        elif node.name == 'widgetstyles':
-            parse_widget_styles(node, scale)
+        elif node.name == 'widgetstyle':
+            parse_widget_style(node, scale)
 
 
 def parse(filename):

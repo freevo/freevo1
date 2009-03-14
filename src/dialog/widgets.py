@@ -172,6 +172,9 @@ class ButtonModel(WidgetModel):
             return 'pressed'
         return state
 
+    def __repr__(self):
+        return 'ButtonModel(%r, icon=%r)' % (self.text, self.icon)
+
 
 class ToggleButtonModel(ButtonModel):
     """
@@ -218,6 +221,9 @@ class ToggleButtonModel(ButtonModel):
                 state += '_unselected'
 
         return state
+
+    def __repr__(self):
+        return 'ToggleButtonModel(%r)' % self.text
 
 class ToggleButtonGroup(object):
     """
@@ -279,7 +285,7 @@ class MenuModel(WidgetModel):
     changes.
     @ivar items: List of menu items managed by this menu.
     """
-    def __init__(self):
+    def __init__(self, items=None):
         WidgetModel.__init__(self)
         self.items = []
         self.page = None
@@ -289,6 +295,10 @@ class MenuModel(WidgetModel):
         self.more_up = False
         self.more_down = False
         self.signals['selection_changed'] = kaa.Signal()
+        if items:
+            for item in items:
+                item.parent = self
+                self.items.append(item)
 
     def handle_event(self, event):
         if event == 'INPUT_ENTER':
@@ -466,6 +476,9 @@ class MenuModel(WidgetModel):
         """
         return self.items[self.active_item]
 
+    def __repr__(self):
+        return 'MenuModel(items=%r)' % self.items
+
 class MenuItemModel(ButtonModel):
     """
     Simple item to be displayed in a menu.
@@ -486,6 +499,9 @@ class MenuItemModel(ButtonModel):
         if state == 'normal' and self == self.parent.get_active_item():
             return 'highlighted'
         return state
+
+    def __repr__(self):
+        return 'MenuItemModel(%r, icon=%r)' % (self.text, self.icon)
 
 class ToggleMenuItemModel(MenuItemModel):
     """
@@ -521,3 +537,6 @@ class ToggleMenuItemModel(MenuItemModel):
                 state += '_unselected'
 
         return state
+
+    def __repr__(self):
+        return 'ToggleMenuItemModel(%r)' % self.text
