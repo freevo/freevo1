@@ -10,7 +10,7 @@
 #   to run under python type:
 #       python /path/to/vg.py --help (normally src/helpers/vg.py)
 #   to run under freevo type:
-#       freevo vg --help
+#       freevo vg -- --help
 #
 # Todo:
 #   Add DVB devices (someone with DVB card needs to do this)
@@ -199,7 +199,6 @@ class VideoGroupBuilder(object):
             except Exception, why:
                 print >>sys.stderr, why
                 continue
-            #print videodev.__dict__
             group_type = 'unknown'
             adev = None
             if videodev.driver in self.DVB:
@@ -229,18 +228,30 @@ class VideoGroupBuilder(object):
             vg = VideoGroup(desc=desc, group_type=group_type, vdev=vdev, vvbi=vvbi, adev=adev)
             self.groups.append(vg)
 
-            if hasattr(videodev, 'inputs'):
-                for input, values in videodev.inputs.items():
-                    # Asuming the the first device is the tuner
-                    if values[0] == 0:
-                        vg.input_num = values[0]
-                        vg.input_type = values[1]
+            for value in videodev.enuminputs().values():
+                if videodev.getinput() == value[0]:
+                    vg.input_num = value[0]
+                    vg.input_type = value[1]
+                    break
+            else:
+                if hasattr(videodev, 'inputs'):
+                    for input, values in videodev.inputs.items():
+                        # Asuming the the first device is the tuner
+                        if values[0] == 0:
+                            vg.input_num = values[0]
+                            vg.input_type = values[1]
 
-            tuner_norm = []
-            if hasattr(videodev, 'inputs'):
-                for standard, values in videodev.standards.items():
-                    tuner_norm.append(values[2])
-            vg.tuner_norm = ','.join(tuner_norm)
+            for value in videodev.enumstds().values():
+                if videodev.getstd() == value[1]:
+                    vg.tuner_norm = value[2]
+                    break
+            else:
+                tv_standard = None
+                tuner_norm = []
+                if hasattr(videodev, 'inputs'):
+                    for standard, values in videodev.standards.items():
+                        tuner_norm.append(values[2])
+                vg.tuner_norm = ','.join(tuner_norm)
             vg.tuner_chanlist = 'FixMe'
 
 
