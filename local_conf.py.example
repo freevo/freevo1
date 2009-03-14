@@ -50,7 +50,7 @@
 #
 # -----------------------------------------------------------------------
 
-CONFIG_VERSION = 5.26
+CONFIG_VERSION = 5.27
 
 # ======================================================================
 # General freevo settings:
@@ -1324,6 +1324,8 @@ CACHE_IMAGES = 1
 # RECORDSERVER_IP = 'localhost'
 # RECORDSERVER_PORT = 18001
 # RECORDSERVER_SECRET = 'secret1'
+# The timer offset when to check the next recording; in the USA use 0
+# RECORDSERVER_ATTIMER = 45
 
 # If the recordserver runs as root, set the uid to the given one
 # after startup. The gui must also match one of the users group ids

@@ -108,7 +108,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.26
+LOCAL_CONF_VERSION = 5.27
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -388,6 +388,9 @@ LOCAL_CONF_CHANGES = [
      Removed MPLAYER_AUDIO_CACHE_KB, MPLAYER_AUDIO_CACHE_MIN_PERCENT and MPLAYER_AUDIO_NETWORK_OPTS, it broke detach
      Added WWW_IMAGE_SIZE and WWW_IMAGE_THUMBNAIL_SIZE for Cooliris support
      Added VIDEO_AUTOJOIN_REGEX to allow more control when joining video files
+     """),
+    (5.27,
+     """ Added RECORDSERVER_ATTIMER to control when the programme recording should start
      """),
 ]
 
@@ -1853,6 +1856,8 @@ TV_RECORD_FAVORITES_LIST = FREEVO_STATICDIR + '/favorites.txt'
 RECORDSERVER_IP = 'localhost'
 RECORDSERVER_PORT = 18001
 RECORDSERVER_SECRET = 'secret1'
+# The timer offset when to check the next recording; in the USA use 0
+RECORDSERVER_ATTIMER = 45
 
 # If the recordserver runs as root, set the uid to the given one
 # after startup. The gui must also match one of the users group ids

@@ -1445,7 +1445,7 @@ def main():
 
 
     _debug_('kaa.AtTimer starting')
-    kaa.AtTimer(recordserver.handleAtTimer).start(sec=45)
+    kaa.AtTimer(recordserver.handleAtTimer).start(sec=config.RECORDSERVER_ATTIMER)
     _debug_('kaa.main starting')
     kaa.main.run()
     _debug_('kaa.main finished')
