@@ -42,6 +42,7 @@ import kaa
 import config
 import evdev
 
+import pygame
 from event import Event, BUTTON
 
 from benchmark import benchmark
@@ -53,7 +54,6 @@ SHUTDOWN = -1
 PYLIRC     = False
 _singleton = None
 
-
 @benchmark(benchmarking & 0x2, benchmarkcall)
 def get_singleton(**kwargs):
     """
@@ -63,7 +63,7 @@ def get_singleton(**kwargs):
     global _singleton
 
     # One-time init
-    if _singleton == None:
+    if _singleton is None:
         _singleton = EventHandler(**kwargs)
 
     return _singleton
@@ -251,7 +251,7 @@ class Lirc:
         _debug_('Lirc.poll(rc=%r)' % (rc,), 5)
         list = self.get_last_code()
 
-        if list == None:
+        if list is None:
             nowtime = 0.0
             nowtime = time.time()
             if (self.lastkeystroke + self.default_keystroke_delay2 < nowtime) and (self.firstkeystroke != 0.0):
@@ -259,7 +259,7 @@ class Lirc:
                 self.lastkeystroke = 0.0
                 self.repeat_count = 0
 
-        if list != None:
+        else:
             nowtime = time.time()
 
             if list:
@@ -281,6 +281,13 @@ class Lirc:
             self.lastkeystroke = nowtime
             self.repeat_count += 1
 
+            try:
+                for code in list:
+                    ev = pygame.event.Event(pygame.USEREVENT, {'type':'lirc', 'code':code})
+                    pygame.event.post(ev)
+            except Exception, why:
+                print why
+            # don't quite understand this; looks like nonsense
             for code in list:
                 return code
 
@@ -319,15 +326,14 @@ class Joystick:
     @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         _debug_('Joystick.__init__()', 2)
-        import pygame
         pygame.joystick.init()
         if pygame.joystick.get_count() < 1:
             pygame.joystick.quit()
         if pygame.joystick.get_count() == 1:
             config.JOYSTICK_ID = 0
-        self.joystick = pygame.joystick.joystick(config.JOYSTICK_ID)
+        self.joystick = pygame.joystick.Joystick(config.JOYSTICK_ID)
         self.joystick.init()
-        print self.joystick.name()
+        print self.joystick.get_name()
         print self.joystick.get_numaxes()
         print self.joystick.get_numbuttons()
         print self.joystick.get_numhats()
@@ -429,7 +435,7 @@ class Evdev:
 
 # --------------------------------------------------------------------------------
 
-class TcpNetwork:
+class TCPNetwork:
     """
     Class to handle network control via TCP connection instead of UDP.
     """
@@ -440,9 +446,10 @@ class TcpNetwork:
         """
         init the network event handler
         """
-        _debug_('TcpNetwork.__init__()', 2)
-        self.port = config.REMOTE_CONTROL_TCP_PORT
+        _debug_('TCPNetwork.__init__()', 1)
         self.host = config.REMOTE_CONTROL_TCP_HOST
+        self.host = '' # Don't specify a host to connect by alias names
+        self.port = config.REMOTE_CONTROL_TCP_PORT
         self.sock = self.socket.socket(self.socket.AF_INET, self.socket.SOCK_STREAM)
         self.sock.setsockopt(self.socket.SOL_SOCKET, self.socket.SO_REUSEADDR, 1)
         self.sock.setblocking(0)
@@ -456,7 +463,7 @@ class TcpNetwork:
         """
         return next event
         """
-        _debug_('TcpNetwork.poll(rc=%r)' % (rc,), 5)
+        _debug_('TCPNetwork.poll(rc=%r)' % (rc,), 5)
         self._getNewConnections()
 
         throwout = []
@@ -483,7 +490,7 @@ class TcpNetwork:
         """
         accept new connections from the socket
         """
-        _debug_('TcpNetwork._getNewConnections()', 2)
+        _debug_('TCPNetwork._getNewConnections()', 2)
         try:
             conn, addr = self.sock.accept()
             conn.setblocking(0)
@@ -494,7 +501,7 @@ class TcpNetwork:
 
 
 
-class Network:
+class UDPNetwork:
     """
     Class to handle network control
     """
@@ -503,7 +510,7 @@ class Network:
         """
         init the network event handler
         """
-        _debug_('Network.__init__()', 2)
+        _debug_('UDPNetwork.__init__()', 2)
         import socket
         self.port = config.REMOTE_CONTROL_PORT
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -517,7 +524,7 @@ class Network:
         """
         return next event
         """
-        _debug_('Network.poll(rc=%r)' % (rc,), 5)
+        _debug_('UDPNetwork.poll(rc=%r)' % (rc,), 5)
         try:
             return self.sock.recv(100)
         except:
@@ -566,11 +573,11 @@ class EventHandler:
                     pass
 
             if use_netremote and config.ENABLE_NETWORK_REMOTE and config.REMOTE_CONTROL_PORT:
-                self.inputs.append(Network())
+                self.inputs.append(UDPNetwork())
 
             if use_netremote and config.ENABLE_TCP_NETWORK_REMOTE and \
                     config.REMOTE_CONTROL_TCP_HOST and config.REMOTE_CONTROL_TCP_PORT:
-                self.inputs.append(TcpNetwork())
+                self.inputs.append(TCPNetwork())
 
         self.app                = None
         self.context            = 'menu'

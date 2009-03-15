@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# FreevoRemote.py - a small tkinter example remote program
+# a small tkinter example remote program
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -33,22 +33,29 @@
 
 import sys
 import socket
+from optparse import Option, BadOptionError, OptionValueError, OptionParser, IndentedHelpFormatter
 
-def usage():
-    print 'a small tkinter example remote program'
-    print 'You need to set ENABLE_NETWORK_REMOTE = 1 in you local_conf.py'
-    print
-    print 'It takes two optional arguments:'
-    print '    - the first is host which defaults to localhost'
-    print '    - the second is port which defaults to 16310'
-    print
-    print 'when run with no args it connects to the localhost on port 16310'
-    print 'freevo remote'
-    print
-    print 'when run with one arg it connects to the given host on port 16310'
-    print 'freevo remote myfreevo.local'
-    print
-    sys.exit(0)
+import config
+
+def parse_options():
+    """
+    Parse command line options
+    """
+    import version, revision
+    _version = version.__version__
+    if _version.endswith('-svn'):
+        _version = _version.split('-svn')[0] + ' r%s' % revision.__revision__
+    formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=36, width=100, short_first=0)
+    parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="""
+A small tkinter example remote program
+
+You need to set ENABLE_NETWORK_REMOTE = 1 in you local_conf.py""", version='%prog ' + _version)
+    parser.add_option('--host', default=config.REMOTE_CONTROL_TCP_HOST,
+        help='The host to control [default:%default]')
+    parser.add_option('--port', type='int', default=config.REMOTE_CONTROL_TCP_PORT,
+        help='The port for the host [default:%default]')
+    return parser.parse_args()
+
 
 try:
     from Tkinter import *
@@ -58,19 +65,29 @@ except:
     usage()
 
 
-panels = [ ['1','2','3'], ['4','5','6'], ['7','8','9'], ['ENTER','0','EXIT'],
-           ['MENU','UP','GUIDE'], ['LEFT','SELECT','RIGHT'],
-           ['DISPLAY','DOWN','SUBTITLE'], ['CH+','VOL+','PIP_ONOFF'],
-           ['CH-','VOL-','PIP_SWAP'], ['PREV_CH','MUTE','PIP_MOVE'],
-           ['PLAY','PAUSE','REC'], ['REW','STOP','FFWD'], ['EJECT','SLEEP','TV_VCR'] ]
+panels = [
+    ['1',       '2',       '3'],
+    ['4',       '5',       '6'],
+    ['7',       '8',       '9'],
+    ['ENTER',   '0',       'EXIT'],
+    ['MENU',    'UP',      'GUIDE'],
+    ['LEFT',    'SELECT',  'RIGHT'],
+    ['DISPLAY', 'DOWN',    'SUBTITLE'],
+    ['CH+',     'VOL+',    'PIP_ONOFF'],
+    ['CH-',     'VOL-',    'PIP_SWAP'],
+    ['PREV_CH', 'MUTE',    'PIP_MOVE'],
+    ['PLAY',    'PAUSE',   'REC'],
+    ['REW',     'STOP',    'FFWD'],
+    ['EJECT',   'SLEEP',   'TV_VCR'],
+]
 
 # the big remote. can possibly be embedded in other stuff.
 class FreevoRemote(Frame):
-    def __init__(self, parent=None):
-        Frame.__init__(self,parent)
+    def __init__(self, options, args, parent=None):
+        Frame.__init__(self, parent)
         self.pack(expand=YES, fill=BOTH)
-        self.host = 'localhost'
-        self.port = 16310
+        self.host = options.host
+        self.port = options.port
         # add the power button
         Button(self, text='POWER', command=self.PowerClick).pack(expand=YES, fill=BOTH)
         #create the frame for panel
@@ -99,18 +116,15 @@ class FreevoRemote(Frame):
 
     def ButtonClick(self, b):
         print b
-        sockobj = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        #sockobj = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sockobj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sockobj.connect((self.host, self.port))
         sockobj.send(b)
         sockobj.close()
 
 if __name__ == '__main__':
-    if len(sys.argv)>1 and sys.argv[1] == '--help':
-        usage()
-    root = FreevoRemote()
+    (options, args) = parse_options()
+
+    root = FreevoRemote(options, args)
     root.master.title('Freevo Remote')
-    if len(sys.argv) > 1:
-        root.host = sys.argv[1]
-        if len(sys.argv) > 2:
-            root.port = int(sys.argv[2])
     root.mainloop()
