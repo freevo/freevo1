@@ -43,7 +43,7 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     """
     make a snapshot of the videofile at position pos to imagefile
     """
-    import popen3
+    from subprocess import Popen, PIPE
     import kaa.imlib2 as Image
     import vfs
     import gui.PopupBox
@@ -73,11 +73,16 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
     if pos != None:
         args.append(str(pos))
 
-    _debug_('%r' % ([os.environ['FREEVO_SCRIPT'], '--execute=%s' % os.path.abspath(__file__) ] + args))
-    out = popen3.stdout([os.environ['FREEVO_SCRIPT'], '--execute=%s' % os.path.abspath(__file__) ] + args)
-    if out:
-        for line in out:
-            _debug_('%s' % line, 2)
+    command = [os.environ['FREEVO_SCRIPT'], '--execute=%s' % os.path.abspath(__file__) ] + args
+    _debug_(' '.join(command))
+    p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
+    (stdout, stderr) = p.communicate()
+    if p.returncode:
+        for line in stdout.split():
+            _debug_(line)
+        for line in stderr.split():
+            _debug_(line, DINFO)
+
     if vfs.isfile(imagefile):
         try:
             image = Image.open(imagefile)
@@ -128,73 +133,12 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
 #
 
 if __name__ == '__main__':
-    import popen2
-
+    from encodingcore import EncodingJob
     mplayer   = os.path.abspath(sys.argv[1])
     filename  = os.path.abspath(sys.argv[2])
     imagefile = os.path.abspath(sys.argv[3])
-    if len(sys.argv) > 4:
-        position = sys.argv[4]
-    else:
-        try:
-            mminfo = kaa.metadata.parse(filename)
-            if mminfo is None:
-                print 'No metadata for "%s"' % (Unicode(filename))
-                sys.exit(1)
 
-            position = str(int(mminfo.video[0].length / 2.0))
-            if hasattr(mminfo, 'type'):
-                if mminfo.type in ('MPEG-TS', 'MPEG-PES'):
-                    position = str(int(mminfo.video[0].length / 20.0))
-        except:
-            # else arbitrary consider that file is 1Mbps and grab position at 10%
-            position = os.stat(filename)[ST_SIZE]/1024/1024/10.0
-            if position < 360:
-                position = '360'
-            else:
-                position = str(int(position))
-
-    # chdir to tmp so we have write access
-    os.chdir('/tmp')
-
-    # call mplayer to get the image
-    _debug_('%r' % ((mplayer, '-nosound', '-vo', 'png', '-frames', '8', '-ss', position, '-zoom', filename),))
-    child = popen2.Popen3((mplayer, '-nosound', '-vo', 'png', '-frames', '8', '-ss', position, '-zoom', filename),
-        1, 100)
-    while(1):
-        data = child.fromchild.readline()
-        if not data:
-            break
-    child.wait()
-    child.fromchild.close()
-    child.childerr.close()
-    child.tochild.close()
-    # store the correct thumbnail
-    captures = glob.glob('000000??.png')
-    if captures:
-        _debug_('%r' % (captures,))
-        capture = captures[-1]
-        try:
-            vfsdir = os.path.dirname(imagefile)
-            if not os.path.exists(vfsdir):
-                os.makedirs(vfsdir)
-            _debug_('copying %r->%r' % (capture, imagefile))
-            shutil.copy(capture, imagefile)
-        except Exception, why:
-            _debug_('%s' % why, DINFO)
-            try:
-                import config
-                import vfs
-                shutil.copy(capture, vfs.getoverlay(imagefile[1:]))
-                _debug_('copied %r to %r' % (capture, vfs.getoverlay(imagefile[1:])))
-            except Exception, why:
-                _debug_('%s' % why, DINFO)
-                _debug_('unable to write file "%s"' % Unicode(imagefile[1:]), DWARNING)
-    else:
-        _debug_('error creating capture for "%s"' % Unicode(filename), DWARNING)
-
-    for capture in captures:
-        try:
-            os.remove(capture)
-        except:
-            _debug_('error removing temporary captures for "%s"' % Unicode(filename), 1)
+    encjob = EncodingJob(filename, imagefile, None, None)
+    encjob._videothumb()
+    encjob._wait()
+    sys.exit(0)

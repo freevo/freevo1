@@ -432,11 +432,12 @@ class EncodingJob:
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def _identify(self):
-        """Identify the media file
-
-        returns a dictionary of items
         """
-        arguments = [ "-vo", "null", "-ao", "null", "-frames", "0", "-identify" ]
+        Identify the media file
+
+        @returns: a dictionary of items
+        """
+        arguments = [ '-vo', 'null', '-ao', 'null', '-frames', '0', '-identify' ]
         if self.titlenum:
             arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.titlenum ]
         else:
@@ -447,9 +448,11 @@ class EncodingJob:
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def _identify_parse(self, lines, data):
-        """Parses Mplayer output to obtain ideal cropping parameters, and do PAL/NTSC detection
-        from QuickRip, heavily adapted, new algo
-        TODO give this another name, it does more then crop detection only
+        """
+        Parses Mplayer output to obtain ideal cropping parameters, and do
+        PAL/NTSC detection from QuickRip, heavily adapted, new algo.
+
+        @todo: give this another name, it does more then crop detection only
         """
         id_pattern = re.compile('^(ID_.*)=(.*)')
         id_info = {}
@@ -466,18 +469,91 @@ class EncodingJob:
 
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
-    def _cropdetect(self):
-        """Detect cropping, contains pieces of QuickRip
-
-        Function is always called because cropping is a good thing, and we can pass our ideal values
-        back to the client which can verify them visually if needed.
+    def _videothumb(self):
         """
+        Generate a video thumbnail of the video
+        """
+        if self.length is None:
+            self._identify()
+            self._wait()
+            if self.id_info.has_key('ID_LENGTH'):
+                self.length = float(self.id_info['ID_LENGTH'])
+            else:
+                self.length = 0
+
+        position = str(int(self.length / 2.0))
+        arguments = [ '-vo', 'png:z=1:outdir=/tmp', '-ao', 'null', '-frames', '8', '-ss', position, '-zoom' ]
+        if self.titlenum:
+            arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.titlenum ]
+        else:
+            arguments += [ self.source ]
+
+        self._run(mplayer, arguments, self._videothumb_parse, None, 0, 'data.png')
+
+
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _videothumb_parse(self, lines, data):
+        from util import vfs
+        # chdir to tmp so we have write access
+        os.chdir('/tmp')
+        for line in lines:
+            if line:
+                _debug_(line)
+        import glob
+        import shutil
+        captures = glob.glob('000000??.png')
+        if captures:
+            _debug_('%r' % (captures,))
+            capture = captures[-1]
+            try:
+                vfsdir = os.path.dirname(self.output)
+                if not os.path.exists(vfsdir):
+                    os.makedirs(vfsdir)
+                _debug_('copying %r->%r' % (capture, self.output))
+                shutil.copy(capture, self.output)
+            except Exception, why:
+                _debug_('%s' % why, DINFO)
+                try:
+                    shutil.copy(capture, vfs.getoverlay(self.output))
+                    _debug_('copied %r to %r' % (capture, vfs.getoverlay(self.output)))
+                except Exception, why:
+                    print why
+                    _debug_('%s' % why, DINFO)
+                    _debug_('unable to write file %r' % self.output, DWARNING)
+        else:
+            _debug_('error creating capture for "%s"' % self.source, DWARNING)
+
+        for capture in captures:
+            try:
+                os.remove(capture)
+            except:
+                _debug_('error removing temporary captures for "%s"' % Unicode(filename), 1)
+
+
+
+    @benchmark(benchmarking & 0x8, benchmarkcall)
+    def _cropdetect(self):
+        """
+        Detect cropping, contains pieces of QuickRip
+
+        Function is always called because cropping is a good thing, and we can
+        pass our ideal values back to the client which can verify them visually
+        if needed.
+        """
+        if self.length is None:
+            self._identify()
+            self._wait()
+            if self.id_info.has_key('ID_LENGTH'):
+                self.length = float(self.id_info['ID_LENGTH'])
+            else:
+                self.length = 0
+
         start = 0
         if self.timeslice[0]:
             start = self.timeslice[0]
         if self.timeslice[1]:
             sstep = int((self.timeslice[1] - start) / 27)
-        elif hasattr(self, 'length'):
+        elif hasattr(self, 'length') and self.length:
             sstep = int((self.length - start) / 27)
         else:
             sstep = 60
@@ -496,9 +572,9 @@ class EncodingJob:
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def _cropdetect_parse(self, lines, data): #seek to remove data
-        """Parses Mplayer output to obtain ideal cropping parameters, and do PAL/NTSC detection
-        from QuickRip, heavily adapted, new algo
-        TODO give this another name, it does more then crop detection only
+        """
+        Parses Mplayer output to obtain ideal cropping parameters, and do
+        PAL/NTSC detection from QuickRip, heavily adapted, new algo.
         """
         #print '_cropdetect_parse(self, lines=%r, data=%r)' % (lines, data)
 
@@ -844,21 +920,21 @@ class EncodingJob:
 
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
-    def _run(self, program, arguments, finalfunc, updatefunc=None, flushbuffer=0, data=None, lock=None):
-        """Runs a program; supply program name (string) and arguments (list)
-        seek to remove data and/or crop (not really used)
+    def _run(self, program, arguments, finalfunc=None, updatefunc=None, flushbuffer=0, data=None, lock=None):
+        """
+        Runs a program; supply program name (string) and arguments (list)
         """
         command = [program]
         command += arguments
 
-        self.thread = CommandThread(self, command, updatefunc, finalfunc, flushbuffer, data, None)
+        self.thread = CommandThread(self, command, updatefunc, finalfunc, flushbuffer, data, lock)
         self.thread.start()
 
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def _wait(self, timeout=10):
         """
-        Wait for the thread to finish in time-out seconds
+        Wait for the thread to finish in time-out seconds.
         If the thread has not finished the kill it
         """
         self.thread.join(timeout)
@@ -870,13 +946,15 @@ class EncodingJob:
 
 
 
-class CommandThread(Thread): # seek to remove data andor crop (not really used)
-    """Handle threading of external commands
+class CommandThread(Thread):
+    """
+    Handle threading of external commands
+
     command executing class - Taken from Quickrip & adapted.
     """
     #@benchmark(benchmarking & 0x8, benchmarkcall)
     def __init__(self, parent, command, updatefunc, finalfunc, flushbuffer, data, lock):
-        #print 'CommandThread.__init__(parent=%r, command=%r, updatefunc=%r, finalfunc=%r, flushbuffer=%r, data=%r, lock=%r)' % (parent, command, updatefunc, finalfunc, flushbuffer, data, lock)
+        _debug_('CommandThread.__init__(parent=%r, command=%r, updatefunc=%r, finalfunc=%r, flushbuffer=%r, data=%r, lock=%r)' % (parent, command, updatefunc, finalfunc, flushbuffer, data, lock))
         Thread.__init__(self)
         self.parent = parent
         self.command = command
@@ -885,6 +963,7 @@ class CommandThread(Thread): # seek to remove data andor crop (not really used)
         self.flushbuffer = flushbuffer
         self.data = data
         self.lock = lock
+        self.returncode = None
 
 
     @benchmark(benchmarking & 0x1, benchmarkcall)
@@ -901,6 +980,7 @@ class CommandThread(Thread): # seek to remove data andor crop (not really used)
             totallines.append(line)
             if self.updateFunc is not None:
                 self.updateFunc(line, self.data)
+        self.returncode = self.process.returncode
 
         _debug_('%s thread finished with %s, %s lines' % (self.command[0], self.process.returncode, len(totallines)))
 
@@ -940,7 +1020,6 @@ class EncodingQueue:
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def addEncodingJob(self, encjob):
         """Adds an encodingjob to the queue"""
-
         self.qlist += [encjob]
         self.qdict[encjob.idnr] = encjob
 
@@ -949,10 +1028,9 @@ class EncodingQueue:
     def getProgress(self):
         """Gets progress on the current job"""
         if hasattr(self, 'currentjob'):
-            return (self.currentjob.name, int(self.currentjob.status),
-                    int(self.currentjob.percentage), self.currentjob.trem)
-        else:
-            return 'No job currently running'
+            return (self.currentjob.name, int(self.currentjob.status), int(self.currentjob.percentage),
+                self.currentjob.trem)
+        return 'No job currently running'
 
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
@@ -988,7 +1066,10 @@ class EncodingQueue:
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
     def _runQueue(self, line='', data=''):
-        """Executes the jobs in the queue, and gets called after every mencoder run is completed"""
+        """
+        Executes the jobs in the queue; when running each job, registers itself
+        as a finalfunc callback for the new thread for the job run is completed.
+        """
         if self.qlist == []:
             #empty queue, do nothing
             self.running = False
@@ -997,7 +1078,6 @@ class EncodingQueue:
             _debug_('queue empty, stopping processing...', DINFO)
             return
 
-        _debug_('runQueue callback data: %s' % line)
         #get the first queued object
         self.currentjob = self.qlist[0]
 
@@ -1010,12 +1090,13 @@ class EncodingQueue:
                 try:
                     os.remove(self.currentjob.source)
                 except OSError :
-                    _debug_(' cannot remove file '+self.currentjob.source, DWARNING)
+                    _debug_('Cannot remove file '+self.currentjob.source, DWARNING)
             #
             try:
                 os.rename(self.currentjob.output + '~incomplete~', self.currentjob.output)
             except OSError :
-                _debug_(' cannot rename file to remove ~incomplete~ suffix '+self.currentjob.output, DWARNING)
+                _debug_('Cannot rename file to remove ~incomplete~ suffix '+self.currentjob.output, DWARNING)
+
             #we are done with this job, remove it
             del self.qlist[0]
             del self.qdict[self.currentjob.idnr]
@@ -1085,12 +1166,18 @@ if __name__ == '__main__':
         encjob._identify()
         encjob._wait()
         print encjob.id_info
+    elif command == '--videothumb':
+        encjob._videothumb()
+        encjob._wait()
     elif command == '--cropdetect':
         encjob.info = kaa.metadata.parse(encjob.source)
-        encjob._analyze_source()
+        encjob._cropdetect()
         encjob._wait()
-        print 'THE KING RETURNED FROM INSPECTING THE CROPPING !'
         print encjob.crop
+    elif command == '--analyze':
+        encjob.info = kaa.metadata.parse(encjob.source)
+        encjob._analyze_source()
+        pprint.pprint(encjob.__dict__)
     else:
         encjob.setVideoCodec('MPEG 4 (lavc)', '700', False, 0)
         encjob.setAudioCodec('MPEG 1 Layer 3 (mp3)', '160')

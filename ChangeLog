@@ -36,6 +36,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
  * Fixed reencode video plug-in; incorrect calls to the encoding server (B#2483017)
  * Fixed skin info; infinite loop in video style 3 (B#2662476)
  * Fixed TV XML processing when the XML file does not have valid timezones (B#2550109)
+ * Fixed video thumbnails to allow for flash music videos being too short (B#2663492)
  * Fixed wiimote plug-in config errors (B#2494315)
 
 == Release 1.8.3 (2008-12-01) ==
