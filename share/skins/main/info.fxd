@@ -103,7 +103,7 @@
     <menuset label="video details" inherits="normal text style">
       <subtitle layout="subtitle" x="10" y="100" width="780" height="60"/>
 
-      <listing layout="video list" x="500" y="450" width="290" height="140-buttonbar_height">
+      <listing layout="video list" x="500" y="450-buttonbar_height" width="290" height="140">
 	<image label="uparrow" filename=""/>
 	<image label="downarrow" filename=""/>
       </listing>

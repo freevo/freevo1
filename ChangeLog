@@ -34,6 +34,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
  * Fixed record server automatic re-encoding (B#2482703,B#2458849)
  * Fixed rom_drives mounting problem for non-root users (B#2502039)
  * Fixed reencode video plug-in; incorrect calls to the encoding server (B#2483017)
+ * Fixed skin info; infinite loop in video style 3 (B#2662476)
  * Fixed TV XML processing when the XML file does not have valid timezones (B#2550109)
  * Fixed wiimote plug-in config errors (B#2494315)
 

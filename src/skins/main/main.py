@@ -455,6 +455,13 @@ class Skin:
 
         info = self.areas['listing']
         rows, cols = info.get_items_geometry(settings, object, self.get_display_style(menu))[:2]
+        # Prevent problems when trying to draw menus that have no rows or columns.
+        # Always better to draw something and then fix the skin rather than going
+        # into an infinite loop in MenuWidget when trying to rebuild the page.
+        if rows == 0:
+            row = 1
+        if cols == 0:
+            cols = 1
         return (cols, rows)
 
 
