@@ -1,8 +1,8 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# extendedmeta.py - Extended Metadata Reader/Cacher
+# Extended Metadata Reader/Cacher
 # -----------------------------------------------------------------------
-# $Id: extendedmeta.py,v #
+# $Id$
 #
 # Notes:
 # Todo:
@@ -30,7 +30,7 @@
 
 
 # The basics
-import os,string,fnmatch,sys,md5,stat
+import os, string, fnmatch, sys, md5, stat
 
 # Metadata tools
 import config, util
@@ -53,7 +53,9 @@ dbschema = """CREATE TABLE music (id INTEGER PRIMARY KEY, dirtitle VARCHAR(255),
         year VARCHAR(255), track NUMERIC(3), track_total NUMERIC(3), bpm NUMERIC(3), last_play float,
         play_count NUMERIC, start_time NUMERIC, end_time NUMERIC, rating NUMERIC, eq  VARCHAR)"""
 
-def make_query(filename,dirtitle):
+
+def make_query(filename, dirtitle):
+    print 'make_query(filename=%r, dirtitle=%r)' % (filename, dirtitle)
     if not os.path.exists(filename):
         print "File %s does not exist" % (filename)
         return None
@@ -62,15 +64,17 @@ def make_query(filename,dirtitle):
     t = tracknum(a['trackno'])
     ext = filename.split('.')[-1]
 
-    VALUES = "(null,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',%i,%i,%i,\'%s\',%f,%i,\'%s\',\'%s\',%i,\'%s\')" \
-        % (util.escape(dirtitle),util.escape(os.path.dirname(filename)),util.escape(os.path.basename(filename)), \
-           ext,util.escape(a['artist']),util.escape(a['title']),util.escape(a['album']),inti(a['date']),t[0], \
-           t[1], 100,0,0,'0',inti(a['length']),0,'null')
+    VALUES = "(null,'%s','%s','%s','%s','%s','%s','%s',%i,%i,%i,'%s',%f,%i,'%s','%s',%i,'%s')" % (
+        util.escape(dirtitle), util.escape(os.path.dirname(filename)), util.escape(os.path.basename(filename)), \
+        ext, util.escape(a['artist']), util.escape(a['title']), util.escape(a['album']), inti(a['date']), t[0], \
+        t[1], 100, 0, 0, '0', inti(a['length']), 0, 'null')
 
     SQL = 'INSERT OR IGNORE INTO music VALUES ' + VALUES
     return SQL
 
+
 def addPathDB(path, dirtitle, type='*.mp3;*.ogg', verbose=True):
+    print 'addPathDB(path=%r, dirtitle=%r, type=%r, verbose=%r)' % (path, dirtitle, type, verbose)
 
     # Get some stuff ready
     count = 0
@@ -79,10 +83,10 @@ def addPathDB(path, dirtitle, type='*.mp3;*.ogg', verbose=True):
         db.runQuery(dbschema)
 
     # Compare and contrast the db to the disc
-    songs = util.recursefolders(path,1,type,1)
+    songs = util.recursefolders(path, 1, type, 1)
     for row in db.runQuery('SELECT path, filename FROM music'):
         try:
-            songs.remove(os.path.join(row['path'],row['filename']))
+            songs.remove(os.path.join(row['path'], row['filename']))
             count = count + 1
         except ValueError:
             # Why doesn't it just give a return code
@@ -92,7 +96,7 @@ def addPathDB(path, dirtitle, type='*.mp3;*.ogg', verbose=True):
         print "  Skipped %i songs already in the database..." % (count)
 
     for song in songs:
-        db.runQuery(make_query(song,dirtitle))
+        db.runQuery(make_query(song, dirtitle))
     db.close()
 
 
@@ -101,7 +105,8 @@ def addPathDB(path, dirtitle, type='*.mp3;*.ogg', verbose=True):
 various = u'__various__'
 
 class AudioParser:
-
+    """
+    """
     def __init__(self, dirname, force=False, rescan=False):
         self.artist  = ''
         self.album   = ''
@@ -123,8 +128,7 @@ class AudioParser:
 
             else:
                 # no changes in all subdirs, looks good
-                if os.path.isfile(cachefile) and \
-                       os.stat(dirname)[stat.ST_MTIME] <= os.stat(cachefile)[stat.ST_MTIME]:
+                if os.path.isfile(cachefile) and os.stat(dirname)[stat.ST_MTIME] <= os.stat(cachefile)[stat.ST_MTIME]:
                     # and no changes in here. Do not parse everything again
                     if force:
                         # forces? We need to load our current values
@@ -203,7 +207,7 @@ class AudioParser:
 
     def get_md5(self, obj):
         m = md5.new()
-        if isinstance(obj,file):     # file
+        if isinstance(obj, file):     # file
             for line in obj.readlines():
                 m.update(line)
             return m.digest()
@@ -217,7 +221,7 @@ class AudioParser:
             try:
                 self.tag.link(i)
             except eyeD3.InvalidAudioFormatException:
-                print 'Cannot get tag for \"%s\"' % (String(i))
+                print 'Cannot get tag for "%s"' % (String(i))
                 continue
             except:
                 continue
@@ -225,8 +229,7 @@ class AudioParser:
             myname = vfs.getoverlay(os.path.join(path, iname))
             images = self.tag.getImages();
             for img in images:
-                if vfs.isfile(myname) and (self.get_md5(vfs.open(myname,'rb')) == \
-                                           self.get_md5(img.imageData)):
+                if vfs.isfile(myname) and (self.get_md5(vfs.open(myname, 'rb')) == self.get_md5(img.imageData)):
                     # Image already there and has identical md5, skip
                     pass
                 else:
@@ -236,7 +239,10 @@ class AudioParser:
                     f.close()
 
 
+
 class PlaylistParser(AudioParser):
+    """
+    """
     def __init__(self, item, rescan=False):
 
         self.artist  = ''

@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# util/dbutil.py - database wrapper
+# Sqlite database wrapper
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -54,7 +54,7 @@ def escape(sql):
     Escape a SQL query in a manner suitable for sqlite
     """
     if sql:
-        sql = sql.replace('\'','\'\'')
+        sql = sql.replace("'", "''")
         return sql
     else:
         return 'null'
@@ -70,25 +70,25 @@ def inti(a):
 
     return ret
 
-# defines:
-DATABASE = os.path.join(config.FREEVO_CACHEDIR, 'freevo.sqlite')
 
 try:
     import sqlite
 except:
-    print "Python SQLite not installed!"
+    _debug_('Python SQLite not installed!', DINFO)
+
 
 
 class MetaDatabase:
     """ Class for working with the database """
     def __init__(self):
-        # Private Variables
-        DATABASE = os.path.join(config.FREEVO_CACHEDIR, 'freevo.sqlite')
+        sqlite_major_version = sqlite._sqlite.sqlite_version_info()[0]
+        DATABASE = os.path.join(config.FREEVO_CACHEDIR, 'freevo.sqlite%i' % sqlite_major_version)
         self.db = sqlite.connect(DATABASE, client_encoding=config.LOCALE)
         self.cursor = self.db.cursor()
 
-    def runQuery(self,query, close=False):
-        '''Execute a sql query on the database'''
+
+    def runQuery(self, query, close=False):
+        """Execute a sql query on the database"""
         try:
             _debug_('query=%s' % (query))
             self.cursor.execute(query)
@@ -105,22 +105,24 @@ class MetaDatabase:
         else:
             return self.cursor.fetchall()
 
+
     def close(self):
-        '''close the database, committing any open transactions first'''
+        """close the database, committing any open transactions first"""
         if not self.db.closed:
             self.db.commit()
             self.db.close()
 
+
     def commit(self):
-        '''commit transactions'''
+        """commit transactions"""
         self.db.commit()
 
-    def checkTable(self,table=None):
+
+    def checkTable(self, table=None):
         if not table:
             return False
         # verify the table exists
-        self.cursor.execute('SELECT name FROM sqlite_master where \
-                             name="%s" and type="table"' % table)
+        self.cursor.execute('SELECT name FROM sqlite_master where name="%s" and type="table"' % table)
         if not self.cursor.fetchone():
             return None
         return table
