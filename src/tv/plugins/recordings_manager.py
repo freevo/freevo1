@@ -510,24 +510,18 @@ class RecordedProgramItem(VideoItem):
         """
         Update the programs fxd file.
         """
-        from util.fxdimdb import FxdImdb, makeVideo
-        fxd = FxdImdb()
+        from util.fxdparser import FXD
 
         (filebase, fileext) = os.path.splitext(self.video_item.filename)
-        fxd.setFxdFile(filebase, overwrite=TRUE)
-
-        video = makeVideo('file', 'f1', self.video_item.filename)
-        fxd.setVideo(video)
-        fxd.info['tagline'] = fxd.str2XML(self.video_item['tagline'])
-        fxd.info['plot'] = fxd.str2XML(self.video_item['plot'])
-        fxd.info['runtime'] = self.video_item['length']
-        fxd.info['recording_timestamp'] = self.timestamp
-        fxd.info['year'] = self.video_item['year']
-        fxd.info['watched'] = str(watched)
-        fxd.info['keep'] = str(keep)
-        fxd.title = self.video_item.name
-        fxd.writeFxd()
-
+        fxd = FXD(filebase + '.fxd')
+        fxd.parse()
+        node = fxd.get_or_create_child(fxd.tree.tree, 'movie')
+        info_node = fxd.get_or_create_child(node, 'info')
+        node = fxd.get_or_create_child(info_node, 'watched')
+        fxd.setcdata(node, str(watched))
+        node = fxd.get_or_create_child(info_node, 'keep')
+        fxd.setcdata(node, str(keep))
+        fxd.save()
         self.watched = watched
         self.keep = keep
 
