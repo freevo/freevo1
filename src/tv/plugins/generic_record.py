@@ -115,6 +115,8 @@ class Recorder:
 class RecordApp(childapp.ChildApp):
 
     def __init__(self, app):
+        self.log_stdout = None
+        self.log_stderr = None
         if config.DEBUG:
             fname_out = os.path.join(config.FREEVO_LOGDIR, 'recorder_stdout.log')
             fname_err = os.path.join(config.FREEVO_LOGDIR, 'recorder_stderr.log')
@@ -136,8 +138,9 @@ class RecordApp(childapp.ChildApp):
     def kill(self):
         childapp.ChildApp.kill(self, signal.SIGINT)
 
-        if config.DEBUG:
+        if self.log_stdout:
             self.log_stdout.close()
+        if self.log_stderr:
             self.log_stderr.close()
 
 
@@ -175,7 +178,6 @@ class Record_Thread(threading.Thread):
 
                 if self.app.isAlive():
                     _debug_('Record_Thread::run: past wait!!')
-                    rc.post_event(Event(OS_EVENT_KILL, (self.app.child.pid, 15)))
                     self.app.kill()
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))

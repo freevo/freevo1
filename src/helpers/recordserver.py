@@ -27,6 +27,7 @@
 
 
 import sys, string, random, time, os, re, pwd, stat, threading, hashlib, datetime, copy
+from threading import Thread
 try:
     import cPickle as pickle
 except ImportError:
@@ -85,7 +86,7 @@ from event import *
 DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 LOGGING = hasattr(config, 'LOGGING_'+appconf) and eval('config.LOGGING_'+appconf) or config.LOGGING
 
-logfile = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, appname, os.getuid())
+logfile = '%s-%s.log' % (os.path.join(config.FREEVO_LOGDIR, appname), os.getuid())
 sys.stdout = open(logfile, 'a')
 sys.stderr = sys.stdout
 
@@ -135,7 +136,7 @@ class RecordServer:
         self.tv_lockfile = None
         self.vg = None
         self.previouslyRecordedShows = None
-        self.delay_recording = None
+        self.delayed_recording = None
         self.schedule = ScheduledRecordings()
         self.updateFavoritesSchedule()
         self.es = EncodingClientActions()
@@ -150,7 +151,7 @@ class RecordServer:
     @kaa.rpc.expose('isRecording')
     def isRecording(self):
         _debug_('isRecording()', 2)
-        recording = glob.glob(config.FREEVO_CACHEDIR + '/record.*')
+        recording = glob.glob(os.path.join(config.FREEVO_CACHEDIR + 'record.*'))
         return (len(recording) > 0, recording)
 
 
@@ -188,7 +189,7 @@ class RecordServer:
         progs = self.getScheduledRecordings().getProgramList()
         proglist = list(progs)
         proglist.sort(self.progsTimeCompare)
-        now = time.time()
+        now = self.timenow()
         timenow = time.localtime(now)
         for progitem in proglist:
             prog = progs[progitem]
@@ -230,7 +231,7 @@ class RecordServer:
         @returns: the state of a player, mplayer, xine, etc.
         """
         _debug_('isPlayerRunning()', 2)
-        res = (os.path.exists(config.FREEVO_CACHEDIR + '/playing'))
+        res = (os.path.exists(os.path.join(config.FREEVO_CACHEDIR, 'playing')))
         _debug_('isPlayerRunning=%r' % (res), 2)
         return res
 
@@ -261,7 +262,7 @@ class RecordServer:
                 _debug_('The cache does not have a version and must be recreated', DINFO)
 
             if file_ver != TYPES_VERSION:
-                _debug_(('ScheduledRecordings version number %s is stale (new is %s), must be reloaded') % \
+                _debug_('ScheduledRecordings version number %s is stale (new is %s), must be reloaded' % \
                     (file_ver, TYPES_VERSION), DINFO)
                 schedule = None
             else:
@@ -310,9 +311,9 @@ class RecordServer:
         if self.previouslyRecordedShows:
             return
 
-        cacheFile = config.FREEVO_CACHEDIR + "/previouslyRecorded.pickle"
+        cacheFile = os.path.join(config.FREEVO_CACHEDIR, 'previouslyRecorded.pickle')
         try:
-            self.previouslyRecordedShows = pickle.load(open(cacheFile, "r"))
+            self.previouslyRecordedShows = pickle.load(open(cacheFile, 'r'))
         except IOError:
             self.previouslyRecordedShows = {}
             pass
@@ -324,8 +325,8 @@ class RecordServer:
         if not self.previouslyRecordedShows:
             return
 
-        cacheFile = config.FREEVO_CACHEDIR+"/previouslyRecorded.pickle"
-        pickle.dump(self.previouslyRecordedShows, open(cacheFile, "w"))
+        cacheFile = os.path.join(config.FREEVO_CACHEDIR, 'previouslyRecorded.pickle')
+        pickle.dump(self.previouslyRecordedShows, open(cacheFile, 'w'))
 
 
     def newEpisode(self, prog=None):
@@ -538,7 +539,7 @@ class RecordServer:
             #Try to record it at its listed time
             (rating, conflictedProg) = getConflicts(self, prog, myScheduledRecordings)
             if rating == 0:
-                #No need to do anything fancy; this will work at its defaul time
+                #No need to do anything fancy; this will work at its default time
                 progsToChange = []
                 progsToChange.append(('add', prog))
                 return (True, 'No conflicts, using default time', progsToChange)
@@ -681,13 +682,15 @@ class RecordServer:
 
     @kaa.rpc.expose('scheduleRecording')
     def scheduleRecording(self, prog=None):
+        """
+        """
         _debug_('scheduleRecording(%r)' % (prog,), 2)
         global guide
 
         if prog is None:
             return (False, _('program is not set'))
 
-        now = time.time()
+        now = self.timenow()
         if now > prog.stop:
             return (False, _('program cannot record as it is over'))
 
@@ -728,7 +731,7 @@ class RecordServer:
             self.addRecordingToSchedule(prog)
 
         # check, maybe we need to start right now
-        self.checkToRecord()
+        self.check_to_record()
 
         return (True, _('program scheduled to record'))
 
@@ -747,14 +750,11 @@ class RecordServer:
                 prog = saved_prog
                 break
 
-        try:
-            recording = prog.isRecording
-        except Exception, e:
-            recording = False
+        recording = hasattr(prog, 'isRecording') and prog.isRecording
 
         self.removeRecordingFromSchedule(prog)
 
-        now = time.time()
+        now = self.timenow()
 
         # if now >= prog.start and now <= prog.stop and recording:
         if recording:
@@ -823,7 +823,7 @@ class RecordServer:
 
         pattern = '.*' + find + '\ *'
         regex = re.compile(pattern, re.IGNORECASE)
-        now = time.time()
+        now = self.timenow()
 
         for ch in guide.chan_list:
             for prog in ch.programs:
@@ -860,8 +860,27 @@ class RecordServer:
         pass
 
 
-    def checkToRecord(self):
-        _debug_('checkToRecord %s' % (time.strftime('%H:%M:%S', time.localtime(time.time()))), 2)
+    def timenow(self):
+        """
+        Round up the timer to the nearest minute; the loop runs once a minute.
+        The RECORDSERVER_ATTIMER is a value to allow the recording to start at
+        the number of seconds of the minute. The AtTimer is not 100% accurate
+        need to allow a few seconds for it.
+
+        @return the time in seconds
+        """
+        now = list(time.localtime(time.time() + 60 - 3))
+        # round down to the nearest minute
+        now[5] = 0
+        return time.mktime(now)
+
+
+    def check_to_record(self):
+        """
+        This is the real main loop of the record server
+        """
+        now = self.timenow()
+        _debug_('check_to_record %s' % (time.strftime('%H:%M:%S')), 2)
         rec_cmd = None
         rec_prog = None
         cleaned = None
@@ -875,30 +894,22 @@ class RecordServer:
 
         currently_recording = None
         for prog in progs.values():
-            try:
-                recording = prog.isRecording
-            except:
-                recording = False
-
+            recording = hasattr(prog, 'isRecording') and prog.isRecording
             if recording:
                 currently_recording = prog
 
-        now = time.time()
         for prog in progs.values():
             _debug_('progloop=%s' % prog, 2)
 
-            try:
-                recording = prog.isRecording
-            except:
-                recording = False
+            recording = hasattr(prog, 'isRecording') and prog.isRecording
 
-            if not recording \
-                and now >= (prog.start - config.TV_RECORD_PADDING_PRE) \
-                and now < (prog.stop + config.TV_RECORD_PADDING_POST):
-                # just add to the 'we want to record this' list
-                # then end the loop, and figure out which has priority,
-                # remember to take into account the full length of the shows
-                # and how much they overlap, or chop one short
+            if not recording and \
+                now >= (prog.start - config.TV_RECORD_PADDING_PRE) and \
+                now < (prog.stop + config.TV_RECORD_PADDING_POST):
+                # just add to the 'we want to record this' list then end the
+                # loop, and figure out which has priority, remember to take
+                # into account the full length of the shows and how much they
+                # overlap, or chop one short
                 duration = int(prog.stop) - int(now)
                 if duration < 10:
                     _debug_('duration %s too small' % duration, DINFO)
@@ -907,38 +918,39 @@ class RecordServer:
                 if currently_recording:
                     # Hey, something is already recording!
                     overlap_duration = currently_recording.stop - prog.start
-                    _debug_('overlap_duration=%r' % overlap_duration, DINFO)
+                    _debug_('overlap_duration=%r' % overlap_duration)
                     if prog.start - 10 <= now:
                         # our new recording should start no later than now!
-                        # check if the new prog is a favorite and the current running is
-                        # not. If so, the user manually added something, we guess it
-                        # has a higher priority.
-                        if self.isProgAFavorite(prog)[0] \
-                            and not self.isProgAFavorite(currently_recording)[0] \
-                            and now < (prog.stop + config.TV_RECORD_PADDING_POST):
+                        # check if the new prog is a favorite and the current
+                        # running is not. If so, the user manually added
+                        # something, we guess it has a higher priority.
+                        if self.isProgAFavorite(prog)[0] and \
+                            not self.isProgAFavorite(currently_recording)[0] and \
+                            now < (prog.stop + config.TV_RECORD_PADDING_POST):
                             _debug_('Ignoring %s' % prog, DINFO)
                             continue
-                        schedule.removeProgram(currently_recording,
-                                         tv_util.getKey(currently_recording))
+                        schedule.removeProgram(currently_recording, tv_util.getKey(currently_recording))
                         plugin.getbyname('RECORD').Stop()
                         _debug_('CALLED RECORD STOP 1: %s' % currently_recording, DINFO)
                     else:
                         # at this moment we must be in the pre-record padding
                         if currently_recording.stop - 10 <= now:
-                            # The only reason we are still recording is because of the post-record padding.
-                            # Therefore we have overlapping paddings but not real stop / start times.
+                            # The only reason we are still recording is because
+                            # of the post-record padding.  Therefore we have
+                            # overlapping paddings but not real stop / start
+                            # times.
                             overlap = (currently_recording.stop + config.TV_RECORD_PADDING_POST) - \
                                       (prog.start - config.TV_RECORD_PADDING_PRE)
-                            if overlap <= ((config.TV_RECORD_PADDING_PRE + config.TV_RECORD_PADDING_POST)/4):
+                            if overlap <= ((config.TV_RECORD_PADDING_PRE + config.TV_RECORD_PADDING_POST) / 4):
                                 schedule.removeProgram(currently_recording,
                                     tv_util.getKey(currently_recording))
                                 plugin.getbyname('RECORD').Stop()
                                 _debug_('CALLED RECORD STOP 2: %s' % currently_recording, DINFO)
-                    self.delay_recording = prog
+                    self.delayed_recording = prog
                 else:
-                    self.delay_recording = None
+                    self.delayed_recording = None
 
-                if self.delay_recording:
+                if self.delayed_recording:
                     _debug_('delaying: %s' % prog, DINFO)
                 else:
                     _debug_('going to record: %s' % prog, DINFO)
@@ -970,7 +982,7 @@ class RecordServer:
 
             self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False, CHANNEL_ID)
             suffix = self.vg.vdev.split('/')[-1]
-            self.tv_lockfile = config.FREEVO_CACHEDIR + '/record.'+suffix
+            self.tv_lockfile = os.path.join(config.FREEVO_CACHEDIR, 'record.'+suffix)
             self.record_app.Record(rec_prog)
 
             # Cleanup old recordings (if enabled)
@@ -994,9 +1006,48 @@ class RecordServer:
                         i = i + 1
 
 
+    def handleEvents(self, event):
+        if event:
+            if event == RECORD_START:
+                prog = event.arg
+                _debug_('RECORD_START %s' % (prog), DINFO)
+                open(self.tv_lockfile, 'w').close()
+                self.create_fxd(prog)
+                if config.VCR_PRE_REC:
+                    util.popen3.Popen3(config.VCR_PRE_REC)
+
+            elif event == RECORD_STOP:
+                prog = event.arg
+                _debug_('RECORD_STOP %s' % (prog), DINFO)
+
+                # Create and run the post processing thread
+                postprocess = RecordPostProcess(prog)
+                postprocess.setDaemon(0) # wait for the thread to end
+                postprocess.start()
+
+                # This is a really nasty hack but if it fixes the problem then great
+                if self.delayed_recording:
+                    prog.isRecording = False
+                    self.check_to_record()
+                    self.delayed_recording = None
+                else:
+                    os.remove(self.tv_lockfile)
+
+            else:
+                if hasattr(event, 'arg'):
+                    _debug_('event=%s arg=%r not handled' % (event, event.arg), DWARNING)
+                else:
+                    _debug_('event=%s not handled' % (event), DWARNING)
+
+        else:
+            # Should never happen
+            _debug_('event not defined', DERROR)
+
+
     @kaa.rpc.expose('addFavorite')
     def addFavorite(self, name, prog, exactchan=False, exactdow=False, exacttod=False):
-        _debug_('addFavorite(name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r)' % (name, prog, exactchan, exactdow, exacttod), 2)
+        _debug_('addFavorite(name=%r, prog=%r, exactchan=%r, exactdow=%r, exacttod=%r)' % \
+            (name, prog, exactchan, exactdow, exacttod), 2)
         if not name:
             return (False, _('no favorite name'))
 
@@ -1211,7 +1262,7 @@ class RecordServer:
                 self.removeScheduledRecording(prog)
 
         schedule.unlock()
-        return (True, 'favorite unscheduled')
+        return (True, _('favorite removed from schedule'))
 
 
     @kaa.rpc.expose('addFavoriteToSchedule')
@@ -1230,7 +1281,7 @@ class RecordServer:
                     prog.isFavorite = favorite
                     self.scheduleRecording(prog)
 
-        return (True, _('favorite scheduled'))
+        return (True, _('favorite added to schedule'))
 
 
     @kaa.rpc.expose('updateFavoritesSchedule')
@@ -1257,28 +1308,22 @@ class RecordServer:
 
         schedule.lock()
 
-        # Then remove all scheduled favorites in that timeframe to
+        # Then remove all scheduled favorites in that time-frame to
         # make up for schedule changes.
         progs = schedule.getProgramList()
         for prog in progs.values():
-
-            # try:
-            #     favorite = prog.isFavorite
-            # except:
-            #     favorite = False
-
             # if prog.start <= last and favorite:
             (isFav, favorite) = self.isProgAFavorite(prog, favs)
             if prog.start <= last and isFav:
                 # do not yet remove programs currently being recorded:
-                isRec = hasattr(prog, "isRecording") and prog.isRecording
+                isRec = hasattr(prog, 'isRecording') and prog.isRecording
                 if not isRec:
                     self.removeScheduledRecording(prog)
 
         for ch in guide.chan_list:
             for prog in ch.programs:
                 (isFav, favorite) = self.isProgAFavorite(prog, favs)
-                isRec = hasattr(prog, "isRecording") and prog.isRecording
+                isRec = hasattr(prog, 'isRecording') and prog.isRecording
                 if isFav and not isRec:
                     prog.isFavorite = favorite
                     self.scheduleRecording(prog)
@@ -1298,15 +1343,16 @@ class RecordServer:
         desc = rec_prog.desc.replace('\n\n','\n').replace('\n','&#10;')
         video = makeVideo('file', 'f1', os.path.basename(rec_prog.filename))
         fxd.setVideo(video)
+        fxd.info['channel'] = fxd.str2XML(rec_prog.channel_id)
+        fxd.info['tunerid'] = fxd.str2XML(rec_prog.tunerid)
         fxd.info['tagline'] = fxd.str2XML(rec_prog.sub_title)
         fxd.info['plot'] = fxd.str2XML(desc)
         fxd.info['runtime'] = None
         fxd.info['recording_timestamp'] = str(rec_prog.start)
-        # bad use of the movie year field :)
         try:
-            fxd.info['year'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(rec_prog.start))
+            fxd.info['userdate'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(rec_prog.start))
         except:
-            fxd.info['year'] = '2007'
+            fxd.info['userdate'] = time.strftime(config.TV_RECORD_YEAR_FORMAT)
         fxd.title = rec_prog.title
         if plugin.is_active('tv.recordings_manager'):
             fxd.info['watched'] = 'False'
@@ -1314,116 +1360,83 @@ class RecordServer:
         fxd.writeFxd()
 
 
-    def handleEvents(self, event):
-        if event:
-            if hasattr(event, 'arg'):
-                _debug_('handleEvents(event=%s arg=%r)' % (event, event.arg))
-            else:
-                _debug_('handleEvents(event=%s)' % (event))
-
-            if event == OS_EVENT_KILL:
-                pass
-
-            elif event == RECORD_START:
-                prog = event.arg
-                _debug_('RECORD_START %s' % (prog), DINFO)
-                open(self.tv_lockfile, 'w').close()
-                self.create_fxd(prog)
-                if config.VCR_PRE_REC:
-                    util.popen3.Popen3(config.VCR_PRE_REC)
-
-            elif event == RECORD_STOP:
-                prog = event.arg
-                _debug_('RECORD_STOP %s' % (prog), DINFO)
-                try:
-                    snapshot(prog.filename)
-                except:
-                    # If automatic pickling fails, use on-demand caching when
-                    # the file is accessed instead.
-                    os.rename(vfs.getoverlay(prog.filename + '.raw.tmp'),
-                              vfs.getoverlay(os.path.splitext(prog.filename)[0] + '.png'))
-                    pass
-
-                if config.VCR_POST_REC:
-                    util.popen3.Popen3(config.VCR_POST_REC)
-
-                if config.TV_RECORD_REMOVE_COMMERCIALS:
-                    (result, response) = commdetectConnectionTest('connection test')
-                    if result:
-                        (status, idnr) = initCommDetectJob(prog.filename)
-                        (status, output) = listCommdetectJobs()
-                        _debug_(output, DINFO)
-                        (status, output) = queueCommdetectJob(idnr, True)
-                        _debug_(output, DINFO)
-                    else:
-                        _debug_('commdetect server not running', DINFO)
-
-                if config.TV_REENCODE:
-                    result = self.es.ping()
-                    if result:
-                        source = prog.filename
-                        output = prog.filename
-                        multipass = config.REENCODE_NUMPASSES > 1
-
-                        (status, resp) = self.es.initEncodingJob(source, output, prog.title, None,
-                            config.TV_REENCODE_REMOVE_SOURCE)
-                        _debug_('initEncodingJob:status:%s resp:%s' % (status, resp))
-
-                        idnr = resp
-
-                        (status, resp) = self.es.setContainer(idnr, config.REENCODE_CONTAINER)
-                        _debug_('setContainer:status:%s resp:%s' % (status, resp))
-
-                        (status, resp) = self.es.setVideoCodec(idnr, config.REENCODE_VIDEOCODEC, 0, multipass,
-                            config.REENCODE_VIDEOBITRATE, config.REENCODE_ALTPROFILE)
-                        _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
-
-                        (status, resp) = self.es.setAudioCodec(idnr, config.REENCODE_AUDIOCODEC,
-                            config.REENCODE_AUDIOBITRATE)
-                        _debug_('setAudioCodec:status:%s resp:%s' % (status, resp))
-
-                        (status, resp) = self.es.setNumThreads(idnr, config.REENCODE_NUMTHREADS)
-                        _debug_('setNumThreads:status:%s resp:%s' % (status, resp))
-
-                        (status, resp) = self.es.setVideoRes(idnr, config.REENCODE_RESOLUTION)
-                        _debug_('setVideoRes:status:%s resp:%s' % (status, resp))
-
-                        (status, resp) = self.es.listJobs()
-                        _debug_('listJobs:status:%s resp:%s' % (status, resp))
-
-                        (status, resp) = self.es.queueIt(idnr, True)
-                        _debug_('queueIt:status:%s resp:%s' % (status, resp))
-                    else:
-                        _debug_('encoding server not running', DINFO)
-
-                # This is a really nasty hack but if it fixes the problem then great
-                if self.delay_recording:
-                    prog = self.delay_recording
-                    #schedule.setProgramList(progs)
-                    #self.saveScheduledRecordings(schedule)
-                    prog.isRecording = True
-                    duration = int(prog.stop) - int(time.time())
-                    prog.rec_duration = duration + config.TV_RECORD_PADDING_POST - 10
-                    prog.filename = tv_util.getProgFilename(prog)
-                    rec_prog = prog
-                    _debug_('start delayed recording: %s' % rec_prog, DINFO)
-                    self.record_app = plugin.getbyname('RECORD')
-                    self.vg = self.fc.getVideoGroup(rec_prog.channel_id, False, CHANNEL_ID)
-                    suffix = self.vg.vdev.split('/')[-1]
-                    self.record_app.Record(rec_prog)
-                    self.delay_recording = None
-                else:
-                    os.remove(self.tv_lockfile)
-            else:
-                _debug_('%s not handled' % (event), DINFO)
-        else:
-            # Should never happen
-            _debug_('%s unknown' % (event), DINFO)
-
-
     def handleAtTimer(self):
         _debug_('handleAtTimer()', 2)
-        self.checkToRecord()
+        self.check_to_record()
+
+
+
+class RecordPostProcess(Thread):
+    def __init__(self, prog):
+        Thread.__init__(self)
+        self.prog = prog
+
+
+    def run(self):
+        _debug_('RecordPostProcess.run() start')
+
+        try:
+            snapshot(self.prog.filename)
+        except:
+            # If automatic pickling fails, use on-demand caching when
+            # the file is accessed instead.
+            os.rename(vfs.getoverlay(self.prog.filename + '.raw.tmp'),
+                      vfs.getoverlay(os.path.splitext(self.prog.filename)[0] + '.png'))
+
+        if config.VCR_POST_REC:
+            util.popen3.Popen3(config.VCR_POST_REC)
+
+        if config.TV_RECORD_REMOVE_COMMERCIALS:
+            (result, response) = commdetectConnectionTest('connection test')
+            if result:
+                (status, idnr) = initCommDetectJob(self.prog.filename)
+                (status, output) = listCommdetectJobs()
+                _debug_(output, DINFO)
+                (status, output) = queueCommdetectJob(idnr, True)
+                _debug_(output, DINFO)
+            else:
+                _debug_('commdetect server not running', DINFO)
+
+        if config.TV_REENCODE:
+            result = self.es.ping()
+            if result:
+                source = self.prog.filename
+                output = self.prog.filename
+                multipass = config.REENCODE_NUMPASSES > 1
+
+                (status, resp) = self.es.initEncodingJob(source, output, self.prog.title, None,
+                    config.TV_REENCODE_REMOVE_SOURCE)
+                _debug_('initEncodingJob:status:%s resp:%s' % (status, resp))
+
+                idnr = resp
+
+                (status, resp) = self.es.setContainer(idnr, config.REENCODE_CONTAINER)
+                _debug_('setContainer:status:%s resp:%s' % (status, resp))
+
+                (status, resp) = self.es.setVideoCodec(idnr, config.REENCODE_VIDEOCODEC, 0, multipass,
+                    config.REENCODE_VIDEOBITRATE, config.REENCODE_ALTPROFILE)
+                _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
+
+                (status, resp) = self.es.setAudioCodec(idnr, config.REENCODE_AUDIOCODEC,
+                    config.REENCODE_AUDIOBITRATE)
+                _debug_('setAudioCodec:status:%s resp:%s' % (status, resp))
+
+                (status, resp) = self.es.setNumThreads(idnr, config.REENCODE_NUMTHREADS)
+                _debug_('setNumThreads:status:%s resp:%s' % (status, resp))
+
+                (status, resp) = self.es.setVideoRes(idnr, config.REENCODE_RESOLUTION)
+                _debug_('setVideoRes:status:%s resp:%s' % (status, resp))
+
+                (status, resp) = self.es.listJobs()
+                _debug_('listJobs:status:%s resp:%s' % (status, resp))
+
+                (status, resp) = self.es.queueIt(idnr, True)
+                _debug_('queueIt:status:%s resp:%s' % (status, resp))
+            else:
+                _debug_('encoding server not running', DINFO)
+
+        _debug_('RecordPostProcess.run() finish')
+
 
 
 def main():
@@ -1443,12 +1456,12 @@ def main():
     eh = EventHandler(recordserver.handleEvents)
     eh.register()
 
-
     _debug_('kaa.AtTimer starting')
     kaa.AtTimer(recordserver.handleAtTimer).start(sec=config.RECORDSERVER_ATTIMER)
     _debug_('kaa.main starting')
     kaa.main.run()
     _debug_('kaa.main finished')
+
 
 
 if __name__ == '__main__':
@@ -1458,17 +1471,17 @@ if __name__ == '__main__':
     sys.stdout = config.Logger(sys.argv[0] + ':stdout')
     sys.stderr = config.Logger(sys.argv[0] + ':stderr')
 
-    locks = glob.glob(config.FREEVO_CACHEDIR + '/record.*')
+    locks = glob.glob(os.path.join(config.FREEVO_CACHEDIR, 'record.*'))
     for f in locks:
-        _debug_('Removed old record lock \"%s\"' % f, DINFO)
+        _debug_('removed old record lock %r' % f, DINFO)
         os.remove(f)
 
     try:
-        _debug_('main() starting')
+        _debug_('main() starting', DINFO)
         main()
-        _debug_('main() finished')
+        _debug_('main() finished', DINFO)
     except SystemExit:
-        _debug_('main() stopped')
+        _debug_('main() stopped', DINFO)
         pass
     except Exception, why:
         import traceback

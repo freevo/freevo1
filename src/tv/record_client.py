@@ -68,8 +68,9 @@ class RecordClientActions:
     def __init__(self):
         """ """
         _debug_('RecordClient.__init__()', 2)
-        self.channel = kaa.rpc.connect((config.RECORDSERVER_IP, config.RECORDSERVER_PORT), config.RECORDSERVER_SECRET, retry=1)
-        self.server = None
+        socket = (config.RECORDSERVER_IP, config.RECORDSERVER_PORT)
+        self.channel = kaa.rpc.connect(socket, config.RECORDSERVER_SECRET, retry=1)
+        #kaa.inprogress(self.channel).wait()
 
 
     def timeit(self, start=None):
@@ -139,6 +140,22 @@ class RecordClientActions:
 
 
     @kaa.coroutine()
+    def getFavoritesCo(self):
+        """ """
+        now = time.time()
+        print self.timeit(now)+': getFavoritesCo() started'
+        inprogress = self._recordserver_rpc('getFavorites')
+        if not inprogress:
+            print self.timeit(now)+': getFavoritesCo.inprogress=%r' % inprogress
+            return
+        print self.timeit(now)+': getFavoritesCo.inprogress=%r' % inprogress
+        yield inprogress
+        print self.timeit(now)+': getFavoritesCo.inprogress=%r' % inprogress
+        yield inprogress.get_result()
+        print self.timeit(now)+': getFavoritesCo finished'
+
+
+    @kaa.coroutine()
     def updateFavoritesScheduleCo(self):
         """ """
         now = time.time()
@@ -158,27 +175,16 @@ class RecordClientActions:
     def getNextProgramStart(self):
         """ """
         now = time.time()
-        print self.timeit(now)+': getNextProgramStart begin'
         inprogress = self._recordserver_rpc('updateFavoritesSchedule')
         if not inprogress:
-            print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
             return
-        print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
         yield inprogress
-        print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
-        #yield kaa.NotFinished
-        print self.timeit(now)+': getNextProgramStart.NotFinished'
         yield inprogress.get_result()
-        print self.timeit(now)+': getNextProgramStart.findNextProgram'
         inprogress = self._recordserver_rpc('findNextProgram')
         if not inprogress:
-            print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
             return
-        print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
         yield inprogress
-        print self.timeit(now)+': getNextProgramStart.inprogress=%r' % inprogress
         nextstart = inprogress.get_result()
-        print self.timeit(now)+': getNextProgramStart.nextstart=%r' % nextstart
 
 
     def pingNow(self):
@@ -487,22 +493,27 @@ if __name__ == '__main__':
         print '%s: pingCo=%r' % (rc.timeit(start), result)
         raise SystemExit
 
-    if function == "findnextprogramco":
+    elif function == "findnextprogramco":
         result = rc.findNextProgramCo().wait()
         print '%s: findNextProgramCo=%r\n"%s"' % (rc.timeit(start), result)
         raise SystemExit
 
-    if function == "getscheduledrecordingsco":
+    elif function == "getscheduledrecordingsco":
         result = rc.getScheduledRecordingsCo().wait()
         print '%s: getScheduledRecordingsCo=%r' % (rc.timeit(start), result)
         raise SystemExit
 
-    if function == "updatefavoritesscheduleco":
+    elif function == "getfavoritesco":
+        result = rc.getFavoritesCo().wait()
+        print '%s: getFavoritesCo=%r' % (rc.timeit(start), result)
+        raise SystemExit
+
+    elif function == "updatefavoritesscheduleco":
         result = rc.updateFavoritesScheduleCo().wait()
         print '%s: updateFavoritesScheduleCo=%r' % (rc.timeit(start), result)
         raise SystemExit
 
-    if function == "getnextprogramstart":
+    elif function == "getnextprogramstart":
         result = rc.getNextProgramStart().wait()
         print '%s: getNextProgramStart=%r' % (rc.timeit(start), result)
         raise SystemExit
@@ -511,7 +522,7 @@ if __name__ == '__main__':
     # kaa.rpc callback tests
     #--------------------------------------------------------------------------------
 
-    if function == "ping":
+    elif function == "ping":
         result = rc.ping(handler)
         if not result:
             print '%s: result=%r' % (rc.timeit(start), result)
@@ -539,7 +550,7 @@ if __name__ == '__main__':
     # kaa.rpc wait on in-progress tests
     #--------------------------------------------------------------------------------
 
-    if function == "pingnow":
+    elif function == "pingnow":
         result = rc.pingNow(*args)
         print '%s: result=%r' % (rc.timeit(start), result)
         raise SystemExit
@@ -648,7 +659,7 @@ if __name__ == '__main__':
             print 'no data'
 
     else:
-        print '%r not found' % (function)
+        print 'function %r not found' % (function)
         raise SystemExit
 
     kaa.OneShotTimer(shutdown, 'bye', time.time()).start(20)

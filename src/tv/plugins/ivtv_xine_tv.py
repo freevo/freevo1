@@ -304,7 +304,7 @@ class PluginInterface(plugin.Plugin):
             ('XINE_TV_INDENT_OSD', False, 'indent OSD text'),
         ]
 
-        
+
 class XineIvtv:
     """
     Main class of the plugin
@@ -427,7 +427,7 @@ class XineIvtv:
         """ Start the xine player """
         _debug_('XineIvtv.Play(mode=%r, channel=%r, channel_change=%r)' % (mode, channel, channel_change), 1)
 
-        self.mode = mode	
+        self.mode = mode
         self.prev_app = rc.app()
         rc.app(self)
         self.mixer.Mute()
@@ -463,7 +463,7 @@ class XineIvtv:
         _debug_('XineIvtv.eventhandler(event=%r)' % (event.name,), )
 
         if self.recordmode in [ 0, 1, 2 ]:
-            # handle event while live recording is active 
+            # handle event while live recording is active
             if event in [ TV_START_RECORDING, STOP ]:
                 if self.ConfirmStop(_('Live Recording active, please repeat to stop')):
                     self.StopLiveRecording()
@@ -474,7 +474,7 @@ class XineIvtv:
                             INPUT_5, INPUT_6, INPUT_7, INPUT_8, INPUT_9 ]:
                 self.xine.ShowMessage(_('Recording in progress!'))
                 return True
- 
+
         if self.recordmenu:
             # handle event while menu mode is displayed
             if event in [ INPUT_1, INPUT_2, INPUT_3 ]:

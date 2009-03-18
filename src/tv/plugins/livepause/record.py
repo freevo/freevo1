@@ -160,11 +160,10 @@ class Recorder(object):
             fxd.title = _('Manual Recording')
         fxd.info['recording_timestamp'] = str(start_time)
         fxd.info['runtime'] = None
-        # bad use of the movie year field :)
         try:
-            fxd.info['year'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(start_time))
+            fxd.info['userdate'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(start_time))
         except:
-            fxd.info['year'] = '2007'
+            fxd.info['userdate'] = time.strftime(config.TV_RECORD_YEAR_FORMAT)
 
         if plugin.is_active('tv.recordings_manager'):
             fxd.info['watched'] = 'False'

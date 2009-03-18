@@ -457,7 +457,7 @@ class LivePauseController:
             self.player.resume()
         else:
             self.player.pause()
-        self.osd.display_info(self.__get_display_info)        
+        self.osd.display_info(self.__get_display_info)
         return True
 
     def __playing_tv_channel_up(self, event, menuw):

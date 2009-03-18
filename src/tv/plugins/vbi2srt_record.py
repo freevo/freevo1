@@ -234,7 +234,7 @@ class Record_Thread(threading.Thread):
 
                 _debug_('command %r' % self.command)
                 self.app = RecordApp(self.command)
-                _debug_('app child pid: %s' % self.app.child.pid)
+                _debug_('command pid: %s' % self.app.child.pid)
 
                 while self.mode == 'record' and self.app.isAlive():
                     self.autokill -= 0.5
@@ -246,7 +246,6 @@ class Record_Thread(threading.Thread):
                 if self.app.isAlive():
                     # might not want to do this is PDC is valid, programme may be delayed
                     _debug_('past wait!!')
-                    rc.post_event(Event(OS_EVENT_KILL, (self.app.child.pid, 15)))
                     self.app.kill()
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))

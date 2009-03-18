@@ -185,7 +185,7 @@ class FreevoChannels:
                         del dup_dict[key]
 
             if len(dup_dict) > 1:
-                _debug_('At current day/time (%s, %s),still %s active TV_Channels for channel %s' % \
+                _debug_('At current day/time (%s, %s), still %s active TV_Channels for channel %s' % \
                     (cwday, ctime, len(dup_dict), chan), DWARNING)
 
             for key in dup_dict.keys():
