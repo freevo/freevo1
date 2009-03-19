@@ -898,10 +898,15 @@ class RecordServer:
             if recording:
                 currently_recording = prog
 
-        for prog in progs.values():
-            _debug_('progloop=%s' % prog, 2)
+        if currently_recording is not None:
+            _debug_('currently_recording=%s' % (currently_recording), DINFO)
+        if self.delayed_recording is not None:
+            _debug_('delayed_recording=%s' % (self.delayed_recording), DINFO)
 
+        for prog in progs.values():
             recording = hasattr(prog, 'isRecording') and prog.isRecording
+
+            _debug_('prog=%s recording=%s' % (prog, recording), 2)
 
             if not recording and \
                 now >= (prog.start - config.TV_RECORD_PADDING_PRE) and \
@@ -953,9 +958,9 @@ class RecordServer:
                 if self.delayed_recording:
                     _debug_('delaying: %s' % prog, DINFO)
                 else:
-                    _debug_('going to record: %s' % prog, DINFO)
+                    _debug_('going to record: %s' % prog)
                     prog.isRecording = True
-                    prog.rec_duration = duration + config.TV_RECORD_PADDING_POST - 10
+                    prog.rec_duration = duration + config.TV_RECORD_PADDING_POST
                     prog.filename = tv_util.getProgFilename(prog)
                     rec_prog = prog
 
@@ -971,7 +976,7 @@ class RecordServer:
             self.saveScheduledRecordings(schedule)
 
         if rec_prog:
-            _debug_('start recording: %s' % rec_prog, DINFO)
+            _debug_('start recording: %s' % rec_prog)
             self.record_app = plugin.getbyname('RECORD')
 
             if not self.record_app:
@@ -1019,6 +1024,7 @@ class RecordServer:
             elif event == RECORD_STOP:
                 prog = event.arg
                 _debug_('RECORD_STOP %s' % (prog), DINFO)
+                prog.isRecording = False
 
                 # Create and run the post processing thread
                 postprocess = RecordPostProcess(prog)
@@ -1027,9 +1033,8 @@ class RecordServer:
 
                 # This is a really nasty hack but if it fixes the problem then great
                 if self.delayed_recording:
-                    prog.isRecording = False
-                    self.check_to_record()
                     self.delayed_recording = None
+                    self.check_to_record()
                 else:
                     os.remove(self.tv_lockfile)
 
@@ -1373,7 +1378,7 @@ class RecordPostProcess(Thread):
 
 
     def run(self):
-        _debug_('RecordPostProcess.run() start')
+        _debug_('post-processing started for %s' % (self.prog), DINFO)
 
         try:
             snapshot(self.prog.filename)
@@ -1435,7 +1440,7 @@ class RecordPostProcess(Thread):
             else:
                 _debug_('encoding server not running', DINFO)
 
-        _debug_('RecordPostProcess.run() finish')
+        _debug_('post-processing finished for %s' % (self.prog), DINFO)
 
 
 
