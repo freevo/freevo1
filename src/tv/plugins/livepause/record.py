@@ -45,127 +45,78 @@ from tv import epg_xmltv
 from util.tv_util import progname2filename
 import config
 
-__all__ = ['Recorder']
-
-class Recorder(object):
+def start_recording(backend, channel_id):
     """
-    Class to store the contents of the ring buffer to a file.
+    Start recording the contents of the ring buffer to a file.
+    @param reader: ChunkBufferReader instance used to read from the ring buffer.
+    @param channel_id: The currently tuned channel.
     """
+    buffer_info = backend.get_buffer_info()
 
-    def __init__(self, reader, channel_id):
-        """
-        Create a new Recorder instance
-        @param reader: ChunkBufferReader instance used to read from the ring buffer.
-        @param channel_id: The currently tuned channel.
-        """
-        self.reader = reader
-        self.channel_id = channel_id
-        self.canceled = False
-        self.recording = True
-        self.thread = threading.Thread(target=self.__run)
-        self.thread.start()
+    program = _get_program(buffer_info[3], channel_id)
+    if program:
+        filename_array = { 'progname': String(program.title),
+                           'title'   : String(program.sub_title) }
+        start_time = program.start
+        end_time = program.stop
+    else:
+        filename_array = { 'progname': String('Manual Recording'),
+                           'title'   : String('') }
+        start_time = buffer_info[3]
+        end_time = current_buffer_time + config.LIVE_PAUSE2_INSTANT_RECORD_LENGTH
 
-    def cancel(self):
-        """
-        Cancel the copy of the contents of the ring buffer to a file.
-        """
-        self.canceled = True
+    filemask = config.TV_RECORD_FILE_MASK % filename_array
+    filemask = time.strftime(filemask, time.localtime(current_buffer_time))
+    filename = os.path.join(config.TV_RECORD_DIR, progname2filename(filemask).rstrip(' -_:') + \
+                            config.TV_RECORD_FILE_SUFFIX)
 
-    def __run(self):
-        """
-        Thread method that does the actual recording.
-        """
-        rc.post_event(event.RECORD_START)
-        reader = self.reader
-        # Get the show that is currently being viewed
-        current_buffer_time = reader.get_current_chunk_time()
+    _create_fxd(program, filename, start_time)
+    backend.save(filename, start_time, end_time)
 
-        program = self.__get_program(current_buffer_time, self.channel_id)
-        if program:
-            filename_array = { 'progname': String(program.title),
-                               'title'   : String(program.sub_title) }
-            end_time = program.stop
-        else:
-            filename_array = { 'progname': String('Manual Recording'),
-                               'title'   : String('') }
-            end_time = current_buffer_time + config.LIVE_PAUSE2_INSTANT_RECORD_LENGTH
+def _get_program(current_time, channel_id):
+    """
+    Get the program object from the EPG for channel_id at time current_time.
+    """
+    for tv_channel_id, tv_display_name, tv_tuner_id in config.TV_CHANNELS:
+        if tv_tuner_id == channel_id:
+            channel_id = tv_channel_id
 
-        filemask = config.TV_RECORD_FILE_MASK % filename_array
-        filemask = time.strftime(filemask, time.localtime(current_buffer_time))
-        filename = os.path.join(config.TV_RECORD_DIR, progname2filename(filemask).rstrip(' -_:') + \
-                                config.TV_RECORD_FILE_SUFFIX)
+    channels = epg_xmltv.get_guide().get_programs(start=current_time,
+                                                 stop=current_time,
+                                                 channel_id=[channel_id])
 
-        self.__create_fxd(program, filename, current_buffer_time)
-        output = None
-        try:
-            output = open(filename, 'wb')
+    if channels and channels[0] and channels[0].programs:
+        return channels[0].programs[0]
+    return None
 
-            while not self.canceled:
-                current_buffer_time = reader.get_current_chunk_time()
-                if current_buffer_time >= end_time:
-                    break
-                data = reader.read(188 * 7)
-                if not data:
-                    time.sleep(0.5)
-                else:
-                    output.write(data)
-        except:
-            _debug_('Caught exception while recording! %s' % traceback.format_exc())
+def _create_fxd(prog, filename, start_time):
+    """
+    Create a .fxd file with the specified program information in.
+    """
+    from util.fxdimdb import FxdImdb, makeVideo
+    fxd = FxdImdb()
 
-        # Make sure the file gets closed.
-        if output:
-            try:
-                output.close()
-            except:
-                pass
+    (filebase, fileext) = os.path.splitext(filename)
+    fxd.setFxdFile(filebase, overwrite=True)
 
-        self.recording = False
-        rc.post_event(event.RECORD_STOP)
-        reader.close()
+    video = makeVideo('file', 'f1', os.path.basename(filename))
+    fxd.setVideo(video)
+    if prog:
+        fxd.title = prog.title
+        fxd.info['tagline'] = fxd.str2XML(prog.sub_title)
+        desc = prog.desc.replace('\n\n','\n').replace('\n','&#10;')
+        fxd.info['plot'] = fxd.str2XML(desc)
+    else:
+        fxd.title = _('Manual Recording')
+    fxd.info['recording_timestamp'] = str(start_time)
+    fxd.info['runtime'] = None
+    # bad use of the movie year field :)
+    try:
+        fxd.info['year'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(start_time))
+    except:
+        fxd.info['year'] = '2007'
 
-    def __get_program(self, current_time, channel_id):
-        """
-        Get the program object from the EPG for channel_id at time current_time.
-        """
-        for tv_channel_id, tv_display_name, tv_tuner_id in config.TV_CHANNELS:
-            if tv_tuner_id == channel_id:
-                channel_id = tv_channel_id
-
-        channels = epg_xmltv.get_guide().get_programs(start=current_time,
-                                                     stop=current_time,
-                                                     channel_id=[channel_id])
-
-        if channels and channels[0] and channels[0].programs:
-            return channels[0].programs[0]
-        return None
-
-    def __create_fxd(self, prog, filename, start_time):
-        """
-        Create a .fxd file with the specified program information in.
-        """
-        from util.fxdimdb import FxdImdb, makeVideo
-        fxd = FxdImdb()
-
-        (filebase, fileext) = os.path.splitext(filename)
-        fxd.setFxdFile(filebase, overwrite=True)
-
-        video = makeVideo('file', 'f1', os.path.basename(filename))
-        fxd.setVideo(video)
-        if prog:
-            fxd.title = prog.title
-            fxd.info['tagline'] = fxd.str2XML(prog.sub_title)
-            desc = prog.desc.replace('\n\n','\n').replace('\n','&#10;')
-            fxd.info['plot'] = fxd.str2XML(desc)
-        else:
-            fxd.title = _('Manual Recording')
-        fxd.info['recording_timestamp'] = str(start_time)
-        fxd.info['runtime'] = None
-        try:
-            fxd.info['userdate'] = time.strftime(config.TV_RECORD_YEAR_FORMAT, time.localtime(start_time))
-        except:
-            fxd.info['userdate'] = time.strftime(config.TV_RECORD_YEAR_FORMAT)
-
-        if plugin.is_active('tv.recordings_manager'):
-            fxd.info['watched'] = 'False'
-            fxd.info['keep'] = 'False'
-        fxd.writeFxd()
+    if plugin.is_active('tv.recordings_manager'):
+        fxd.info['watched'] = 'False'
+        fxd.info['keep'] = 'False'
+    fxd.writeFxd()

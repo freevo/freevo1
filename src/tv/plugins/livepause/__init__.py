@@ -29,33 +29,28 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # ----------------------------------------------------------------------- */
-import socket
-import sys
-import threading
 import time
-import traceback
 
-import childapp
+import kaa
 import config     # Configuration handler. reads config file.
-import osd
 import plugin
 import rc         # The RemoteControl class.
-import util
 import dialog
 
-
+import tv.dialogs
 from tv.channels import FreevoChannels
 from event import *
 
 from tv.plugins.livepause.events import *
-from tv.plugins.livepause.record import Recorder
-from tv.plugins.livepause.chunk_buffer import ChunkBuffer
+from tv.plugins.livepause.record import *
+from tv.plugins.livepause import backend
 
 from tv.plugins.livepause import display
 from tv.plugins.livepause import players
-from tv.plugins.livepause import controllers
 
-WAIT_FOR_DATA_COUNT   = 3
+import dialog.dialogs
+
+WAIT_FOR_DATA_COUNT   = 1
 WAIT_FOR_DATA_TIMEOUT = 20 # Seconds
 
 STARVED_PAUSE_COUNT = 3
@@ -65,7 +60,6 @@ class State:
     TUNING    = 'Tuning'
     BUFFERING = 'Buffering'
     PLAYING   = 'Playing'
-    NUMBER    = 'ChannelNumber'
 
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -141,13 +135,10 @@ class PluginInterface(plugin.DaemonPlugin):
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
         # Determine size and location of the live buffer
-        size = config.LIVE_PAUSE2_BUFFER_SIZE
-        path = config.LIVE_PAUSE2_BUFFER_PATH
+
         self.event_listener = True
 
-        _debug_('live pause started: Path=%s Max Size=%dMB' % (path, size))
-
-        self.livepause = LivePauseController(path, size, players.get_player())
+        self.livepause = LivePauseController(players.get_player())
         plugin.register(self.livepause, plugin.TV, False)
 
     def shutdown(self):
@@ -178,7 +169,10 @@ class PluginInterface(plugin.DaemonPlugin):
                 ('LIVE_PAUSE2_BUFFER_TIMEOUT', 5*60, 'Timeout to disable buffering after exiting watching tv'),
                 ('LIVE_PAUSE2_INSTANT_RECORD_LENGTH', 2*60*60, 'Length of time to record, in seconds, if no program data is available. (Default: 2Hours)'),
                 ('LIVE_PAUSE2_PREFERRED_PLAYER', None, 'Preferred player to use (one of vlc,xine,mplayer) or None to select the best one available.'),
-                ('LIVE_PAUSE2_OSD_SKIN', 'base', 'Name of the OSD skin to use for graphics OSDs.')
+                ('LIVE_PAUSE2_PORT', backend.MEDIA_SERVER_PORT, 'TCP Port to use for the livepause server.'),
+                ('LIVE_PAUSE2_BACKEND_SERVER_IP', None, 'IP address of the server to use as the backend.'),
+                ('LIVE_PAUSE2_BACKEND_SERVER_PORT', backend.BACKEND_SERVER_PORT, 'Port of the remote backend server.'),
+                ('LIVE_PAUSE2_BACKEND_SERVER_SECRET', backend.BACKEND_SERVER_SECRET, 'Secret phrase that must match on the backend server.')
                 ]
 
 ###############################################################################
@@ -188,30 +182,22 @@ class LivePauseController:
     """
     The main class to control play back.
     """
-    def __init__(self, path, max_size, player):
+    def __init__(self, player):
         self.name = 'livepause'
         self.app_mode  = 'tv'
 
         self.fc = FreevoChannels()
-        self.buffer = ChunkBuffer(path, max_size * (1024*1024))
-        self.reader = self.buffer.get_reader()
 
-        self.recording = None
+        self.backend = backend.get_backend()
+        self.backend.set_mode(player.mode)
 
-        self.controller = None
-        self.device_in_use = None
         self.last_channel = None
         self.stop_time = 0
-        self.disable_buffering_timer = None
+        self.data_started_timer = kaa.OneShotTimer(self.__buffering_data_timedout)
+        self.disable_buffering_timer = kaa.OneShotTimer(self.__disable_buffering_timeout)
 
         self.state = State.IDLE
         self.player = player
-
-        self.slave_server = SlaveServer(self.reader, self)
-        self.slave_server.start()
-
-        self.channel_number = ''
-        self.channel_number_timer = None
 
         self.changing_channel = False
 
@@ -220,6 +206,10 @@ class LivePauseController:
 
         self.audio_langs = None
         self.audio_lang_index = -1
+
+        self.recording = False
+
+        self.state_dialog = None
 
         # Setup Event Maps
         self.event_maps = {}
@@ -251,43 +241,20 @@ class LivePauseController:
             'TV_CHANNEL_DOWN'     : self.__playing_tv_channel_down,
             'TV_CHANNEL_NUMBER'   : self.__playing_tv_channel_number,
             'TV_START_RECORDING'  : self.__playing_tv_record,
-            'RECORD_START'        : self.__playing_tv_record_start,
-            'RECORD_STOP'         : self.__playing_tv_record_stop,
+            'SAVE_STARTED'        : self.__playing_tv_record_start,
+            'SAVE_FINISHED'       : self.__playing_tv_record_stop,
             'BUTTON'              : self.__playing_button_pressed,
             'TOGGLE_OSD'          : self.__playing_display_info,
             'SEEK'                : self.__playing_seek,
             'READER_OVERTAKEN'    : self.__playing_reader_overtaken,
             'DATA_ACQUIRED'       : None,
             'DATA_TIMEDOUT'       : None,
-            'INPUT_1'             : self.__playing_handle_number,
-            'INPUT_2'             : self.__playing_handle_number,
-            'INPUT_3'             : self.__playing_handle_number,
-            'INPUT_4'             : self.__playing_handle_number,
-            'INPUT_5'             : self.__playing_handle_number,
-            'INPUT_6'             : self.__playing_handle_number,
-            'INPUT_7'             : self.__playing_handle_number,
-            'INPUT_8'             : self.__playing_handle_number,
-            'INPUT_9'             : self.__playing_handle_number,
-            'INPUT_0'             : self.__playing_handle_number,
             'VIDEO_NEXT_FILLMODE' : None,
             'VIDEO_NEXT_AUDIOMODE': None,
             'VIDEO_NEXT_AUDIOLANG': None, #self.__playing_toggle_audo_lang,
             'VIDEO_NEXT_SUBTITLE' : self.__playing_toggle_subtitles,
             }
 
-        self.event_maps[State.NUMBER] = {
-            'STOP'                : self.__handle_stop,
-            'INPUT_1'             : self.__playing_handle_number,
-            'INPUT_2'             : self.__playing_handle_number,
-            'INPUT_3'             : self.__playing_handle_number,
-            'INPUT_4'             : self.__playing_handle_number,
-            'INPUT_5'             : self.__playing_handle_number,
-            'INPUT_6'             : self.__playing_handle_number,
-            'INPUT_7'             : self.__playing_handle_number,
-            'INPUT_8'             : self.__playing_handle_number,
-            'INPUT_9'             : self.__playing_handle_number,
-            'INPUT_0'             : self.__playing_handle_number,
-            }
         self.current_event_map = self.event_maps[self.state]
 
 
@@ -301,9 +268,7 @@ class LivePauseController:
         if plugin.getbyname('MIXER'):
             plugin.getbyname('MIXER').reset()
 
-        if self.disable_buffering_timer:
-            self.disable_buffering_timer.cancel()
-            self.disable_buffering_timer = None
+        self.disable_buffering_timer.stop()
 
         rc.app(self)
 
@@ -314,15 +279,16 @@ class LivePauseController:
             now = time.time()
             seconds_since_played = now - self.stop_time
             _debug_('Same channel, seconds since last playing this channel %d' % seconds_since_played)
-            self.controller.enable_events(True)
+            self.backend.set_events_enabled(True)
             if seconds_since_played > 120.0:
-                self.slave_server.start_at_end = True
-            else:
-                self.slave_server.start_at_end = False
+                # Start at the end of the buffer
+                buffer_info = self.backend.get_buffer_info()
+                self.backend.seekto(buffer_info[2] - 3)
 
             self.__change_state(State.PLAYING)
         else:
             _debug_('New channel, tuning to %s' % tuner_channel)
+            self.backend.set_events_enabled(True)
             self.change_channel(tuner_channel)
 
         return None
@@ -333,37 +299,30 @@ class LivePauseController:
         Stop playback and go into idle.
         """
         _debug_('Stopping play back.')
+        display.get_osd().hide()
         dialog.disable_overlay_display()
         self.player.stop()
         self.stop_time = time.time()
-        self.controller.enable_events(False)
+        self.backend.set_events_enabled(False)
         self.__change_state(State.IDLE)
-        self.disable_buffering_timer = threading.Timer(config.LIVE_PAUSE2_BUFFER_TIMEOUT, self.__disable_buffering_timeout)
-        self.disable_buffering_timer.start()
+        self.disable_buffering_timer.start(config.LIVE_PAUSE2_BUFFER_TIMEOUT)
         return True
 
     def disable_buffering(self):
         """
         Stop buffering the current channel.
         """
-        if self.device_in_use:
-            self.stop_time = 0
-            self.last_channel = None
-            self.controller.stop_filling()
-            self.controller = None
-            self.device_in_use = None
-            _debug_('Buffering disabled.')
+        self.stop_time = 0
+        self.last_channel = None
+        self.disable_buffering_timer.stop()
+        self.backend.disable_buffering()
+        _debug_('Buffering disabled.')
 
     def shutdown(self):
         """
         Stop buffering and the slave server.
         """
-        if self.device_in_use:
-            self.disable_buffering()
-
-        if self.slave_server:
-            self.slave_server.stop()
-            self.slave_server = None
+        self.disable_buffering()
 
 
     def change_channel(self, channel):
@@ -375,27 +334,10 @@ class LivePauseController:
         if self.last_channel == channel:
             # Already tune to this channel so nothing to do!
             return
-
-
-        if self.device_in_use:
-            self.controller.stop_filling()
-            self.controller = None
-            self.device_in_use = None
-
-        # Find the controller for this VideoGroup type
-        vg = self.fc.getVideoGroup(channel, True)
-        self.controller = controllers.get_controller(vg.group_type)
-        if not self.controller:
-            _debug_('Failed to find controller for device')
-            return
-
         self.fc.chanSet(channel, True)
 
-        self.buffer.reset()
-        self.controller.start_filling(self.buffer, vg, channel, WAIT_FOR_DATA_TIMEOUT)
-        self.device_in_use = vg
         self.last_channel = channel
-
+        self.backend.change_channel(channel)
         self.__change_state(State.TUNING)
 
 
@@ -409,7 +351,10 @@ class LivePauseController:
         """
         _debug_('Event %s' % event)
         event_consumed = False
-        if event.name in self.current_event_map:
+        if self.state == State.PLAYING:
+            event_consumed = tv.dialogs.handle_channel_number_input(event)
+
+        if not event_consumed and event.name in self.current_event_map:
             handler = self.current_event_map[event.name]
             if handler:
                 event_consumed = handler(event, menuw)
@@ -457,7 +402,7 @@ class LivePauseController:
             self.player.resume()
         else:
             self.player.pause()
-        self.osd.display_info(self.__get_display_info)
+        self.osd.display_buffer_pos(self.__get_display_info)
         return True
 
     def __playing_tv_channel_up(self, event, menuw):
@@ -479,28 +424,29 @@ class LivePauseController:
         return True
 
     def __playing_tv_channel_number(self, event, menuw):
-        self.__change_state(State.PLAYING)
-        next_channel = self.fc.getManChannel(int(self.channel_number))
-        self.channel_number = ''
+        next_channel = self.fc.getManChannel(event.arg)
+        if self.last_channel != next_channel:
+            self.changing_channel = True
+            self.player.stop()
 
-        self.changing_channel = True
-        self.player.stop()
-
-        self.change_channel(next_channel)
+            self.change_channel(next_channel)
         return True
 
     def __playing_tv_record(self, event, menuw):
         if self.recording:
-            self.recording.cancel()
-            self.recording = None
+            self.backend.cancel_save()
+            self.recording = False
         else:
-            self.recording = Recorder(self.reader.copy(), self.last_channel)
+            self.recording = True
+            record.start_recording(self.backend, self.last_channel)
 
     def __playing_tv_record_start(self, event, menuw):
         dialog.show_message(_('Recording started'))
 
     def __playing_tv_record_stop(self, event, menuw):
-        dialog.show_message(_('Recording stopped'))
+        if self.state == State.PLAYING:
+            dialog.show_message(_('Recording stopped'))
+        self.recording = False
 
     def __playing_reader_overtaken(self, event, menuw):
         if self.player.paused:
@@ -572,67 +518,34 @@ class LivePauseController:
     def __get_display_info(self):
         info_dict = {}
         info_dict['channel'] = self.__get_display_channel()
-        info_dict['current_time'] = self.reader.get_current_chunk_time()
-
-        chunk_reader = self.buffer.get_reader()
-        info_dict['start_time'] = chunk_reader.get_current_chunk_time()
-        chunk_reader.seek(chunk_reader.available_forward() - 1)
-        info_dict['end_time'] = chunk_reader.get_current_chunk_time()
-        cf = self.reader.available_forward()
-        cb = self.reader.available_backward()
-        ct = cf + cb
-        info_dict['percent_through_buffer'] = float(cb) / float(ct)
-        chunk_reader.close()
-
-        info_dict['percent_buffer_full'] = float(len(self.buffer.buffer))/ float(self.buffer.buffer.size)
-
-        del chunk_reader
-
+        buffer_info = self.backend.get_buffer_info()
+        info_dict['current_time'] = buffer_info[3]
+        info_dict['start_time'] = buffer_info[1]
+        info_dict['end_time'] = buffer_info[2]
+        info_dict['percent_through_buffer'] = float(buffer_info[3] - buffer_info[1]) / float(buffer_info[2] - buffer_info[1])
+        info_dict['percent_buffer_full'] = buffer_info[0]
+        info_dict['paused'] = self.player.paused
+        info_dict['recording'] = self.recording
         return info_dict
 
     def __playing_seek(self, event, menuw):
         steps = int(event.arg)
+        buffer_info = self.backend.get_buffer_info()
         if steps > 0:
-            can_seek = self.reader.available_forward() > 0
+            can_seek = buffer_info[2] != buffer_info[3]
+            steps = min(buffer_info[2] - buffer_info[3], steps)
         else:
-            can_seek = self.reader.available_backward() > 0
-
+            steps = max(buffer_info[1] - buffer_info[3], steps)
+            can_seek = buffer_info[1] != buffer_info[3]
         if can_seek:
-            self.player.pause()
-            self.reader.seek_seconds(steps)
+            self.backend.seek(steps)
             self.player.restart()
-        return True
-
-    def __number_handle_button(self, event, menuw):
-        consumed = False
-        if event.arg == 'ENTER' and self.channel_number:
-            self.channel_number_timer.cancel()
-            rc.post_event(TV_CHANNEL_NUMBER)
-            consumed = True
-        return consumed
-
-    def __number_handle_stop(self, event, menuw):
-        self.__change_state(State.PLAYING)
-        return True
-
-    def __playing_handle_number(self, event, menuw):
-        if self.state == State.PLAYING:
-            self.__change_state(State.NUMBER)
-
-        self.channel_number += str(event.arg)
-        if len(self.channel_number) > 3:
-            self.channel_number = self.channel_number[1:]
-        self.osd.display_channel_number(int(self.channel_number))
-
-        if self.channel_number_timer:
-            self.channel_number_timer.cancel()
-        _debug_('Starting channel number timer')
-        self.channel_number_timer = threading.Timer(4.0, self.__fire_channel_number)
-        self.channel_number_timer.start()
+        time.sleep(0.2)
+        self.osd.display_buffer_pos(self.__get_display_info)
         return True
 
     ###########################################################################
-    # State Managment
+    # State Management
     ###########################################################################
 
     def __change_state(self, new_state):
@@ -653,68 +566,44 @@ class LivePauseController:
         # State Initialisation code
 
         if self.state == State.IDLE:
+            self.state_dialog.hide()
             rc.app(None)
             rc.post_event(PLAY_END)
-            if self.controller:
-                self.controller.enable_events(False)
+            self.backend.set_events_enabled(False)
 
         elif self.state == State.TUNING:
-            self.slave_server.start_at_end = True
+            # Display the current state on the OSD
+            self.__draw_state_screen()
 
         elif self.state == State.BUFFERING:
             self.wait_for_data_count = WAIT_FOR_DATA_COUNT
+            # Display the current state on the OSD
+            self.__draw_state_screen()
 
         elif self.state == State.PLAYING:
-            if old_state == State.NUMBER:
-                return
-            self.player.start(self.slave_server.port)
+            # Display the current state on the OSD
+            self.__draw_state_screen()
+
+            self.player.start((self.backend.get_server_address(), config.LIVE_PAUSE2_PORT))
             dialog.enable_overlay_display(self.player.get_display())
             self.osd = display.get_osd()
 
-        elif self.state == State.NUMBER:
-            return
-
-        # Display the current state on the OSD
-        self.__draw_state_screen()
 
 
     def __draw_state_screen(self):
-        osd_obj = osd.get_singleton()
+        if self.state_dialog is None:
+            self.state_dialog = StateDialog()
+
         percent = 0.0
-
-        channel = self.__get_display_channel()
-
-        if self.state == State.IDLE:
-            state_string = None
-
-        elif self.state == State.TUNING:
-            state_string = _('Tuning to %s') % channel
-
-        elif self.state == State.BUFFERING:
-            state_string = _('Buffering %s') % channel
+        if self.state == State.BUFFERING:
             percent = float(WAIT_FOR_DATA_COUNT - self.wait_for_data_count) / float(WAIT_FOR_DATA_COUNT)
 
         elif self.state == State.PLAYING:
-            state_string = _('Playing %s') % channel
             percent = 1.0
 
-        osd_obj.clearscreen(color=osd_obj.COL_BLACK)
-        if state_string:
-            y = (config.CONF.height / 2) - config.OSD_DEFAULT_FONTSIZE
-            h = -1
-            font = osd_obj.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE)
-            osd_obj.drawstringframed(state_string, 0, y, config.CONF.width, h, font,
-                fgcolor=osd_obj.COL_ORANGE, align_h='center')
-            x = config.CONF.width / 4
-            w = x * 2
-            y = (config.CONF.height / 2) + config.OSD_DEFAULT_FONTSIZE
-            h = int(20.0 * ( float(config.CONF.height) /  600.0 ))
-            osd_obj.drawbox(x - 4,y - 4,x + w + 4, y + h + 4 , color=osd_obj.COL_ORANGE, width=2)
-            w = int(float(w) * percent)
-            osd_obj.drawbox(x,y,x + w, y +h , color=osd_obj.COL_ORANGE, fill=1)
-
-        osd_obj.update()
-
+        channel = self.__get_display_channel()
+        self.state_dialog.set_state(self.state, percent, channel)
+        self.state_dialog.show()
 
     def __get_display_channel(self):
         channel = self.last_channel
@@ -731,139 +620,26 @@ class LivePauseController:
 
     def __disable_buffering_timeout(self):
         self.disable_buffering()
-        self.disable_buffering_timer = None
 
-###############################################################################
-# Live Buffer Emptier Class
-###############################################################################
-class SlaveServer:
-    """
-    Class to serve data from the ring buffer over HTTP (very simple no paths,
-    only 1 connection).
-    """
+class StateDialog(dialog.dialogs.Dialog):
+    def __init__(self):
+        super(StateDialog, self).__init__('livepause_state', 0.0)
+        self.info_dict = {'state':State.IDLE, 'state_string':None, 'percent':0.0}
 
-    def __init__(self, reader, controller):
-        """
-        Initialise a server to provide data to player.
-        """
-        self.port = 50007
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind(('', self.port))
-        self.socket.listen(1)
-        self.reader = reader
-        self.controller = controller
-        self.quit = False
-        self.thread = None
-        self.connection = None
-        self.start_at_end = False
-        self.send_events = False
-        self.seek_offset_next_conn = 0
+    def set_state(self, state, percent, channel):
+        self.info_dict['state'] = state
+        self.info_dict['percent']= percent
+        if state == State.IDLE:
+            self.info_dict['state_string'] = None
 
-    def start(self, start_at_end = False):
-        """
-        Start the server.
-        """
-        if self.thread is None:
-            self.quit = False
-            self.start_at_end = start_at_end
-            self.thread = threading.Thread(target=self.run, name='Slave Server')
-            self.thread.setDaemon(True)
-            self.thread.start()
+        elif state == State.TUNING:
+            self.info_dict['state_string'] = _('Tuning to %s') % channel
 
+        elif state == State.BUFFERING:
+            self.info_dict['state_string'] = _('Buffering %s') % channel
 
-    def stop(self):
-        """
-        Stop the server.
-        """
-        if self.thread is not None:
-            self.quit = True
-            self.socket.close()
-            if self.connection:
-                self.connection.close()
+        elif state == State.PLAYING:
+            self.info_dict['state_string'] = _('Playing %s') % channel
 
-
-
-    def run(self):
-        """
-        Thread method to listen for connection from xine slave:// and serve data from the ring buffer.
-        """
-        self.reader.overtaken = self.__reader_overtaken
-
-        while not self.quit:
-            # When no client is connected we don't need to inform anyone about
-            # being overtaken.
-            self.send_events = False
-
-            connection, addr = self.socket.accept()
-            _debug_('Connection from %s:%d reader %d< >%d'  % ( addr[0], addr[1],
-                            self.reader.available_backward(), self.reader.available_forward()))
-            self.__handle_connection(connection)
-
-        _debug_('Slave server exited')
-        self.thread = None
-
-    def __handle_connection(self, connection):
-        """
-        Handle a connection to the slave server.
-        """
-        self.connection = connection
-        reader = self.reader
-
-        connection.send('HTTP/1.0 200 OK\n')
-        connection.send('Content-type: application/octet-stream\n')
-        connection.send('Cache-Control: no-cache\n\n')
-
-        if self.start_at_end:
-            reader.seek( reader.available_forward())
-            reader.seek_seconds(- WAIT_FOR_DATA_COUNT)
-            self.start_at_end = False
-        elif self.seek_offset_next_conn:
-            reader.seek_seconds(self.seek_offset_next_conn)
-
-        try:
-            last_time = time.time()
-            count = 0
-            starved_count = 0
-            self.send_events = True
-
-            while not self.quit:
-                if count == 0:
-                    _debug_('In data loop')
-                data = reader.read(188 * 7)
-
-                if not data:
-                    starved_count += 1
-                    if starved_count >= STARVED_PAUSE_COUNT:
-                        _debug_('Starved!!! count=%d starved_count=%d' % (count,starved_count))
-                        self.controller.player.pause()
-                        time.sleep(2.0)
-                        self.controller.player.resume()
-                    else:
-                        time.sleep(0.2)
-                else:
-                    starved_count = 0
-                    now = time.time()
-                    if last_time - now > 1.0:
-                        last_time = now
-                        _debug_('Sent %d bytes' %  count)
-                    count += len(data)
-                    connection.send(data)
-
-        except socket.error:
-            pass
-        except :
-            traceback.print_exc()
-        try:
-            connection.close()
-        except:
-            pass
-
-        self.connection = None
-
-    def __reader_overtaken(self):
-        """
-        Callback to handle the situation where the reader has been overtaken
-        by the buffer writer.
-        """
-        if self.send_events:
-            rc.post_event(READER_OVERTAKEN)
+    def get_info_dict(self):
+        return self.info_dict
