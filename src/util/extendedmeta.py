@@ -50,8 +50,8 @@ from util import recursefolders
 
 dbschema = """CREATE TABLE music (id INTEGER PRIMARY KEY, dirtitle VARCHAR(255), path VARCHAR(255),
         filename VARCHAR(255), type VARCHAR(3), artist VARCHAR(255), title VARCHAR(255), album VARCHAR(255),
-        year VARCHAR(255), track NUMERIC(3), track_total NUMERIC(3), bpm NUMERIC(3), last_play float,
-        play_count NUMERIC, start_time NUMERIC, end_time NUMERIC, rating NUMERIC, eq  VARCHAR)"""
+        genre VARCHAR(255), year VARCHAR(255), track NUMERIC(3), track_total NUMERIC(3), bpm NUMERIC(3),
+        last_play float, play_count NUMERIC, start_time NUMERIC, end_time NUMERIC, rating NUMERIC, eq VARCHAR)"""
 
 
 def make_query(filename, dirtitle):
@@ -62,18 +62,60 @@ def make_query(filename, dirtitle):
 
     a = mediainfo.get(filename)
     t = tracknum(a['trackno'])
-    ext = filename.split('.')[-1]
+    ext = os.path.splitext(filename)[1]
 
-    VALUES = "(null,'%s','%s','%s','%s','%s','%s','%s',%i,%i,%i,'%s',%f,%i,'%s','%s',%i,'%s')" % (
-        util.escape(dirtitle), util.escape(os.path.dirname(filename)), util.escape(os.path.basename(filename)), \
-        ext, util.escape(a['artist']), util.escape(a['title']), util.escape(a['album']), inti(a['date']), t[0], \
-        t[1], 100, 0, 0, '0', inti(a['length']), 0, 'null')
+    values = {}
+    values['id'] = 'null'
+    values['dirtitle'] = util.escape(dirtitle)
+    values['path'] = util.escape(os.path.dirname(filename))
+    values['filename'] = util.escape(os.path.basename(filename))
+    values['type'] = ext
+    values['artist'] = util.escape(a['artist'])
+    values['title'] = util.escape(a['title'])
+    values['album'] = util.escape(a['album'])
+    values['genre'] = util.escape(a['genre'])
+    values['year'] = inti(a['date'])
+    values['track'] = int(t[0])
+    values['track_total'] = int(t[1])
+    values['bpm'] = a['bitrate'] and int(a['bitrate']) or -1
+    values['last_play'] = float(0)
+    values['play_count'] = int(0)
+    values['start_time'] = inti(a['0'])
+    values['end_time'] = a['length'] and inti(a['length']) or -1
+    values['rating'] = int(0)
+    values['eq'] = 'null'
 
-    SQL = 'INSERT OR IGNORE INTO music VALUES ' + VALUES
+    # if there is an error in one of the values it will show in this block
+    "%(id)s" % values
+    "'%(dirtitle)s'" % values
+    "'%(path)s'" % values
+    "'%(filename)s'" % values
+    "'%(type)s'" % values
+    "'%(artist)s'" % values
+    "'%(title)s'" % values
+    "'%(album)s'" % values
+    "'%(genre)s'" % values
+    "'%(year)s'" % values
+    "%(track)i" % values
+    "%(track_total)i" % values
+    "%(bpm)i" % values
+    "%(last_play)f" % values
+    "%(play_count)i" % values
+    "%(start_time)i" % values
+    "%(end_time)i" % values
+    "%(rating)i" % values
+    "'%(eq)s'" % (values)
+
+    # Assign the values
+    VALUES = """%(id)s, '%(dirtitle)s', '%(path)s', '%(filename)s', '%(type)s', '%(artist)s', '%(title)s',
+        '%(album)s', '%(genre)s', '%(year)s', %(track)i, %(track_total)i, %(bpm)i, %(last_play)f,
+        %(play_count)i, %(start_time)i, %(end_time)i, %(rating)i, '%(eq)s'""" % (values)
+
+    SQL = 'INSERT OR IGNORE INTO music VALUES (%s)' % VALUES
     return SQL
 
 
-def addPathDB(path, dirtitle, type='*.mp3;*.ogg', verbose=True):
+def addPathDB(path, dirtitle, type='*.mp3;*.ogg;*.flac', verbose=True):
     _debug_('addPathDB(path=%r, dirtitle=%r, type=%r, verbose=%r)' % (path, dirtitle, type, verbose), 2)
 
     # Get some stuff ready

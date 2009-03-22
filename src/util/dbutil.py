@@ -82,7 +82,7 @@ class MetaDatabase:
     """ Class for working with the database """
     def __init__(self):
         sqlite_major_version = sqlite._sqlite.sqlite_version_info()[0]
-        DATABASE = os.path.join(config.FREEVO_CACHEDIR, 'freevo.sqlite%i' % sqlite_major_version)
+        DATABASE = os.path.join(config.FREEVO_CACHEDIR, 'freevo.db%i' % sqlite_major_version)
         self.db = sqlite.connect(DATABASE, client_encoding=config.LOCALE)
         self.cursor = self.db.cursor()
 
