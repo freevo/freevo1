@@ -118,5 +118,12 @@
     <color label="gray" value="96,96,96,255"/>
     <color label="black" value="0,0,0,255"/>
     <color label="transparent" value="0,0,0,0"/>
+    <osd name="channel_banner" x="0" y="0" width="800" height="100">
+      <image name="Background" x="0" y="0" width="800" height="100" expression="True" scale="both" src="details_bg.png"/>
+      <image name="Channel Logo" x="10" y="12" width="100" height="75" expression="True" scale="aspect" srcexpr="channel_logo"/>
+      <text name="Channel Number" x="130" y="30" width="60" height="40" expression="channel_number" font="message" align="right" valign="center"/>
+      <text name="Channel Name" x="200" y="30" width="330" height="40" expression="channel_name" font="message" align="left" valign="center"/>
+      <text name="Time" x="540" y="10" width="250" height="80" expression="strftime('%x\n%H:%M', time)" font="message" align="right" valign="center"/>
+    </osd>
   </osds>
 </freevo>

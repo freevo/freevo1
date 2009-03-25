@@ -77,7 +77,7 @@ class InvalidValueError(Exception):
 class DesignerObject(object):
     """
     Base class for all designer objects.
-    @ivar properties: A tuple of tuples containing a property name, text 
+    @ivar properties: A tuple of tuples containing a property name, text
     description, property type and optionally additional type information.
     Property type is one of the following:
      - PROP_TYPE_STRING (string) - can be followed by either a list of options
@@ -215,13 +215,13 @@ class ThemeObject(DesignerObject):
         if self.include:
             load_skin(self.include)
 
-        self.icontheme = attr_str(node, 'icontheme', None)
+        self.icontheme = attr_str(node, 'icontheme', '')
         if self.icontheme:
             osd_skin.set_icon_theme(self.icontheme)
 
         for cnode in node.children:
             obj = None
-            
+
             if cnode.name == 'font':
                 obj = FontObject(cnode)
             elif cnode.name == 'color':
@@ -466,7 +466,7 @@ class DialogObject(DesignerObject):
 
         delta_x = self.x - x1
         delta_y = self.y - y1
-        
+
         for child in self.children:
             try:
                 child.x =str(int(child.x) + delta_x)
@@ -480,7 +480,7 @@ class DialogObject(DesignerObject):
         self.y = y1
         self.width = x2 - x1
         self.height = y2 - y1
-        
+
 
     def get_child_rect(self, child):
         try:
@@ -614,7 +614,7 @@ class FontObject(DesignerObject):
         color = self.get_theme().get_color(self.color)
         font = imlib2.load_font(self.font, self.size)
         if font:
-           font.set_color(color)
+            font.set_color(color)
 
         return font
 
@@ -658,9 +658,9 @@ class DialogChildObject(DesignerObject):
             obj.prepare()
             obj.render(img, info_dict)
             obj.finish()
-    
+
     def to_fxd_node(self):
-      return util.fxdparser.XMLnode( self.type, self.get_attrs())
+        return util.fxdparser.XMLnode( self.type, self.get_attrs())
 
     def get_attrs(self):
         return (('name', self.name),
@@ -791,7 +791,7 @@ class ImageObject(DialogChildObject):
         else:
             attrs += (('src', self.src),)
         return attrs
-        
+
 
     def get_skin_object(self):
         if self.src_is_expr:
@@ -845,7 +845,7 @@ class WidgetObject(DialogChildObject):
             self.up    = attr_str(node, 'up', '')
             self.down  = attr_str(node, 'down', '')
         else:
-            
+
             self.style = ''
             self.right = ''
             self.left = ''
@@ -898,7 +898,7 @@ class MenuObject(WidgetObject):
 
     def get_attrs(self):
         return super(MenuObject,self).get_attrs() + (('itemsperpage', str(self.items_per_page)),)
-    
+
     def get_skin_object(self):
         self.skin_object = osd_skin.OSDMenu((int(self.x), int(self.y)),
                                             (int(self.width), int(self.height)),
@@ -1281,7 +1281,7 @@ class ThemeObject(DesignerObject):
 
         for cnode in node.children:
             obj = None
-            
+
             if cnode.name == 'font':
                 obj = FontObject(cnode)
             elif cnode.name == 'color':
@@ -1526,7 +1526,7 @@ class DialogObject(DesignerObject):
 
         delta_x = self.x - x1
         delta_y = self.y - y1
-        
+
         for child in self.children:
             try:
                 child.x =str(int(child.x) + delta_x)
@@ -1540,7 +1540,7 @@ class DialogObject(DesignerObject):
         self.y = y1
         self.width = x2 - x1
         self.height = y2 - y1
-        
+
 
     def get_child_rect(self, child):
         try:
@@ -1674,7 +1674,7 @@ class FontObject(DesignerObject):
         color = self.get_theme().get_color(self.color)
         font = imlib2.load_font(self.font, self.size)
         if font:
-           font.set_color(color)
+            font.set_color(color)
 
         return font
 
@@ -1718,9 +1718,9 @@ class DialogChildObject(DesignerObject):
             obj.prepare()
             obj.render(img, info_dict)
             obj.finish()
-    
+
     def to_fxd_node(self):
-      return util.fxdparser.XMLnode( self.type, self.get_attrs())
+        return util.fxdparser.XMLnode( self.type, self.get_attrs())
 
     def get_attrs(self):
         return (('name', self.name),
@@ -1851,7 +1851,7 @@ class ImageObject(DialogChildObject):
         else:
             attrs += (('src', self.src),)
         return attrs
-        
+
 
     def get_skin_object(self):
         if self.src_is_expr:
@@ -1905,7 +1905,7 @@ class WidgetObject(DialogChildObject):
             self.up    = attr_str(node, 'up', '')
             self.down  = attr_str(node, 'down', '')
         else:
-            
+
             self.style = ''
             self.right = ''
             self.left = ''
@@ -1958,7 +1958,7 @@ class MenuObject(WidgetObject):
 
     def get_attrs(self):
         return super(MenuObject,self).get_attrs() + (('itemsperpage', str(self.items_per_page)),)
-    
+
     def get_skin_object(self):
         self.skin_object = osd_skin.OSDMenu((int(self.x), int(self.y)),
                                             (int(self.width), int(self.height)),

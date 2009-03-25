@@ -330,17 +330,13 @@ class ShowProgramDetails(ScrollableTextScreen):
         _debug_('ShowProgramDetails.__init__(menuw=%r, prg=%r)' % (menuw, prg), 2)
         if prg is None:
             name = _('No Information Available')
-            sub_title = ''
-            time = ''
-            description = ''
         else:
             self.program = prg
-            name = prg.name
-            sub_title = prg.sub_title
+            name = prg.title
             # gather the info and construct the description text
-            if sub_title:
+            if hasattr(prg, 'sub_title') and  prg.sub_title:
             # subtitle + newline + description
-                description = u'"' + Unicode(sub_title) + u'"\n' + Unicode(prg.description)
+                description = u'"' + Unicode(prg.sub_title) + u'"\n' + Unicode(prg.description)
             else:
                 # or just the description, if there is no subtitle
                 description = Unicode(prg.description)
@@ -373,8 +369,15 @@ class ShowProgramDetails(ScrollableTextScreen):
         _debug_('getattr(name=%r)' % (name,), 2)
         if name == 'title':
             return self.name
+
+        if name == 'datetime':
+            return self.program.prog.getattr('date') + u' ' + self.program.prog.getattr('time')
+
         if self.program:
-            return self.program.getattr(name)
+            result = self.program.getattr(name)
+            if not result:
+                result = self.program.self.program.prog.getattr(name)
+            return result
         return u''
 
 

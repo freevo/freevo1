@@ -848,8 +848,8 @@
         <layout label="tvguideinfo program details">
             <content x="0" y="0" type="text" spacing="20" font="default">
                 <item type="default">
-                    <if expression="time">
-                        <text font="info font" align="right" width="max" expression="time"/>
+                    <if expression="datetime">
+                        <text font="info font" align="right" width="max" expression="datetime"/>
                         <newline/>
                     </if>
                     <if expression="title">

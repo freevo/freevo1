@@ -886,6 +886,12 @@ class ShowDetails(ScrollableTextScreen):
         if name == 'title':
             return self.name
 
+        if name == 'datetime':
+            record_start = self.movie['recording_timestamp']
+            if record_start:
+                return time.strftime(config.TV_DATETIME_FORMAT,
+                                        time.localtime(float(record_start)))
+
         if self.movie:
             return self.movie.getattr(name)
 
