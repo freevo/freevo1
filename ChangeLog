@@ -31,6 +31,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
  * Fixed command plug-in that tried to read a non-existent log file (B#2486033)
  * Fixed cd_burn plug-in for spaces in directory names and location of temp files (B#2473568)
  * Fixed OSD drawing of transparent text (B#2482964)
+ * Fixed record client for changes to kaa.base (B#2721256)
  * Fixed record server automatic re-encoding (B#2482703,B#2458849)
  * Fixed record server timing problems (B#2692397)
  * Fixed recordings manager not to overwirte the fxd files (B#2688691)

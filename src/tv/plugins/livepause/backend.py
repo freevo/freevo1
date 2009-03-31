@@ -191,7 +191,7 @@ class RemoteBackendClient(Backend):
         if inprogress is None:
             return False
         inprogress.wait()
-        result = inprogress.get_result()
+        result = inprogress.result
         return result
 
     def set_events_enabled(self, enable):
