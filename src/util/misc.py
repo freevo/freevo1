@@ -34,6 +34,7 @@ import os, sys
 import string, re
 import copy
 import htmlentitydefs
+from stat import *
 
 
 # Configuration file. Determines where to look for AVI/MP3 files, etc
@@ -393,31 +394,38 @@ def htmlenties2txt(string):
     return string
 
 
-def comingup(items=None, scheduledRecordings=None):
-    """ Coming Up for TV schedule """
-    from tv.record_client import RecordClient
+def comingup(scheduledRecordings=None, write=False):
+    """
+    What's coming up in the TV recording schedule
+    """
+    print 'comingup(scheduledRecordings=%r, write=%r)' % (scheduledRecordings, write)
     import time
     import codecs
+    from tv.record_client import RecordClient
 
     result = u''
 
-    cachefile = '%s/upsoon' % (config.FREEVO_CACHEDIR)
-    if not scheduledRecordings:
-        if os.path.exists(cachefile) and abs(time.time() - os.path.getmtime(cachefile)) < 600:
+    #XXX this is bad as the cachefile is not updated on a write operation
+    cachefile = os.path.join(config.FREEVO_CACHEDIR, 'upsoon')
+    if scheduledRecordings is None:
+        # if the cached file exists and is younger than 10 mins
+        if os.path.exists(cachefile) and os.stat(cachefile)[ST_MTIME] >= time.time() - 600:
             cache = codecs.open(cachefile, 'r', config.encoding)
             for a in cache.readlines():
                 result = result + a
             cache.close()
+            #print 'comingup:1:result=%r' % (result,)
             return result
 
         (status, schedule) = RecordClient().getScheduledRecordingsNow()
-        if not status:
-            return schedule
+        if status is None:
+            result = RecordClient().recordserverdown
+            return result
+        elif status is False:
+            result = _('No recordings are scheduled')
+            return result
     else:
-        (status, schedule) = scheduledRecordings
-
-    if not status:
-        return schedule # in this case the schedule is the reason
+        schedule = scheduledRecordings
 
     progs = schedule.getProgramList()
 

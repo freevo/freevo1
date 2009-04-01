@@ -30,6 +30,7 @@
 
 
 import os, time
+import pprint
 
 import config, skin, util, rc
 
@@ -111,18 +112,6 @@ class TVGuide(Item):
         #if os.path.isfile(upsoon):
         #    os.unlink(upsoon)
 
-        util.misc.comingup(None, (True, scheduledRecordings))
-        progs = scheduledRecordings.getProgramList()
-
-        for k in progs:
-            prog = progs[k]
-            self.scheduled_programs.append(prog.str2utf())
-            if prog.overlap:
-                self.overlap_programs.append(prog.str2utf())
-            if hasattr(prog, 'isFavorite') and prog.isFavorite:
-                self.favorite_programs.append(prog.str2utf())
-
-
     @benchmark(benchmarking & 0x400, benchmarkcall)
     def update_schedules(self, force=False):
         """
@@ -139,7 +128,18 @@ class TVGuide(Item):
         self.scheduled_programs = []
         self.overlap_programs = []
         self.favorite_programs = []
-        self.recordclient.getScheduledRecordings(self.update_schedules_cb)
+        (status, scheduledRecordings) = self.recordclient.getScheduledRecordingsNow()
+        if status:
+            util.misc.comingup(scheduledRecordings, True)
+            progs = scheduledRecordings.getProgramList()
+
+            for k in progs:
+                prog = progs[k]
+                self.scheduled_programs.append(prog.str2utf())
+                if prog.overlap:
+                    self.overlap_programs.append(prog.str2utf())
+                if hasattr(prog, 'isFavorite') and prog.isFavorite:
+                    self.favorite_programs.append(prog.str2utf())
 
 
     @benchmark(benchmarking & 0x400, benchmarkcall)
