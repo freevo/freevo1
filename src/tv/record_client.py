@@ -103,8 +103,8 @@ class RecordClientActions:
         print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
-        yield inprogress.result
-        print self.timeit(now)+': pingCo finished' # we never get here
+        result = inprogress.result
+        print self.timeit(now)+': pingCo finished=%r' % result
 
 
     @kaa.coroutine()
@@ -119,8 +119,8 @@ class RecordClientActions:
         print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
-        yield inprogress.result
-        print self.timeit(now)+': findNextProgramCo finished'
+        result = inprogress.result
+        print self.timeit(now)+': findNextProgramCo finished=%r' % (result,)
 
 
     @kaa.coroutine()
@@ -135,8 +135,8 @@ class RecordClientActions:
         print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
-        yield inprogress.result
-        print self.timeit(now)+': getScheduledRecordingsCo finished'
+        result = inprogress.result
+        print self.timeit(now)+': getScheduledRecordingsCo finished=%r' % result
 
 
     @kaa.coroutine()
@@ -151,8 +151,8 @@ class RecordClientActions:
         print self.timeit(now)+': getFavoritesCo.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': getFavoritesCo.inprogress=%r' % inprogress
-        yield inprogress.result
-        print self.timeit(now)+': getFavoritesCo finished'
+        result = inprogress.result
+        print self.timeit(now)+': getFavoritesCo finished=%r' % result
 
 
     @kaa.coroutine()
@@ -167,8 +167,8 @@ class RecordClientActions:
         print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
         yield inprogress
         print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
-        yield inprogress.result
-        print self.timeit(now)+': updateFavoritesScheduleCo finished'
+        result = inprogress.result
+        print self.timeit(now)+': updateFavoritesScheduleCo finished=%r' % result
 
 
     @kaa.coroutine()
@@ -179,7 +179,8 @@ class RecordClientActions:
         if not inprogress:
             return
         yield inprogress
-        yield inprogress.result
+        result = inprogress.result
+        _debug_('updateFavoritesSchedule.result=%r' % (result,), 2)
         inprogress = self._recordserver_rpc('findNextProgram')
         if not inprogress:
             return
@@ -463,17 +464,23 @@ if __name__ == '__main__':
     config.DEBUG = 2
 
     def shutdown(message, now):
+        print 'shutdown(message, now)'
         print "shutdown.message=%r after %.3f secs" % (message, time.time()-now)
         raise SystemExit
 
     def handler(result):
+        print 'handler(result)'
         """ A callback handler for test functions """
         _debug_('handler(result=%r)' % (result,), 2)
         print '%s: handler.result=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     rc = RecordClient()
-    kaa.inprogress(rc.channel).wait()
+    try:
+        kaa.inprogress(rc.channel).wait()
+    except Exception, why:
+        print 'Cannot connect to record server'
+        raise SystemExit
 
     if len(sys.argv) >= 2:
         function = sys.argv[1].lower()
@@ -495,7 +502,7 @@ if __name__ == '__main__':
 
     elif function == "findnextprogramco":
         result = rc.findNextProgramCo().wait()
-        print '%s: findNextProgramCo=%r\n"%s"' % (rc.timeit(start), result)
+        print '%s: findNextProgramCo=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     elif function == "getscheduledrecordingsco":
