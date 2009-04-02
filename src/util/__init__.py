@@ -80,4 +80,4 @@ if sys.argv[0].find('setup.py') == -1:
     __builtin__.__dict__['Unicode'] = Unicode
     __builtin__.__dict__['String']  = String
 
-    import mediainfo
+    #import mediainfo
