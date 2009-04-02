@@ -146,9 +146,9 @@
                         <newline/>
                     </if>
                     <goto_pos y="190" mode="absolute"/>
-                    <if expression="year">
+                    <if expression="userdate">
                         <text font="info value">(</text>
-                        <text font="info value" expression="year"/>
+                        <text font="info value" expression="userdate"/>
                         <text font="info value">)</text>
                     </if>
                     <if expression="runtime">
@@ -271,9 +271,9 @@
                         <newline/>
                     </if>
 
-                    <if expression="display_type == 'audio' and year">
+                    <if expression="display_type == 'audio' and userdate">
                         <if expression="album or artist">
-                            <text font="info value" expression="year"/>
+                            <text font="info value" expression="userdate"/>
                             <newline/>
                         </if>
                     </if>
