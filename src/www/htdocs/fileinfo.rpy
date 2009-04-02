@@ -87,8 +87,8 @@ class FileInfoResource(FreevoResource):
                     info += fxd_info['plot']+'<br/>'
                 if info != '':
                     info += '<p>'
-                if fxd_info.has_key('year'):
-                    info += '<b>Recorded:</b>&nbsp;'+fxd_info['year']+' '
+                if fxd_info.has_key('userdate'):
+                    info += '<b>Recorded:</b>&nbsp;'+fxd_info['userdate']+' '
                 if fxd_info.has_key('runtime'):
                     info += '<b>Runtime:</b>&nbsp;'+fxd_info['runtime']+' '
                 info += '<b>Size:</b>&nbsp;'+str((os.stat(file)[6]/1024)/1024)+' MB'
@@ -103,9 +103,9 @@ class FileInfoResource(FreevoResource):
                     info += Unicode(media_info['artist'])+'<br/>'
                 if media_info['album']:
                     info += '"'+Unicode(media_info['album'])+'"'
-                if media_info['year']:
-                    info += ' - '+Unicode(media_info['year'])
-                if media_info['album'] or media_info['year']:
+                if media_info['userdate']:
+                    info += ' - '+Unicode(media_info['userdate'])
+                if media_info['album'] or media_info['userdate']:
                     info += '<br/>'
                 if media_info['genre']:
                     info += Unicode(media_info['genre'])+'<br/>'
