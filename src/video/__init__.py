@@ -129,7 +129,7 @@ class PluginInterface(plugin.MimetypePlugin):
                             hidden_files.append(filename)
 
             if parent and parent.media:
-                file_id = String(parent.media.id) + file[len(os.path.join(parent.media.mountdir, "")):]
+                file_id = String(parent.media.id) + file[len(os.path.join(parent.media.mountdir, '')):]
                 try:
                     x.mplayer_options = discset_information[file_id]
                     _debug_('x.mplayer_options=%r' % x.mplayer_options)
@@ -153,8 +153,7 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         global tv_show_information
         if not diritem.image and config.VIDEO_SHOW_DATA_DIR:
-            diritem.image = util.getimage(vfs.join(config.VIDEO_SHOW_DATA_DIR,
-                                                   vfs.basename(diritem.dir).lower()))
+            diritem.image = util.getimage(vfs.join(config.VIDEO_SHOW_DATA_DIR, vfs.basename(diritem.dir).lower()))
 
         if tv_show_information.has_key(vfs.basename(diritem.dir).lower()):
             tvinfo = tv_show_information[vfs.basename(diritem.dir).lower()]
@@ -169,10 +168,11 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         adds configure variables to the directory
         """
-        return [ ('VIDEO_DIRECTORY_AUTOBUILD_THUMBNAILS',
-                  _('Directory Autobuild Thumbnails '),
-                  _('Build video thumbnails for all items (may take a while when entering).'),
-                  False) ]
+        return [
+            ('VIDEO_DIRECTORY_AUTOBUILD_THUMBNAILS', _('Directory Autobuild Thumbnails '),
+            _('Build video thumbnails for all items (may take a while when entering).'),
+            False)
+        ]
 
 
 

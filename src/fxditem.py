@@ -39,7 +39,7 @@ this class) which is a subclass of FXDItem.
 
 If the fxd files 'covers' a real item like the movie information cover
 real movie files, please do:
-    1. add the fxd file as 'fxd_file' memeber variable to the new item
+    1. add the fxd file as 'fxd_file' member variable to the new item
     2. add the files as list _fxd_covered_ to the item
 """
 
@@ -135,7 +135,7 @@ class Mimetype(plugin.MimetypePlugin):
                 items += parser.getattr(None, 'items')
 
             except:
-                print "fxd file %s corrupt" % fxd_file
+                _debug_('fxd file %r corrupt' % fxd_file, DINFO)
                 traceback.print_exc()
         return items
 

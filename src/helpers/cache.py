@@ -283,13 +283,16 @@ def cache_cropdetect(defaults):
     import video.fxdhandler as fxdhandler
     from util import fxdparser
     from video import VideoItem
-    import pprint
 
     global encjob
 
     def fxd_movie_read(fxd, node):
         _debug_('fxd_movie_read=%r' % (fxd.user_data['filename'],), 2)
-        for filename in info.files.files:
+        fileinfo = fxd.user_data['fileinfo']
+        for filename in fileinfo.files:
+            if fxd.user_data['defaults']['dry_run']:
+                print filename,
+                continue
             if not os.path.exists(filename):
                 raise encodingcore.EncodingError('file %r does not exist' % filename)
             encjob = encodingcore.EncodingJob(None, None, None, None)
@@ -317,7 +320,7 @@ def cache_cropdetect(defaults):
             encjob._wait(10)
             fxd.user_data['encjob'] = encjob
             fxd.user_data['crop'] = encjob.crop
-            #print '%r: crop=%s' % (info.files.fxd_file, encjob.crop)
+            #print '%r: crop=%s' % (fileinfo.files.fxd_file, encjob.crop)
 
 
     def fxd_movie_write(fxd, node):
@@ -354,24 +357,18 @@ def cache_cropdetect(defaults):
         else:
             fxdfiles += [ os.path.abspath(dirname) ]
 
-    def lowercaseSort(lhs, rhs):
-        lhs, rhs = lhs.lower(), rhs.lower()
-        return cmp(lhs, rhs)
-
-    fxdfiles.sort(lowercaseSort)
-
+    fxdfiles.sort(lambda l, o: cmp(l.lower(), o.lower()))
     fxdfiles = util.misc.unique(fxdfiles)
     files = []
     for info in fxditem.mimetype.parse(None, fxdfiles, display_type='video'):
-        if hasattr(info, 'mplayer_options') and not info.mplayer_options:
-            files.append(info.files.fxd_file)
+        if defaults['rebuild'] or (hasattr(info, 'mplayer_options') and not info.mplayer_options):
+            files.append(info.files)
 
-    for filename in files[:]:
+    for fileinfo in copy.copy(files):
+        filename = fileinfo.fxd_file
         print
-        print '  %4d/%-4d %s' % (files.index(filename)+1, len(files), Unicode(os.path.basename(filename))),
+        print '  %4d/%-4d %s' % (files.index(fileinfo)+1, len(files), Unicode(os.path.basename(filename))),
         sys.__stdout__.flush()
-        if defaults['dry_run']:
-            continue
         try:
             ctime = os.stat(filename)[ST_CTIME]
             mtime = os.stat(filename)[ST_MTIME]
@@ -380,13 +377,16 @@ def cache_cropdetect(defaults):
             parser.set_handler('movie', fxd_movie_read)
             parser.set_handler('movie', fxd_movie_write, 'w', True)
             parser.user_data = {
+                'defaults': defaults,
+                'fileinfo' : fileinfo,
                 'filename': filename,
                 'encjob': None,
                 'crop': None,
             }
             parser.parse()
             parser.save()
-            print parser.user_data['crop'],
+            if not defaults['dry_run']:
+                print parser.user_data['crop'],
             parser = None
             sinfo = os.utime(filename, (atime, mtime))
         except encodingcore.EncodingError, why:
