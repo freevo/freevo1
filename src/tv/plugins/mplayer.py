@@ -121,6 +121,7 @@ class MPlayer:
             'audiofile': '',
             'af': [],
             'vf': [],
+            'tv': '',
             'url': '',
         }
 
@@ -165,8 +166,9 @@ class MPlayer:
                 freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tuner_freq = '%1.3f' % (freq_khz / 1000.0)
 
-                args['url'] = ('tv:// -tv driver=%s:%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
-                    (config.TV_DRIVER, vg.adev, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS))
+                args['tv'] = '-tv driver=%s:%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' % \
+                    (config.TV_DRIVER, vg.adev, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS)
+                args['url'] = 'tv://'
 
                 if config.MPLAYER_ARGS.has_key('tv'):
                     args['mode_args'] = config.MPLAYER_ARGS['tv'].split()
@@ -175,15 +177,17 @@ class MPlayer:
                 freq_khz = self.fc.chanSet(tuner_channel, True, app='mplayer')
                 tuner_freq = '%1.3f' % (freq_khz / 1000.0)
 
-                args['url'] = ('tv:// -tv driver=%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
-                    (config.TV_DRIVER, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS))
+                args['tv'] = '-tv driver=%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' % \
+                    (config.TV_DRIVER, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS)]
+                args['url'] = 'tv://'
 
                 if config.MPLAYER_ARGS.has_key('tv'):
                     args['mode_args'] = config.MPLAYER_ARGS['tv'].split()
 
         elif mode == 'vcr':
-            args['url'] = ('tv:// -tv driver=%s:%s:%s:%s:width=%s:height=%s:%s %s' %
-                (config.TV_DRIVER, device, input, norm, w, h, outfmt, config.TV_OPTS))
+            args['tv'] = '-tv driver=%s:%s:%s:%s:width=%s:height=%s:%s %s' % \
+                (config.TV_DRIVER, device, input, norm, w, h, outfmt, config.TV_OPTS)
+            args['url'] = 'tv://'
 
             if config.MPLAYER_ARGS.has_key('tv'):
                 args['mode_args'] = config.MPLAYER_ARGS['tv'].split()
@@ -228,6 +232,7 @@ class MPlayer:
             command += ['-af', '%s' % ','.join(args['af'])]
         if args['vf']:
             command += ['-vf', '%s' % ','.join(args['vf'])]
+        command += str('%(tv)s' % args).split()
 
         # use software scaler?
         if '-nosws' in command:
@@ -242,9 +247,10 @@ class MPlayer:
 
         #command = self.sort_filter(command)
 
-        command += ['%(url)s' % args]
+        url = '%(url)s' % args
+        command += [url]
 
-        _debug_(' '.join(command[1:]))
+        _debug_('%r' % command)
 
         self.mode = mode
 
