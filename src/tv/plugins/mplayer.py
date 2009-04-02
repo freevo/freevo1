@@ -178,7 +178,7 @@ class MPlayer:
                 tuner_freq = '%1.3f' % (freq_khz / 1000.0)
 
                 args['tv'] = '-tv driver=%s:freq=%s:%s:%s:%s:width=%s:height=%s:%s %s' % \
-                    (config.TV_DRIVER, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS)]
+                    (config.TV_DRIVER, tuner_freq, device, input, norm, w, h, outfmt, config.TV_OPTS)
                 args['url'] = 'tv://'
 
                 if config.MPLAYER_ARGS.has_key('tv'):
