@@ -1410,7 +1410,7 @@ SKIN_MEDIAMENU_FORCE_TEXTVIEW = 0
 OSD_DEFAULT_FONTNAME = 'Vera.ttf'
 OSD_DEFAULT_FONTSIZE = 18
 OSD_FORCE_FONTNAME = None
-OSD_FORCE_FONTSIZE = None
+OSD_FORCE_FONTSIZE = 4.0 / 3.0
 
 #
 # System Path to search for fonts not included in the Freevo distribution
