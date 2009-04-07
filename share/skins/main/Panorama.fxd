@@ -166,7 +166,7 @@
                     </if>
                     <if expression="not content and not plot">
                         <text font="info value" width="max" expression="num_items" />
-                        <text font="info value">Items</text>
+                        <text font="info value"> Items</text>
                         <!-- other values are num_play_items and num_dir_items -->
                     </if>
                     <newline />
@@ -186,7 +186,7 @@
                 </item>
                 <item type="track">
                     <if expression="trackno">
-                        <text font="info tagline">Track</text>
+                        <text font="info tagline"> Track</text>
                         <text font="info tagline" expression="trackno" />
                         <newline />
                         <goto_pos y="10" mode="relative" />
@@ -197,17 +197,17 @@
                     </if>
                     <if expression="len(audio)">
                         <text font="info value" expression="len(audio)" />
-                        <text font="info value">Audio tracks</text>
+                        <text font="info value"> Audio tracks</text>
                         <newline />
                     </if>
                     <if expression="len(subtitles)">
                         <text font="info value" expression="len(subtitles)" />
-                        <text font="info value">Subtitles</text>
+                        <text font="info value"> Subtitles</text>
                         <newline />
                     </if>
                     <if expression="len(chapters)">
                         <text font="info value" expression="len(chapters)" />
-                        <text font="info value">Chapters</text>
+                        <text font="info value"> Chapters</text>
                         <newline />
                     </if>
                 </item>
@@ -271,9 +271,9 @@
                         <text font="info tagline" expression="name" mode="soft" />
                         <newline />
                     </if>
-                    <if expression="display_type == &#39;audio&#39; and year">
+                    <if expression="display_type == &#39;audio&#39; and userdate">
                         <if expression="album or artist">
-                            <text font="info value" expression="year" />
+                            <text font="info value" expression="userdate" />
                             <newline />
                         </if>
                     </if>
@@ -283,7 +283,7 @@
                     </if>
                     <if expression="type == &#39;playlist&#39;">
                         <text font="info value" width="max" expression="len(playlist)" />
-                        <text font="info value">Items</text>
+                        <text font="info value"> Items</text>
                         <newline />
                     </if>
                 </item>
@@ -306,7 +306,7 @@
                         </if>
                     </if>
                     <if expression="parent(audio_advanced_sort)">
-                        <text font="info value">Track</text>
+                        <text font="info value"> Track</text>
                         <text font="info value" expression="trackno" />
                         <if expression="trackof">
                             <text font="info value">of</text>
@@ -334,7 +334,7 @@
                     </if>
                     <if expression="len(tracks)">
                         <text font="info value" expression="len(tracks)" />
-                        <text width="130" font="info label">Tracks</text>
+                        <text width="130" font="info label"> Tracks</text>
                         <newline />
                     </if>
                 </item>
@@ -391,14 +391,14 @@
                     <text font="info tagline" width="max" expression="name" />
                     <newline />
                     <text font="info value" width="max" expression="num_items" />
-                    <text font="info value">Items</text>
+                    <text font="info value"> Items</text>
                     <!-- other values are num_play_items and num_dir_items -->
                 </item>
                 <item type="playlist">
                     <text font="info tagline" width="max" expression="name" />
                     <newline />
                     <text font="info value" width="max" expression="len(playlist)" />
-                    <text font="info value">Items</text>
+                    <text font="info value"> Items</text>
                     <!-- other values are num_play_items and num_dir_items -->
                 </item>
                 <item type="image">
@@ -732,7 +732,7 @@
                     </if>
                     <if expression="samplerate">
                         <text font="player info" expression="samplerate" />
-                        <text font="player info">Hz</text>
+                        <text font="player info"> Hz</text>
                     </if>
                     <newline />
                     <goto_pos x="310" y="300" mode="absolute" />
@@ -823,6 +823,9 @@
         <font label="clock" name="DejaVuSansCondensed" size="16" color="0xffffff" />
 
         <!-- Basic Fonts -->
+        <font label="micro0" name="DejaVuSansCondensed" size="8" color="default0"></font>
+        <font label="micro1" name="DejaVuSansCondensed" size="8" color="default1"></font>
+        <font label="micro2" name="DejaVuSansCondensed" size="8" color="default2"></font>
         <font label="tiny0" name="DejaVuSansCondensed" size="10" color="default0"></font>
         <font label="tiny1" name="DejaVuSansCondensed" size="10" color="default1"></font>
         <font label="tiny2" name="DejaVuSansCondensed" size="10" color="default2"></font>
