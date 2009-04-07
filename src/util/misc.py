@@ -398,7 +398,7 @@ def comingup(scheduledRecordings=None, write=False):
     """
     What's coming up in the TV recording schedule
     """
-    print 'comingup(scheduledRecordings=%r, write=%r)' % (scheduledRecordings, write)
+    _debug_('comingup(scheduledRecordings=%r, write=%r)' % (scheduledRecordings, write), 2)
     import time
     import codecs
     from tv.record_client import RecordClient
