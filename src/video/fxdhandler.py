@@ -192,8 +192,12 @@ def parse_movie(fxd, node):
     else:
         # one or more files, this is directly for the item
 
-        id, url, item.media_id, item.mplayer_options, player, is_playlist = \
-            parse_video_child(fxd, video[0], dirname)
+        try:
+            id, url, item.media_id, item.mplayer_options, player, is_playlist = parse_video_child(
+                fxd, video[0], dirname)
+        except (IndexError, TypeError), why:
+            print 'parse_video_child(fxd=%r, video=%r, dirname=%r)' % (fxd, video, dirname)
+            raise
         if url.startswith('file://') and os.path.isfile(url[7:]):
             variables = item.info.get_variables()
             item.set_url(url, info=True)
