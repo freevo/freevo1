@@ -365,7 +365,7 @@ class Playlist(Item):
 
         if not self.playlist:
             # XXX PopupBox please
-            _debug_('empty playlist'))
+            _debug_('empty playlist')
             return False
 
         if not arg or arg != 'next':
