@@ -31,13 +31,14 @@
 #
 # -----------------------------------------------------------------------
 
+import re
+import os
+import sys
+from optparse import Option, OptionValueError, OptionParser, IndentedHelpFormatter
 
 import config
 import plugin
 import util
-import re
-import os
-import sys
 import imp
 
 
@@ -431,9 +432,74 @@ def compare_types(first, second):
     value_second = values.has_key(second) and values[second] or 10
     return value_first - value_second
 
+def parse_options(defaults):
+    """
+    Parse command line options
+    """
+    formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+    parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="""
+This helper shows the list of all plugins included in Freevo and can
+information about them.
+
+A plugin can be activated by adding "plugin.activate(name)" into the
+local_conf.py. Optional arguments are type, level and args
+
+type:  specifies the type of this plugin. The default it is all for plugins not
+       located in a specific media dir (e.g. rom_drives), some plugins are
+       supposed to be insert into the specific dir (e.g. video.imdb) and have
+       this as default type. You can override it by setting the type, e.g.  the
+       type 'video' for rom_drives.rom_items will only show the rom drives in
+       the video main menu.
+
+level: specifies the position of the plugin in the plugin list. This sets the
+       position of the items in the menu from this plugin to arrange them
+
+args:  some plugins require some additional arguments
+
+To remove a plugin activated in freevo_config, it's possible to add
+"plugin.remove(name)" into the local_conf.py. The activate function also
+returns a plugin number, for the plugins loaded by freevo_config, it's also
+possible to use this number: plugin.remove(number).
+
+There are five types of plugins:
+
+MainMenuPlugin: show items in the main menu or in the media main menu like video
+ItemPlugin:     add actions to items, shown after pressing ENTER on the item
+DaemonPlugin:   a plugin that runs in the background
+IdlebarPlugin:  subplugin for the idlebar plugin
+Plugin:         plugin to add some functions to Freevo, see plugin description.
+
+
+This helper script has the following options to get information about possible
+plugins in Freevo.""", version='%prog 1.0')
+    parser.add_option('-v', '--verbose', action='count', default=0,
+        help='set the level of verbosity [default:%default]')
+    parser.add_option('-l', '--list', action='store_true', default=False,
+        help='list all plug-ins [default:%default]')
+    parser.add_option('-i', '--info', action='append', default=None, metavar='NAME',
+        help='display detailed information about the plug-in [default:%default]')
+    parser.add_option('-a', '--all', action='store_true', default=False,
+        help='display detailed information about all plug-ins [default:%default]')
+    parser.add_option('--html', action='store_true', default=False,
+        help='display detailed information about all plug-ins in html format [default:%default]')
+    parser.add_option('--wiki', action='store_true', default=False,
+        help='display detailed information about all plug-ins in wiki format [default:%default]')
+    parser.add_option('--wiki-mode', action='store', metavar='MODE', choices=['moin', 'trac'], default='moin',
+        help='display detailed information about all plug-ins in wiki format [default:%default]')
+    plugin_types = [ 'MainMenuPlugin', 'ItemPlugin', 'DaemonPlugin', 'IdlebarPlugin', 'Plugin', ]
+    parser.add_option('--module-type', action='store', metavar='TYPE', choices=plugin_types, default=[],
+        help='display detailed wiki information about a plug-in type')
+    return parser
+
+
 if __name__ == '__main__':
+    defaults = { }
+    opts_parser = parse_options(defaults)
+    (opts, args) = opts_parser.parse_args()
+    defaults.update(opts.__dict__)
+
     # show a list of all plugins
-    if len(sys.argv)>1 and sys.argv[1] == '-l':
+    if opts.list:
         all_plugins = parse_plugins()
 
         types = []
@@ -460,19 +526,20 @@ if __name__ == '__main__':
                     print '%-35s %s' % (name, smalldesc)
 
     # show info about a plugin
-    elif len(sys.argv)>2 and sys.argv[1] == '-i':
-        print_info(sys.argv[2], parse_plugins(sys.argv[2]))
+    elif opts.info:
+        for name in opts.info:
+            print_info(name, parse_plugins(name))
 
     # show info about all plugins (long list)
-    elif len(sys.argv)>1 and sys.argv[1] == '-a':
+    elif opts.all:
         all_plugins = parse_plugins()
-        for p in all_plugins:
-            if p != all_plugins[0] and p != all_plugins[-1]:
+        for name in all_plugins:
+            if name != all_plugins[0] and name != all_plugins[-1]:
                 print '\n********************************\n'
-            print_info(p[0], [p])
+            print_info(name[0], [name])
 
     # show info about all plugins as html
-    elif len(sys.argv)>1 and sys.argv[1] == '-html':
+    elif opts.html:
         all_plugins = parse_plugins()
 
         print """<html>
@@ -496,18 +563,13 @@ if __name__ == '__main__':
         print '</body>'
 
     # show info about all plugins in wiki format
-    elif len(sys.argv)>1 and sys.argv[1] == '-wiki':
+    elif opts.wiki:
         # we should be able to call this in one of several modes
         # freevo plugins -wiki [moin|trac] [<plug-in type>*|<plug-in name>*]
         mode = 'moin'
         types = []
         modules = []
-        if len(sys.argv) > 2:
-            mode = sys.argv[2]
-            if mode in ('moin','trac',):
-                modules = sys.argv[3:]
-            else:
-                modules = sys.argv[2:]
+        mode = opts.mode
         all_plugins = parse_plugins()
 
         # This is a bit horrid, should do this cleaner
@@ -577,42 +639,6 @@ if __name__ == '__main__':
                     print wiki_info(name, file, type, status, desc, config_list, mode)
 
     else:
-        print 'This helper shows the list of all plugins included in Freevo and'
-        print 'can print information about them.'
+        opts_parser.print_help()
         print
-        print 'A plugin can be activated by adding "plugin.activate(name)" into the'
-        print 'local_conf.py. Optional arguments are type, level and args'
-        print 'type:  specifies the type of this plugin. The default it is all for plugins'
-        print '       not located in a specific media dir (e.g. rom_drives), some plugins'
-        print '       are supposed to be insert into the specific dir (e.g. video.imdb) and'
-        print '       have this as default type. You can override it by setting the type, e.g.'
-        print '       the type \'video\' for rom_drives.rom_items will only show the rom drives'
-        print '       in the video main menu.'
-        print 'level: specifies the position of the plugin in the plugin list. This sets the'
-        print '       position of the items in the menu from this plugin to arrange them'
-        print 'args:  some plugins require some additional arguments'
-        print
-        print 'To remove a plugin activated in freevo_config, it\'s possible to add '
-        print '"plugin.remove(name)" into the local_conf.py. The activate function also'
-        print 'returns a plugin number, for the plugins loaded by freevo_config, it\'s also'
-        print 'possible to use this number: plugin.remove(number).'
-        print
-        print 'There are five types of plugins:'
-        print 'MainMenuPlugin: show items in the main menu or in the media main menu like video'
-        print 'ItemPlugin    : add actions to items, shown after pressing ENTER on the item'
-        print 'DaemonPlugin  : a plugin that runs in the background'
-        print 'IdlebarPlugin : subplugin for the idlebar plugin'
-        print 'Plugin        : plugin to add some functions to Freevo, see plugin description.'
-        print
-        print
-        print 'This helper script has the following options to get information about possible'
-        print 'plugins in Freevo:'
-        print
-        print 'usage: freevo plugins [-l | -i name | -a ]'
-        print ' -l           list all plugins'
-        print ' -i name      print detailed information about plugin "name"'
-        print ' -a           print detailed information about all plugins (long)'
-        print
-        print 'Please note that this helper is new and not all plugins have a good description.'
-        print 'Feel free to send patches to the Freevo mailing list'
-        print
+        opts_parser.print_version()
