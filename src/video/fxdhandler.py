@@ -196,7 +196,7 @@ def parse_movie(fxd, node):
             id, url, item.media_id, item.mplayer_options, player, is_playlist = parse_video_child(
                 fxd, video[0], dirname)
         except (IndexError, TypeError), why:
-            print 'parse_video_child(fxd=%r, video=%r, dirname=%r)' % (fxd, video, dirname)
+            _debug_('%r is corrupt' % (fxd.filename,), DWARNING)
             raise
         if url.startswith('file://') and os.path.isfile(url[7:]):
             variables = item.info.get_variables()
