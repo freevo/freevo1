@@ -162,15 +162,14 @@ def shutdown():
     """
     shut down the Identify_Thread
     """
-    print 'shutdown()'
+    _debug_('rom_drives.shutdown()')
     global im_thread
     if im_thread.isAlive():
-        _debug_('stopping Identify_Thread', 2)
-        print 'stopping Identify_Thread'
+        _debug_('stopping Identify_Thread')
         im_thread.stop = True
         while im_thread.isAlive():
             time.sleep(0.1)
-        print 'stopped Identify_Thread'
+        _debug_('stopped Identify_Thread')
 
 
 class autostart(plugin.DaemonPlugin):

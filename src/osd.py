@@ -642,10 +642,15 @@ class OSD:
         """
         shutdown the display
         """
-        pygame.quit()
+        _debug_('OSD.shutdown()')
+        import plugin
+        if not plugin.is_active('dialog.x11_overlay_display'):
+            pygame.quit()
         if config.OSD_SDL_EXEC_AFTER_CLOSE:
+            _debug_('os.system(%r)' % (config.OSD_SDL_EXEC_AFTER_CLOSE,))
             os.system(config.OSD_SDL_EXEC_AFTER_CLOSE)
         self.active = False
+        _debug_('OSD.shutdown() done')
 
 
     @benchmark(benchmarking & 0x2, benchmarkcall)

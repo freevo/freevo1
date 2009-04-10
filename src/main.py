@@ -338,16 +338,13 @@ class MainTread:
                 _debug_('no target for events given')
 
 
-_shutting_down = False
 def unix_signal_handler(sig, frame):
     """
     Unix signal handler to shut down freevo
     """
-    _debug_('unix_signal_handler(sig=%r, frame=%r)' % (sig, frame), 1)
-    global _shutting_down
-    if _shutting_down:
-        return
-    _shutting_down = True
+    _debug_('unix_signal_handler(sig=%r, frame=%r)' % (sig, frame))
+    _debug_('shutdown() called')
+    shutdown(exit=True)
     _debug_('SystemExit raised')
     raise SystemExit
 
@@ -356,14 +353,11 @@ def signal_handler():
     """
     the signal handler to shut down freevo
     """
-    _debug_('signal_handler()', 1)
-    global _shutting_down
-    if _shutting_down:
-        return
-    _shutting_down = True
+    _debug_('signal_handler()')
+    _debug_('shutdown() called')
+    shutdown(exit=True)
     _debug_('SystemExit raised')
     raise SystemExit
-    shutdown(exit=True)
 
 
 frames = {}
@@ -371,8 +365,13 @@ def tracefunc(frame, event, arg, _indent=[0]):
     """
     function to trace and time everything inside freevo for debugging
     """
-    # ignore non-freevo calls
-    if frame.f_code.co_filename.find('/freevo/') == -1:
+    # ignore non-freevo and non-kaa calls
+    print opts.trace
+    if frame.f_code.co_filename.find('/freevo/') == -1 and frame.f_code.co_filename.find('/kaa/') == -1:
+        return tracefunc
+    if frame.f_code.co_filename.find('/rc.py') != -1:
+        return tracefunc
+    if frame.f_code.co_filename.find('/osd.py') != -1:
         return tracefunc
     # ignore debugging calls
     if frame.f_code.co_name == '_debug_function_':
@@ -389,7 +388,7 @@ def tracefunc(frame, event, arg, _indent=[0]):
             except (AssertionError, AttributeError):
                 pass
         here = '%s:%s %s()' % (filename, lineno, funcname)
-        tracefd.write('%s-> %s\n' % (spacer * _indent[0], here))
+        tracefd.write('%03d%s-> %s\n' % (_indent[0], spacer * _indent[0], here))
         tracefd.flush()
         frames[frame] = (time.clock(), here)
         _indent[0] += 1
@@ -397,7 +396,7 @@ def tracefunc(frame, event, arg, _indent=[0]):
         try:
             startclock, here = frames[frame]
             _indent[0] -= 1
-            tracefd.write('%s<- %s %.6f\n' % (spacer * _indent[0], here, (time.clock() - startclock)))
+            tracefd.write('%03d%s<- %s %.6f\n' % (_indent[0], spacer * _indent[0], here, (time.clock() - startclock)))
             tracefd.flush()
             del(frames[frame])
         except KeyError:
@@ -427,8 +426,8 @@ def parse_options(defaults, version):
     #    help='set the level of verbosity [default:%default]')
     parser.add_option('-d', '--debug', action='count', dest='debug', default=0,
         help='set the level of debuging')
-    parser.add_option('-t', '--trace', action='count', default=0,
-        help='activate full trace (useful for debugging)')
+    parser.add_option('-t', '--trace', action='append', default=None,
+        help='activate tracing of one or more modules (useful for debugging)')
     parser.add_option('-f', '--force-fs', action='store_true', default=False,
         help='force X11 to start full-screen [default:%default]')
     parser.add_option('-t', '--trace', action='store_true', default=False,
@@ -458,7 +457,6 @@ except ImportError:
 defaults = { }
 (opts, args) = parse_options(defaults, _version)
 defaults.update(opts.__dict__)
-pprint.pprint(defaults)
 
 if opts.force_fs:
     # force fullscreen mode

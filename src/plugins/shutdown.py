@@ -4,6 +4,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
+# Author:
 # Notes:
 # Todo:
 #
@@ -41,24 +42,33 @@ from plugin import MainMenuPlugin
 
 from dialog.dialogs import ButtonDialog
 
-def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
+class ShutdownModes:
+    FREEVO_SHUTDOWN = 'freevo_shutdown'
+    SYSTEM_SHUTDOWN = 'system_shutdown'
+    SYSTEM_RESTART = 'system_restart'
+    shutdown_in_progress = False
+
+
+def shutdown(menuw=None, mode=None, exit=False):
     """
     Function to shut down freevo or the whole system. This system will be
     shut down when argshutdown is True, restarted when argrestart is true,
     else only Freevo will be stopped.
     """
-    _debug_('shutdown(menuw=%r, argshutdown=%r, argrestart=%r, exit=%r)' % (menuw, argshutdown, argrestart, exit), 2)
+    _debug_('shutdown(menuw=%r, mode=%r, exit=%r)' % (menuw, mode, exit), 1)
+    if ShutdownModes.shutdown_in_progress:
+        _debug_('shutdown in progress')
+        return
+    ShutdownModes.shutdown_in_progress = True
     import osd
     import plugin
     import rc
     import util.mediainfo
-
     osd = osd.get_singleton()
-
     util.mediainfo.sync()
     if not osd.active:
-        # this function is called from the signal handler, but
-        # we are dead already.
+        # this function is called from the signal handler, but we are dead
+        # already.
         sys.exit(0)
 
     osd.clearscreen(color=osd.COL_BLACK)
@@ -68,7 +78,7 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
     osd.update()
     time.sleep(0.5)
 
-    if argshutdown or argrestart:
+    if mode == ShutdownModes.SYSTEM_SHUTDOWN or mode == ShutdownModes.SYSTEM_RESTART:
         # shutdown dual head for mga
         if config.CONF.display == 'mga':
             os.system('%s runapp matroxset -f /dev/fb1 -m 0' % os.environ['FREEVO_SCRIPT'])
@@ -76,52 +86,58 @@ def shutdown(menuw=None, argshutdown=None, argrestart=None, exit=False):
             os.system('%s runapp matroxset -f /dev/fb0 -m 1' % os.environ['FREEVO_SCRIPT'])
             time.sleep(1)
 
-        _debug_('mga:plugin.shutdown()', 2)
+        _debug_('sys:plugin.shutdown()')
         plugin.shutdown()
-        _debug_('mga:rc.shutdown()', 2)
+        _debug_('sys:rc.shutdown()')
         rc.shutdown()
-        _debug_('mga:osd.shutdown()', 2)
+        #if config.CONF.display == 'mga':
+        _debug_('sys:osd.shutdown()')
         osd.shutdown()
 
-        if argshutdown and not argrestart:
+        if mode == ShutdownModes.SYSTEM_SHUTDOWN:
+            _debug_('os.system(%r)' % (config.SYS_SHUTDOWN_CMD,))
             os.system(config.SYS_SHUTDOWN_CMD)
-        elif argrestart and not argshutdown:
+        elif ShutdownModes.SYSTEM_RESTART:
+            _debug_('os.system(%r)' % (config.SYS_RESTART_CMD,))
             os.system(config.SYS_RESTART_CMD)
+
+        # this closes the log
+        _debug_('sys:config.shutdown()')
+        config.shutdown()
+
         # let freevo be killed by init, looks nicer for mga
-        while 1:
+        print 'Freevo shutdown'
+        while True:
             time.sleep(1)
-        return
 
     #
     # Exit Freevo
     #
 
-    # Shutdown any daemon plugins that need it.
-    _debug_('plugin.shutdown()', 2)
+    # shutdown any daemon plugins that need it.
+    _debug_('plugin.shutdown()')
     plugin.shutdown()
-
-    # Shutdown all children still running
-    _debug_('rc.shutdown()', 2)
+    # shutdown registered callbacks
+    _debug_('rc.shutdown()')
     rc.shutdown()
-
     # SDL must be shutdown to restore video modes etc
     _debug_('osd.clearscreen(color=osd.COL_BLACK)', 2)
     osd.clearscreen(color=osd.COL_BLACK)
-    _debug_('osd.shutdown()', 2)
+    _debug_('osd.shutdown()')
     osd.shutdown()
-
-    _debug_('config.shutdown()', 2)
+    _debug_('config.shutdown()')
     config.shutdown()
 
     if exit:
-        # realy exit, we are called by the signal handler
-        sys.exit(0)
+        # really exit, we are called by the signal handler
+        _debug_('raise SystemExit')
+        raise SystemExit
 
     _debug_('%s --stop' % os.environ['FREEVO_SCRIPT'], 2)
     os.system('%s --stop' % os.environ['FREEVO_SCRIPT'])
 
     # Just wait until we're dead. SDL cannot be polled here anyway.
-    while 1:
+    while True:
         time.sleep(1)
 
 
@@ -196,7 +212,7 @@ class ShutdownItem(Item):
         shutdown freevo, don't shutdown the system
         """
         _debug_('shutdown_freevo(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        shutdown(menuw=menuw, argshutdown=False, argrestart=False)
+        shutdown(menuw=menuw, mode=FREEVO_SHUTDOWN)
 
 
     def shutdown_system(self, arg=None, menuw=None):
@@ -204,7 +220,7 @@ class ShutdownItem(Item):
         shutdown the complete system
         """
         _debug_('shutdown_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        shutdown(menuw=menuw, argshutdown=True, argrestart=False)
+        shutdown(menuw=menuw, mode=SYSTEM_SHUTDOWN)
 
 
     def shutdown_system_restart(self, arg=None, menuw=None):
@@ -212,7 +228,7 @@ class ShutdownItem(Item):
         restart the complete system
         """
         _debug_('shutdown_system_restart(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        shutdown(menuw=menuw, argshutdown=False, argrestart=True)
+        shutdown(menuw=menuw, mode=SYSTEM_RESTART)
 
 
 

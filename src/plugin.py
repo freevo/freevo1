@@ -315,7 +315,7 @@ def is_active(name, arg=None):
                     pass
             if arg == p[3]:
                 return p
-    return False
+    return None
 
 
 @benchmark(benchmarking & 0x2, benchmarkcall)

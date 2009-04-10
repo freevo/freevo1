@@ -43,6 +43,7 @@ from item import Item
 from gui import ConfirmBox
 from gui.AlertBox import AlertBox
 from tv.record_client import RecordClient
+from plugins.shutdown import ShutdownModes, shutdown
 
 recordclient = RecordClient()
 
@@ -70,11 +71,10 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     Plugin to shutdown Freevo from the main menu
 
-    At each shutdown this plugin configures the system to
-    bootup for the next recording or a configured default time.
-    The wakeup can be done via acpi-alarm or nvram-wakeup.
-    Moreover it adds warning information about the next
-    recording to the shutdown confirmation messages.
+    At each shutdown this plugin configures the system to bootup for the next
+    recording or a configured default time.  The wakeup can be done via
+    acpi-alarm or nvram-wakeup.  Moreover it adds warning information about the
+    next recording to the shutdown confirmation messages.
 
     Activate with:
     | plugin.remove('shutdown')
@@ -90,10 +90,9 @@ class PluginInterface(plugin.MainMenuPlugin):
     The wakeup methode can be either nvram or acpi.
 
     NVRAM:
-    If you want to use nvram-wakeup,
-    you will need a working nvram configuration first.
-    (This plugin can deal automatically with the often needed reboot).
-    Put the path to nvram-wakeup in AUTOSHUTDOWN_WAKEUP_CMD.
+    If you want to use nvram-wakeup, you will need a working nvram
+    configuration first.  (This plugin can deal automatically with the often
+    needed reboot).  Put the path to nvram-wakeup in AUTOSHUTDOWN_WAKEUP_CMD.
 
     More variables:
     | AUTOSHUTDOWN_NVRAM_OPT = '--syslog'
@@ -117,8 +116,8 @@ class PluginInterface(plugin.MainMenuPlugin):
     ##############################
     echo '$1' > /proc/acpi/alarm
 
-    and put its path in AUTOSHUTDOWN_WAKEUP_CMD.
-    You have to be root or use sudo for this to work.
+    and put its path in AUTOSHUTDOWN_WAKEUP_CMD.  You have to be root or use
+    sudo for this to work.
     """
 
     def config(self):
@@ -497,28 +496,15 @@ def shutdown_action(action=None):
 
     @param action: (type Shutdown)
     """
-    _debug_('shutdown_action(action=%r)' % (action,), 2)
+    _debug_('shutdown_action(action=%r)' % (action,), 1)
     if (action == Shutdown.SHUTDOWN_WAKEUP):
-        _debug_('shutdown wakeup')
         action = __schedule_wakeup_and_shutdown()
     if (action == Shutdown.RESTART_SYSTEM):
-        _debug_('restart system')
-        __cleanup_freevo()
-        __syscall(config.SYS_RESTART_CMD, config.AUTOSHUTDOWN_PRETEND)
-        # wait until the system halts/reboots
-        while 1:
-            time.sleep(1)
+        shutdown(menuw=None, mode=ShutdownModes.SYSTEM_RESTART)
     elif (action == Shutdown.SHUTDOWN_SYSTEM):
-        _debug_('shutdown system')
-        __cleanup_freevo()
-        __syscall(config.SYS_SHUTDOWN_CMD, config.AUTOSHUTDOWN_PRETEND)
-        # wait until the system halts/reboots
-        while 1:
-            time.sleep(1)
+        shutdown(menuw=None, mode=ShutdownModes.SYSTEM_SHUTDOWN)
     elif (action == Shutdown.SHUTDOWN_FREEVO):
-        _debug_('shutdown freevo')
-        __cleanup_freevo()
-        sys.exit(0)
+        shutdown(menuw=None, mode=ShutdownModes.FREEVO_SHUTDOWN)
     elif (action == Shutdown.IGNORE):
         pass
     else:
@@ -587,42 +573,6 @@ def __schedule_wakeup_and_shutdown():
             raise ExInternalError
 
     return next_action
-
-
-def __cleanup_freevo():
-    """
-    Performs necessary actions for freevo shutdown
-    """
-    _debug_('__cleanup_freevo()', 2)
-    import osd
-    import plugin
-    import rc
-    import util.mediainfo
-    osd = osd.get_singleton()
-    util.mediainfo.sync()
-    if not config.HELPER:
-        if not osd.active:
-            # this function is called from the signal
-            # handler, but we are dead already.
-            sys.exit(0)
-        osd.clearscreen(color=osd.COL_BLACK)
-        osd.drawstringframed(_('shutting down...'), 0, 0, osd.width, osd.height,
-            osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE),
-            fgcolor=osd.COL_ORANGE, align_h='center', align_v='center')
-        osd.update()
-        time.sleep(0.5)
-    # shutdown all daemon plugins
-    _debug_('plugin.shutdown()', 2)
-    plugin.shutdown()
-    # shutdown registered callbacks
-    _debug_('rc.shutdown()', 2)
-    rc.shutdown()
-    if not config.HELPER:
-        # shutdown the screen
-        _debug_('osd.clearscreen(color=osd.COL_BLACK)', 2)
-        osd.clearscreen(color=osd.COL_BLACK)
-        _debug_('osd.shutdown()', 2)
-        osd.shutdown()
 
 
 def __is_recordserver_remote():
