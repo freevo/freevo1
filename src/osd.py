@@ -165,7 +165,7 @@ class OSDFont:
         self.name   = name
         self.ptsize = ptsize
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
+    @benchmark(benchmarking & 0x200, benchmarkcall)
     def charsize(self, c):
         try:
             return self.chars[c]
@@ -182,6 +182,7 @@ class OSDFont:
         for c in s:
             w += self.charsize(c)
         return w
+
 
     @benchmark(benchmarking & 0x2, benchmarkcall)
     def __loadfont__(self, filename, ptsize):
@@ -204,7 +205,7 @@ class OSDFont:
 
         _debug_('Loading font "%s"' % filename, 2)
 
-        font   = self.__loadfont__(filename, ptsize)
+        font = self.__loadfont__(filename, ptsize)
         if not font:
 
             # search OSD_EXTRA_FONT_PATH for this font
@@ -361,7 +362,6 @@ class OSD:
         if not os.environ.has_key('SDL_VIDEODRIVER') and config.CONF.display == 'x11':
             os.environ['SDL_VIDEODRIVER'] = 'x11'
 
-
         # disable term blanking for mga and fbcon and restore the
         # tty so that sdl can use it
         if config.CONF.display in ('mga', 'fbcon'):
@@ -516,7 +516,9 @@ class OSD:
                 return
 
             _debug_('pygame event=%s' % (event), 2)
-            #print 'pygame event=%s' % (event)
+
+            if config.SYS_USE_JOYSTICK:
+                _debug_('pygame event=%s' % (event))
 
             if config.SYS_USE_MOUSE:
                 if event.type == MOUSEMOTION:
@@ -796,6 +798,7 @@ class OSD:
                 except:
                     data = util.create_thumbnail(filename)
                     image = pygame.image.fromstring(data[0], data[1], data[2])
+                    del data
 
             else:
                 try:
@@ -805,6 +808,7 @@ class OSD:
                     try:
                         i = kaa.imlib2.open(filename)
                         image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
+                        del i
                     except IOError, why:
                         _debug_('imlib2 image load problem: %s' % (why), DERROR)
                         return None
@@ -834,7 +838,7 @@ class OSD:
         @returns: pygame surfaceloadbitmap
         @rtype: Surface or None
         """
-        _debug_('loadbitmap(url=%r, cache=%r)' % (url, cache), 2)
+        _debug_('loadbitmap(url=%r, cache=%r)' % (url, cache))
 
         if not pygame.display.get_init():
             return None
