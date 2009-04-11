@@ -103,7 +103,7 @@ class RemoteBackend(LocalBackend):
     @kaa.rpc.expose('cancelsave')
     def cancelsave(self):
         super(RemoteBackend, self).cancelsave()
-        
+
     @kaa.rpc.expose('set_events_enabled', add_client=True)
     def set_events_enabled(self, client, enable):
         self.client = client
@@ -133,7 +133,7 @@ def main():
 
     if not hasattr(config, 'LIVE_PAUSE2_PORT'):
         config.LIVE_PAUSE2_PORT = MEDIA_SERVER_PORT
- 
+
     _debug_('socket=%r, secret=%r' % (socket, secret))
 
     server = RemoteBackend()

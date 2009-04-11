@@ -557,7 +557,7 @@ sure you have several hundred MB free!
         help='generate missing mplayer crop options [default:%default]')
     parser.add_option('-r', '--recursive', action='store_true', default=False,
         help='generate recursively the cache [default:%default]')
-    parser.add_option('-f', '--directory', action='append', default=None, metavar='DIR', 
+    parser.add_option('-f', '--directory', action='append', default=None, metavar='DIR',
         help='path name, one per directory or file [default:%default]')
     return parser.parse_args()
 

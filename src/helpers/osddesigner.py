@@ -201,7 +201,7 @@ class ImageFileWidget(gtk.HBox):
     def on_button_clicked(self, *args):
         image_name = self.choose_image()
         if image_name:
-             self.entry.set_text(image_name)
+            self.entry.set_text(image_name)
 
     def get_text(self):
         return self.entry.get_text()
@@ -318,7 +318,7 @@ class Designer:
         column = gtk.TreeViewColumn("Name",cell)
         column.set_cell_data_func(cell, self.get_cell_name)
         self.osds_treeview.append_column(column)
-        
+
         cell = gtk.CellRendererText()
         self.images_dir_combobox.pack_start(cell)
         self.images_dir_combobox.add_attribute(cell, 'text', 0)
@@ -394,7 +394,7 @@ class Designer:
         self.type_pixbufs = {}
         for type in ['theme', 'dialog', 'text', 'image', 'percent', 'widget', 'menu', 'font', 'color', 'style', 'state']:
             self.type_pixbufs[type] = gtk.gdk.pixbuf_new_from_file_at_size(type + '.png', 16, 16)
-            
+
         os.chdir(cwd)
 
         self.load_settings()
@@ -710,7 +710,7 @@ class Designer:
     def on_choose_image_dialog_delete_event(self, *args):
         self.choose_image_dialog.hide()
         return True
-    
+
     def on_images_dir_combobox_changed(self, *args):
         self.images_model.clear()
         self.images_iconview.unselect_all()
@@ -784,7 +784,7 @@ class Designer:
         self.saveas_filechooser.hide()
         if response == gtk.RESPONSE_OK:
             self.save_theme(self.saveas_filechooser.get_filename())
-            
+
     #--------------------------------------------------------------------------
     # Drawing methods
     #--------------------------------------------------------------------------
@@ -803,7 +803,7 @@ class Designer:
         context.set_source_rgb(0, 0, 0)
         context.rectangle( 9, 9, theme.width + 1, theme.height + 1)
         context.stroke()
-        
+
         # Draw dialog
         if self.current_dialog_pixbuf:
             context.set_source_pixbuf(self.current_dialog_pixbuf,
@@ -912,7 +912,7 @@ class Designer:
         self.osds_treeview.expand_to_path(path)
         self.set_current_object(obj)
         self.set_unsaved()
-        
+
     def set_current_dialog(self, obj, iter):
         if obj is None:
             self.name_entry.set_sensitive(False)
@@ -922,7 +922,7 @@ class Designer:
             self.name_entry.set_sensitive(True)
             self.value_entry.set_sensitive(True)
             self.info_treeview.set_sensitive(True)
-                
+
             model = gtk.ListStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
             for name,value in obj.info_dict.items():
                 if name != '__builtins__':
@@ -979,7 +979,7 @@ class Designer:
                     widget_to_name[textview] = prop[0]
                     widget = gtk.ScrolledWindow()
                     widget.add(textview)
-                    
+
                 elif prop[2] == PROP_TYPE_INT:
                     widget = gtk.SpinButton()
                     range = prop[3]
@@ -1011,7 +1011,7 @@ class Designer:
                 widget_to_name[widget] = prop[0]
                 name_to_widget[prop[0]] = widget
                 idx += 1
-            
+
             if obj.type == 'dialog':
                 button = gtk.Button('Autosize')
                 button.set_tooltip_text('Determines the smallest size required by the dialog')
@@ -1069,7 +1069,7 @@ class Designer:
                 if len(prop) == 4:
                     widget = widget.child
                 widget.set_text(value)
-            
+
             elif prop[2] == PROP_TYPE_TEXT:
                 widget.get_child().get_buffer().set_text(value)
 
@@ -1103,7 +1103,7 @@ class Designer:
     def on_prop_value_changed(self, widget, *args):
         if not self.updating_values and self.current_obj:
             prop = self.widget_to_prop[widget]
-            
+
             value = None
             orig_value = self.current_obj.get_prop(prop)
             if isinstance(widget, ImageFileWidget):
@@ -1120,7 +1120,7 @@ class Designer:
             elif isinstance(widget, gtk.ToggleButton):
                 value = widget.get_active()
 
-            
+
             if value is not None and value != orig_value:
                 try:
                     self.current_obj.set_prop(prop, value)
@@ -1169,7 +1169,7 @@ class Designer:
                 self.update_prop_values()
                 self.set_unsaved()
                 self.render_current_dialog()
-        
+
     def get_current_obj_rect(self):
         rect = None
         if isinstance(self.current_obj, DialogChildObject):
@@ -1434,7 +1434,7 @@ class Designer:
         self.choose_image_ok_button.set_sensitive(False)
         self.images_dir_combobox.set_model(model)
         self.images_dir_combobox.set_active(0)
-        
+
         response = self.choose_image_dialog.run()
         self.choose_image_dialog.hide()
         if response == 1:
@@ -1477,9 +1477,9 @@ class Designer:
                 filename = 'Unsaved'
             else:
                 filename = os.path.basename(self.theme_filename)
-            messagedialog = gtk.MessageDialog(self.main_window, 
-                                              gtk.DIALOG_MODAL, 
-                                              gtk.MESSAGE_WARNING, 
+            messagedialog = gtk.MessageDialog(self.main_window,
+                                              gtk.DIALOG_MODAL,
+                                              gtk.MESSAGE_WARNING,
                                               gtk.BUTTONS_NONE,
                                               'Save changed to "%s" before closing?' % filename)
             messagedialog.format_secondary_text('Your changes will be lost if you do not save them.')
@@ -1505,7 +1505,7 @@ class Designer:
         for filename, in self.background_model:
             filenames.append(filename)
         show_dialog_outline = self.show_dialog_menuitem.get_active()
-        
+
         settings = (1, filenames, show_dialog_outline)
         try:
             fp = open(config.FREEVO_STATICDIR + '/osddesigner.settings', 'wb')
