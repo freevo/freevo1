@@ -66,27 +66,31 @@ __license__ = 'GPL'
 mappings = {
     'lists' : {
         'containers'  : [ 'avi', 'mp4', 'mpeg' ], # add mkv back later
-        'videocodecs' : [ 'MPEG 4 (lavc)','MPEG 2 (lavc)', 'XviD', 'H.264' ],
+        'videocodecs' : [ 'MPEG 4 (lavc)','MPEG 4 (lavc fast)','MPEG 2 (lavc)', 'XviD', 'H.264', 'copy' ],
         'audiocodecs' : [ 'MPEG 1 Layer 3 (mp3)', 'MPEG 1 Layer 2 (mp2)', 'AAC (iPod)', 'AC3', 'Vorbis',
-            'WMAv1',' WMAv2', 'copy' ]
+            'WMAv1',' WMAv2', 'copy' ],
     },
     'vcodec' : {
         'MPEG 4 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg4:mbd=2:trell:v4mv:last_pred=2:dia=-1:vmax_b_frames=2:'+
             'vb_strategy=1:cmp=3:subcmp=3:precmp=0:vqcomp=0.6:vbitrate=%s:threads=%s%s%s'],
+        'MPEG 4 (lavc fast)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg4:vbitrate=%s:threads=%s%s%s' ],
         'MPEG 2 (lavc)' : [ 'lavc', '-lavcopts', 'vcodec=mpeg2video:vhq:vqmin=2:trell:vrc_buf_size=1835:'+
             'vrc_maxrate=9800:keyint=18:vstrict=0:vbitrate=%s:threads=%s%s%s'],
-        'XviD'          : [ 'xvid', '-xvidencopts', 'chroma_opt:vhq=4:bvhq=1:bitrate=%s:threads=%s%s%s'],
+        'XviD'          : [ 'xvid', '-xvidencopts', 'chroma_opt:vhq=4:bvhq=1:bitrate=%s:threads=%s%s%s' ],
         #'H.264'         : [ 'x264', '-x264encopts', 'subq=5:8x8dct:frameref=2:bframes=3:b_pyramid:weight_b:'+
-        #    'bitrate=%s:threads=%s%s%s']
-        'H.264'         : [ 'x264', '-x264encopts', 'subq=7:global_header:trellis=2:partitions=all:no-fast-pskip:'+
-            'me=umh:deblock:direct_pred=auto:level_idc=30:frameref=6:no8x8dct:me_range=32:bframes=0:nob_pyramid:'+
-            'nobrdo:cabac:bitrate=%s:threads=%s%s%s']
+        #    'bitrate=%s:threads=%s%s%s' ],
+        #'H.264'         : [ 'x264', '-x264encopts', 'subq=7:global_header:trellis=2:partitions=all:no-fast-pskip:'+
+        #    'me=umh:deblock:direct_pred=auto:level_idc=30:frameref=6:no8x8dct:me_range=32:bframes=0:nob_pyramid:'+
+        #    'nobrdo:cabac:bitrate=%s:threads=%s%s%s' ],
+        'H.264'         : [ 'x264', '-x264encopts', 'subq=5:8x8dct:frameref=2:bframes=3:b_pyramid:weight_b:' +
+            'bitrate=%s:threads=%s%s%s' ],
+        'copy'          : [ 'copy' ],
     },
     'container' : {
-        'mpeg' : [ 'mpeg', '-mpegopts', 'format=dvd:tsaf'],
-        'mp4' : [ 'lavf' , '-lavfopts', 'format=mp4', '-ffourcc', 'mp4v'    ],
-        'mkv' : [ 'lavf',  '-lavfopts', 'format=avi'],
-        'avi' : [ 'lavf' , '-lavfopts', 'format=avi']
+        'mpeg' : [ 'mpeg', '-mpegopts', 'format=dvd:tsaf' ],
+        'mp4' : [ 'lavf' , '-lavfopts', 'format=mp4', '-ffourcc', 'mp4v' ],
+        'mkv' : [ 'lavf',  '-lavfopts', 'format=avi' ],
+        'avi' : [ 'lavf' , '-lavfopts', 'format=avi' ],
     },
     'acodec' : {
         'MPEG 1 Layer 3 (mp3)' : ['lavc', '-lavcopts', 'acodec=libmp3lame:abitrate=%s:aglobal=1'],
@@ -96,7 +100,7 @@ mappings = {
         'Vorbis'               : ['lavc', '-lavcopts', 'acodec=vorbis:abitrate=%s:aglobal=1'],
         'WMAv1'                : ['lavc', '-lavcopts', 'acodec=wmav1:abitrate=%s:aglobal=1'],
         'WMAv2'                : ['lavc', '-lavcopts', 'acodec=wmav2:abitrate=%s:aglobal=1'],
-        'copy'                 : ['copy']
+        'copy'                 : ['copy'],
     },
     'filter' : {
         'Linear blend' : 'pp=lb',
@@ -367,7 +371,7 @@ class EncodingJob:
         """Set video filters"""
         for vfilter, option in videofilters:
             if mappings['filter'].has_key(option):
-                self.vfilters += [ mappings['filter'][option]]
+                self.vfilters += [ mappings['filter'][option] ]
 
 
     @benchmark(benchmarking & 0x8, benchmarkcall)
@@ -558,9 +562,9 @@ class EncodingJob:
         else:
             sstep = 60
 
-        arguments = self.timeslice_mencoder + [ '-vf', 'cropdetect=30', '-nosound', '-vo', 'null', '-fps', '540']
+        arguments = self.timeslice_mencoder + [ '-vf', 'cropdetect=30', '-nosound', '-vo', 'null', '-fps', '540' ]
         if sstep > 0:
-            arguments +=  [ '-demuxer', 'lavf', '-sstep', str(sstep)]
+            arguments += [ '-demuxer', 'lavf', '-sstep', str(sstep) ]
 
         if self.titlenum:
             arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.titlenum ]
