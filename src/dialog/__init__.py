@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# Freevo module to handle channel changing.
+# Module used to display information on top of the menu or video.
 # -----------------------------------------------------------------------
 # $Id$
 #
