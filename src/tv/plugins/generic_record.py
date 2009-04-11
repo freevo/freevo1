@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# generic_record.py - A plugin to record tv using VCR_CMD.
+# A plugin to record tv using VCR_CMD.
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -51,6 +51,7 @@ class PluginInterface(plugin.Plugin):
     """
 
     def __init__(self):
+        _debug_('PluginInterface.__init__()', 1)
         plugin.Plugin.__init__(self)
         plugin.register(Recorder(), plugin.RECORD)
 
@@ -58,6 +59,7 @@ class PluginInterface(plugin.Plugin):
 class Recorder:
 
     def __init__(self):
+        _debug_('Recorder.__init__()', 1)
         # Disable this plugin if not loaded by record_server.
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
@@ -72,6 +74,7 @@ class Recorder:
 
 
     def Record(self, rec_prog):
+        _debug_('Record(rec_prog=%r)' % (rec_prog,), 1)
         vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
 
         frequency = self.fc.chanSet(str(rec_prog.tunerid), False, 'record plugin')
@@ -108,6 +111,7 @@ class Recorder:
 
 
     def Stop(self):
+        _debug_('Stop()', 1)
         self.thread.mode = 'stop'
         self.thread.mode_flag.set()
 
@@ -115,6 +119,7 @@ class Recorder:
 class RecordApp(childapp.ChildApp):
 
     def __init__(self, app):
+        _debug_('RecordApp.__init__(app=%r)' % (app,), 1)
         self.log_stdout = None
         self.log_stderr = None
         if config.DEBUG:
@@ -136,6 +141,7 @@ class RecordApp(childapp.ChildApp):
 
 
     def kill(self):
+        _debug_('kill()', 1)
         childapp.ChildApp.kill(self, signal.SIGINT)
 
         if self.log_stdout:
@@ -147,6 +153,7 @@ class RecordApp(childapp.ChildApp):
 class Record_Thread(threading.Thread):
 
     def __init__(self):
+        _debug_('Record_Thread.__init__()', 1)
         threading.Thread.__init__(self)
 
         self.mode = 'idle'
@@ -156,6 +163,7 @@ class Record_Thread(threading.Thread):
         self.app = None
 
     def run(self):
+        _debug_('run()', 1)
         while 1:
             _debug_('Record_Thread::run: mode=%s' % self.mode)
             if self.mode == 'idle':
