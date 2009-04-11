@@ -48,7 +48,7 @@ import kaa.imlib2
 from kaa.metadata.image import EXIF as exif
 
 from benchmark import benchmark
-benchmarking = 0
+benchmarking = 0xff
 benchmarkcall = 0
 
 if float(sys.version[0:3]) < 2.3:
@@ -589,6 +589,7 @@ def create_thumbnail(filename, thumbnail=None):
         f.write('FRI%s%s%5s' % (chr(image.width), chr(image.height), image.mode))
         f.write(data[0])
         f.close()
+        del image
         return data
     except Exception, why:
         _debug_('Cannot cache image %r: %s' % (filename, why), DWARNING)

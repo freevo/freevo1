@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# util/lirc.py - A module to help with some lirc tasks.
+# A module to help with some lirc tasks.
 # -----------------------------------------------------------------------
 # $Id$
 #

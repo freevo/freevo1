@@ -182,12 +182,12 @@ def getname(file, skip_ext=True):
 
 
 def killall(appname, sig=9):
-    '''kills all applications with the string <appname> in their commandline.
+    """
+    kills all applications with the string <appname> in their commandline.
 
     The <sig> parameter indicates the signal to use.
     This implementation uses the /proc filesystem, it might be Linux-dependent.
-    '''
-
+    """
     unify_name = re.compile('[^A-Za-z0-9]').sub
     appname = unify_name('', appname)
 
