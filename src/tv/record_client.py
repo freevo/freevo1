@@ -97,14 +97,10 @@ class RecordClientActions:
         now = time.time()
         print self.timeit(now)+': pingCo started'
         inprogress = self._recordserver_rpc('ping')
-        if not inprogress:
-            print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
-            return
         print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
         yield inprogress
-        print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
-        result = inprogress.result
-        print self.timeit(now)+': pingCo finished=%r' % result
+        print self.timeit(now)+': pingCo finished=%r' % (inprogress.result,)
+        yield inprogress.result
 
 
     @kaa.coroutine()
@@ -113,14 +109,10 @@ class RecordClientActions:
         now = time.time()
         print self.timeit(now)+': findNextProgramCo(isrecording=%r) started' % (isrecording,)
         inprogress = self._recordserver_rpc('findNextProgram', isrecording)
-        if not inprogress:
-            print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
-            return
         print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
         yield inprogress
-        print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
-        result = inprogress.result
-        print self.timeit(now)+': findNextProgramCo finished=%r' % (result,)
+        print self.timeit(now)+': findNextProgramCo finished=%r' % (inprogress.result,)
+        yield inprogress.result
 
 
     @kaa.coroutine()
@@ -129,14 +121,10 @@ class RecordClientActions:
         now = time.time()
         print self.timeit(now)+': getScheduledRecordingsCo() started'
         inprogress = self._recordserver_rpc('getScheduledRecordings')
-        if not inprogress:
-            print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
-            return
         print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
         yield inprogress
-        print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
-        result = inprogress.result
-        print self.timeit(now)+': getScheduledRecordingsCo finished=%r' % result
+        print self.timeit(now)+': getScheduledRecordingsCo finished=%r' % (inprogress.result,)
+        yield inprogress.result
 
 
     @kaa.coroutine()
@@ -145,14 +133,10 @@ class RecordClientActions:
         now = time.time()
         print self.timeit(now)+': getFavoritesCo() started'
         inprogress = self._recordserver_rpc('getFavorites')
-        if not inprogress:
-            print self.timeit(now)+': getFavoritesCo.inprogress=%r' % inprogress
-            return
         print self.timeit(now)+': getFavoritesCo.inprogress=%r' % inprogress
         yield inprogress
-        print self.timeit(now)+': getFavoritesCo.inprogress=%r' % inprogress
-        result = inprogress.result
-        print self.timeit(now)+': getFavoritesCo finished=%r' % result
+        print self.timeit(now)+': getFavoritesCo finished=%r' % (inprogress.result,)
+        yield inprogress.result
 
 
     @kaa.coroutine()
@@ -161,31 +145,28 @@ class RecordClientActions:
         now = time.time()
         print self.timeit(now)+': updateFavoritesScheduleCo started'
         inprogress = self._recordserver_rpc('updateFavoritesSchedule')
-        if not inprogress:
-            print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
-            return
         print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
         yield inprogress
-        print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
-        result = inprogress.result
-        print self.timeit(now)+': updateFavoritesScheduleCo finished=%r' % result
+        print self.timeit(now)+': updateFavoritesScheduleCo finished=%r' % (inprogress.result,)
+        yield inprogress.result
 
 
     @kaa.coroutine()
-    def getNextProgramStart(self):
-        """ """
+    def getNextProgramStartCo(self):
+        """
+        Get the next program using coroutines and yield the result.
+        This will be a slow call as the updateFavoritesSchedule can take a time
+        """
         now = time.time()
+        print self.timeit(now)+': getNextProgramStartCo started'
         inprogress = self._recordserver_rpc('updateFavoritesSchedule')
-        if not inprogress:
-            return
         yield inprogress
-        result = inprogress.result
-        _debug_('updateFavoritesSchedule.result=%r' % (result,), 2)
+        print self.timeit(now)+': updateFavoritesSchedule.result=%r' % (inprogress.result,)
         inprogress = self._recordserver_rpc('findNextProgram')
-        if not inprogress:
-            return
         yield inprogress
-        nextstart = inprogress.result
+        print self.timeit(now)+': findNextProgram.result=%r' % (inprogress.result,)
+        print self.timeit(now)+': getNextProgramStartCo finished=%r' % (inprogress.result,)
+        yield inprogress.result
 
 
     def pingNow(self):
@@ -520,9 +501,9 @@ if __name__ == '__main__':
         print '%s: updateFavoritesScheduleCo=%r' % (rc.timeit(start), result)
         raise SystemExit
 
-    elif function == "getnextprogramstart":
-        result = rc.getNextProgramStart().wait()
-        print '%s: getNextProgramStart=%r' % (rc.timeit(start), result)
+    elif function == "getnextprogramstartco":
+        result = rc.getNextProgramStartCo().wait()
+        print '%s: getNextProgramStartCo=%r' % (rc.timeit(start), result)
         raise SystemExit
 
     #--------------------------------------------------------------------------------
