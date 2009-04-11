@@ -197,6 +197,7 @@ class MPlayer:
             'af': [],
             'vf': [],
             'url': url,
+            'disable_osd': False,
         }
 
         if config.CONF.x or config.CONF.y:
@@ -262,6 +263,10 @@ class MPlayer:
 
         if os.path.isfile(os.path.splitext(item.filename)[0]+'.edl'):
             args['edl'] = '-edl %s' % str(os.path.splitext(item.filename)[0]+'.edl')
+        
+        if dialog.overlay_display_supports_dialogs:
+            # Disable the mplayer OSD if we have a better option.
+            args['disable_osd'] = True
 
         # Mplayer command and standard arguments
         if set_vcodec:
@@ -347,6 +352,7 @@ class MPlayer:
         command += args['fxd_args'].split()
         command += args['af'] and ['-af', '%s' % ','.join(args['af'])] or []
         command += args['vf'] and ['-vf', '%s' % ','.join(args['vf'])] or []
+        command += args['disable_osd'] and ['-osdlevel', '0'] or []
 
         # use software scaler?
         #XXX these need to be in the arg list as the scaler will add vf args
@@ -354,9 +360,6 @@ class MPlayer:
             command.remove('-nosws')
         elif '-framedrop' not in command:
             command += config.MPLAYER_SOFTWARE_SCALER.split()
-
-        if dialog.overlay_display_supports_dialogs:
-            command += ['-osdlevel' , '0']
 
         command = filter(len, command)
 
