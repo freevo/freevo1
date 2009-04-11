@@ -190,9 +190,7 @@ class RemoteBackendClient(Backend):
         inprogress = self._rpc('get_buffer_info')
         if inprogress is None:
             return False
-        inprogress.wait()
-        result = inprogress.result
-        return result
+        return inprogress.wait()
 
     def set_events_enabled(self, enable):
         inprogress = self._rpc('set_events_enabled', enable)
