@@ -39,9 +39,6 @@ import socket
 from twisted.web.woven import page
 from twisted.web.resource import Resource
 from tv.record_client import RecordClient
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 TRUE = 1
 FALSE = 0
@@ -61,10 +58,13 @@ def RecordClientResource():
 
 
 class RecordClientActions:
+    """
+    """
     def __init__(self):
         import kaa
         self.recordclient = RecordClient()
         kaa.inprogress(self.recordclient.channel).wait()
+
 
     def __call__(self):
         return RecordClientResource().recordclient
@@ -72,8 +72,8 @@ class RecordClientActions:
 
         
 class FreevoPage(page.Page):
-
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+    """
+    """
     def __init__(self, model=None, template=None):
         #print 'FreevoPage.__init__(model=%r, template=%r)' % (model, template)
 
@@ -89,25 +89,25 @@ class FreevoPage(page.Page):
 
 
 class FreevoResource(Resource):
-    """ Base class of webpages which handels the authentication.
+    """
+    Base class of webpages which handels the authentication.
 
     All webpages should be subclasses of this class.
-    The subclasses must not have a render methode
-    but they need a _render methode instead.
-    When a webpage is opened by the user then first the render methode
+    The subclasses must not have a render method
+    but they need a _render method instead.
+    When a webpage is opened by the user then first the render method
     of this base class is called and then if the authentication was successfull
-    the _render methode of the subclass is called.
+    the _render method of the subclass is called.
     Otherwise a error messages is returned and shown to the user.
     """
-
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def render(self, request):
-        """ render methode of this class.
+        """
+        render method of this class.
 
-        This methode will be called when a user requests this page.
+        This method will be called when a user requests this page.
         It only handels the authentication but does not present any
-        content.If authentication is successfull this methode returns the
-        _render methode, which does the actuall work.
+        content.If authentication is successfull this method returns the
+        _render method, which does the actuall work.
         """
         # get username and password from the user
         username = request.getUser()
@@ -124,17 +124,17 @@ class FreevoResource(Resource):
             return '<h1>401 Authentication required</h1>'
         else:
             # authentication was successfull
-            # thus we return the self._render methode
+            # thus we return the self._render method
             # which hopefully will do something usefull
             self.session = request.getSession()
             return self._render(request)
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def auth_user(self, username, password):
-        """ check of username and password
+        """
+        Check of username and password
 
-        This methode validates username and password.
+        This method validates username and password.
         If authentication is successfull it returns True otherwise False.
         """
         #print 'auth_user(username=%r, password=%r)' % (username, '******')
@@ -151,33 +151,32 @@ class FreevoResource(Resource):
 
 
 class HTMLResource:
-    """ HTML elements of a freevo webpage
+    """
+    HTML elements of a freevo webpage
 
     This class provides many usefull elements which can be used
     in a webpage. It provides a string called res which should be used to
     build up the html string that should form the content of a webpage.
-    Usage: Create a instance of this class in the _render methode of the
-    subclass which represents the webpage, use all this methodes to build
+    Usage: Create a instance of this class in the _render method of the
+    subclass which represents the webpage, use all this methods to build
     the html string  and return HTMLResource.res in the end.
     """
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def __init__(self):
         # create empty result string which must be filled with life
         self.res =''
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def printContentType(self, content_type='text/html'):
-        """ Content"""
+        """Content"""
         # debug print
         #print 'printContentType(content_type=%r)' % (content_type)
         # adding new text
         self.res += 'Content-type: %s\n\n' % content_type
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def printHeader(self, title='unknown page', style=None, script=None, rss=None, selected='Help', prefix=0):
-        """ Header
+        """
+        Header
 
         This produces the header of a freevo page with the navigation bar.
 
@@ -256,9 +255,9 @@ class HTMLResource:
         self.res += '\n<!-- Main Content -->\n';
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableOpen(self, opts=''):
-        """ Opens a table
+        """
+        Opens a table
 
         opts are additional parameters for the <table> tag.
         """
@@ -266,7 +265,6 @@ class HTMLResource:
         self.res += "<table "+opts+">\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableClose(self):
         """
         Close a table
@@ -275,9 +273,9 @@ class HTMLResource:
         self.res += "</table>\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableHeadOpen(self, opts=''):
-        """ Open a table header line
+        """
+        Open a table header line
 
         opts are additional parameters for the <thead> tag.
         """
@@ -285,7 +283,6 @@ class HTMLResource:
         self.res += "  <thead "+opts+">\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableHeadClose(self, opts=''):
         """
         Closes a table header line
@@ -294,9 +291,9 @@ class HTMLResource:
         self.res += "  </thead>\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableBodyOpen(self, opts=''):
-        """ Opens a table body
+        """
+        Opens a table body
 
         opts are additional parameter for the <tbody> tag
         """
@@ -304,7 +301,6 @@ class HTMLResource:
         self.res += "  <tbody "+opts+">\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableBodyClose(self, opts=''):
         """
         Closes a table body
@@ -313,9 +309,9 @@ class HTMLResource:
         self.res += "  </tbody>\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableFootOpen(self, opts=''):
-        """ Opens a table footer
+        """
+        Opens a table footer
 
         opts are additional parameters for the <tfoot> tag.
         """
@@ -323,7 +319,6 @@ class HTMLResource:
         self.res += "  <tfoot "+opts+">\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableFootClose(self, opts=''):
         """
         Closes a table footer.
@@ -332,9 +327,9 @@ class HTMLResource:
         self.res += "  </tfoot>\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableRowOpen(self, opts=''):
-        """ Opens a table row
+        """
+        Opens a table row
 
         opts are additonal parameters for the <tr> tag
         """
@@ -342,7 +337,6 @@ class HTMLResource:
         self.res += "     <tr "+opts+">\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableRowClose(self):
         """
         Closes a table row
@@ -351,9 +345,9 @@ class HTMLResource:
         self.res += "     </tr>\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def tableCell(self, data='', opts=''):
-        """ Creates a table cell
+        """
+        Creates a table cell
 
         opts are additonal parameters for the <td>.
         data is the content of this table cell.
@@ -362,7 +356,6 @@ class HTMLResource:
         self.res += "       <td "+opts+">"+data+"</td>\n"
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def formValue(self, form=None, key=None):
         #print 'formValue(form=%r, key=%r)' % (form, key)
         if not form or not key:
@@ -375,7 +368,6 @@ class HTMLResource:
         return val
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def printFooter(self):
         """
         Closes the html document
@@ -384,9 +376,9 @@ class HTMLResource:
         self.res += '</body>\n</html>\n'
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def printSearchForm(self):
-        """ Creates the simple search form"""
+        """
+        Creates the simple search form"""
 
         #print 'printSearchForm()'
         self.res += """
@@ -395,9 +387,10 @@ class HTMLResource:
     </form>
     """
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def printAdvancedSearchForm(self):
-        """ Creates the advanced search form.
+        """
+        Creates the advanced search form.
 
         This search form has an additonal checkbox and a go button
         """
@@ -412,7 +405,7 @@ class HTMLResource:
     </form>
     """
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def printMessages(self, messages):
         """
         Prints a message
@@ -424,7 +417,7 @@ class HTMLResource:
             self.res += "   <li>%s</li>\n" % m
             self.res += "</ul>\n"
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def printMessagesFinish(self, messages):
         """
         Print messages and add the search form, links and footer.
@@ -435,7 +428,7 @@ class HTMLResource:
         self.printLinks()
         self.printFooter()
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def printLinks(self, prefix=0):
         """
         Print Link
@@ -450,7 +443,7 @@ class HTMLResource:
         #    pass
         return
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def printBreadcrumb(self, media, mediadirs, dir):
         """
         ???
@@ -467,7 +460,7 @@ class HTMLResource:
 
         return breadcrumb
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def printPassword(self, password):
         """
         ???
@@ -488,7 +481,7 @@ class HTMLResource:
         //-->
         </script>"""
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def printImagePopup(self):
         """
         Opens a Popup to display an image
@@ -526,9 +519,10 @@ class HTMLResource:
         }
         </script> """
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def printWebRemote(self):
-        """ Prints web remote
+        """
+        Prints web remote
 
         If configured to do so,
         then this displays a remote to control freevo

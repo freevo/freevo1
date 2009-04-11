@@ -42,9 +42,6 @@ import kaa.imlib2 as imlib2
 import kaa.metadata as metadata
 
 from www.web_types import HTMLResource, FreevoResource, RecordClientResource
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 TRUE = 1
 FALSE = 0
@@ -53,7 +50,6 @@ FALSE = 0
 class LibraryResource(FreevoResource):
     isLeaf=1
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def __init__(self):
         #print '__init__(self)'
         self.allowed_dirs = []
@@ -64,7 +60,6 @@ class LibraryResource(FreevoResource):
         self.recordclient = RecordClientResource()
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def is_access_allowed(self, dir_str):
         #print 'is_access_allowed(self, dir_str=%r)' % (dir_str)
         for i in range(len(self.allowed_dirs)):
@@ -73,7 +68,6 @@ class LibraryResource(FreevoResource):
                 return TRUE
         return FALSE
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def convert_dir(self, dir_str):
         """
         Converts a direct file location to a link that twisted can display.
@@ -99,7 +93,6 @@ class LibraryResource(FreevoResource):
             child_res += "/"
         return child_res+location
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def get_suffixes (self, media):
         #print 'get_suffixes (self, media=\"%s\")' % (media)
         suffixes = []
@@ -114,7 +107,6 @@ class LibraryResource(FreevoResource):
             suffixes.extend(config.VIDEO_SUFFIX)
         return suffixes
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def get_dirlist(self, media):
         #print 'get_dirlist(self, media=\"%s\")' % (media)
         dirs = []
@@ -141,7 +133,6 @@ class LibraryResource(FreevoResource):
                     dirs.append(d)
         return dirs
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def check_dir(self, media, dir):
         #print 'check_dir(self, media=\"%s\", dir=%r)' % (media, dir)
         dirs2 = []
@@ -152,7 +143,6 @@ class LibraryResource(FreevoResource):
                 return TRUE
         return FALSE
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def _render(self, request):
         #print '_render(self, request=\"%s\")' % (request)
         fv = HTMLResource()
@@ -633,7 +623,6 @@ class LibraryResource(FreevoResource):
         return String(fv.res)
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def cover_filter(self, x):
         #print 'cover_filter(self, x=%r)' % (x)
         for i in os.listdir(x):
@@ -652,7 +641,6 @@ class LibraryResource(FreevoResource):
                         return jpg_file
 
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
     def get_fxd_cover(self, fxd_file):
         #print 'get_fxd_cover(self, fxd_file=\"%s\")' % (fxd_file)
         cover = ''
@@ -665,7 +653,7 @@ class LibraryResource(FreevoResource):
                 break
         return cover
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def resize_image(self, image, size):
         #print 'resize_image(self, image=%r, size=%s)' % (image, size)
         (width, height) = size
@@ -676,7 +664,7 @@ class LibraryResource(FreevoResource):
             new_height = 200
         return (int(new_width), int(new_height + 0.5))
 
-    @benchmark(benchmarking & 0x04, benchmarkcall)
+
     def get_fxd_title(self, fxd_file):
         #print 'get_fxd_title(self, fxd_file=%r)', (fxd_file)
         fxd_info = ""

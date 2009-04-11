@@ -983,7 +983,6 @@ class DiskManager(plugin.DaemonPlugin):
                 del series_table[name]
         clean_time = time.time() - clean_time
 
-        # For benchmarking:
         _debug_('Recordings Manager update_recordings times')
         _debug_('cache_time     ', cache_time)
         _debug_('parse_time     ', parse_time)

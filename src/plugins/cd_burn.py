@@ -80,9 +80,6 @@ from stat import *
 #from os.path import *
 from event import *
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 class MyProgressBox(ProgressBox):
     def __init__(self, text, x=None, y=None, width=0, height=0, icon=None,
@@ -590,7 +587,6 @@ class main_burn_thread(threading.Thread):
             self.widget.draw(update=True)
 
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self, arg=None, menuw=None, token=None):
         """
         Starts the burning process and helpers

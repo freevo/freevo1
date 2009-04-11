@@ -47,9 +47,6 @@ import traceback
 import kaa.imlib2
 from kaa.metadata.image import EXIF as exif
 
-from benchmark import benchmark
-benchmarking = 0xff
-benchmarkcall = 0
 
 if float(sys.version[0:3]) < 2.3:
     PICKLE_PROTOCOL = 1
@@ -63,8 +60,6 @@ if traceback.extract_stack()[0][0].find('install.py') == -1:
     # import stuff from util.misc
     import misc
 
-    benchmarking = config.DEBUG_BENCHMARKING & 0x01
-    benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 #
 #
@@ -72,7 +67,6 @@ if traceback.extract_stack()[0][0].find('install.py') == -1:
 #
 #
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def getdirnames(dirname, softlinks=True, sort=True):
     """
     Get all subdirectories in the given directory.
@@ -93,7 +87,6 @@ def getdirnames(dirname, softlinks=True, sort=True):
 
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def gzopen(file):
     """
     open a gzip file and return the fd. If it's not a gzip file, try
@@ -110,7 +103,6 @@ def gzopen(file):
     return f
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def readfile(filename):
     """
     return the complete file as list
@@ -121,7 +113,6 @@ def readfile(filename):
     return ret
 
 
-#@benchmark(benchmarking & 0x40, benchmarkcall)
 def freespace(path):
     """
     freespace(path) -> integer
@@ -136,7 +127,6 @@ def freespace(path):
     return 0
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def totalspace(path):
     """
     totalspace(path) -> integer
@@ -151,7 +141,6 @@ def totalspace(path):
     return 0
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def touch(file):
     """
     touch a file (maybe create it)
@@ -164,7 +153,6 @@ def touch(file):
     return 0
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def rmrf_helper(result, dirname, names):
     """
     help function for rm -rf
@@ -177,7 +165,6 @@ def rmrf_helper(result, dirname, names):
     return result
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def rmrf(top=None):
     """
     Pure python version of 'rm -rf'
@@ -203,7 +190,6 @@ def rmrf(top=None):
 #
 #
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def match_suffix(filename, suffixlist):
     """
     Check if a filename ends in a given suffix, case is ignored.
@@ -218,7 +204,6 @@ def match_suffix(filename, suffixlist):
     return 0
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def match_files(dirname, suffix_list):
     """
     Find all files in a directory that has matches a list of suffixes.
@@ -238,7 +223,6 @@ def match_files(dirname, suffix_list):
     return matches
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def find_matches(files, suffix_list):
     """
     return all files in 'files' that match one of the suffixes in 'suffix_list'
@@ -250,7 +234,6 @@ def find_matches(files, suffix_list):
     return filter(lambda x: x[x.rfind('.')+1:].lower() in suffix_list, files)
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def match_files_recursively_helper(result, dirname, names):
     """
     help function for match_files_recursively
@@ -268,7 +251,6 @@ def match_files_recursively_helper(result, dirname, names):
     return result
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def match_files_recursively_skip_protected(result, dirname, names):
     """
     help function for match_files_recursively_skip_protected, skipping directories with a .password file
@@ -287,7 +269,6 @@ def match_files_recursively_skip_protected(result, dirname, names):
     return result
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def match_files_recursively(dir, suffix_list, skip_password=False):
     """
     get all files matching suffix_list in the dir and in it's subdirectories
@@ -305,7 +286,6 @@ def match_files_recursively(dir, suffix_list, skip_password=False):
     return matches
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def get_subdirs_recursively(dir):
     """
     get all subdirectories recursively in the given directory
@@ -320,7 +300,6 @@ def get_subdirs_recursively(dir):
     return matches
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def recursefolders(root, recurse=0, pattern='*', return_folders=0):
     """
     Before anyone asks why I didn't use os.path.walk; it's simple,
@@ -376,7 +355,6 @@ def recursefolders(root, recurse=0, pattern='*', return_folders=0):
 
 mounted_dirs = []
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def is_mounted(dir):
     """
     return if the dir is mounted (according to the internal list "mounted_dirs"
@@ -388,7 +366,6 @@ def is_mounted(dir):
     return dir in mounted_dirs
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def mount(dir, force=False):
     """
     mount a directory
@@ -413,7 +390,6 @@ def mount(dir, force=False):
         mounted_dirs.append(dir)
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def umount(dir):
     """
     umount a directory
@@ -434,7 +410,6 @@ def umount(dir):
             mounted_dirs.remove(dir)
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def umount_all():
     """
     umount all mounted directories
@@ -450,7 +425,6 @@ def umount_all():
     mounted_dirs = []
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def resolve_media_mountdir(*arg):
     """
     get the mount point of the media with media_id
@@ -477,7 +451,6 @@ def resolve_media_mountdir(*arg):
     return mountdir, file
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def check_media(media_id):
     """
     check if media_id is a valid media in one of the drives
@@ -496,7 +469,6 @@ def check_media(media_id):
 #
 #
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def read_pickle(file):
     """
     read a file with pickle
@@ -510,7 +482,6 @@ def read_pickle(file):
         return None
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def save_pickle(data, file):
     """
     save the data with pickle to the given file
@@ -529,7 +500,6 @@ def save_pickle(data, file):
 # cache utils
 #
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def read_thumbnail(filename):
     """
     return image cached inside filename
@@ -543,7 +513,6 @@ def read_thumbnail(filename):
     return data
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def create_thumbnail(filename, thumbnail=None):
     """
     cache image for faster access
@@ -596,7 +565,6 @@ def create_thumbnail(filename, thumbnail=None):
         return None
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def cache_image(filename, thumbnail=None, use_exif=False):
     """
     cache image for faster access, return cached image
@@ -613,7 +581,6 @@ def cache_image(filename, thumbnail=None, use_exif=False):
     return create_thumbnail(filename, thumbnail)
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def scale_rectangle_to_max(size, max_size):
     """
     returns a scaled rectangle size fitting the size to max_size
@@ -633,7 +600,6 @@ def scale_rectangle_to_max(size, max_size):
     return (scaled_width, scaled_height)
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def www_image_path(filename, subdir='.thumbs'):
     """
     returns the path to the thumbnail image for a given filename
@@ -651,7 +617,6 @@ def www_image_path(filename, subdir='.thumbs'):
     return imagepath
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def www_image(filename, subdir, force=False, getsize=False, size=128, verbose=0):
     """
     creates a webserver image image and returns its size.
@@ -724,7 +689,6 @@ def www_image(filename, subdir, force=False, getsize=False, size=128, verbose=0)
     return image.size
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def www_thumb_create(filename, force=False, getsize=False, size=config.WWW_IMAGE_THUMBNAIL_SIZE, verbose=0):
     """
     creates a webserver image image and returns its size.
@@ -735,7 +699,6 @@ def www_thumb_create(filename, force=False, getsize=False, size=config.WWW_IMAGE
         return (0, 0)
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def www_image_create(filename, force=False, getsize=False, size=config.WWW_IMAGE_SIZE, verbose=0):
     """
     creates a webserver image image and returns its size.

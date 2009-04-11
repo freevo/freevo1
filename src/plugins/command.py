@@ -53,12 +53,8 @@ from gui.ListBox import ListBox
 from gui.RegionScroller import RegionScroller
 from gui.PopupBox import PopupBox
 
-from benchmark import benchmark
-benchmarking = 1 #config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
-@benchmark(benchmarking, benchmarkcall)
 def islog(name):
     f = open(os.path.join(config.FREEVO_LOGDIR, 'command-std%s-%s.log' % (name, os.getuid())))
     data = f.readline()
@@ -127,7 +123,6 @@ class LogScroll(PopupBox):
         self.add_child(self.pb)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
 
         if event in (INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT):
@@ -168,7 +163,6 @@ class CommandOptions(PopupBox):
         self.results.toggle_selected_index(0)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         """
         eventhandler to browse the result popup
@@ -192,7 +186,6 @@ class CommandOptions(PopupBox):
 
 class CommandChild(childapp.ChildApp2):
 
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, app, debugname=None, doeslogging=0, callback_use_rc=True, logfilename=None):
         childapp.ChildApp2.__init__(self, app, debugname, doeslogging, callback_use_rc)
         self.logbuffer = []
@@ -200,7 +193,6 @@ class CommandChild(childapp.ChildApp2):
         self.outfd = logfilename is not None and open(logfilename, 'w') or None
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def stdout_cb(self, line):
         """
         Save the stdout line to a file or buffer
@@ -212,7 +204,6 @@ class CommandChild(childapp.ChildApp2):
             self.logbuffer.append('<so> ' + line)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def stderr_cb(self, line):
         """
         Override this method to receive stderr from the child app
@@ -225,7 +216,6 @@ class CommandChild(childapp.ChildApp2):
             self.logbuffer.append('<se> ' + line)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def poll(self):
         pass
 
@@ -245,7 +235,6 @@ class CommandItem(Item):
     @ivar stdout: log to stdout
     @ivar rc: remote control singleton
     """
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, command=None, directory=None):
         Item.__init__(self, skin_type='commands')
         self.display_type = 'commands'
@@ -261,7 +250,6 @@ class CommandItem(Item):
             self.image = util.getimage(self.cmd)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """
         return a list of actions for this item
@@ -269,7 +257,6 @@ class CommandItem(Item):
         return [ (self.flashpopup , _('Run Command')) ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def flashpopup(self, arg=None, menuw=None):
         """
         start popup and execute command
@@ -316,7 +303,6 @@ class CommandItem(Item):
             CommandOptions(workapp.logbuffer, workapp.logfilename, text=message).show()
 
 
-@benchmark(benchmarking, benchmarkcall)
 def fxdparser(fxd, node):
     """
     parse commands out of a fxd file
@@ -344,13 +330,11 @@ class CommandMenuItem(Item):
     this is the item for the main menu and creates the list
     of commands in a submenu.
     """
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, parent):
         Item.__init__(self, parent, skin_type='commands')
         self.name = _('Commands')
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """
         return a list of actions for this item
@@ -359,7 +343,6 @@ class CommandMenuItem(Item):
         return items
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def create_commands_menu(self, arg=None, menuw=None):
         """
         create a list with commands
@@ -408,18 +391,15 @@ class PluginInterface(plugin.MainMenuPlugin):
     This plugin also activates <command> tag support in all menus, see information
     from command.fxdhandler for details.
     """
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         # register command to normal fxd item parser
         # to enable <command> tags in fxd files in every menu
         plugin.register_callback('fxditem', [], 'command', fxdparser)
         plugin.MainMenuPlugin.__init__(self)
 
-    @benchmark(benchmarking, benchmarkcall)
     def items(self, parent):
         return [ CommandMenuItem(parent) ]
 
-    @benchmark(benchmarking, benchmarkcall)
     def config(self):
         return [
             ('COMMANDS_DIR', '/usr/local/bin', 'The directory to show commands from.'),
@@ -456,7 +436,6 @@ class fxdhandler(plugin.Plugin):
     Putting a <command> in a folder.fxd will add this command to the list of
     item actions for that directory.
     """
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         """
         Register command to normal fxd item parser to enable <command> tags in
@@ -480,19 +459,16 @@ class CommandMainMenuItem(plugin.MainMenuPlugin):
     consult freevo_config.py for the level of the other Menu Items if you
     wish to place it in a particular location.
     """
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, commandxmlfile):
         plugin.MainMenuPlugin.__init__(self)
         self.cmd_xml = commandxmlfile
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def config(self):
         return [ ('COMMAND_SPAWN_WM', '', 'command to start window manager.'),
                  ('COMMAND_KILL_WM', '', 'command to stop window manager.') ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def items(self, parent):
         command_items = []
         parser = util.fxdparser.FXD(self.cmd_xml)

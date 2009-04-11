@@ -36,9 +36,6 @@ import config, plugin
 from plugins.idlebar import IdleBarPlugin
 import util.tv_util as tv_util
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
 class PluginInterface(IdleBarPlugin):
@@ -54,7 +51,6 @@ class PluginInterface(IdleBarPlugin):
     a more severe warning.  If no args are given then no warnings will be
     given.
     """
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __init__(self, listings_threshold=-1):
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.tv'
@@ -71,7 +67,6 @@ class PluginInterface(IdleBarPlugin):
         self.EXPIRED      = os.path.join(icondir, 'television_expired.png')
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def checktv(self):
         if len(glob.glob(self.tv_lockfile)) > 0:
             return 1
@@ -80,7 +75,6 @@ class PluginInterface(IdleBarPlugin):
         return 0
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def draw(self, (type, object), x, osd):
         if self.checktv() == 1:
             return osd.draw_image(self.TVLOCKED, (x, osd.y + 10, -1, -1))[0]

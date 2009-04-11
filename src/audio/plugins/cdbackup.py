@@ -68,9 +68,6 @@ from event import *
 
 from util import popen3
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 # Included to be able to access the info for Audio CDs
 import kaa.metadata as mmpython
@@ -264,7 +261,6 @@ class main_backup_thread(threading.Thread):
         self.output_directory = ''
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def run(self, rip_format='mp3'):
         self.abort = False
 

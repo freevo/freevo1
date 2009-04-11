@@ -38,9 +38,6 @@ import menu
 import rc
 import audio.player
 from event import *
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -49,7 +46,6 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     detached = False
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self):
         _debug_('detach.PluginInterface.__init__()', 2)
         plugin.MainMenuPlugin.__init__(self)
@@ -60,7 +56,6 @@ class PluginInterface(plugin.MainMenuPlugin):
         self.event.register()
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def config(self):
         """
         config is called automatically,
@@ -71,19 +66,16 @@ class PluginInterface(plugin.MainMenuPlugin):
         ]
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def detach(self):
         _debug_('detach()', 1)
         rc.post_event(plugin.event('DETACH'))
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def attach(self):
         _debug_('attach()', 1)
         rc.post_event(plugin.event('ATTACH'))
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def _event_handler(self, event):
         _debug_('_event_handler(event=%s)' % (event,), 2)
         gui = audio.player.get()
@@ -116,7 +108,6 @@ class PluginInterface(plugin.MainMenuPlugin):
                 rc.post_event(plugin.event('ATTACH'))
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def _detach(self, menuw=None):
         _debug_('_detach()', 1)
         if PluginInterface.detached:
@@ -134,7 +125,6 @@ class PluginInterface(plugin.MainMenuPlugin):
             gui.item.parent.menuw = None
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def _attach(self, menuw=None):
         _debug_('_attach()', 1)
         if not PluginInterface.detached:
@@ -152,7 +142,6 @@ class PluginInterface(plugin.MainMenuPlugin):
         gui.show()
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def items(self, parent):
         _debug_('items(parent=%r)' % (parent,), 2)
         gui = audio.player.get()
@@ -162,7 +151,6 @@ class PluginInterface(plugin.MainMenuPlugin):
         return []
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def show(self, arg=None, menuw=None):
         _debug_('show(arg=%r, menuw=%r)' % (arg, menuw), 1)
         rc.post_event(plugin.event('ATTACH'))

@@ -37,9 +37,6 @@ import copy
 from event import Event
 import rc
 
-from benchmark import benchmark
-benchmarking = 0
-benchmarkcall = False
 
 
 #
@@ -51,7 +48,6 @@ class Plugin:
     Basic plugin class. All plugins should inherit from this
     class
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         import config
         self._type   = None
@@ -63,7 +59,6 @@ class Plugin:
                 setattr(config, var, val)
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def config(self):
         """
         return a list of config variables this plugin needs to be set in
@@ -73,7 +68,6 @@ class Plugin:
         return []
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def translation(self, application):
         """
         Loads the gettext translation for this plugin (only this class).
@@ -92,12 +86,10 @@ class MainMenuPlugin(Plugin):
     """
     Plugin class for plugins to add something to the main menu
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         Plugin.__init__(self)
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def items(self, parent):
         """
         return the list of items for the main menu
@@ -118,12 +110,10 @@ class ItemPlugin(Plugin):
 
     def eventhandler(self, item, event, menuw=None):
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         Plugin.__init__(self)
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def actions(self, item):
         """
         return a list of actions to that item. Each actions is a tuple
@@ -154,7 +144,6 @@ class DaemonPlugin(Plugin):
     this function may be called to shutdown the plugin and will be called on freevo
     shutdown
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         Plugin.__init__(self)
         self.poll_counter   = 0         # poll counter, don't change this
@@ -163,7 +152,6 @@ class DaemonPlugin(Plugin):
         self.event_listener = False     # process all events
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def poll_wrapper(self):
         import skin
         if self.poll_menu_only and not skin.active():
@@ -178,7 +166,6 @@ class MimetypePlugin(Plugin):
     self.display_type is a list of display types where this mimetype
     should be displayed, [] for always.
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         import util
         Plugin.__init__(self)
@@ -186,7 +173,6 @@ class MimetypePlugin(Plugin):
         self.find_matches = util.find_matches
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def suffix(self):
         """
         return the list of suffixes this class handles
@@ -194,7 +180,6 @@ class MimetypePlugin(Plugin):
         return []
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def get(self, parent, files):
         """
         return a list of items based on the files
@@ -202,7 +187,6 @@ class MimetypePlugin(Plugin):
         return []
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def count(self, parent, files):
         """
         return how many items will be build on files
@@ -210,7 +194,6 @@ class MimetypePlugin(Plugin):
         return len(self.find_matches(files, self.suffix()))
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def dirinfo(self, diritem):
         """
         set information for a diritem based on the content, etc.
@@ -218,7 +201,6 @@ class MimetypePlugin(Plugin):
         pass
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def dirconfig(self, diritem):
         """
         adds configure variables to the directory
@@ -242,7 +224,6 @@ RECORD         = 'RECORD'
 #
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def activate(name, type=None, level=10, args=None):
     """
     activate a plugin
@@ -267,7 +248,6 @@ def activate(name, type=None, level=10, args=None):
     return __plugin_number__
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def remove(id):
     """
     remove a plugin from the list. This can only be done in local_config.py
@@ -293,7 +273,6 @@ def remove(id):
             __all_plugins__.remove(p)
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def is_active(name, arg=None):
     """
     search the list if the given plugin is active. If arg is set,
@@ -318,7 +297,6 @@ def is_active(name, arg=None):
     return None
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def init(callback = None):
     """
     load and init all the plugins
@@ -342,7 +320,6 @@ def init(callback = None):
     __sort_plugins__()
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def init_special_plugin(id):
     """
     load only the plugin 'id'
@@ -369,7 +346,6 @@ def init_special_plugin(id):
     __sort_plugins__()
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def shutdown(plugin_name=None):
     """
     called to shutdown one or all daemon plugins
@@ -382,7 +358,6 @@ def shutdown(plugin_name=None):
                 _debug_('shut down plugin %r' % p.plugin_name, 2)
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def get(type):
     """
     get the plugin list 'type'
@@ -395,7 +370,6 @@ def get(type):
     return __plugin_type_list__[type]
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def mimetype(display_type):
     """
     return all MimetypePlugins for the given display_type. If display_type is
@@ -412,7 +386,6 @@ def mimetype(display_type):
     return ret
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def getall():
     """
     return a list of all plugins
@@ -424,7 +397,6 @@ def getall():
     return ret
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def getbyname(name, multiple_choises=0):
     """
     get a plugin by it's name
@@ -437,7 +409,6 @@ def getbyname(name, multiple_choises=0):
     return None
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def register(plugin, name, multiple_choises=0):
     """
     register an object as a named plugin
@@ -451,7 +422,6 @@ def register(plugin, name, multiple_choises=0):
         __named_plugins__[name] = plugin
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def register_callback(name, *args):
     """
     register a callback to the callback handler 'name'.
@@ -463,7 +433,6 @@ def register_callback(name, *args):
     __callbacks__[name].append(args)
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def get_callbacks(name):
     """
     return all callbacks registered with 'name'
@@ -474,7 +443,6 @@ def get_callbacks(name):
     return __callbacks__[name]
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def event(name, arg=None):
     """
     create plugin event
@@ -482,7 +450,6 @@ def event(name, arg=None):
     return Event('PLUGIN_EVENT %s' % name, arg=arg)
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def isevent(event):
     """
     plugin event parsing
@@ -510,7 +477,6 @@ __callbacks__          = {}
 __plugin_basedir__     = ''
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def __add_to_ptl__(type, object):
     """
     small helper function to add a plugin to the PluginTypeList
@@ -522,7 +488,6 @@ def __add_to_ptl__(type, object):
 
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def __find_plugin_file__(filename):
     global __plugin_basedir__
     full_filename = os.path.join(__plugin_basedir__, filename)
@@ -556,7 +521,6 @@ def __find_plugin_file__(filename):
 
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def __load_plugin__(name, type, level, args, number):
     """
     load the plugin and add it to the lists
@@ -674,7 +638,6 @@ def __load_plugin__(name, type, level, args, number):
         traceback.print_exc()
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def __sort_plugins__():
     """
     sort all plugin lists based on the level

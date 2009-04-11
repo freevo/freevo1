@@ -36,9 +36,6 @@ import random
 from time import time,sleep
 from threading import Thread,Lock,Semaphore
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 progs = {}
 progsAnalizados = 0
@@ -91,7 +88,6 @@ class ParsePrograma(Thread):
         self.fecha = fecha
         self.callback = callback
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
 
         try:
@@ -162,7 +158,6 @@ class ParseLetra(Thread):
         self.callback = callback
         self.blackList = blackList
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
 
         global totalProgramas

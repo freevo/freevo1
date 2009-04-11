@@ -46,9 +46,6 @@ from event import Event
 import osd
 import skin
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
 osd = osd.get_singleton()
@@ -150,7 +147,6 @@ class PluginInterface(plugin.DaemonPlugin):
             self.thread.join()
 
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def __run__(self):
         _debug_('__run__()', 2)
         current_saver = None

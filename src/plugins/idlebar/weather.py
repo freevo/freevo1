@@ -39,9 +39,6 @@ import plugin
 from plugins.idlebar import IdleBarPlugin
 import util.pymetar as pymetar
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
 class WeatherFetcher(Thread):
@@ -62,7 +59,6 @@ class WeatherFetcher(Thread):
         self.icon = 'na.png'
 
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         """
         Thread to fetch the weather and write the results to a cache file

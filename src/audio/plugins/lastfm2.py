@@ -51,9 +51,6 @@ else:
         from cElementTree import XML
     except ImportError:
         from elementtree.ElementTree import XML
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING & 0x01
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 # Debugging modules
 if config.DEBUG_DEBUGGER:
@@ -64,7 +61,6 @@ class LastFMError(Exception):
     """
     An exception class for last.fm
     """
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, why, url=None):
         Exception.__init__(self)
         if url:
@@ -101,7 +97,6 @@ class PluginInterface(plugin.MainMenuPlugin):
     | SUBTITLE      - send to lastfm LOVE song (Key l)
     | LANG          - send to lastfm BAN song (Key a)
     """
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         _debug_('PluginInterface.__init__()', 2)
         if not config.LASTFM_USER or not config.LASTFM_PASS:
@@ -111,7 +106,6 @@ class PluginInterface(plugin.MainMenuPlugin):
         self.menuitem = None
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def config(self):
         """
         freevo plugins -i audio.freevo returns the info
@@ -126,14 +120,12 @@ class PluginInterface(plugin.MainMenuPlugin):
         ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def items(self, parent):
         _debug_('items(parent=%r)' % (parent,), 2)
         self.menuitem = LastFMMainMenuItem(parent)
         return [ self.menuitem ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def shutdown(self):
         if self.menuitem is not None:
             self.menuitem.shutdown()
@@ -145,7 +137,6 @@ class LastFMMainMenuItem(MenuItem):
     This is the item for the main menu and creates the list of commands in a
     submenu.
     """
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, parent):
         _debug_('LastFMMainMenuItem.__init__(parent=%r)' % (parent,), 2)
         MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
@@ -153,14 +144,12 @@ class LastFMMainMenuItem(MenuItem):
         self.webservices = LastFMWebServices()
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """return a list of actions for this item"""
         _debug_('LastFMMainMenuItem.actions()', 2)
         return [ (self.create_stations_menu, 'stations') ]
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def create_stations_menu(self, arg=None, menuw=None):
         _debug_('create_stations_menu(arg=%r, menuw=%r)' % (arg, menuw), 2)
         lfm_items = []
@@ -177,7 +166,6 @@ class LastFMMainMenuItem(MenuItem):
         menuw.refresh()
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def shutdown(self):
         if self.webservices is not None:
             self.webservices.shutdown()
@@ -192,7 +180,6 @@ class LastFMItem(AudioItem):
     """
     poll_interval = 4
     poll_interval = 1
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, parent, name, station, webservices):
         _debug_('LastFMItem.__init__(parent=%r, name=%r, station=%r, webservices=%r)' % \
             (parent, name, station, webservices), 1)
@@ -207,7 +194,6 @@ class LastFMItem(AudioItem):
         self.menuw = None
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def actions(self):
         """
         return a list of actions for this item
@@ -221,7 +207,6 @@ class LastFMItem(AudioItem):
         return items
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         _debug_('LastFMItem.eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
         if event == 'STOP':
@@ -262,7 +247,6 @@ class LastFMItem(AudioItem):
         return False
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def play(self, arg=None, menuw=None):
         """
         Play the current playing
@@ -336,7 +320,6 @@ class LastFMItem(AudioItem):
             return
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def stop(self, arg=None, menuw=None):
         """
         Stop the current playing
@@ -346,7 +329,6 @@ class LastFMItem(AudioItem):
             self.player.stop()
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def skip(self):
         """Skip song"""
         _debug_('skip()', 1)
@@ -354,14 +336,12 @@ class LastFMItem(AudioItem):
         self.play(self.arg, self.menuw)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def love(self):
         """Send "Love" information to audioscrobbler"""
         _debug_('love()', 1)
         self.webservices.love()
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def ban(self):
         """Send "Ban" information to audioscrobbler"""
         _debug_('ban()', 1)
@@ -377,13 +357,11 @@ class LastFMXSPF:
     """
     _LASTFM_NS = 'http://www.audioscrobbler.net/dtd/xspf-lastfm'
 
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         self.feed = feedparser.FeedParserDict()
         self.feed.entries = []
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def parse(self, xml):
         """
         Parse the XML feed
@@ -431,7 +409,6 @@ class LastFMWebServices:
         'User-agent': 'Freevo-%s (r%s)' % (version.__version__, revision.__revision__)
     }
 
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self):
         _debug_('LastFMWebServices.__init__()', 2)
         self.logincachefilename = os.path.join(config.FREEVO_CACHEDIR, 'lastfm.session')
@@ -446,7 +423,6 @@ class LastFMWebServices:
             self._login()
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def shutdown(self):
         """
         Shutdown the lasf.fm webservices
@@ -457,7 +433,6 @@ class LastFMWebServices:
             self.downloader.stop()
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def _urlopen(self, url, lines=True):
         """
         Wrapper to see what is sent and received
@@ -495,7 +470,6 @@ class LastFMWebServices:
             raise LastFMError(why)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def _login(self, arg=None):
         """Read session and stream url from ws.audioscrobbler.com"""
         _debug_('login(arg=%r)' % (arg,), 2)
@@ -532,7 +506,6 @@ class LastFMWebServices:
             self.base_path = ''
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def request_xspf(self):
         """Request a XSPF (XML Shareable Playlist File)"""
         _debug_('LastFMWebServices.request_xspf()', 1)
@@ -543,7 +516,6 @@ class LastFMWebServices:
         return self._urlopen(request_url, lines=False)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def adjust_station(self, station_url):
         """Change Last FM Station"""
         _debug_('adjust_station(station_url=%r)' % (station_url,), 2)
@@ -569,7 +541,6 @@ class LastFMWebServices:
             pop.destroy()
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def now_playing(self):
         """
         Return Song Info and album Cover
@@ -584,7 +555,6 @@ class LastFMWebServices:
         return reply
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def download(self, url, filename, entry=None):
         """
         Download album cover or track to last.fm directory.
@@ -607,7 +577,6 @@ class LastFMWebServices:
         return self.downloader
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def skip(self):
         """Skip song"""
         _debug_('skip()', 2)
@@ -618,7 +587,6 @@ class LastFMWebServices:
         return self._urlopen(skip_url)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def love(self):
         """Send "Love" information to audioscrobbler"""
         _debug_('love()', 2)
@@ -629,7 +597,6 @@ class LastFMWebServices:
         return self._urlopen(love_url)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def ban(self):
         """Send "Ban" information to audioscrobbler"""
         _debug_('ban()', 2)
@@ -640,7 +607,6 @@ class LastFMWebServices:
         return self._urlopen(ban_url)
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def test_user_pass(self):
         """
         Test User/Pass
@@ -680,7 +646,6 @@ class LastFMDownloader(Thread):
     There is a bad bug im mplayer that corrupts the url passed, so we have to
     download it to a file and then play it
     """
-    @benchmark(benchmarking, benchmarkcall)
     def __init__(self, url, filename, headers=None, entry=None):
         Thread.__init__(self)
         self.url = url
@@ -691,7 +656,6 @@ class LastFMDownloader(Thread):
         self.running = True
 
 
-    @benchmark(benchmarking & 0x01, benchmarkcall)
     def run(self):
         """
         Execute a download operation. Stop when finished downloading or
@@ -726,7 +690,6 @@ class LastFMDownloader(Thread):
             _debug_('%s: %s' % (self.url, why), DWARNING)
 
 
-    #@benchmark(benchmarking, benchmarkcall)
     def filesize(self):
         """
         Get the downloaded file size
@@ -734,7 +697,6 @@ class LastFMDownloader(Thread):
         return self.size
 
 
-    @benchmark(benchmarking, benchmarkcall)
     def stop(self):
         """
         Stop the download thead running
@@ -743,7 +705,6 @@ class LastFMDownloader(Thread):
         self.running = False
 
 
-    #@benchmark(benchmarking, benchmarkcall)
     def isrunning(self):
         """
         See if the thread running

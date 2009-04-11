@@ -45,16 +45,12 @@ import evdev
 import pygame
 from event import Event, BUTTON
 
-from benchmark import benchmark
-benchmarking = 0 #config.DEBUG_BENCHMARKING
-benchmarkcall = False #config.DEBUG_BENCHMARKCALL
 
 SHUTDOWN = -1
 
 PYLIRC     = False
 _singleton = None
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def get_singleton(**kwargs):
     """
     get the global rc object
@@ -69,7 +65,6 @@ def get_singleton(**kwargs):
     return _singleton
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def post_event(event):
     """
     add an event to the event queue
@@ -78,7 +73,6 @@ def post_event(event):
     return get_singleton().post_event(event)
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def app(application=0):
     """
     set or get the current app/eventhandler
@@ -96,7 +90,6 @@ def app(application=0):
     return get_singleton().get_app()
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def set_context(context):
     """
     set the context (map with button->event transformation
@@ -105,7 +98,6 @@ def set_context(context):
     return get_singleton().set_context(context)
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def register(function, repeat, timer, *arg):
     """
     register an function to be called
@@ -116,7 +108,6 @@ def register(function, repeat, timer, *arg):
     return get_singleton().register(function, repeat, timer, *arg)
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def unregister(object):
     """
     unregister an object from the main loop
@@ -125,7 +116,6 @@ def unregister(object):
     return get_singleton().unregister(object)
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def shutdown():
     """
     shutdown the rc
@@ -134,7 +124,6 @@ def shutdown():
     return get_singleton().shutdown()
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def suspend():
     """
     suspend the rc
@@ -143,7 +132,6 @@ def suspend():
     return get_singleton().suspend()
 
 
-@benchmark(benchmarking & 0x2, benchmarkcall)
 def resume():
     """
     resume the rc
@@ -162,7 +150,6 @@ class Lirc:
     """
     Class to handle lirc events
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         _debug_('Lirc.__init__()', 2)
         try:
@@ -197,7 +184,6 @@ class Lirc:
         PYLIRC = True
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def resume(self):
         """
         (re-)initialize pylirc, e.g. after calling close()
@@ -207,7 +193,6 @@ class Lirc:
         pylirc.blocking(0)
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def suspend(self):
         """
         cleanup pylirc, close devices
@@ -216,7 +201,6 @@ class Lirc:
         pylirc.exit()
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def get_last_code(self):
         """
         read the lirc interface
@@ -243,7 +227,6 @@ class Lirc:
         return result
 
 
-    #@benchmark(benchmarking & 0x2, benchmarkcall)
     def poll(self, rc):
         """
         return next event
@@ -298,7 +281,6 @@ class Keyboard:
     """
     Class to handle keyboard input
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         """
         init the keyboard event handler
@@ -308,7 +290,6 @@ class Keyboard:
         self.callback = osd.get_singleton()._cb
 
 
-    #@benchmark(benchmarking & 0x2, benchmarkcall)
     def poll(self, rc):
         """
         return next event
@@ -323,7 +304,6 @@ class Joystick:
     """
     Class to handle joystick input
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         _debug_('Joystick.__init__()', 2)
         pygame.joystick.init()
@@ -340,7 +320,6 @@ class Joystick:
         print self.joystick.get_numballs()
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def poll(self, rc):
         """
         return next event
@@ -354,7 +333,6 @@ class Evdev:
     """
     Class to handle evdev events
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         """
         init all specified devices
@@ -398,7 +376,6 @@ class Evdev:
         self._movements = {}
 
 
-    #@benchmark(benchmarking & 0x2, benchmarkcall)
     def poll(self, rc):
         """
         return next event
@@ -441,7 +418,6 @@ class TCPNetwork:
     """
     import socket
     MAX_MESSAGE_SIZE = 255 # the maximum size of a message
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         """
         init the network event handler
@@ -458,7 +434,6 @@ class TCPNetwork:
         self.connections = []
 
 
-    #@benchmark(benchmarking & 0x2, benchmarkcall)
     def poll(self, rc):
         """
         return next event
@@ -485,7 +460,6 @@ class TCPNetwork:
             self.connections.pop(index)
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def _getNewConnections(self):
         """
         accept new connections from the socket
@@ -505,7 +479,6 @@ class UDPNetwork:
     """
     Class to handle network control
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self):
         """
         init the network event handler
@@ -519,7 +492,6 @@ class UDPNetwork:
         self.sock.bind(('', self.port))
 
 
-    #@benchmark(benchmarking & 0x2, benchmarkcall)
     def poll(self, rc):
         """
         return next event
@@ -539,7 +511,6 @@ class EventHandler:
     Class to transform input keys or buttons into events. This class
     also handles the complete event queue (post_event)
     """
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __init__(self, use_pylirc=1, use_netremote=1, is_helper=1):
         _debug_('EventHandler.__init__(use_pylirc=%r, use_netremote=%r, is_helper=%r)' % \
             (use_pylirc, use_netremote, is_helper), 1)
@@ -592,7 +563,6 @@ class EventHandler:
         _debug_('EventHandler.self.inputs=%r' % (self.inputs,), 1)
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def set_app(self, app, context):
         """
         set default eventhandler and context
@@ -602,7 +572,6 @@ class EventHandler:
         self.context = context
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def get_app(self):
         """
         get current eventhandler (app)
@@ -611,7 +580,6 @@ class EventHandler:
         return self.app
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def set_context(self, context):
         """
         set context for key mapping
@@ -620,7 +588,6 @@ class EventHandler:
         self.context = context
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def post_event(self, event):
         """
         add event to the queue
@@ -631,7 +598,6 @@ class EventHandler:
         event.post()
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def key_event_mapper(self, key):
         """
         map key to event based on current context
@@ -654,7 +620,6 @@ class EventHandler:
         return Event(BUTTON, arg=key)
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def register(self, function, repeat, timer, *arg):
         """
         register an function to be called
@@ -678,7 +643,6 @@ class EventHandler:
             self.lock.release()
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def unregister(self, function):
         """
         unregister an object from the main loop
@@ -698,7 +662,6 @@ class EventHandler:
             self.lock.release()
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def suspend(self):
         _debug_('EventHandler.suspend()', 2)
         for i in self.inputs:
@@ -706,7 +669,6 @@ class EventHandler:
                 i.suspend()
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def resume(self):
         _debug_('EventHandler.resume()', 2)
         for i in self.inputs:
@@ -714,7 +676,6 @@ class EventHandler:
                 i.resume()
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def shutdown(self):
         """
         shutdown the rc
@@ -725,7 +686,6 @@ class EventHandler:
             c[0](*c[1])
 
 
-    #@benchmark(benchmarking & 0x2, benchmarkcall)
     def poll(self):
         """
         poll all registered functions
@@ -759,7 +719,6 @@ class EventHandler:
                 c[3] += 1
 
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def subscribe(self, event_callback=None):
         """
         subscribe to 'post_event'

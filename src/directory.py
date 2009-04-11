@@ -57,9 +57,6 @@ from playlist import Playlist
 from event import *
 from gui import InputBox, AlertBox, ProgressBox
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 all_variables = [
     ('DIRECTORY_SORT_BY_DATE', _('Directory Sort By Date'),
@@ -104,7 +101,6 @@ class DirItem(Playlist):
     """
     class for handling directories
     """
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def __init__(self, directory, parent, name='', display_type=None, add_args=None, create_metainfo=True):
         if directory.startswith('/misc'):
             _debug_('DirItem.__init__(directory=%r, parent=%r, name=%r, display_type=%r, add_args=%r, create_metainfo=%r)' % (directory, parent, name, display_type, add_args, create_metainfo), 2)
@@ -218,7 +214,6 @@ class DirItem(Playlist):
         return '<%r>' % (self.__class__)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def set_fxd_file(self, file):
         """
         Set self.folder_fxd and parse it
@@ -238,7 +233,6 @@ class DirItem(Playlist):
                 traceback.print_exc()
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def read_folder_fxd(self, fxd, node):
         """
         parse the xml file for directory settings::
@@ -286,7 +280,6 @@ class DirItem(Playlist):
                     self.modified_vars.append(v)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def __is_type_list_var__(self, var):
         """
         return if this variable to be saved is a type_list
@@ -298,7 +291,6 @@ class DirItem(Playlist):
         return False
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def write_folder_fxd(self, fxd, node):
         """
         callback to save the modified fxd file
@@ -355,7 +347,6 @@ class DirItem(Playlist):
 
 
     # eventhandler for this item
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
         if event == DIRECTORY_CHANGE_DISPLAY_TYPE and menuw.menustack[-1] == self.menu:
@@ -391,7 +382,6 @@ class DirItem(Playlist):
     # metainfo
     # ======================================================================
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def create_metainfo(self):
         """
         create some metainfo for the directory
@@ -448,7 +438,6 @@ class DirItem(Playlist):
     # actions
     # ======================================================================
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def actions(self):
         """
         return a list of actions for this item
@@ -488,7 +477,6 @@ class DirItem(Playlist):
 
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def cwd(self, arg=None, menuw=None):
         """
         browse directory
@@ -497,7 +485,6 @@ class DirItem(Playlist):
         self.check_password_and_build(arg=None, menuw=menuw)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def play(self, arg=None, menuw=None):
         """
         play directory
@@ -509,7 +496,6 @@ class DirItem(Playlist):
             self.check_password_and_build(arg='play', menuw=menuw)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def play_random(self, arg=None, menuw=None):
         """
         play in random order
@@ -518,7 +504,6 @@ class DirItem(Playlist):
         self.check_password_and_build(arg='playlist:random', menuw=menuw)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def play_recursive(self, arg=None, menuw=None):
         """
         play recursive
@@ -527,7 +512,6 @@ class DirItem(Playlist):
         self.check_password_and_build(arg='playlist:recursive', menuw=menuw)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def play_random_recursive(self, arg=None, menuw=None):
         """
         play recursive in random order
@@ -536,7 +520,6 @@ class DirItem(Playlist):
         self.check_password_and_build(arg='playlist:random_recursive', menuw=menuw)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def check_password_and_build(self, arg=None, menuw=None):
         """
         password checker
@@ -575,7 +558,6 @@ class DirItem(Playlist):
             self.build(arg=arg, menuw=menuw)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def pass_cmp_cb(self, word=None):
         """
         read the contents of self.dir/.passwd and compare to word
@@ -591,7 +573,6 @@ class DirItem(Playlist):
             return
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def build(self, arg=None, menuw=None):
         if self.media:
             self.media.mount()
@@ -817,7 +798,6 @@ class DirItem(Playlist):
             self.menuw = menuw
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def reload(self):
         """
         called when we return to this menu
@@ -834,7 +814,6 @@ class DirItem(Playlist):
     # ======================================================================
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def configure_set_name(self, name):
         """
         return name for the configure menu
@@ -855,7 +834,6 @@ class DirItem(Playlist):
                 return 'ICON_RIGHT_AUTO_' + _('auto')
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def configure_set_var(self, arg=None, menuw=None):
         """
         Update the variable in arg and change the menu. This function is used by
@@ -929,7 +907,6 @@ class DirItem(Playlist):
         menuw.refresh(reload=1)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def configure_set_display_type(self, arg=None, menuw=None):
         """
         change display type from specific to all
@@ -954,7 +931,6 @@ class DirItem(Playlist):
         menuw.refresh(reload=1)
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def configure(self, arg=None, menuw=None):
         """
         show the configure dialog for folder specific settings in folder.fxd
@@ -994,7 +970,6 @@ class Dirwatcher(plugin.DaemonPlugin):
     Directory handling
     """
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def __init__(self):
         _debug_('Dirwatcher.__init__()', 2)
         plugin.DaemonPlugin.__init__(self)
@@ -1009,7 +984,6 @@ class Dirwatcher(plugin.DaemonPlugin):
         plugin.register(self, 'Dirwatcher')
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def listoverlay(self):
         """
         Get listing of overlay dir for change checking.
@@ -1031,7 +1005,6 @@ class Dirwatcher(plugin.DaemonPlugin):
         return ret
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def cwd(self, menuw, item, item_menu, dir, media=None):
         _debug_('cwd(menuw=%r, item=%r, item_menu=%r, dir=%r, media=%r)' % (menuw, item, item_menu, dir, media), 2)
         self.menuw     = menuw
@@ -1053,7 +1026,6 @@ class Dirwatcher(plugin.DaemonPlugin):
         self.media = media
 
 
-    @benchmark(benchmarking & 0x02, benchmarkcall)
     def scan(self):
         if not self.dir:
             return
@@ -1095,7 +1067,6 @@ class Dirwatcher(plugin.DaemonPlugin):
         self.item.__dirwatcher_last_files__ = self.files
 
 
-    #@benchmark(benchmarking & 0x02, benchmarkcall)
     def poll(self):
         if self.dir and self.menuw and self.menuw.menustack[-1] == self.item_menu and not rc.app():
             self.scan()

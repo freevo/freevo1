@@ -44,9 +44,6 @@ import kaa.metadata
 from copy import copy
 from string import split, join
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 #precompiled regular expression to obtain mencoder progress
 re_progress = re.compile('(\d+)\%\) .*Trem:\s*(\d+\w+)\s+')
@@ -126,7 +123,6 @@ class Enum(dict):
     from pytvgrab enum.py, see http://pytvgrab.sourceforge.net
 
     Enum(names, x=0)"""
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def __init__(self, names, x=0):
         """ Initialize an Enum """
         for i in range(x, x+len(names)):
@@ -142,7 +138,6 @@ class EncodingError(Exception):
     """
     An exception class for last.fm
     """
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def __init__(self, why):
         Exception.__init__(self)
         self.why = str(why)
@@ -156,25 +151,21 @@ class EncodingOptions:
     """
     Encoding options
     """
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getContainerList(self):
         """Return a list of possible containers"""
         return mappings['lists']['containers']
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getVideoCodecList(self):
         """Return a list of possible video codecs"""
         return mappings['lists']['videocodecs']
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getAudioCodecList(self):
         """Return a possible audio codec list"""
         return mappings['lists']['audiocodecs']
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getVideoFiltersList(self):
         """Return a list of possible video filters"""
         return mappings['filtertype']
@@ -223,7 +214,6 @@ class EncodingJob:
     @ivar threads: number of threads
     @ivar failed: has the job failed?
     """
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def __init__(self, source, output, friendlyname, idnr, titlenum=None, rmsource=False):
         """
         Initialize an instance of an EncodingJob
@@ -302,7 +292,6 @@ class EncodingJob:
                 self.finishedanalyze = True
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setTimeslice(self, timeslice):
         "Set the encoding time-slice"
         self.timeslice = timeslice
@@ -321,7 +310,6 @@ class EncodingJob:
                 return 'Invalid slice of times: end is before start ??'
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setContainer(self, container):
         """Set a container to hold the audio & video streams"""
         #safety checks
@@ -338,7 +326,6 @@ class EncodingJob:
             self.output = ('%s.%s' % (self.output, self.container))
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setVideoCodec(self, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """Set video codec and target filesize (in MB) or bit rate (in kbits/sec)"""
         _debug_('setVideoCodec(self, vcodec=%s, tgtsize=%s, multipass=%s, vbitrate=%s)' % \
@@ -356,7 +343,6 @@ class EncodingJob:
         self.altprofile = altprofile
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setAudioCodec(self, acodec, abrate=128):
         """Set audio codec & bit rate"""
         if acodec not in self.encodingopts.getAudioCodecList():
@@ -366,7 +352,6 @@ class EncodingJob:
         self.abrate = abrate
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setVideoFilters(self, videofilters):
         """Set video filters"""
         for vfilter, option in videofilters:
@@ -374,7 +359,6 @@ class EncodingJob:
                 self.vfilters += [ mappings['filter'][option] ]
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setVideoRes(self, videores):
         """Set video resolution"""
         if videores == 'Optimal':
@@ -383,13 +367,11 @@ class EncodingJob:
             (self.resx, self.resy) = videores.split(':')
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def setNumThreads(self, numthreads):
         """Set the number of threads to use"""
         self.threads = numthreads
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _CalcVideoBR(self):
         """Calculates the video bit rate"""
 
@@ -404,7 +386,6 @@ class EncodingJob:
         _debug_('_CalcVideoBR: vbrate=%s' % (self.vbrate), 2)
 
 
-    #@benchmark(benchmarking & 0x8, benchmarkcall)
     def _analyze_source(self):
         """Find out some basic information about the source
 
@@ -434,7 +415,6 @@ class EncodingJob:
                 _debug_('Video length not found, using %s' % (self.length))
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _identify(self):
         """
         Identify the media file
@@ -450,7 +430,6 @@ class EncodingJob:
         self._run(mplayer, arguments, self._identify_parse, None, 0, None)
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _identify_parse(self, lines, data):
         """
         Parses Mplayer output to obtain ideal cropping parameters, and do
@@ -472,7 +451,6 @@ class EncodingJob:
         self.id_info = id_info
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _videothumb(self):
         """
         Generate a video thumbnail of the video
@@ -495,7 +473,6 @@ class EncodingJob:
         self._run(mplayer, arguments, self._videothumb_parse, None, 0, 'data.png')
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _videothumb_parse(self, lines, data):
         from util import vfs
         # chdir to tmp so we have write access
@@ -535,7 +512,6 @@ class EncodingJob:
 
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _cropdetect(self):
         """
         Detect cropping, contains pieces of QuickRip
@@ -574,7 +550,6 @@ class EncodingJob:
         self._run(mplayer, arguments, self._cropdetect_parse, None, 0, None)
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _cropdetect_parse(self, lines, data): #seek to remove data
         """
         Parses Mplayer output to obtain ideal cropping parameters, and do
@@ -709,7 +684,6 @@ class EncodingJob:
         self.finishedanalyze = True
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _GenerateCLMencoder(self):
         """Generate the command line(s) to be executed, using MEncoder for encoding"""
         #calculate the video bit rate
@@ -736,7 +710,6 @@ class EncodingJob:
             self.cls = [ videopass1, videopass2 ]
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _GCLMSource(self):
         """Returns source part of mencoder"""
         if self.titlenum:
@@ -749,7 +722,6 @@ class EncodingJob:
             return [ self.source ]
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _GCLMVideopass(self, passnr):
         """Returns video pass specific part of mencoder cl"""
         vf = copy(self.vfilters)
@@ -878,7 +850,6 @@ class EncodingJob:
         return args
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _CalcBPP(self, x, y):
         """Perform a BPP (Bits per Pixel calculation)"""
         bpp = (self.vbrate * 1000) / (x * y * self.fps)
@@ -886,7 +857,6 @@ class EncodingJob:
         return bpp
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _OptimalRes(self, x, y):
         """Using BPP calculations, try to find out the ideal resolution for this movie"""
         nonoptimal = True
@@ -908,7 +878,6 @@ class EncodingJob:
         return ( int(optx), int (opty) )
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _MencoderParse(self, line, data):
         """Parses mencoder stdout to get progress and them
         from Quickrip, adapted
@@ -923,7 +892,6 @@ class EncodingJob:
             #self.ui_updateProgress(perc, trem, passtype)
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _run(self, program, arguments, finalfunc=None, updatefunc=None, flushbuffer=0, data=None, lock=None):
         """
         Runs a program; supply program name (string) and arguments (list)
@@ -935,7 +903,6 @@ class EncodingJob:
         self.thread.start()
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _wait(self, timeout=10):
         """
         Wait for the thread to finish in time-out seconds.
@@ -956,7 +923,6 @@ class CommandThread(Thread):
 
     command executing class - Taken from Quickrip & adapted.
     """
-    #@benchmark(benchmarking & 0x8, benchmarkcall)
     def __init__(self, parent, command, updatefunc, finalfunc, flushbuffer, data, lock):
         _debug_('CommandThread.__init__(parent=%r, command=%r, updatefunc=%r, finalfunc=%r, flushbuffer=%r, data=%r, lock=%r)' % (parent, command, updatefunc, finalfunc, flushbuffer, data, lock))
         Thread.__init__(self)
@@ -970,7 +936,6 @@ class CommandThread(Thread):
         self.returncode = None
 
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         _debug_(' '.join(self.command))
         self.process = Popen(self.command, stdout=PIPE, stderr=PIPE, close_fds=True, universal_newlines=True)
@@ -995,7 +960,6 @@ class CommandThread(Thread):
         self.process = None
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def kill_process(self):
         """
         Kills current process
@@ -1010,7 +974,6 @@ class CommandThread(Thread):
 
 class EncodingQueue:
     """Class for generating an encoding queue"""
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def __init__(self):
         #we keep a list and a dict because a dict doesn't store an order
         self.qlist = []
@@ -1021,14 +984,12 @@ class EncodingQueue:
         self._removeTmp()
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def addEncodingJob(self, encjob):
         """Adds an encodingjob to the queue"""
         self.qlist += [encjob]
         self.qdict[encjob.idnr] = encjob
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def getProgress(self):
         """Gets progress on the current job"""
         if hasattr(self, 'currentjob'):
@@ -1037,7 +998,6 @@ class EncodingQueue:
         return 'No job currently running'
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def startQueue(self):
         """Start the queue"""
         if not self.running:
@@ -1046,7 +1006,6 @@ class EncodingQueue:
             self._runQueue()
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def listJobs(self):
         """Returns a list of queue'ed jobs"""
         if self.qdict == {}:
@@ -1058,7 +1017,6 @@ class EncodingQueue:
             return jlist
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _removeTmp(self):
         """Removes possible temporary files created during encoding"""
         tmpfiles = ['frameno.avi', 'divx2pass.log', 'xvid-twopass.stats', 'x264_2pass.log' ]
@@ -1068,7 +1026,6 @@ class EncodingQueue:
                 os.remove(tmpfile)
 
 
-    @benchmark(benchmarking & 0x8, benchmarkcall)
     def _runQueue(self, line='', data=''):
         """
         Executes the jobs in the queue; when running each job, registers itself
@@ -1151,8 +1108,6 @@ class EncodingQueue:
 
 
 if __name__ == '__main__':
-    benchmarking = 0xffff
-    benchmarkcall = 1
     command = None
     source = '/freevo/video/dvd/BRUCE_ALMIGHTY/'
     titlenum = 0

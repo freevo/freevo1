@@ -42,9 +42,6 @@ import os
 import util
 from kaa.metadata.image import EXIF as exif
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 osd = osd.get_singleton()
 
@@ -52,7 +49,6 @@ format_imagecache = util.objectcache.ObjectCache(30, desc='format_image')
 load_imagecache   = util.objectcache.ObjectCache(20, desc='load_image')
 
 
-@benchmark(benchmarking & 0x08, benchmarkcall)
 def pygamesurface_imlib2_scale(image, newsize):
 
     buf = pygame.image.tostring(image, 'RGBA')
@@ -64,7 +60,6 @@ def pygamesurface_imlib2_scale(image, newsize):
     return pygame.image.frombuffer(buf, newsize, 'RGBA')
 
 
-@benchmark(benchmarking & 0x08, benchmarkcall)
 def format_image(settings, item, width, height, force=0, anamorphic=0):
     _debug_('format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r)' % \
         (settings, item, width, height, force, anamorphic), 2)
@@ -221,7 +216,6 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     return cimage, width, height
 
 
-@benchmark(benchmarking & 0x08, benchmarkcall)
 def text_or_icon(settings, string, x, width, font):
     l = string.split('_')
     if len(l) != 4:

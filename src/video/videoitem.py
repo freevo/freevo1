@@ -54,9 +54,6 @@ from item  import Item, FileInformation
 from event import *
 from skin.widgets import ScrollableTextScreen
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 class VideoItem(Item):
     """
@@ -82,7 +79,6 @@ class VideoItem(Item):
     @ivar player_rating: rating of the current player.
     """
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def __init__(self, url, parent, info=None, parse=True):
         """
         Create an instance of a VideoItem
@@ -176,7 +172,6 @@ class VideoItem(Item):
             self['deinterlace'] = False
 
 
-    #@benchmark(benchmarking & 0x200, benchmarkcall)
     def __str__(self):
         """
         Create a string for a VideoItem instance.
@@ -186,7 +181,6 @@ class VideoItem(Item):
         return s
 
 
-    #@benchmark(benchmarking & 0x200, benchmarkcall)
     def __repr__(self):
         """
         Create a raw string for a VideoItem instance.
@@ -199,7 +193,6 @@ class VideoItem(Item):
         return s
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def set_url(self, url, info=True):
         """
         Sets a new url to the item. This functions also changes other
@@ -247,7 +240,6 @@ class VideoItem(Item):
         self.rating()
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def rating(self):
         """
         Calculate a new player rating for this item.
@@ -308,7 +300,6 @@ class VideoItem(Item):
         _debug_("rating: url=%r possible_players=%r" % (self.url, self.possible_players,), 2)
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def id(self):
         """
         This id should be the same when the item is rebuild later with the same
@@ -326,7 +317,6 @@ class VideoItem(Item):
         return ret
 
 
-    #@benchmark(benchmarking & 0x200, benchmarkcall)
     def __getitem__(self, key):
         """
         Get the item's attribute.
@@ -406,7 +396,6 @@ class VideoItem(Item):
         return Item.__getitem__(self, key)
 
 
-    #@benchmark(benchmarking & 0x200, benchmarkcall)
     def sort(self, mode=None):
         """
         Sort the video items.
@@ -425,7 +414,6 @@ class VideoItem(Item):
     # actions:
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def actions(self):
         """
         Menu actions for a video item.
@@ -495,7 +483,6 @@ class VideoItem(Item):
         return items
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def show_details(self, arg=None, menuw=None):
         """
         Show more details
@@ -503,7 +490,6 @@ class VideoItem(Item):
         ShowDetails(menuw, self)
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def show_variants(self, arg=None, menuw=None):
         """
         Show a list of variants in a menu
@@ -515,7 +501,6 @@ class VideoItem(Item):
         self.menuw.pushmenu(m)
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def create_thumbnail(self, arg=None, menuw=None):
         """
         Create a thumbnail as image icon
@@ -529,7 +514,6 @@ class VideoItem(Item):
         menuw.delete_submenu()
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def play_max_cache(self, arg=None, menuw=None):
         """
         Play and use maximum cache with mplayer
@@ -537,7 +521,6 @@ class VideoItem(Item):
         self.play(menuw=menuw, arg='-cache 65536')
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def set_next_available_subitem(self):
         """
         Select the next available subitem. Loops on each subitem and checks if
@@ -593,7 +576,6 @@ class VideoItem(Item):
         return not from_start
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def play(self, arg=None, menuw=None):
         """
         Play the item.
@@ -707,7 +689,6 @@ class VideoItem(Item):
                 AlertBox(text=error, handler=self.error_handler).show()
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def error_handler(self):
         """
         error handler if play doesn't work to send the end event and stop
@@ -717,7 +698,6 @@ class VideoItem(Item):
         self.stop()
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def stop(self, arg=None, menuw=None):
         """
         execute commands if defined
@@ -729,7 +709,6 @@ class VideoItem(Item):
             self.player.stop()
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def dvd_vcd_title_menu(self, arg=None, menuw=None):
         """
         Generate special menu for DVD/VCD/SVCD content
@@ -770,7 +749,6 @@ class VideoItem(Item):
         self.menuw.pushmenu(moviemenu)
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def settings(self, arg=None, menuw=None):
         """
         Create a menu with 'settings'
@@ -781,7 +759,6 @@ class VideoItem(Item):
         self.menuw.pushmenu(confmenu)
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         """
         Eventhandler for this item
@@ -846,7 +823,6 @@ class ShowDetails(ScrollableTextScreen):
     """
     Screen to show more details
     """
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def __init__(self, menuw, movie):
         if movie is None:
             name = _('No Information Available')
@@ -881,7 +857,6 @@ class ShowDetails(ScrollableTextScreen):
         self.show(menuw)
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def getattr(self, name):
         if name == 'title':
             return self.name
@@ -898,7 +873,6 @@ class ShowDetails(ScrollableTextScreen):
         return u''
 
 
-    @benchmark(benchmarking & 0x200, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         """
         eventhandler for the programm description display

@@ -45,11 +45,6 @@ import plugin
 import rc
 from event import *
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
-benchmarking = 0
-benchmarkcall = False
 
 # barstates
 BAR_NOTSET=0            # state not set
@@ -98,7 +93,6 @@ class PluginInterface(plugin.DaemonPlugin):
     """
     detached = False
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self):
         """initialise the DaemonPlugin interface"""
         _debug_('detachbar.PluginInterface.__init__()', 2)
@@ -114,7 +108,6 @@ class PluginInterface(plugin.DaemonPlugin):
         self.wait_timeout = 3  # 3 seconds till we hide the bar
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def _event_handler(self, event):
         _debug_('_event_handler(event=%s)' % (event,), 2)
         if plugin.isevent(event) == 'DETACH':
@@ -136,13 +129,11 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.update(BAR_WAIT)
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def _timer_handler(self):
         _debug_('_timer_handler()', 2)
         self.update()
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def update(self, state=None):
         """
         update the bar according to bar state
@@ -168,7 +159,6 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.update(BAR_HIDE)
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def show(self):
         """
         used when showing for the first time
@@ -179,7 +169,6 @@ class PluginInterface(plugin.DaemonPlugin):
             self.getinfo()
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def hide(self):
         """
         used when hiding the bar
@@ -191,7 +180,6 @@ class PluginInterface(plugin.DaemonPlugin):
         self.bar    = None
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def stop(self):
         """
         stops the player, waiting for timeout
@@ -201,7 +189,6 @@ class PluginInterface(plugin.DaemonPlugin):
         #self.time  = time.time()
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def draw(self, (type, object), osd):
         """
         draws the bar
@@ -270,7 +257,6 @@ class PluginInterface(plugin.DaemonPlugin):
         osd.write_text(progress, font, None, self.t_x, y, self.t_w, self.font_h, 'center', 'center')
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def getinfo(self):
         """
         sets an array of things to draw
@@ -300,7 +286,6 @@ class PluginInterface(plugin.DaemonPlugin):
             self.render += [ self.player.item.name ]
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def calculatesizes(self, osd, font):
         """
         sizecalcs is not necessery on every pass
@@ -353,7 +338,6 @@ class PluginInterface(plugin.DaemonPlugin):
             self.t_w = min(self.t_w, self.idlebar_max - self.x - 30)
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def formattime(self, seconds):
         """
         returns string formatted as mins:seconds

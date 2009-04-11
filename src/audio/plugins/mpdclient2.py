@@ -14,9 +14,6 @@ from time import sleep
 from threading import Thread, Event, Lock
 
 import config
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 # a line is either:
 #
@@ -410,7 +407,6 @@ class MPD_Ping_Thread(Thread):
         Thread.__init__(self, name="MPD_Ping_Thread")
 
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def join(self, timeout=None):
         _debug_('join(timeout=None)', 2)
         """
@@ -420,7 +416,6 @@ class MPD_Ping_Thread(Thread):
         Thread.join(self, timeout)
 
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         _debug_('run()', 2)
         while not self._stopevent.isSet():

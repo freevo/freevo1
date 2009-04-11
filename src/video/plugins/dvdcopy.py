@@ -39,9 +39,6 @@ import threading
 import time
 import os.path
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 drive_jobs = {}
 for media in config.REMOVABLE_MEDIA:
@@ -142,7 +139,6 @@ class DVDCopyJob:
         self.thread = threading.Thread(target=self.__copy)
         self.thread.start()
 
-    @benchmark(benchmarking & 0x2, benchmarkcall)
     def __copy(self):
         global drive_jobs
         args = [config.CONF.dvdbackup, '-i', self.source, '-o', config.DVDCOPY_DIR]

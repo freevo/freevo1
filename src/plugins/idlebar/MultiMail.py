@@ -38,9 +38,6 @@ import time
 
 from plugins.idlebar import IdleBarPlugin
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
 class MultiMail(IdleBarPlugin):
@@ -69,7 +66,6 @@ class MultiMail(IdleBarPlugin):
         self.bg_thread.start() # Run self._bg_function() in a separate thread
 
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def _bg_function(self):
         while 1:
             self.unread = self.checkmail()

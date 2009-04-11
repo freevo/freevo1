@@ -42,9 +42,6 @@ from event import *
 from util.audioscrobbler import Audioscrobbler, AudioscrobblerException
 import util.audioscrobbler
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
 #
@@ -74,7 +71,6 @@ class PluginInterface(plugin.DaemonPlugin):
         LASTFM_PASS = 'password'
     """
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __init__(self):
         """
         Set up the basics, register with Freevo and connect
@@ -113,7 +109,6 @@ class PluginInterface(plugin.DaemonPlugin):
             pass
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def shutdown(self):
         _debug_('shutdown()', 2)
         try:
@@ -124,7 +119,6 @@ class PluginInterface(plugin.DaemonPlugin):
             pass
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def config(self):
         _debug_('config()', 2)
         return [
@@ -134,7 +128,6 @@ class PluginInterface(plugin.DaemonPlugin):
         ]
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def poll(self):
         """
         Run this code every self.poll_interval seconds
@@ -144,7 +137,6 @@ class PluginInterface(plugin.DaemonPlugin):
             self.draw(('player', self.playitem), None)
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def draw(self, (ttype, object), osd):
         """
         'draw' is called about once a second when playing audio
@@ -161,7 +153,6 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.submit_song(player)
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def eventhandler(self, event, menuw=None):
         """
         Get events from Freevo
@@ -187,7 +178,6 @@ class PluginInterface(plugin.DaemonPlugin):
         return 0
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def submit_song(self, player):
         artist    = player.getattr('artist')
         track     = player.getattr('title') or player.getattr('name')

@@ -53,9 +53,6 @@ import HTMLParser
 
 import config
 import util
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 import kaa.metadata as mmpython
 #Constants
@@ -85,7 +82,6 @@ txheaders = {
 class FxdImdb:
     """Class for creating fxd files and fetching imdb information"""
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def __init__(self):
         """Initialise class instance"""
 
@@ -126,7 +122,6 @@ class FxdImdb:
         self.image_url_handler['www.impawards.com'] = self.impawards
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def guessImdb(self, filename, label=False):
         """Guess possible imdb movies from file name. Same return as searchImdb"""
         _debug_('guessImdb(filename=%r, label=%r)' % (filename, label))
@@ -190,7 +185,6 @@ class FxdImdb:
         return self.searchImdb(name, season, episode)
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def searchImdb(self, name, season=None, episode=None):
         """
         Search IMDB for the name
@@ -263,7 +257,6 @@ class FxdImdb:
         return self.id_list
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def getIMDBid(self, id, season=None, episode=None):
         """id (number)
         Set an imdb_id number for object, and fetch data"""
@@ -312,7 +305,6 @@ class FxdImdb:
         return episodeid
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def parse_data(self, results, id, episodeid, season, episode):
         """results (imdb html page), imdb_id
         Returns tuple of (title, info(dict), image_urls)"""
@@ -452,7 +444,6 @@ class FxdImdb:
         return (self.title, self.info, self.image_urls)
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def setFxdFile(self, fxdfilename=None, overwrite=False):
         """
         fxdfilename (string, full path)
@@ -489,7 +480,6 @@ class FxdImdb:
                 os.makedirs(vfs.dirname(self.fxdfile))
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def setVideo(self, *videos, **mplayer_opt):
         """
         videos (tuple (type, id-ref, device, mplayer-opts, file/param) (multiple allowed),
@@ -506,7 +496,6 @@ class FxdImdb:
         if mplayer_opt and 'mplayer_opt' in mpl_global_opt:
             self.mpl_global_opt = mplayer_opt['mplayer_opt']
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def setVariants(self, *parts, **mplayer_opt):
         """
         variants/parts (tuple (name, ref, mpl_opts, sub, s_dev, audio, a_dev)),
@@ -523,7 +512,6 @@ class FxdImdb:
             self.variant += [ part ]
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def writeFxd(self):
         """Write fxd file"""
         #if fxdfile is empty, set it yourself
@@ -556,7 +544,6 @@ class FxdImdb:
             raise FxdImdb_IO_Error('error saving the file: %s' % str(error))
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def setDiscset(self, device, regexp, *file_opts, **mpl_global_opt):
         """
         device (string), regexp (string), file_opts (tuple (mplayer-opts,file)),
@@ -581,7 +568,6 @@ class FxdImdb:
             self.mpl_global_opt = (mpl_global_opt['mplayer_opt'])
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def isDiscset(self):
         """Check if fxd file describes a disc-set, returns 1 for true, 0 for false
         None for invalid file"""
@@ -600,7 +586,6 @@ class FxdImdb:
 
 #------ private functions below .....
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def convert_entities(self, contents):
         s = contents.strip()
         s = s.replace('\n',' ')
@@ -612,7 +597,6 @@ class FxdImdb:
         s = s.replace('"','&quot;')
         return s
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def write_discset(self):
         """Write a <disc-set> to a fresh file"""
 
@@ -659,7 +643,6 @@ class FxdImdb:
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def write_movie(self):
         """Write <movie> to fxd file"""
 
@@ -705,7 +688,6 @@ class FxdImdb:
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def update_movie(self):
         """Updates an existing file, adds extra dvd|vcd|file and variant tags"""
         passedvid = False
@@ -756,7 +738,6 @@ class FxdImdb:
 
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def update_discset(self):
         """Updates an existing file, adds extra disc in discset"""
 
@@ -805,7 +786,6 @@ class FxdImdb:
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def parsesearchdata(self, results, url=None, id=0):
         """
         results (imdb html page), imdb_id
@@ -852,7 +832,6 @@ class FxdImdb:
         return self.id_list
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def find_episode(self, results, id, season, episode):
         """results (imdb html page)
         Returns a new id for getIMDBid with TV series episode data
@@ -876,7 +855,6 @@ class FxdImdb:
         return id
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def impawardsimages(self, title, year):
         """Generate URLs to the impawards movie posters and add them to the
         global image_urls array."""
@@ -933,7 +911,6 @@ class FxdImdb:
                 pass
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def impawards(self, host, path):
         """parser for posters from www.impawards.com. TODO: check for licences
         of each poster and add all posters"""
@@ -942,7 +919,6 @@ class FxdImdb:
         return [ 'http://%s%s' % (host, path) ]
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def fetch_image(self):
         """Fetch the best image"""
         _debug_('fetch_image=%s' % (self.image_urls))
@@ -994,7 +970,6 @@ class FxdImdb:
         print "use of this image"
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def str2XML(self, line):
         """return a valid XML string"""
         try:
@@ -1024,7 +999,6 @@ class FxdImdb:
             return Unicode(line)
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def getmedia_id(self, drive):
         """drive (device string)
         return a unique identifier for the disc"""
@@ -1035,7 +1009,6 @@ class FxdImdb:
         return id
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def print_info(self):
         """return info part for FXD writing"""
         ret = u''
@@ -1047,7 +1020,6 @@ class FxdImdb:
         return ret
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def print_video(self):
         """return info part for FXD writing"""
         ret = ''
@@ -1063,7 +1035,6 @@ class FxdImdb:
         return ret
 
 
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def print_variant(self):
         """return info part for FXD writing"""
         ret = ''
@@ -1097,10 +1068,8 @@ class FxdImdb:
 
 class Error(Exception):
     """Base class for exceptions in Imdb_Fxd"""
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def __str__(self):
         return self.message
-    @benchmark(benchmarking & 0x40, benchmarkcall)
     def __init__(self, message):
         self.message = message
 
@@ -1122,7 +1091,6 @@ class FxdImdb_Net_Error(Error):
 
 #------- Helper functions for creating tuples - these functions are classless
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def makeVideo(type, id_ref, file, **values):
     """Create a video tuple"""
     device = mplayer_opt = None
@@ -1142,7 +1110,6 @@ def makeVideo(type, id_ref, file, **values):
     t = type, id_ref, device, mplayer_opt, file
     return t
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def makePart(name, id_ref, **values):
     """Create a part tuple"""
     mplayer_opt = sub = s_dev = audio = a_dev = None
@@ -1161,7 +1128,6 @@ def makePart(name, id_ref, **values):
     t = name, id_ref, mplayer_opt, sub, s_dev, audio, a_dev
     return t
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def makeFile_opt(mplayer_opt, file):
     """Create a file_opt tuple"""
     if mplayer_opt == None or file == None:
@@ -1173,7 +1139,6 @@ def makeFile_opt(mplayer_opt, file):
 
 #--------- classless private functions
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def relative_path(filename):
     """return the relative path to a mount point for a file on a removable disc"""
     from os.path import isabs, ismount, split, join
@@ -1198,6 +1163,5 @@ def relative_path(filename):
     return filename
 
 
-@benchmark(benchmarking & 0x40, benchmarkcall)
 def point_maker(matching):
     return '%s.%s' % (matching.groups()[0], matching.groups()[1])

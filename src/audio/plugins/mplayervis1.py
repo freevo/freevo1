@@ -56,9 +56,6 @@ import plugin, config, rc, skin, osd
 from event import *
 from animation import render, BaseAnimation
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 if config.DEBUG_DEBUGGER:
     import pdb, pprint, traceback
@@ -75,7 +72,6 @@ class MpvGoom(BaseAnimation):
     message    = None
     coversurf  = None
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self, x, y, width, height, title='', coverfile=None):
         """
         Initialise the MPlayer Visualization Goom
@@ -115,7 +111,6 @@ class MpvGoom(BaseAnimation):
         self.last_time = 0
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def set_cover(self, coverfile):
         """
         Set a blend image to toggle between visual and cover
@@ -125,21 +120,18 @@ class MpvGoom(BaseAnimation):
         self.coverfile = coverfile
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def set_visual(self, visual):
         """ pass the visualisation effect to goom """
         _debug_('set_visual(visual=%r)' % (visual,), 1)
         self.goom.fxmode = visual
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def set_message(self, message):
         """ pass the song message to goom """
         _debug_('set_message(message=%r)' % (message,), 1)
         self.goom.message = message
 
 
-    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def set_alpha(self, high, low):
         """ Get the alpha level for a count """
         _debug_('set_alpha(high=%r low=%r)' % (high, low,), 2)
@@ -149,7 +141,6 @@ class MpvGoom(BaseAnimation):
         return alpha
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def set_resolution(self, x, y, width, height, clear=False):
         """ Set the resolution of the goom window """
         _debug_('set_resolution(x=%r, y=%r, width=%r, height=%r, clear=%r)' % (x, y, width, height, clear), 1)
@@ -193,7 +184,6 @@ class MpvGoom(BaseAnimation):
             self.c_timer   = time.time()
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def set_fullscreen(self):
         """ Set the mode to full screen """
         _debug_('set_fullscreen()', 1)
@@ -221,7 +211,6 @@ class MpvGoom(BaseAnimation):
             self.set_resolution(x, y, w, h)
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def set_info(self, info, timeout=5):
         """
         Pass a info message on to the screen.
@@ -246,7 +235,6 @@ class MpvGoom(BaseAnimation):
         self.info      = (s, x, y, w, h)
 
 
-    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def init_state(self):
         if self.counter > 0:
             # Initial fade out is twice as fast as normal
@@ -259,7 +247,6 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_in_wait']
 
 
-    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def fade_in_wait_state(self):
         if self.counter > 0:
             self.counter -= self.fade_step
@@ -270,7 +257,6 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_in']
 
 
-    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def fade_in_state(self):
         if self.counter > 0:
             self.counter -= self.fade_step
@@ -282,7 +268,6 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_out_wait']
 
 
-    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def fade_out_wait_state(self):
         if self.counter > 0:
             self.counter -= self.fade_step
@@ -293,7 +278,6 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_out']
 
 
-    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def fade_out_state(self):
         if self.counter > 0:
             self.counter -= self.fade_step
@@ -305,7 +289,6 @@ class MpvGoom(BaseAnimation):
             self.state = self.fade_machine['fade_in_wait']
 
 
-    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def timerhandler(self):
         """
         The timer handler
@@ -360,7 +343,6 @@ class MpvGoom(BaseAnimation):
         return True
 
 
-    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def poll(self, current_time):
         """
         override to get extra performance
@@ -413,7 +395,6 @@ class PluginInterface(plugin.Plugin):
     passed_event = False
     detached = False
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def __init__(self):
         """ Initialist the PluginInterface """
         _debug_('PluginInterface.__init__()', 1)
@@ -450,7 +431,6 @@ class PluginInterface(plugin.Plugin):
         self.initialised = False
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def config(self):
         """
         """
@@ -470,7 +450,6 @@ class PluginInterface(plugin.Plugin):
         ]
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def toggle_view(self):
         """
         Toggle between view modes
@@ -486,7 +465,6 @@ class PluginInterface(plugin.Plugin):
             self.view_func[self.view]()
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def eventhandler(self, event=None, arg=None):
         """
         eventhandler to simulate hide/show of mpav
@@ -555,7 +533,6 @@ class PluginInterface(plugin.Plugin):
         return False
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def item_info(self, fmt=None):
         """
         Returns info about the current playing song
@@ -597,7 +574,6 @@ class PluginInterface(plugin.Plugin):
         return result
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def dock(self):
         _debug_('dock()', 1)
         self.visual.mode = DOCK
@@ -628,7 +604,6 @@ class PluginInterface(plugin.Plugin):
         self.visual.set_resolution(x, y, w, h, False)
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def fullscreen(self):
         _debug_('fullscreen()', 1)
         self.visual.mode = FULL
@@ -642,7 +617,6 @@ class PluginInterface(plugin.Plugin):
         rc.app(self)
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def noview(self):
         _debug_('noview()', 1)
 
@@ -658,7 +632,6 @@ class PluginInterface(plugin.Plugin):
             self.player.playerGUI.show()
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def start_visual(self):
         _debug_('start_visual()', 1)
         if self.view == NOVI:
@@ -682,14 +655,12 @@ class PluginInterface(plugin.Plugin):
             self.visual.start()
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def pause_visual(self):
         _debug_('pause_visual()', 1)
         if self.visual:
             self.visual.running = False
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def stop_visual(self):
         _debug_('stop_visual()', 1)
         if self.visual:
@@ -699,7 +670,6 @@ class PluginInterface(plugin.Plugin):
             self.goom = None
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def play(self, command, player):
         """
         Play the track
@@ -715,14 +685,12 @@ class PluginInterface(plugin.Plugin):
         return command + [ '-af', 'export=%s' % mmap_file ]
 
 
-    @benchmark(benchmarking & 0x100, benchmarkcall)
     def stop(self):
         _debug_('stop()', 1)
         if self.visual:
             self.visual.running = False
 
 
-    #@benchmark(benchmarking & 0x100, benchmarkcall)
     def stdout(self, line):
         """
         get information from mplayer stdout

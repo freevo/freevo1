@@ -36,9 +36,6 @@ import kaa.metadata as mmpython
 from copy import copy
 from string import split, join
 
-from benchmark import benchmark
-benchmarking = config.DEBUG_BENCHMARKING
-benchmarkcall = config.DEBUG_BENCHMARKCALL
 
 
 class CommDetectJob:
@@ -171,7 +168,6 @@ class CommandThread(threading.Thread):
         self.finalfunc = finalfunc
         _debug_('command=\"%s\"' % command)
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         self.pipe = popen2.Popen4(self.command)
         pid = self.pipe.pid

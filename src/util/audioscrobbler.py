@@ -36,9 +36,6 @@ import hashlib
 import urllib
 from threading import Thread, RLock
 
-from benchmark import benchmark
-benchmarking = 0
-benchmarkcall = False
 
 DEBUG = False
 DEBUG = True
@@ -46,12 +43,10 @@ DEBUG = True
 
 class AudioscrobblerException(Exception):
     """ AudioscrobblerException class """
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __init__(self, why, url=None):
         self.why = why
         self.url = url
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __str__(self):
         if self.url:
             return repr(self.url+': '+self.why)
@@ -64,7 +59,6 @@ class AudioscrobblerWorker(Thread):
     """
     Audioscrobbler Realtime Submission Protocol worker class
     """
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __init__(self, user, password, cachefilename):
         """
         Initialise an instance of AudioscrobblerWorker
@@ -100,7 +94,6 @@ class AudioscrobblerWorker(Thread):
             self._login()
 
 
-    @benchmark(benchmarking & 0x1, benchmarkcall)
     def run(self):
         """
         Execute the Audioscrobbler action
@@ -117,7 +110,6 @@ class AudioscrobblerWorker(Thread):
             print 'AudioscrobblerException: %s' % (why,)
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def _urlopen(self, url, data=None, lines=True):
         """
         Wrapper to see what is sent and received
@@ -162,7 +154,6 @@ class AudioscrobblerWorker(Thread):
             return reply
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def _login(self):
         """
         Login to audioscrobbler.com, this is called when needed.
@@ -193,7 +184,6 @@ class AudioscrobblerWorker(Thread):
         fd.close()
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def nowplaying(self, artist, track, album, secs, tracknumber, mbtrackid):
         """
         Send what is now playing to audioscrobbler.com
@@ -265,7 +255,6 @@ class AudioscrobblerWorker(Thread):
         return data
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def submit(self, artist, track, starttime, source, rating, secs, album, tracknumber, mbtrackid):
         """
         Submit one or more tracks to Audioscrobbler Realtime.
@@ -312,7 +301,6 @@ class Audioscrobbler(object):
     nowplayingurl = None
     submissionurl = None
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def __init__(self, username, password, cachefilename):
         """
         Initialise an instance of Audioscrobbler
@@ -329,7 +317,6 @@ class Audioscrobbler(object):
         self.cachefilename = cachefilename
 
 
-    @benchmark(benchmarking & 0x4, benchmarkcall)
     def nowplaying(self, artist, track, album=None, secs=None, tracknumber=None, mbtrackid=None):
         """
         Send what is now playing to audioscrobbler.com
