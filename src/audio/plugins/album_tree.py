@@ -191,11 +191,17 @@ class PluginInterface(plugin.MainMenuPlugin):
         self.show_item.type = 'audio'
         plugin.register(self, 'audio.album_tree')
 
-        if (not config.__dict__.has_key('AUDIO_ALBUM_TREE_SPEC') ) or  (not config.AUDIO_ALBUM_TREE_SPEC):
-            print '*ALBUM_TREE:"config.AUDIO_ALBUM_TREE_SPEC" is empty:DEMO-MODE:USING PREDEFINED TREES'
+        if not config.AUDIO_ALBUM_TREE_SPEC:
+            _debug_('AUDIO_ALBUM_TREE_SPEC is empty; demo-mode, using predefined trees', DWARNING)
             self.load_demo()
         else:
             self.load_spec(config.AUDIO_ALBUM_TREE_SPEC)
+
+
+    def config(self):
+        return [
+            ('AUDIO_ALBUM_TREE_SPEC', [], 'Specification for the album tree queries'),
+        ]
 
 
     def shutdown(self):
