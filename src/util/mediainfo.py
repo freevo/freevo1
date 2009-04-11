@@ -456,8 +456,6 @@ class Info:
         get the value of 'key'
         """
         result = ''
-        if key == 'year':
-            key = 'userdate'
         for var in self.dicts:
             if var and var.has_key(key):
                 val = var[key]
