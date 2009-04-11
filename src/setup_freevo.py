@@ -75,6 +75,7 @@ EXTERNAL_PROGRAMS = (
     ("vlc", "vlc", 0),
     ("dvdbackup", "dvdbackup", 0),
     ("unzip", "unzip", 0),
+    ("livepause","livepause",0)
 )
 
 # Help text
