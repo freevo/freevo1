@@ -66,7 +66,8 @@ def pygamesurface_imlib2_scale(image, newsize):
 
 @benchmark(benchmarking & 0x08, benchmarkcall)
 def format_image(settings, item, width, height, force=0, anamorphic=0):
-    #print 'format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r)' % (settings, item, width, height, force, anamorphic)
+    _debug_('format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r)' % \
+        (settings, item, width, height, force, anamorphic), 2)
 
     try:
         type = item.display_type
@@ -79,7 +80,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
         type = ''
 
 
-    item_image=Unicode(item.image)
+    item_image = Unicode(item.image)
 
     cname = '%s-%s-%s-%s-%s-%s-%s' % (settings.icon_dir, item_image, type, item.type, width, height, force)
 
@@ -104,15 +105,25 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
             if not os.path.exists(item.image):
                 return None, 0, 0
 
+        for folder in ('.thumbs', '.images'):
+            image_parts = os.path.split(item.image)
+            imagefile = os.path.join(image_parts[0], folder, image_parts[1])
+            if os.path.exists(imagefile):
+                break
+            else:
+                imagefile = item.image
+        print 'thumb://%s' % (item.image,)
         image = load_imagecache['thumb://%s' % item.image]
         if not image:
-            image = osd.loadbitmap(item.image)
+            image = osd.loadbitmap(imagefile)
             load_imagecache['thumb://%s' % item.image] = image
 
+        # DJW need to skip this code if the image is from .thumbs or .images as
+        # the image has already been rotated in the cache.
         if not item['rotation']:
             try:
-                f=open(item.image, 'rb')
-                tags=exif.process_file(f)
+                f = open(imagefile, 'rb')
+                tags = exif.process_file(f)
                 f.close()
                 if tags.has_key('Image Orientation'):
                     orientation = tags['Image Orientation']
