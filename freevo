@@ -72,7 +72,21 @@ After that, you can run freevo without parameter.
 action:
   setup          run freevo setup to scan your environment
   prompt         start python with the freevo environment
-  runapp         run an application"""
+  runapp         run an application
+
+notes:
+  The --debug option can be specified a number of times and debugging level
+  will be incremented each time. For example freevo --debug --debug will set
+  the debugging level to 2
+
+  The --trace option requires a module name and can be specified a number of
+  times for each module that is listed tracing will be activated for the
+  module. It is also possible to trace an entire package. For example freevo
+  --trace=tv/ will trace all modules in the tv package.
+
+  Options to helpers can be explicitly passed to the helper with the -- option.
+  For example to see the help for the cache helper you can use:
+  freevo cache -- --help"""
 
 help_description = ""
 
@@ -519,7 +533,7 @@ _debug_('%s=%r' % ('HOME', os.environ['HOME']))
 # now check what and how we should start freevo
 daemon = 0 # start in background
 proc   = [ os.path.abspath(os.path.join(freevo_python, 'main.py')) ]
-proc_args = opt_debug + opt_trace + opt_daemon 
+proc_args = opt_debug + opt_trace + opt_daemon
 name   = os.path.splitext(os.path.basename(os.path.abspath(sys.argv[0])))[0]
 check  = 1 # check running instance
 
@@ -557,7 +571,7 @@ elif name == FREEVO:
         # the helpers directory
         name = arg
         proc = [ os.path.join(freevo_python, 'helpers', name + '.py') ]
-        
+
         if opts.daemon:
             daemon = 1
         elif opts.stop:
@@ -587,12 +601,12 @@ elif name == FREEVO:
                 sys.exit('freevo not running')
             sys.exit(0)
         else:
-            proc += opt_debug + opt_trace + opt_daemon 
+            proc += opt_debug + opt_trace + opt_daemon
 
 else:
     # arg for freevo
-    #proc += args + opt_debug + opt_trace + opt_daemon 
-    proc += opt_debug + opt_trace + opt_daemon 
+    #proc += args + opt_debug + opt_trace + opt_daemon
+    proc += opt_debug + opt_trace + opt_daemon
 
 if name == FREEVO:
     proc += proc_args
