@@ -36,7 +36,7 @@ import config
 
 # The file format version number. It must be updated when incompatible
 # changes are made to the file format.
-EPG_VERSION = 6
+EPG_VERSION = 7
 
 class TvProgram:
     """
@@ -222,6 +222,7 @@ class TvGuide:
         # These two types map to the same channel objects
         self.chan_dict = {}   # Channels mapped using the id
         self.chan_list = []   # Channels, ordered
+        self.categories = []
         self.EPG_VERSION = EPG_VERSION
 
 
@@ -240,6 +241,10 @@ class TvGuide:
         _debug_('add_program(program=%r)' % (program,), 2)
         if program.channel_id not in self.chan_dict:
             return
+        for category in program.categories:
+            if category not in self.categories:
+                self.categories.append(category)
+
         programs = self.chan_dict[program.channel_id].programs
         if len(programs) > 0:
             if programs[-1].start < program.stop and programs[-1].stop > program.start:
@@ -255,7 +260,7 @@ class TvGuide:
         self.chan_dict[program.channel_id].programs += [program]
 
 
-    def get_programs(self, start=0, stop=2147483647, channel_id=None):
+    def get_programs(self, start=0, stop=2147483647, channel_id=None, category=None):
         """
         Get all programs that occur at least partially between the start and stop
         timeframe.
@@ -263,18 +268,21 @@ class TvGuide:
         @param start: is 0, get all programs from the start.
         @param stop: is 2147483647, get all programs until the end.
         @param channel_id: can be used to select a channel id, all channels are returned otherwise.
+        @param category: can be used to select only programs in the specified category
         @returns: a list of TV channels
         """
         _debug_('get_programs(start=%r, stop=%r, channel_id=%r)' % (time.strftime('%H:%M', time.localtime(start)),
             time.strftime('%H:%M', time.localtime(stop)), channel_id), 2)
 
         global channel_cache
-        channels = channel_cache.cached(start, stop, channel_id)
-        if channels is not None:
-            _debug_('cached channels=%r' % (channels,), 2)
-            return channels
+        if category is None:
+            channels = channel_cache.cached(start, stop, channel_id)
+            if channels is not None:
+                _debug_('cached channels=%r' % (channels,), 2)
+                return channels
 
-        channel_cache.reset(start, stop, channel_id)
+            channel_cache.reset(start, stop, channel_id)
+
         channels = []
         for chan in self.chan_list:
             if channel_id and chan.id != channel_id:
@@ -284,11 +292,15 @@ class TvGuide:
             # Copy the programs that are inside the indicated time bracket
             c.set_logo(chan.logo)
             c.set_times(chan.times)
-            f = lambda p, a=start, b=stop: not (p.start > b or p.stop < a)
+            if category is None:
+                f = lambda p, a=start, b=stop: not (p.start > b or p.stop < a)
+            else:
+                f = lambda p, a=start, b=stop, c=category: not (p.start > b or p.stop < a) and (c in p.categories)
             c.set_programs(filter(f, chan.programs))
 
             channels.append(c)
-            channel_cache.add(chan.id, c)
+            if category is None:
+                channel_cache.add(chan.id, c)
 
         _debug_('channels=%r' % (channels,), 2)
         return channels
