@@ -123,7 +123,6 @@ from item import Item
 from event import *
 from plugins.shutdown import shutdown
 
-
 # Create the OSD object
 osd = osd.get_singleton()
 
@@ -317,16 +316,18 @@ class MainTread:
                     if config.FREEVO_EVENTHANDLER_SANDBOX:
                         traceback.print_exc()
                         from gui import ConfirmBox
-                        pop = ConfirmBox(text=_('Event \'%s\' crashed\n\nPlease take a ' \
-                                                'look at the logfile and report the bug to ' \
-                                                'the Freevo mailing list. The state of '\
-                                                'Freevo may be corrupt now and this error '\
-                                                'could cause more errors until you restart '\
-                                                'Freevo.\n\nLogfile: %s\n\n') % \
-                                         (event, sys.stdout.logfile),
-                                         width=osd.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)-50,
-                                         handler=shutdown,
-                                         handler_message = _('shutting down...'))
+                        pop = ConfirmBox(
+                            text=_("Event '%s' crashed\n\n" +
+                                "Please take a look at the logfile and report" +
+                                "the bug to the Freevo mailing list. The state" +
+                                "of Freevo may be corrupt now and this error" +
+                                "could cause more errors until you restart" +
+                                "Freevo.\n\n" +
+                                "Logfile: %s\n\n") %
+                            (event, sys.stdout.logfile),
+                            width=osd.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)-50,
+                            handler=shutdown,
+                            handler_message = _('shutting down...'))
                         pop.b0.set_text(_('Shutdown'))
                         pop.b0.toggle_selected()
                         pop.b1.set_text(_('Continue'))
@@ -366,13 +367,15 @@ def tracefunc(frame, event, arg, _indent=[0]):
     function to trace and time everything inside freevo for debugging
     """
     # ignore non-freevo and non-kaa calls
-    print opts.trace
-    if frame.f_code.co_filename.find('/freevo/') == -1 and frame.f_code.co_filename.find('/kaa/') == -1:
-        return tracefunc
-    if frame.f_code.co_filename.find('/rc.py') != -1:
-        return tracefunc
-    if frame.f_code.co_filename.find('/osd.py') != -1:
-        return tracefunc
+    if opts.trace not in ('all', 'sys'):
+        for module in opts.trace:
+            if frame.f_code.co_filename.find(module) >= 0:
+                break
+        else:
+            return tracefunc
+    elif opts.trace == 'all':
+        if frame.f_code.co_filename.find('/freevo/') == -1 and frame.f_code.co_filename.find('/kaa/') == -1:
+            return tracefunc
     # ignore debugging calls
     if frame.f_code.co_name == '_debug_function_':
         return tracefunc
@@ -426,12 +429,12 @@ def parse_options(defaults, version):
     #    help='set the level of verbosity [default:%default]')
     parser.add_option('-d', '--debug', action='count', dest='debug', default=0,
         help='set the level of debuging')
-    parser.add_option('-t', '--trace', action='append', default=None,
+    parser.add_option('--trace', action='append', default=[],
         help='activate tracing of one or more modules (useful for debugging)')
+    parser.add_option('--daemon', action='store_true', default=False,
+        help='run freevo or a helper as a daemon [default:%default]')
     parser.add_option('-f', '--force-fs', action='store_true', default=False,
         help='force X11 to start full-screen [default:%default]')
-    parser.add_option('-t', '--trace', action='store_true', default=False,
-        help='enable function tracing; debug level 2 [default:%default]')
     parser.add_option('--doc', action='store_true', default=False,
         help='generate API documentation [default:%default]')
     return parser.parse_args()
@@ -468,11 +471,14 @@ if opts.force_fs:
         os.system('xsetroot -cursor %s' % config.OSD_X11_CURSORS)
     config.START_FULLSCREEN_X = 1
 
+if opts.debug:
+    config.DEBUG = opts.debug
+
 if opts.trace:
     # activate a trace function
+    global trace_pat
     tracefd = open(os.path.join(config.FREEVO_LOGDIR, 'trace.txt'), 'w')
     sys.settrace(tracefunc)
-    config.DEBUG = 2
 
 if opts.doc:
     # create api doc for Freevo and move it to Docs/api

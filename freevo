@@ -128,7 +128,6 @@ class MyOptionParser(OptionParser):
                 else:
                     return                  # stop now, leave this arg in rargs
             except BadOptionError:
-                #print 'arg', arg, rargs
                 if arg.find('=') != -1:
                     # remove the duplicated argument for a long_opt
                     del rargs[0]
@@ -136,7 +135,7 @@ class MyOptionParser(OptionParser):
 
 
 def _debug_(message, level=1):
-    if defaults['dry_run'] or defaults['debug'] >= level:
+    if defaults['debug'] >= level:
         print message
 
 
@@ -214,11 +213,11 @@ def get_python(check_freevo):
     return None
 
 
-def getpid(name, arg):
+def getpid(name, args):
     """
     get pid of running 'name'
     """
-    _debug_('getpid(name=%r, arg=%r)' % (name, arg))
+    _debug_('getpid(name=%r, args=%r)' % (name, args))
     for fname in ('/var/run/' + name  + '-%s.pid' % os.getuid(),
                   '/tmp/' + name + '-%s.pid' % os.getuid()):
         if os.path.isfile(fname):
@@ -227,7 +226,7 @@ def getpid(name, arg):
                 pid = int(f.readline()[:-1])
             except ValueError:
                 # file does not contain a number
-                _debug_('fname=%r pid=%r' % (fname, 0))
+                _debug_('1:fname=%r pid=%r' % (fname, 0))
                 return fname, 0
             f.close()
 
@@ -240,31 +239,22 @@ def getpid(name, arg):
                     f.close()
                 else:
                     # process not running
-                    _debug_('fname=%r pid=%r' % (fname, 0))
+                    _debug_('2:fname=%r pid=%r' % (fname, 0))
                     return fname, 0
 
             except (OSError, IOError):
                 # running, but not freevo (because not mine)
-                _debug_('fname=%r pid=%r' % (fname, 0))
+                _debug_('3:fname=%r pid=%r' % (fname, 0))
                 return fname, 0
 
-            if '-OO' in proc_arg:
-                proc_arg.remove('-OO')
-
-            if proc_arg and ((arg[0].find('runapp') == -1 and \
-                len(proc_arg)>2 and arg[1] != proc_arg[1]) or \
-                len(proc_arg)>3 and arg[2] != proc_arg[2]):
-                # different proc I guess
-                _debug_('proc_arg=%r' % (proc_arg,))
-                try:
-                    os.unlink(fname)
-                except OSError:
-                    pass
-                _debug_('fname=%r pid=%r' % (fname, 0))
-                return fname, 0
-            _debug_('fname=%r pid=%r' % (fname, pid))
+            # This requires the same paths
+            for arg in args:
+                if arg not in proc_arg:
+                    _debug_('4:fname=%r pid=%r arg=%r' % (fname, 0, arg))
+                    return fname, 0
+            _debug_('5:fname=%r pid=%r' % (fname, pid))
             return fname, pid
-    _debug_('fname=%r pid=%r' % (fname, 0))
+    _debug_('6:fname=%r pid=%r' % (fname, 0))
     return fname, 0
 
 
@@ -273,8 +263,6 @@ def stop(name, arg):
     stop running process 'name'
     """
     _debug_('stop(name=%r, arg=%r)' % (name, arg))
-    #if opts.dry_run:
-    #    return 1
     fname, pid = getpid(name, arg)
     if not pid:
         _debug_('cannot kill %r no pid' % (name))
@@ -288,9 +276,9 @@ def stop(name, arg):
             os.kill(pid, signal)
             for i in range(12):
                 if getpid(name, arg)[1] == 0:
-                    _debug_('killed %r pid=%r with signal=%r (%r)' % (name, pid, signal, i))
+                    _debug_('killed %r pid=%r with signal=%r' % (name, pid, signal))
                     break
-                time.sleep(0.1)
+                time.sleep(0.2)
         except OSError, e:
             _debug_('kill(pid=%r signal=%r): %s' % (pid, signal, e))
             pass
@@ -298,8 +286,8 @@ def stop(name, arg):
             try:
                 os.unlink(fname)
                 _debug_('%s removed' % (fname))
-            except OSError, e:
-                _debug_('%s NOT removed' % (fname))
+            except OSError, why:
+                _debug_('%s NOT removed: %s' % (fname, why))
             return 1
     return 0
 
@@ -346,10 +334,10 @@ def start(name, arg, daemon, store=1):
                 if store and os.path.isfile(f.name):
                     os.unlink(f.name)
     else:
-        if opts.debug:
-            _debug_('os.execvp(', arg[0], arg, ')')
+        _debug_('os.execvp(%r, %r)' % (arg[0], arg))
         if opts.dry_run:
             return
+        _debug_('arg=%r' % (arg,))
         os.execvp(arg[0], arg)
 
 
@@ -368,9 +356,9 @@ def parse_options(defaults, versions):
     #parser.add_option('-v', '--verbose', action='count', dest='verbosity', default=0,
     #    help='set the level of verbosity')
     parser.add_option('-d', '--debug', action='count', dest='debug', default=0,
-        help='set the level of debuging')
-    parser.add_option('-t', '--trace', action='count', default=0,
-        help='activate full trace (useful for debugging)')
+        help='set the level of debugging')
+    parser.add_option('-t', '--trace', action='append', default=[],
+        help='activate tracing of one or more modules (useful for debugging)')
     parser.add_option('--dry-run', action='store_true', default=False,
         help='do not run the module, print the actions')
     parser.add_option('-f', '--fullscreen', action='store_true', default=False,
@@ -479,12 +467,20 @@ execfile(freevo_revision, {}, versions)
 (opts, args) = parse_options(defaults, versions)
 defaults.update(opts.__dict__)
 
-_debug_('opts:%r' % (opts.__dict__,))
-_debug_('args:%r' % (args,))
+_debug_('opts=%r' % (opts.__dict__,))
+_debug_('args=%r' % (args,))
 
-opt_trace = [ '--trace' ] * opts.trace
 opt_debug = [ '--debug' ] * opts.debug
+opt_trace = [ '--trace=/'+x for x in opts.trace ]
+opt_daemon = opts.daemon and [ '--daemon' ] or []
 opt_server_layout = opts.server_layout and [ opts.server_layout ] or []
+
+#args += opt_debug + opt_trace + opt_daemon
+
+_debug_('opt_debug=%r' % (opt_debug,))
+_debug_('opt_trace=%r' % (opt_trace,))
+_debug_('opt_daemon=%r' % (opt_daemon,))
+_debug_('opt_server_layout=%r' % (opt_server_layout,))
 
 if opts.debug >= 2:
     cmdfile = open('freevo-gdb.sh', 'w')
@@ -523,13 +519,15 @@ _debug_('%s=%r' % ('HOME', os.environ['HOME']))
 # now check what and how we should start freevo
 daemon = 0 # start in background
 proc   = [ os.path.abspath(os.path.join(freevo_python, 'main.py')) ]
+proc_args = opt_debug + opt_trace + opt_daemon 
 name   = os.path.splitext(os.path.basename(os.path.abspath(sys.argv[0])))[0]
 check  = 1 # check running instance
 
 arg = len(args) >= 1 and args[0] or None
 
-_debug_('arg:%r' % arg)
-_debug_('args:%r' % args)
+_debug_('arg=%r' % arg)
+_debug_('args=%r' % args)
+_debug_('name=%r' % name)
 
 if arg == 'setup':
     # run setup
@@ -575,9 +573,7 @@ elif name == FREEVO:
                     break
                 server_num += 1
             sys.stdin.close()
-            print type(proc)
-            args = [ 'xinit', freevo_script, '--force-fs' ] + \
-                opt_trace + opt_debug + [ '--', ':'+str(server_num) ] + opt_server_layout
+            args = [ 'xinit', freevo_script, '--force-fs' ] + [ '--', ':'+str(server_num) ] + opt_server_layout
             _debug_('os.execvp(%r, %r)' % ('xinit', args))
             if opts.dry_run:
                 sys.exit(0)
@@ -591,13 +587,17 @@ elif name == FREEVO:
                 sys.exit('freevo not running')
             sys.exit(0)
         else:
-            proc = proc + opt_trace + opt_debug
+            proc += opt_debug + opt_trace + opt_daemon 
 
 else:
     # arg for freevo
-    proc += args + opt_trace + opt_debug
+    #proc += args + opt_debug + opt_trace + opt_daemon 
+    proc += opt_debug + opt_trace + opt_daemon 
 
-if name != FREEVO:
+if name == FREEVO:
+    proc += proc_args
+else:
+    # helper modules
     proc = [ os.path.join(freevo_python, 'helpers', name + '.py') ] + args
     if not os.path.isfile(proc[0]):
         if os.path.isfile(name):
