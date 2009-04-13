@@ -49,7 +49,7 @@ from util import recursefolders
 ##### Database
 
 dbschema = """CREATE TABLE music (id INTEGER PRIMARY KEY, dirtitle VARCHAR(255), path VARCHAR(255),
-        filename VARCHAR(255), type VARCHAR(3), artist VARCHAR(255), title VARCHAR(255), album VARCHAR(255),
+        filename VARCHAR(255), type VARCHAR(5), artist VARCHAR(255), title VARCHAR(255), album VARCHAR(255),
         genre VARCHAR(255), year VARCHAR(255), track NUMERIC(3), track_total NUMERIC(3), bpm NUMERIC(3),
         last_play float, play_count NUMERIC, start_time NUMERIC, end_time NUMERIC, rating NUMERIC, eq VARCHAR)"""
 
