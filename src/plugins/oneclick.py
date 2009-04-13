@@ -889,6 +889,7 @@ class WeatherDetailHandler:
 
         return False
 
+
 if __name__ == '__main__':
     for location in config.ONECLICK_LOCATIONS:
         print location
@@ -896,6 +897,7 @@ if __name__ == '__main__':
         print weather_item
     import sys
     sys.exit(1)
+
 
 class WeatherBaseScreen(skin.Area):
     """ A base class for weather screens to inherit from, provides common members+methods """

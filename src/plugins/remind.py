@@ -96,12 +96,14 @@ class RemindItem(Item):
         self.wrap = None
         Item.__init__(self, parent)
 
+
     def actions(self):
         """
         return a list of actions for this item
         """
-        items = [ ( self.remindlines , _('Show Reminders') ) ]
+        items = [ ( self.remindlines, _('Show Reminders') ) ]
         return items
+
 
     def remindlines(self, arg=None, menuw=None):
         lines = []
@@ -176,7 +178,7 @@ class RemindMainMenuItem(Item):
         """
         return a list of actions for this item
         """
-        items = [ ( self.create_reminderstype_menu , _('Reminders types' )) ]
+        items = [ ( self.create_reminderstype_menu, _('Reminders types' )) ]
         return items
 
     def create_reminderstype_menu(self, arg=None, menuw=None):

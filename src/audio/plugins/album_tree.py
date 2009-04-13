@@ -49,16 +49,17 @@ from gui import ProgressBox
 
 class treeSpec(object):
     """
-    see: PluginInterface() below for freevo plugin doc.
-    this class contains no freevo specific code
-    Inspired by foobar2000 albumlist (NOT playlist tree)
+    see: PluginInterface() below for freevo plug-in doc.
+    This class contains no freevo specific code
+    Inspired by foobar2000 albumlist (NOT play list tree)
     (http://www.hydrogenaudio.org/forums/index.php?showforum=28)
-    This is a tree/not a playlist generator.
-    generates ugly sql(only as ugly as the spec), but sqlite is fast enough.
-    operates directly on a sqlite cursor.
-    see http://www.sqlite.org/lang_expr.html for "scripting" functions
+    This is a tree/not a play list generator.
+    Generates ugly sql(only as ugly as the spec), but sqlite is fast enough.
+    Operates directly on a sqlite cursor.
+    See http://www.sqlite.org/lang_expr.html for "scripting" functions
     """
     def __init__(self, name='unnamed', cursor=None, spec=None, alt_grouping=None):
+        _debug_('__init__(name=%r, cursor=%r, spec=%r, alt_grouping=%r)' % (name, cursor, spec, alt_grouping))
         self.spec = spec
         self.name = name
         self.alt_grouping = alt_grouping
@@ -69,7 +70,7 @@ class treeSpec(object):
         """
         builds query
         """
-
+        _debug_('get_query(data=%r)' % (data,))
         where = []
         for i, item in enumerate(self.spec):
             if i < len(data):
@@ -97,15 +98,15 @@ class treeSpec(object):
             query += wheresql
             query += ' group by %s order by %s'  % (grouping, grouping)
 
-
         return query
 
 
     def execute(self, data):
+        _debug_('execute(data=%r)' % (data,))
         self.cursor.execute(self.get_query(data))
         return list(self.cursor)
         #should return an iterator/generator instead of a list?
-        #dont confuse others/need count for progress -->return list
+        #don't confuse others/need count for progress -->return list
 
 
 
@@ -119,9 +120,9 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     The sqlite-meta-database should be available.
 
-    The audio.rating and audio.logger plugin allso use this database,
-    you can skip the rest of the pre-install if those plugins
-    are already succesfully installed.
+    The audio.rating and audio.logger plug-in also use this database,
+    you can skip the rest of the pre-install if those plug-ins
+    are already successfully installed.
 
         - install pysqlite, sqlite
         - edit your local_config.py
@@ -177,17 +178,21 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     B{Post Installation}
 
-    New plugins are not immediately visible on the freevo webserver.
+    New plug-ins are not immediately visible on the freevo webserver.
 
     You might want to restart the  [wiki:Webserver freevo webserver] after the
-    installation of a new plugin.
+    installation of a new plug-in.
     """
     __version__ = "album_tree v0.51"
 
     def __init__(self):
+        _debug_('PluginInterface.__init__()')
         plugin.MainMenuPlugin.__init__(self)
         #config.EVENTS['audio']['DISPLAY'] = Event(FUNCTION_CALL, arg=self.detach)
-        self.show_item = menu.MenuItem(_('Album Tree'), action=self.onchoose_main)
+        image = 'image.png'
+        icon = 'icon.png' # puts an icon next to the menu item
+        icon = None
+        self.show_item = menu.MenuItem(_('Album Tree'), action=self.onchoose_main, image=image, icon=icon)
         self.show_item.type = 'audio'
         plugin.register(self, 'audio.album_tree')
 
@@ -199,6 +204,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def config(self):
+        _debug_('PluginInterface.config()')
         return [
             ('AUDIO_ALBUM_TREE_SPEC', [], 'Specification for the album tree queries'),
         ]
@@ -208,7 +214,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         shut down the sqlite database
         """
-        _debug_('shutdown', 2)
+        _debug_('PluginInterface.shutdown()')
         db.close()
 
 
@@ -216,6 +222,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         load definitions from config
         """
+        _debug_('load_spec(spec_list=%r)' % (spec_list,))
         curs = db.cursor
         self.album_tree_list = []
         for specdef in spec_list:
@@ -229,6 +236,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         load predefined testing layout
         """
+        _debug_('load_demo()')
         curs = db.cursor
         self.album_tree_list = [
         treeSpec('Artist/Album/Track', curs, ["artist", "album", "track||'-'||title"], [None, None, 'track']),
@@ -257,11 +265,13 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
+        _debug_('items(parent=%r)' % (parent,))
         return [ self.show_item ]
 
 
     def actions(self):
-        #todo: add random 10 etc..
+        _debug_('actions()')
+        #TODO: add random 10 etc..
         return []
 
 
@@ -269,6 +279,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         main menu
         """
+        _debug_('onchoose_main(arg=%r, menuw=%r)' % (arg, menuw))
         items = []
         for tree in self.album_tree_list:
             items.append(menu.MenuItem(tree.name, action=self.onchoose_node, arg=[tree, []]))
@@ -284,6 +295,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         browse through a tree specification
         """
+        _debug_('onchoose_node(arg=%r, menuw=%r)' % (arg, menuw))
         tree = arg[0]
         data = arg[1]
         title = '-'.join(data)
@@ -301,8 +313,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
         #should be impossible?
         if (len(mylistofitems) == 0):
-            mylistofitems += [menu.MenuItem(_('No Objects found'),
-                              menuw.back_one_menu, 0)]
+            mylistofitems += [menu.MenuItem(_('No Objects found'), menuw.back_one_menu, 0)]
 
         myobjectmenu = menu.Menu(title, mylistofitems)
                                  #reload_func=menuw.back_one_menu )
@@ -313,8 +324,9 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def onchoose_last_node(self, tree, data, menuw):
         """
-        last node in tree generates a playlist.
+        last node in tree generates a play list.
         """
+        _debug_('onchoose_last_node(tree=%r, data=%r, menuw=%r)' % (tree, data, menuw))
         title = '-'.join(data)
         #creating of audio items is slow.
         #need a progress-bar.
