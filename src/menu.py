@@ -30,6 +30,7 @@ Freevo menu handling system
 
 import string
 import copy
+from pprint import pprint
 
 import config
 import plugin
@@ -52,7 +53,7 @@ class MenuItem(Item):
         Item.__init__(self, parent, skin_type=skin_type)
         if name:
             self.name  = Unicode(name)
-        if icon:
+        if icon: # puts an icon next to the menu item
             self.icon  = icon
         if image:
             self.image = image
