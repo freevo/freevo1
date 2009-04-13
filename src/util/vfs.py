@@ -190,11 +190,11 @@ def listdir(directory, handle_exception=True, include_dot_files=False, include_o
 
         if include_dot_files:
             for f in os.listdir(directory):
-                if not f in ('.svn', '.xvpics', '.thumbnails', '.pics', 'folder.fxd'):
+                if not f in ('.svn', '.xvpics', '.thumbnails', '.pics', 'folder.fxd', 'lost+found'):
                     files.append(os.path.join(directory, f))
         else:
             for f in os.listdir(directory):
-                if not f.startswith('.') and not f in ('folder.fxd',):
+                if not f.startswith('.') and not f in ('folder.fxd', 'lost+found'):
                     files.append(os.path.join(directory, f))
 
         if not include_overlay:
@@ -203,8 +203,8 @@ def listdir(directory, handle_exception=True, include_dot_files=False, include_o
         overlay = getoverlay(directory)
         if overlay and overlay != directory and os.path.isdir(overlay):
             for fname in os.listdir(overlay):
-                if fname.endswith('.raw') or fname.startswith('.') or \
-                       fname == 'folder.fxd' or fname.find('.thumb.') > 0:
+                if fname.endswith('.raw') or fname.startswith('.') or fname in ('folder.fxd', 'lost+found') or \
+                    fname.find('.thumb.') > 0:
                     continue
                 f = os.path.join(overlay, fname)
                 if not os.path.isdir(f):
