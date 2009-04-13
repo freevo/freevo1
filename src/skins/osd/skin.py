@@ -156,7 +156,7 @@ class OSDObject(object):
 class OSDText(OSDObject):
     def __init__(self, pos, size, expr, font, fgcolor, bgcolor, valign, halign):
         OSDObject.__init__(self, pos, size)
-        _debug_('OSDText (%s,%s) %sx%s "%s" %s %s' % (pos[0], pos[1], size[0], size[1], expr, valign, halign))
+        _debug_('OSDText (%s,%s) %sx%s "%s" %s %s' % (pos[0], pos[1], size[0], size[1], expr, valign, halign), 2)
         self.expr = expr
         self.font = font
         self.fgcolor = fgcolor
@@ -384,7 +384,7 @@ class OSDText(OSDObject):
 class OSDImage(OSDObject):
     def __init__(self, pos, size, image, expr, image_expr=None, scale=None):
         OSDObject.__init__(self, pos, size)
-        _debug_('OSDImage (%s,%s) %sx%s "%s" "%s" "%s" "%s"' % (pos[0], pos[1], size[0], size[1], image, expr, image_expr, scale))
+        _debug_('OSDImage (%s,%s) %sx%s "%s" "%s" "%s" "%s"' % (pos[0], pos[1], size[0], size[1], image, expr, image_expr, scale), 2)
         self.image_name = image
         self.image_expr = image_expr
         self.image = None
@@ -425,7 +425,7 @@ class OSDImage(OSDObject):
 class OSDPercent(OSDImage):
     def __init__(self, pos, size, vertical, image, expr):
         OSDImage.__init__(self, pos, size, image, expr)
-        _debug_('OSDPercent (%s,%s) %sx%s "%s" "%s" %s' % (pos[0], pos[1], size[0], size[1], image, expr, vertical))
+        _debug_('OSDPercent (%s,%s) %sx%s "%s" "%s" %s' % (pos[0], pos[1], size[0], size[1], image, expr, vertical), 2)
         self.vertical = vertical
 
     def render(self, image, value_dict):
@@ -455,7 +455,7 @@ class OSDPercent(OSDImage):
 class OSDWidget(OSDObject):
     def __init__(self, pos, size, unscaled_size, name, style, navigation=None):
         OSDObject.__init__(self, pos, size)
-        _debug_('OSDWidget (%s,%s) %sx%s "%s" "%s"' % (pos[0], pos[1], size[0], size[1], name, style))
+        _debug_('OSDWidget (%s,%s) %sx%s "%s" "%s"' % (pos[0], pos[1], size[0], size[1], name, style), 2)
         self.name = name
         self.style = style
         self.unscaled_size = unscaled_size
@@ -530,7 +530,7 @@ def eval_or_int(exp, exp_dict):
 class OSDMenu(OSDWidget):
     def __init__(self, pos, size, unscaled_size, name, style, items_per_page):
         super(OSDMenu, self).__init__(pos, size, unscaled_size, name, style)
-        _debug_('OSDMenu (%s,%s) %sx%s "%s" "%s" %d' % (pos[0], pos[1], size[0], size[1], name, style, items_per_page))
+        _debug_('OSDMenu (%s,%s) %sx%s "%s" "%s" %d' % (pos[0], pos[1], size[0], size[1], name, style, items_per_page), 2)
         self.items_per_page = items_per_page
         self.items = []
         item_h = size[1] / items_per_page
@@ -626,7 +626,7 @@ def get_image(filename, scale, size):
             size = (w, h)
             src_size = size
             dst_size = size
-        _debug_('Creating image %s (%dx%d) of size %dx%d using scale %s' % (filename, src_size[0],src_size[1], dst_size[0], dst_size[1], scale))
+        _debug_('Creating image %s (%dx%d) of size %dx%d using scale %s' % (filename, src_size[0],src_size[1], dst_size[0], dst_size[1], scale), 2)
         image = image.scale(dst_size, src_size=src_size)
 
         image_cache[cache_key] = image
@@ -640,7 +640,7 @@ def get_image(filename, scale, size):
 
 
 def find_image(filename):
-    _debug_('Looking for %s (icontheme %s)' % (filename, icontheme))
+    _debug_('Looking for %s (icontheme %s)' % (filename, icontheme), 2)
     if icontheme:
         dirs = [os.path.join(config.IMAGE_DIR, 'osd', icontheme),
                 os.path.join(config.ICON_DIR, 'osd', icontheme)]

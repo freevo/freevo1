@@ -107,7 +107,7 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
                 break
             else:
                 imagefile = item.image
-        print 'thumb://%s' % (item.image,)
+        _debug_('thumb://%s' % (item.image,))
         image = load_imagecache['thumb://%s' % item.image]
         if not image:
             image = osd.loadbitmap(imagefile)

@@ -334,11 +334,11 @@ def parse_color(node):
     colors[label] = value
 
 def resolve_color(color):
-    _debug_('Resolving %r type = %r' % (color, type(color)))
+    _debug_('Resolving %r type = %r' % (color, type(color)), 2)
     if isinstance(color, str):
-        _debug_('Colors %r' %(colors.keys()))
+        _debug_('Colors %r' %(colors.keys()), 2)
         if color in colors:
-            _debug_('Resolved %s to %r' % (color, colors[color]))
+            _debug_('Resolved %s to %r' % (color, colors[color]), 2)
             return colors[color]
         else:
             _debug_('Color %s not found!' % color)
