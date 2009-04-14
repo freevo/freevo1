@@ -133,7 +133,7 @@ class EncodingServer:
     @kaa.rpc.expose('waitCropDetect')
     def _waitCropDetect(self, idnr):
         #wait for the analyzing to end
-        status = self.jobs[idnr]._CropDetect()
+        status = self.jobs[idnr]._cropdetect()
         while not self.jobs[idnr].finishedanalyze:
             time.sleep(0.1)
         if self.jobs[idnr].finishedanalyze and self.jobs[idnr].failed:
