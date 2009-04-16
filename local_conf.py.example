@@ -1094,6 +1094,10 @@ CACHE_IMAGES = 1
 
 # MPLAYER_AO_DEV      = 'oss:/dev/dsp'  # e.g.: oss,sdl,alsa, see mplayer docs
 
+# MPLAYER_VO_DEV specifies the -vo option to mplayer, if the display in
+# freevo.conf is X11 then this defaults to xv,sdl,x11, see mplayer -vo help for
+# the full list of output drivers.
+# MPLAYER_VO_DEV = 'dfbmga'             # X11 drivers in order of preference
 # MPLAYER_VO_DEV_OPTS = ''              # e.g.: ':some_var=vcal'
 
 # MPLAYER_AUDIO_CACHE_KB = 256
