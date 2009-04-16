@@ -31,11 +31,13 @@
 """
 Represents audio items as different views
 """
+from pprint import pprint
 
 import config
 import plugin
 import menu
 import rc
+import skin, osd
 #import audio.player
 
 from event import *
@@ -45,70 +47,14 @@ db = MetaDatabase()
 import playlist
 from audio import audioitem
 from gui import ProgressBox
+from menu import MenuItem
+from item import Item
 
+#get the singletons so we get skin info and access the osd
+skin = skin.get_singleton()
+osd  = osd.get_singleton()
 
-class treeSpec(object):
-    """
-    see: PluginInterface() below for freevo plug-in doc.
-    This class contains no freevo specific code
-    Inspired by foobar2000 albumlist (NOT play list tree)
-    (http://www.hydrogenaudio.org/forums/index.php?showforum=28)
-    This is a tree/not a play list generator.
-    Generates ugly sql(only as ugly as the spec), but sqlite is fast enough.
-    Operates directly on a sqlite cursor.
-    See http://www.sqlite.org/lang_expr.html for "scripting" functions
-    """
-    def __init__(self, name='unnamed', cursor=None, spec=None, alt_grouping=None):
-        _debug_('__init__(name=%r, cursor=%r, spec=%r, alt_grouping=%r)' % (name, cursor, spec, alt_grouping))
-        self.spec = spec
-        self.name = name
-        self.alt_grouping = alt_grouping
-        self.cursor = cursor
-
-
-    def get_query(self, data):
-        """
-        builds query
-        """
-        _debug_('get_query(data=%r)' % (data,))
-        where = []
-        for i, item in enumerate(self.spec):
-            if i < len(data):
-                where.append('%s="%s"' % (item, data[i]))
-            else:
-                break
-        if where:
-            wheresql = ' where ' + ' and '.join(where)
-        else:
-            wheresql = ''
-
-        #group by:
-        grouping = self.spec[i]
-        if self.alt_grouping and self.alt_grouping[i]:
-            grouping = self.alt_grouping[i]
-
-        #last level in tree-->, no-count ; use path, filename + order by instead of group by
-        if len(self.spec) -1 == len(data):
-            query = 'select %s, path, filename from music'% (self.spec[i], )
-            query += wheresql
-            query += ' order by ' + grouping
-        #normal/not last level in tree
-        else:
-            query = 'select %s, count() from music'% (self.spec[i], )
-            query += wheresql
-            query += ' group by %s order by %s'  % (grouping, grouping)
-
-        return query
-
-
-    def execute(self, data):
-        _debug_('execute(data=%r)' % (data,))
-        self.cursor.execute(self.get_query(data))
-        return list(self.cursor)
-        #should return an iterator/generator instead of a list?
-        #don't confuse others/need count for progress -->return list
-
-
+skin.register('album_tree', ('screen', 'title', 'info', 'plugin'))
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -120,9 +66,9 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     The sqlite-meta-database should be available.
 
-    The audio.rating and audio.logger plug-in also use this database,
-    you can skip the rest of the pre-install if those plug-ins
-    are already successfully installed.
+    The audio.rating and audio.logger plugin allso use this database,
+    you can skip the rest of the pre-install if those plugins
+    are already succesfully installed.
 
         - install pysqlite, sqlite
         - edit your local_config.py
@@ -178,29 +124,46 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     B{Post Installation}
 
-    New plug-ins are not immediately visible on the freevo webserver.
+    New plugins are not immediately visible on the freevo webserver.
 
     You might want to restart the  [wiki:Webserver freevo webserver] after the
-    installation of a new plug-in.
+    installation of a new plugin.
+
+    Available columns for the selection are:
+        - id INTEGER PRIMARY KEY
+        - dirtitle VARCHAR(255) directory title
+        - path VARCHAR(255)
+        - filename VARCHAR(255)
+        - type VARCHAR(5) (.mp3, .ogg, .flac)
+        - artist VARCHAR(255)
+        - title VARCHAR(255)
+        - album VARCHAR(255)
+        - genre VARCHAR(255)
+        - year VARCHAR(255)
+        - track NUMERIC(3)
+        - track_total NUMERIC(3)
+        - bpm NUMERIC(3)
+        - last_play float
+        - play_count NUMERIC
+        - start_time NUMERIC
+        - end_time NUMERIC
+        - rating NUMERIC
+        - eq VARCHAR
     """
-    __version__ = "album_tree v0.51"
+    __version__ = "album_tree v0.60"
 
     def __init__(self):
         _debug_('PluginInterface.__init__()')
         plugin.MainMenuPlugin.__init__(self)
-        #config.EVENTS['audio']['DISPLAY'] = Event(FUNCTION_CALL, arg=self.detach)
-        image = 'image.png'
-        icon = 'icon.png' # puts an icon next to the menu item
-        icon = None
-        self.show_item = menu.MenuItem(_('Album Tree'), action=self.onchoose_main, image=image, icon=icon)
-        self.show_item.type = 'audio'
-        plugin.register(self, 'audio.album_tree')
-
         if not config.AUDIO_ALBUM_TREE_SPEC:
             _debug_('AUDIO_ALBUM_TREE_SPEC is empty; demo-mode, using predefined trees', DWARNING)
-            self.load_demo()
+            self.album_tree_list = self.load_demo()
         else:
-            self.load_spec(config.AUDIO_ALBUM_TREE_SPEC)
+            self.album_tree_list = self.load_spec(config.AUDIO_ALBUM_TREE_SPEC)
+
+        #self.show_item = menu.MenuItem(_('Album Tree'), action=self.onchoose_main)
+        #self.show_item.type = 'audio'
+        plugin.register(self, 'audio.album_tree')
 
 
     def config(self):
@@ -220,44 +183,47 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def load_spec(self, spec_list):
         """
-        load definitions from config
+        Load definitions from config
+
+        @returns: a list of trees
         """
-        _debug_('load_spec(spec_list=%r)' % (spec_list,))
         curs = db.cursor
-        self.album_tree_list = []
+        album_tree_list = []
         for specdef in spec_list:
-            tree = treeSpec(specdef['name'], curs, specdef['spec'])
+            tree = TreeSpec(specdef['name'], curs, specdef['spec'])
             if specdef.has_key('alt_grouping'):
                 tree.alt_grouping = specdef['alt_grouping']
-            self.album_tree_list.append(tree)
+            album_tree_list.append(tree)
+        return album_tree_list
 
 
     def load_demo(self):
         """
-        load predefined testing layout
+        Load predefined testing layout
+
+        @returns: a list of trees
         """
-        _debug_('load_demo()')
         curs = db.cursor
-        self.album_tree_list = [
-        treeSpec('Artist/Album/Track', curs, ["artist", "album", "track||'-'||title"], [None, None, 'track']),
-        treeSpec('(A-Z)/Artist/Year-Album/Track', curs,
-            ["upper(substr(artist, 0, 1))", "artist", "album||'-'||year", "track||'-'||title"],
-            [None, None, 'year||album', 'track']),
-        treeSpec('Artist-Album/Track', curs, ["artist||'-'||album", "track||'-'||title"], [None, 'track']),
-        treeSpec('a-z/artist/title-album-track', curs,
-            ["lower(substr(artist, 0, 1))", "lower(artist)", "title||'-'||album||'-'||track"]),
-        treeSpec('Year/Artist-Album/Track', curs,
-            ["year", "artist||'-'||album", "track||'-'||title"], [None, None, None, 'track']),
-        #demo:
-        treeSpec('Dirtitle/Artist/Album/Track', curs,
-            ["dirtitle", "artist", "album", "track||'-'||title"], [None, None, None, 'track'])
+        album_tree_list = [
+            TreeSpec('Artist/Album/Track', curs, ["artist", "album", "track||'-'||title"], [None, None, 'track']),
+            TreeSpec('(A-Z)/Artist/Year-Album/Track', curs,
+                ["upper(substr(artist, 0, 1))", "artist", "album||'-'||year", "track||'-'||title"],
+                [None, None, 'year||album', 'track']),
+            TreeSpec('Artist-Album/Track', curs, ["artist||'-'||album", "track||'-'||title"], [None, 'track']),
+            TreeSpec('a-z/artist/title-album-track', curs,
+                ["lower(substr(artist, 0, 1))", "lower(artist)", "title||'-'||album||'-'||track"]),
+            TreeSpec('Year/Artist-Album/Track', curs,
+                ["year", "artist||'-'||album", "track||'-'||title"], [None, None, None, 'track']),
+            TreeSpec('Dirtitle/Artist/Album/Track', curs,
+                ["dirtitle", "artist", "album", "track||'-'||title"], [None, None, None, 'track'])
         ]
+        return album_tree_list
 
         #treespec below:
         #INSANE, but this is what i like about foobar2000.
         #NOT YET POSSIBLE, "album_artist" tag is not in sql database.
         #Surprisingly:sqlite can handle it pretty fast.
-        #treeSpec('a-z/album_artist/album/track-(artist)-title', curs,
+        #TreeSpec('a-z/album_artist/album/track-(artist)-title', curs,
         #   ["lower(substr(ifnull(album_artist, artist), 0, 1))",
         #       "ifnull(album_artist, artist)", "album",
         #       "track||'-'||nullif(artist, ifnull(album_artist, artist))||'-'||title"],
@@ -265,51 +231,103 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
-        _debug_('items(parent=%r)' % (parent,))
-        return [ self.show_item ]
+        _debug_('PluginInterface.items(parent=%r)' % (parent,))
+        return [ AlbumTreeMainMenu(parent, self.album_tree_list) ]
 
 
     def actions(self):
-        _debug_('actions()')
-        #TODO: add random 10 etc..
+        _debug_('PluginInterface.actions()')
+        #todo: add random 10 etc..
         return []
 
 
-    def onchoose_main(self, arg=None, menuw=None):
-        """
-        main menu
-        """
-        _debug_('onchoose_main(arg=%r, menuw=%r)' % (arg, menuw))
-        items = []
-        for tree in self.album_tree_list:
-            items.append(menu.MenuItem(tree.name, action=self.onchoose_node, arg=[tree, []]))
 
-        #myobjectmenu = menu.Menu(_('Album Tree'), items, reload_func=menuw.back_one_menu )
-        myobjectmenu = menu.Menu(_('Album Tree'), items)
+class AlbumTreeMainMenu(MenuItem):
+    """
+    Create the menu item for Album Tree
+    """
+    def __init__(self, parent, tree):
+        _debug_('AlbumTreeMainMenu.__init__(parent=%r)' % (parent,))
+        MenuItem.__init__(self, name=_('Album Tree 2'), parent=parent, skin_type='album_tree', type='audio')
+        self.parent = parent
+        self.tree = tree
+        #print 'AlbumTreeMainMenu:', pprint(self.__dict__)
+
+
+    def actions(self):
+        """
+        return a list of actions for this item
+        """
+        _debug_('AlbumTreeMainMenu.actions()')
+        items = [ (self.create_album_tree_menu, _('Album Tree Items')) ]
+        return items
+
+
+    def __call__(self, arg=None, menuw=None):
+        """
+        call first action in the actions list
+        """
+        _debug_('AlbumTreeMainMenu.__call__(arg=%r, menuw=%r)' % (arg, menuw))
+        if self.actions():
+            return self.actions()[0][0](arg=arg, menuw=menuw)
+
+
+    def create_album_tree_menu(self, arg=None, menuw=None):
+        """
+        Create the menu of Album Tree items
+
+        @param arg: will always be None as this is a method
+        @param menuw: is a MenuWidget
+        @returns: Nothing
+        """
+        _debug_('create_album_tree_menu(arg=%r, menuw=%r)' % (arg, menuw))
+        branches = []
+        for branch in self.tree:
+            #print 'branch=%r' % branch,; pprint(branch.__dict__)
+            branches.append(AlbumTreeBranchMenu(self, branch.name, (branch, [])))
+
+        album_tree_menu = menu.Menu(_('Album Tree 2'), branches)
         rc.app(None)
-        menuw.pushmenu(myobjectmenu)
+        menuw.pushmenu(album_tree_menu)
         menuw.refresh()
 
 
-    def onchoose_node(self, arg=None, menuw=None):
+
+class AlbumTreeBranchMenu(MenuItem):
+    """
+    Item for the menu for one query
+    """
+    def __init__(self, parent, name, arg):
+        _debug_('AlbumTreeBranchMenu.__init__(parent=%r, name=%r, arg=%r)' % (parent, name, arg))
+        MenuItem.__init__(self, name, parent=parent)
+        self.parent = parent
+        self.branch = arg[0]
+        self.data = arg[1]
+        #print 'AlbumTreeBranchMenu:', pprint(self.__dict__)
+
+
+    def actions(self):
+        _debug_('AlbumTreeBranchMenu.actions()')
+        return [ (self.branch_node, _('Album Tree Item')) ]
+
+
+    def branch_node(self, arg=None, menuw=None):
         """
         browse through a tree specification
         """
-        _debug_('onchoose_node(arg=%r, menuw=%r)' % (arg, menuw))
-        tree = arg[0]
-        data = arg[1]
-        title = '-'.join(data)
+        _debug_('branch_node(arg=%r, menuw=%r)' % (arg, menuw))
+        title = '-'.join(self.data)
 
         mylistofitems =  []
 
-        if len(tree.spec) -1 <> len(data): #non-tracks
-            for tree_item, count in tree.execute(data):
-                mylistofitems.append(
-                    menu.MenuItem("%s(%i)" % \
-                        (tree_item, count), action=self.onchoose_node, arg=[tree, data + [tree_item]]))
-        else: #tracks
-            self.onchoose_last_node(tree, data, menuw)
+        #print 'len(self.branch.spec)-1=%r, len(self.data)=%r' % (len(self.branch.spec)-1, len(self.data))
+        if len(self.branch.spec) - 1 == len(self.data): #tracks
+            self.leaf_node(self.branch, self.data, menuw)
             return
+        else:
+            for item, count in self.branch.execute(self.data):
+                mylistofitems.append(AlbumTreeBranchMenu(self, "%s(%i)" % (item, count),
+                    (self.branch, self.data + [item])))
 
         #should be impossible?
         if (len(mylistofitems) == 0):
@@ -322,17 +340,17 @@ class PluginInterface(plugin.MainMenuPlugin):
         menuw.refresh()
 
 
-    def onchoose_last_node(self, tree, data, menuw):
+    def leaf_node(self, branch, data, menuw):
         """
-        last node in tree generates a play list.
+        last node in branch generates a playlist.
         """
-        _debug_('onchoose_last_node(tree=%r, data=%r, menuw=%r)' % (tree, data, menuw))
+        _debug_('leaf_node(branch=%r, data=%r, menuw=%r)' % (branch, data, menuw))
         title = '-'.join(data)
         #creating of audio items is slow.
         #need a progress-bar.
         pl = playlist.Playlist(name='-'.join(data), playlist=[], display_type='audiocd')
 
-        tracks = tree.execute(data)  #returns list of (desc, path, filename)
+        tracks = branch.execute(data)  #returns list of (desc, path, filename)
 
         pop = ProgressBox(text=_('Generating playlist...'), full=len(tracks))
         pop.show()
@@ -350,12 +368,67 @@ class PluginInterface(plugin.MainMenuPlugin):
 
         pl.playlist = items
 
-        #note/question for core developers:
-        #command below causes strange errors?
-        #plugin.__plugin_type_list__ is empty??? but it's Not?
-        #pl.browse(arg=None, menuw=menuw)
-        #print 'LIST=', plugin.__plugin_type_list__['mimetype']
-        #workaround: not all features of a real playlist :(
-
         mymenu = menu.Menu(title, pl.playlist, item_types="audio")
         menuw.pushmenu(mymenu)
+
+
+
+class TreeSpec(object):
+    """
+    see: PluginInterface() below for freevo plugin doc.
+    this class contains no freevo specific code
+    Inspired by foobar2000 albumlist (NOT playlist tree)
+    (http://www.hydrogenaudio.org/forums/index.php?showforum=28)
+    This is a tree/not a playlist generator.
+    generates ugly sql(only as ugly as the spec), but sqlite is fast enough.
+    operates directly on a sqlite cursor.
+    see http://www.sqlite.org/lang_expr.html for "scripting" functions
+    """
+    def __init__(self, name='unnamed', cursor=None, spec=None, alt_grouping=None):
+        self.spec = spec
+        self.name = name
+        self.alt_grouping = alt_grouping
+        self.cursor = cursor
+
+
+    def get_query(self, data):
+        """
+        builds query
+        """
+
+        where = []
+        for i, item in enumerate(self.spec):
+            if i < len(data):
+                where.append('%s="%s"' % (item, data[i]))
+            else:
+                break
+        if where:
+            wheresql = ' where ' + ' and '.join(where)
+        else:
+            wheresql = ''
+
+        #group by:
+        grouping = self.spec[i]
+        if self.alt_grouping and self.alt_grouping[i]:
+            grouping = self.alt_grouping[i]
+
+        #last level in tree-->, no-count ; use path, filename + order by instead of group by
+        if len(self.spec) -1 == len(data):
+            query = 'select %s, path, filename from music'% (self.spec[i], )
+            query += wheresql
+            query += ' order by ' + grouping
+        #normal/not last level in tree
+        else:
+            query = 'select %s, count() from music'% (self.spec[i], )
+            query += wheresql
+            query += ' group by %s order by %s'  % (grouping, grouping)
+
+
+        return query
+
+
+    def execute(self, data):
+        self.cursor.execute(self.get_query(data))
+        return list(self.cursor)
+        #should return an iterator/generator instead of a list?
+        #dont confuse others/need count for progress -->return list
