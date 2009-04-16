@@ -46,5 +46,8 @@ class TextOSD(OSD):
         info_message += time.strftime('%H:%M', time.localtime(info_dict['end_time']))
         dialog.show_message(info_message)
 
+    def display_buffer_pos(self, info_function):
+        self.display_info(info_function)
+
     def display_channel_number(self, channel):
         dialog.show_message(_('Channel #: %s') % channel)

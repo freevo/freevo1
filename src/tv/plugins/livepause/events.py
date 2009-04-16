@@ -31,18 +31,29 @@
 #
 # ----------------------------------------------------------------------- */
 """
-Defines the events used by different parts of the Live Pause system to communicate data availabilty.
+Defines the events used by different parts of the Live Pause system to communicate data availability.
 
 DATA_STARTED - Tuning is complete and data has started arriving.
 DATA_ACQUIRED - Sent for every second of data acquired after the initial EVENT_DATA_STARTED.
 DATA_TIMEDOUT - Sent if no data has been received for a configurable number of seconds.
 READER_OVERTAKEN - Sent by the Slave server when it detects that it has been overtaken by the filler (and there lost data).
 TV_CHANNEL_NUMBER - Sent by the live pause plugin when the user has entered a channel number to change the current channel.
+LIVEPAUSE_EXITED - Sent when the livepause application has exited.
 """
 
 import event
+
 DATA_STARTED      = event.Event('DATA_STARTED')
 DATA_ACQUIRED     = event.Event('DATA_ACQUIRED')
 DATA_TIMEDOUT     = event.Event('DATA_TIMEDOUT')
+
 READER_OVERTAKEN  = event.Event('READER_OVERTAKEN')
+READER_STARVED    = event.Event('READER_STARVED')
+
 TV_CHANNEL_NUMBER = event.Event('TV_CHANNEL_NUMBER')
+
+LIVEPAUSE_EXITED  = event.Event('LIVEPAUSE_EXITED')
+
+SAVE_STARTED      = event.Event('SAVE_STARTED')
+SAVE_FINISHED     = event.Event('SAVE_FINISHED')
+SAVE_FAILED       = event.Event('SAVE_FAILED')

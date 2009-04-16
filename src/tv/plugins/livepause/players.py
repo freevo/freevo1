@@ -46,6 +46,7 @@ import config
 import childapp
 import rc
 
+import dialog
 import dialog.display
 
 def get_player():
@@ -61,6 +62,9 @@ def get_player():
     @returns: the best Player object available.
     """
     player = config.LIVE_PAUSE2_PREFERRED_PLAYER
+    if player == 'null':
+        return Player('raw')
+
     if not player in ['vlc', 'xine', 'mplayer']:
         player = None
     if not player:
@@ -76,18 +80,23 @@ def get_player():
 
 
 class Player(object):
-    def __init__(self, supports_text, supports_graphics):
+    """
+    Class representing an application to display video/audio stream from the ringbuffer.
+    @ivar mode: The mode the media server should be in when this application connects to it.
+    @ivar paused: Whether playback is currently paused (True) or playing (False)
+    """
+    def __init__(self, mode):
         """
         Initialise a new Player class.
-        @param supports_text:  Set to True if the player supports a text rendering OSD.
-        @param supports_graphics: Set to True If the player supports a graphics OSD.
+        @param mode: Mode to supply the TS via, either raw or http.
         """
-        self.supports_text = supports_text
-        self.supports_graphics = supports_graphics
+        self.mode = mode
+        self.paused = False
 
-    def start(self, port):
+    def start(self, socket_address):
         """
-        Start the player to play from the specified TCP port.
+        Start the player to play from the specified address/port.
+        @param socket_address: Tuple containing an IP address and port to connect to.
         """
         pass
 
@@ -184,42 +193,15 @@ class Player(object):
         Returns a Display subclass to be passed to the dialog subsystem
         when the player is active.
         """
-        return None
+        return dialog.display.AppTextDisplay(self.display_message)
 
     def display_message(self, message):
         """
         Display using the players text rendering OSD the specified message text.
         It is assumed that the player will display the message for an
         player-specific time before it is removed.
-
-        NOTE: Only supported if supports_text is True.
         """
-        pass
-
-    def show_graphics(self, surface, position):
-        """
-        Show the graphics on the specified surface using the players graphics
-        OSD.
-        NOTE: Only supported if supports_graphics is True.
-
-        surface - pygame.Surface to display
-        position - (x,y) position to display the image.
-        """
-        pass
-
-    def hide_graphics(self):
-        """
-        Hide the players graphics OSD.
-        NOTE: Only supported if supports_graphics is True.
-        """
-        pass
-
-    def set_graphics_alpha(self, alpha):
-        """
-        Set the alpha/transparency of the OSD layer.
-        alpha - 0=Transparent, 255=Opaque.
-        """
-        pass
+        print 'display_message: ', message
 
 
 
@@ -228,35 +210,43 @@ class Xine(Player):
     the main class to control xine
     """
     def __init__(self):
-        Player.__init__(self, True, False)
+        Player.__init__(self, 'raw')
         self.app       = None
         self.mrl_index = 0
         self.subtitles = False
         self.paused = False
 
-        # Create the command used to start xine.
-
-        self.command = [ '--prio=%s' % config.MPLAYER_NICE ] + \
-                       config.XINE_COMMAND.split(' ') + \
-                       [ '--stdctl',
-                         '-V', config.XINE_VO_DEV,
-                         '-A', config.XINE_AO_DEV ] + \
-                       config.XINE_ARGS_DEF.split(' ')
+        self.command = None
 
 
-        if not rc.PYLIRC and '--no-lirc' in self.command:
-            self.command.remove('--no-lirc')
-
-
-    def start(self, port):
+    def start(self, socket_address):
         """
         Start the player to play from the specified TCP port.
         """
         self.mrl_index = 0
+        if self.command is None:
+            config_file_opt = []
+            config_file = dialog.utils.get_xine_config_file()
+            print 'Config file: ', config_file
+            if config_file:
+                config_file_opt = ['--config', config_file]
+
+            # Create the command used to start xine.
+
+            self.command = [ '--prio=%s' % config.MPLAYER_NICE ] + \
+                           config.XINE_COMMAND.split(' ') + \
+                           [ '--stdctl',
+                             '-V', config.XINE_VO_DEV,
+                             '-A', config.XINE_AO_DEV ] + \
+                           config.XINE_ARGS_DEF.split(' ') + \
+                           config_file_opt
+
+            if not rc.PYLIRC and '--no-lirc' in self.command:
+                self.command.remove('--no-lirc')
         # NOTE: We add the slave server MRL twice so that we can toggle between
         # them, this allows use to effectively reset Xine rendering pipeline and
         # make it possible to seek quickly.
-        mrl = 'http://localhost:%d' % port
+        mrl = 'slave://%s:%d' % socket_address
         self.app = childapp.ChildApp2(self.command + \
                        [mrl, mrl])
 
@@ -335,13 +325,6 @@ class Xine(Player):
             self.app.write('pause\n')
             self.paused = False
 
-    def get_display(self):
-        """
-        Returns a Display subclass to be passed to the dialog subsystem
-        when the player is active.
-        """
-        return dialog.display.AppTextDisplay(self.display_message)
-
     def display_message(self, message):
         """
         Function to tell xine to display the specified text.
@@ -356,7 +339,7 @@ class Mplayer(Player):
     The main class to control MPlayer
     """
     def __init__(self):
-        Player.__init__(self, True, False)
+        Player.__init__(self, 'http')
         self.app       = None
         self.mrl_index = 0
         self.subtitles = False
@@ -366,6 +349,9 @@ class Mplayer(Player):
         command = ['--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD]
         command += ['-slave']
         command += config.MPLAYER_ARGS_DEF.split(' ')
+
+        if dialog.overlay_display_supports_dialogs:
+            command += ['-osdlevel','0']
 
         if config.DEBUG_CHILDAPP:
             command += ['-v']
@@ -389,7 +375,7 @@ class Mplayer(Player):
         self.command = command
 
 
-    def start(self, port):
+    def start(self, socket_address):
         """
         Start the player to play from the specified TCP port.
         """
@@ -397,7 +383,7 @@ class Mplayer(Player):
         # NOTE: We add the slave server MRL twice so that we can toggle between
         # them, this allows use to effectively reset mplayer's rendering pipeline and
         # make it possible to seek quickly.
-        mrl = 'http://localhost:%d' % port
+        mrl = 'http://%s:%d' % socket_address
         self.app = childapp.ChildApp2(self.command + [mrl, mrl])
 
 
@@ -443,13 +429,6 @@ class Mplayer(Player):
             self.app.write('pause\n')
             self.paused = False
 
-    def get_display(self):
-        """
-        Returns a Display subclass to be passed to the dialog subsystem
-        when the player is active.
-        """
-        return dialog.display.AppTextDisplay(self.display_message)
-
     def display_message(self, message):
         """
         Function to tell mplayer to display the specified text.
@@ -465,7 +444,7 @@ class Vlc(Player):
     if you plan to use GraphicOSD : logo sub-filter works in vlc 0.8.6i or older
     """
     def __init__(self):
-        Player.__init__(self, True, True)
+        Player.__init__(self, 'http')
         self.app = None
         self.paused = False
         command = ['--prio=%s' % config.MPLAYER_NICE, config.CONF.vlc]
@@ -474,7 +453,12 @@ class Vlc(Player):
                     '--height', str(config.CONF.height),
                     '--sub-filter', 'marq:logo', '--marq-timeout', '3000', '--marq-marquee', 'Playing', '--logo-file', 'dummy'
                    ]
-        command += config.VLC_OPTIONS.split(' ')
+        if hasattr(config, VLC_OPTIONS):
+            command += config.VLC_OPTIONS.split(' ')
+
+        if dialog.overlay_display_supports_dialogs:
+            command += ['--no-osd']
+
         self.command = command
         self.current_sub_index = -1
         self.sub_pids = []
@@ -482,7 +466,7 @@ class Vlc(Player):
         self.audio_pids = []
 
 
-    def start(self, port):
+    def start(self, socket_address):
         """
         Start the player to play from the specified TCP port.
         """
@@ -490,7 +474,7 @@ class Vlc(Player):
         # NOTE: We add the slave server MRL twice so that we can toggle between
         # them, this allows use to effectively reset mplayer's rendering pipeline and
         # make it possible to seek quickly.
-        mrl = 'http://@localhost:%d' % port
+        mrl = 'http://@%s:%d' % socket_address
         self.app = VlcApp(self.command + [mrl])
 
 

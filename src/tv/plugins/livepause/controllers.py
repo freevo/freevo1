@@ -47,8 +47,6 @@ import tv.v4l2 as V4L2
 
 from tv.plugins.dvbstreamer.manager import DVBStreamerManager
 
-from tv.plugins.livepause.fillers import UDPTSReceiver, MPEGProgamStreamReceiver
-
 __all__ = ['get_controller', 'Controller', 'DVBStreamerController', 'HDHomeRunController', 'IVTVController']
 
 # Hashtable of video group types to controller object
@@ -99,11 +97,6 @@ class Controller(object):
         """
         pass
 
-    def enable_events(self, enable):
-        """
-        Enable/Disable sending of Data Received/Timeout events.
-        """
-        pass
 
 
 class DVBStreamerController(Controller):
@@ -125,7 +118,6 @@ class DVBStreamerController(Controller):
             pass
 
         self.manager = DVBStreamerManager(username, password)
-        self.receiver  = None
         self.last_device = None
 
     def start_filling(self, buffer, videogroup, channel, timeout):
@@ -147,38 +139,34 @@ class DVBStreamerController(Controller):
             ip_address = 'localhost'
 
         try:
+            controller = self.manager.get_controller(device)
+            controller.execute_command('setprop adapter.active true', True)
+        except:
+            _debug_('Not DVBStreamer 2.x?')
+
+        try:
             self.manager.enable_udp_output(device,  ip_address, port)
         except:
             traceback.print_exc()
 
         self.last_device = device
 
-        if not self.receiver:
-            self.receiver = UDPTSReceiver(port, timeout)
-
-        self.receiver.send_events = True
-
-        self.receiver.start(buffer)
-        self.last_device = device
+        buffer.fill('udp', '%s:%d' % (ip_address, port))
 
     def stop_filling(self):
         """
         Stop filling the buffer supplied in the previous start_filling call.
         """
-        if self.receiver:
-            self.receiver.stop()
         try:
             self.manager.disable_output(self.last_device)
         except:
             traceback.print_exc()
+        try:
+            controller = self.manager.get_controller(self.last_device)
+            controller.execute_command('setprop adapter.active false', True)
+        except:
+            _debug_('Not DVBStreamer 2.x?')
 
-    def enable_events(self, enable):
-        """
-        Enable/Disable sending of Data Received/Timeout events.
-        """
-        _debug_('Enable events? %s' % enable)
-        if self.receiver:
-            self.receiver.send_events = enable
 
 
 class HDHomeRunController(Controller):
@@ -188,8 +176,6 @@ class HDHomeRunController(Controller):
 
     def __init__(self):
         Controller.__init__(self)
-
-        self.receiver  = None
         self.last_device = None
 
     def start_filling(self, buffer, videogroup, channel, timeout):
@@ -210,26 +196,17 @@ class HDHomeRunController(Controller):
         os.system('hdhomerun_config %s set /tuner%s/program %s' % (id, tuner, channel))
         os.system('hdhomerun_config %s set /tuner%s/target %s:%d' % (id, tuner, ip_address, port))
 
-        if not self.receiver:
-            self.receiver = UDPTSReceiver(port, timeout)
-
-        self.receiver.start(buffer)
         self.last_device = (id, tuner)
+        buffer.fill('udp', '%s:%d' % (ip_address, port))
+
+
 
     def stop_filling(self):
         """
         Stop filling the buffer supplied in the previous start_filling call.
         """
-        if self.receiver:
-            self.receiver.stop()
         os.system('hdhomerun_config %s set /tuner%s/target none' % self.last_device)
 
-    def enable_events(self, enable):
-        """
-        Enable/Disable sending of Data Received/Timeout events.
-        """
-        if self.receiver:
-            self.receiver.send_events = enable
 
 class IVTVController(Controller):
     """
@@ -237,7 +214,6 @@ class IVTVController(Controller):
     """
     def __init__(self):
         COntroller.__init__(self)
-        self.receiver = MPEGProgamStreamReceiver()
         self.settings = None
 
     def start_filling(self, buffer, videogroup, channel, timeout):
@@ -269,20 +245,12 @@ class IVTVController(Controller):
             retcode = os.system(videogroup.cmd)
             _debug_("exit code: %g" % retcode)
         self.settings = v
-        self.receiver.start(device, buffer)
+        buffer.fill('psfile', videogroup.vdev)
 
     def stop_filling(self):
         """
         Stop filling the buffer supplied in the previous start_filling call.
         """
         if self.settings:
-            self.receiver.stop()
             self.settings.close()
             self.settings = None
-
-    def enable_events(self, enable):
-        """
-        Enable/Disable sending of Data Received/Timeout events.
-        """
-        if self.settings:
-            self.receiver.send_events = enable

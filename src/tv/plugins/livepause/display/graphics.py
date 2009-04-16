@@ -48,55 +48,68 @@ class GraphicsOSD(OSD):
     def __init__(self):
         super(OSD, self).__init__()
         self.channel_banner = ChannelBanner()
+        self.info_dialog = InfoDialog()
+        self.buffer_pos_dialog = BufferPositionDialog()
+        self.last_dialog = None
 
     def display_info(self, info_function):
-        dialog = InfoDialog(info_function)
-        dialog.show()
+        self.info_dialog.info_function = info_function
+        self.info_dialog.info_channel = None
+        self.info_dialog.show()
+        self.last_dialog = self.info_dialog
 
     def display_channel_number(self, channel):
         self.channel_banner.set_channel(channel)
         self.channel_banner.show()
+        self.last_dialog = self.channel_banner
+
+    def display_buffer_pos(self, info_function):
+        self.buffer_pos_dialog.info_function = info_function
+        self.buffer_pos_dialog.show()
+        self.last_dialog = self.buffer_pos_dialog
+    
+    def hide(self):
+        if self.last_dialog:
+            self.last_dialog.hide()
+            self.last_dialog = None
 
 class InfoDialog(InputDialog):
-    def __init__(self, info_function):
-        super(InfoDialog, self).__init__('info', 3.0)
-        self.info_function = info_function
-        info_dict = info_function()
-        self.info_channel = info_dict['channel']
-        self.info_prog = 'current'
-        self.current_channel = self.info_channel
+    def __init__(self):
+        super(InfoDialog, self).__init__('livepause_info', 3.0)
+        self.info_function = None
+        self.info_channel = None
+        self.info_prog = None
+        self.info_time = None
+        self.current_channel = None
+        self.current_prog = None
+
 
     def handle_event(self, event):
         update_info = False
         if event == 'INPUT_LEFT':
-            if self.info_prog == 'next':
-                self.info_prog = 'now'
-            elif self.info_channel == self.current_channel and self.info_prog == 'now':
-                self.info_prog = 'current'
+            if self.info_prog:
+                self.info_time = self.info_prog.start - 1.0
             update_info = True
 
         if event == 'INPUT_RIGHT':
-            if self.info_prog == 'current':
-                self.info_prog = 'now'
-            elif self.info_prog == 'now':
-                self.info_prog = 'next'
+            if self.info_prog:
+                self.info_time = self.info_prog.stop + 1.0
             update_info = True
 
         if event == 'INPUT_UP':
             channel = self.__get_previous_channel(self.info_channel)
             if channel:
-                if self.info_prog == 'current':
-                    self.info_prog = 'now'
                 self.info_channel = channel
             update_info = True
 
         if event == 'INPUT_DOWN':
             channel = self.__get_next_channel(self.info_channel)
             if channel:
-                if self.info_prog == 'current':
-                    self.info_prog = 'now'
                 self.info_channel = channel
             update_info = True
+        
+        if event == 'INPUT_EXIT':
+            self.hide()
 
         if update_info:
             self.show()
@@ -106,48 +119,52 @@ class InfoDialog(InputDialog):
 
     def get_info_dict(self):
         info_dict = self.info_function()
+        now = time.time()
+
+        if self.info_channel == None:
+            self.info_channel = info_dict['channel']
+            self.info_time = info_dict['current_time']
+            self.info_prog = 'current'
+            self.current_channel = self.info_channel
+            self.current_time = info_dict['current_time']
+
+        if self.current_channel == self.info_channel:
+            start_time = info_dict['start_time']
+            if self.info_time < start_time:
+                self.info_time = start_time
+        else:
+            if now > self.info_time:
+                self.info_time = now
 
         guide = tv.epg_xmltv.get_guide()
         tv_channel_id = self.__get_guide_channel(self.info_channel)
-        program = None
+        channels = guide.get_programs(self.info_time, self.info_time, tv_channel_id)
+        if channels and channels[0].programs:
+            self.info_prog = channels[0].programs[0]
 
-        if self.info_prog == 'current':
-            info_dict['guide_status'] = _('Current')
-            prog_time = info_dict['current_time']
-            channels = guide.get_programs(prog_time, prog_time, tv_channel_id)
-            if channels and channels[0].programs:
-                program = channels[0].programs[0]
+            if self.info_prog.start <= self.current_time and \
+                self.info_prog.stop >= self.current_time and \
+                self.current_channel == self.info_channel:
+                info_dict['guide_status'] = _('Current')
+            elif self.info_prog.start <= now and \
+                  self.info_prog.stop >= now:
+                info_dict['guide_status'] = _('Now')
+            else:
+                info_dict['guide_status'] = ''
 
-        elif self.info_prog == 'now':
-            info_dict['guide_status'] = _('Now')
-            prog_time = time.time()
-            channels = guide.get_programs(prog_time, prog_time, tv_channel_id)
-            if channels and channels[0].programs:
-                program = channels[0].programs[0]
+            info_dict['guide_program_title'] = self.info_prog.title
+            info_dict['guide_program_desc'] = self.info_prog.desc
+            info_dict['guide_program_start'] = self.info_prog.getattr('start')
+            info_dict['guide_program_stop'] = self.info_prog.getattr('stop')
 
-        elif self.info_prog == 'next':
-            info_dict['guide_status'] = _('Next')
-            prog_time = time.time()
-            channels = guide.get_programs(prog_time, prog_time, tv_channel_id)
-            if channels and channels[0].programs:
-                now = channels[0].programs[0]
-                next_start_time = now.stop + 1.0
-                channels = guide.get_programs(next_start_time, next_start_time, tv_channel_id)
-                if channels[0].programs:
-                    program = channels[0].programs[0]
-
-        info_dict['guide_channel'] = self.info_channel
-
-        if program:
-            info_dict['guide_program_title'] = program.title
-            info_dict['guide_program_desc'] = program.desc
-            info_dict['guide_program_start'] = program.getattr('start')
-            info_dict['guide_program_stop'] = program.getattr('stop')
         else:
+            self.info_prog = None
             info_dict['guide_program_title'] = ''
             info_dict['guide_program_desc'] = ''
             info_dict['guide_program_start'] = ''
             info_dict['guide_program_stop'] = ''
+
+        info_dict['guide_channel'] = self.info_channel
 
         # Convert time entries to localtime to allow use of strftime
         info_dict['start_time'] = time.localtime(info_dict['start_time'])
@@ -191,6 +208,21 @@ class InfoDialog(InputDialog):
 
         return result
 
+class BufferPositionDialog(Dialog):
+    def __init__(self):
+        super(BufferPositionDialog, self).__init__('livepause_bufferpos', 3.0)
+        self.info_function = None
+
+    def get_info_dict(self):
+        info_dict = self.info_function()
+
+        # Convert time entries to localtime to allow use of strftime
+        info_dict['start_time'] = time.localtime(info_dict['start_time'])
+        info_dict['end_time'] = time.localtime(info_dict['end_time'])
+        info_dict['current_time'] = time.localtime(info_dict['current_time'])
+        return info_dict
+
+
 class ChannelBanner(Dialog):
     def __init__(self):
         super(ChannelBanner, self).__init__('channelbanner', 3.0)
@@ -208,8 +240,13 @@ class ChannelBanner(Dialog):
         self.info_dict = {
                           'channel_number' : channel_number,
                           'channel_name'   : channel_name,
-                          'channel_logo'   : channel_logo
+                          'channel_logo'   : channel_logo,
+                          'time'           : time.localtime(),
                           }
 
+        print 'info_dict'
+        print info_dict
+        print
+        
     def get_info_dict(self):
         return self.info_dict
