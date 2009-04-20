@@ -133,8 +133,11 @@ def shutdown(menuw=None, mode=None, exit=False):
         _debug_('raise SystemExit')
         raise SystemExit
 
+    # We must use spawn instead of os.system here because the python interpreter
+    # lock is held by os.system until the command returns, which prevents receiving
+    # any signals.
     _debug_('%s --stop' % os.environ['FREEVO_SCRIPT'], 2)
-    os.system('%s --stop' % os.environ['FREEVO_SCRIPT'])
+    os.spawnlp(os.P_NOWAIT, os.environ['FREEVO_SCRIPT'], os.environ['FREEVO_SCRIPT'], '--stop')
 
     # Just wait until we're dead. SDL cannot be polled here anyway.
     while True:
@@ -212,7 +215,7 @@ class ShutdownItem(Item):
         shutdown freevo, don't shutdown the system
         """
         _debug_('shutdown_freevo(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        shutdown(menuw=menuw, mode=FREEVO_SHUTDOWN)
+        shutdown(menuw=menuw, mode=ShutdownModes.FREEVO_SHUTDOWN)
 
 
     def shutdown_system(self, arg=None, menuw=None):
@@ -220,7 +223,7 @@ class ShutdownItem(Item):
         shutdown the complete system
         """
         _debug_('shutdown_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        shutdown(menuw=menuw, mode=SYSTEM_SHUTDOWN)
+        shutdown(menuw=menuw, mode=ShutdownModes.SYSTEM_SHUTDOWN)
 
 
     def shutdown_system_restart(self, arg=None, menuw=None):
@@ -228,7 +231,7 @@ class ShutdownItem(Item):
         restart the complete system
         """
         _debug_('shutdown_system_restart(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        shutdown(menuw=menuw, mode=SYSTEM_RESTART)
+        shutdown(menuw=menuw, mode=ShutdownModes.SYSTEM_RESTART)
 
 
 

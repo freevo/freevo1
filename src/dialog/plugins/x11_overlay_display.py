@@ -68,6 +68,9 @@ class PluginInterface(plugin.Plugin):
         else:
             self.display = X11GraphicsDisplay()
             dialog.set_overlay_display(self.display)
+            singleton = osd.get_singleton()
+            if singleton:
+                singleton.shutdown = osd_shutdown
             plugin.Plugin.__init__(self)
 
 
@@ -75,15 +78,8 @@ class PluginInterface(plugin.Plugin):
         _debug_('what is the correct way to stop kaa.display.x11?')
 
 
-    def shutdown1(self):
-        if reason:
-            # Nasty hack to kill the connection
-            self.display.window = None
-            import kaa.display.x11
-            del kaa.display.x11._default_x11_display
-            kaa.display.x11._default_x11_display = None
-
-
+def osd_shutdown():
+    _debug_('x11_overlay_display overrode OSD.shutdown()!')
 
 if not reason:
     class X11GraphicsDisplay(GraphicsDisplay):
@@ -146,5 +142,3 @@ if not reason:
                 self.window.render_imlib2_image(self.image)
 
     x11_available = True
-
-
