@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# webradio.py - webradio plugin
+# linkbrowser plugin
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -31,7 +31,6 @@
 
 
 import os
-from xml.utils import qp_xml
 import urllib, urllib2, urlparse
 import sys
 import re
@@ -324,7 +323,6 @@ class PluginInterface(plugin.MainMenuPlugin):
     | plugin.activate('video.linkbrowser', args=('name', 'url') or
     | plugin.activate('video.linkbrowser', args=('name', 'url', image', ...)
     """
-
     def __init__(self, name, url, image=None, blacklist_regexp=None, autoplay=False, all_links=True):
         plugin.MainMenuPlugin.__init__(self)
         self.name = name
@@ -337,6 +335,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         blacklist_regexp = blacklist_regexp or []
         for b in blacklist_regexp:
             self.blacklist_regexp.append(re.compile(b).match)
+
 
     def items(self, parent):
         l = Link(self.name, self.url, self.blacklist_regexp, self.autoplay,

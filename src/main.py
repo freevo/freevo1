@@ -40,7 +40,6 @@ from optparse import Option, OptionValueError, OptionParser, IndentedHelpFormatt
 import pprint
 
 try:
-    from xml.utils import qp_xml
     from xml.dom import minidom
 
     # now load other modules to check if all requirements are installed

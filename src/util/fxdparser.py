@@ -34,7 +34,7 @@ import stat
 import traceback
 
 # XML support
-from xml.utils import qp_xml
+from util.qp_xml import Parser
 
 import config
 import util
@@ -73,7 +73,7 @@ class XMLnode:
         raise KeyError(to_find)
 
 
-class FXDtree(qp_xml.Parser):
+class FXDtree(Parser):
     """
     class to parse and write fxd files
     """
@@ -82,7 +82,7 @@ class FXDtree(qp_xml.Parser):
         Load the file and parse it. If the file does not exist, create
         an empty <freevo> node.
         """
-        qp_xml.Parser.__init__(self)
+        Parser.__init__(self)
         self.filename = filename
         if not vfs.isfile(filename):
             self.tree = XMLnode('freevo')

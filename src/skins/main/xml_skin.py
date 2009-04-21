@@ -41,8 +41,6 @@ import util
 import osd
 import plugin
 
-# XML support
-from xml.utils import qp_xml
 
 osd = osd.get_singleton()
 
