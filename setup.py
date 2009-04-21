@@ -17,7 +17,6 @@ from distutils import core
 
 
 libs_to_check = [
-    ('xml.utils.qp_xml', 'http://pyxml.sourceforge.net/'),
     ('kaa', '\"svn co svn://svn.freevo.org/kaa/trunk/ kaa\"' ),
     ('kaa.metadata', '\"svn co svn://svn.freevo.org/kaa/trunk/ kaa\"' ),
     ('kaa.imlib2', '\"svn co svn://svn.freevo.org/kaa/trunk/ kaa\"' ),

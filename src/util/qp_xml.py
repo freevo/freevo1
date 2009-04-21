@@ -16,11 +16,7 @@
 #
 
 import string
-
-try:
-    import pyexpat
-except ImportError:
-    from xml.parsers import pyexpat
+import pyexpat
 
 error = __name__ + '.error'
 
