@@ -1596,8 +1596,10 @@ DVD_LANG_PREF = 'en,se,no'         # Order of preferred languages on DVD.
 DVD_SUBTITLE_PREF = ''             # Order of preferred subtitles on DVD.
 
 # Priority of mplayer process. 0 is unchanged, <0 is higher prio, >0 lower prio.
-# prio <0 has no effect unless run as root.
+# prio <0 has no effect unless run as root. As a non-root user the lowest is 10
+# nice levels are -20 to 19
 MPLAYER_NICE = -20
+MENCODER_NICE = 15
 
 if CONF.display in ( 'directfb', 'dfbmga' ):
     MPLAYER_ARGS_DEF = ('-autosync 100 -nolirc -nojoystick -autoq 100 -fs ')
