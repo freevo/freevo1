@@ -350,16 +350,18 @@ def shutdown(plugin_name=None):
     """
     called to shutdown one or all daemon plugins
     """
-    plugins_to_shutdown = {}
+    plugins_to_shutdown = []
     for key in __plugin_type_list__:
         for p in __plugin_type_list__[key]:
             if (not plugin_name or p.plugin_name == plugin_name) and hasattr(p, 'shutdown'):
-                plugins_to_shutdown[p] = p
+                if p not in plugins_to_shutdown:
+                    plugins_to_shutdown.append(p)
 
-    for p in plugins_to_shutdown.keys():
-        _debug_('shutting down plugin %r %r' % (p.plugin_name, key), 2)
+    for p in plugins_to_shutdown:
+        plugin_name = p.__module__
+        _debug_('shutting down plugin %r' % (plugin_name,), 1)
         p.shutdown()
-        _debug_('shut down plugin %r' % p.plugin_name, 2)
+        _debug_('shut down plugin %r' % (plugin_name,), 2)
 
 
 def get(type):
