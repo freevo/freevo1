@@ -36,10 +36,8 @@ after checking for python.
 
 import sys
 import os
-import getopt
 import string
-
-CONFIG_VERSION = 2.2
+from optparse import Option, OptionParser, IndentedHelpFormatter
 
 # For Internationalization purpose
 # an exception is raised with Python 2.1 if LANG is unavailable.
@@ -50,6 +48,8 @@ except: # unavailable, define '_' for all modules
     import __builtin__
     __builtin__.__dict__['_']= lambda m: m
 
+
+CONFIG_VERSION = 2.2
 
 EXTERNAL_PROGRAMS = (
     ("mplayer", "mplayer", 1),
@@ -78,44 +78,71 @@ EXTERNAL_PROGRAMS = (
     ("livepause","livepause",0)
 )
 
-# Help text
-def print_usage():
-    usage = _('''\
-Usage: ./freevo setup [OPTION]...
-Set up Freevo for your specific environment.
 
-   --geometry=WIDTHxHEIGHT      set the display size
-                                  WIDTHxHEIGHT can be 800x600, 768x576 or 640x480
+def parse_options(defaults):
+    """
+    Parse command line options
+    """
+    import version
+    geometry_choices = ['800x600', '768x576', '640x480']
+    display_choices = ['x11', 'fbdev', 'dxr3', 'mga', 'directfb', 'dfbmga', 'dga']
+    tv_choices = ['ntsc', 'pal', 'secam']
+    chanlist_choices = [
+        'us-cable', 'us-cable-hrc', 'australia', 'italy', 'canada-cable', 'china-bcast', 'japan-bcast',
+        'japan-cable', 'newzealand', 'switzerland', 'southafrica', 'us-bcast', 'ireland', 'europe-west',
+        'argentina', 'france', 'russia', 'europe-east'
+    ]
 
-   --display=DISP               set the display
-                                  DISP can be x11, fbdev, dxr3, mga,
-                                  directfb, dfbmga or dga
+    formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+    parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="""freevo %prog [options]
+    
+For more information see:
+    freevo %prog -- --help""",
+        version='%prog ' + version._version)
+    parser.prog = 'setup'
+    parser.description = """Set up Freevo for your specific environment.
 
-   --tv=NORM                    set the TV standard
-                                  NORM can be ntsc, pal or secam
+Depending on the display and the tv standard the geometry may be automatically changed."""
+    parser.add_option('-v', '--verbose', action='count', default=0,
+        help='set the level of verbosity [default:%default]')
+    parser.add_option('--geometry', default='800x600', metavar='GEOMETRY',
+        help='set the screen geometry [default:%default]')
+    parser.add_option('--display', choices=display_choices, default=display_choices[0], metavar='DISPLAY',
+        help='set the display, choose from: ' + ', '.join(display_choices) + ' [default:%default]')
+    parser.add_option('--tv', choices=tv_choices, default=tv_choices[0], metavar='STANDARD',
+        help='set the TV standard, choose from: ' + ', '.join(tv_choices) + ' [default:%default]')
+    parser.add_option('--chanlist', choices=chanlist_choices, default=chanlist_choices[0], metavar='LIST',
+        help='set the channel list, choose from: ' + ', '.join(chanlist_choices) + ' [default:%default]')
+    parser.add_option('--sysfirst', action='store_true', default=False,
+        help='search for from system path first [default:%default]')
+    parser.add_option('--compile', action='store', default=None,
+        help='compile the modules [default:%default]')
+    parser.add_option('--prefix', action='store', default='.',
+        help='destination prefix the modules [default:%default]')
 
-   --chanlist=LIST              set the channel list
-                                  LIST can be us-bcast, us-cable, us-cable-hrc,
-                                  japan-bcast, japan-cable, europe-west,
-                                  europe-east, italy, newzealand, australia,
-                                  ireland, france, china-bcast, southafrica,
-                                  argentina, canada-cable, switzerland
+    opts, args = parser.parse_args()
+    try:
+        w, h = opts.geometry.split('x')
+        width = int(w)
+        height = int(h)
+    except:
+        parser.error('geometry %r is not "<width>x<height>"' % opts.geometry)
+    if opts.compile is not None:
+        try:
+            int(opts.compile)
+        except:
+            parser.error('compile %r is not one of (0, 1, 2)' % opts.geometry)
 
-   --help                       display this help and exit
-
-The default is "--geometry=800x600 --display=x11 --tv=ntsc --chanlist=us-cable"
-Please report bugs to <freevo-users@lists.sourceforge.net>.
-''')
-
-    print usage
+    return opts, args
 
 
-class Struct:
-    pass
-
+class FreevoConf:
+    def __init__(self, **kw):
+        self.__dict__.update(kw)
 
 
 def match_files_recursively_helper(result, dirname, names):
+    #print 'match_files_recursively_helper(result=%r, dirname=%r, names=%r)' % (result, dirname, names)
     if dirname == '.' or dirname[:5].upper() == './WIP':
         return result
     for name in names:
@@ -125,42 +152,15 @@ def match_files_recursively_helper(result, dirname, names):
     return result
 
 
-def check_config(conf):
-    vals_geometry = ['800x600', '768x576', '640x480']
-    vals_display = ['x11', 'fbdev', 'directfb', 'dfbmga', 'mga', 'dxr3', 'dga']
-    vals_tv = ['ntsc', 'pal', 'secam']
-    vals_chanlist = ['us-bcast', 'us-cable', 'us-cable-hrc',
-                     'japan-bcast', 'japan-cable', 'europe-west',
-                     'europe-east', 'italy', 'newzealand', 'australia',
-                     'ireland', 'france', 'china-bcast', 'southafrica',
-                     'argentina', 'canada-cable', 'russia', 'switzerland']
-
-    if not conf.geometry in vals_geometry:
-        print 'geometry must be one of: %s' % ' '.join(vals_geometry)
-        sys.exit(1)
-
-    if not conf.display in vals_display:
-        print 'display must be one of: %s' % ' '.join(vals_display)
-        sys.exit(1)
-
-    if not conf.tv in vals_tv:
-        print 'tv must be one of: %s' % ' '.join(vals_tv)
-        sys.exit(1)
-
-    if not conf.chanlist in vals_chanlist:
-        print 'chanlist must be one of: %s' % ' '.join(vals_chanlist)
-        sys.exit(1)
-
-
 def create_config(conf):
 
-    outfile='/etc/freevo/freevo.conf'
+    outfile = '/etc/freevo/freevo.conf'
     try:
         fd = open(outfile, 'w')
     except:
         if not os.path.isdir(os.path.expanduser('~/.freevo')):
             os.mkdir(os.path.expanduser('~/.freevo'))
-        outfile=os.path.expanduser('~/.freevo/freevo.conf')
+        outfile = os.path.expanduser('~/.freevo/freevo.conf')
         fd = open(outfile, 'w')
 
     for val in dir(conf):
@@ -173,23 +173,22 @@ def create_config(conf):
     print 'wrote %s' % outfile
 
 
-def check_program(conf, name, variable, necessary, sysfirst=1, verbose=1):
+def check_program(conf, opts, name, variable, necessary):
 
     # Check for programs both in the path and the runtime apps dir
-    search_dirs_runtime = ['./runtime/apps', './runtime/apps/mplayer',
-                           './runtime/apps/tvtime']
-    if sysfirst:
+    search_dirs_runtime = ['./runtime/apps', './runtime/apps/mplayer', './runtime/apps/tvtime']
+    if opts.sysfirst:
         search_dirs = os.environ['PATH'].split(':') + search_dirs_runtime
     else:
         search_dirs = search_dirs_runtime + os.environ['PATH'].split(':')
 
-    if verbose:
+    if opts.verbose:
         print _('checking for %-13s') % (name+'...'),
 
     for dirname in search_dirs:
         filename = os.path.join(dirname, name)
         if os.path.exists(filename) and os.path.isfile(filename):
-            if verbose:
+            if opts.verbose:
                 print filename
             conf.__dict__[variable] = filename
             break
@@ -204,75 +203,44 @@ def check_program(conf, name, variable, necessary, sysfirst=1, verbose=1):
             print
             print
             sys.exit(1)
-        elif verbose:
+        elif opts.verbose:
             print _('not found (deactivated)')
 
 
 
 
 if __name__ == '__main__':
-    # Default opts
+    from pprint import pprint
 
-    # XXX Make this OO and also use the Optik lib
-    conf = Struct()
-    conf.geometry = '800x600'
-    conf.display = 'x11'
-    conf.tv = 'ntsc'
-    conf.chanlist = 'us-cable'
-    conf.version = CONFIG_VERSION
-    sysfirst = 0 # Check the system path for apps first, then the runtime
+    opts, args = parse_options({})
 
-    # Parse commandline options
-    try:
-        long_opts = 'help compile= geometry= display= tv= chanlist= sysfirst'.split()
-        opts, args = getopt.getopt(sys.argv[1:], 'h', long_opts)
-    except getopt.GetoptError:
-        # print help information and exit:
-        print_usage()
-        sys.exit(2)
+    conf = FreevoConf(
+        geometry=opts.geometry,
+        display=opts.display,
+        tv=opts.tv,
+        chanlist=opts.chanlist,
+        version=CONFIG_VERSION
+    )
 
-    for o, a in opts:
-        if o in ("-h", "--help"):
-            print_usage()
-            sys.exit()
+    # this is called by the Makefile, don't call it directly
+    if opts.compile is not None:
+        # Compile python files:
+        import distutils.util
+        try:
+            optimize = min(opts.compile, 2)
+        except Exception, why:
+            sys.exit(why)
 
-        if o == '--geometry':
-            conf.geometry = a
-
-        if o == '--display':
-            conf.display = a
-
-        if o == '--tv':
-            conf.tv = a
-
-        if o == '--chanlist':
-            conf.chanlist = a
-
-        if o == '--sysfirst':
-            sysfirst = 1
-
-        # this is called by the Makefile, don't call it directly
-        if o == '--compile':
-            # Compile python files:
-            import distutils.util
-            try:
-                optimize=min(int(a[0]), 2)
-                prefix=a[2:]
-            except:
-                sys.exit(1)
-
-            files = []
-            os.path.walk('.', match_files_recursively_helper, files)
-            distutils.util.byte_compile(files, prefix='.', base_dir=prefix, optimize=optimize)
-            sys.exit(0)
+        files = []
+        os.path.walk('.', match_files_recursively_helper, files)
+        distutils.util.byte_compile(files, prefix='.', base_dir=opts.prefix, optimize=optimize)
+        sys.exit(0)
 
 
-    print _('System path first=%s') % ( [_('No'), _('Yes')][sysfirst])
+    print _('System path first=%s') % ( [_('No'), _('Yes')][opts.sysfirst])
 
     for program, valname, needed in EXTERNAL_PROGRAMS:
-        check_program(conf, program, valname, needed, sysfirst)
-
-    check_config(conf)
+        check_program(conf, opts, program, valname, needed)
 
     # set geometry for display/tv combinations without a choice
     if conf.display in ( 'directfb', 'dfbmga' ):
