@@ -82,6 +82,8 @@ from event import *
 
 
 class MyProgressBox(ProgressBox):
+    """
+    """
     def __init__(self, text, x=None, y=None, width=0, height=0, icon=None,
         vertical_expansion=1, text_prop=None, full=0, parent='osd',
         handler=None, initial_progress=0):
@@ -115,6 +117,8 @@ class MyProgressBox(ProgressBox):
 
 
 class Logger:
+    """
+    """
     def __init__(self):
         _debug_('cd_burn.Logger.__init__()')
         self.filename = '%s/%s-%s.log' % (config.FREEVO_LOGDIR, 'burn_cd-helpers', os.getuid())
@@ -168,6 +172,7 @@ class BurnCDItem:
             AlertBox(text=_('Not Yet implemented :)')).show()
             return
 
+
     def check_program(self, program=None, program_name=None):
         """
         checks if the file "program" with the program name exists and is
@@ -182,6 +187,7 @@ class BurnCDItem:
             return 0
         else:
             return 1
+
 
     def burn_audio_cd(self):
         """
@@ -303,20 +309,21 @@ class BurnCDItem:
         _debug_('clean_up_burndir end');
         return 1
 
+
     def start_burning(self, arg=None, menuw=None):
         """
         Starts the burning thread
         """
         _debug_('start_burning(arg=%r, menuw=%r)' % (arg, menuw))
-        self.thread_burn = main_burn_thread(token=self)
+        self.thread_burn = MainBurnThread(token=self)
         self.thread_burn.start()
         self.plugin.thread_burn = self.thread_burn
         self.menu_back()
 
+
     #
     # Routines to find files for burning
     #
-
     def findFileFromItem(self):
         """Finds the file of a single file item"""
         _debug_('findFileFromItem()')
@@ -325,11 +332,13 @@ class BurnCDItem:
             self.volume_name = self.item.name
             self.files.append(self.item.filename)
 
+
     def findFromDir(self):
         """Finds all the files in a directory item"""
         _debug_('findFromDir()')
         for f in os.listdir(self.item.dir) :
             self.files.append(self.item.dir+'/'+f)
+
 
     def findFromPlaylist(self) :
         """Adds all files in a play-list to self's list of files to burn"""
@@ -340,6 +349,7 @@ class BurnCDItem:
                 self.files.append(line.rstrip("\n"))
         finally:
             f.close()
+
 
     def findRelated(self, mode=0):
         """
@@ -370,6 +380,7 @@ class BurnCDItem:
             _debug_('extension ' + ext)
             self.files.append(k)
 
+
     def findFromDirMatches(self, suffix=None):
         """finds all files in a dir matching suffix"""
         _debug_('findFromDirMatches(suffix=%r)' % (suffix,))
@@ -378,12 +389,14 @@ class BurnCDItem:
         matches = util.match_files(dirname=self.item.dir, suffix_list=suffix)
         self.files = matches
 
-class main_burn_thread(threading.Thread):
+
+
+class MainBurnThread(threading.Thread):
     """
     Thread that really burns the CD
     """
     def __init__(self, token=None):
-        _debug_('cd_burn.main_burn_thread.__init__(token=%r)' % (token))
+        _debug_('cd_burn.MainBurnThread.__init__(token=%r)' % (token,))
         threading.Thread.__init__(self)
         self.token  = token
         self.childs = []
@@ -398,6 +411,7 @@ class main_burn_thread(threading.Thread):
 
         #widget to display the status
         self.widget = False
+
 
     def stop(self):
         _debug_('stop()')
@@ -453,7 +467,7 @@ class main_burn_thread(threading.Thread):
 
             self.update_status(status='error', description='Aborted by user')
 
-    #mick, all childs are spwaned using this method
+
     def run_child(self, cmd=None, cwd=None, wait=0, task_weight=False):
         """
         Spawns a child using command cmd.
@@ -524,6 +538,7 @@ class main_burn_thread(threading.Thread):
                 return
         return child_app
 
+
     def makeNonBlocking(self, fd):
         _debug_('makeNonBlocking(fd=%s)' % (fd,))
         fl = fcntl.fcntl(fd, fcntl.F_GETFL)
@@ -531,6 +546,7 @@ class main_burn_thread(threading.Thread):
             fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NDELAY)
         except AttributeError:
             fcntl.fcntl(fd, fcntl.F_SETFL, fl | fcntl.FNDELAY)
+
 
     def show_status(self, arg=None, menuw=None):
         """
@@ -541,6 +557,7 @@ class main_burn_thread(threading.Thread):
             handler=self.hide_status, full=100, initial_progress=self.progress)
         self.widget.show()
 
+
     def hide_status(self, arg=None, menuw=None):
         _debug_('hide_status(arg=%r, menuw=%r)' % (arg, menuw))
         w = self.widget;
@@ -548,12 +565,14 @@ class main_burn_thread(threading.Thread):
         if w:
             w.destroy
 
+
     def update_progress(self, progress=0):
         _debug_('update_progress(progress=%r)' % (progress,))
         self.progress=progress
         if self.widget:
             self.widget.set_progress(progress)
             self.widget.draw(update=True)
+
 
     def update_status(self, status='running', description=None):
         """
@@ -730,7 +749,6 @@ class PluginInterface(plugin.ItemPlugin):
     Activate in local_conf.py by:
     | plugin.activate(cd_burn)
     """
-
     def __init__(self):
         _debug_('cd_burn.PluginInterface.__init__()')
         plugin.ItemPlugin.__init__(self)
@@ -738,6 +756,7 @@ class PluginInterface(plugin.ItemPlugin):
         self.item   = None
         self.thread_burn = None
         self.dev_list = []
+
 
     def config(self):
         """
@@ -748,23 +767,15 @@ class PluginInterface(plugin.ItemPlugin):
         try:
             self.dev_list = []
             child = popen2.Popen4('cdrecord -scanbus')
-            while child.poll() < 0:
-                # _debug_(child.pid)
-                try:
-                    while 1:
-                        line = child.fromchild.readline()
-                        #if line and ('RW' in line):
-                        if line and (line.find('RW') != -1):
-                            # _debug_(line)
-                            burn_dev = line.split()[0]
-                            # _debug_(burn_dev)
-                            self.dev_list.append(burn_dev)
-                        else:
-                            # this is needed to get out of while loop..
-                            break
-                except IOError:
-                    _debug_("no line")
-                time.sleep(0.1)
+            try:
+                while child.poll() < 0:
+                    line = child.fromchild.readline()
+                    if line and line.find('RW') >= 0:
+                        burn_dev = line.split()[0]
+                        self.dev_list.append(burn_dev)
+            except IOError:
+                _debug_("no line")
+            time.sleep(0.1)
 
             if len(self.dev_list) and self.dev_list[0]:
                 record_dev = self.dev_list[0]
@@ -787,6 +798,7 @@ class PluginInterface(plugin.ItemPlugin):
             ('CDBURN_DEV', record_dev, 'Device for cdrecord to burn with (not auto detected)')
         ]
 
+
     def stop_burning(self, arg, menuw=None):
         _debug_('stop_burning(arg=%r, menuw=%r)' % (arg, menuw))
         pop = PopupBox(text=_('Interrupting burning process...'))
@@ -800,6 +812,7 @@ class PluginInterface(plugin.ItemPlugin):
             menuw.refresh
 
         AlertBox(text=_('Backup interrupted')).show()
+
 
     def actions(self, item):
         _debug_('actions(item=%r)' % (item,), 2)
@@ -820,6 +833,7 @@ class PluginInterface(plugin.ItemPlugin):
             return [ (self.fill_menu, _('Burn CD')) ]
         else:
             return []
+
 
     def draw_menu(self, menuw=None, items=None):
         """
