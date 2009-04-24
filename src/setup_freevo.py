@@ -173,22 +173,25 @@ def create_config(conf):
     print 'wrote %s' % outfile
 
 
-def check_program(conf, opts, name, variable, necessary):
+def check_program(conf, name, variable, necessary, opts=None):
 
     # Check for programs both in the path and the runtime apps dir
+    sysfirst = opts is not None and opts.sysfirst
+    verbose = opts is not None and opts.verbose
+
     search_dirs_runtime = ['./runtime/apps', './runtime/apps/mplayer', './runtime/apps/tvtime']
-    if opts.sysfirst:
+    if sysfirst:
         search_dirs = os.environ['PATH'].split(':') + search_dirs_runtime
     else:
         search_dirs = search_dirs_runtime + os.environ['PATH'].split(':')
 
-    if opts.verbose:
+    if verbose:
         print _('checking for %-13s') % (name+'...'),
 
     for dirname in search_dirs:
         filename = os.path.join(dirname, name)
         if os.path.exists(filename) and os.path.isfile(filename):
-            if opts.verbose:
+            if verbose:
                 print filename
             conf.__dict__[variable] = filename
             break
@@ -203,7 +206,7 @@ def check_program(conf, opts, name, variable, necessary):
             print
             print
             sys.exit(1)
-        elif opts.verbose:
+        elif verbose:
             print _('not found (deactivated)')
 
 
@@ -240,7 +243,7 @@ if __name__ == '__main__':
     print _('System path first=%s') % ( [_('No'), _('Yes')][opts.sysfirst])
 
     for program, valname, needed in EXTERNAL_PROGRAMS:
-        check_program(conf, opts, program, valname, needed)
+        check_program(conf, program, valname, needed, opts)
 
     # set geometry for display/tv combinations without a choice
     if conf.display in ( 'directfb', 'dfbmga' ):

@@ -504,7 +504,7 @@ cfgfilepath = ['.', os.path.expanduser('~/.freevo'), '/etc/freevo', '/usr/local/
 # Default settings
 # These will be overwritten by the contents of 'freevo.conf'
 #
-CONF = setup_freevo.Struct()
+CONF = setup_freevo.FreevoConf()
 CONF.geometry = '800x600'
 CONF.position = '0,0'
 CONF.width, CONF.height = 800, 600
@@ -560,7 +560,7 @@ for dirname in cfgfilepath:
             if len(line) == 0:
                 continue
             vals = line.split()
-            _debug_('Cfg file data: "%s"' % line, 2)
+            _debug_('Cfg file data: "%s"' % line)
             try:
                 name, val = vals[0].strip(), vals[2].strip()
             except:
@@ -587,7 +587,7 @@ else:
 #
 for program, valname, needed in setup_freevo.EXTERNAL_PROGRAMS:
     if not hasattr(CONF, valname) or not getattr(CONF, valname):
-        setup_freevo.check_program(CONF, program, valname, needed, verbose=0)
+        setup_freevo.check_program(CONF, program, valname, needed)
     if not hasattr(CONF, valname) or not getattr(CONF, valname):
         setattr(CONF, valname, '')
 
