@@ -55,11 +55,6 @@ from twisted.internet import reactor
 from twisted.web import static, server, vhost, script, rewrite
 
 
-if len(sys.argv)>1 and sys.argv[1] == '--help':
-    print 'start or stop the internal webserver'
-    print 'usage freevo webserver [ start | stop ]'
-    sys.exit(0)
-
 # No debugging in this module
 DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
 
@@ -109,6 +104,25 @@ def main():
 
 
 if __name__ == '__main__':
+    from optparse import IndentedHelpFormatter, OptionParser
+
+    def parse_options():
+        """
+        Parse command line options
+        """
+        import version
+        formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+        parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [--daemon|--stop]",
+            version='%prog ' + str(version._version))
+        parser.prog = appname
+        parser.description = "start or stop the internal webserver"
+
+        opts, args = parser.parse_args()
+        return opts, args
+
+
+    opts, args = parse_options()
+
     try:
         _debug_('main() starting')
         main()
