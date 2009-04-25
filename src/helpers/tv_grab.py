@@ -34,41 +34,25 @@
 import sys
 import os
 import shutil
+from optparse import Option, OptionParser, IndentedHelpFormatter
 
 import config
-
-def usage():
-    print 'Downloads the listing for xmltv and cache the data'
-    print
-    print 'usage: freevo tv_grab [ --query ]'
-    print 'options:'
-    print '  --query:  print a list of all stations. The list can be used to set TV_CHANNELS'
-    sys.exit(0)
-
 
 def grab():
     if not config.XMLTV_GRABBER:
         print 'No program found to grab the listings. Please set XMLTV_GRABBER'
         print 'in local.conf.py to the grabber you need'
-        print
-        usage()
 
     print 'Grabbing listings.'
     xmltvtmp = '/tmp/TV.xml.tmp'
-    ec = os.system('%s --output %s --days %s' % ( config.XMLTV_GRABBER,
-                                             xmltvtmp,
-                                             config.XMLTV_DAYS ))
+    ec = os.system('%s --output %s --days %s' % ( config.XMLTV_GRABBER, xmltvtmp, config.XMLTV_DAYS ))
 
     if os.path.exists(xmltvtmp) and ec == 0:
         if os.path.isfile(config.XMLTV_SORT):
             print 'Sorting listings.'
-            os.system('%s --output %s %s' % ( config.XMLTV_SORT,
-                                              xmltvtmp+'.1',
-                                              xmltvtmp ))
-
+            os.system('%s --output %s %s' % ( config.XMLTV_SORT, xmltvtmp+'.1', xmltvtmp ))
             shutil.copyfile(xmltvtmp+'.1', xmltvtmp)
             os.unlink(xmltvtmp+'.1')
-
         else:
             print 'Not configured to use tv_sort, skipping.'
 
@@ -77,29 +61,37 @@ def grab():
         import tv.epg_xmltv
         tv.epg_xmltv.get_guide(XMLTV_FILE=xmltvtmp)
     else:
-        sys.stderr.write("ERROR: xmltv grabbing failed; "
-                         "%s returned exit code %d.\n" %
-                         (config.XMLTV_GRABBER, ec >> 8))
-        sys.stderr.write("  If you did not change your system, it's likely that "
-                         "the site being grabbed did.\n  You might want to try "
-                         "whether updating your xmltv helps in that case:\n"
-                         "    http://www.xmltv.org/\n")
-        sys.exit(1)
+        sys.stderr.write("\n")
+        sys.stderr.write("ERROR: xmltv grabbing failed; %s returned exit code %d.\n" % (config.XMLTV_GRABBER, ec >> 8))
+        sys.exit(
+            "If you did not change your system, it's likely that the site being grabbed did.\n"
+            "You might want to try whether updating your xmltv helps in that case:\n"
+            "   http://www.xmltv.org/\n")
+
 
 if __name__ == '__main__':
 
-    def handler(result):
-        if result:
-            print _('Updated recording schedule')
-        else:
-            print _('Not updated recording schedule')
-        raise SystemExit
+    def parse_options():
+        """
+        Parse command line options
+        """
+        import version
+        formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+        parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [options]",
+            version='%prog ' + str(version._version))
+        prog = os.path.basename(sys.argv[0])
+        parser.prog = os.path.splitext(prog)[0]
+        parser.description = "Downloads the listing for xmltv and cache the data"
+        parser.add_option('-q', '--query', action='store_true', default=False,
+            help='print a list of all stations. The list can be used to set TV_CHANNELS [default:%default]')
+
+        opts, args = parser.parse_args()
+        return opts, args
 
 
-    if len(sys.argv)>1 and sys.argv[1] == '--help':
-        usage()
+    opts, args = parse_options()
 
-    if len(sys.argv)>1 and sys.argv[1] == '--query':
+    if opts.query:
         print
         print 'searching for station information'
 
@@ -120,6 +112,14 @@ if __name__ == '__main__':
 
     import kaa
     from tv.record_client import RecordClient
+
+    def handler(result):
+        if result:
+            print _('Updated recording schedule')
+        else:
+            print _('Not updated recording schedule')
+        raise SystemExit
+
 
     print 'Scheduling favorites for recording:  '
     if not RecordClient().updateFavoritesSchedule(handler):
