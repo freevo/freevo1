@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# evdev.py - Linux /dev/input/event# interface library
+# Linux /dev/input/event# interface library
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -41,9 +41,13 @@ _ids = {}
 _buses = {}
 
 def _convert_value(s):
-    if s.startswith("0x"):
-        return int(s, 16)
-    return int(s, 10)
+    try:
+        if s.startswith("0x"):
+            return int(s, 16)
+        return int(s, 10)
+    except ValueError:
+        pass
+
 
 def parse_input_h(path):
     global _types, _events, _ids, _buses
@@ -56,7 +60,9 @@ def parse_input_h(path):
     ids = {}
     buses = {}
 
+    linenum = 0
     for line in f.readlines():
+        linenum += 1
         m = re.search("#define (?P<name>EV_[A-Za-z0-9_]+)\s+(?P<value>(0x)?[0-9A-Fa-f]+)", line)
         if m:
             if m.group("name") != "EV_VERSION":
@@ -90,7 +96,10 @@ def parse_input_h(path):
             if not events.has_key(k):
                 events[k] = {}
 
-            events[k][_convert_value(m.group("value"))] = m.group("name")
+            try:
+                events[k][_convert_value(m.group("value"))] = m.group("name")
+            except ValueError, why:
+                raise ValueError('%s at line %d' % (why, linenum))
 
     _types = types
     _events = events
@@ -116,6 +125,8 @@ def save_event(fout):
     for event in _events:
         print >>fout, '    %d : { # %s' % (event, _types[event])
         for subevent in _events[event]:
+            if subevent is None:
+                continue
             print >>fout, '        %3d : \'%s\',' % (subevent, _events[event][subevent])
         print >>fout, '    },'
     print >>fout, '}'
@@ -251,14 +262,14 @@ class evdev:
             self._fd = None
 
     def print_info(self):
-        print "Input driver version %d.%d.%d" % self.get_version()
+        print >>sys.stderr, "Input driver version %d.%d.%d" % self.get_version()
 
         devid = self.get_id()
-        print "Device ID: bus %s vendor 0x%04x product 0x%04x version 0x%04x" % \
-            (devid["bus"], devid["vendor"], devid["product"], devid["version"])
+        print >>sys.stderr, 'Device ID: bus %s vendor 0x%04x product 0x%04x version 0x%04x' % \
+            (devid['bus'], devid['vendor'], devid['product'], devid['version'])
 
-        print 'Device name: "' + self.get_name() + '"'
-        print 'Device location: "' + self.get_location() + '"'
+        print >>sys.stderr, 'Device name: "' + self.get_name() + '"'
+        print >>sys.stderr, 'Device location: "' + self.get_location() + '"'
 
     def print_events(self):
         print "Supported events:"
@@ -371,34 +382,47 @@ def help():
 
 
 if __name__ == "__main__":
-    argc = len(sys.argv)
+    from optparse import IndentedHelpFormatter, OptionParser
 
-    device = None
-    input_h = '/usr/include/linux/input.h'
-    for argv in sys.argv:
-        if argv in ('-h', '--help'):
-            help()
-            sys.exit(0)
-        if argv.find('/dev/') >= 0:
-            device = argv
-        if argv.find('input.h') >= 0:
-            input_h = argv
+    def parse_options():
+        """
+        Parse command line options
+        """
+        import version
+        formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+        parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [options]",
+            version='%prog ' + str(version._version))
+        parser.prog = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+        parser.description = "Parse the input header file for event data"
+        parser.add_option('-v', '--verbose', action='count', default=0,
+            help='set the level of verbosity [default:%default]')
+        parser.add_option('--device', metavar='DEVICE', default='/dev/input/event0',
+            help='device [default:%default] information will be also written to stdout')
+        parser.add_option('--input', metavar='INPUT', default='/usr/include/linux/input.h',
+            help='parse the imput header [default:%default] and write the event' \
+                'data to stdout, this can be redirected to the linuxevent.py')
+
+        opts, args = parser.parse_args()
+        return opts, args
+
+
+    opts, args = parse_options()
+
+    device = opts.device
+    input_h = opts.input
 
     if not os.path.exists(input_h):
-        print '\"%s\" does not exist' % input_h
-        sys.exit(1)
+        sys.exit('%r does not exist' % (input_h,))
 
     try:
         parse_input_h(input_h)
-    except StandardError, e:
-        print 'Failed to parse \"%s\": %s' % (input_h, e)
-        sys.exit(1)
+    except StandardError, why:
+        sys.exit('Failed to parse %r: %s' % (input_h, why))
 
     try:
         save_event(sys.stdout)
-    except StandardError, e:
-        print 'Failed writing: %s' % (e)
-        sys.exit(1)
+    except StandardError, why:
+        sys.exit('Failed to write %r: %s' % (input_h, why))
 
     if device:
         e = evdev(device, True)
