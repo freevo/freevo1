@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# vtrelease.py - release the ttys after pygame crash
+# Release the ttys after pygame crash
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -34,15 +34,24 @@
 import os
 import sys
 from fcntl import ioctl
+from optparse import IndentedHelpFormatter, OptionParser
 
-if len(sys.argv)>1 and sys.argv[1] == '--help':
-    print 'release the vt in case freevo crashed and still locks'
-    print 'the framebuffer.'
-    print
-    print 'this script has no options'
-    print
-    sys.exit(0)
+def parse_options():
+    """
+    Parse command line options
+    """
+    import version
+    formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+    parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [options]",
+        version='%prog ' + str(version._version))
+    parser.prog = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+    parser.description = "release the vt in case freevo crashed and still locks the framebuffer"
 
+    opts, args = parser.parse_args()
+    return opts, args
+
+
+opts, args = parse_options()
 
 for i in range(1,7):
     try:
