@@ -308,7 +308,7 @@ IS_RSSSERVER = 0
 __builtin__.__dict__['__freevo_app__'] = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 
 if sys.argv[0].find('main.py') == -1:
-    HELPER=1
+    HELPER = 1
     if sys.argv[0].find('recordserver.py') != -1:
         IS_RECORDSERVER = 1
     elif sys.argv[0].find('webserver.py') != -1:
@@ -505,14 +505,6 @@ cfgfilepath = ['.', os.path.expanduser('~/.freevo'), '/etc/freevo', '/usr/local/
 # These will be overwritten by the contents of 'freevo.conf'
 #
 CONF = setup_freevo.FreevoConf()
-CONF.geometry = '800x600'
-CONF.position = '0,0'
-CONF.width, CONF.height = 800, 600
-CONF.x, CONF.y = 0, 0
-CONF.display = 'x11'
-CONF.tv = 'ntsc'
-CONF.chanlist = 'us-cable'
-CONF.version = 0
 
 #
 # Read the environment set by the start script
@@ -611,12 +603,12 @@ if not HELPER:
             print 'Warning: display is set to %s, but the environment ' % CONF.display + \
                   'has no DISPLAY set. Setting display to fbdev.'
             print
-            CONF.display='fbdev'
+            CONF.display = 'fbdev'
 
 elif CONF.display == 'dxr3':
     # don't use dxr3 for helpers. They don't use the osd anyway, but
     # it may mess up the dxr3 output (don't ask why).
-    CONF.display='fbdev'
+    CONF.display = 'fbdev'
 
 #
 # Load freevo_config.py:
@@ -844,7 +836,7 @@ if ROM_DRIVES == None:
                     print 'Trying to autodetect type of %s' % devname
                     if os.path.exists('/proc/ide/' + re.sub(r'^(/dev/)', '', devname) + '/media'):
                         if open('/proc/ide/'+  re.sub(r'^(/dev/)', '', devname) +\
-                             '/media', 'r').read().lower().find('cdrom') !=1:
+                             '/media', 'r').read().lower().find('cdrom') != 1:
                             dispname = 'CD-%s' % (len(ROM_DRIVES)+1)
                             print ("%s is a cdrom drive" %devname)
                     else:
@@ -895,7 +887,7 @@ def sortchannels(list, key):
     for l in list:
         if len(l[key]) == 1:
             l[key].append(('0', ))
-    nlist = map(lambda x, key=key: (string.split(x[key][1][0])[0], x), list)
+    nlist = map(lambda x, key = key: (string.split(x[key][1][0])[0], x), list)
     nlist.sort()
     return map(lambda (key, x): x, nlist)
 
@@ -940,7 +932,7 @@ def detect_channels():
         input = open(file, 'r')
         tmp   = open('/tmp/xmltv_parser', 'w')
         while(1):
-            line =input.readline()
+            line = input.readline()
             if not line:
                 break
             if line.find('<programme') > 0:
