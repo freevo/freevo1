@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# makestationlist.py - Generates stationlist.xml for use with tvtime
+# Generates stationlist.xml for use with tvtime
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -31,7 +31,7 @@
 #
 # -----------------------------------------------------------------------
 
-'''
+"""
 Band name          Channels provided
 US Cable           1-99
 US Cable 100       100-125
@@ -52,7 +52,7 @@ VHF South Africa   1-13
 UHF                U21-U69
 UHF Australia      AU28-AU69
 Australia Optus    01-058
-'''
+"""
 
 import sys
 import config
@@ -66,37 +66,57 @@ bands = [
     'VHF South Africa', 'UHF', 'UHF Australia', 'Australia Optus'
 ]
 
-if len(sys.argv)>1 and sys.argv[1] == '--help':
-    print 'convert local_conf.py station list for tvtime'
-    print 'option: --band <name>\nwhere: name is one of:\n\'%s\'' % '\', \''.join(bands)
-    print
-    sys.exit(0)
+def main(band):
 
-band = "US-Cable"
-if len(sys.argv)>2 and sys.argv[1] == '--band':
-    if sys.argv[2] in bands:
-        band = sys.argv[2]
+    norm = config.CONF.tv.upper()
 
-norm = config.CONF.tv.upper()
+    filename = '/tmp/stationlist.xml'
+    fp = open(filename,'w')
 
-fp = open('/tmp/stationlist.xml','w')
+    fp.write('<?xml version="1.0"?>\n')
+    fp.write('<!DOCTYPE stationlist PUBLIC "-//tvtime//DTD stationlist 1.0//EN" '
+        '"http://tvtime.sourceforge.net/DTD/stationlist1.dtd">\n')
+    fp.write('<stationlist xmlns="http://tvtime.sourceforge.net/DTD/">\n')
+    fp.write('  <list norm="%s" frequencies="%s">\n' % (norm, band))
 
-fp.write('<?xml version="1.0"?>\n')
-fp.write('<!DOCTYPE stationlist PUBLIC "-//tvtime//DTD stationlist 1.0//EN" "http://tvtime.sourceforge.net/DTD/stationlist1.dtd">\n')
-fp.write('<stationlist xmlns="http://tvtime.sourceforge.net/DTD/">\n')
-fp.write('  <list norm="%s" frequencies="%s">\n' % (norm, band))
+    c = 0
+    for m in config.TV_CHANNELS:
+        if config.TV_FREQUENCY_TABLE.has_key(m[2]):
+            channelfreq = float(config.TV_FREQUENCY_TABLE[m[2]]) / 1000.0
+            fp.write('    <station name="%s" active="1" position="%s" band="Custom" channel="%sMHz"/>\n' % \
+                (cgi.escape(m[1]), c, channelfreq))
+        else:
+            fp.write('    <station name="%s" active="1" position="%s" band="%s" channel="%s"/>\n' % \
+                (cgi.escape(m[1]), c, band, m[2]))
+        c = c + 1
 
-c = 0
-for m in config.TV_CHANNELS:
-    if config.TV_FREQUENCY_TABLE.has_key(m[2]):
-        channelfreq = float(config.TV_FREQUENCY_TABLE[m[2]]) / 1000.0
-        fp.write('    <station name="%s" active="1" position="%s" band="Custom" channel="%sMHz"/>\n' % \
-            (cgi.escape(m[1]), c, channelfreq))
-    else:
-        fp.write('    <station name="%s" active="1" position="%s" band="%s" channel="%s"/>\n' % \
-            (cgi.escape(m[1]), c, band, m[2]))
-    c = c + 1
+    fp.write('  </list>\n')
+    fp.write('</stationlist>\n')
+    fp.close()
 
-fp.write('  </list>\n')
-fp.write('</stationlist>\n')
-fp.close()
+    print 'written stationlist to %r' % (filename,)
+
+
+if __name__ == '__main__':
+    import os
+    from optparse import IndentedHelpFormatter, OptionParser
+
+    def parse_options():
+        """
+        Parse command line options
+        """
+        import version
+        formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+        parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [options]",
+            version='%prog ' + str(version._version))
+        parser.prog = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+        parser.description = "Convert station list (TV_CHANNELS) from local_conf.py for tvtime"
+        parser.add_option('--band', choices=bands, default=bands[0], metavar='BAND',
+            help='Select the TV band [default:%default], choose from: "' + '", "'.join(bands) + '"')
+
+        opts, args = parser.parse_args()
+        return opts, args
+
+
+    opts, args = parse_options()
+    main(opts.band)
