@@ -46,12 +46,12 @@ class Recordings:
         file_ver = None
         scheduledRecordings = None
 
-        if os.path.isfile(config.TV_RECORD_SCHEDULE):
-            print 'reading cached file (%s)' % config.TV_RECORD_SCHEDULE
+        if os.path.isfile(opts.schedule):
+            print 'reading cached file (%s)' % opts.schedule
             if hasattr(self, 'scheduledRecordings_cache'):
                 mod_time, scheduledRecordings = self.scheduledRecordings_cache
                 try:
-                    if os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME] == mod_time:
+                    if os.stat(opts.schedule)[stat.ST_MTIME] == mod_time:
                         print 'Return cached data'
                         return scheduledRecordings
                 except OSError, e:
@@ -59,12 +59,12 @@ class Recordings:
                     pass
 
             try:
-                f = open(config.TV_RECORD_SCHEDULE, 'r')
+                f = open(opts.schedule, 'r')
                 scheduledRecordings = unjellyFromXML(f)
                 f.close()
             except sux.ParseError, e:
-                print '"%s" is invalid, removed' % (config.TV_RECORD_SCHEDULE)
-                os.unlink(config.TV_RECORD_SCHEDULE)
+                print '"%s" is invalid, removed' % (opts.schedule)
+                os.unlink(opts.schedule)
 
             try:
                 file_ver = scheduledRecordings.TYPES_VERSION
@@ -86,15 +86,15 @@ class Recordings:
         print 'ScheduledRecordings has %s items.' % len(scheduledRecordings.programList)
 
         try:
-            mod_time = os.stat(config.TV_RECORD_SCHEDULE)[stat.ST_MTIME]
+            mod_time = os.stat(opts.schedule)[stat.ST_MTIME]
             self.scheduledRecordings_cache = mod_time, scheduledRecordings
         except OSError:
             pass
         return scheduledRecordings
 
 
-def convert_schedule():
-    print 'Converting favourties from %s to %s' % (config.TV_RECORD_SCHEDULE, config.TV_RECORD_FAVORITES)
+def convert_schedule(opts):
+    print 'Converting favourties from %s to %s' % (opts.schedule, opts.favorites)
     rs = Recordings()
     schedule = rs.getScheduledRecordings()
     print 'TYPES_VERSION=%r' % (schedule.TYPES_VERSION,)
@@ -114,24 +114,42 @@ def convert_schedule():
     print 'Favorites converted successfully, existing manual recordings will need to be added manually'
 
 
-def help(argv):
-    print '%s [<record_schedule.xml>] [<favorites.pickle>]' % (os.path.basename(argv[0]),)
-    print '  default: %r %r' % (config.TV_RECORD_SCHEDULE, config.TV_RECORD_FAVORITES)
-
-
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        if sys.argv[1] in ('-h', '--help'):
-            help(sys.argv)
-            sys.exit(0)
-        config.TV_RECORD_SCHEDULE = sys.argv[1]
-    if len(sys.argv) > 2:
-        config.TV_RECORD_FAVORITES = sys.argv[2]
-    if not os.path.exists(config.TV_RECORD_SCHEDULE):
-        print '%r does not exist' % (config.TV_RECORD_SCHEDULE,)
-        sys.exit(2)
-    if os.path.exists(config.TV_RECORD_FAVORITES):
-        print '%r exists, please remove' % (config.TV_RECORD_FAVORITES,)
-        sys.exit(1)
-    convert_schedule()
+    from optparse import IndentedHelpFormatter, OptionParser
+
+    def parse_options():
+        """
+        Parse command line options
+        """
+        import version
+        formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+        parser = OptionParser(conflict_handler='resolve', formatter=formatter,
+            usage="freevo %prog [options]",
+            version='%prog ' + str(version._version))
+        parser.prog = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+        parser.description = "Helper to convert the record_schedule.xml to favorites.pickle"
+        parser.add_option('-v', '--verbose', action='count', default=0,
+            help='set the level of verbosity [default:%default]')
+        parser.add_option('-i', '--schedule', metavar='FILE', default=config.TV_RECORD_SCHEDULE,
+            help='the record schedule file [default:%default]')
+        parser.add_option('-o', '--favorites', metavar='FILE', default=config.TV_RECORD_FAVORITES,
+            help='the record favorites file [default:%default]')
+
+        opts, args = parser.parse_args()
+
+        if not os.path.exists(opts.schedule):
+            parser.error('%r does not exist.' % (opts.schedule,))
+
+        if os.path.exists(opts.favorites):
+            parser.error('%r exists, please remove.' % (opts.favorites,))
+
+        if os.path.splitext(opts.schedule)[1] != '.xml':
+            parser.error('%r is not an XML file.' % (opts.schedule,))
+
+        return opts, args
+
+
+    opts, args = parse_options()
+
+    convert_schedule(opts)
