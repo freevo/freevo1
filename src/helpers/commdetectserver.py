@@ -107,23 +107,55 @@ class CommDetectServer(xmlrpc.XMLRPC):
         jlist = self.queue.listJobs()
         return (True, jam(jlist))
 
-def main():
+
+def main(opts, args):
     from twisted.internet import reactor
     global DEBUG
     if not (os.path.exists(tmppath) and os.path.isdir(tmppath)):
         os.mkdir(tmppath)
     os.chdir(tmppath)
 
-    debug = False
-    if len(sys.argv) >= 2 and sys.argv[1] == "debug":
-        debug = True
+    debug = opts.debug
+    if debug:
         import commdetectcore
-        commdetectcore.DEBUG=debug
+        commdetectcore.DEBUG = debug
 
     _debug_('DEBUG=%s' % DEBUG, DINFO)
     cds = CommDetectServer(debug=debug, allowNone=True)
     reactor.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(cds))
     reactor.run()
 
+
 if __name__ == '__main__':
-    main()
+    from optparse import IndentedHelpFormatter, OptionParser
+
+    def parse_options():
+        """
+        Parse command line options
+        """
+        import version
+        formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+        parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [--daemon|--stop]",
+            version='%prog ' + str(version._version))
+        parser.prog = appname
+        parser.description = "start or stop the commercial detection server"
+        parser.add_option('-d', '--debug', action='store_true', dest='debug', default=False,
+            help='enable debugging')
+
+        opts, args = parser.parse_args()
+        return opts, args
+
+
+    opts, args = parse_options()
+
+    try:
+        _debug_('main() starting')
+        main(opts, args)
+        _debug_('main() finished')
+    except SystemExit:
+        _debug_('main() stopped')
+        pass
+    except Exception, why:
+        import traceback
+        traceback.print_exc()
+        _debug_(why, DWARNING)
