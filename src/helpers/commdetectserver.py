@@ -115,13 +115,12 @@ def main(opts, args):
         os.mkdir(tmppath)
     os.chdir(tmppath)
 
-    debug = opts.debug
-    if debug:
+    if opts.debug:
         import commdetectcore
-        commdetectcore.DEBUG = debug
+        commdetectcore.DEBUG = opts.debug != 0
 
     _debug_('DEBUG=%s' % DEBUG, DINFO)
-    cds = CommDetectServer(debug=debug, allowNone=True)
+    cds = CommDetectServer(debug=opts.debug, allowNone=True)
     reactor.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(cds))
     reactor.run()
 

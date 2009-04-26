@@ -49,6 +49,29 @@ if __name__ == '__main__':
     except Exception, e:
         print e
 
+
+    from optparse import IndentedHelpFormatter, OptionParser
+
+    def parse_options():
+        """
+        Parse command line options
+        """
+        import version
+        formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+        parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [--daemon|--stop]",
+            version='%prog ' + str(version._version))
+        parser.prog = appname
+        parser.description = "start or stop the video encoding server"
+        parser.add_option('-d', '--debug', action='count', dest='debug', default=0,
+            help='set the level of debugging')
+
+        opts, args = parser.parse_args()
+        return opts, args
+
+
+    opts, args = parse_options()
+
+
 import time, random, sys, os
 import logging
 import config
@@ -271,17 +294,15 @@ def main():
     tmppath = tempfile.mkdtemp(prefix = 'encodeserver-')
     os.chdir(tmppath)
 
-    debug = False
-    if len(sys.argv) >= 2 and sys.argv[1] == 'debug':
-        debug = True
+    if opts.debug:
         import encodingcore
-        encodingcore.DEBUG = debug
+        encodingcore.DEBUG = opts.debug != 0
     _debug_('main: DEBUG=%s' % DEBUG, DINFO)
     socket = ('', config.ENCODINGSERVER_PORT)
     secret = config.ENCODINGSERVER_SECRET
     _debug_('socket=%r, secret=%r' % (socket, secret))
 
-    encodingserver = EncodingServer(debug=debug, allowNone=True)
+    encodingserver = EncodingServer(debug=opts.debug, allowNone=True)
     try:
         rpc = kaa.rpc.Server(socket, secret)
     except Exception:
