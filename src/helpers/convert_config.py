@@ -32,6 +32,7 @@
 import sys
 import os
 import re
+from optparse import IndentedHelpFormatter, OptionParser
 
 change_map = {
     'DIR_MOVIES': 'VIDEO_ITEMS',
@@ -132,20 +133,35 @@ change_map = {
     'SYS_SYS_USE_NETWORK': 'SYS_USE_NETWORK',
 }
 
-def help():
-    print 'convert local_conf.py to use the new variable names'
-    print 'usage: convert_config local_conf.py [ -w ]'
-    print
-    print 'if -w is given the local_conf.py will be rewritten, without the option'
-    print 'the script will only print the changes.'
-    print
-    print 'Developer may use the option -s (without local_conf) to scan for files'
-    print 'which use the deleted variables'
-    print
-    sys.exit(0)
+
+def parse_options():
+    """
+    Parse command line options
+    """
+    import version
+    formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
+    parser = OptionParser(conflict_handler='resolve', formatter=formatter,
+        usage="freevo %prog [options]",
+        version='%prog ' + str(version._version))
+    parser.prog = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+    parser.description = "Helper to convert old local_conf.py configuration to current configuration"
+    #parser.add_option('-v', '--verbose', action='count', default=0,
+    #    help='set the level of verbosity [default:%default]')
+    parser.add_option('--scan', action='store_true', default=False,
+        help='scan source files for the old variables')
+    parser.add_option('--file', metavar='FILE', default=None,
+        help='the local_conf.py file [default:%default]')
+    parser.add_option('-w', '--write', action='store_true', default=False,
+        help='write the local_conf.py file, this will overwrite an existing file!')
+
+    opts, args = parser.parse_args()
+    if not opts.file and not opts.scan:
+        parser.error('either --scan or --file must be given.')
+
+    return opts, args
 
 
-
+opts, args = parse_options()
 
 seperator = ' #=[]{}().:,\n'
 
@@ -159,7 +175,7 @@ def change(file, print_name=False):
     data = cfg.readlines()
     cfg.close()
 
-    if len(sys.argv) == 3 and sys.argv[2] == '-w':
+    if opts.write:
         print 'write output file %s' % file
         out = open(file, 'w')
 
@@ -197,10 +213,8 @@ def change(file, print_name=False):
         out.close()
 
 
-
-
-if len(sys.argv) <= 3 and sys.argv[1] == '-s':
-    print 'searching for files using old style variables'
+if opts.scan:
+    print 'searching for files using old style variables...'
     # s = ''
     # for var in change_map:
     #     s += '|%s' % var
@@ -217,4 +231,4 @@ if len(sys.argv) <= 3 and sys.argv[1] == '-s':
     sys.exit(0)
 
 
-change(sys.argv[1])
+change(opts.file)
