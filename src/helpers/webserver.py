@@ -113,7 +113,7 @@ if __name__ == '__main__':
         import version
         formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
         parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [--daemon|--stop]",
-            version='%prog ' + str(version._version))
+            version='%prog ' + str(version.version))
         parser.prog = appname
         parser.description = "start or stop the internal webserver"
 

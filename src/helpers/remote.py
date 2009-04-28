@@ -41,15 +41,12 @@ def parse_options():
     """
     Parse command line options
     """
-    import version, revision
-    _version = version.__version__
-    if _version.endswith('-svn'):
-        _version = _version.split('-svn')[0] + ' r%s' % revision.__revision__
+    import version
     formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=36, width=100, short_first=0)
     parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="""
 A small tkinter example remote program
 
-You need to set ENABLE_NETWORK_REMOTE = 1 in you local_conf.py""", version='%prog ' + _version)
+You need to set ENABLE_NETWORK_REMOTE = 1 in you local_conf.py""", version='%prog ' + version.version)
     parser.add_option('--host', default=config.REMOTE_CONTROL_TCP_HOST,
         help='The host to control [default:%default]')
     parser.add_option('--port', type='int', default=config.REMOTE_CONTROL_TCP_PORT,

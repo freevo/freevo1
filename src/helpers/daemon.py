@@ -58,16 +58,13 @@ def parse_options():
     """
     Parse command line options
     """
-    import version, revision
-    _version = version.__version__
-    if _version.endswith('-svn'):
-        _version = _version.split('-svn')[0] + ' r%s' % revision.__revision__
+    import version
     formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=36, width=100, short_first=0)
     parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="""
 Freevo helper script to start Freevo on lirc command.  Everytime Freevo is not
 running and EXIT or POWER is pressed, this script will start Freevo. If the
 display in freevo.conf is x11 or dga, this script will start Freevo in a new X
-session.""", version='%prog ' + _version)
+session.""", version='%prog ' + version.version)
     parser.add_option('--start', action='store_true', default=False,
         help='start the daemon [default:%default]')
     parser.add_option('--stop', action='store_true', default=False,

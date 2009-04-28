@@ -108,7 +108,7 @@ if __name__ == '__main__':
         import version
         formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
         parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [options]",
-            version='%prog ' + str(version._version))
+            version='%prog ' + str(version.version))
         parser.prog = os.path.splitext(os.path.basename(sys.argv[0]))[0]
         parser.description = "Convert station list (TV_CHANNELS) from local_conf.py for tvtime"
         parser.add_option('--band', choices=bands, default=bands[0], metavar='BAND',

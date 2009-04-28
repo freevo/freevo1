@@ -170,17 +170,14 @@ def parse_options():
     """
     Parse command line options
     """
-    import version, revision
-    _version = version.__version__
-    if _version.endswith('-svn'):
-        _version = _version.split('-svn')[0] + ' r%s' % revision.__revision__
+    import version
     thumbsize = config.WWW_IMAGE_THUMBNAIL_SIZE
     imagesize = config.WWW_IMAGE_SIZE
     formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=36, width=100, short_first=0)
     parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="""
 Make image MRSS feed for CoolIris (http://www.cooliris.com/site/support/download-all-products.php)
 
-Usage: %prog [options]""", version='%prog ' + _version)
+Usage: %prog [options]""", version='%prog ' + version.version)
     parser.add_option('-v', '--verbose', action='count', default=0,
         help='set the level of verbosity')
     parser.add_option('-r', '--rebuild', action='store_true', dest='force', default=False,

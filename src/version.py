@@ -14,4 +14,6 @@ except ImportError:
 
 _version = __version__
 if _version.endswith('-svn'):
-    _version = _version.split('-svn')[0] + ' r%s' % _revision
+    version = _version.split('-svn')[0] + ' r%s' % _revision
+else:
+    version = _version

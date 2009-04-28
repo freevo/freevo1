@@ -78,7 +78,7 @@ if __name__ == '__main__':
         import version
         formatter = IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
         parser = OptionParser(conflict_handler='resolve', formatter=formatter, usage="freevo %prog [options]",
-            version='%prog ' + str(version._version))
+            version='%prog ' + str(version.version))
         prog = os.path.basename(sys.argv[0])
         parser.prog = os.path.splitext(prog)[0]
         parser.description = "Downloads the listing for xmltv and cache the data"
