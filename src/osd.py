@@ -110,7 +110,7 @@ L       Subtitle
 _singleton = None
 
 def get_singleton():
-    print 'get_singleton()'
+    _debug_('get_singleton()', 2)
     global _singleton
 
     # don't start osd for helpers
@@ -129,7 +129,7 @@ def stop():
     stop the osd because only one program can use the
     device, e.g. for DXR3 and dfbmga output,
     """
-    print 'stop()'
+    _debug_('stop()', 1)
     get_singleton().stopdisplay()
 
 
@@ -137,14 +137,14 @@ def restart():
     """
     restart a stopped osd
     """
-    print 'restart()'
+    _debug_('restart()', 1)
     get_singleton().restartdisplay()
     get_singleton().update()
 
 
 class Font:
     def __init__(self, filename='', ptsize=0, font=None):
-        print 'Font.__init__(filename='', ptsize=0, font=None)'
+        _debug_('Font.__init__(filename='', ptsize=0, font=None)', 1)
         _debug_('deprecated font object use', DWARNING)
         self.filename = filename
         self.ptsize   = ptsize
@@ -155,7 +155,7 @@ font_warning = []
 
 class OSDFont:
     def __init__(self, name, ptsize):
-        print 'OSDFont.__init__(name, ptsize)'
+        _debug_('OSDFont.__init__(name=%r, ptsize=%r)' % (name, ptsize), 1)
         self.font   = self.__getfont__(name, ptsize)
         self.height = max(self.font.size('A')[1], self.font.size('j')[1])
         self.chars  = {}
@@ -163,7 +163,7 @@ class OSDFont:
         self.ptsize = ptsize
 
     def charsize(self, c):
-        #print 'charsize(c=%r)' % (c,)
+        _debug_('charsize(c=%r)' % (c,), 2)
         #c = Unicode(c)
         try:
             return self.chars[c]
@@ -173,7 +173,7 @@ class OSDFont:
             return w
 
     def stringsize(self, s):
-        print 'stringsize(s=%r)' % (s,)
+        _debug_('stringsize(s=%r)' % (s,), 1)
         if not s:
             return 0
         w = 0
@@ -183,7 +183,7 @@ class OSDFont:
 
 
     def __loadfont__(self, filename, ptsize):
-        print '__loadfont__(filename, ptsize)'
+        _debug_('__loadfont__(filename=%r, ptsize=%r)' % (filename, ptsize), 1)
         if os.path.isfile(filename):
             try:
                 return pygame.font.Font(filename, ptsize)
@@ -193,15 +193,12 @@ class OSDFont:
 
 
     def __getfont__(self, filename, ptsize):
-        print '__getfont__(filename, ptsize)'
-
+        _debug_('__getfont__(filename=%r, ptsize=%r)' % (filename, ptsize), 1)
         if config.OSD_FORCE_FONTNAME:
             filename = config.OSD_FORCE_FONTNAME
 
         if config.OSD_FORCE_FONTSIZE:
             ptsize = int(ptsize * config.OSD_FORCE_FONTSIZE)
-
-        _debug_('Loading font "%s"' % filename, 2)
 
         font = self.__loadfont__(filename, ptsize)
         if not font:
@@ -219,26 +216,26 @@ class OSDFont:
                 #     break
 
         if not font:
-            _debug_('Couldnt load font "%s"' % os.path.basename(filename))
+            _debug_("Couldn't load font %r" % os.path.basename(filename), DINFO)
 
             # Ok, see if there is an alternate font to use
             if fontname.lower() in config.OSD_FONT_ALIASES:
                 alt_fname = os.path.join(config.FONT_DIR,
                                          config.OSD_FONT_ALIASES[fontname.lower()])
-                _debug_('trying alternate: %s' % os.path.basename(alt_fname).lower())
+                _debug_('Trying alternate: %r' % os.path.basename(alt_fname), DINFO)
                 font = self.__loadfont__(alt_fname, ptsize)
 
         if not font:
             # not good
             global font_warning
             if not fontname in font_warning:
-                _debug_('No alternate found in the alias list!', DWARNING)
+                _debug_('No alternate found in the alias list!', DINFO)
                 _debug_('Falling back to default font, this may look very ugly', DWARNING)
                 font_warning.append(fontname)
             font = self.__loadfont__(config.OSD_DEFAULT_FONTNAME, ptsize)
 
         if not font:
-            _debug_('Couldn\'t load font "%s"' % config.OSD_DEFAULT_FONTNAME, config.INFO)
+            _debug_("Couldn't load font %r" % (config.OSD_DEFAULT_FONTNAME,), DWARNING)
             raise
 
         return font
@@ -247,7 +244,7 @@ class OSDFont:
     
 class BusyIcon(threading.Thread):
     def __init__(self):
-        print 'BusyIcon.__init__()'
+        _debug_('BusyIcon.__init__()', 1)
         threading.Thread.__init__(self)
         self.setDaemon(1)
         self.lock = threading.Lock()
@@ -261,7 +258,7 @@ class BusyIcon(threading.Thread):
 
 
     def wait(self, timer):
-        print 'BusyIcon.wait(timer=%r)' % (timer,)
+        _debug_('BusyIcon.wait(timer=%r)' % (timer,), 1)
         self.lock.acquire()
         try:
             self.active = True
@@ -272,14 +269,14 @@ class BusyIcon(threading.Thread):
 
 
     def stop(self):
-        print 'BusyIcon.stop()'
+        _debug_('BusyIcon.stop()', 1)
         self.lock.acquire()
         self.active = False
         self.lock.release()
 
 
     def run(self):
-        print 'BusyIcon.run()'
+        _debug_('BusyIcon.run()', 1)
         while True:
             self.mode_flag.clear()
             self.mode_flag.wait()
@@ -299,33 +296,24 @@ class BusyIcon(threading.Thread):
                         width  = image.get_width()
                         height = image.get_height()
                         x = osd.width - self.overscan_width - 20 - width
+                        icon_x = int(float(x) * config.IMAGEVIEWER_ASPECT)
                         y = osd.height - self.overscan_height - 20 - height
+                        icon_y = y
                         #TODO have to adjust the x and width
-
                         self.rect = pygame.Rect(x, y, width, height)
-                        pygame.draw.rect(osd.screen, pygame.Color('white'), self.rect, 1)
-                        pygame.draw.rect(osd.main_layer, pygame.Color('yellow'), self.rect, 1)
+                        self.icon_rect = pygame.Rect(icon_x, icon_y, width, height)
+                        pygame.draw.rect(osd.screen, pygame.Color('white'), self.rect, 1) #DJW
+                        pygame.draw.rect(osd.main_layer, pygame.Color('yellow'), self.rect, 1) #DJW
                         # backup the screen
                         screen_backup = pygame.Surface((width, height))
                         screen_backup.blit(osd.screen, (0, 0), self.rect)
-                        pygame.image.save(screen_backup, '/tmp/screen_backup-'+ts)
-                        #DJW:
-                        screen1 = pygame.Surface((osd.width, osd.height))
-                        screen1.blit(osd.screen, (0, 0))
-                        pygame.image.save(screen1, '/tmp/screen1-'+ts)
-                        mlayer1 = pygame.Surface((osd.width, osd.height))
-                        mlayer1.blit(osd.main_layer, (0, 0))
-                        pygame.image.save(mlayer1, '/tmp/mlayer1-'+ts)
-                        #DJW:
                         # draw the icon
-                        osd.drawsurface(image, x, y, layer=osd.main_layer)
+                        osd.drawsurface(image, icon_x, icon_y, layer=osd.main_layer)
                         osd.update(rect=self.rect, stop_busyicon=False)
                         # restore the screen
                         osd.screen.blit(screen_backup, (x, y))
-                        rect = self.rect.inflate(2, 2)
-                        pygame.draw.rect(osd.screen, pygame.Color('cyan'), rect, 1)
-                        pygame.draw.rect(osd.main_layer, pygame.Color('green'), rect, 1)
-                        print 'screen restored'
+                        rect = self.rect.inflate(2, 2) #DJW
+                        _debug_('screen restored', 2)
                 finally:
                     self.lock.release()
 
@@ -333,15 +321,15 @@ class BusyIcon(threading.Thread):
                 time.sleep(0.01)
             if screen_backup is not None:
                 osd.main_layer.blit(screen_backup, (x, y))
-            #DJW:
-            screen2 = pygame.Surface((osd.width, osd.height))
-            screen2.blit(osd.screen, (0, 0))
-            pygame.image.save(screen2, '/tmp/screen2-'+ts)
-            mlayer2 = pygame.Surface((osd.width, osd.height))
-            mlayer2.blit(osd.main_layer, (0, 0))
-            pygame.image.save(mlayer2, '/tmp/mlayer2-'+ts)
-            #DJW:
-            print('done')
+                pygame.draw.rect(osd.screen, pygame.Color('cyan'), rect, 1) #DJW
+                pygame.draw.rect(osd.main_layer, pygame.Color('green'), rect, 1) #DJW
+                screen2 = pygame.Surface((osd.width, osd.height)) #DJW
+                screen2.blit(osd.screen, (0, 0)) #DJW
+                pygame.image.save(screen2, '/tmp/screen2-'+ts) #DJW
+                mlayer2 = pygame.Surface((osd.width, osd.height)) #DJW
+                mlayer2.blit(osd.main_layer, (0, 0)) #DJW
+                pygame.image.save(mlayer2, '/tmp/mlayer2-'+ts) #DJW
+                _debug_('main_layer restored', 2)
 
 
 class OSD:
@@ -366,7 +354,7 @@ class OSD:
         """
         Initialize an instance of OSD
         """
-        print 'OSD.__init__()'
+        _debug_('OSD.__init__()', 1)
         self.fullscreen = 0 # Keep track of fullscreen state
         self.app_list = []
 
@@ -401,7 +389,7 @@ class OSD:
                         # set ioctl (tty, KDSETMODE, KD_TEXT)
                         ioctl(fd, 0x4B3A, 0)
                     except Exception, why:
-                        print 'Cannot set KD_TEXT on term %s: %s' % (device, why)
+                        _debug_('Cannot set KD_TEXT on term %r: %s' % (device, why), DWARNING)
                     os.close(fd)
                     os.system('%s -term linux -cursor off -blank 0 -clear -powerdown 0 ' \
                         '-powersave off </dev/tty%s > /dev/tty%s 2>/dev/null' %  (config.CONF.setterm, i, i))
@@ -460,7 +448,7 @@ class OSD:
             os.system(config.OSD_SDL_EXEC_AFTER_STARTUP)
 
         self.sdl_driver = pygame.display.get_driver()
-        _debug_('SDL Driver: %s' % (str(self.sdl_driver)))
+        _debug_('SDL Driver: %s' % (str(self.sdl_driver)), DINFO)
 
         pygame.mouse.set_visible(0)
         pygame.key.set_repeat(500, 30)
@@ -486,7 +474,7 @@ class OSD:
 
 
     def focused_app(self):
-        print 'focused_app()'
+        _debug_('focused_app()', 2)
         if len(self.app_list):
             return self.app_list[-1]
         else:
@@ -494,12 +482,12 @@ class OSD:
 
 
     def add_app(self, app):
-        print 'add_app(app)'
+        _debug_('add_app(app=%r)' % (app,), 2)
         self.app_list.append(app)
 
 
     def remove_app(self, app):
-        print 'remove_app(app)'
+        _debug_('remove_app(app=%r)' % (app,), 2)
         _times = self.app_list.count(app)
         for _time in range(_times):
             self.app_list.remove(app)
@@ -509,7 +497,7 @@ class OSD:
             rc.set_context(self.focused_app().get_event_context())
 
     def __find_current_widget__(self, widget):
-        print '__find_current_widget__(widget)'
+        _debug_('__find_current_widget__(widget=%r)' % (widget,), 1)
         if not widget:
             return None
         if not hasattr(widget, 'menustack'):
@@ -520,7 +508,7 @@ class OSD:
         """
         callback for SDL event (not Freevo events)
         """
-        #print '_cb(map=%r)' % (map,)
+        #_debug_('_cb(map=%r)' % (map,), 3)
         if not pygame.display.get_init():
             return None
 
@@ -671,8 +659,7 @@ class OSD:
         """
         shutdown the display
         """
-        print 'OSD.shutdown()'
-        _debug_('OSD.shutdown()')
+        _debug_('OSD.shutdown()', 1)
         import plugin
         if not plugin.is_active('dialog.x11_overlay_display'):
             pygame.quit()
@@ -687,7 +674,7 @@ class OSD:
         """
         stop the display to give other apps the right to use it
         """
-        print 'stopdisplay()'
+        _debug_('stopdisplay()', 1)
         if not pygame.display.get_init():
             return None
 
@@ -708,7 +695,7 @@ class OSD:
         """
         restores a stopped display
         """
-        print 'restartdisplay()'
+        _debug_('restartdisplay()', 1)
         if pygame.display.get_init():
             return None
 
@@ -737,7 +724,7 @@ class OSD:
         """
         toggle between window and fullscreen mode
         """
-        print 'toggle_fullscreen()'
+        _debug_('toggle_fullscreen()', 1)
         self.fullscreen = (self.fullscreen+1) % 2
         if pygame.display.get_init():
             pygame.display.toggle_fullscreen()
@@ -748,7 +735,7 @@ class OSD:
         """
         return 1 is fullscreen is running
         """
-        print 'get_fullscreen()'
+        _debug_('get_fullscreen()', 1)
         return self.fullscreen
 
 
@@ -756,7 +743,7 @@ class OSD:
         """
         clean the complete screen
         """
-        print 'clearscreen(color=None)'
+        _debug_('clearscreen(color=%r)' % (color,), 1)
         if not pygame.display.get_init():
             return None
 
@@ -770,18 +757,16 @@ class OSD:
 
 
     def printdata(self, data):
-        print 'printdata(data)'
-        print 'image=%s %d %r' % (type(data[0]), len(data[0]), data[0][:10])
-        print 'size=%s %s' % (type(data[1]), data[1])
-        print 'mode=%s %s' % (type(data[2]), data[2])
+        print('image=%s %d %r' % (type(data[0]), len(data[0]), data[0][:10]))
+        print('size=%s %s' % (type(data[1]), data[1]))
+        print('mode=%s %s' % (type(data[2]), data[2]))
 
 
     def _load_image_imlib2(self, data):
         """
         Load an image from an imlib2 image object
         """
-        print '_load_image_imlib2(data)'
-        _debug_('_load_image_imlib2(data=%r)' % (data,), 2)
+        _debug_('_load_image_imlib2(data=%r)' % (data,), 1)
         if data.mode == 'BGRA':
             data.mode = 'RGBA'
         image = pygame.image.fromstring(str(data.get_raw_data(format=data.mode)), data.size, data.mode)
@@ -792,8 +777,7 @@ class OSD:
         """
         Load an image from a file name
         """
-        print '_load_image_filename(url)'
-        _debug_('_load_image_filename(url=%r)' % (url,), 2)
+        _debug_('_load_image_filename(url=%r)' % (url,), 1)
         if url[:8] == 'thumb://':
             filename = os.path.abspath(url[8:])
             thumbnail = True
@@ -803,7 +787,7 @@ class OSD:
 
         if not os.path.isfile(filename):
             fname = os.path.join(config.IMAGE_DIR, filename)
-            _debug_('Bitmap file "%s" doesn\'t exist!' % filename, DWARNING)
+            _debug_("Bitmap file %r doesn't exist!" % filename, DWARNING)
             if config.DEBUG:
                 traceback.print_stack()
             return None
@@ -865,8 +849,7 @@ class OSD:
         @returns: pygame surfaceloadbitmap
         @rtype: Surface or None
         """
-        print 'loadbitmap(url, cache=False)'
-        _debug_('loadbitmap(url=%r, cache=%r)' % (url, cache))
+        _debug_('loadbitmap(url=%r, cache=%r)' % (url, cache), 1)
 
         if not pygame.display.get_init():
             return None
@@ -903,7 +886,8 @@ class OSD:
         Draw a bitmap on the OSD. It is automatically loaded into the cache
         if not already there.
         """
-        print 'drawbitmap(image, x=0, y=0, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation=0, layer=None)'
+        _debug_('drawbitmap(image=%s, x=%s, y=%s, scaling=%s, bbx=%s, bby=%s, bbw=%s, bbh=%s, rotation=%s, layer=%s)' \
+            % (image, x, y, scaling, bbx, bby, bbw, bbh, rotation, layer), 2)
         if not pygame.display.get_init():
             return None
         if not isinstance(image, pygame.Surface):
@@ -915,7 +899,6 @@ class OSD:
         """
         scales and rotates a surface and then draws it to the screen.
         """
-        print 'DJW:drawsurface(image=%s, x=%s, y=%s, scaling=%s, bbx=%s, bby=%s, bbw=%s, bbh=%s, rotation=%s, layer=%s)' % (image, x, y, scaling, bbx, bby, bbw, bbh, rotation, layer)
         _debug_('drawsurface(image=%s, x=%s, y=%s, scaling=%s, bbx=%s, bby=%s, bbw=%s, bbh=%s, rotation=%s, layer=%s)' \
             % (image, x, y, scaling, bbx, bby, bbw, bbh, rotation, layer), 2)
 
@@ -944,7 +927,6 @@ class OSD:
         Zooms a Surface. It gets a Pygame Surface which is rotated and scaled according
         to the parameters.
         """
-        print 'zoomsurface(image, scaling=None, bbx=0, bby=0, bbw=0, bbh=0, rotation=0)'
         _debug_('zoomsurface(image=%s, scaling=%s, bbx=%s, bby=%s, bbw=%s, bbh=%s, rotation=%s)' \
             % (image, scaling, bbx, bby, bbw, bbh, rotation), 2)
         if not image:
@@ -979,8 +961,8 @@ class OSD:
         """
         draw a normal box
         """
-        print 'drawbox(x0=%s, y0=%s, x1=%s, y1=%s, width=%s, color=%s, fill=%s, layer=%s)' \
-            % (x0, y0, x1, y1, width, color, fill, layer)
+        _debug_('drawbox(x0=%s, y0=%s, x1=%s, y1=%s, width=%s, color=%s, fill=%s, layer=%s)' % (
+            x0, y0, x1, y1, width, color, fill, layer), 1)
         self.mutex.acquire()
         try:
             # Make sure the order is top left, bottom right
@@ -1019,7 +1001,7 @@ class OSD:
         """
         returns a copy of the given area of the current screen
         """
-        print 'getsurface(x=0, y=0, width=0, height=0, rect=None)'
+        _debug_('getsurface(x=%r, y=%r, width=%r, height=%r, rect=%r)' % (x, y, width, height, rect), 1)
         self.mutex.acquire()
         try:
             if rect != None:
@@ -1034,7 +1016,7 @@ class OSD:
         """
         copy a surface to the screen
         """
-        print 'putsurface(surface, x, y)'
+        _debug_('putsurface(surface=%r, x=%r, y=%r)' % (surface, x, y), 1)
         self.mutex.acquire()
         try:
             self.main_layer.blit(surface, (x, y))
@@ -1046,7 +1028,7 @@ class OSD:
         """
         blit the source to the screen
         """
-        print 'screenblit(source=%r, destpos=%r, sourcerect=%r)' % (source, destpos, sourcerect)
+        _debug_('screenblit(source=%r, destpos=%r, sourcerect=%r)' % (source, destpos, sourcerect), 1)
         self.mutex.acquire()
         try:
             if sourcerect:
@@ -1070,7 +1052,7 @@ class OSD:
         """
         return cached font
         """
-        print 'getfont(font=%r, ptsize=%r)' % (font, ptsize)
+        _debug_('getfont(font=%r, ptsize=%r)' % (font, ptsize), 1)
         key = (font, ptsize)
         try:
             return self.font_info_cache[key]
@@ -1089,7 +1071,7 @@ class OSD:
             - rest that didn't fit
             - True if this function stopped because of a <nl>.
         """
-        print '__drawstringframed_line__(string, max_width, font, hard, ellipses, word_splitter)'
+        _debug_('__drawstringframed_line__(string, max_width, font, hard, ellipses, word_splitter)', 1)
         c = 0                           # num of chars fitting
         width = 0                       # width needed
         ls = len(string)
@@ -1165,7 +1147,7 @@ class OSD:
         Helper for drawing a transparency gradient end for strings
         which don't fit it's content area.
         """
-        print '__draw_transparent_text__(surface, pixels=30)'
+        _debug_('__draw_transparent_text__(surface=%r, pixels=%r)' % (surface, pixels), 1)
         try:
             opaque_mod = float(1)
             opaque_stp = opaque_mod/float(pixels)
@@ -1210,7 +1192,7 @@ class OSD:
         @param mode: the way we should break lines/truncate. Can be 'hard'(based on chars)
             or 'soft' (based on words)
         """
-        print 'drawstringframed(string, x, y, width, height, font, fgcolor, bgcolor, align_h, align_v, mode, layer, ellipses, dim)'
+        _debug_('drawstringframed(string, x, y, width, height, font, fgcolor, bgcolor, align_h, align_v, mode, layer, ellipses, dim)', 1)
         if not pygame.display.get_init():
             return '', (x, y, x, y)
 
@@ -1436,7 +1418,7 @@ class OSD:
         """
         draw a string. This function is obsolete, please use drawstringframed
         """
-        print 'drawstring(string, x, y, fgcolor, bgcolor, font, ptsize, align, layer)'
+        _debug_('drawstring(string, x, y, fgcolor, bgcolor, font, ptsize, align, layer)', 1)
         if not pygame.display.get_init():
             return None
 
@@ -1468,7 +1450,7 @@ class OSD:
         """
         help functions to save and restore a pixel for drawcircle
         """
-        print '_savepixel(x, y, s)'
+        _debug_('_savepixel(x, y, s)', 1)
         try:
             return (x, y, s.get_at((x, y)))
         except:
@@ -1479,7 +1461,7 @@ class OSD:
         """
         restore the saved pixel
         """
-        print '_restorepixel(save, s)'
+        _debug_('_restorepixel(save, s)', 1)
         if save:
             s.set_at((save[0], save[1]), save[2])
 
@@ -1491,7 +1473,7 @@ class OSD:
         they don't belong. This function stores the values and
         restores them
         """
-        print 'drawcircle(s, color, x, y, radius)'
+        _debug_('drawcircle(s, color, x, y, radius)', 1)
         p1 = self._savepixel(x-1, y-radius-1, s)
         p2 = self._savepixel(x,   y-radius-1, s)
         p3 = self._savepixel(x+1, y-radius-1, s)
@@ -1514,7 +1496,7 @@ class OSD:
         """
         draw a round box
         """
-        print 'drawroundbox(x0, y0, x1, y1, color, border_size, border_color, radius, layer)'
+        _debug_('drawroundbox(x0, y0, x1, y1, color, border_size, border_color, radius, layer)', 1)
         self.mutex.acquire()
         try:
             if not pygame.display.get_init():
@@ -1588,8 +1570,8 @@ class OSD:
         """
         update the screen
         """
-        print 'update(rect=%r, blend_surface=%r, blend_speed=%r, blend_steps=%r, blend_time=%r, stop_busyicon=%r)' % (
-            rect, blend_surface, blend_speed, blend_steps, blend_time, stop_busyicon)
+        _debug_('update(rect=%r, blend_surface=%r, blend_speed=%r, blend_steps=%r, blend_time=%r, stop_busyicon=%r)' % (
+            rect, blend_surface, blend_speed, blend_steps, blend_time, stop_busyicon), 1)
         if not pygame.display.get_init():
             return None
 
@@ -1643,7 +1625,7 @@ class OSD:
 
 
     def _helpscreen(self):
-        print '_helpscreen()'
+        _debug_('_helpscreen()', 1)
         if not pygame.display.get_init():
             return
 
@@ -1664,7 +1646,7 @@ class OSD:
                 ks = line[:8]
                 cmd = line[8:]
 
-                print '"%s" "%s" %s %s' % (ks, cmd, x, y)
+                _debug_('"%s" "%s" %s %s' % (ks, cmd, x, y), 1)
                 fname = config.OSD_DEFAULT_FONTNAME
                 if ks: self.drawstring(ks, x, y, font=fname, ptsize=14)
                 if cmd: self.drawstring(cmd, x+80, y, font=fname, ptsize=14)
@@ -1681,7 +1663,7 @@ class OSD:
 
     def _sdlcol(self, col):
         """ Convert a 32-bit TRGB color to a 4 element tuple for SDL """
-        print '_sdlcol(col=%r)' % (col,)
+        _debug_('_sdlcol(col=%r)' % (col,), 2)
         if col==None:
             return (0, 0, 0, 255)
         a = 255 - ((col >> 24) & 0xff)
