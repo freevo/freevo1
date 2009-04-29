@@ -341,9 +341,9 @@
                         <newline/>
                     </if>
                     
-                    <if expression="display_type == 'audio' and year">
+                    <if expression="display_type == 'audio' and userdate">
                         <if expression="album or artist">
-                            <text font="info value" expression="year"/>
+                            <text font="info value" expression="userdate"/>
                             <newline/>
                         </if>
                     </if>

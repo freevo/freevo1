@@ -209,9 +209,9 @@
 	    <text width="130" font="info label">Album:</text>
 	    <goto_pos x="10" mode="relative"/>
 	    <text font="info value" expression="album"/>
-	    <if expression="year">
+	    <if expression="userdate">
 	      <text font="info value"> (</text>
-	      <text font="info value" expression="year"/>
+	      <text font="info value" expression="userdate"/>
 	      <text font="info value">)</text>
 	    </if>
 	    <newline/>

@@ -146,9 +146,9 @@
                         <newline/>
                     </if>
                     <goto_pos y="190" mode="absolute"/>
-                    <if expression="userdate">
+                    <if expression="year">
                         <text font="info value">(</text>
-                        <text font="info value" expression="userdate"/>
+                        <text font="info value" expression="year"/>
                         <text font="info value">)</text>
                     </if>
                     <if expression="runtime">
