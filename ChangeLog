@@ -28,6 +28,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
  * Updated encoding crop detection (F#2500046)
  * Updated recordings manager with 'Add to Favorites' and 'Search for more' (F#2661790)
  * Fixed alsamixer mute variable error (B#2497746)
+ * Fixed busy not being removed correctly (B#1928513)
  * Fixed caching permission problems (B#2580201)
  * Fixed command plug-in that tried to read a non-existent log file (B#2486033)
  * Fixed cd_burn plug-in for spaces in directory names and location of temp files (B#2473568)

@@ -288,7 +288,6 @@ class BusyIcon(threading.Thread):
                 import skin
                 self.lock.acquire()
                 try:
-                    ts = time.strftime('%s') + '.png'
                     osd = get_singleton()
                     icon = skin.get_icon('misc/osd_busy')
                     if icon:
@@ -299,37 +298,23 @@ class BusyIcon(threading.Thread):
                         icon_x = int(float(x) * config.IMAGEVIEWER_ASPECT)
                         y = osd.height - self.overscan_height - 20 - height
                         icon_y = y
-                        #TODO have to adjust the x and width
                         self.rect = pygame.Rect(x, y, width, height)
-                        self.icon_rect = pygame.Rect(icon_x, icon_y, width, height)
-                        pygame.draw.rect(osd.screen, pygame.Color('white'), self.rect, 1) #DJW
-                        pygame.draw.rect(osd.main_layer, pygame.Color('yellow'), self.rect, 1) #DJW
                         # backup the screen
                         screen_backup = pygame.Surface((width, height))
                         screen_backup.blit(osd.screen, (0, 0), self.rect)
                         # draw the icon
                         osd.drawsurface(image, icon_x, icon_y, layer=osd.main_layer)
                         osd.update(rect=self.rect, stop_busyicon=False)
-                        # restore the screen
-                        osd.screen.blit(screen_backup, (x, y))
-                        rect = self.rect.inflate(2, 2) #DJW
-                        _debug_('screen restored', 2)
+                        _debug_('main_layer icon drawn', 2)
                 finally:
                     self.lock.release()
 
             while self.active:
                 time.sleep(0.01)
+
             if screen_backup is not None:
                 osd.main_layer.blit(screen_backup, (x, y))
-                pygame.draw.rect(osd.screen, pygame.Color('cyan'), rect, 1) #DJW
-                pygame.draw.rect(osd.main_layer, pygame.Color('green'), rect, 1) #DJW
-                screen2 = pygame.Surface((osd.width, osd.height)) #DJW
-                screen2.blit(osd.screen, (0, 0)) #DJW
-                pygame.image.save(screen2, '/tmp/screen2-'+ts) #DJW
-                mlayer2 = pygame.Surface((osd.width, osd.height)) #DJW
-                mlayer2.blit(osd.main_layer, (0, 0)) #DJW
-                pygame.image.save(mlayer2, '/tmp/mlayer2-'+ts) #DJW
-                _debug_('main_layer restored', 2)
+                _debug_('main_layer icon removed', 2)
 
 
 class OSD:
@@ -437,8 +422,7 @@ class OSD:
         help_str = '    '.join(help)
 
         pygame.display.set_caption('Freevo' + ' '*7 + String( help_str ) )
-        icon = pygame.image.load(os.path.join(config.ICON_DIR,
-                                              'misc/freevo_app.png')).convert()
+        icon = pygame.image.load(os.path.join(config.ICON_DIR, 'misc/freevo_app.png')).convert()
         pygame.display.set_icon(icon)
 
         self.clearscreen(self.COL_BLACK)
