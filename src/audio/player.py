@@ -36,7 +36,6 @@ import rc
 import plugin
 from event import *
 
-
 if config.DEBUG_DEBUGGER:
     import pdb, pprint, traceback
 
@@ -44,10 +43,12 @@ _player_ = None
 
 def get():
     global _player_
+    _debug_('get() _player_=%r' % (_player_,))
     return _player_
 
 class PlayerGUI(GUIObject):
     def __init__(self, item, menuw):
+        _debug_('PlayerGUI.__init__(item=%r, menuw=%r)' % (item, menuw))
         GUIObject.__init__(self)
         self.visible = menuw and True or False
         self.menuw = menuw
@@ -61,6 +62,7 @@ class PlayerGUI(GUIObject):
 
 
     def play(self, player=None):
+        _debug_('play(player=%r)' % (player,))
         global _player_
         if _player_ and _player_.player and _player_.player.is_playing():
             _player_.stop()
@@ -108,6 +110,7 @@ class PlayerGUI(GUIObject):
 
 
     def try_next_player(self):
+        _debug_('try_next_player()')
         self.stop()
         _debug_('error, try next player')
         player = None
@@ -127,6 +130,7 @@ class PlayerGUI(GUIObject):
 
 
     def stop(self, restore_menu=False):
+        _debug_('stop(restore_menu=%r)' % (restore_menu,))
         global _player_
         _player_ = None
         self.player.stop()
@@ -139,6 +143,7 @@ class PlayerGUI(GUIObject):
 
 
     def show(self):
+        _debug_('show()')
         if not self.visible:
             self.visible = True
             self.refresh()
@@ -146,6 +151,7 @@ class PlayerGUI(GUIObject):
 
 
     def hide(self):
+        _debug_('hide()')
         if self.visible:
             self.visible = False
             skin.clear()
@@ -154,8 +160,9 @@ class PlayerGUI(GUIObject):
 
     def refresh(self):
         """
-        Give information to the skin..
+        Give information to the skin
         """
+        _debug_('refresh() visible=%r running=%r' % (self.visible, self.running), 3)
         if not self.visible:
             return
 
