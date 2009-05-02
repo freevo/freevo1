@@ -104,6 +104,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             return
         plugin.MainMenuPlugin.__init__(self)
         self.menuitem = None
+        self.plugin_name = 'lastfm2'
 
 
     def config(self):

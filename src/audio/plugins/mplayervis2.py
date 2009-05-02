@@ -221,7 +221,7 @@ class MpvGoom(BaseAnimation):
     def set_fullscreen_software_scaling(self, divisor=1):
         w, h = config.MPLAYERVIS_FULL_SOFTWARE_GEOMETRY.split('x')
 
-        w = float(w) / config.IMAGEVIEWER_ASPECT
+        w = float(w) / config.OSD_PIXEL_ASPECT
         w = int(w)
         h = int(h)
 

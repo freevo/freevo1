@@ -81,6 +81,7 @@ class PluginInterface(plugin.DaemonPlugin):
             return
 
         plugin.DaemonPlugin.__init__(self)
+        self.plugin_name = 'audioscrobbler'
 
         # DeamonPlugin internal settings.
         self.poll_interval = 3000
