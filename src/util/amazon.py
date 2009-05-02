@@ -90,7 +90,7 @@ __license__ = "Python"
 # Locale support by Michael Josephson <mike@josephson.org>
 
 from xml.dom import minidom
-from xml.dom.ext import PrettyPrint
+#from xml.dom.ext import PrettyPrint
 from xml.parsers import expat
 import os, sys, getopt, cgi, urllib, string
 try:
@@ -330,9 +330,9 @@ def search(operation, search_type, keyword, product_line, type="Large", page=Non
         raise AmazonError, why
 
     # XXX remove begin
-    f = open('/tmp/%s-%s-%s-%s.xml' % (operation, search_type, keyword, product_line),'w')
-    PrettyPrint(xmldoc, f)
-    f.close()
+    #f = open('/tmp/%s-%s-%s-%s.xml' % (operation, search_type, keyword, product_line),'w')
+    #PrettyPrint(xmldoc, f)
+    #f.close()
     # XXX remove end
 
     usock.close()
