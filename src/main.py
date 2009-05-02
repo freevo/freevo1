@@ -442,31 +442,26 @@ def parse_options(defaults, version):
 #
 # Freevo main function
 #
-_version = ''
 try:
     try:
         import freevo.version as version
-        import freevo.revision as revision
     except ImportError:
         import version
-        import revision
-    _version = '%s' % version.__version__
-    _version = _version.replace('-svn', ' r%s' % revision.__revision__)
 except ImportError:
     pass
 
 # parse arguments
 defaults = { }
-(opts, args) = parse_options(defaults, _version)
+(opts, args) = parse_options(defaults, version.version)
 defaults.update(opts.__dict__)
 
 if opts.force_fs:
     # force fullscreen mode
     # deactivate screen blanking and set osd to fullscreen
-    _debug_('os.system(\'xset -dpms s off\')')
+    _debug_('os.system("xset -dpms s off")')
     os.system('xset -dpms s off')
     if config.OSD_X11_CURSORS is not None:
-        _debug_('os.system(\'xsetroot -cursor %s\')' % config.OSD_X11_CURSORS)
+        _debug_('os.system("xsetroot -cursor %s")' % config.OSD_X11_CURSORS)
         os.system('xsetroot -cursor %s' % config.OSD_X11_CURSORS)
     config.START_FULLSCREEN_X = 1
 
@@ -521,7 +516,7 @@ try:
     skin.prepare()
 
     # Fire up splashscreen and load the plugins
-    splash = Splashscreen(_('Starting Freevo-%s, please wait ...') % _version)
+    splash = Splashscreen(_('Starting Freevo-%s, please wait ...') % version.version)
     skin.register('splashscreen', ('screen', splash))
     plugin.init(splash.progress)
     dialog.init()
@@ -562,10 +557,10 @@ try:
 
     MainTread()
 
-    print 'Freevo %s ready' % (_version,)
+    print 'Freevo %s ready' % (version.version,)
     rc.post_event(FREEVO_READY)
     kaa.main.run()
-    print 'Freevo %s finished' % (_version,)
+    print 'Freevo %s finished' % (version.version,)
 
 #except KeyboardInterrupt:
 #    print 'Shutdown by keyboard interrupt'
@@ -573,7 +568,7 @@ try:
 #    shutdown()
 
 except SystemExit, why:
-    print 'Freevo %s exited' % (_version,)
+    print 'Freevo %s exited' % (version.version,)
 
 except Exception, why:
     _debug_('Crash!: %s' % (why), config.DCRITICAL)

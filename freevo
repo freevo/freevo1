@@ -533,7 +533,7 @@ _debug_('%s=%r' % ('HOME', os.environ['HOME']))
 # now check what and how we should start freevo
 daemon = 0 # start in background
 proc   = [ os.path.abspath(os.path.join(freevo_python, 'main.py')) ]
-proc_args = opt_debug + opt_trace + opt_daemon
+proc_args = [] #opt_debug + opt_trace + opt_daemon
 name   = os.path.splitext(os.path.basename(os.path.abspath(sys.argv[0])))[0]
 check  = 1 # check running instance
 
