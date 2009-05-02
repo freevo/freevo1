@@ -264,8 +264,7 @@ class PluginInterface(IdleBarPlugin):
         pollduration = now - self.lastpoll
         drawduration = now - self.lastdraw
         self.lastpoll = now
-        #print "poll(): poll=%.2f, draw=%.2f, interval=%s, state=%s" % (pollduration, drawduration, self.draw_interval, self.state)
-        _debug_("poll(): poll=%.2f, draw=%.2f, interval=%s, state=%s" % \
+        _debug_("_timerhandler(): poll=%.2f, draw=%.2f, interval=%s, state=%s" % \
             (pollduration, drawduration, self.draw_interval, self.state), 2)
         if drawduration >= self.draw_interval:
             if skin.active():
