@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# freevo_config.py - System configuration
+# System configuration
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -391,6 +391,11 @@ LOCAL_CONF_CHANGES = [
      """),
     (5.27,
      """ Added RECORDSERVER_ATTIMER to control when the programme recording should start
+     Added MPLAYERVIS_DOCK_ZOOM to allow the docked goom image to be zoomed
+     Renamed MPLAYERVIS_FAST_FULLSCREEN to MPLAYERVIS_FULL_ZOOM
+     Renamed IMAGEVIEWER_ASPECT to OSD_PIXEL_ASPECT as this affects not just images
+     Added AUTOSHUTDOWN_WAKEUP_TIME_PAD to control how much time to allow for
+     system boot to complete when waking up from an AUTOSHUTDOWN.
      """),
 ]
 
@@ -586,6 +591,11 @@ AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP = True
 # recorded in a short period of time. Note that this
 # variable is used by both the timer and the menu.
 AUTOSHUTDOWN_ALLOWED_IDLE_TIME = 45
+
+# WAKEUP_TIME_PAD
+# Amount of pad time (in seconds) to start system boot ahead of the next
+# wakeup event so that system will be ready.  Default is 180 (3 minutes).
+AUTOSHUTDOWN_WAKEUP_TIME_PAD = 180
 
 # -- Choice of wakeup method
 #
@@ -1284,18 +1294,6 @@ IMAGEVIEWER_DURATION = 3
 IMAGEVIEWER_AUTOPLAY = True
 
 #
-# When viewing images on a TV screen where the pixels are not square
-# the images need to be scaled according to the aspect ratio of the TV
-# Use this setting for 16x9 TVs
-#   IMAGEVIEWER_ASPECT = (float(1024) / float(720))
-# Use this setting for 4x3 TVs
-#   IMAGEVIEWER_ASPECT = (float(768) / float(720))
-# Use this setting for Monitors including HDTVs
-#   IMAGEVIEWER_ASPECT = 1.0
-#
-IMAGEVIEWER_ASPECT = 1.0
-
-#
 # use exif thumbnail your thumbnail review. The quality is lower but
 # it's much faster
 #
@@ -1459,8 +1457,7 @@ OSD_X11_CURSORS = None
 # use the framebuffer and have a PAL tv may set this to
 # './matrox_g400/mga_pal_768x576.sh' OSD_SDL_EXEC_AFTER_STARTUP=''
 if CONF.display == 'mga':
-    OSD_SDL_EXEC_AFTER_STARTUP='%s %s %s' % (os.path.join(CONTRIB_DIR, 'fbcon/mgafb'),
-                                             CONF.tv, CONF.geometry)
+    OSD_SDL_EXEC_AFTER_STARTUP='%s %s %s' % (os.path.join(CONTRIB_DIR, 'fbcon/mgafb'), CONF.tv, CONF.geometry)
     OSD_SDL_EXEC_AFTER_CLOSE='%s restore' % os.path.join(CONTRIB_DIR, 'fbcon/mgafb')
     OSD_OVERSCAN_LEFT = OSD_OVERSCAN_RIGHT = 20
     OSD_OVERSCAN_TOP = OSD_OVERSCAN_BOTTOM = 10
@@ -1491,6 +1488,18 @@ OSD_DIM_TEXT = 1
 # Make a complete screen redraw every time. This is necessary sometimes
 #
 OSD_UPDATE_COMPLETE_REDRAW = 0
+
+#
+# When viewing images on a TV screen where the pixels are not square
+# the images need to be scaled according to the aspect ratio of the TV
+# Use this setting for 16x9 TVs
+#   OSD_PIXEL_ASPECT = (float(1024) / float(720))
+# Use this setting for 4x3 TVs
+#   OSD_PIXEL_ASPECT = (float(768) / float(720))
+# Use this setting for Monitors including HDTVs
+#   OSD_PIXEL_ASPECT = 1.0
+#
+OSD_PIXEL_ASPECT = 1.0
 
 if CONF.display in ( 'dxr3', 'dga' ):
     OSD_UPDATE_COMPLETE_REDRAW = 1

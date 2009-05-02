@@ -86,6 +86,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     | AUTOSHUTDOWN_WAKEUP_CMD = PATH/TO/THE/WAKEUP_SCRIPT
     | AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = '13:00'
     | AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP = True
+    | AUTOSHUTDOWN_WAKEUP_TIME_PAD = 180
 
     The wakeup methode can be either nvram or acpi.
 
@@ -127,6 +128,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('AUTOSHUTDOWN_WAKEUP_CMD', None, 'path to the wakeup script'),
             ('AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME', '13:00', 'Daily wake up time'),
             ('AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP', True, 'Force daily wake up'),
+            ('AUTOSHUTDOWN_WAKEUP_TIME_PAD', 180, 'Allow time for system to boot'),
         ]
 
 
@@ -533,8 +535,8 @@ def __schedule_wakeup_and_shutdown():
             next_action = Shutdown.IGNORE
     else:
         # wake up a little earlier because of the time the booting takes
-        # 180 s = 3 min should be enough
-        wakeup_utc_s = wakeup_utc_s - 180
+        # set in local_conf.py, freevo_config.py or defaults to 180 seconds (3 minutes)
+        wakeup_utc_s = wakeup_utc_s - int(config.AUTOSHUTDOWN_WAKEUP_TIME_PAD)
 
         # let's see which methode we should use for wakeup
         if config.AUTOSHUTDOWN_METHOD.upper() == 'ACPI':

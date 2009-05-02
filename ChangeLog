@@ -23,6 +23,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
  * New screen-saver module, "life" (F#2371097)
  * New screen-saver module, "flames" (F#2376752)
  * New tv guide plug-in "categories" (F#2743961)
+ * Updated autoshutdown plug-in to allow a configurable start-up delay (F#2784634)
  * Updated French translation (F#2784895)
  * Updated ivtv_xine_tv plugin with a record menu screen, xine-ui patch required (F#2373921)
  * Updated play state dialogues with time elapsed / total time (F#2594055)

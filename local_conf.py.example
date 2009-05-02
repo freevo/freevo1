@@ -193,6 +193,11 @@ CONFIG_VERSION = 5.27
 # variable is used by both the timer and the menu.
 # AUTOSHUTDOWN_ALLOWED_IDLE_TIME = 45
 
+# WAKEUP_TIME_PAD
+# Amount of pad time (in seconds) to start system boot ahead of the next
+# wakeup event so that system will be ready.  Default is 180 (3 minutes).
+# AUTOSHUTDOWN_WAKEUP_TIME_PAD = 180
+
 # -- Choice of wakeup method
 #
 # The wakeup can be done via acpi-alarm or nvram-wakeup.
