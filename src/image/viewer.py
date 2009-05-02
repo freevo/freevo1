@@ -78,7 +78,7 @@ class ImageViewer(GUIObject):
         self.render      = render.get_singleton()
         self.osd         = osd.get_singleton()
         self.osd_height  = self.osd.height
-        self.osd_width   = self.osd.width * float(config.IMAGEVIEWER_ASPECT)
+        self.osd_width   = self.osd.width * float(config.OSD_PIXEL_ASPECT)
 
         self.signal_registered = False
 

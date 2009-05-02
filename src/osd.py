@@ -295,7 +295,7 @@ class BusyIcon(threading.Thread):
                         width  = image.get_width()
                         height = image.get_height()
                         x = osd.width - self.overscan_width - 20 - width
-                        icon_x = int(float(x) * config.IMAGEVIEWER_ASPECT)
+                        icon_x = int(float(x) * config.OSD_PIXEL_ASPECT)
                         y = osd.height - self.overscan_height - 20 - height
                         icon_y = y
                         self.rect = pygame.Rect(x, y, width, height)
@@ -516,6 +516,7 @@ class OSD:
                 return
 
             _debug_('pygame event=%s' % (event), 2)
+            #print('pygame event=%s' % (event))
 
             if config.SYS_USE_JOYSTICK:
                 _debug_('pygame event=%s' % (event))
@@ -895,7 +896,7 @@ class OSD:
 
         if not rotation % 180:
             pass
-        x = int(float(x) / config.IMAGEVIEWER_ASPECT)
+        x = int(float(x) / config.OSD_PIXEL_ASPECT)
         self.mutex.acquire()
         try:
             if layer:
@@ -927,9 +928,9 @@ class OSD:
             w, h = image.get_size()
             if rotation % 180:
                 w = int(float(w) * scaling)
-                h = int(float(h) * scaling / config.IMAGEVIEWER_ASPECT)
+                h = int(float(h) * scaling / config.OSD_PIXEL_ASPECT)
             else:
-                w = int(float(w) * scaling / config.IMAGEVIEWER_ASPECT)
+                w = int(float(w) * scaling / config.OSD_PIXEL_ASPECT)
                 h = int(float(h) * scaling)
             image = pygame.transform.scale(image, (w, h))
             image = pygame.transform.rotozoom(image, rotation, 1.0)

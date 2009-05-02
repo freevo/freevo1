@@ -191,8 +191,8 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     # this was the original anamorphic code
     #if anamorphic:
     #    i_w  = i_w * 0.75
-    i_w  = float(i_w) / config.IMAGEVIEWER_ASPECT
-    aspect   = float(i_h)/i_w
+    i_w = float(i_w) / config.OSD_PIXEL_ASPECT
+    aspect = float(i_h)/i_w
 
     if type == 'audio' and aspect < 1.3 and aspect > 0.8:
         # this is an audio cover
