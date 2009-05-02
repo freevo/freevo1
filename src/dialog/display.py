@@ -225,12 +225,6 @@ class GraphicsDisplay(Display):
         self._lock = threading.RLock()
         self.volume_dialog = None
 
-    def handle_event(self, evt):
-        if self.current_dialog and hasattr(self.current_dialog, 'handle_event'):
-            return self.current_dialog.handle_event(evt)
-
-        return super(GraphicsDisplay,self).handle_event(evt)
-
     def handle_mouse_event(self, evt):
         if self.current_dialog and hasattr(self.current_dialog, 'handle_mouse_event'):
             self.current_dialog.handle_mouse_event(evt)

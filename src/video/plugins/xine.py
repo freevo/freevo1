@@ -175,9 +175,9 @@ class Xine:
         self.options = options
         self.item.elapsed = 0
         if config.EVENTS.has_key(item.mode):
-            self.app_mode = item.mode
+            self.event_context = item.mode
         else:
-            self.app_mode = 'video'
+            self.event_context = 'video'
 
         if plugin.getbyname('MIXER'):
             plugin.getbyname('MIXER').reset()
@@ -235,7 +235,7 @@ class Xine:
 
         self.stdout_plugins = []
         self.paused    = False
-        rc.app(self)
+        rc.add_app(self)
 
         self.app = XineApp(command, self)
         dialog.enable_overlay_display(AppTextDisplay(self.ShowMessage))
@@ -266,7 +266,7 @@ class Xine:
                         cin.write('quit\n')
 
         self.app.stop('quit\n')
-        rc.app(None)
+        rc.remove_app(self)
         dialog.disable_overlay_display()
         self.app = None
 

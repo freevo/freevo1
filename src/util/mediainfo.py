@@ -39,6 +39,7 @@ import kaa.metadata
 
 import config
 import util
+import menu
 
 class FileOutdatedException(Exception):
     pass
@@ -703,7 +704,7 @@ def check_cache_status():
     check if cache got updated with helper while freevo is running
     """
     global __last_status_check__
-    if rc.app():
+    if not isinstance(rc.focused_app(), menu.MenuWidget):
         return
     try:
         cachefile = os.path.join(config.FREEVO_CACHEDIR, 'mediainfo')

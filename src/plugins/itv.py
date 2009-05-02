@@ -238,7 +238,6 @@ class HeadlinesSiteItem(Item):
             headlines += [menu.MenuItem(_('No Headlines found'), menuw.goto_prev_page, 0)]
 
         headlines_menu = menu.Menu(_('Headlines'), headlines)
-        rc.app(None)
         menuw.pushmenu(headlines_menu)
         menuw.refresh()
 

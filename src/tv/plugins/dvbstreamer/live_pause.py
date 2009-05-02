@@ -169,7 +169,7 @@ class Xine:
     """
     def __init__(self, type, version, manager, path, size):
         self.name      = 'xine'
-        self.app_mode  = 'tv'
+        self.event_context  = 'tv'
         self.xine_type = type
         self.version   = version
         self.app       = None
@@ -218,7 +218,7 @@ class Xine:
         if plugin.getbyname('MIXER'):
             plugin.getbyname('MIXER').reset()
 
-        rc.app(self)
+        rc.add_app(self)
 
         same_channel = self.last_channel == tuner_channel
 
@@ -517,7 +517,7 @@ class Xine:
         # State Initialisation code
 
         if self.state == STATE_IDLE:
-            rc.app(None)
+            rc.remove_app(self)
             rc.post_event(PLAY_END)
             self.udp_receiver.send_events = False
 

@@ -422,6 +422,8 @@ class DialogMenu:
             action.select(menuw=menuw)
         else:
             action[0](menuw=menuw)
+        if menuw.menustack[-1] == self:
+            menuw.back_one_menu()
 
     def refresh(self):
         if self.__do_show:

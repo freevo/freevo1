@@ -67,7 +67,7 @@ class GraphicsOSD(OSD):
         self.buffer_pos_dialog.info_function = info_function
         self.buffer_pos_dialog.show()
         self.last_dialog = self.buffer_pos_dialog
-    
+
     def hide(self):
         if self.last_dialog:
             self.last_dialog.hide()
@@ -107,7 +107,7 @@ class InfoDialog(InputDialog):
             if channel:
                 self.info_channel = channel
             update_info = True
-        
+
         if event == 'INPUT_EXIT':
             self.hide()
 
@@ -247,6 +247,6 @@ class ChannelBanner(Dialog):
         print 'info_dict'
         print info_dict
         print
-        
+
     def get_info_dict(self):
         return self.info_dict

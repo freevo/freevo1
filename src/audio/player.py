@@ -101,11 +101,11 @@ class PlayerGUI(GUIObject):
             print error
             self.running = False
             if self.visible:
-                rc.app(None)
+                rc.remove_app(self.player)
             self.item.eventhandler(PLAY_END)
         else:
             if self.visible:
-                rc.app(self.player)
+                rc.add_app(self.player)
             self.refresh()
 
 
@@ -136,7 +136,7 @@ class PlayerGUI(GUIObject):
         self.player.stop()
         self.running = False
         if self.visible:
-            rc.app(None)
+            rc.remove_app(self.player)
 
         if self.menuw and not self.menuw.visible and restore_menu:
             self.menuw.show()
@@ -147,7 +147,7 @@ class PlayerGUI(GUIObject):
         if not self.visible:
             self.visible = True
             self.refresh()
-            rc.app(self.player)
+            rc.add_app(self.player)
 
 
     def hide(self):
@@ -155,7 +155,7 @@ class PlayerGUI(GUIObject):
         if self.visible:
             self.visible = False
             skin.clear()
-            rc.app(None)
+            rc.remove_app(self.player)
 
 
     def refresh(self):

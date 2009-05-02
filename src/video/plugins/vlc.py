@@ -65,7 +65,7 @@ class Vlc:
         init the vlc object
         """
         self.name       = 'vlc'
-        self.app_mode   = 'video'
+        self.event_context = 'video'
         self.app        = None
         self.plugins    = []
         self.cmd        = config.VLC_CMD
@@ -122,7 +122,7 @@ class Vlc:
             vlc_options=config.VLC_OPTIONS
 
         command = self.cmd + ' ' + vlc_options + ' --intf dummy -f --key-quit=esc "%s"' % url
-        rc.app(self)
+        rc.add_app(self)
 
         self.app = childapp.ChildApp2(command)
         return None
@@ -136,7 +136,7 @@ class Vlc:
             return
         self.app.kill(2)
 
-        rc.app(None)
+        rc.remove_app(self)
         self.app = None
 
 

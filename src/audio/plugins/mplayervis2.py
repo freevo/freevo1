@@ -748,7 +748,7 @@ class PluginInterface(plugin.Plugin):
             if self.view == FULL:
                 rc.post_event(STOP)
 
-            rc.app(self.player)
+            rc.add_app(self.player)
 
             return True
 
@@ -821,8 +821,8 @@ class PluginInterface(plugin.Plugin):
 
         self.visual.current_view = DOCK
 
-        if rc.app() != self.player.eventhandler:
-            rc.app(self.player)
+        if rc.focused_app() != self.player:
+            rc.add_app(self.player)
 
         # get the rect from skin
         #  XXX someone with better knowlegde of the
@@ -852,7 +852,7 @@ class PluginInterface(plugin.Plugin):
             self.player.playerGUI.hide()
 
         skin.clear()
-        rc.app(self)
+        rc.add_app(self)
 
 
     def fullscreen(self):
@@ -868,8 +868,8 @@ class PluginInterface(plugin.Plugin):
     def noview(self):
         _debug_('noview()', 1)
 
-        if rc.app() != self.player.eventhandler:
-            rc.app(self.player)
+        if rc.focused_app() != self.player:
+            rc.add_app(self.player)
 
         if self.visual:
             self.visual.current_view = NOVI
@@ -914,8 +914,8 @@ class PluginInterface(plugin.Plugin):
         if self.visual:
             self.visual.stop()
 
-            if rc.app() != self.player.eventhandler:
-                rc.app(self.player)
+            if rc.focused_app() != self.player:
+                rc.focused_app(self.player)
 
 
     def stop(self):

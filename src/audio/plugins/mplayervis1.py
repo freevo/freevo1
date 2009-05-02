@@ -695,8 +695,8 @@ class PluginInterface(plugin.Plugin):
         _debug_('dock()')
         self.visual.mode = MpvMode.DOCK
 
-        if rc.app() != self.player.eventhandler:
-            rc.app(self.player)
+        if rc.focused_app() != self.player:
+            rc.add_app(self.player)
 
         self.visual.set_dock()
         if not self.player.playerGUI.visible:
@@ -715,7 +715,7 @@ class PluginInterface(plugin.Plugin):
         self.visual.set_fullscreen()
         self.visual.set_info(self.item_info(), 10)
         skin.clear()
-        rc.app(self)
+        rc.add_app(self)
 
 
     def noview(self):
@@ -723,8 +723,8 @@ class PluginInterface(plugin.Plugin):
 
         self.visual.mode = MpvMode.NOVI
 
-        if rc.app() != self.player.eventhandler:
-            rc.app(self.player)
+        if rc.focused_app() != self.player:
+            rc.add_app(self.player)
 
         if self.visual:
             self.stop_visual()
@@ -744,7 +744,7 @@ class PluginInterface(plugin.Plugin):
             if self.visual.running:
                 return
 
-        if rc.app() == self.player.eventhandler:
+        if rc.focused_app() == self.player:
             title = hasattr(self.item, 'title') and self.item.title or self.item.name
             self.visual = MpvGoom(300, 300, 150, 150, title, self.item.image)
 

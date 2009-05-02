@@ -144,5 +144,5 @@ class PopupBox(Window):
 
         if event == INPUT_EXIT:
             self.destroy()
-        else:
-            return self.parent.eventhandler(event)
+            return True
+        return False

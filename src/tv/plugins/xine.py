@@ -101,7 +101,7 @@ class Xine:
     def __init__(self, type):
         self.name      = 'xine'
 
-        self.app_mode  = 'tv'
+        self.event_context = 'tv'
         self.xine_type = type
         self.app       = None
 
@@ -141,7 +141,7 @@ class Xine:
 
         _debug_('Starting cmd=%s' % command)
 
-        rc.app(self)
+        rc.add_app(self)
 
         self.app = childapp.ChildApp2(command)
         dialog.enable_overlay_display(AppTextDisplay(self.ShowMessage))
@@ -154,7 +154,7 @@ class Xine:
         """
         if self.app:
             self.app.stop('quit\n')
-            rc.app(None)
+            rc.remove_app(self)
             dialog.disable_overlay_display()
 
             if not channel_change:

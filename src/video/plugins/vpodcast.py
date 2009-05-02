@@ -166,7 +166,6 @@ class VPodcastMainMenuItem(MenuItem):
                 arg=(name, rss_url, feed_type), image=image_path) ]
 
         podcast_main_menu = menu.Menu(_('Video Podcasts'), podcast_menu_items)
-        rc.app(None)
         menuw.pushmenu(podcast_main_menu)
         menuw.refresh()
 
@@ -251,7 +250,6 @@ class VPodcastMainMenuItem(MenuItem):
         podcast_sub_menu = menu.Menu(_('Video Podcasts'), podcast_items)
         menuw.pushmenu(podcast_sub_menu)
         menuw.refresh()
-        rc.app(None)
 
 
     def download(self, url, filename):

@@ -824,7 +824,7 @@ class WeatherDetailHandler:
         self.menuw = menu
         self.weather = weather
         self.menuw.hide(clear=False)
-        rc.app(self)
+        rc.add_app(self)
 
         self.skins = ('day', 'forecast', 'week', 'map')
 
@@ -867,7 +867,7 @@ class WeatherDetailHandler:
         """eventhandler"""
         _debug_('eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
         if event == 'MENU_BACK_ONE_MENU':
-            rc.app(None)
+            rc.remove_app(self)
             self.menuw.show()
             return True
 

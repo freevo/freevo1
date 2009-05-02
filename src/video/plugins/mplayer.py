@@ -69,7 +69,7 @@ class MPlayer:
         """
         self.name       = 'mplayer'
 
-        self.app_mode   = 'video'
+        self.event_context = 'video'
         self.seek       = 0
         self.seek_timer = threading.Timer(0, self.reset_seek)
         self.app        = None
@@ -259,7 +259,7 @@ class MPlayer:
 
         if os.path.isfile(os.path.splitext(item.filename)[0]+'.edl'):
             args['edl'] = '-edl %s' % str(os.path.splitext(item.filename)[0]+'.edl')
-        
+
         if dialog.overlay_display_supports_dialogs:
             # Disable the mplayer OSD if we have a better option.
             args['disable_osd'] = True
@@ -369,7 +369,7 @@ class MPlayer:
 
         self.paused = False
 
-        rc.app(self)
+        rc.add_app(self)
         self.app = MPlayerApp(command, self)
         dialog.enable_overlay_display(AppTextDisplay(self.show_message))
         return None
@@ -386,7 +386,7 @@ class MPlayer:
             return
 
         self.app.stop('quit\n')
-        rc.app(None)
+        rc.remove_app(self)
         dialog.disable_overlay_display()
         self.app = None
 

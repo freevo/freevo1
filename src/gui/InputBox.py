@@ -88,4 +88,4 @@ class InputBox(PopupBox):
             self.destroy()
             return True
 
-        return self.parent.eventhandler(event)
+        return False

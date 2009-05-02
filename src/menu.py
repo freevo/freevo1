@@ -198,13 +198,14 @@ class MenuWidget(GUIObject):
         return '%r' % (self.__class__)
 
 
-    def get_event_context(self):
+    def set_event_context(self):
         """
-        return the event context
+        Set the event context
         """
+        context = self.event_context
         if self.menustack and hasattr(self.menustack[-1], 'event_context'):
-            return self.menustack[-1].event_context
-        return self.event_context
+            context = self.menustack[-1].event_context
+        rc.set_app_context(self, context)
 
 
     def show(self):
@@ -213,7 +214,7 @@ class MenuWidget(GUIObject):
             self.refresh(reload=1)
             for callback in copy.copy(self.show_callbacks):
                 callback()
-        rc.app(None)
+        self.set_event_context()
 
 
     def hide(self, clear=True):
@@ -227,6 +228,8 @@ class MenuWidget(GUIObject):
         if len(self.menustack) > 1:
             self.menustack = self.menustack[:-1]
             menu = self.menustack[-1]
+
+            self.set_event_context()
 
             if not isinstance(menu, Menu):
                 return True
@@ -267,6 +270,8 @@ class MenuWidget(GUIObject):
             self.menustack = self.menustack[:count]
             menu = self.menustack[-1]
 
+            self.set_event_context()
+
             if not isinstance(menu, Menu):
                 menu.refresh()
                 return True
@@ -290,7 +295,7 @@ class MenuWidget(GUIObject):
 
     def goto_main_menu(self, arg=None, menuw=None):
         self.menustack = [self.menustack[0]]
-        menu = self.menustack[0]
+        self.set_event_context()
         self.init_page()
         self.refresh()
 
@@ -310,6 +315,7 @@ class MenuWidget(GUIObject):
         """
         self.menustack = [self.menustack[0]]
         menu = self.menustack[0]
+        self.set_event_context()
         self.init_page()
 
         if media == 'shutdown':
@@ -399,6 +405,7 @@ class MenuWidget(GUIObject):
 
     def pushmenu(self, menu):
         self.menustack.append(menu)
+        self.set_event_context()
         if isinstance(menu, Menu):
             menu.page_start = 0
             self.init_page()
@@ -737,69 +744,69 @@ class MenuWidget(GUIObject):
 
         if event == MENU_GOTO_MAINMENU:
             self.goto_main_menu()
-            return
+            return True
 
         if event == MENU_GOTO_TV:
             self.goto_media_menu("tv")
-            return
+            return True
 
         if event == MENU_GOTO_TVGUIDE:
             self.goto_media_menu("tv.guide")
-            return
+            return True
 
         if event == MENU_GOTO_VIDEOS:
             self.goto_media_menu("video")
-            return
+            return True
 
         if event == MENU_GOTO_MUSIC:
             self.goto_media_menu("audio")
-            return
+            return True
 
         if event == MENU_GOTO_IMAGES:
             self.goto_media_menu("image")
-            return
+            return True
 
         if event == MENU_GOTO_GAMES:
             self.goto_media_menu("games")
-            return
+            return True
 
         if event == MENU_GOTO_RADIO:
             self.goto_media_menu("audio.radio")
-            return
+            return True
 
         if event == MENU_GOTO_SHUTDOWN:
             self.goto_media_menu("shutdown")
-            return
+            return True
 
         if event == MENU_BACK_ONE_MENU:
             sounds.play_sound(sounds.MENU_BACK_ONE)
             self.back_one_menu()
-            return
+            return True
 
         if not isinstance(menu, Menu) and menu.eventhandler(event):
-            return
+            return True
 
         if event == 'MENU_REFRESH':
             self.refresh()
-            return
+            return True
 
         if event == 'MENU_REBUILD':
             self.init_page()
             self.refresh()
-            return
+            return True
 
         if not self.menu_items:
             if event in (MENU_SELECT, MENU_SUBMENU, MENU_PLAY_ITEM):
                 self.back_one_menu()
-                return
+                return True
             menu = self.menustack[-2]
             if hasattr(menu, 'selected') and hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
                 if menu.selected.eventhandler(event=event, menuw=self):
-                    return
+                    return True
             for p in self.eventhandler_plugins:
                 if p.eventhandler(event=event, menuw=self):
-                    return
-            return
+                    return True
+            return False
 
         if not isinstance(menu, Menu):
             if self.eventhandler_plugins == None:
@@ -807,58 +814,68 @@ class MenuWidget(GUIObject):
 
             for p in self.eventhandler_plugins:
                 if p.eventhandler(event=event, menuw=self):
-                    return
+                    return True
 
             _debug_('no eventhandler for event %s' % event, 2)
-            return
+            return False
 
         if event == MENU_UP:
             self._handle_up(menu, event)
+            return True
 
-        elif event == MENU_DOWN:
+        if event == MENU_DOWN:
             self._handle_down(menu, event)
+            return True
 
-        elif event == MENU_PAGEUP:
+        if event == MENU_PAGEUP:
             self._handle_pageup(menu, event)
+            return True
 
-        elif event == MENU_PAGEDOWN:
+        if event == MENU_PAGEDOWN:
             self._handle_pagedown(menu, event)
+            return True
 
-        elif event == MENU_LEFT:
+        if event == MENU_LEFT:
             self._handle_left(menu, event)
+            return True
 
-        elif event == MENU_RIGHT:
+        if event == MENU_RIGHT:
             self._handle_right(menu, event)
+            return True
 
-        elif event == MENU_PLAY_ITEM and hasattr(menu.selected, 'play'):
+        if event == MENU_PLAY_ITEM and hasattr(menu.selected, 'play'):
             menu.selected.play(menuw=self)
+            return True
 
-        elif event == MENU_PLAY_ITEM or event == MENU_SELECT:
+        if event == MENU_PLAY_ITEM or event == MENU_SELECT:
             self._handle_play_item(menu, event)
+            return True
 
-        elif event == MENU_SUBMENU:
+        if event == MENU_SUBMENU:
             self._handle_submenu(menu, event)
+            return True
 
-        elif event == MENU_CALL_ITEM_ACTION:
+        if event == MENU_CALL_ITEM_ACTION:
             self._handle_call_item_action(menu, event)
+            return True
 
-        elif event == MENU_CHANGE_STYLE and len(self.menustack) > 1:
+        if event == MENU_CHANGE_STYLE and len(self.menustack) > 1:
             # did the menu change?
             if skin.toggle_display_style(menu):
                 self.rebuild_page()
                 self.refresh()
-                return
+            return True
 
-        elif hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
+        if hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
             if menu.selected.eventhandler(event=event, menuw=self):
-                return
+                return True
 
         for p in self.eventhandler_plugins:
             if p.eventhandler(event=event, menuw=self):
-                return
+                return True
 
         _debug_('no eventhandler for event %s' % str(event), 2)
-        return 0
+        return False
 
 
 
@@ -948,9 +965,6 @@ class MenuWidget(GUIObject):
 
         rc.post_event(MENU_PROCESS_END)
 
-        # make sure we are in context 'menu'
-        _debug_('menu: setting context to %s' % self.event_context, 2)
-        rc.set_context(self.event_context)
 
 
 

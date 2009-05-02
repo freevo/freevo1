@@ -69,7 +69,7 @@ class RadioPlayer:
     def __init__(self):
         self.mode = 'idle'
         self.name = 'radioplayer'
-        self.app_mode = 'audio'
+        self.event_context = 'audio'
         self.app = None
         self.starttime = 0
 
@@ -127,7 +127,7 @@ class RadioPlayer:
             os.system('%s' % (config.RADIO_CMD_START % self.item.station))
         #thread.start_new_thread(self.__update_thread, ())
 
-        rc.app(self)
+        rc.add_app(self)
         rc.post_event(PLAY_START)
         return None
 
@@ -155,7 +155,7 @@ class RadioPlayer:
             os.system('%s' % config.RADIO_CMD_STOP)
 
         rc.post_event(PLAY_END)
-        rc.app(None)
+        rc.remove_app(self)
 
 
     def is_playing(self):

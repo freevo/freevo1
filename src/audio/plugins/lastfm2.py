@@ -162,7 +162,6 @@ class LastFMMainMenuItem(MenuItem):
         if not lfm_items:
             lfm_items += [MenuItem(_('Invalid LastFM Session!'), menuw.goto_prev_page, 0)]
         lfm_menu = Menu(_('Last FM'), lfm_items)
-        #rc.app(None)
         menuw.pushmenu(lfm_menu)
         menuw.refresh()
 

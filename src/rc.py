@@ -73,6 +73,12 @@ def post_event(event):
     return get_singleton().post_event(event)
 
 
+def focused_app():
+    """
+    Return the current app object which has focus.
+    """
+    return get_singleton().get_app()
+
 def app(application=0):
     """
     set or get the current app/eventhandler
@@ -89,6 +95,22 @@ def app(application=0):
 
     return get_singleton().get_app()
 
+def add_app(app):
+    context = 'menu'
+    if hasattr(app, 'event_context'):
+        context = app.event_context
+    _debug_('rc.add_app: Setting app %r (context %s)' % (app, context))
+    get_singleton().add_app(app, context)
+
+def remove_app(app):
+    _debug_('rc.remove_app: Removing app %r ' % app)
+    get_singleton().remove_app(app)
+
+def set_app_context(app, context):
+    get_singleton().set_app_context(app, context)
+
+def get_app_context(app):
+    return get_singleton().get_app_context(app)
 
 def set_context(context):
     """
@@ -552,6 +574,7 @@ class EventHandler:
 
         self.app                = None
         self.context            = 'menu'
+        self.apps               = []
         self.callbacks          = []
         self.shutdown_callbacks = []
         self.poll_objects       = []
@@ -562,6 +585,28 @@ class EventHandler:
         kaa.Timer(self.poll).start(config.POLL_TIME)
         _debug_('EventHandler.self.inputs=%r' % (self.inputs,), 1)
 
+    def add_app(self, app, context):
+        self.app = app
+        self.context = context
+        self.apps.append([app, context])
+
+    def remove_app(self, app):
+        if app == self.app:
+            self.apps.pop()
+            self.app,self.context = self.apps[-1]
+        else:
+            for i in xrange(len(self.apps)):
+                if self.apps[i][0] == app:
+                    del self.apps[i]
+
+    def set_app_context(self, app, context):
+        if app == self.app:
+            self.context = context
+            self.apps[-1][1] = context
+        else:
+            for i in xrange(len(self.apps)):
+                if self.apps[i][0] == app:
+                    self.apps[i][1] = context
 
     def set_app(self, app, context):
         """

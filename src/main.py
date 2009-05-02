@@ -179,7 +179,7 @@ class MainMenu(Item):
 
         mainmenu = menu.Menu(_('Freevo Main Menu'), items, item_types='main', umount_all = 1)
         menuw.pushmenu(mainmenu)
-        osd.add_app(menuw)
+        rc.add_app(menuw)
 
 
     def eventhandler(self, event=None, menuw=None, arg=None):
@@ -274,7 +274,6 @@ class MainTread:
             return
 
         _debug_('handling event %s' % str(event), 2)
-
         for p in self.eventlistener_plugins:
             p.eventhandler(event=event)
 
@@ -289,53 +288,57 @@ class MainTread:
             return
 
         # Send events to either the current app or the menu handler
-        elif rc.app():
-            if not rc.app()(event):
-                for p in self.eventhandler_plugins:
-                    if p.eventhandler(event=event):
-                        break
+        elif rc.focused_app():
+            consumed = False
+            app = rc.focused_app()
+            try:
+                if config.DEBUG_TIME:
+                    t1 = time.clock()
+
+                if hasattr(app, 'eventhandler'):
+                    consumed = app.eventhandler(event)
                 else:
-                    _debug_('no eventhandler for event %s' % event, 2)
+                    consumed = app(event)
 
-        else:
-            app = osd.focused_app()
-            if app:
-                try:
-                    if config.DEBUG_TIME:
-                        t1 = time.clock()
-                    app.eventhandler(event)
-                    if config.DEBUG_TIME:
-                        print time.clock() - t1
+                if config.DEBUG_TIME:
+                    print time.clock() - t1
 
-                except SystemExit:
-                    _debug_('SystemExit re-raised')
-                    raise
-
-                except:
-                    if config.FREEVO_EVENTHANDLER_SANDBOX:
-                        traceback.print_exc()
-                        from gui import ConfirmBox
-                        pop = ConfirmBox(
-                            text=_("Event '%s' crashed\n\n" +
-                                "Please take a look at the logfile and report" +
-                                "the bug to the Freevo mailing list. The state" +
-                                "of Freevo may be corrupt now and this error" +
-                                "could cause more errors until you restart" +
-                                "Freevo.\n\n" +
-                                "Logfile: %s\n\n") %
-                            (event, sys.stdout.logfile),
-                            width=osd.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)-50,
-                            handler=shutdown,
-                            handler_message = _('shutting down...'))
-                        pop.b0.set_text(_('Shutdown'))
-                        pop.b0.toggle_selected()
-                        pop.b1.set_text(_('Continue'))
-                        pop.b1.toggle_selected()
-                        pop.show()
+                if not consumed:
+                    for p in self.eventhandler_plugins:
+                        if p.eventhandler(event=event):
+                            break
                     else:
-                        raise
-            else:
-                _debug_('no target for events given')
+                        _debug_('no eventhandler for event %s' % event, 2)
+
+            except SystemExit:
+                _debug_('SystemExit re-raised')
+                raise
+
+            except:
+                if config.FREEVO_EVENTHANDLER_SANDBOX:
+                    traceback.print_exc()
+                    from gui import ConfirmBox
+                    pop = ConfirmBox(
+                        text=_("Event '%s' crashed\n\n" +
+                            "Please take a look at the logfile and report" +
+                            "the bug to the Freevo mailing list. The state" +
+                            "of Freevo may be corrupt now and this error" +
+                            "could cause more errors until you restart" +
+                            "Freevo.\n\n" +
+                            "Logfile: %s\n\n") %
+                        (event, sys.stdout.logfile),
+                        width=osd.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)-50,
+                        handler=shutdown,
+                        handler_message = _('shutting down...'))
+                    pop.b0.set_text(_('Shutdown'))
+                    pop.b0.toggle_selected()
+                    pop.b1.set_text(_('Continue'))
+                    pop.b1.toggle_selected()
+                    pop.show()
+                else:
+                    raise
+        else:
+            _debug_('no target for events given')
 
 
 def unix_signal_handler(sig, frame):

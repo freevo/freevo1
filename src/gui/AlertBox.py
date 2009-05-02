@@ -73,5 +73,5 @@ class AlertBox(PopupBox):
             self.destroy()
             if self.handler:
                 self.handler()
-        else:
-            return self.parent.eventhandler(event)
+            return True
+        return False

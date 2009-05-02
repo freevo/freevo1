@@ -184,7 +184,7 @@ class LivePauseController:
     """
     def __init__(self, player):
         self.name = 'livepause'
-        self.app_mode  = 'tv'
+        self.event_context  = 'tv'
 
         self.fc = FreevoChannels()
 
@@ -270,7 +270,7 @@ class LivePauseController:
 
         self.disable_buffering_timer.stop()
 
-        rc.app(self)
+        rc.add_app(self)
 
         # If it's the same channel as last time and we have come back to it after
         # more than 2 minutes start at the end of the buffer, otherwise jump
@@ -567,7 +567,7 @@ class LivePauseController:
 
         if self.state == State.IDLE:
             self.state_dialog.hide()
-            rc.app(None)
+            rc.remove_app(self)
             rc.post_event(PLAY_END)
             self.backend.set_events_enabled(False)
 

@@ -66,7 +66,7 @@ class MPlayer:
 
     def __init__(self):
         self.tuner_chidx = 0    # Current channel, index into config.TV_CHANNELS
-        self.app_mode = 'tv'
+        self.event_context = 'tv'
         self.fc = FreevoChannels()
         self.current_vg = None
 
@@ -271,11 +271,7 @@ class MPlayer:
         # Start up the TV task
         self.app = childapp.ChildApp2(command)
 
-        self.prev_app = rc.app()
-        rc.app(self)
-
-        if osd.focused_app():
-            osd.focused_app().hide()
+        rc.add_app(self)
 
         # Suppress annoying audio clicks
         time.sleep(0.4)
@@ -305,9 +301,7 @@ class MPlayer:
 
         self.app.stop('quit\n')
 
-        rc.app(self.prev_app)
-        if osd.focused_app() and not channel_change:
-            osd.focused_app().show()
+        rc.remove_app(self)
 
         if os.path.exists('/tmp/freevo.wid'): os.unlink('/tmp/freevo.wid')
 

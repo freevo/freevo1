@@ -151,7 +151,7 @@ class Vlc:
     """
     def __init__(self, manager, path, size):
         self.name      = 'vlc'
-        self.app_mode  = 'tv'
+        self.event_context = 'tv'
         self.app       = None
         self.adapter_in_use = -1
         self.fc = FreevoChannels()
@@ -209,7 +209,7 @@ class Vlc:
         if not tuner_channel:
             tuner_channel = self.fc.getChannel()
 
-        rc.app(self)
+        rc.add_app(self)
 
         same_channel = self.last_channel == tuner_channel
 
@@ -534,7 +534,7 @@ class Vlc:
         # State Initialisation code
 
         if self.state == STATE_IDLE:
-            rc.app(None)
+            rc.remove_app(self)
             rc.post_event(PLAY_END)
             self.udp_receiver.send_events = False
 

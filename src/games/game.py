@@ -67,7 +67,7 @@ class Game:
     def __init__(self):
         _debug_('Game.__init__()', 2)
         self.mode = None
-        self.app_mode = 'games'
+        self.event_context = 'games'
 
     def play(self, item, menuw):
         _debug_('play(item=%r, menuw=%r)' % (item, menuw), 2)
@@ -98,15 +98,14 @@ class Game:
         _debug_('Game.play(): Starting thread, cmd=%s' % self.command)
 
         self.app=GameApp(self.command, stop_osd=1)
-        self.prev_app = rc.app()
         rc.suspend()
-        rc.app(self)
+        rc.add_app(self)
 
 
     def stop(self):
         _debug_('stop()', 2)
         self.app.stop()
-        rc.app(None)
+        rc.remove_app(self)
         rc.resume()
         if plugin.is_active('joy'):
             try:

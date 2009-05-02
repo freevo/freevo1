@@ -117,6 +117,7 @@ from audio import AudioDiskItem
 from audio import AudioItem
 from video import VideoItem
 
+from menu import MenuWidget
 LABEL_REGEXP = re.compile("^(.*[^ ]) *$").match
 
 
@@ -161,9 +162,8 @@ def shutdown():
     global im_thread
     if im_thread.isAlive():
         _debug_('stopping Identify_Thread')
-        im_thread.stop = True
-        while im_thread.isAlive():
-            time.sleep(0.1)
+        im_thread.stop.set()
+        im_thread.join()
         _debug_('stopped Identify_Thread')
 
 
@@ -872,7 +872,7 @@ class Identify_Thread(threading.Thread):
 
     def check_all(self):
         """ Check all drives """
-        if rc.app():
+        if not isinstance(rc.focused_app(), MenuWidget):
             # Some app is running, do not scan, it's not necessary
             return
 
@@ -891,6 +891,7 @@ class Identify_Thread(threading.Thread):
         """ Initialize the identify thread """
         threading.Thread.__init__(self)
         self.lock = thread.allocate_lock()
+        self.stop = threading.Event()
 
 
     def run(self):
@@ -912,17 +913,13 @@ class Identify_Thread(threading.Thread):
                     for media in config.REMOVABLE_MEDIA:
                         media.drive_status = CDS_NO_INFO #media.get_drive_status()
 
-                if not rc.app():
+                if isinstance(rc.focused_app(), MenuWidget):
                     # check only in the menu
                     self.check_all()
 
-                for i in range(4):
-                    # wait some time
-                    time.sleep(0.5)
-
-                    # check if we need to stop
-                    if hasattr(self, 'stop'):
-                        return
+                self.stop.wait(1.0)
+                if self.stop.isSet():
+                    return
             except SystemExit:
                 break
 

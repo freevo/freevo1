@@ -63,7 +63,6 @@ class ScheduledRecordingsItem(Item):
         schedule_menu = menu.Menu(_('Scheduled Recordings'), items,
             reload_func=self.reload, item_types='tv program menu')
         self.menuw = menuw
-        rc.app(None)
         menuw.pushmenu(schedule_menu)
         menuw.refresh()
 

@@ -337,7 +337,6 @@ class SnesItem(Item):
 
         if event == em.STOP:
             self.stop()
-            rc.app(None)
             if not menuw == None:
                 menuw.refresh(reload=1)
 

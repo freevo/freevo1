@@ -190,7 +190,6 @@ class ApodcastMainMenuItem(MenuItem):
         if (len(podcast_items) == 0):
             podcast_items += [ menu.MenuItem(_('No Podcast locations found'), menwu.goto_prev_page, 0) ]
         podcast_sub_menu = menu.Menu(_('AUDIO PODCAST'), podcast_items)
-        rc.app(None)
         menuw.pushmenu(podcast_sub_menu)
         menuw.refresh()
 
@@ -218,7 +217,6 @@ class ApodcastMainMenuItem(MenuItem):
 
         popup.destroy()
         podcast_main_menu = menu.Menu(_('AUDIO PODCAST'), podcast_menu_items)
-        rc.app(None)
         menuw.pushmenu(podcast_main_menu)
         menuw.refresh()
 

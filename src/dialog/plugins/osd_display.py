@@ -71,7 +71,7 @@ class OSDGraphicsDisplay(GraphicsDisplay):
         surface = pygame.image.frombuffer(buf, image.size, 'RGBA')
         # If the dialog handles events then dim the background to show the
         # dialog now has focus.
-        if hasattr(self.current_dialog, 'handle_event'):
+        if hasattr(self.current_dialog, 'eventhandler'):
             fill_color = (0,0,0,config.OSD_DIALOG_BACKGROUND_DIM)
         else:
             fill_color = (0,0,0,0)

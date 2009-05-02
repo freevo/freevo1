@@ -61,7 +61,6 @@ class ApodMainMenuItem(Item):
         apodmenuitems += [menu.MenuItem(_('Current Picture'), action=self.fetchCurrentPicture)]
         apodmenuitems += [menu.MenuItem(_('Previous Pictures'), action=self.browsePictureDir)]
         apod_menu = menu.Menu( _( 'Apod Pictures' ), apodmenuitems)
-        rc.app(None)
         menuw.pushmenu(apod_menu)
         menuw.refresh()
 
@@ -77,7 +76,6 @@ class ApodMainMenuItem(Item):
                                              menuw.back_one_menu, 0)]
         apodpic_menu = menu.Menu(_('Apod Pictures'), apodpic_items,
                                      reload_func=menuw.back_one_menu )
-        rc.app(None)
         menuw.pushmenu(apodpic_menu)
         menuw.refresh()
 

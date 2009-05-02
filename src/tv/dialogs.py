@@ -71,7 +71,7 @@ def handle_channel_number_input(evt):
     Should be called at the start of a players event handler so that
     only events that this function doesn't consume are processed.
     for example:
-    
+
     | def eventhandler(self, event):
     |     if tv.channels.handle_channel_number_input(event):
     |         return True

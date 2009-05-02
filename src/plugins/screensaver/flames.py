@@ -143,4 +143,3 @@ def blitdouble(screen, flame, miniflame):
     blit_array(miniflame, flame[:,:-3])
     s2 = pygame.transform.scale(miniflame, screen.get_size())
     screen.blit(s2, (0,0))
-

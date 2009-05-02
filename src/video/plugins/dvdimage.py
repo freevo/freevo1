@@ -55,6 +55,7 @@ class PluginInterface(plugin.ItemPlugin):
     def __init__(self):
         plugin.ItemPlugin.__init__(self)
         self.symlink = vfs.join(config.OVERLAY_DIR,'dvdlink')
+        self.event_context = 'input'
 
 
     def actions(self, item):
@@ -92,15 +93,14 @@ class PluginInterface(plugin.ItemPlugin):
                 if self.pop:
                     self.pop.destroy()
                     self.pop = None
-                    rc.app(None)
+                    rc.remove_app(self)
 
                 self.chapter()
         except: pass
 
     def chapter(self):
         if self.schapter == None:
-            rc.app(self)
-            rc.set_context('input')
+            rc.add_app(self)
             self.pop = PopupBox(_('Choose title to play. <1-9>'))
             self.pop.show()
         else:
@@ -123,8 +123,7 @@ class PluginInterface(plugin.ItemPlugin):
         self.selected = None
 
         if len(self.files)>1:
-            rc.app(self)
-            rc.set_context('input')
+            rc.add_app(self)
             self.pop = PopupBox(_('Choose disc (%i discs available).' % len(self.files) ))
             self.pop.show()
         else:

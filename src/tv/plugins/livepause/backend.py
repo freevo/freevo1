@@ -227,13 +227,13 @@ class RemoteBackendClient(Backend):
         if inprogress is None:
             return False
         inprogress.wait()
-        
+
     def cancelsave(self):
         inprogress = self._rpc('cancelsave')
         if inprogress is None:
             return False
         inprogress.wait()
-        
+
 
 class LocalBackend(Backend):
     """
@@ -429,8 +429,8 @@ class LivePauseApp(childapp.ChildApp):
         Cancel any current save operation.
         """
         self.send_command_wait_for_output('cancelsave')
-        
-        
+
+
     def quit(self):
         """
         Request that livepause exits.

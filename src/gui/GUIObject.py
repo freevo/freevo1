@@ -304,7 +304,6 @@ class GUIObject:
                 object.blit_parent(restore=False)
             object = object.parent
 
-        self.osd.app_list[-1].blit_parent()
         self.osd.update()
 
 
@@ -320,9 +319,7 @@ class GUIObject:
         """
         blit self.surface to the parent.surface
         """
-        if self.osd.app_list.count(self):
-            p = False
-        elif self.parent.surface:
+        if self.parent.surface:
             p = True
         else:
             p = False
@@ -444,8 +441,6 @@ class GUIObject:
         _debug_('parent: %s' % self.parent, 2)
         if self.parent:
             self.parent.children.remove(self)
-
-        self.osd.remove_app(self)
 
         self.hide()
         if self.parent:

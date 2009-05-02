@@ -147,7 +147,7 @@ class MpdDetailHandler:
         self.menuw   = iMenuw
         self.mpd = iWeather
         self.menuw.hide(clear=False)
-        rc.app(self)
+        rc.add_app(self)
 
         self.skins     = ('mpd')
         self.subtitles = (_('mpd'))
@@ -163,7 +163,7 @@ class MpdDetailHandler:
     def eventhandler(self, event, menuw=None):
         '''eventhandler'''
         if event == 'MENU_BACK_ONE_MENU':
-            rc.app(None)
+            rc.remove_app(self)
             self.menuw.show()
             return True
 

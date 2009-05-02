@@ -116,7 +116,6 @@ class RemindItem(Item):
             lines += [menu.MenuItem(_('No Reminders Found'), menuw.goto_prev_page, 0)]
 
         lines_menu = menu.Menu(_('Reminders'), lines)
-        rc.app(None)
         menuw.pushmenu(lines_menu)
         menuw.refresh()
 

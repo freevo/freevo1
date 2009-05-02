@@ -40,4 +40,3 @@ setup ( name = 'pygoom-2k4',
         description = 'Goom-2k4 bindings for Python',
         ext_modules = [pympav_1]
         )
-

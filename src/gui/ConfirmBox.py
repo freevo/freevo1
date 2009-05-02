@@ -90,10 +90,11 @@ class ConfirmBox(PopupBox):
             self.b0.toggle_selected()
             self.b1.toggle_selected()
             self.draw()
-            return
+            return True
 
         elif event == INPUT_EXIT:
             self.destroy()
+            return True
 
         elif event == INPUT_ENTER:
             if self.b0.selected:
@@ -111,6 +112,6 @@ class ConfirmBox(PopupBox):
                         self.destroy()
             else:
                 self.destroy()
+            return True
 
-        else:
-            return self.parent.eventhandler(event)
+        return False

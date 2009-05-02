@@ -287,7 +287,6 @@ class AlbumTreeMainMenu(MenuItem):
             branches.append(AlbumTreeBranchMenu(self, branch.name, (branch, [])))
 
         album_tree_menu = menu.Menu(_('Album Tree 2'), branches)
-        rc.app(None)
         menuw.pushmenu(album_tree_menu)
         menuw.refresh()
 
@@ -335,7 +334,6 @@ class AlbumTreeBranchMenu(MenuItem):
 
         myobjectmenu = menu.Menu(title, mylistofitems)
                                  #reload_func=menuw.back_one_menu )
-        rc.app(None)
         menuw.pushmenu(myobjectmenu)
         menuw.refresh()
 

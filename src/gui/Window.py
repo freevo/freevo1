@@ -36,6 +36,8 @@ from GUIObject import GUIObject, Align
 from Container import Container
 from skin import eval_attr
 
+OSD_PARENT = None
+
 class Window(GUIObject):
     """
     x         x coordinate. Integer
@@ -48,15 +50,15 @@ class Window(GUIObject):
         GUIObject.__init__(self, x, y, width, height)
 
         if not parent or parent == 'osd':
-            parent = self.osd.app_list[0]
+            global OSD_PARENT
+            if OSD_PARENT is None:
+                OSD_PARENT = GUIObject()
+            parent = OSD_PARENT
 
         parent.add_child(self)
 
-        self.osd.add_app(self)
 
         self.event_context = 'input'
-        _debug_('window: setting context to %s' % self.event_context, 2)
-        rc.set_context(self.event_context)
 
         if not width:
             self.width  = self.osd.width / 2
@@ -80,12 +82,14 @@ class Window(GUIObject):
         self.visible = 1
         self.osd.dialog_layer.fill((0,0,0,config.OSD_DIALOG_BACKGROUND_DIM))
         self.draw()
+        rc.add_app(self)
 
     def hide(self):
         self.visible = 0
         self.osd.dialog_layer_enabled = False
         self.osd.dialog_layer.fill((0,0,0,0))
         self.osd.update()
+        rc.remove_app(self)
 
     def add_child(self, child):
         if self.content:

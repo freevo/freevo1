@@ -264,7 +264,7 @@ class MediaMenu(Item):
                 else:
                     menu.selected = None
 
-            if menu == menuw.menustack[-1] and not rc.app():
+            if menu == menuw.menustack[-1] and rc.focused_app() == menuw:
                 menuw.init_page()
                 menuw.refresh()
             # others may need this event, too

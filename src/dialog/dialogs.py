@@ -157,20 +157,26 @@ class InputDialog(Dialog):
     """
     Dialog class that when shown changes the input context to 'input'.
     """
-    def handle_event(self, event):
+    def __init__(self, name, duration):
+        super(InputDialog, self).__init__(name, duration)
+        self.event_context = 'input'
+        self.signals['hidden'].connect(InputDialog.__hidden)
+        self.signals['shown'].connect(InputDialog.__shown)
+
+    @staticmethod
+    def __shown(dialog):
+        rc.add_app(dialog)
+
+    @staticmethod
+    def __hidden(dialog):
+        rc.remove_app(dialog)
+
+    def eventhandler(self, event):
         if event == 'STOP':
             self.display.hide_dialog()
             return True
         return False
 
-    def prepare(self):
-        self.context = rc.get_singleton().context
-        rc.set_context('input')
-        super(InputDialog,self).prepare()
-
-    def finish(self):
-        rc.set_context(self.context)
-        super(InputDialog, self).finish()
 
 class MessageDialog(Dialog):
     """
@@ -359,7 +365,7 @@ class WidgetDialog(InputDialog):
         self.selected_widget = widget
         self.redraw()
 
-    def handle_event(self, event):
+    def eventhandler(self, event):
         self.processing_event = True
 
         handled = False
@@ -398,7 +404,7 @@ class WidgetDialog(InputDialog):
 
 
         if not handled:
-            handled = super(WidgetDialog, self).handle_event(event)
+            handled = super(WidgetDialog, self).eventhandler(event)
 
         self.processing_event = False
 
@@ -568,6 +574,9 @@ class ButtonDialog(WidgetDialog):
         return result
 
 class MenuDialog(WidgetDialog):
+    """
+    Dialog that contains a menu widget.
+    """
     def __init__(self, title, items, skin='menu'):
         menu = MenuModel()
         for item in items:

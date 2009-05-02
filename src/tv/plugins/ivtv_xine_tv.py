@@ -318,7 +318,7 @@ class XineIvtv:
 
         self.app = None
         self.prev_app = None
-        self.app_mode = 'tv'
+        self.event_context = 'tv'
 
         self.lastinput_time = 0
         self.lastinput_value = None
@@ -428,8 +428,7 @@ class XineIvtv:
         _debug_('XineIvtv.Play(mode=%r, channel=%r, channel_change=%r)' % (mode, channel, channel_change), 1)
 
         self.mode = mode
-        self.prev_app = rc.app()
-        rc.app(self)
+        rc.add_app(self)
         self.mixer.Mute()
         self.xine.Start()
         self.tuner.SetChannelByName(channel, True)
@@ -454,7 +453,7 @@ class XineIvtv:
         self.mixer.Stop()
         self.tuner.Stop()
         self.xine.Stop()
-        rc.app(self.prev_app)
+        rc.remove_app(self)
         rc.post_event(PLAY_END)
         _debug_('Stopped %r app' % self.mode)
 

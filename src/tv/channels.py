@@ -99,7 +99,7 @@ class FreevoChannels:
             #DJW this should be noticed
             import traceback
             traceback.print_stack()
-            
+
         return group
 
 

@@ -98,7 +98,7 @@ class LibraryResource(FreevoResource):
             if isinstance(d, types.TupleType):
                 (title, tdir) = d
                 if os.path.isdir(tdir):
-                    dirs.append(d)            
+                    dirs.append(d)
         return dirs
 
     def check_dir(self, media, dir):
@@ -119,11 +119,11 @@ class LibraryResource(FreevoResource):
         action_file      = Unicode(fv.formValue(form, 'file'))
         if isinstance( action_file, str ):
             action_file = Unicode( action_file, 'latin-1' )
-            
+
         action_newfile   = Unicode(fv.formValue(form, 'newfile'))
         if isinstance( action_newfile, str ):
             action_newfile = Unicode( action_newfile, 'latin-1' )
-            
+
         action_dir       = Unicode(fv.formValue(form, 'dir'))
         dir_str = fv.formValue(form, 'dir')
         if isinstance(dir_str, str):
@@ -131,9 +131,9 @@ class LibraryResource(FreevoResource):
                 action_dir = ""
         if isinstance( action_dir, str ):
             action_dir = Unicode( action_dir, 'latin-1' )
-            
+
         action_mediatype = fv.formValue(form, 'media')
-        action_script = os.path.basename(request.path)        
+        action_script = os.path.basename(request.path)
         #use request.postpath array to set action to download
         if not action and len(request.postpath) > 0:
             action = "download"
@@ -178,7 +178,7 @@ class LibraryResource(FreevoResource):
                             os.unlink(file_loc)
                             messages += [ _( 'Delete %s.' ) % ('<b>'+file_loc+'</b>') ]
                         file_loc_fxd = os.path.splitext(file_loc)[0] + '.fxd'
-                        if os.path.exists(file_loc_fxd): 
+                        if os.path.exists(file_loc_fxd):
                             os.unlink(file_loc_fxd)
                             messages += [ _('Delete %s.') % ('<b>'+file_loc_fxd+'</b>') ]
                     except OSError, e:
@@ -230,12 +230,12 @@ class LibraryResource(FreevoResource):
                 for m in messages:
                     fv.res += "   <li>%s</li>\n" % m
                 fv.res += "</ul>\n"
-                
+
 
         if not action_mediatype:
             fv.tableOpen('class="library"')
-            movmuslink = '<a href="%s?media=%s&dir=">%s</a>' 
-            rectvlink = '<a href="%s?media=%s&dir=%s">%s</a>' 
+            movmuslink = '<a href="%s?media=%s&dir=">%s</a>'
+            rectvlink = '<a href="%s?media=%s&dir=%s">%s</a>'
             fv.tableRowOpen('class="chanrow"')
             fv.tableCell('<img src=\"images/library/library-movies.jpg\">')
             fv.tableCell(movmuslink % (action_script, "movies",_("Movies")), '')
@@ -310,7 +310,7 @@ class LibraryResource(FreevoResource):
                             pass
                 else:
                     fv.res += '<h4>Recording server is not available, recording information is unavailable.</h4>'
-            
+
                 #generate our favorites regular expression
                 favre = ''
                 (status, favorites) = self.recordclient().getFavoritesNow()
@@ -326,7 +326,7 @@ class LibraryResource(FreevoResource):
                     favre = string.replace(favre, ' ', '_')
 
             #put in back up directory link
-            #figure out if action_dir is in directories variable and change 
+            #figure out if action_dir is in directories variable and change
             #back if it is
             actiondir_is_root = FALSE
             for d in directories:
@@ -397,6 +397,5 @@ class LibraryResource(FreevoResource):
             fv.printFooter()
 
         return String( fv.res )
-    
-resource = LibraryResource()
 
+resource = LibraryResource()

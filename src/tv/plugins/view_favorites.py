@@ -65,7 +65,6 @@ class ViewFavoritesItem(Item):
 
         favorite_menu = menu.Menu(_( 'View Favorites'), items, reload_func=self.reload, item_types='tv favorite menu')
         self.menuw = menuw
-        rc.app(None)
         menuw.pushmenu(favorite_menu)
         menuw.refresh()
 

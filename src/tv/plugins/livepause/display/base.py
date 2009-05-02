@@ -57,7 +57,7 @@ class OSD(object):
         live pause status information.
         """
         pass
-    
+
     def display_buffer_pos(self, info_func):
         """
         Display an OSD for live pause buffer information.

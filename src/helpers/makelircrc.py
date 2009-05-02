@@ -175,7 +175,7 @@ def parseFile(name):
                         remote_used = value
                         if opts.verbose:
                             print >>sys.__stderr__, 'using remote %s' % (value)
-        
+
         # continue in the codes section
         if state.state == ParseState.IN_CODES:
             match = iscode(line)
@@ -260,7 +260,7 @@ if needed:
     if unused:
         print """Since you have unused buttons, you may want to set a button to a missing
 one Right now, the output file will have an unused mapping for %r. You
-could assign this button by calling this script with the extra parameter 
+could assign this button by calling this script with the extra parameter
 \'%s=%s\'.  You can add this parameter as often as needed.  Please send
 good mappings to missing buttons to the Freevo developers to add them into
 this script.""" % (unused[0], unused[0], needed[0])

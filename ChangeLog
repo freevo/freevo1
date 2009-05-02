@@ -17,6 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
 --------------------------------
 
  * New skinable dialogs (F#2308911)
+ * New improvements to the rc.app() interface (F#2772598)
  * New "freevo cache" option --cropdetect to detect and add crop options to fxd files (F#)
  * New rtorrent module to allow torrents to be downloaded from freevo (F#2580403)
  * New OSD dialog screen designer (F#2621369)

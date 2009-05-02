@@ -73,7 +73,7 @@ class ImageViewer(GUIObject):
 
         self.slideshow   = config.IMAGEVIEWER_AUTOPLAY
         self.duration    = config.IMAGEVIEWER_DURATION
-        self.app_mode    = 'image'
+        self.event_context = 'image'
         self.last_image  = (None, None)
         self.render      = render.get_singleton()
         self.osd         = osd.get_singleton()
@@ -122,7 +122,7 @@ class ImageViewer(GUIObject):
             # Using Container-Image
             image, w, h = item.loadimage()
 
-        rc.app(self)
+        rc.add_app(self)
 
         if not image:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
@@ -374,7 +374,7 @@ class ImageViewer(GUIObject):
             self.signal_registered = False
             self.slideshow = config.IMAGEVIEWER_AUTOPLAY
             rc.unregister(self.signalhandler)
-            rc.app(None)
+            rc.remove_app(self)
             self.fileitem.eventhandler(event)
             return True
 

@@ -76,7 +76,7 @@ class Xawtv:
 
     def __init__(self, app, remote):
         self.tuner_chidx = 0    # Current channel, index into config.TV_CHANNELS
-        self.app_mode = 'tv'
+        self.event_context = 'tv'
         self.fc = FreevoChannels()
         self.current_vg = None
         self.xawtv_prog = app
@@ -189,8 +189,7 @@ class Xawtv:
             self.app.sendcmd('setstation %s' % tuner_channel)
         #XXX use remote to change the input we want
 
-        self.prev_app = rc.app()
-        rc.app(self)
+        rc.add_app(self)
 
         # Suppress annoying audio clicks
         time.sleep(0.4)
@@ -217,7 +216,7 @@ class Xawtv:
             mixer.setIgainVolume(0) # Input on emu10k cards.
 
         self.app.stop()
-        rc.app(self.prev_app)
+        rc.remove_app(self)
 
     def eventhandler(self, event, menuw=None):
         _debug_('%s: %s app got %s event' % (time.time(), self.mode, event))

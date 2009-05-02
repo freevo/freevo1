@@ -366,7 +366,7 @@ class TVTime:
     __igainvol = 0
 
     def __init__(self):
-        self.app_mode = 'tv'
+        self.event_context = 'tv'
         self.fc = FreevoChannels()
         self.current_vg = None
         self.optionD_supported = False
@@ -462,8 +462,7 @@ class TVTime:
         # Start up the TV task
         self.app=TVTimeApp(command)
 
-        self.prev_app = rc.app() # ???
-        rc.app(self)
+        rc.add_app(self)
 
         # Suppress annoying audio clicks
         time.sleep(0.4)
@@ -490,7 +489,7 @@ class TVTime:
             mixer.setIgainVolume(0) # Input on emu10k cards.
 
         self.app.stop('quit\n')
-        rc.app(self.prev_app)
+        rc.remove_app(self)
 
     def eventhandler(self, event, menuw=None):
         _debug_('%s: %s app got %s event' % (time.time(), self.mode, event))

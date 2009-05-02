@@ -70,7 +70,7 @@ class RecordClientActions:
         return RecordClientResource().recordclient
 
 
-        
+
 class FreevoPage(page.Page):
     """
     """
