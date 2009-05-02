@@ -310,7 +310,7 @@ def fxdparser(fxd, node):
     item = CommandItem()
     item.name    = fxd.getattr(node, 'title')
     item.cmd     = fxd.childcontent(node, 'cmd')
-    item.image   = util.getimage(item.cmd)
+    item.image   = fxd.childcontent(node, 'image')
     item.log     = fxd.childcontent(node, 'log')
     if fxd.get_children(node, 'stoposd'):
         item.stoposd = True
