@@ -628,8 +628,7 @@ class DirItem(Playlist):
                     display_type=display_type, random=True).play(menuw=menuw)
             return
 
-        if config.OSD_BUSYICON_TIMER:
-            osd.get_singleton().busyicon.wait(config.OSD_BUSYICON_TIMER[0])
+        osd.get_singleton().busyicon.wait(config.OSD_BUSYICON_TIMER[0])
 
         files       = vfs.listdir(self.dir, include_overlay=True)
         num_changes = mediainfo.check_cache(self.dir)
@@ -645,7 +644,7 @@ class DirItem(Playlist):
                 pop.show()
                 callback=pop.tick
 
-        elif config.OSD_BUSYICON_TIMER and len(files) > config.OSD_BUSYICON_TIMER[1]:
+        elif len(files) > config.OSD_BUSYICON_TIMER[1]:
             # many files, just show the busy icon now
             osd.get_singleton().busyicon.wait(0)
 
@@ -739,11 +738,10 @@ class DirItem(Playlist):
         if pop:
             pop.destroy()
 
-        if config.OSD_BUSYICON_TIMER:
-            # stop the timer. If the icons is drawn, it will stay there
-            # until the osd is redrawn, if not, we don't need it to pop
-            # up the next milliseconds
-            osd.get_singleton().busyicon.stop()
+        # stop the timer. If the icons is drawn, it will stay there
+        # until the osd is redrawn, if not, we don't need it to pop
+        # up the next milliseconds
+        osd.get_singleton().busyicon.stop()
 
 
         #
