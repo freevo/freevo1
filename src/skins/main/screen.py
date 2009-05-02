@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# screen.py - The screen for the Freevo areas to draw on
+# The screen for the Freevo areas to draw on
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -70,7 +70,6 @@ class Screen:
         self.s_alpha.fill((0,0,0,0))
 
 
-
     def clear(self):
         self.update_bg      = None
         self.update_alpha   = []
@@ -132,7 +131,7 @@ class Screen:
 
         if force_redraw:
             _debug_('show, force update', 2)
-            self.update_bg      = (0,0,osd.width, osd.height)
+            self.update_bg      = (0, 0, osd.width, osd.height)
             self.update_alpha   = []
             self.update_content = []
 
@@ -209,10 +208,10 @@ class Screen:
 
         rect = (osd.width, osd.height, 0, 0)
         for u in update_area:
-            osd.screenblit(layer, (u[0], u[1]), (u[0], u[1], u[2] - u[0], u[3] - u[1]))
+            osd.screenblit(layer, (u[0], u[1]), (u[0], u[1], u[2]-u[0], u[3]-u[1]))
             rect = ( min(u[0], rect[0]), min(u[1], rect[1]),
                      max(u[2], rect[2]), max(u[3], rect[3]))
-        rect = (rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1])
+        rect = (rect[0], rect[1], rect[2]-rect[0], rect[3]-rect[1])
 
         if osd.must_lock:
             self.s_alpha.unlock()
