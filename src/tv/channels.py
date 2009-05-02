@@ -82,47 +82,59 @@ class FreevoChannels:
             plugin.init_special_plugin(config.plugin_external_tuner)
 
 
+    def _findVideoGroup(self, chan, isplayer, chan_index):
+        """
+        Find the VideoGroup number used by this Freevo channel.
+        """
+        group = 0
+        for i in range(len(config.TV_CHANNELS)):
+            chan_info = config.TV_CHANNELS[i]
+            if chan_info[chan_index] == chan:
+                try:
+                    group = int(chan_info[4])
+                except (IndexError, ValueError):
+                    pass
+                break
+        else: # Channel not found
+            #DJW this should be noticed
+            import traceback
+            traceback.print_stack()
+            
+        return group
+
+
     def getVideoGroup(self, chan, isplayer, chan_index=TUNER_ID):
         """
         Gets the VideoGroup object used by this Freevo channel.
         """
         _debug_('getVideoGroup(chan=%r, isplayer=%r, chan_index=%r)' % (chan, isplayer, chan_index), 1)
+
+        vg = config.TV_VIDEO_GROUPS[0]
+
         self.lock.acquire()
         try:
             try:
-                group = -int(chan)
+                channel = int(chan)
+                if channel <= 0: # channels start at 1
+                    group = -channel
+                else:
+                    group = self._findVideoGroup(chan, isplayer, chan_index)
             except ValueError:
-                group = 0
-            if group <= 0:
-                for i in range(len(config.TV_CHANNELS)):
-                    chan_info = config.TV_CHANNELS[i]
-                    if chan_info[chan_index] == chan:
-                        if len(chan_info) > 4:
-                            group = chan_info[4]
-                        try:
-                            group = int(group)
-                        except ValueError:
-                            group = 0
-                        break
+                group = self._findVideoGroup(chan, isplayer, chan_index)
 
-                else: # Channel not found
-                    #DJW this should be noticed
-                    import traceback
-                    traceback.print_stack()
-                    #DJW
+            vg = config.TV_VIDEO_GROUPS[group]
             if not isplayer:
-                record_group = config.TV_VIDEO_GROUPS[group].record_group
+                record_group = vg.record_group
                 if record_group:
                     try:
                         # some simple checks
-                        group = int(record_group)
-                        record_vg = config.TV_VIDEO_GROUPS[group]
+                        vg = config.TV_VIDEO_GROUPS[int(record_group)]
                     except:
                         _debug_('TV_VIDEO_GROUPS[%s].record_group=%s is invalid' % (group, record_group), DWARNING)
         finally:
             self.lock.release()
 
-        return config.TV_VIDEO_GROUPS[group]
+        return vg
 
 
     def chanUp(self, isplayer, app=None, app_cmd=None):
