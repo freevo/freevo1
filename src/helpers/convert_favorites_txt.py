@@ -97,6 +97,7 @@ class Lexer:
                 else:
                     s += c
 
+
 def convert_favorites_txt():
     f = {}
     linenum = 0
@@ -120,7 +121,7 @@ def convert_favorites_txt():
                 favorite.priority = f['priority']
                 favorite.allowDuplicates = int(f['allowDuplicates'])
                 favorite.onlyNew = int(f['onlyNew'])
-        
+
                 print(favorite)
                 favorites[favorite.name] = favorite
                 tokennum = 0
@@ -131,7 +132,7 @@ def convert_favorites_txt():
                 field = FIELDS[tokennum]
                 f[field] = token.strip('"').strip("'").strip()
                 tokennum += 1
-        
+
             except ValueError, why:
                 print why
                 print tokens
