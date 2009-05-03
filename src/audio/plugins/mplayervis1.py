@@ -529,7 +529,7 @@ class PluginInterface(plugin.Plugin):
         self.plugin_name = 'audio.mplayervis'
         plugin.register(self, self.plugin_name)
 
-        self.view = config.MPLAYERVIS_MODE
+        self.view = MpvMode(config.MPLAYERVIS_MODE)
         self.view_func = [self.dock, self.fullscreen, self.noview]
         self.initialised = False
 
@@ -562,8 +562,6 @@ class PluginInterface(plugin.Plugin):
         """
         _debug_('toggle_view()')
         self.view += 1
-        if self.view > MpvMode.NOVI:
-            self.view = MpvMode.DOCK
 
         if not self.visual:
             self.start_visual()
@@ -737,7 +735,7 @@ class PluginInterface(plugin.Plugin):
     def start_visual(self):
         _debug_('start_visual()')
         print('start_visual() self.view=%r' % (self.view,))
-        if self.view == NOVI:
+        if self.view == MpvMode.NOVI:
             return
 
         if self.visual:
@@ -748,7 +746,7 @@ class PluginInterface(plugin.Plugin):
             title = hasattr(self.item, 'title') and self.item.title or self.item.name
             self.visual = MpvGoom(300, 300, 150, 150, title, self.item.image)
 
-            if self.view == FULL:
+            if self.view == MpvMode.FULL:
                 self.visual.set_info(self.item.name, 10)
 
             self.view_func[self.view]()
@@ -757,7 +755,7 @@ class PluginInterface(plugin.Plugin):
 
         return
 
-        print('start_visual() self.view=%r' % (self.view,))
+        print('start_visual() self.view=%s' % (self.view,))
         if rc.app() != self.player.eventhandler:
             print('rc.app()=%r, self.player.eventhandler=%r' % (rc.app(), self.player.eventhandler))
 
@@ -775,7 +773,7 @@ class PluginInterface(plugin.Plugin):
 
     def pause_visual(self):
         _debug_('pause_visual()')
-        print('pause_visual() self.view=%r' % (self.view,))
+        print('pause_visual() self.view=%s' % (self.view,))
         if self.visual:
             print('self.visual.running=%r' % (self.visual.running,))
             self.visual.running = False
@@ -783,7 +781,7 @@ class PluginInterface(plugin.Plugin):
 
     def stop_visual(self):
         _debug_('stop_visual()')
-        print('stop_visual() self.view=%r' % (self.view,))
+        print('stop_visual() self.view=%s' % (self.view,))
         if self.visual:
             print('self.visual.running=%r' % (self.visual.running,))
             self.visual.running = False
