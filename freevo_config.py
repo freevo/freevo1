@@ -1825,7 +1825,8 @@ if os.uname()[0] == 'FreeBSD':
     TV_INPUT = 1
     RADIO_DEVICE = None
 else:
-    TV_DRIVER = 'v4l'
+    # For Linux TV_DRIVER can be 'v4l' or 'v4l2' and depends on the driver
+    TV_DRIVER = 'v4l2'
     TV_DEVICE = '/dev/video0'
     TV_INPUT = 0
     RADIO_DEVICE = None
