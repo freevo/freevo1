@@ -41,10 +41,10 @@ The priority levels in ascending order are:
 import time
 import pygame.event
 from pygame.locals import *
-import config
 import rc
 import event
 import dialog
+import threading
 
 import kaa
 
@@ -52,6 +52,10 @@ import skins.osd
 from skins.osd.skin import OSDWidget
 
 from widgets import ButtonModel, MenuModel, MenuItemModel
+
+DEBUG_PERFORMANCE = False
+
+REDRAW_DIALOG = event.Event('REDRAW_DIALOG')
 
 class Dialog(object):
     """
@@ -73,9 +77,9 @@ class Dialog(object):
     @cvar NORMAL_PRIORITY: Constant for normal priority.
     @cvar LOW_PRIORITY: Constant for low priority.
     """
-    HIGH_PRIORITY   = 'high'
-    NORMAL_PRIORITY = 'normal'
-    LOW_PRIORITY    = 'low'
+    HIGH_PRIORITY   = 2
+    NORMAL_PRIORITY = 1
+    LOW_PRIORITY    = 0
 
     def __init__(self, name, duration):
         """
@@ -88,15 +92,44 @@ class Dialog(object):
         self.display = None
         self.duration = duration
         self.priority = Dialog.NORMAL_PRIORITY
+        self.__first_show = True
         self.signals = kaa.Signals()
+        self.signals['prepared'] = kaa.Signal()
         self.signals['shown'] = kaa.Signal()
         self.signals['hidden'] = kaa.Signal()
+        self.signals['finished'] = kaa.Signal()
+        self.updater = None
+        self.__update_interval = 0
+        self.last_render = 0.0
+        if DEBUG_PERFORMANCE:
+            self.__render_count = 0
+            self.__first_render_time = 0.0
+            self.__hide_time = 0.0
+
+    @property
+    def visible(self):
+        return (self.display is not None) and (self.display.current_dialog == self)
 
     @property
     def skin(self):
         if self._skin is None:
             self._skin = skins.osd.get_definition(self.name)
         return self._skin
+
+    def __get_update_interval(self):
+        return self.__update_interval
+
+    def __set_update_interval(self, interval):
+        self.__update_interval = interval
+
+        if self.updater is None and self.visible and interval > 0:
+            self.updater = DialogUpdater(self)
+
+        elif self.updater and interval == 0:
+            self.updater.stop()
+            self.updater = None
+
+    update_interval = property(__get_update_interval, __set_update_interval)
 
     def show(self, duration=None):
         """
@@ -125,7 +158,8 @@ class Dialog(object):
         """
         if self.skin:
             self.skin.prepare()
-        self.signals['shown'].emit(self)
+        self.__first_show = True
+        self.signals['prepared'].emit(self)
 
     def render(self):
         """
@@ -133,18 +167,54 @@ class Dialog(object):
         @return: An image of the rendered dialog, or None.
         @rtype: kaa.imlib2.Image
         """
+        if self.__first_show:
+            self.__first_show = False
+            if DEBUG_PERFORMANCE:
+                self.__first_render_time = time.time()
+
+            self.signals['shown'].emit(self)
+            if self.__update_interval > 0:
+                if self.updater:
+                    self.updater.resume()
+                else:
+                    self.updater = DialogUpdater(self)
+
+        result = None
         if self.skin:
-            return self.skin.render(self.get_info_dict())
-        return None
+            if DEBUG_PERFORMANCE:
+                self.__render_count += 1
+            result = self.skin.render(self.get_info_dict())
+            self.last_render = time.time()
+
+        return result
+
+    def hidden(self):
+        """
+        Called when the display removes the dialog on the screen.
+        The dialog may be shown again up until finish() is called.
+        """
+        if DEBUG_PERFORMANCE:
+            self.__hide_time = time.time()
+            _debug_('Dialog %s hidden open for %f seconds rendered %d times' % (self.__class__.__name__, self.__hide_time - self.__first_render_time, self.__render_count))
+
+        if self.updater:
+            self.updater.pause()
+
+        self.__first_show = True
+        self.signals['hidden'].emit(self)
 
     def finish(self):
         """
         The dialog has been finished with and can free any resources.
-        This method emits the hidden signal.
+        This method emits the finished signal.
         """
+        if self.updater:
+            self.updater.stop()
+            self.updater = None
+
         if self.skin:
             self.skin.finish()
-        self.signals['hidden'].emit(self)
+        self.signals['finished'].emit(self)
 
     def get_info_dict(self):
         """
@@ -176,7 +246,6 @@ class InputDialog(Dialog):
             self.display.hide_dialog()
             return True
         return False
-
 
 class MessageDialog(Dialog):
     """
@@ -268,10 +337,11 @@ class PlayStateDialog(Dialog):
         will return a tuple of elapsed time, total time and percent through the file.
         Both total time and percent position are optional.
         """
-        super(PlayStateDialog, self).__init__('play_state', 1.0)
+        super(PlayStateDialog, self).__init__('play_state', 3.0)
         self.priority = Dialog.LOW_PRIORITY
         self.state = state
         self.get_time_info = get_time_info
+        self.update_interval = 1.0
 
     def get_info_dict(self):
         time_info = None
@@ -348,10 +418,11 @@ class WidgetDialog(InputDialog):
         """
         Request that the dialog be redrawn.
         """
+        #_stack_('Processing events? %r' % self.processing_event )
         if self.processing_event:
             self.force_redraw = True
         else:
-            rc.post_event(event.Event('REDRAW_DIALOG', self))
+            rc.post_event(event.Event(REDRAW_DIALOG, self))
 
     def __widget_activate(self, widget):
         """
@@ -363,18 +434,15 @@ class WidgetDialog(InputDialog):
             self.selected_widget.set_active(False)
 
         self.selected_widget = widget
-        self.redraw()
+        if self.visible:
+            self.redraw()
 
     def eventhandler(self, event):
         self.processing_event = True
 
         handled = False
 
-        if event == 'REDRAW_DIALOG' and event.arg == self:
-            self.force_redraw = True
-            handled = True
-
-        elif self.selected_widget:
+        if self.selected_widget:
             handled = self.selected_widget.handle_event(event)
 
         if not handled:
@@ -617,3 +685,103 @@ class MenuDialog(WidgetDialog):
         else:
             arg = None
         item.handler(self, arg)
+
+class ProgressDialog(Dialog):
+    """
+    Dialog to display progress of an operation.
+    Contains a message, percent progress display and progress text.
+    """
+
+    INDETERMINATE_UPDATE = 0.03
+
+    def __init__(self, message, progress_text=u'', progress_percent=0.0, indeterminate=False):
+        super(ProgressDialog, self).__init__('progress', 0)
+        self.message = message
+        self.progress_text = progress_text
+        self.progress_percent = progress_percent
+        self.indeterminate = False
+        self.last_update = 0
+        self.indeterminate_pos = -0.01
+        self.indeterminate_dir = -0.01
+        if indeterminate:
+            self.set_indeterminate(True)
+
+    def set_indeterminate(self, indeterminate):
+        if  self.indeterminate != indeterminate:
+            self.indeterminate = indeterminate
+
+            if indeterminate:
+                self.last_update = 0
+                self.indeterminate_pos = 0.00
+                self.indeterminate_dir = -0.05
+                self.update_interval = ProgressDialog.INDETERMINATE_UPDATE
+            else:
+                self.update_interval = 0.0
+
+            if self.visible:
+                self.show()
+
+    def update_progress(self, progress_text, progress_percent):
+        self.progress_text = progress_text
+        self.progress_percent = progress_percent
+        if self.visible:
+            self.show()
+
+    def get_info_dict(self):
+        dict = {'message'          : self.message,
+                'progress_text'    : self.progress_text}
+        if self.indeterminate:
+            now = time.time()
+            if now - self.last_update >= ProgressDialog.INDETERMINATE_UPDATE:
+                self.indeterminate_pos += self.indeterminate_dir
+                if self.indeterminate_pos <= -1.0:
+                    self.indeterminate_dir = 0.05
+
+                if self.indeterminate_pos > -0.01:
+                    self.indeterminate_dir = -0.05
+
+                self.last_update = now
+            dict['progress_percent'] = self.indeterminate_pos
+        else:
+            dict['progress_percent'] = self.progress_percent
+        return dict
+
+class DialogUpdater(object):
+    def __init__(self, dialog):
+        self.dialog = dialog
+        self.state = 'running'
+        self.event = threading.Event()
+        self.thread = threading.Thread(target=self.__update_dialog)
+        self.thread.setDaemon(True)
+        self.thread.start()
+
+    def pause(self):
+        self.set_state('pause')
+
+    def resume(self):
+        self.set_state('running')
+
+    def stop(self):
+        self.set_state('quit')
+
+    def set_state(self, state):
+        if self.state != state:
+            self.state = state
+            self.event.set()
+
+    def __update_dialog(self):
+        import pygame.time
+        clock = pygame.time.Clock()
+        delay = self.dialog.update_interval
+        while self.state != 'quit':
+            if delay > 0.0:
+                self.event.wait(delay)
+            if self.event.isSet():
+                self.event.clear()
+                if self.state == 'pause':
+                    self.event.wait()
+                    self.event.clear()
+                    clock.tick()
+            if self.state == 'running':
+                self.dialog.display.redraw_dialog(self.dialog)
+            delay = self.dialog.update_interval - (clock.tick() / 1000.0)

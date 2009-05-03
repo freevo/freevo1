@@ -49,8 +49,8 @@ from item import Item
 from tv.tvguide import TVGuide
 from directory import DirItem
 
-from gui.AlertBox import AlertBox
-from gui.PopupBox import PopupBox
+
+import dialog
 
 TRUE = 1
 FALSE = 0
@@ -62,14 +62,14 @@ def get_tunerid(channel_id):
         tv_channel_id, tv_display_name, tv_tuner_id = vals[:3]
         if tv_channel_id == channel_id:
             return tv_tuner_id
-    AlertBox(text=_('Could not find TV channel %s') % channel_id).show()
+    dialog.show_alert(_('Could not find TV channel %s') % channel_id)
     return None
 
 
 def get_friendly_channel(channel_id):
     channel_name = tv_util.get_chan_displayname(channel_id)
     if not channel_name:
-        AlertBox(text=_('Could not find TV channel %s') % channel_id).show()
+        dialog.show_alert(_('Could not find TV channel %s') % channel_id)
     return channel_name
 
 
@@ -77,7 +77,7 @@ def start_tv(mode=None, channel_id=None):
     tuner_id = get_tunerid(channel_id)
     p = plugin.getbyname(plugin.TV)
     if p is None:
-        AlertBox(text=_('Cannot get TV plug-in')).show()
+        dialog.show_alert(_('Cannot get TV plug-in'))
         return
     p.Play(mode, tuner_id)
 
@@ -125,7 +125,7 @@ class TVMenu(Item):
         if not config.TV_CHANNELS:
             msg = _('The list of TV channels is invalid!\n')
             msg += _('Please check the config file.')
-            AlertBox(text=msg).show()
+            dialog.show_alert(msg)
             return
 
         if arg == 'record':

@@ -330,7 +330,7 @@ def parse_color(node):
     global colors
     label = attr_str(node, 'label', '')
     value = attr_color(node, 'value', (0 , 0, 0), False)
-    _debug_('Color %s = %r' % (label, value))
+    _debug_('Color %s = %r' % (label, value), 2)
     colors[label] = value
 
 def resolve_color(color):
@@ -341,7 +341,7 @@ def resolve_color(color):
             _debug_('Resolved %s to %r' % (color, colors[color]), 2)
             return colors[color]
         else:
-            _debug_('Color %s not found!' % color)
+            _debug_('Color %s not found!' % color, 2)
             return (0, 0, 0)
     else:
         return color

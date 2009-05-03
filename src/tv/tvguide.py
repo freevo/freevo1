@@ -34,13 +34,11 @@ import pprint
 
 import config, skin, util, rc
 
-from gui.PopupBox import PopupBox
-from gui.AlertBox import AlertBox
-
 from event import *
 from item import Item
 from programitem import ProgramItem
 
+import dialog
 
 import tv.epg_xmltv
 from tv.epg_types import TvProgram
@@ -65,12 +63,11 @@ class TVGuide(Item):
         stop_time = start_time + self.hours_per_page * 60 * 60
 
         # constructing the guide takes some time
-        msgtext = _('Preparing the program guide')
-        guide = tv.epg_xmltv.get_guide(PopupBox(text=msgtext))
+        guide = tv.epg_xmltv.get_guide(popup=True)
         # getting channels
         channels = guide.get_programs(start_time+1, stop_time-1)
         if not channels:
-            AlertBox(text=_('TV Guide is corrupt!')).show()
+            dialog.show_alert(_('TV Guide is corrupt!'), type='error')
             return
 
         # select the first available program
@@ -304,7 +301,6 @@ class TVGuide(Item):
         if self.menuw.children:
             return
         _debug_('tvguide: setting context to %s' % self.event_context, 2)
-        rc.set_context(self.event_context)
         self.update(force_update)
         skin.draw(self.type, self)
 
@@ -395,7 +391,7 @@ class TVGuide(Item):
         displayed, this is the case when the user moves around in the menu.
         """
         _debug_('rebuild(start_time=%r, stop_time=%r, start_channel=%r, selected=%r)' % (start_time, stop_time, start_channel, selected), 2)
-        self.guide = tv.epg_xmltv.get_guide()
+        self.guide = tv.epg_xmltv.get_guide(popup=True)
         channels = self.guide.get_programs(start_time+1, stop_time-1)
 
         table = [ ]

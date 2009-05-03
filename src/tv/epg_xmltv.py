@@ -62,7 +62,7 @@ class EpgException(Exception):
 cached_guide = None
 
 
-def get_guide(popup=None, XMLTV_FILE=None):
+def get_guide(popup=False, XMLTV_FILE=None):
     """
     Get a TV guide from memory cache, file cache or raw XMLTV file.
     Tries to return at least the channels from the config file if there
@@ -72,6 +72,10 @@ def get_guide(popup=None, XMLTV_FILE=None):
 
     if not XMLTV_FILE:
         XMLTV_FILE = config.XMLTV_FILE
+
+    if popup:
+        import dialog.dialogs
+        popup_dialog = dialog.dialogs.ProgressDialog( _('Preparing the program guide'), indeterminate=True)
 
     # Can we use the cached version (if same as the file)?
     if (cached_guide == None or
@@ -87,7 +91,7 @@ def get_guide(popup=None, XMLTV_FILE=None):
             _debug_('XMLTV, reading cached file (%s)' % pname)
 
             if popup:
-                popup.show()
+                popup_dialog.show()
 
             cached_guide = util.read_pickle(pname)
 
@@ -114,7 +118,7 @@ def get_guide(popup=None, XMLTV_FILE=None):
             # Need to reload the guide
 
             if popup:
-                popup.show()
+                popup_dialog.show()
 
             _debug_('XMLTV, trying to read raw file (%s)' % XMLTV_FILE)
             try:
@@ -143,7 +147,7 @@ def get_guide(popup=None, XMLTV_FILE=None):
         cached_guide = TvGuide()
 
     if popup:
-        popup.destroy()
+        popup_dialog.hide()
 
     return cached_guide
 

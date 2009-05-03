@@ -118,9 +118,10 @@ class EPGInfoDialog(InputDialog):
         self.info_prog = None
         self.info_time = None
         self.current_channel = None
+        self.update_interval = 1.0
 
 
-    def handle_event(self, evt):
+    def eventhandler(self, evt):
         update_info = False
         if evt == 'INPUT_LEFT':
             if self.info_prog:
@@ -235,6 +236,7 @@ class ChannelBannerDialog(Dialog):
     def __init__(self):
         super(ChannelBannerDialog, self).__init__('channel_banner', 4.0)
         self.channel_number = ''
+        self.update_interval = 1.0
 
     def set_channel(self, channel=None, channel_number=None ):
         if channel:

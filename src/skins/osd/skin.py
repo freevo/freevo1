@@ -424,33 +424,68 @@ class OSDImage(OSDObject):
 
 class OSDPercent(OSDImage):
     def __init__(self, pos, size, vertical, image, expr):
-        OSDImage.__init__(self, pos, size, image, expr)
+        OSDImage.__init__(self, pos, size, image, expr, scale='both')
         _debug_('OSDPercent (%s,%s) %sx%s "%s" "%s" %s' % (pos[0], pos[1], size[0], size[1], image, expr, vertical), 2)
         self.vertical = vertical
 
     def render(self, image, value_dict):
+        percent = 0.0
         try:
-            percent = min(1.0, max(0.0, eval(self.expr, value_dict)))
+            percent = eval(self.expr, value_dict)
+            if percent >= 0:
+                percent = min(1.0, max(0.0, percent))
         except:
             report_error('Failed to evaluate percent expression \"%s\"' % self.expr)
 
-        if self.vertical:
-            im_x = 0
-            x = eval_or_int(self.pos[0], value_dict)
-            w = self.size[0]
-            h = int(float(self.size[1]) * percent)
-            im_y = self.size[1] - h
-            y = eval_or_int(self.pos[1], value_dict) + im_y
+        if percent >= 0.0:
+            if self.vertical:
+                im_x = 0
+                x = eval_or_int(self.pos[0], value_dict)
+                w = self.size[0]
+                h = int(float(self.size[1]) * percent)
+                im_y = self.size[1] - h
+                y = eval_or_int(self.pos[1], value_dict) + im_y
 
+            else:
+                im_x = 0
+                im_y = 0
+                x = eval_or_int(self.pos[0], value_dict)
+                y = eval_or_int(self.pos[1], value_dict)
+                w = int(float(self.size[0]) * percent)
+                h = self.size[1]
         else:
-            im_x = 0
-            im_y = 0
-            x = eval_or_int(self.pos[0], value_dict)
-            y = eval_or_int(self.pos[1], value_dict)
-            w = int(float(self.size[0]) * percent)
-            h = self.size[1]
 
-        image.blend(self.image,src_pos=(im_x,im_y), src_size=(w,h), dst_pos=(x,y))
+            if self.vertical:
+                max_size = self.size[1]
+            else:
+                max_size = self.size[0]
+
+            max_size = ((max_size * 12) / 16)
+            indeterminate_pos = (max_size * percent) * -1
+
+            # Indeterminate/bouncing bar
+            if self.vertical:
+                im_x = 0
+                x = eval_or_int(self.pos[0], value_dict)
+                w = self.size[0]
+                h = int(self.size[1] / 4)
+                im_y = indeterminate_pos
+                y = eval_or_int(self.pos[1], value_dict) + im_y
+
+            else:
+                im_x = indeterminate_pos
+                im_y = 0
+                x = eval_or_int(self.pos[0], value_dict) + im_x
+                y = eval_or_int(self.pos[1], value_dict)
+                w = int(self.size[0] / 4)
+                h = self.size[1]
+        #print 'percent=%r im_xy = %d,%d xy=%d,%d wh=%dx%d' % (percent, im_x, im_y, x,y, w, h)
+        if w and h:
+            image.blend(self.image,src_pos=(im_x,im_y), src_size=(w,h), dst_pos=(x,y))
+
+    def finish(self):
+        self.indeterminate_token = None
+        super(OSDPercent, self).finish()
 
 class OSDWidget(OSDObject):
     def __init__(self, pos, size, unscaled_size, name, style, navigation=None):
@@ -581,11 +616,10 @@ def get_image(filename, scale, size):
         else:
             cache_dir = vfs.getoverlay(filename)
         root,ext = os.path.splitext(filename)
-        cache_file = '%s-%s%s' % (USABLE_RESOLUTION, cache_key, ext)
+        cache_file = '%s-%s-%dx%d%s' % (USABLE_RESOLUTION,  scale, size[0], size[1], ext)
         cache_filename = os.path.join(cache_dir, cache_file)
-
         if vfs.exists(cache_filename) and vfs.mtime(cache_filename) > vfs.mtime(filename):
-            image = imlib2.load(cache_filename)
+            image = imlib2.open(cache_filename)
             image_cache[cache_key] = image
 
     # Finally load the image and scale it as required.
@@ -635,6 +669,7 @@ def get_image(filename, scale, size):
             if not vfs.exists(cache_dir):
                 os.makedirs(cache_dir)
             image.save(cache_filename)
+            _debug_('Saved to %s' % cache_filename)
 
     return image
 

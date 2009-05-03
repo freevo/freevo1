@@ -44,6 +44,7 @@ the higher priority dialog closes.
 
 import time
 import threading
+import traceback
 
 import config
 import kaa
@@ -220,10 +221,17 @@ class GraphicsDisplay(Display):
         super(GraphicsDisplay, self).__init__(True)
         self.current_dialog = None
         self.current_time_details = None
-        self.waiting = {'normal':None, 'low':None}
+        self.waiting = {dialogs.Dialog.NORMAL_PRIORITY:None, dialogs.Dialog.LOW_PRIORITY:None}
         self.hide_dialog_timer = kaa.OneShotTimer(self.__hide_dialog)
         self._lock = threading.RLock()
         self.volume_dialog = None
+
+    def handle_event(self, event):
+        if event == 'REDRAW_DIALOG':
+            if event.arg == None or event.arg == self.current_dialog:
+                self.redraw_dialog(self.current_dialog)
+            return True
+        return super(GraphicsDisplay, self).handle_event(event)
 
     def handle_mouse_event(self, evt):
         if self.current_dialog and hasattr(self.current_dialog, 'handle_mouse_event'):
@@ -248,21 +256,28 @@ class GraphicsDisplay(Display):
         """
         Show the supplied dialog for upto duration seconds.
         @param dialog: The dialog to render.
-        @param duration: The maximum length of time to display the dialog.
+        @param duration: The maximum length of time to display the dialog. Use 0.0 to display until hidden.
         """
         self._lock.acquire()
-        #Stop any pending hide timers
-        self.hide_dialog_timer.stop()
 
         if self.current_dialog and self.current_dialog != dialog:
             _debug_('Dialog already open, current priority %s new dialog priority %s' % (self.current_dialog.priority, dialog.priority))
-            if self.current_dialog.priority == 'normal' and dialog.priority == 'high' or \
-               self.current_dialog.priority == 'low' and dialog.priority == 'normal':
+            if self.current_dialog.priority < dialog.priority:
+                #Stop any pending hide timers
+                self.hide_dialog_timer.stop()
 
-                now = time.time()
+                if self.current_time_details[1] == 0.0:
+                    queue_dialog = True
+                    left = 0.0
+                else:
+                    now = time.time()
+                    left = (self.current_time_details[1] - (now - self.current_time_details[0]))
+                    queue_dialog = left > 0.0
 
-                left = self.current_time_details[1] - (now - self.current_time_details[0])
-                if left > 0.0:
+                # Inform the current dialog it has been hidden
+                self.current_dialog.hidden()
+
+                if queue_dialog:
                     _debug_('Queuing current dialog, time left %f' % left)
                     self.waiting[self.current_dialog.priority] = (self.current_dialog, left, True)
                     # We don't finish the dialog as we will be displaying it again when
@@ -272,25 +287,32 @@ class GraphicsDisplay(Display):
                     self.current_dialog.finish()
                 self.hide_dialog_timer.stop()
                 self.current_dialog = None
-            elif dialog.priority == 'normal' and self.current_dialog.priority == 'high' or \
-                 dialog.priority == 'low' and self.current_dialog.priority == 'normal':
+
+            elif dialog.priority < self.current_dialog.priority:
                 _debug_('Queuing new dialog')
                 self.waiting[dialog.priority] = (dialog, duration, False)
                 self._lock.release()
                 return
             else:
+                _debug_('Dialog is same priority hiding previous dialog')
                 self.hide_dialog(self.current_dialog)
 
-        if not self.current_dialog:
-            self.current_dialog = dialog
-            self.current_time_details = (time.time(), duration)
-            dialog.prepare()
+        self.__set_current_dialog(dialog, duration, self.current_dialog == dialog)
 
-        self.show_image(dialog.render(), dialog.skin.position)
+        self._lock.release()
 
-        if duration is not None and duration > 0:
-            self.hide_dialog_timer.start(duration)
-
+    def redraw_dialog(self, dialog):
+        """
+        Redraw the specified dialog if it is the current dialog show.
+        This operation will not affect the duration the dialog is displayed for.
+        @param dialog: The dialog to redraw.
+        """
+        self._lock.acquire()
+        if self.current_dialog is not None and self.current_dialog == dialog:
+            try:
+                self.show_image(dialog.render(), dialog.skin.position)
+            except:
+                _debug_('Exception caught while trying to render dialog!\n' + traceback.format_exc(), DERROR)
         self._lock.release()
 
     def hide_all_dialogs(self):
@@ -299,16 +321,16 @@ class GraphicsDisplay(Display):
         """
         self._lock.acquire()
         if self.current_dialog:
-            self.current_dialog.finish()
-            self.current_dialog = None
             self.hide_dialog_timer.stop()
             self.hide_image()
-            if self.waiting[dialogs.Dialog.NORMAL_PRIORITY]:
-                dialog, duration, prepared = self.waiting[dialogs.Dialog.NORMAL_PRIORITY]
-                dialog.finish()
-            if self.waiting[dialogs.Dialog.LOW_PRIORITY]:
-                dialog, duration, prepared = self.waiting[dialogs.Dialog.LOW_PRIORITY]
-                dialog.finish()
+            self.current_dialog.hidden()
+            self.current_dialog.finish()
+            self.current_dialog = None
+            for priority in (dialogs.Dialog.NORMAL_PRIORITY, dialogs.Dialog.LOW_PRIORITY):
+                if self.waiting[priority]:
+                    dialog, duration, prepared = self.waiting[dialogs.Dialog.NORMAL_PRIORITY]
+                    dialog.finish()
+                    self.waiting[priority] = None
         self._lock.release()
 
     def hide_dialog(self, dialog):
@@ -317,43 +339,39 @@ class GraphicsDisplay(Display):
         @param dialog: The dialog to hide.
         """
         self._lock.acquire()
-        if self.current_dialog is not None and self.current_dialog == dialog:
-            priority = self.current_dialog.priority
-            self.hide_dialog_timer.stop()
-            self.current_dialog.finish()
-            self.current_dialog = None
-            self.hide_image()
-            _debug_('Closing dialog priority %s' % priority)
-            # Now check lower priority waiting queue for any dialogs waiting to be displayed
-            if priority == dialogs.Dialog.HIGH_PRIORITY:
-                priority = dialogs.Dialog.NORMAL_PRIORITY
-            elif priority == dialogs.Dialog.NORMAL_PRIORITY:
-                priority = dialogs.Dialog.LOW_PRIORITY
+        if self.current_dialog is not None:
+            if self.current_dialog == dialog:
+                priority = self.current_dialog.priority
+                self.hide_dialog_timer.stop()
+                self.hide_image()
+
+                self.current_dialog.hidden()
+                self.current_dialog.finish()
+                self.current_dialog = None
+
+                _debug_('Closing dialog priority %s' % priority)
+
+                for priority in range(dialogs.Dialog.LOW_PRIORITY, priority):
+                    _debug_('Checking priority %s' % priority)
+                    waiting = self.waiting[priority]
+                    if waiting:
+                        self.waiting[priority] = None
+                        dialog, duration, prepared = waiting
+                        self.__set_current_dialog(dialog, duration, prepared)
+                        break
+
             else:
-                priority = None
-
-            _debug_('Checking priority %s' % priority)
-            if priority:
-                waiting = self.waiting[priority]
-                if waiting:
-                    self.waiting[priority] = None
-                    dialog, duration, prepared = waiting
-                    self.current_dialog = dialog
-                    if not prepared:
-                        dialog.prepare()
-
-                    self.show_image(dialog.render(), dialog.skin.position)
-
-                    if duration is not None and duration > 0:
-                        self.hide_dialog_timer.start(duration)
-
-        else:
-            # Check the waiting queue and remove if found.
-            waiting = self.waiting[dialog.priority]
-            if waiting and waiting[0] == dialog:
-                self.waiting[dialog.priority] = None
+                # Check the waiting queue and remove if found.
+                waiting = self.waiting[dialog.priority]
+                if waiting and waiting[0] == dialog:
+                    if waiting[2]:
+                        dialog.finish()
+                    self.waiting[dialog.priority] = None
 
         self._lock.release()
+
+    def disabled(self):
+        self.hide_all_dialogs()
 
     def __hide_dialog(self):
         """
@@ -361,8 +379,23 @@ class GraphicsDisplay(Display):
         """
         self.hide_dialog(self.current_dialog)
 
-    def disabled(self):
-        self.hide_all_dialogs()
+    def __set_current_dialog(self, dialog, duration, prepared):
+        _debug_('Setting current dialog to %s' % dialog.__class__.__name__)
+        self.current_dialog = dialog
+        self.current_time_details = (time.time(), duration)
+
+        if not prepared:
+            dialog.prepare()
+
+        try:
+            self.show_image(dialog.render(), dialog.skin.position)
+        except:
+            _debug_('Exception caught while trying to render dialog!\n' + traceback.format_exc(), DERROR)
+
+        if duration > 0.0:
+            #Stop any pending hide timers
+            self.hide_dialog_timer.stop()
+            self.hide_dialog_timer.start(duration)
 
     #===============================================================================
     #  Methods that should be overridden by subclasses

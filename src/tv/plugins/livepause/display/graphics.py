@@ -47,7 +47,6 @@ class GraphicsOSD(OSD):
     """
     def __init__(self):
         super(OSD, self).__init__()
-        self.channel_banner = ChannelBanner()
         self.info_dialog = InfoDialog()
         self.buffer_pos_dialog = BufferPositionDialog()
         self.last_dialog = None
@@ -57,11 +56,6 @@ class GraphicsOSD(OSD):
         self.info_dialog.info_channel = None
         self.info_dialog.show()
         self.last_dialog = self.info_dialog
-
-    def display_channel_number(self, channel):
-        self.channel_banner.set_channel(channel)
-        self.channel_banner.show()
-        self.last_dialog = self.channel_banner
 
     def display_buffer_pos(self, info_function):
         self.buffer_pos_dialog.info_function = info_function
@@ -82,9 +76,10 @@ class InfoDialog(InputDialog):
         self.info_time = None
         self.current_channel = None
         self.current_prog = None
+        self.update_interval = 1.0
 
 
-    def handle_event(self, event):
+    def eventhandler(self, event):
         update_info = False
         if event == 'INPUT_LEFT':
             if self.info_prog:
@@ -212,6 +207,7 @@ class BufferPositionDialog(Dialog):
     def __init__(self):
         super(BufferPositionDialog, self).__init__('livepause_bufferpos', 3.0)
         self.info_function = None
+        self.update_interval = 1.0
 
     def get_info_dict(self):
         info_dict = self.info_function()
@@ -221,32 +217,3 @@ class BufferPositionDialog(Dialog):
         info_dict['end_time'] = time.localtime(info_dict['end_time'])
         info_dict['current_time'] = time.localtime(info_dict['current_time'])
         return info_dict
-
-
-class ChannelBanner(Dialog):
-    def __init__(self):
-        super(ChannelBanner, self).__init__('channelbanner', 3.0)
-
-    def set_channel(self, channel_number):
-        if channel_number > len(config.TV_CHANNELS):
-            channel_name = ''
-            channel_logo = ''
-        else:
-            channel_name = config.TV_CHANNELS[channel_number][1]
-            channel_logo = config.TV_LOGOS + '/' + config.TV_CHANNELS[channel_number][0] + '.png'
-            if not os.path.isfile(channel_logo):
-                channel_logo = ''
-
-        self.info_dict = {
-                          'channel_number' : channel_number,
-                          'channel_name'   : channel_name,
-                          'channel_logo'   : channel_logo,
-                          'time'           : time.localtime(),
-                          }
-
-        print 'info_dict'
-        print info_dict
-        print
-
-    def get_info_dict(self):
-        return self.info_dict

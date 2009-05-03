@@ -38,6 +38,11 @@ import dialog
 from dialog.display import GraphicsDisplay
 import config
 
+from benchmark import benchmark
+benchmarking = config.DEBUG_BENCHMARKING & 0x800
+benchmarkcall = config.DEBUG_BENCHMARKCALL
+
+
 class PluginInterface(plugin.Plugin):
     """
     Enables the use of the dialog layer in the menu screens to show messages,
@@ -57,6 +62,7 @@ class OSDGraphicsDisplay(GraphicsDisplay):
         self.osd = osd.get_singleton()
         self.last_dialog = None
 
+    @benchmark(benchmarking, benchmarkcall)
     def show_image(self, image, position):
         """
         Show the supplied image on the OSD layer.
@@ -76,15 +82,22 @@ class OSDGraphicsDisplay(GraphicsDisplay):
         else:
             fill_color = (0,0,0,0)
         # Only clear the screen if the dialog is different to last time.
+
         if self.last_dialog != self.current_dialog:
             self.osd.dialog_layer.fill(fill_color)
             self.last_dialog = self.current_dialog
+            update_whole_screen = True
         else:
             pygame.draw.rect(self.osd.dialog_layer, fill_color, (position[0], position[1], image.width, image.height))
+            update_whole_screen = False
 
         self.osd.drawsurface(surface, position[0], position[1], layer=self.osd.dialog_layer)
         self.osd.dialog_layer_enabled= True
-        self.osd.update()
+        if update_whole_screen:
+            self.osd.update()
+        else:
+            self.osd.update(rect=[(position[0], position[1], image.width, image.height)])
+        #_stack_('OSD dialog update')
 
 
     def hide_image(self):

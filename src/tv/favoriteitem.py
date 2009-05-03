@@ -35,8 +35,8 @@ import menu, config, osd
 from item import Item
 
 from gui.InputBox import InputBox
-from gui.AlertBox import AlertBox
-from gui.PopupBox import PopupBox
+
+import dialog
 
 from tv.record_types import Favorite, ScheduledRecordings
 from tv.epg_types import TvProgram
@@ -318,8 +318,7 @@ class FavoriteItem(Item):
         _debug_('save_changes(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # this can take some time, as it means although to update the schedule
         msgtext = _('Saving the changes to this favorite.')+'\n'+_('This may take some time.')
-        pop = PopupBox(text=msgtext)
-        pop.show()
+        pop = dialog.show_working_indicator(msgtext)
 
         if self.fav_action == 'edit':
             # first we remove the old favorite
@@ -338,14 +337,14 @@ class FavoriteItem(Item):
                     if self.fav_action == 'add':
                         menuw.refresh(reload=1)
                 self.fav_action = 'edit'
-                pop.destroy()
+                pop.hide()
             else:
-                pop.destroy()
+                pop.hide()
                 # it is important to show the user this error,
                 # because that means the favorite is removed,
                 # and must be created again
                 msgtext=_('Save failed, favorite was lost')+(':\n%s' % msg)
-                AlertBox(text=msgtext).show()
+                dialog.show_alert(msgtext)
 
 
     def rem_favorite(self, arg=None, menuw=None):
@@ -362,8 +361,8 @@ class FavoriteItem(Item):
                 menuw.refresh(reload=1)
             # and show a short message of success
             msgtext = text=_('"%s" has been removed from favorites') % name
-            AlertBox(text=msgtext).show()
+            dialog.show_alert(msgtext)
         else:
             # if all fails then we should show an error
             msgtext = _('Remove failed')+(':\n%s' % msg)
-            AlertBox(text=msgtext).show()
+            dialog.show_alert(msgtext)

@@ -405,7 +405,7 @@ class MPlayer:
 
         if event == VIDEO_MANUAL_SEEK:
             self.seek = 0
-            rc.set_context('input')
+            rc.set_app_context(self, 'input')
             dialog.show_message("input")
             return True
 
@@ -421,7 +421,7 @@ class MPlayer:
                 self.app.write('seek ' + str(self.seek) + ' 2\n')
                 _debug_("seek "+str(self.seek)+" 2\n")
                 self.seek = 0
-                rc.set_context('video')
+                rc.set_app_context(self, 'video')
                 return True
 
             elif event == INPUT_EXIT:
@@ -429,7 +429,7 @@ class MPlayer:
                 #self.app.write('seek stopped\n')
                 self.seek_timer.cancel()
                 self.seek = 0
-                rc.set_context('video')
+                rc.set_app_context(self, 'video')
                 return True
 
         if event == STOP:
@@ -465,7 +465,7 @@ class MPlayer:
             # otherwise the act of requesting the current position resumes playback!
             if self.paused:
                 self.stored_time_info = self.get_time_info()
-                dialog.show_play_state(dialog.PLAY_STATE_PAUSE, self.get_time_info)
+                dialog.show_play_state(dialog.PLAY_STATE_PAUSE, self.get_stored_time_info)
                 self.app.write('pause\n')
             else:
                 self.app.write('pause\n')
@@ -534,7 +534,7 @@ class MPlayer:
     def reset_seek(self):
         _debug_('seek timeout')
         self.seek = 0
-        rc.set_context('video')
+        rc.set_app_context(self, 'video')
 
 
     def reset_seek_timeout(self):

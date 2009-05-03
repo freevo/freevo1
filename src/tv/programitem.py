@@ -29,9 +29,16 @@
 #
 # ----------------------------------------------------------------------
 
-import time, os
+import time
+import os
 
-import config, menu, rc, skin
+import config
+import menu
+import rc
+import skin
+
+import dialog
+from dialog.dialogs import ButtonDialog,ProgressDialog
 
 from skin.widgets import ScrollableTextScreen
 from event import *
@@ -43,10 +50,6 @@ from tv.record_client import RecordClient
 from tv.channels import FreevoChannels, CHANNEL_ID
 from tv.record_types import Favorite
 
-
-from gui.PopupBox import PopupBox
-from gui.AlertBox import AlertBox
-from gui.ConfirmBox import ConfirmBox
 
 class ProgramItem(Item):
     """
@@ -146,10 +149,11 @@ class ProgramItem(Item):
             # this program is in the future
             if self.scheduled:
                 msgtext= _('Do you want to remove the Program from the record schedule?')
+                confirmbtn = _('Remove')
             else:
                 msgtext = _('This Program is in the future. Do you want to record it?')
-
-            ConfirmBox(text=msgtext, handler=lambda: self.toggle_rec(menuw=menuw), default_choice=1).show()
+                confirmbtn = _('Record')
+            dialog.show_confirmation(msgtext, confirmbtn, lambda: self.toggle_rec(menuw=menuw))
             return
         else:
             # check if the device is free
@@ -165,7 +169,7 @@ class ProgramItem(Item):
                 msgtext = _('Sorry, you cannot watch TV while recording. ')
                 msgtext+= _('If this is not true then remove ')
                 msgtext+= tvlockfile + '.'
-                AlertBox(text=msgtext, height=200).show()
+                dialog.show_alert(msg_text)
             else:
                 # everything is ok, we can start watching!
                 self.parent.hide()
@@ -203,11 +207,11 @@ class ProgramItem(Item):
             else:
                 menuw.refresh(reload=True)
             msgtext= _('"%s" has been scheduled for recording') % self.name
-            pop = AlertBox(text=msgtext).show()
         else:
             # something went wrong
             msgtext = _('Scheduling failed')+(':\n%s' % reason)
-            AlertBox(text=msgtext).show()
+
+        dialog.show_message(msgtext)
 
 
     def remove_program(self, arg=None, menuw=None):
@@ -222,11 +226,10 @@ class ProgramItem(Item):
             else:
                 menuw.refresh(reload=True)
             msgtext = _('"%s" has been removed from schedule') % self.name
-            AlertBox(text=msgtext).show()
         else:
             # something went wrong
             msgtext = _('Remove failed')+(':\n%s' % reason)
-            AlertBox(text=msgtext).show()
+        dialog.show_message(msgtext)
 
 
     def add_favorite(self, arg=None, menuw=None):
@@ -259,8 +262,7 @@ class ProgramItem(Item):
             # and open the submenu
             fav_item.display_submenu(menuw=menuw)
         else:
-            msgtext=_('Cannot edit favorite %s' % self.name)
-            AlertBox(text=msgtext).show()
+            dialog.show_alert(_('Cannot edit favorite %s') % self.name)
 
 
     def find_more(self, arg=None, menuw=None):
@@ -271,11 +273,11 @@ class ProgramItem(Item):
 
         # this might take some time, thus we open a popup messages
         _debug_(String('searching for: %s' % self.title), 2)
-        pop = PopupBox(text=_('Searching, please wait...'))
+        pop = ProgressDialog(_('Searching, please wait...'), indeterminate=True)
         pop.show()
         # do the search
         (status, matches) = self.recordclient.findMatchesNow(self.title)
-        pop.destroy()
+        pop.hide()
         if status:
             items = []
             _debug_('search found %s matches' % len(matches), 2)
@@ -286,13 +288,11 @@ class ProgramItem(Item):
                 items.append(ProgramItem(self.parent, prog, context='search'))
         elif matches == 'no matches':
             # there have been no matches
-            msgtext = _('No matches found for %s') % self.title
-            AlertBox(text=msgtext).show()
+            dialog.show_alert(_('No matches found for %s') % self.title)
             return
         else:
             # something else went wrong
-            msgtext = _('Search failed') +(':\n%s' % matches)
-            AlertBox(text=msgtext).show()
+            dialog.show_alert( _('Search failed') +(':\n%s' % matches))
             return
 
         # create a menu from the search result

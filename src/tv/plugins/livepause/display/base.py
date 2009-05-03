@@ -74,16 +74,3 @@ class OSD(object):
         live pause status information.
         """
         pass
-
-    def display_channel_number(self, number):
-        """
-        Display a channel number as it is being entered by the user.
-        @param number: The number entered so far.
-        """
-        pass
-
-    def hide(self):
-        """
-        Hide the last dialog/text shown.
-        """
-        pass
