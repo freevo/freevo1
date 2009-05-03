@@ -29,7 +29,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, time, os, string
+import sys, time, os, string, codecs
 try:
     import cPickle as pickle
 except ImportError:
@@ -219,13 +219,13 @@ class ScheduledRecordings:
             traceback.print_exc()
         # save the favourites as a text file
         try:
-            favorites_fh = open(config.TV_RECORD_FAVORITES_LIST, 'w')
+            favorites_fh = codecs.open(config.TV_RECORD_FAVORITES_LIST, 'w', encoding='utf-8')
             print >>favorites_fh, TYPES_VERSION
             for favourite in self.favorites.keys():
                 f = self.favorites[favourite]
-                print >>favorites_fh, \
-                    '%(name)r %(title)r %(channel)r %(dow)r %(mod)r %(allowDuplicates)r %(onlyNew)r %(priority)r' % \
-                    f.__dict__
+                line = "'%(name)s' '%(title)s' '%(channel)s' '%(dow)s' '%(mod)s' " % f.__dict__
+                line += "%(allowDuplicates)s %(onlyNew)s '%(priority)s'" % f.__dict__
+                print >>favorites_fh, line
             favorites_fh.close()
         except Exception, why:
             import traceback
@@ -360,9 +360,9 @@ class ScheduledTvProgram:
     """
     A scheduled TV programme (Not used)
     """
-    LOW_QUALTY  = 1
-    MED_QUALTY  = 2
-    HIGH_QUALTY = 3
+    LOW_QUALITY  = 1
+    MED_QUALITY  = 2
+    HIGH_QUALITY = 3
 
     def __init__(self):
         """ Construct a ScheduledTvProgram instance """
@@ -372,4 +372,4 @@ class ScheduledTvProgram:
         self.isFavorite   = False
         self.favoriteName = None
         self.removed      = False
-        self.quality      = self.HIGH_QUALITY
+        self.quality      = ScheduledTvProgram.HIGH_QUALITY
