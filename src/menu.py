@@ -42,7 +42,9 @@ from gui import sounds
 from event import *
 from item import Item
 from gui import GUIObject, AlertBox
+import osd
 
+osd = osd.get_singleton()
 
 
 class MenuItem(Item):
@@ -350,9 +352,11 @@ class MenuWidget(GUIObject):
                                 key = "menu." + media
                                 if config.OSD_SOUNDS[key]:
                                     sounds.play_sound(sounds.load_sound(key))
-                            except:
+                            except KeyError:
                                 pass
+                        osd.busyicon.wait(config.OSD_BUSYICON_TIMER[0])
                         menuitem.select(menuw=self)
+                        osd.busyicon.stop()
                         break
                 except AttributeError: # may have no .arg (no media menu)
                     pass
