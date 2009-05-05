@@ -166,7 +166,7 @@ class MenuPrograma(Item):
     def make_menu(self, arg=None, menuw=None):
         entries = []
         entries.append(ProgramaVideoItem(_("Reproducir"),self._programa,self))
-        entries.append(ProgramaVideoItem(_("Reproducir a pantalla completa"),self._programa,self))
+        entries.append(ProgramaVideoItem(_("Reproducir a pantalla completa (16:9)"),self._programa,self))
         #entries.append(menu.MenuItem('Descargar y reproducir', self.download_play, self._programa, self))
         menuw.pushmenu(menu.Menu(self.name, entries))
 

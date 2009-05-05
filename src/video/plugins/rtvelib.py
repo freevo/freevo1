@@ -36,7 +36,6 @@ import random
 from time import time,sleep
 from threading import Thread,Lock,Semaphore
 
-
 progs = {}
 progsAnalizados = 0
 totalProgramas = 0
@@ -119,7 +118,8 @@ class ParsePrograma(Thread):
 
             #flv
             progXML = progXML[progXML.find('<location>')+10:]
-            flv = 'http://www.rtve.es'+progXML[:progXML.find('</location>')]
+            flv = progXML[:progXML.find('</location>')]
+            flv = 'http://www.rtve.es/resources/'+flv[flv.find('flv'):]
 
             key = name #names may be duplicated
             while progs.has_key(key):
