@@ -332,18 +332,31 @@ class MenuModel(WidgetModel):
             return True
 
         elif event == 'INPUT_LEFT':
-            if self.active_item != self.offset:
+            if self.active_item > 0:
                 self.items[self.active_item].active = False
-                self.active_item = self.offset
+                if self.active_item != self.offset:
+                    self.active_item = self.offset
+                else:
+                    self.active_item -= 1
+                    self.offset = self.active_item - (self.items_per_page - 1)
+                    if self.offset < 0:
+                        self.offset = 0
+                    self.__update_page()
                 self.items[self.active_item].active = True
                 self.signals['selection_changed'].emit(self, self.items[self.active_item])
                 self.redraw()
             return True
 
         elif event == 'INPUT_RIGHT':
-            if self.active_item != self.offset + self.items_per_page:
+            if self.active_item < len(self.items) - 1:
                 self.items[self.active_item].active = False
-                self.active_item = self.offset + self.items_per_page - 1
+                if self.active_item != self.offset + self.items_per_page - 1:
+                    self.active_item = self.offset + self.items_per_page - 1
+                else:
+                    self.active_item += 1
+                    self.offset = self.active_item - (self.items_per_page - 1)
+                    self.__update_page()
+
                 if self.active_item >= len(self.items):
                     self.active_item =  len(self.items) - 1
                 self.items[self.active_item].active = True
