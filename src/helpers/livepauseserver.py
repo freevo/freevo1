@@ -143,7 +143,7 @@ def main():
     except Exception:
         raise
 
-    rpc.connect(server)
+    rpc.register(server)
 
     _debug_('kaa.main starting')
     kaa.main.run()

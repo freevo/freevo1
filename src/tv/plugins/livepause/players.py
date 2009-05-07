@@ -453,7 +453,7 @@ class Vlc(Player):
                     '--height', str(config.CONF.height),
                     '--sub-filter', 'marq:logo', '--marq-timeout', '3000', '--marq-marquee', 'Playing', '--logo-file', 'dummy'
                    ]
-        if hasattr(config, VLC_OPTIONS):
+        if hasattr(config, 'VLC_OPTIONS'):
             command += config.VLC_OPTIONS.split(' ')
 
         if dialog.overlay_display_supports_dialogs:
