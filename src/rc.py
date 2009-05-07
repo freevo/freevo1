@@ -79,6 +79,7 @@ def focused_app():
     """
     return get_singleton().get_app()
 
+
 def app(application=0):
     """
     set or get the current app/eventhandler
@@ -95,28 +96,35 @@ def app(application=0):
 
     return get_singleton().get_app()
 
+
 def add_app(app):
+    print 'app=%r context=%r' % (app, get_singleton().context,) #DJW
     context = 'menu'
     if hasattr(app, 'event_context'):
         context = app.event_context
     _debug_('rc.add_app: Setting app %r (context %s)' % (app, context))
     get_singleton().add_app(app, context)
 
+
 def remove_app(app):
     _debug_('rc.remove_app: Removing app %r ' % app)
     get_singleton().remove_app(app)
 
+
 def set_app_context(app, context):
     get_singleton().set_app_context(app, context)
 
+
 def get_app_context(app):
     return get_singleton().get_app_context(app)
+
 
 def set_context(context):
     """
     set the context (map with button->event transformation
     """
     _debug_('rc.set_context(context=%r)' % (context,), 2)
+    print('rc.set_context(context=%r)' % (context,))
     return get_singleton().set_context(context)
 
 
@@ -585,10 +593,12 @@ class EventHandler:
         kaa.Timer(self.poll).start(config.POLL_TIME)
         _debug_('EventHandler.self.inputs=%r' % (self.inputs,), 1)
 
+
     def add_app(self, app, context):
         self.app = app
         self.context = context
         self.apps.append([app, context])
+
 
     def remove_app(self, app):
         if app == self.app:
@@ -599,6 +609,7 @@ class EventHandler:
                 if self.apps[i][0] == app:
                     del self.apps[i]
 
+
     def set_app_context(self, app, context):
         if app == self.app:
             self.context = context
@@ -607,6 +618,7 @@ class EventHandler:
             for i in xrange(len(self.apps)):
                 if self.apps[i][0] == app:
                     self.apps[i][1] = context
+
 
     def set_app(self, app, context):
         """
@@ -630,6 +642,7 @@ class EventHandler:
         set context for key mapping
         """
         _debug_('EventHandler.set_context(context=%r)' % (context,), 2)
+        print('EventHandler context=%r' % (context,)) #DJW
         self.context = context
 
 
@@ -769,4 +782,4 @@ class EventHandler:
         subscribe to 'post_event'
         """
         _debug_('EventHandler.subscribe(event_callback=%r)' % (event_callback,), 2)
-        raise "subscribe doesn't work"
+        raise Exception("subscribe doesn't work")

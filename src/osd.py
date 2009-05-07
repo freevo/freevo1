@@ -282,12 +282,16 @@ class BusyIcon(threading.Thread):
                 self.timer -= 0.01
                 time.sleep(0.01)
             screen_backup = None
+            icons = None
+            counter = 0
+            icon_number = 0
             if self.active:
                 import skin
                 self.lock.acquire()
                 try:
                     osd = get_singleton()
-                    icon = skin.get_icon('misc/osd_busy')
+                    icons = skin.get_icon('misc/osd_busy%02d' % (counter % 5))
+                    icon = icons or skin.get_icon('misc/osd_busy')
                     if icon:
                         image  = osd.loadbitmap(icon)
                         width  = image.get_width()
@@ -300,18 +304,24 @@ class BusyIcon(threading.Thread):
                         # backup the screen
                         screen_backup = pygame.Surface((width, height))
                         screen_backup.blit(osd.screen, (0, 0), self.rect)
-                        # draw the icon
-                        osd.drawsurface(image, icon_x, icon_y, layer=osd.main_layer)
-                        osd.update(rect=self.rect, stop_busyicon=False)
                         _debug_('main_layer icon drawn', 2)
                 finally:
                     self.lock.release()
 
             while self.active:
+                if counter == 0:
+                    if icons:
+                        icon = skin.get_icon('misc/osd_busy%02d' % icon_number)
+                    if icon:
+                        icon_number = (icon_number + 1) % 12
+                        image = osd.loadbitmap(icon)
+                        osd.screen.blit(image, (icon_x, icon_y))
+                        pygame.display.flip()
+                counter = (counter + 1) % 50
                 time.sleep(0.01)
 
             if screen_backup is not None:
-                osd.main_layer.blit(screen_backup, (x, y))
+                osd.screen.blit(screen_backup, (x, y))
                 _debug_('main_layer icon removed', 2)
 
 
