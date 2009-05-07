@@ -31,7 +31,7 @@
 
 import calendar
 import time, traceback, sys
-from time import gmtime, strftime
+from time import gmtime, strftime, strptime
 
 import plugin, config, menu
 
@@ -45,13 +45,6 @@ from gui.InputBox import InputBox
 from tv.record_types import Favorite
 from tv.epg_types import TvProgram
 
-# Use the alternate strptime module which seems to handle time zones
-#
-# XXX Remove when we are ready to require Python 2.3
-if float(sys.version[0:3]) < 2.3:
-    import tv.strptime as strptime
-else:
-    import _strptime as strptime
 
 
 class ManualRecordItem(Item):
@@ -363,13 +356,15 @@ class ManualRecordItem(Item):
 
         # handle the year wraparound
         if int(self.stop_month) < currentmonth:
-            stopyear = str(int(stopyear) + 1)
+            stopyear = int(stopyear) + 1
         if int(self.start_month) < currentmonth:
-            startyear = str(int(startyear) + 1)
+            startyear = int(startyear) + 1
         # create utc second start time
-        starttime = time.mktime(strptime.strptime(str(self.start_month)+" "+str(self.start_day)+" "+str(startyear)+" "+str(self.start_time)+":00",'%m %d %Y '+config.TV_TIME_FORMAT+':%S'))
+        starttime_str = '%s %s %s %s:00' % (self.start_month, self.start_day, startyear, self.start_time)
+        starttime = time.mktime(strptime(starttime_str, '%m %d %Y '+config.TV_TIME_FORMAT+':%S'))
         # create utc stop time
-        stoptime = time.mktime(strptime.strptime(str(self.stop_month)+" "+str(self.stop_day)+" "+str(stopyear)+" "+str(self.stop_time)+":00",'%m %d %Y '+config.TV_TIME_FORMAT+':%S'))
+        stoptime_str = '%s %s %s %s:00' % (self.stop_month, self.stop_day, stopyear, self.stop_time)
+        stoptime = time.mktime(strptime(stoptime_str, '%m %d %Y '+config.TV_TIME_FORMAT+':%S'))
 
         # so we don't record for more then maxdays (maxdays day * 24hr/day * 60 min/hr * 60 sec/min)
         if not abs(stoptime - starttime) < (self.MAXDAYS * 86400):
