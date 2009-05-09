@@ -10,7 +10,11 @@ try:
     import revision
     _revision = revision.__revision__
 except ImportError:
-    _revision = 'Unknown'
+    try:
+        import src.revision as revision
+        _revision = revision.__revision__
+    except ImportError:
+        _revision = 'Unknown'
 
 _version = __version__
 if _version.endswith('-svn'):

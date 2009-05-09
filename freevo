@@ -355,23 +355,55 @@ def start(name, arg, daemon, store=1):
         os.execvp(arg[0], arg)
 
 
+def get_revision():
+    """
+    Get the revision when running from svn and create the revision file
+    @param filename: name of revision file
+    @returns: revision
+    """
+    revision = 0
+    if os.path.isdir('.svn'):
+        try:
+            from subprocess import Popen, PIPE
+            import re
+            os.environ['LC_ALL']='C'
+            p = Popen(["svn", "info", "--revision=BASE"], stdout=PIPE, env=os.environ)
+            info = p.communicate()[0]
+            revision  = re.search('\nRevision: (\d*)\n', info).groups()[0]
+        except Exception, why:
+            print why
+    return revision
+
+
+def write_revision(revision, filename):
+    """
+    Write the revision number to filename
+    @param revision: revision number
+    @param filename: file name to write
+    """
+    fh = open(filename, 'w')
+    try:
+        fh.write('"""\n')
+        fh.write('Freevo revision number\n')
+        fh.write('"""\n')
+        fh.write('\n')
+        fh.write('__revision__ = %r\n' % revision)
+    finally:
+        fh.close()
+
+
 def parse_options(defaults, versions):
     """
     Parse command line options
     """
-    if versions['__version__'].endswith('-svn'):
-        version = versions['__version__'][:-4] + ' r' + versions['__revision__']
-    else:
-        version = versions['__version__']
-
     formatter=IndentedHelpFormatter(indent_increment=2, max_help_position=32, width=100, short_first=0)
     parser = MyOptionParser(conflict_handler='resolve', formatter=formatter,
-        usage=help_usage % '\n  '.join(get_helpers()), version='%prog-' + version)
+        usage=help_usage % '\n  '.join(get_helpers()), version='%prog-' + versions['version'])
     #parser.add_option('-v', '--verbose', action='count', dest='verbosity', default=0,
     #    help='set the level of verbosity')
-    parser.add_option('-d', '--debug', action='count', dest='debug', default=0,
+    parser.add_option('--debug', action='count', dest='debug', default=0,
         help='set the level of debugging')
-    parser.add_option('-t', '--trace', action='append', default=[],
+    parser.add_option('--trace', action='append', default=[],
         help='activate tracing of one or more modules (useful for debugging)')
     parser.add_option('--dry-run', action='store_true', default=False,
         help='do not run the module, print the actions')
@@ -381,7 +413,7 @@ def parse_options(defaults, versions):
         help='X server layout [default:%default]')
     #parser.add_option('--force-fs', action='store_true', default=False,
     #    help='run freevo in full-screen')
-    parser.add_option('-p', '--profile', action='store_true', default=False,
+    parser.add_option('--profile', action='store_true', default=False,
         help='activate profile and write stats to /tmp [default:%default]')
     parser.add_option('--daemon', action='store_true', default=False,
         help='run freevo or a helper as a daemon [default:%default]')
@@ -413,22 +445,26 @@ if os.path.isdir(os.path.join(os.path.dirname(freevo_script), 'src/plugins')):
     #
     dname = os.path.dirname(freevo_script)
     freevo_python   = os.path.join(dname, 'src')
-    freevo_version  = os.path.join(dname, 'src/version.py')
-    freevo_revision = os.path.join(dname, 'src/revision.py')
-    freevo_helpers  = os.path.join(dname, 'src/helpers')
+    freevo_version  = os.path.join(dname, 'src', 'version.py')
+    freevo_revision = os.path.join(dname, 'src', 'revision.py')
+    freevo_helpers  = os.path.join(dname, 'src', 'helpers')
     freevo_locale   = os.path.join(dname, 'i18n')
     freevo_share    = os.path.join(dname, 'share')
     freevo_contrib  = os.path.join(dname, 'contrib')
     freevo_config   = os.path.join(dname, 'freevo_config.py')
 
+    if os.path.isdir(os.path.join(dname, '.svn')):
+        revision = get_revision()
+        write_revision(revision, freevo_revision)
+
     if os.path.isfile(os.path.join(dname, 'runtime/runapp')):
         #
         # there is a runtime, use it
         #
-        runapp = os.path.join(dname, './runtime/runapp')
-        python = [ runapp, os.path.join(dname, './runtime/apps/freevo_python') ]
+        runapp = os.path.join(dname, 'runtime', 'runapp')
+        python = [ runapp, os.path.join(dname, 'runtime', 'apps', 'freevo_python') ]
         preload = ''
-        f = open(os.path.join(dname, './runtime/preloads'))
+        f = open(os.path.join(dname, 'runtime', 'preloads'))
         for lib in f.readline()[:-1].split(' '):
             preload += os.path.join(dname, lib) + ':'
         if preload:
@@ -441,7 +477,7 @@ if os.path.isdir(os.path.join(os.path.dirname(freevo_script), 'src/plugins')):
         #
         python = get_python(0)
         if not python:
-            sys.exit("Can't find python >= 2.4")
+            sys.exit("Can't find python >= 2.5")
         python = [ python ]
         runapp = ''
 else:
@@ -459,9 +495,9 @@ else:
     freevo_version  = os.path.join(freevo_python, 'version.py')
     freevo_revision = os.path.join(freevo_python, 'revision.py')
     freevo_helpers  = os.path.join(freevo_python, 'helpers')
-    dname = os.path.abspath(os.path.join(os.path.dirname(freevo_script), '../'))
-    freevo_locale   = os.path.join(dname, 'share/locale')
-    freevo_share    = os.path.join(dname, 'share/freevo')
+    dname = os.path.abspath(os.path.join(os.path.dirname(freevo_script), '..'))
+    freevo_locale   = os.path.join(dname, 'share', 'locale')
+    freevo_share    = os.path.join(dname, 'share', 'freevo')
     freevo_contrib  = os.path.join(freevo_share, 'contrib')
     freevo_config   = os.path.join(freevo_share, 'freevo_config.py')
     runapp          = ''
@@ -474,7 +510,6 @@ for var in ('runapp', 'freevo_script', 'freevo_python', 'freevo_locale',
     os.environ[var.upper()] = eval(var)
 versions = {}
 execfile(freevo_version, {}, versions)
-execfile(freevo_revision, {}, versions)
 
 
 # check the args
