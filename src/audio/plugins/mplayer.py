@@ -221,7 +221,7 @@ class MPlayer:
             return self.item.eventhandler(event)
 
         if event in (PLAY_END, USER_END):
-            self.playerGUI.stop()
+            #self.playerGUI.stop()
             return self.item.eventhandler(event)
 
         elif event == PAUSE or event == PLAY:
