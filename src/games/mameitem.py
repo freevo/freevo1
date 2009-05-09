@@ -106,6 +106,7 @@ class MameItem(Item):
 
 
     def play(self, arg=None, menuw=None):
+        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
         self.parent.current_item = self
 
         if not self.menuw:

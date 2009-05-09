@@ -150,7 +150,7 @@ class LastFMItem(Item):
 
 
     def play(self, arg=None, menuw=None):
-        _debug_('play(arg=%r, menuw=%r)' % (arg, menu), 2)
+        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
         self.start_time = time.time()
         if not self.menuw:
             self.menuw = menuw

@@ -64,6 +64,7 @@ class XmRadioItem(AudioItem):
 
 
     def play(self, arg=None, menuw=None):
+        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
         self.elapsed = 0
 
         if not self.menuw:

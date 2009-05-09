@@ -107,6 +107,7 @@ class MPlayer:
         """
         play a audioitem with mplayer
         """
+        _debug_('%s.play(item=%r, playerGUI=%r)' % (self.__module__, item, playerGUI))
         self.playerGUI = playerGUI
         filename       = item.filename
 
@@ -200,7 +201,9 @@ class MPlayer:
         eventhandler for mplayer control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
+        print('mplayer.eventhandler(event=%r, arg=%r)' % (event.name, event.arg))
         for p in self.plugins:
+            print 'p=%r' % (p,)
             if p.eventhandler(event):
                 return True
 

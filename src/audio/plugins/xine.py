@@ -100,6 +100,7 @@ class Xine:
         """
         play an audio file with xine
         """
+        _debug_('%s.play(item=%r, playerGUI=%r)' % (self.__module__, item, playerGUI))
 
         self.item      = item
         self.playerGUI = playerGUI

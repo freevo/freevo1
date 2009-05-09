@@ -251,7 +251,7 @@ class LastFMItem(AudioItem):
         """
         Play the current playing
         """
-        _debug_('LastFMItem.play(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
         self.arg = arg
         if self.menuw is None:
             self.menuw = menuw

@@ -97,6 +97,7 @@ class RadioPlayer:
         """
         play a radioitem with radio player
         """
+        _debug_('%s.play(item=%r, playerGUI=%r)' % (self.__module__, item, playerGUI))
         self.playerGUI = playerGUI
         self.item = item
         #self.item.elapsed = 0

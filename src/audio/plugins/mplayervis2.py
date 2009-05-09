@@ -660,7 +660,7 @@ class PluginInterface(plugin.Plugin):
         """
         Play it
         """
-        _debug_('play(command, player)', 1)
+        _debug_('%s.play(command=%r, player=%r)' % (self.__module__, command, player))
         self.player = player
         self.item   = player.playerGUI.item
         self.menuw  = player.playerGUI.menuw

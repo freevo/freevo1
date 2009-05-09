@@ -229,7 +229,7 @@ class DirItem(Playlist):
                 parser.set_handler('skin', self.read_folder_fxd)
                 parser.parse()
             except:
-                print "fxd file %s corrupt" % self.folder_fxd
+                print 'fxd file %r corrupt' % (self.folder_fxd,)
                 traceback.print_exc()
 
 
@@ -260,8 +260,7 @@ class DirItem(Playlist):
             self.image = os.path.join(self.dir, image)
 
         # parse <info> tag
-        fxd.parse_info(fxd.get_children(node, 'info', 1), self,
-                       {'description': 'content', 'content': 'content' })
+        fxd.parse_info(fxd.get_children(node, 'info', 1), self, {'description': 'content', 'content': 'content' })
 
         for child in fxd.get_children(node, 'setvar', 1):
             # <setvar name="directory_smart_sort" val="1"/>
@@ -482,6 +481,7 @@ class DirItem(Playlist):
         browse directory
         """
         _debug_('cwd(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        print('cwd(arg=%r, menuw=%r)' % (arg, menuw))
         self.check_password_and_build(arg=None, menuw=menuw)
 
 
@@ -489,7 +489,7 @@ class DirItem(Playlist):
         """
         play directory
         """
-        _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
         if arg == 'next':
             Playlist.play(self, arg=arg, menuw=menuw)
         else:
@@ -500,7 +500,7 @@ class DirItem(Playlist):
         """
         play in random order
         """
-        _debug_('play_random(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('play_random(arg=%r, menuw=%r)' % (arg, menuw))
         self.check_password_and_build(arg='playlist:random', menuw=menuw)
 
 
@@ -508,7 +508,7 @@ class DirItem(Playlist):
         """
         play recursive
         """
-        _debug_('play_recursive(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('play_recursive(arg=%r, menuw=%r)' % (arg, menuw))
         self.check_password_and_build(arg='playlist:recursive', menuw=menuw)
 
 
@@ -516,7 +516,7 @@ class DirItem(Playlist):
         """
         play recursive in random order
         """
-        _debug_('play_random_recursive(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('play_random_recursive(arg=%r, menuw=%r)' % (arg, menuw))
         self.check_password_and_build(arg='playlist:random_recursive', menuw=menuw)
 
 
@@ -524,17 +524,17 @@ class DirItem(Playlist):
         """
         password checker
         """
-        _debug_('check_password_and_build(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('check_password_and_build(arg=%r, menuw=%r)' % (arg, menuw))
         if not self.menuw:
             self.menuw = menuw
 
         if self.media:
             self.media.mount()
 
-        if vfs.isfile(self.dir + '/.password'):
+        if vfs.isfile(os.path.join(self.dir + '.password')):
             _debug_('password protected dir', DINFO)
             try:
-                pwfile = vfs.open(self.dir + '/.password')
+                pwfile = vfs.open(os.path.join(self.dir + '.password'))
                 line = pwfile.readline()
                 pwfile.close()
             except IOError, e:
@@ -586,6 +586,7 @@ class DirItem(Playlist):
         build the items for the directory
         """
         _debug_('build(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        print('build(arg=%r, menuw=%r)' % (arg, menuw))
         self.menuw      = menuw
         self.playlist   = []
         self.play_items = []
@@ -634,7 +635,7 @@ class DirItem(Playlist):
         num_changes = mediainfo.check_cache(self.dir)
 
         pop = None
-        callback=None
+        callback = None
         if skin.active():
             if (num_changes > 10) or (num_changes and self.media):
                 if self.media:
@@ -776,7 +777,7 @@ class DirItem(Playlist):
             # autoplay
             items[0].actions()[0][0](menuw=menuw)
 
-        elif arg=='play' and self.play_items:
+        elif arg == 'play' and self.play_items:
             # called by play function
             self.playlist = self.play_items
             Playlist.play(self, menuw=menuw)
@@ -938,7 +939,7 @@ class DirItem(Playlist):
         for i, name, descr, type_list in self.all_variables:
             if name == '':
                 continue
-            name += '\t'  + self.configure_set_name(i)
+            name += '\t' + self.configure_set_name(i)
             mi = menu.MenuItem(name, self.configure_set_var, i)
             mi.description = descr
             items.append(mi)

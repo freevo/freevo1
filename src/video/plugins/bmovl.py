@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# bmovl.py - bmovl plugin for Freevo MPlayer module for video
+# bmovl plugin for Freevo MPlayer module for video
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -203,6 +203,7 @@ class PluginInterface(plugin.Plugin):
         """
         called before playing is started to add some stuff to the command line
         """
+        _debug_('%s.play(command=%r, player=%r)' % (self.__module__, command, player))
         self.item        = player.item
         self.player      = player
         self.osd_visible = False

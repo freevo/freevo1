@@ -90,6 +90,7 @@ class PluginInterface(plugin.Plugin):
         # register xmms as the object to play audio
         plugin.register(FXMMS(), plugin.AUDIO_PLAYER, True)
 
+
     def config(self):
         return [ ('FXMMS_CMD', '/usr/bin/xmms', 'location of xmms.'),
                  ('FXMMS_NETRADIO', 1, 'Whether to use xmms for netradio'),
@@ -100,7 +101,6 @@ class FXMMS:
     """
     the main class to control xmms
     """
-
     def __init__(self):
         self.name     = 'fxmms'
         self.app_mode = 'audio'
@@ -108,6 +108,7 @@ class FXMMS:
         self.is_alive = False  #flag for osd update thread
         self.idle     = 0      #timer for osd update thread
         self.last_event = PLAY_END #keep track of last event for osd thread
+
 
     def rate(self, item):
         """
@@ -143,10 +144,12 @@ class FXMMS:
         _debug_('%r good' % (item.url))
         return 2
 
+
     def play(self, item, playerGUI):
         """
         play an audioitem with xmms
         """
+        _debug_('%s.play(item=%r, playerGUI=%r)' % (self.__module__, item, playerGUI))
         if item.url:
             filename = item.url
         else:
@@ -188,12 +191,14 @@ class FXMMS:
 
         return None
 
+
     def hide_windows(self):
         #hide windows
         xmms.main_win_toggle(0)
         xmms.pl_win_toggle(0)
         xmms.eq_win_toggle(0)
         xmms.toggle_aot(0)
+
 
     def stop(self):
         """
@@ -204,6 +209,7 @@ class FXMMS:
 
     def is_playing(self):
         return xmms.is_playing()
+
 
     def __update_thread(self):
         """
@@ -241,11 +247,13 @@ class FXMMS:
 
         xmms.quit()
 
+
     def refresh(self):
         curtime = xmms.get_output_time()
         curtime = int(curtime / 1000)
         self.elapsed = self.item.elapsed = curtime
         self.playerGUI.refresh()
+
 
     def eventhandler(self, event, menuw=None):
         """

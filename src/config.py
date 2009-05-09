@@ -700,12 +700,14 @@ VIDEO_SUFFIX = []
 
 for p in plugin.getall():
     if p.startswith('video'):
-        try:
-            for s in eval('VIDEO_%s_SUFFIX' % p[6:].upper()):
-                if not s in VIDEO_SUFFIX:
-                    VIDEO_SUFFIX.append(s)
-        except:
-            pass
+        suffix = p[6:].upper()
+        if suffix:
+            try:
+                for s in eval('VIDEO_%s_SUFFIX' % suffix):
+                    if not s in VIDEO_SUFFIX:
+                        VIDEO_SUFFIX.append(s)
+            except NameError:
+                pass
 
 
 #
