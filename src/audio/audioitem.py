@@ -188,13 +188,14 @@ class AudioItem(Item):
         """
         Start playing the item
         """
+        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
         self.parent.current_item = self
         self.elapsed = 0
 
         if not self.menuw:
             self.menuw = menuw
 
-        self.player = PlayerGUI(self, menuw)
+        self.player = PlayerGUI(self, menuw, arg)
         error = self.player.play()
 
         if error and menuw:

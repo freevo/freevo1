@@ -359,7 +359,7 @@ class Playlist(Item):
         """
         play the playlist
         """
-        _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
         if not self.menuw:
             self.menuw = menuw
 
@@ -409,7 +409,9 @@ class Playlist(Item):
             return True
 
         if hasattr(self.current_item, 'play'):
-            self.current_item.play(menuw=menuw)
+            if self.current_item == self.playlist[-1]:
+                arg = 'last'
+            self.current_item.play(arg=arg, menuw=menuw)
         else:
             self.current_item.actions()[0][0](menuw=menuw)
 

@@ -47,12 +47,13 @@ def get():
     return _player_
 
 class PlayerGUI(GUIObject):
-    def __init__(self, item, menuw):
-        _debug_('PlayerGUI.__init__(item=%r, menuw=%r)' % (item, menuw))
+    def __init__(self, item, menuw, arg=None):
+        _debug_('PlayerGUI.__init__(item=%r, menuw=%r, arg=%r)' % (item, menuw, arg))
         GUIObject.__init__(self)
         self.visible = menuw and True or False
-        self.menuw = menuw
         self.item = item
+        self.menuw = menuw
+        self.arg = arg
         self.player  = None
         self.running = False
         self.pbox    = None
