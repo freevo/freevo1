@@ -75,6 +75,7 @@ class Skin:
         self.last_draw     = None, None, None
         self.screen        = screen.get_singleton()
         self.areas         = {}
+        self.suspended     = False
 
         # load default areas
         from listing_area   import Listing_Area
@@ -457,18 +458,30 @@ class Skin:
         """
         Clean the screen
         """
-        _debug_('clear: %s' % osd_update, 2)
+        _debug_('Skin.clear(osd_update=%r)' % (osd_update,))
         self.force_redraw = True
         osd.clearscreen(osd.COL_BLACK)
         if osd_update:
             osd.update()
 
 
+    def suspend(self):
+        _debug_('Skin.suspend()')
+        if not self.suspended:
+            self.suspended = True
+
+
+    def resume(self):
+        _debug_('Skin.resume()')
+        if self.suspended:
+            self.suspended = False
+
+
     def redraw(self):
         """
         Redraw the current screen
         """
-        _debug_('redraw()', 2)
+        _debug_('Skin.redraw()', 3)
         if self.last_draw[0] and self.last_draw[1]:
             self.draw(self.last_draw[0], self.last_draw[1], self.last_draw[2])
 
@@ -485,7 +498,10 @@ class Skin:
         Draw the object.  object may be a menu widget, a table for the tv menu
         or an audio item for the audio player.
         """
-        _debug_('Skin.draw(type=%r, object=%r, menu=%r)' % (type, object, menu), 3)
+        _debug_('Skin.draw(type=%r, object=%r, menu=%r)' % (type, object, menu), 2)
+        if self.suspended:
+            return
+
         if isinstance(object, GUIObject):
             # handling for gui objects: are they visible? what about children?
             if not object.visible:

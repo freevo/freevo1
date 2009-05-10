@@ -416,7 +416,7 @@ class MpvGoom(BaseAnimation):
                     if self.messages:
                         self.goom.message = self.messages[self.message_index]
                         self.message_index = (self.message_index + 1) % len(self.messages)
-                self.message_counter = (self.message_counter + 1) % 300
+                self.message_counter = (self.message_counter + 1) % config.MPLAYERVIS_MSG_FRAMES
 
             gooms = self.goom.process()
 
@@ -573,8 +573,8 @@ class PluginInterface(plugin.Plugin):
             ('MPLAYERVIS_FULL_GEOMETRY', '%dx%d' % (config.CONF.width, config.CONF.height), 'Full screen geometry'),
             ('MPLAYERVIS_FULL_ZOOM', 1, 'Fullscreen surface is zoomed by 2^ZOOM'),
             ('MPLAYERVIS_DOCK_ZOOM', 1, 'Docked surface is zoomed by 2^ZOOM'),
-            ('MPLAYERVIS_FPS', 25, 'Max FPS of visualization'),
-            ('MPLAYERVIS_HAS_TRACK', False, 'Set to True if mplayer has -af track patch'),
+            ('MPLAYERVIS_FPS', 15, 'Max FPS of visualization'),
+            ('MPLAYERVIS_MSG_FRAMES', 1000, 'Number of frames between messages in full-screen mode'),
         ]
 
 
@@ -751,8 +751,9 @@ class PluginInterface(plugin.Plugin):
 
         self.visual.set_dock()
         if not self.player.playerGUI.visible:
-            self.player.playerGUI.show()
             osd.active = True
+            skin.resume()
+            self.player.playerGUI.show()
 
 
     def fullscreen(self):
@@ -764,6 +765,7 @@ class PluginInterface(plugin.Plugin):
             osd.active = False
 
         self.visual.set_fullscreen()
+        skin.suspend()
         skin.clear()
         rc.app(self)
 
@@ -781,6 +783,7 @@ class PluginInterface(plugin.Plugin):
 
         if not self.player.playerGUI.visible:
             osd.active = True
+            skin.resume()
             self.player.playerGUI.show()
 
 
@@ -807,6 +810,8 @@ class PluginInterface(plugin.Plugin):
             self.view_func[self.view]()
             self.visual.start()
             self.visual.timer.start(1.0 / config.MPLAYERVIS_FPS)
+            if self.view == MpvMode.FULL:
+                skin.suspend()
 
 
     def pause_visual(self):
@@ -833,6 +838,8 @@ class PluginInterface(plugin.Plugin):
             self.visual = None
             self.goom = None
         osd.active = True
+        #if self.view == MpvMode.FULL:
+        skin.resume()
 
 
     def play(self, command, player):
@@ -845,8 +852,8 @@ class PluginInterface(plugin.Plugin):
         self.player = player
         self.item   = player.playerGUI.item
 
-        if config.MPLAYERVIS_HAS_TRACK:
-            return command + [ '-af', 'export=%s' % MMAP_FILE + ',track=5:1500' ]
+        #if config.MPLAYERVIS_HAS_TRACK:
+        #    return command + [ '-af', 'export=%s' % MMAP_FILE + ',track=5:1500' ]
         return command + [ '-af', 'export=%s' % MMAP_FILE ]
 
 
