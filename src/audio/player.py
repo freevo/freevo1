@@ -54,6 +54,7 @@ class PlayerGUI(GUIObject):
         self.item = item
         self.menuw = menuw
         self.arg = arg
+        self.succession = PlayListSuccession(arg)
         self.player  = None
         self.running = False
         self.pbox    = None
@@ -63,7 +64,7 @@ class PlayerGUI(GUIObject):
 
 
     def play(self, player=None):
-        _debug_('play(player=%r)' % (player,))
+        _debug_('%s.play(player=%r)' % (self.__module__, player))
         global _player_
         if _player_ and _player_.player and _player_.player.is_playing():
             _player_.stop()
@@ -180,6 +181,67 @@ class PlayerGUI(GUIObject):
 
         self.first_drawing = False
         skin.draw('player', self.item)
+
+
+
+class PlayListSuccession:
+    """
+    Play list succession class, it determines if the audio item is the first,
+    next, last or only item in a play list. Unfortunately it cannot detect the
+    only item in a play list.
+
+    mplayervis uses this class to determine what to do with the visualisation.
+
+    Possibly move this class to audioitem
+    """
+    UNKNOWN = 0 # don't know
+    FIRST   = 1 # first item in play list
+    NEXT    = 2 # next item in play list
+    LAST    = 3 # last item in play list
+    ONLY    = 4 # single item play list
+
+    def __init__(self, mode=UNKNOWN):
+        self.mode = self.setmode(mode)
+
+    def setmode(self, s):
+        #mode if isinstance(mode, PlayListSuccession) else 
+        return PlayListSuccession.FIRST if s is None    else \
+               PlayListSuccession.FIRST if s == 'first' else \
+               PlayListSuccession.NEXT  if s == 'next'  else \
+               PlayListSuccession.LAST  if s == 'last'  else \
+               PlayListSuccession.ONLY  if s == 'only'  else \
+               PlayListSuccession.UNKNOWN
+
+    def __repr__(self):
+        if self.mode == PlayListSuccession.FIRST: return 'FIRST'
+        if self.mode == PlayListSuccession.NEXT:  return 'NEXT'
+        if self.mode == PlayListSuccession.LAST:  return 'LAST'
+        if self.mode == PlayListSuccession.ONLY:  return 'ONLY'
+        return 'UNKNOWN'
+
+    def __cmp__(self, other):
+        if isinstance(other, PlayListSuccession):
+            if self.mode > other.mode: return 1
+            if self.mode < other.mode: return -1
+        else:
+            if self.mode > other: return 1
+            if self.mode < other: return -1
+        return 0
+
+    def __index__(self):
+        return self.mode
+
+    def __int__(self):
+        return self.mode
+
+    def __add__(self, other):
+        self.mode = (self.mode + int(other)) % 3
+        return self
+
+    def __sub__(self, other):
+        self.mode = (self.mode - int(other)) % 3
+        return self
+
 
 
 # register player to the skin

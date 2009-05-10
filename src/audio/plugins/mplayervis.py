@@ -5,7 +5,7 @@
 # $Id$
 #
 # Notes: - I'm no fan of all the skin.clear() being done :(
-# Todo:  -
+# Todo:  - Find a way to stop the skin when in full-screen mode
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
@@ -44,9 +44,10 @@ except ImportError:
 if not hasattr(pygoom, 'HEXVERSION') and pygoom.HEXVERSION < 0x000200f0:
     raise ImportError('pygoom too old, you need version 0.2.0 or higher')
 
-# pygame  modules
+# pygame modules
 from pygame import Surface, Rect, image, transform
 from pygame.time import Clock
+import pygame
 
 # kaa modules
 from kaa import Timer, OneShotTimer
@@ -57,6 +58,7 @@ import plugin, rc, skin, osd
 
 from event import *
 from animation import render, BaseAnimation
+from audio.player import PlayListSuccession
 
 
 if config.DEBUG_DEBUGGER:
@@ -120,7 +122,7 @@ class MpvGoom(BaseAnimation):
         """
         Initialise the MPlayer Visualization Goom
         """
-        print('MpvGoom.__init__(x=%r y=%r width=%r height=%r coverfile=%r)' % (x, y, width, height, coverfile))
+        _debug_('MpvGoom.__init__(x=%r y=%r width=%r height=%r coverfile=%r)' % (x, y, width, height, coverfile))
         self.mode = MpvMode(config.MPLAYERVIS_MODE)
         self.coverfile = coverfile
         self.showfps = False
@@ -131,6 +133,7 @@ class MpvGoom(BaseAnimation):
             f.write(s)
             f.close()
 
+        #pygoom.debug(2)
         BaseAnimation.__init__(self, (x, y, width, height), fps=100, bg_update=False, bg_redraw=False)
         self.goom = pygoom.PyGoom(width, height, MMAP_FILE, songtitle=title)
         self.infodata = None
@@ -156,10 +159,13 @@ class MpvGoom(BaseAnimation):
         self.running = False
         self.timer = Timer(self.goom_surface_update)
         self.last_time = 0
+        self.message_counter = 1 # skip message at start
+        self.message_index = 0
+        self.messages = []
 
 
     def __del__(self):
-        print('MpvGoom.__del__')
+        _debug_('MpvGoom.__del__')
 
 
     def set_cover(self, coverfile):
@@ -177,10 +183,16 @@ class MpvGoom(BaseAnimation):
         self.goom.fxmode = visual
 
 
+    def set_songtitle(self, songtitle):
+        """ pass the song title to goom """
+        _debug_('set_songtitle(songtitle=%r)' % (songtitle,))
+        self.goom.songtitle = str(songtitle)
+
+
     def set_message(self, message):
-        """ pass the song message to goom """
+        """ pass a message to goom """
         _debug_('set_message(message=%r)' % (message,))
-        self.goom.message = message
+        self.goom.message = str(message)
 
 
     def set_alpha(self, high, low):
@@ -194,7 +206,7 @@ class MpvGoom(BaseAnimation):
 
     def set_resolution(self, x, y, width, height, zoom=1):
         """ Set the resolution of the goom window """
-        print('set_resolution(x=%r, y=%r, width=%r, height=%r, zoom=%r)' % (x, y, width, height, zoom))
+        _debug_('set_resolution(x=%r, y=%r, width=%r, height=%r, zoom=%r)' % (x, y, width, height, zoom))
         r = Rect(x, y, width / zoom, height / zoom)
         if r == self.rect:
             return
@@ -207,15 +219,15 @@ class MpvGoom(BaseAnimation):
         self.goom.resolution(width / zoom, height / zoom)
 
 
-        # change the cover if neceserry
+        # change the cover if necessary
         coversurf = None
         if self.coverfile:
             try:
                 coversurf = image.load(self.coverfile).convert()
-                coversurf.set_colorkey(-1) # make top-left pixel transparent
+                #coversurf.set_colorkey(-1) # make top-left pixel transparent
             except Exception, why:
-                print why
-                pass
+                _debug_(why, DWARNING)
+
         if coversurf is not None:
             # scale and fit to the rect
             w, h   = coversurf.get_size()
@@ -273,7 +285,7 @@ class MpvGoom(BaseAnimation):
         h = c.height  - 2*c.spacing
         x = c.x + c.spacing
         y = c.y + c.spacing
-        print('c=%r, w=%r, h=%r, x=%r, y=%r' % (c, w, h, x, y))
+        _debug_('c=%r, w=%r, h=%r, x=%r, y=%r' % (c, w, h, x, y))
 
         # check if the view-area has a rectangle
         #try:
@@ -296,7 +308,6 @@ class MpvGoom(BaseAnimation):
         @param timeout: how long to display
         """
         _debug_('set_info(info=%r, timeout=%r)' % (info, timeout))
-        print('set_info(info=%r, timeout=%r)' % (info, timeout))
 
         font = skin.get_font('widget')
         w = font.stringsize(info)
@@ -306,7 +317,7 @@ class MpvGoom(BaseAnimation):
         y = config.OSD_OVERSCAN_TOP+5
 
         s = Surface((w, h), 0, 32)
-        print('s=%r info=%r font=%r x=%r y=%r w=%r h=%r' % (s, info, font, x, y, w, h))
+        _debug_('s=%r info=%r font=%r x=%r y=%r w=%r h=%r' % (s, info, font, x, y, w, h))
 
         self.infodata  = (s, info, font, x, y, w, h)
         self.m_timer   = time.time()
@@ -331,7 +342,7 @@ class MpvGoom(BaseAnimation):
 
 
     def init_state(self):
-        #print('init_state()')
+        #_debug_('init_state()')
         if self.counter > 0:
             # Initial fade out is twice as fast as normal
             self.counter -= (self.fade_step * 2)
@@ -344,7 +355,7 @@ class MpvGoom(BaseAnimation):
 
 
     def fade_in_wait_state(self):
-        #print('fade_in_wait_state()')
+        #_debug_('fade_in_wait_state()')
         if self.counter > 0:
             self.counter -= self.fade_step
         if self.counter < 0:
@@ -355,7 +366,7 @@ class MpvGoom(BaseAnimation):
 
 
     def fade_in_state(self):
-        #print('fade_in_state()')
+        #_debug_('fade_in_state()')
         if self.counter > 0:
             self.counter -= self.fade_step
         if self.counter < 0:
@@ -367,7 +378,7 @@ class MpvGoom(BaseAnimation):
 
 
     def fade_out_wait_state(self):
-        #print('fade_out_wait_state()')
+        #_debug_('fade_out_wait_state()')
         if self.counter > 0:
             self.counter -= self.fade_step
         if self.counter < 0:
@@ -378,7 +389,7 @@ class MpvGoom(BaseAnimation):
 
 
     def fade_out_state(self):
-        #print('fade_out_state()')
+        #_debug_('fade_out_state()')
         if self.counter > 0:
             self.counter -= self.fade_step
         if self.counter < 0:
@@ -394,16 +405,20 @@ class MpvGoom(BaseAnimation):
         The timer handler
         Uses a state machine to control the display of the cover image
         """
-        #print('goom_surface_update()')
+        #_debug_('goom_surface_update()')
         try:
             # draw the cover
             if not self.running:
                 return False
 
+            if self.mode == MpvMode.FULL:
+                if self.message_counter == 0:
+                    if self.messages:
+                        self.goom.message = self.messages[self.message_index]
+                        self.message_index = (self.message_index + 1) % len(self.messages)
+                self.message_counter = (self.message_counter + 1) % 300
+
             gooms = self.goom.process()
-            #print('gooms=%r' % (gooms,))
-            #if not self.running:
-            #    return False
 
             # write the goom surface to the display
             if self.mode == MpvMode.FULL:
@@ -464,59 +479,6 @@ class MpvGoom(BaseAnimation):
 
 
 
-class PlayListSuccession:
-    """
-    Play list succession class
-    Possibly move this class to another module, perhaps audio.player or audio.playerGUI
-    """
-    UNKNOWN = 0 # don't know
-    FIRST   = 1 # first item in play list
-    NEXT    = 2 # next item in play list
-    LAST    = 3 # last item in play list
-    ONLY    = 4 # single item play list
-
-    def __init__(self, mode=UNKNOWN):
-        self.mode = mode
-
-    def set(self, s):
-        self.mode = PlayListSuccession.FIRST if s is None   else \
-                    PlayListSuccession.NEXT  if s == 'next' else \
-                    PlayListSuccession.LAST  if s == 'last' else \
-                    PlayListSuccession.ONLY  if s == 'only' else \
-                    PlayListSuccession.UNKNOWN
-
-    def __repr__(self):
-        if self.mode == PlayListSuccession.FIRST: return 'FIRST'
-        if self.mode == PlayListSuccession.NEXT:  return 'NEXT'
-        if self.mode == PlayListSuccession.LAST:  return 'LAST'
-        if self.mode == PlayListSuccession.ONLY:  return 'ONLY'
-        return 'UNKNOWN'
-
-    def __cmp__(self, other):
-        if isinstance(other, PlayListSuccession):
-            if self.mode > other.mode: return 1
-            if self.mode < other.mode: return -1
-        else:
-            if self.mode > other: return 1
-            if self.mode < other: return -1
-        return 0
-
-    def __index__(self):
-        return self.mode
-
-    def __int__(self):
-        return self.mode
-
-    def __add__(self, other):
-        self.mode = (self.mode + int(other)) % 3
-        return self
-
-    def __sub__(self, other):
-        self.mode = (self.mode - int(other)) % 3
-        return self
-
-
-
 class PluginInterface(plugin.Plugin):
     """
     Native mplayer audiovisualization for Freevo.
@@ -566,7 +528,6 @@ class PluginInterface(plugin.Plugin):
         self.message  = None
         self.infodata = None
         self.message_fmt = config.MPLAYERVIS_MESSAGE_FMT
-        self.succession = PlayListSuccession()
 
         # Event for changing between viewmodes
         config.EVENTS['audio']['SUBTITLE'] = Event('TOGGLE_TITLE') #'l'
@@ -599,7 +560,7 @@ class PluginInterface(plugin.Plugin):
         """
         Define the configuration variables
         """
-        print('PluginInterface.config()')
+        _debug_('PluginInterface.config()')
         return [
             ('MPLAYERVIS_MODE', 0, 'Set the initial mode of the display, 0)DOCK, 1)FULL or 2)NOVI'),
             ('MPLAYERVIS_INIT_COUNTER', 255, 'Counter before the image fades, should be >= 255'),
@@ -634,8 +595,7 @@ class PluginInterface(plugin.Plugin):
         """
         eventhandler to simulate hide/show of mpav
         """
-        _debug_('eventhandler(event=%r, arg=%r)' % (event.name, arg))
-        print('mplayervis1.eventhandler(event=%r, arg=%r)' % (event.name, arg))
+        _debug_('mplayervis1.eventhandler(event=%r, arg=%r)' % (event.name, arg))
 
         if plugin.isevent(event) == 'DETACH':
             PluginInterface.detached = True
@@ -646,13 +606,14 @@ class PluginInterface(plugin.Plugin):
             self.start_visual()
             
         elif event == PLAY_START:
-            if self.succession == PlayListSuccession.FIRST:
+            if self.player.playerGUI.succession == PlayListSuccession.FIRST:
                 self.start_visual()
             else:
                 self.resume_visual()
+            self.item_info(self.message_fmt)
                 
         elif event == PLAY_END:
-            if self.succession == PlayListSuccession.LAST:
+            if self.player.playerGUI.succession == PlayListSuccession.LAST:
                 self.stop_visual()
             else:
                 self.pause_visual()
@@ -667,20 +628,18 @@ class PluginInterface(plugin.Plugin):
 
         elif event == 'TOGGLE_FPS':
             self.visual.showfps = not self.visual.showfps
-            print('showfps=%s' % (self.visual.showfps))
+            _debug_('showfps=%s' % (self.visual.showfps))
             return True
 
         elif event == 'TOGGLE_TITLE':
             self.title = not self.title and self.item.name or ''
             _debug_('title=%s' % (self.title))
-            print('title=%s' % (self.title))
-            self.visual.set_title(self.title)
+            self.visual.set_songtitle(self.title)
             return True
 
         elif event == 'TOGGLE_MESSAGE':
             self.message = not self.message and self.item_info(self.message_fmt) or ''
             _debug_('message=%s' % (self.message))
-            print('message=%s' % (self.message))
             self.visual.set_message(self.message)
             return True
 
@@ -715,7 +674,10 @@ class PluginInterface(plugin.Plugin):
 
 
     def _paused_handler(self):
-        print('_paused_handler')
+        """
+        This is only called if there is only one track to play
+        """
+        _debug_('_paused_handler')
         #rc.post_event(Event(STOP))
         self.stop_visual()
         # need to redraw the screen some how
@@ -750,6 +712,20 @@ class PluginInterface(plugin.Plugin):
             'e' : elapsed,
         }
         _debug_('song=%r' % (song,), 2)
+
+        self.visual.messages = []
+        self.visual.message_index = 0
+        self.visual.message_counter = 1
+        if song['a']:
+            self.visual.messages.append(str('Artist: %(a)s' % song))
+        if song['l']:
+            self.visual.messages.append(str('Album: %(l)s' % song))
+        if song['n']:
+            self.visual.messages.append(str('Track: %(n)s' % song))
+        if song['y']:
+            self.visual.messages.append(str('Year: %(y)s' % song))
+        if song['t']:
+            self.visual.messages.append(str('%(t)s' % song))
 
         if not fmt:
             if year:
@@ -788,7 +764,6 @@ class PluginInterface(plugin.Plugin):
             osd.active = False
 
         self.visual.set_fullscreen()
-        self.visual.set_info(self.item_info(), 10)
         skin.clear()
         rc.app(self)
 
@@ -810,9 +785,8 @@ class PluginInterface(plugin.Plugin):
 
 
     def start_visual(self):
-        _debug_('start_visual()')
-        print('start_visual() self.view=%r self.succession=%r' % (self.view, self.succession))
-        if self.succession != PlayListSuccession.FIRST:
+        _debug_('start_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
+        if self.player.playerGUI.succession != PlayListSuccession.FIRST:
             return
         
         if self.visual and self.visual.running:
@@ -822,13 +796,13 @@ class PluginInterface(plugin.Plugin):
             return
 
         if rc.app() == self.player.eventhandler:
-            title = hasattr(self.item, 'title') and self.item.title or self.item.name
+            title = self.item.title if hasattr(self.item, 'title') else self.item.name
             self.visual = MpvGoom(300, 300, 150, 150, title, self.item.image)
 
             #if self.view == MpvMode.FULL:
             self.visual.set_info(self.item.name, 10)
 
-            print('self.visual.running=%r -> True' % (self.visual.running,))
+            _debug_('self.visual.running=%r -> True' % (self.visual.running,))
             self.visual.running = True
             self.view_func[self.view]()
             self.visual.start()
@@ -836,36 +810,24 @@ class PluginInterface(plugin.Plugin):
 
 
     def pause_visual(self):
-        _debug_('pause_visual()')
-        print('pause_visual() self.view=%r self.succession=%r' % (self.view, self.succession))
+        _debug_('pause_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
         self.timer.start(3)
-        #if self.visual:
-        #    print('self.visual.running=%r -> False' % (self.visual.running,))
-        #    self.visual.running = False
-        #    self.visual.timer.stop()
 
 
     def resume_visual(self):
-        _debug_('start_visual()')
-        print('resume_visual() self.view=%r self.succession=%r' % (self.view, self.succession))
+        _debug_('resume_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
         self.timer.stop()
         if self.visual:
-            if self.view == MpvMode.NOVI:
-                #self.visual.draw_info(gooms)
-                pass
-        #    print('self.visual.running=%r -> True' % (self.visual.running,))
-        #    self.visual.running = True
-        #    self.visual.start()
-        #    self.visual.timer.start(1.0 / config.MPLAYERVIS_FPS)
+            title = self.item.title if hasattr(self.item, 'title') else self.item.name
+            self.visual.set_songtitle(title)
 
     
     def stop_visual(self):
-        _debug_('stop_visual()')
-        print('stop_visual() self.view=%r self.succession=%r' % (self.view, self.succession))
-        self.visual.timer.stop()
+        _debug_('stop_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
         self.timer.stop()
         if self.visual:
-            print('self.visual.running=%r -> False' % (self.visual.running,))
+            _debug_('self.visual.running=%r -> False' % (self.visual.running,))
+            self.visual.timer.stop()
             self.visual.running = False
             self.visual.remove()
             self.visual = None
@@ -882,7 +844,6 @@ class PluginInterface(plugin.Plugin):
         _debug_('%s.play(command=%r, player=%r)' % (self.__module__, command, player))
         self.player = player
         self.item   = player.playerGUI.item
-        self.succession.set(player.playerGUI.arg)
 
         if config.MPLAYERVIS_HAS_TRACK:
             return command + [ '-af', 'export=%s' % MMAP_FILE + ',track=5:1500' ]
@@ -890,11 +851,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def stop(self):
-        _debug_('stop()')
-        print('%s.stop()' % (self.__module__,))
-        #if self.visual:
-        #    print('self.visual.running=%r -> False' % (self.visual.running,))
-        #    self.visual.running = False
+        _debug_('%s.stop()' % (self.__module__,))
 
 
     def stdout(self, line):
