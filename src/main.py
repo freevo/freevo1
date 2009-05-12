@@ -368,19 +368,16 @@ def tracefunc(frame, event, arg, _indent=[0]):
     """
     function to trace and time everything inside freevo for debugging
     """
-    # ignore non-freevo and non-kaa calls
-    if opts.trace not in ('all', 'sys'):
-        for module in opts.trace:
-            if frame.f_code.co_filename.find(module) >= 0:
-                break
-        else:
-            return tracefunc
-    elif opts.trace == 'all':
-        if frame.f_code.co_filename.find('/freevo/') == -1 and frame.f_code.co_filename.find('/kaa/') == -1:
-            return tracefunc
     # ignore debugging calls
     if frame.f_code.co_name == '_debug_function_':
         return tracefunc
+    # trace all modules specified in opts.trace
+    for module in opts.trace:
+        if frame.f_code.co_filename.find(module) >= 0:
+            break
+    else:
+        return tracefunc
+
     spacer = '  '
     if event == 'call':
         filename = frame.f_code.co_filename
@@ -473,7 +470,6 @@ if opts.debug:
 
 if opts.trace:
     # activate a trace function
-    global trace_pat
     tracefd = open(os.path.join(config.FREEVO_LOGDIR, 'trace.txt'), 'w')
     sys.settrace(tracefunc)
 
@@ -556,7 +552,7 @@ try:
     MainMenu().getcmd()
 
     # Kick off the main menu loop
-    _debug_('Main loop starting...',2)
+    _debug_('Main loop starting...')
 
     MainTread()
 
