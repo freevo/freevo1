@@ -62,7 +62,6 @@ typedef struct data_t {
 
 typedef struct PyGoomObject {
 	PyObject_HEAD
-	PyObject *x_attr;
 	PyObject *exportfile;
 	PyObject *songtitle;
 	PyObject *message;
@@ -153,11 +152,11 @@ PyGoom_process(PyGoomObject *self, PyObject *args)
     }
 
     songtitle = PyString_AsString(self->songtitle);
-    if (strcmp(songtitle, "") == 0) {
+    if (songtitle && strcmp(songtitle, "") == 0) {
         songtitle = 0;
     } 
     message = PyString_AsString(self->message);
-    if (strcmp(message, "") == 0) {
+    if (message && strcmp(message, "") == 0) {
         message = 0;
     }
     if (songtitle || message) {
@@ -382,7 +381,7 @@ PyGoom_init(PyGoomObject *self, PyObject *args, PyObject *kwds)
     if (debug >= 1) {
         printf("PyGoom_init\n"); fflush(stdout);
     }
-	if (!PyArg_ParseTupleAndKeywords(args, kwds, "iiO|Oi", kwlist,
+	if (!PyArg_ParseTupleAndKeywords(args, kwds, "iiO|Si", kwlist,
 	      &self->width, &self->height, &exportfile, &songtitle, &self->fxmode)) {
 		return -1;
 	}

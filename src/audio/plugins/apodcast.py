@@ -52,9 +52,9 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def config(self):
-        '''
+        """
         freevo plugins -i audio.apodcast returns the info
-        '''
+        """
         return [
             ('APODCAST_LOCATIONS', None, 'List of podcast locations'),
             ('APODCAST_DIR', None, 'Dir for downloaded podcasts')
@@ -160,7 +160,7 @@ class ApodcastMainMenuItem(MenuItem):
 
 
     def create_podcast_submenu(self, arg=None, menuw=None, image=None):
-        popup = PopupBox(text=_('Fetching podcast...'))
+        popup = PopupBox(text=_('Fetching podcasts...'))
         popup.show()
         url = arg[1]
         p = podcast()
@@ -196,7 +196,7 @@ class ApodcastMainMenuItem(MenuItem):
 
 
     def create_podcast_menu(self, arg=None, menuw=None):
-        popup = PopupBox(text=_('Fetching podcasts...'))
+        popup = PopupBox(text=_('Fetching podcast...'))
         popup.show()
         podcast_menu_items = []
 
