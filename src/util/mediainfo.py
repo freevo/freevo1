@@ -450,6 +450,16 @@ class Info:
         return s
 
 
+    def __contains__(self, item):
+        for var in self.dicts:
+            if var and var.has_key(item):
+                val = var[item]
+                if var != self.metadata or val not in bad_info:
+                    if val is not None and val != '':
+                        return True
+        return False
+
+
     def __getitem__(self, key):
         """
         get the value of 'key'
@@ -458,11 +468,11 @@ class Info:
         for var in self.dicts:
             if var and var.has_key(key):
                 val = var[key]
-                if not var == self.metadata or not val in bad_info:
-                    result = val
-                if result is not None and result != '':
-                    _debug_('__getitem__(key=%r)=%r' % (key, result), 3)
-                    return result
+                if var != self.metadata or val not in bad_info:
+                    if val is not None and val != '':
+                        result = val
+                        _debug_('__getitem__(key=%r)=%r' % (key, result), 3)
+                        return result
         _debug_('__getitem__(key=%r)=%r' % (key, result), 3)
         return result
 

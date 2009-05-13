@@ -201,11 +201,16 @@ class MPlayer:
         eventhandler for mplayer control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-        print('mplayer.eventhandler(event=%r, arg=%r)' % (event.name, event.arg))
-        for p in self.plugins:
-            print 'p=%r' % (p,)
-            if p.eventhandler(event):
-                return True
+        #print('%s.eventhandler=%s' % (self.__module__, event))
+        try:
+            for p in self.plugins:
+                if p.eventhandler(event):
+                    print('%s handled by %s' % (event, p))
+                    return True
+        except Exception, why:
+            import traceback
+            traceback.print_exc()
+            return True
 
         if event == AUDIO_SEND_MPLAYER_CMD:
             self.app.write('%s\n' % event.arg)

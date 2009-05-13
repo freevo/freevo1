@@ -686,11 +686,11 @@ class PluginInterface(plugin.Plugin):
         item     = self.item
         info     = item.info
         image    = item.image
-        title    = info['title'] if info['title'] else item.name
-        artist   = info['artist']  if 'artist'  in info else ''
-        album    = info['album']   if 'artist'  in info else ''
-        trackno  = info['trackno'] if 'trackno' in info else ''
-        year     = info['year']    if 'year'    in info else ''
+        title    = info['title'] if 'title' in info else item.name
+        artist   = info['artist']
+        album    = info['album']
+        trackno  = info['trackno']
+        year     = info['year']
         length   = '%i:%02i' % (int(item.length/60), int(item.length%60)) if item.length else ''
         elapsed  = '%i:%02i' % (int(item.elapsed/60), int(item.elapsed%60)) if item.elapsed else ''
 
@@ -795,6 +795,8 @@ class PluginInterface(plugin.Plugin):
             title = self.item.title if hasattr(self.item, 'title') and self.item.title else \
                   self.item.name
             self.visual = MpvGoom(300, 300, 150, 150, title, self.item.image)
+            if self.visual is None:
+                raise Exception('Cannot initialise MpvGoom')
 
             #if self.view == MpvMode.FULL:
             self.visual.set_info(self.item.name, 10)

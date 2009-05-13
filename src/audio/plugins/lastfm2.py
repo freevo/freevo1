@@ -36,11 +36,12 @@ from threading import Thread
 # Freevo modules
 import config
 import plugin
+import osd
 import rc
 import version, revision
 from event import STOP, PLAY_END
 from menu import MenuItem, Menu
-from gui import AlertBox, PopupBox
+from gui import AlertBox
 from audio.audioitem import AudioItem
 from audio.player import PlayerGUI
 from util import feedparser
@@ -55,6 +56,8 @@ else:
 # Debugging modules
 if config.DEBUG_DEBUGGER:
     import pdb, pprint
+
+osd = osd.get_singleton()
 
 
 class LastFMError(Exception):
@@ -519,8 +522,7 @@ class LastFMWebServices:
     def adjust_station(self, station_url):
         """Change Last FM Station"""
         _debug_('adjust_station(station_url=%r)' % (station_url,), 2)
-        pop = PopupBox(text=_('Tuning radio station, please wait...'))
-        pop.show()
+        osd.busyicon.wait(config.OSD_BUSYICON_TIMER[0])
         try:
             if not self.session:
                 self._login()
@@ -538,7 +540,7 @@ class LastFMWebServices:
             except IOError, why:
                 return None
         finally:
-            pop.destroy()
+            osd.busyicon.stop()
 
 
     def now_playing(self):
@@ -573,6 +575,7 @@ class LastFMWebServices:
             'User-agent': 'Freevo-%s (r%s)' % (version.__version__, revision.__revision__)
         }
         self.downloader = LastFMDownloader(url, filename, headers, entry)
+        self.downloader.setDaemon(1)
         self.downloader.start()
         return self.downloader
 
@@ -688,6 +691,7 @@ class LastFMDownloader(Thread):
             _debug_('%s: %s' % (self.url, why), DWARNING)
         except urllib2.HTTPError, why:
             _debug_('%s: %s' % (self.url, why), DWARNING)
+        self.running = False
 
 
     def filesize(self):
