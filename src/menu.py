@@ -428,9 +428,10 @@ class MenuWidget(GUIObject):
                 return False
             return menu.refresh()
 
-        #DJW: why do we do this?
-        #if self.menustack[-1].umount_all == 1:
-        #    util.umount_all()
+        # We need to unmount devices but only at the top menu
+        if len(self.menustack) == 1:
+            if self.menustack[-1].umount_all == 1:
+                util.umount_all()
 
         if reload:
             if menu.reload_func:
