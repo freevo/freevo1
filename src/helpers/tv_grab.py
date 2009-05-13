@@ -121,9 +121,16 @@ if __name__ == '__main__':
         raise SystemExit
 
 
+    rc = RecordClient()
+    try:
+        kaa.inprogress(rc.channel).wait()
+    except Exception, why:
+        print 'Cannot connect to record server'
+        raise SystemExit
+
     print 'Scheduling favorites for recording:  '
-    if not RecordClient().updateFavoritesSchedule(handler):
-        print RecordClient().recordserverdown
+    if not rc.updateFavoritesSchedule(handler):
+        print rc.recordserverdown
         raise SystemExit
 
     kaa.main.run()
