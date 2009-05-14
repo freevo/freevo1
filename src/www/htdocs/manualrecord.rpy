@@ -29,17 +29,9 @@
 # -----------------------------------------------------------------------
 
 import sys, time
+from time import strptime
 
 import tv.epg_xmltv, tv.epg_types
-
-# Use the alternate strptime module which seems to handle time zones
-#
-# XXX Remove when we are ready to require Python 2.3
-if float(sys.version[0:3]) < 2.3:
-    import tv.strptime as strptime
-else:
-    import _strptime as strptime
-
 
 from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
@@ -101,12 +93,14 @@ class ManualRecordResource(FreevoResource):
                     stopyear = str(int(stopyear) + 1)
                 if int(startmonth) < currentmonth:
                     startyear = str(int(startyear) + 1)
+
                 # create utc second start time
-                starttime = time.mktime(strptime.strptime(str(startmonth)+' '+str(startday)+' '+str(startyear)+\
-                    ' '+str(starthour)+':'+str(startminute)+':00','%m %d %Y %H:%M:%S'))
+                starttime_str = '%s %s %s %s:%s:00' % (startyear, startmonth, startday, starthour, startminute)
+                starttime = time.mktime(strptime(starttime_str, '%Y %m %d %H:%M:%S'))
                 # create utc stop time
-                stoptime = time.mktime(strptime.strptime(str(stopmonth)+' '+str(stopday)+' '+str(stopyear)+\
-                    ' '+str(stophour)+':'+str(stopminute)+':00','%m %d %Y %H:%M:%S'))
+                stoptime_str = '%s %s %s %s:%s:00' % (stopyear, stopmonth, stopday, stophour, stopminute)
+                stoptime = time.mktime(strptime(stoptime_str, '%Y %m %d %H:%M:%S'))
+
                 # so we don't record for more then maxdays (maxdays day * 24hr/day * 60 min/hr * 60 sec/min)
                 if abs(stoptime - starttime) < (MAXDAYS * 86400):
                     if starttime < stoptime:
