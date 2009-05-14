@@ -95,19 +95,19 @@ class PluginInterface(plugin.ItemPlugin):
                 menu_items.append(menu.MenuItem(menu_item[0], self.create_job, menu_item[1]))
         else:
             #create a menu with a few encoding options (1cd, 2cd, xvid, mpeg4)
-            #args : tuple, (videocodec, size, multipass
-            menu_items = [ menu.MenuItem("XviD, 700mb", self.create_job, (2, 700, False, 0)) ]
-            menu_items.append( menu.MenuItem("XviD, 700mb, High Quality", self.create_job, (2, 700, True, 0)) )
-            menu_items.append( menu.MenuItem("XviD, 1400mb", self.create_job, (2, 1400, False, 0)) )
-            menu_items.append( menu.MenuItem("XviD, 1400mb, High Quality", self.create_job, (2, 1400, True, 0)) )
-            menu_items.append( menu.MenuItem("MPEG4, 700mb", self.create_job, (0, 700, False, 0)) )
-            menu_items.append( menu.MenuItem("MPEG4, 700mb, High Quality", self.create_job, (0, 700, True, 0)) )
-            menu_items.append( menu.MenuItem("MPEG4, 1400mb", self.create_job, (0, 1400, False, 0)) )
-            menu_items.append( menu.MenuItem("MPEG4, 1400mb, High Quality", self.create_job, (0, 1400, True, 0)) )
-            menu_items.append( menu.MenuItem("h.264, 700mb", self.create_job, (3, 700, False, 0)) )
-            menu_items.append( menu.MenuItem("h.264, 700mb, High Quality", self.create_job, (3, 700, True, 0)) )
-            menu_items.append( menu.MenuItem("h.264, 1400mb", self.create_job, (3, 1400, False, 0)) )
-            menu_items.append( menu.MenuItem("h.264, 1400mb, High Quality", self.create_job, (3, 1400, True, 0)) )
+            #args : tuple, (videocodec, size, multipass, bitrate, audiocodec, container)
+            menu_items = [ menu.MenuItem("XviD, 700mb", self.create_job, (2, 700, False, 0, 0, 0)) ]
+            menu_items.append( menu.MenuItem("XviD, 700mb, High Quality", self.create_job, (2, 700, True, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("XviD, 1400mb", self.create_job, (2, 1400, False, 0, 0, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("XviD, 1400mb, High Quality", self.create_job, (2, 1400, True, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("MPEG4, 700mb", self.create_job, (0, 700, False, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("MPEG4, 700mb, High Quality", self.create_job, (0, 700, True, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("MPEG4, 1400mb", self.create_job, (0, 1400, False, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("MPEG4, 1400mb, High Quality", self.create_job, (0, 1400, True, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("h.264, 700mb", self.create_job, (3, 700, False, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("h.264, 700mb, High Quality", self.create_job, (3, 700, True, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("h.264, 1400mb", self.create_job, (3, 1400, False, 0, 0, 0)) )
+            menu_items.append( menu.MenuItem("h.264, 1400mb, High Quality", self.create_job, (3, 1400, True, 0, 0, 0)) )
 
         encoding_menu = menu.Menu(_('Choose your encoding profile'), menu_items)
         menuw.pushmenu(encoding_menu)
@@ -118,11 +118,11 @@ class PluginInterface(plugin.ItemPlugin):
         """
         #create a filename for the to-be-encoded dvd title
         #title = int(self.item.url[6:])
-        fname = join(config.VIDEO_ITEMS[0][1], "%s_%s.avi" % (self.item.parent.name, self.title))
+        fname = join(config.VIDEO_ITEMS[0][1], "%s_%s" % (self.item.parent.name, self.title))
         #_debug_('title=%s, fname=%s' % (title, fname))
         _debug_('arg=%r' % (arg, ))
         #unwrap settings tupple
-        vcodecnr, tgtsize, mpass, vbitrate = arg
+        vcodecnr, tgtsize, mpass, vbitrate, acodecnr, contnr = arg
 
         #we are going to create a job and send it to the encoding server, this can take some time while analyzing
 
@@ -144,7 +144,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.error(resp)
             return
 
-        container = resp[0]
+        container = resp[contnr]
 
         (status, resp) = self.server.setContainer(idnr, container)
         if not status:
@@ -173,7 +173,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.error(resp)
             return
 
-        acodec = resp[0]
+        acodec = resp[acodecnr]
 
         (status, resp) = self.server.setAudioCodec(idnr, acodec, 128)
 
