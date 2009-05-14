@@ -35,7 +35,6 @@ import tv.epg_xmltv
 import tv.epg_types
 from www.wap_types import WapResource, FreevoWapResource
 from www.web_types import RecordClientResource
-import _strptime as strptime
 
 class WRecResource(FreevoWapResource):
     def __init__(self):
@@ -64,8 +63,8 @@ class WRecResource(FreevoWapResource):
         # look for action to do an add
         if action:
             if action == 'add':
-                starttime = time.mktime(strptime.strptime(str(startdate)+" "+str(start)+":00",'%d/%m/%y %H:%M:%S'))
-                stoptime = time.mktime(strptime.strptime(str(startdate)+" "+str(stop)+":00",'%d/%m/%y %H:%M:%S'))
+                starttime = time.mktime(time.strptime(str(startdate)+' '+str(start)+':00', '%d/%m/%y %H:%M:%S'))
+                stoptime = time.mktime(time.strptime(str(startdate)+' '+str(stop)+':00', '%d/%m/%y %H:%M:%S'))
                 if stoptime < starttime:
                     stoptime = stoptime + 86400
                 prog = tv.epg_types.TvProgram()

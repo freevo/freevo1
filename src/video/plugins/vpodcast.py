@@ -425,7 +425,7 @@ class FeedTypeMRSS:
                 item.updated = pub_date is not None and pub_date.text or None
                 item.updated_parsed = None
                 if pub_date is not None:
-                    from tv.strptime import strptime
+                    from time.strptime import strptime
                     try: # used by
                         item.updated_parsed = strptime(pub_date.text, '%a, %d %b %Y %H:%M: %Z')
                     except ValueError:

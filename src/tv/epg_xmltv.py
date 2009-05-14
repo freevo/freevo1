@@ -39,8 +39,6 @@ import shutil
 import config
 import util
 
-import _strptime as strptime
-
 import tv.xmltv as xmltv
 
 # The EPG data types. They need to be in an external module in order for pickling
@@ -337,15 +335,11 @@ def timestr2secs_utc(timestr):
         if tz[0] == '+':
             adj_secs = - adj_secs
     else:
-        _debug_('Time spec %r has a timezone that cannot be parsed.' % timestr)
-        ## WARNING! BUG HERE!
-        # The line below is incorrect; the strptime.strptime function doesn't
-        # handle time zones. There is no obvious function that does. Therefore
-        # this bug is left in for someone else to solve.
-        #try:
-        #    secs = time.mktime(strptime.strptime(timestr, xmltv.date_format))
-        #except ValueError:
-        #    secs = time.mktime(strptime.strptime(timestr[:12], '%Y%m%d%H%M'))
+        _debug_('Time spec %r has a timezone that cannot be parsed.' % timestr, DWARNING)
+        try:
+            secs = time.mktime(time.strptime(timestr, xmltv.date_format))
+        except ValueError:
+            secs = time.mktime(time.strptime(timestr[:12], '%Y%m%d%H%M'))
     return adj_secs + secs
 
 
