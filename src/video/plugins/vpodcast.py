@@ -125,7 +125,7 @@ class PluginInterface(plugin.MainMenuPlugin):
                 _debug_('Invalid VPODCAST_LOCATIONS %r' % (location,), DWARNING)
                 continue
 
-            podcastdir = os.path.join(config.VPODCAST_DIR, _name_to_filename(name))
+            podcastdir = str(os.path.join(config.VPODCAST_DIR, _name_to_filename(name)))
             if not os.path.isdir(podcastdir):
                 os.makedirs(podcastdir)
 
