@@ -40,6 +40,7 @@ from subprocess import Popen, PIPE
 from pprint import pprint
 from copy import copy
 from string import split, join
+from util.misc import uniquify_filename
 
 import config
 import kaa.metadata
@@ -233,6 +234,7 @@ class EncodingJob:
         self.encodingopts = EncodingOptions()
         self.source = source
         self.output = output
+        self.temp_output = None #temporary output file for mencoder job
         self.name = friendlyname
         self.idnr = idnr
         self.titlenum = titlenum
@@ -319,13 +321,15 @@ class EncodingJob:
             return 'Unknown container format'
 
         self.container = container
+
+
+    def full_output_file_name(self):
         if hasattr(config, 'ENCODINGSERVER_SAVE_DIR') and config.ENCODINGSERVER_SAVE_DIR:
             if not os.path.exists(config.ENCODINGSERVER_SAVE_DIR):
                 os.makedirs(self.ENCODINGSERVER_SAVE_DIR, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
-            self.output = os.path.basename(self.output)
-            self.output = ('%s/%s.%s' % (config.ENCODINGSERVER_SAVE_DIR, self.output, self.container))
+            return ('%s/%s.%s' % (config.ENCODINGSERVER_SAVE_DIR, os.path.basename(self.output), self.container))
         else:
-            self.output = ('%s.%s' % (self.output, self.container))
+            return ('%s.%s' % (self.output, self.container))
 
 
     def setVideoCodec(self, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
@@ -818,7 +822,8 @@ class EncodingJob:
         if self.acodec != 'copy':
             args += [ mappings['acodec'][self.acodec][1],
                       mappings['acodec'][self.acodec][2] % self.abrate ]
-        args += [ '-o', output + '~incomplete~' ]
+        self.temp_output = uniquify_filename(output + '~incomplete~')
+        args += [ '-o', self.temp_output ]
 
         # don't pass video filter in we have none
         if len(vfilter) != 0:
@@ -1071,6 +1076,10 @@ class EncodingQueue:
 
         _debug_('PID %s' % self.currentjob.pid)
 
+        output=self.currentjob.full_output_file_name()
+        # check eventually that there is no file by the same name
+        unique_output = uniquify_filename(output)
+
         if self.currentjob.status == status.vpassfinal:
             _debug_('Job %s finished' % self.currentjob.idnr, DINFO)
             if self.currentjob.rmsource:
@@ -1081,9 +1090,9 @@ class EncodingQueue:
                     _debug_('Cannot remove file '+self.currentjob.source, DWARNING)
             #
             try:
-                os.rename(self.currentjob.output + '~incomplete~', self.currentjob.output)
+                os.rename(self.currentjob.temp_output, unique_output)
             except OSError :
-                _debug_('Cannot rename file to remove ~incomplete~ suffix '+self.currentjob.output, DWARNING)
+                _debug_('Cannot rename file to remove ~incomplete~ suffix '+self.currentjob.temp_output, DWARNING)
 
             #we are done with this job, remove it
             del self.qlist[0]

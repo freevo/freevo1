@@ -106,9 +106,8 @@ class PluginInterface(plugin.ItemPlugin):
         if item.type == 'video' and item.mode == 'file':
             self.item = item
             self.title = item.name
-            self.source = item.filename
-            (filename, extn) = os.path.splitext(item.filename)
-            self.output = filename
+            self.source = item.filename            
+            self.output = os.path.splitext(item.filename)[0]
             _debug_('item.__dict__:' % item.__dict__, 3)
             return [ (self.encoding_profile_menu, _('Transcode this program...')) ]
         return []
@@ -122,7 +121,8 @@ class PluginInterface(plugin.ItemPlugin):
         if attr == 'disp_title':
             return '%s' % (self.title)
         if attr == 'disp_filename':
-            return '%s' % (os.path.split(self.source)[1])+'.'+self.profile['container']
+            # note that this may later be changed by the uniquify_filename()
+            return '%s' % (os.path.splitext(os.path.basename(self.source))[0])+'.'+self.profile['container']
         elif attr == 'disp_container':
             return '%s' % (self.profile['container'])
         elif attr == 'disp_resolution':

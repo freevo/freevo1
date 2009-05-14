@@ -28,7 +28,7 @@
 #
 # -----------------------------------------------------------------------
 
-
+import string
 import glob
 import os, sys
 import string, re
@@ -40,6 +40,51 @@ from stat import *
 # Configuration file. Determines where to look for AVI/MP3 files, etc
 import config
 from vfs import abspath as vfs_abspath
+
+
+def uniquify_filename(filename,directory=None,extensions=None):
+    """Returns a filename so that there is no other file by
+    the same name in the directory (ignoring extensions); to achieve
+    this, it alters the given 'filename' possibly adding a '(N)' snippet
+    to the filename (before the extension) where N is a progressive
+    integer.  The provided 'filename' should have an extension.
+    If the provided filename is already unique, then it will be
+    unaltered.
+    If 'extensions' contains a list of extensions, then only files in
+    the directory with those extensions are considered (note that the
+    extensions must have a 'dot' in front). If 'filename' is not an
+    absolute path, the directory is specified in 'directory'.  
+    Example usage: uniquify_filename('/sbin/mkfs')
+    """        
+    assert type(extensions) == tuple or type(extensions) == list or \
+        extensions == None
+    if directory == None:
+        directory, filename = os.path.split(filename)
+    filename, ext = os.path.splitext(filename)
+    N=0
+    uniquifier = ''
+    # check if the uniquification scheme is already part of this filename;
+    # in case, strip it and use it as a base
+    if filename[-1] == ')':
+        j=string.rfind(filename,'(')
+        if j>=0:
+            try:
+                N = int(filename[j+1:-1])
+            except ValueError:
+                j = None
+            if j != None:
+                filename = filename[:j]
+                uniquifier = filename[j:]
+    files = []
+    for i in os.listdir(directory):
+        a,b=os.path.splitext(i)
+        if extensions == None or b in extensions:
+            files.append(a)
+    while (filename+uniquifier) in files:
+        N = N + 1
+        uniquifier = '(%d)' % N
+    return directory+os.path.sep+filename+uniquifier+ext
+
 
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/52560
 def unique(s):
