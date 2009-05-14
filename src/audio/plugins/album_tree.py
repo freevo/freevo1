@@ -79,6 +79,12 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     B{Configuration}
 
+    albumtree uses AUDIO_ALBUM_TREE_SPEC which is a list of selection criteria::
+
+        - name is the name in the menu
+        - spec is a list of selection criteria
+        - alt_grouping is the grouping of the tracks (group by)
+
     Edit your local_config.py and add this:
 
     | plugin.activate('audio.album_tree')
@@ -420,7 +426,6 @@ class TreeSpec(object):
             query = 'select %s, count() from music'% (self.spec[i], )
             query += wheresql
             query += ' group by %s order by %s'  % (grouping, grouping)
-
 
         return query
 

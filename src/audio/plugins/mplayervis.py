@@ -135,7 +135,8 @@ class MpvGoom(BaseAnimation):
 
         #pygoom.debug(2)
         BaseAnimation.__init__(self, (x, y, width, height), fps=100, bg_update=False, bg_redraw=False)
-        self.goom = pygoom.PyGoom(width, height, MMAP_FILE, songtitle=title or '')
+        # goom doesn't handle Unicode, so make it a string
+        self.goom = pygoom.PyGoom(width, height, MMAP_FILE, songtitle=String(title) or '')
         self.infodata = None
 
         self.fade_step = config.MPLAYERVIS_FADE_STEP
@@ -522,10 +523,10 @@ class PluginInterface(plugin.Plugin):
         self.message_fmt = config.MPLAYERVIS_MESSAGE_FMT
 
         # Event for changing between viewmodes
-        config.EVENTS['audio']['SUBTITLE'] = Event('TOGGLE_TITLE') #'l'
-        config.EVENTS['audio']['LANG'] = Event('TOGGLE_MESSAGE')   #'a'
-        config.EVENTS['audio']['ENTER'] = Event('TOGGLE_FPS')      #'ENTER'
-        config.EVENTS['audio']['DISPLAY'] = Event('CHANGE_MODE')   #'d'
+        config.EVENTS['audio']['SUBTITLE'] = Event('DISPLAY_TITLE')   #'l'
+        config.EVENTS['audio']['ENTER']    = Event('DISPLAY_MESSAGE') #'a'
+        config.EVENTS['audio']['LANG']     = Event('DISPLAY_FPS')     #'ENTER'
+        config.EVENTS['audio']['DISPLAY']  = Event('CHANGE_MODE')     #'d'
         config.EVENTS['audio']['+'] = Event('NEXT_VISUAL')
         config.EVENTS['audio']['-'] = Event('CHANGE_VISUAL', arg=-1)
         config.EVENTS['audio']['0'] = Event('CHANGE_VISUAL', arg=0)
@@ -618,19 +619,22 @@ class PluginInterface(plugin.Plugin):
             self.toggle_view()
             return True
 
-        elif event == 'TOGGLE_FPS':
+        elif event == 'DISPLAY_FPS':
             self.visual.showfps = not self.visual.showfps
             _debug_('showfps=%s' % (self.visual.showfps))
             return True
 
-        elif event == 'TOGGLE_TITLE':
-            self.title = not self.title and self.item.name or ''
+        elif event == 'DISPLAY_TITLE':
+            if not self.title:
+                self.title = self.item_info('%(t)s')
             _debug_('title=%s' % (self.title))
             self.visual.set_songtitle(self.title)
             return True
 
-        elif event == 'TOGGLE_MESSAGE':
-            self.message = not self.message and self.item_info(self.message_fmt) or ''
+        elif event == 'DISPLAY_MESSAGE':
+            #self.message = not self.message and self.item_info(self.message_fmt) or ''
+            if not self.message:
+                self.message = self.item_info(self.message_fmt)
             _debug_('message=%s' % (self.message))
             self.visual.set_message(self.message)
             return True
@@ -690,7 +694,8 @@ class PluginInterface(plugin.Plugin):
         artist   = info['artist']
         album    = info['album']
         trackno  = info['trackno']
-        year     = info['year']
+        trackof  = info['trackof']
+        year     = info['userdate'] if 'userdate' in info else info['year']
         length   = '%i:%02i' % (int(item.length/60), int(item.length%60)) if item.length else ''
         elapsed  = '%i:%02i' % (int(item.elapsed/60), int(item.elapsed%60)) if item.elapsed else ''
 
@@ -700,25 +705,27 @@ class PluginInterface(plugin.Plugin):
             'a' : artist,
             'l' : album,
             'n' : trackno,
+            'N' : trackof,
             'y' : year,
             's' : length,
             'e' : elapsed,
         }
         _debug_('song=%r' % (song,))
 
-        self.visual.messages = []
-        self.visual.message_index = 0
-        self.visual.message_counter = 1
-        if song['a']:
-            self.visual.messages.append(str('Artist: %(a)s' % song))
-        if song['l']:
-            self.visual.messages.append(str('Album: %(l)s' % song))
-        if song['n']:
-            self.visual.messages.append(str('Track: %(n)s' % song))
-        if song['y']:
-            self.visual.messages.append(str('Year: %(y)s' % song))
-        if song['t']:
-            self.visual.messages.append(str('%(t)s' % song))
+        if self.visual is not None:
+            self.visual.messages = []
+            self.visual.message_index = 0
+            self.visual.message_counter = 1
+            if song['a']:
+                self.visual.messages.append(str('Artist: %(a)s' % song))
+            if song['l']:
+                self.visual.messages.append(str('Album: %(l)s' % song))
+            if song['n']:
+                self.visual.messages.append(str('Track: %(n)s' % song))
+            if song['y']:
+                self.visual.messages.append(str('Year: %(y)s' % song))
+            if song['t']:
+                self.visual.messages.append(str('%(t)s' % song))
 
         if not fmt:
             if year:
@@ -800,6 +807,8 @@ class PluginInterface(plugin.Plugin):
 
             #if self.view == MpvMode.FULL:
             self.visual.set_info(self.item.name, 10)
+            self.title = None
+            self.message = None
 
             _debug_('self.visual.running=%r -> True' % (self.visual.running,))
             self.visual.running = True
@@ -821,6 +830,8 @@ class PluginInterface(plugin.Plugin):
         if self.visual:
             title = self.item.title if hasattr(self.item, 'title') else self.item.name
             self.visual.set_songtitle(title)
+            self.title = None
+            self.message = None
             if self.view == MpvMode.FULL:
                 skin.clear()
 
