@@ -620,7 +620,8 @@ class PluginInterface(plugin.Plugin):
             return True
 
         elif event == 'DISPLAY_FPS':
-            self.visual.showfps = not self.visual.showfps
+            if self.visual is not None:
+                self.visual.showfps = not self.visual.showfps
             _debug_('showfps=%s' % (self.visual.showfps))
             return True
 
@@ -628,7 +629,8 @@ class PluginInterface(plugin.Plugin):
             if not self.title:
                 self.title = self.item_info('%(t)s')
             _debug_('title=%s' % (self.title))
-            self.visual.set_songtitle(self.title)
+            if self.visual is not None:
+                self.visual.set_songtitle(self.title)
             return True
 
         elif event == 'DISPLAY_MESSAGE':
@@ -636,15 +638,17 @@ class PluginInterface(plugin.Plugin):
             if not self.message:
                 self.message = self.item_info(self.message_fmt)
             _debug_('message=%s' % (self.message))
-            self.visual.set_message(self.message)
+            if self.visual is not None:
+                self.visual.set_message(self.message)
             return True
 
         elif event == 'NEXT_VISUAL':
             PluginInterface.vis_mode += 1
             if PluginInterface.vis_mode > 9: PluginInterface.vis_mode = -1
             _debug_('vis_mode=%s' % (PluginInterface.vis_mode))
-            self.visual.set_visual(PluginInterface.vis_mode)
-            rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
+            if self.visual is not None:
+                self.visual.set_visual(PluginInterface.vis_mode)
+                rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
             return True
 
         elif event == 'CHANGE_VISUAL':
@@ -652,12 +656,13 @@ class PluginInterface(plugin.Plugin):
             if PluginInterface.vis_mode < -1: PluginInterface.vis_mode = -1
             if PluginInterface.vis_mode > 9: PluginInterface.vis_mode = 9
             _debug_('vis_mode=%s' % (PluginInterface.vis_mode))
-            self.visual.set_visual(PluginInterface.vis_mode)
-            rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
+            if self.visual is not None:
+                self.visual.set_visual(PluginInterface.vis_mode)
+                rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
             return True
 
         elif event == OSD_MESSAGE:
-            if self.visual: # and self.view == MpvMode.FULL:
+            if self.visual is not None: # and self.view == MpvMode.FULL:
                 self.visual.set_info(event.arg)
                 return True
 
@@ -778,7 +783,7 @@ class PluginInterface(plugin.Plugin):
         if rc.app() != self.player.eventhandler:
             rc.app(self.player)
 
-        if self.visual:
+        if self.visual is not None:
             self.stop_visual()
 
         if not self.player.playerGUI.visible:
@@ -827,7 +832,7 @@ class PluginInterface(plugin.Plugin):
     def resume_visual(self):
         _debug_('resume_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
         self.timer.stop()
-        if self.visual:
+        if self.visual is not None:
             title = self.item.title if hasattr(self.item, 'title') else self.item.name
             self.visual.set_songtitle(title)
             self.title = None
@@ -839,7 +844,7 @@ class PluginInterface(plugin.Plugin):
     def stop_visual(self):
         _debug_('stop_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
         self.timer.stop()
-        if self.visual:
+        if self.visual is not None:
             _debug_('self.visual.running=%r -> False' % (self.visual.running,))
             self.visual.timer.stop()
             self.visual.running = False
