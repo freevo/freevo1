@@ -48,8 +48,8 @@
 #include <stdio.h>
 #include <errno.h>
 
-#define HEXVERSION 0x000200f0L
-#define VERSION "0.2.0"
+#define HEXVERSION 0x000201f0L
+#define VERSION "0.2.1"
 
 static PyObject *ErrorObject;
 static int debug = 0;
