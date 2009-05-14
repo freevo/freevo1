@@ -37,12 +37,14 @@ from threading import Thread
 from time import sleep
 import sys, os, re #, ConfigParser, copy
 from subprocess import Popen, PIPE
-import pprint
+from pprint import pprint
+from copy import copy
+from string import split, join
 
 import config
 import kaa.metadata
-from copy import copy
-from string import split, join
+
+from childapp import ChildApp2
 
 
 #precompiled regular expression to obtain mencoder progress
@@ -446,7 +448,7 @@ class EncodingJob:
                 id_info[id_match.groups()[0]] = id_match.groups()[1]
 
         if config.DEBUG >= 2:
-            print 'id_info:',; pprint.pprint(id_info)
+            print 'id_info:',; pprint(id_info)
 
         self.id_info = id_info
 
@@ -917,6 +919,26 @@ class EncodingJob:
 
 
 
+class CommandThread2(ChildApp2):
+    def __init__():
+        pass
+
+
+    def stdout_cb(self, line):
+        """
+        parse the stdout of the mplayer process
+        """
+        pass
+
+
+    def stderr_cb(self, line):
+        """
+        parse the stderr of the mplayer process
+        """
+        pass
+
+
+
 class CommandThread(Thread):
     """
     Handle threading of external commands
@@ -938,7 +960,7 @@ class CommandThread(Thread):
 
     def run(self):
         _debug_(' '.join(self.command))
-        self.process = Popen(self.command, stdout=PIPE, stderr=PIPE, close_fds=True, universal_newlines=True)
+        self.process = Popen(['nice']+self.command, stdout=PIPE, stderr=PIPE, close_fds=True, universal_newlines=True)
         _debug_('%s thread running with PID %s' % (self.command[0], self.process.pid))
 
         output = self.process.stdout
@@ -1041,12 +1063,17 @@ class EncodingQueue:
 
         #get the first queued object
         self.currentjob = self.qlist[0]
+        #print 'self.currentjob:',; pprint(self.currentjob.__dict__)
+        #print 'self.currentjob.thread:',; pprint(self.currentjob.thread.__dict__)
+        print 'self.currentjob.idnr:', self.currentjob.idnr
+        print 'self.currentjob.status:', self.currentjob.status
+        print 'self.currentjob.thread.returncode:', self.currentjob.thread.returncode
 
         _debug_('PID %s' % self.currentjob.pid)
 
         if self.currentjob.status == status.vpassfinal:
             _debug_('Job %s finished' % self.currentjob.idnr, DINFO)
-            if self.currentjob.rmsource is True:
+            if self.currentjob.rmsource:
                 _debug_('Removing source: %s' % self.currentjob.source)
                 try:
                     os.remove(self.currentjob.source)
@@ -1136,7 +1163,7 @@ if __name__ == '__main__':
     elif command == '--analyze':
         encjob.info = kaa.metadata.parse(encjob.source)
         encjob._analyze_source()
-        pprint.pprint(encjob.__dict__)
+        pprint(encjob.__dict__)
     else:
         encjob.setVideoCodec('MPEG 4 (lavc)', '700', False, 0)
         encjob.setAudioCodec('MPEG 1 Layer 3 (mp3)', '160')
