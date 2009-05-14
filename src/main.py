@@ -470,7 +470,9 @@ if opts.debug:
 
 if opts.trace:
     # activate a trace function
-    tracefd = open(os.path.join(config.FREEVO_LOGDIR, 'trace.txt'), 'w')
+    tracefile = os.path.join(config.FREEVO_LOGDIR, 'trace.txt')
+    print 'tracing to %r' % (tracefile,)
+    tracefd = open(tracefile, 'w')
     sys.settrace(tracefunc)
 
 if opts.doc:
