@@ -142,7 +142,7 @@ def restart():
 
 class Font:
     def __init__(self, filename='', ptsize=0, font=None):
-        _debug_('Font.__init__(filename='', ptsize=0, font=None)', 1)
+        _debug_('Font.__init__(filename=%r, ptsize=%r, font=%r)' % (filename, ptsize, font), 1)
         _debug_('deprecated font object use', DWARNING)
         self.filename = filename
         self.ptsize   = ptsize
@@ -171,7 +171,7 @@ class OSDFont:
             return w
 
     def stringsize(self, s):
-        _debug_('stringsize(s=%r)' % (s,), 1)
+        _debug_('stringsize(s=%r)' % (s,), 2)
         if not s:
             return 0
         w = 0
@@ -181,7 +181,7 @@ class OSDFont:
 
 
     def __loadfont__(self, filename, ptsize):
-        _debug_('__loadfont__(filename=%r, ptsize=%r)' % (filename, ptsize), 1)
+        _debug_('__loadfont__(filename=%r, ptsize=%r)' % (filename, ptsize), 2)
         if os.path.isfile(filename):
             try:
                 return pygame.font.Font(filename, ptsize)
@@ -191,7 +191,7 @@ class OSDFont:
 
 
     def __getfont__(self, filename, ptsize):
-        _debug_('__getfont__(filename=%r, ptsize=%r)' % (filename, ptsize), 1)
+        _debug_('__getfont__(filename=%r, ptsize=%r)' % (filename, ptsize), 2)
         if config.OSD_FORCE_FONTNAME:
             filename = config.OSD_FORCE_FONTNAME
 
@@ -256,7 +256,7 @@ class BusyIcon(threading.Thread):
 
 
     def wait(self, timer):
-        _debug_('BusyIcon.wait(timer=%r)' % (timer,), 1)
+        _debug_('BusyIcon.wait(timer=%r)' % (timer,), 2)
         self.lock.acquire()
         try:
             self.active = True
@@ -267,14 +267,14 @@ class BusyIcon(threading.Thread):
 
 
     def stop(self):
-        _debug_('BusyIcon.stop()', 1)
+        _debug_('BusyIcon.stop()', 2)
         self.lock.acquire()
         self.active = False
         self.lock.release()
 
 
     def run(self):
-        _debug_('BusyIcon.run()', 1)
+        _debug_('BusyIcon.run()', 2)
         while True:
             self.mode_flag.clear()
             self.mode_flag.wait()
@@ -487,7 +487,7 @@ class OSD:
 
 
     def __find_current_widget__(self, widget):
-        _debug_('__find_current_widget__(widget=%r)' % (widget,), 1)
+        _debug_('__find_current_widget__(widget=%r)' % (widget,), 2)
         if not widget:
             return None
         if not hasattr(widget, 'menustack'):
@@ -758,7 +758,7 @@ class OSD:
         """
         Load an image from an imlib2 image object
         """
-        _debug_('_load_image_imlib2(data=%r)' % (data,), 1)
+        _debug_('_load_image_imlib2(data=%r)' % (data,), 2)
         if data.mode == 'BGRA':
             data.mode = 'RGBA'
         image = pygame.image.fromstring(str(data.get_raw_data(format=data.mode)), data.size, data.mode)
@@ -769,7 +769,7 @@ class OSD:
         """
         Load an image from a file name
         """
-        _debug_('_load_image_filename(url=%r)' % (url,), 1)
+        _debug_('_load_image_filename(url=%r)' % (url,), 2)
         if url[:8] == 'thumb://':
             filename = os.path.abspath(url[8:])
             thumbnail = True
@@ -807,14 +807,14 @@ class OSD:
             else:
                 try:
                     image = pygame.image.load(filename)
-                except pygame.error, e:
-                    _debug_('SDL image load problem: %s - trying imlib2' % e, DINFO)
+                except pygame.error, why:
+                    _debug_('SDL image load problem: %s - trying imlib2' % (why,), DINFO)
                     try:
                         i = kaa.imlib2.open(filename)
                         image = pygame.image.fromstring(i.tostring(), i.size, i.mode)
                         del i
                     except IOError, why:
-                        _debug_('imlib2 image load problem: %s' % (why), DERROR)
+                        _debug_('imlib2 image load problem: %s' % (why,), DERROR)
                         return None
 
         except SystemExit:
@@ -841,7 +841,7 @@ class OSD:
         @returns: pygame surfaceloadbitmap
         @rtype: Surface or None
         """
-        _debug_('loadbitmap(url=%r, cache=%r)' % (url, cache), 1)
+        _debug_('loadbitmap(url=%r, cache=%r)' % (url, cache), 2)
 
         if not pygame.display.get_init():
             return None
@@ -993,7 +993,7 @@ class OSD:
         """
         returns a copy of the given area of the current screen
         """
-        _debug_('getsurface(x=%r, y=%r, width=%r, height=%r, rect=%r)' % (x, y, width, height, rect), 1)
+        _debug_('getsurface(x=%r, y=%r, width=%r, height=%r, rect=%r)' % (x, y, width, height, rect), 2)
         self.mutex.acquire()
         try:
             if rect != None:
@@ -1008,7 +1008,7 @@ class OSD:
         """
         copy a surface to the screen
         """
-        _debug_('putsurface(surface=%r, x=%r, y=%r)' % (surface, x, y), 1)
+        _debug_('putsurface(surface=%r, x=%r, y=%r)' % (surface, x, y), 2)
         self.mutex.acquire()
         try:
             self.main_layer.blit(surface, (x, y))
@@ -1020,7 +1020,7 @@ class OSD:
         """
         blit the source to the screen
         """
-        _debug_('screenblit(source=%r, destpos=%r, sourcerect=%r)' % (source, destpos, sourcerect), 1)
+        _debug_('screenblit(source=%r, destpos=%r, sourcerect=%r)' % (source, destpos, sourcerect), 2)
         self.mutex.acquire()
         try:
             if sourcerect:
@@ -1044,7 +1044,7 @@ class OSD:
         """
         return cached font
         """
-        _debug_('getfont(font=%r, ptsize=%r)' % (font, ptsize), 1)
+        _debug_('getfont(font=%r, ptsize=%r)' % (font, ptsize), 2)
         key = (font, ptsize)
         try:
             return self.font_info_cache[key]
@@ -1063,7 +1063,7 @@ class OSD:
             - rest that didn't fit
             - True if this function stopped because of a <nl>.
         """
-        _debug_('__drawstringframed_line__(string, max_width, font, hard, ellipses, word_splitter)', 1)
+        _debug_('__drawstringframed_line__(string, max_width, font, hard, ellipses, word_splitter)', 2)
         c = 0                           # num of chars fitting
         width = 0                       # width needed
         ls = len(string)
@@ -1139,7 +1139,7 @@ class OSD:
         Helper for drawing a transparency gradient end for strings
         which don't fit it's content area.
         """
-        _debug_('__draw_transparent_text__(surface=%r, pixels=%r)' % (surface, pixels), 1)
+        _debug_('__draw_transparent_text__(surface=%r, pixels=%r)' % (surface, pixels), 2)
         try:
             opaque_mod = float(1)
             opaque_stp = opaque_mod/float(pixels)
@@ -1184,7 +1184,9 @@ class OSD:
         @param mode: the way we should break lines/truncate. Can be 'hard'(based on chars)
             or 'soft' (based on words)
         """
-        _debug_('drawstringframed(string, x, y, width, height, font, fgcolor, bgcolor, align_h, align_v, mode, layer, ellipses, dim)', 1)
+        _debug_('drawstringframed(string=%r, x=%r, y=%r, width=%r, height=%r, font=%r, fgcolor=%r, bgcolor=%r, ' \
+            'align_h=%r, align_v=%r, mode=%r, layer=%r, ellipses=%r, dim=%r)' % (
+            string, x, y, width, height, font, fgcolor, bgcolor, align_h, align_v, mode, layer, ellipses, dim), 2)
         if not pygame.display.get_init():
             return '', (x, y, x, y)
 
@@ -1410,7 +1412,7 @@ class OSD:
         """
         draw a string. This function is obsolete, please use drawstringframed
         """
-        _debug_('drawstring(string, x, y, fgcolor, bgcolor, font, ptsize, align, layer)', 1)
+        _debug_('drawstring(string, x, y, fgcolor, bgcolor, font, ptsize, align, layer)', 2)
         if not pygame.display.get_init():
             return None
 
@@ -1442,7 +1444,7 @@ class OSD:
         """
         help functions to save and restore a pixel for drawcircle
         """
-        _debug_('_savepixel(x, y, s)', 1)
+        _debug_('_savepixel(x, y, s)', 2)
         try:
             return (x, y, s.get_at((x, y)))
         except:
@@ -1453,7 +1455,7 @@ class OSD:
         """
         restore the saved pixel
         """
-        _debug_('_restorepixel(save, s)', 1)
+        _debug_('_restorepixel(save, s)', 2)
         if save:
             s.set_at((save[0], save[1]), save[2])
 
@@ -1465,7 +1467,7 @@ class OSD:
         they don't belong. This function stores the values and
         restores them
         """
-        _debug_('drawcircle(s, color, x, y, radius)', 1)
+        _debug_('drawcircle(s, color, x, y, radius)', 2)
         p1 = self._savepixel(x-1, y-radius-1, s)
         p2 = self._savepixel(x,   y-radius-1, s)
         p3 = self._savepixel(x+1, y-radius-1, s)
@@ -1488,7 +1490,7 @@ class OSD:
         """
         draw a round box
         """
-        _debug_('drawroundbox(x0, y0, x1, y1, color, border_size, border_color, radius, layer)', 1)
+        _debug_('drawroundbox(x0, y0, x1, y1, color, border_size, border_color, radius, layer)', 2)
         self.mutex.acquire()
         try:
             if not pygame.display.get_init():
@@ -1563,7 +1565,7 @@ class OSD:
         update the screen
         """
         _debug_('update(rect=%r, blend_surface=%r, blend_speed=%r, blend_steps=%r, blend_time=%r, stop_busyicon=%r)' % (
-            rect, blend_surface, blend_speed, blend_steps, blend_time, stop_busyicon), 1)
+            rect, blend_surface, blend_speed, blend_steps, blend_time, stop_busyicon), 2)
         if not pygame.display.get_init():
             return None
 
@@ -1617,7 +1619,7 @@ class OSD:
 
 
     def _helpscreen(self):
-        _debug_('_helpscreen()', 1)
+        _debug_('_helpscreen()', 2)
         if not pygame.display.get_init():
             return
 
