@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# mediamenu.py - Basic menu for all kinds of media
+# Basic menu for all kinds of media
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -220,8 +220,8 @@ class MediaMenu(Item):
             return
 
         item_menu = menu.Menu(menutitle, items,
-                              item_types = '%s main menu' % self.display_type,
-                              umount_all=1, reload_func = self.reload)
+                              item_types='%s main menu' % self.display_type,
+                              umount_all=1, reload_func=self.reload)
         item_menu.skin_force_text_view = force_text_view
         self.menuw = menuw
         menuw.pushmenu(item_menu)
