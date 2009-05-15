@@ -310,17 +310,16 @@ class LastFMItem(AudioItem):
                     raise LastFMError('Failed to download track', entry.location_url)
                 time.sleep(0.1)
             if not self.player:
-                self.player = PlayerGUI(self, self.menuw)
+                self.player = PlayerGUI(self, menuw=self.menuw, arg='next')
             error = self.player.play()
             if error:
                 raise LastFMError('Play error=%r' % (error,))
 
         except LastFMError, why:
             _debug_('play error: %s' % (why,), DWARNING)
-            if self.menuw:
-                AlertBox(text=str(why)).show()
-            rc.post_event(STOP)
-            return
+            #if self.menuw:
+            #    AlertBox(text=str(why)).show()
+            #rc.post_event(STOP)
 
 
     def stop(self, arg=None, menuw=None):
@@ -469,7 +468,6 @@ class LastFMWebServices:
         except urllib2.HTTPError, why:
             raise LastFMError(why, url)
         except Exception, why:
-            _debug_('%s' % (why,), DWARNING)
             raise LastFMError(why)
 
 

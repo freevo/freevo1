@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# mplayer.py - the Freevo MPlayer plugin for audio
+# the Freevo MPlayer plug-in for audio
 # -----------------------------------------------------------------------
 # $Id$
 #

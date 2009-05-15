@@ -35,6 +35,7 @@ Native Freevo MPlayer Audio Visualization Plugin
 __author__ = 'Viggo Fredriksen <viggo@katatonic.org>'
 
 import os, time
+from threading import Lock
 try:
     import pygoom
 except ImportError:
@@ -48,6 +49,7 @@ if not hasattr(pygoom, 'HEXVERSION') and pygoom.HEXVERSION < 0x000200f0:
 from pygame import Surface, Rect, image, transform
 from pygame.time import Clock
 import pygame
+from pprint import pformat
 
 # kaa modules
 from kaa import Timer, OneShotTimer
@@ -161,7 +163,6 @@ class MpvGoom(BaseAnimation):
         self.timer = Timer(self.goom_surface_update)
         self.last_time = 0
         self.message_counter = 1 # skip message at start
-        self.message_index = 0
         self.messages = []
 
 
@@ -330,7 +331,7 @@ class MpvGoom(BaseAnimation):
         Draw the info
         @param gooms: Goom surface
         """
-        _debug_('draw_info()')
+        _debug_('draw_info()', 2)
         if self.infodata is not None:
             (s, info, font, x, y, w, h) = self.infodata
             if time.time() - self.m_timer > self.m_timeout:
@@ -415,8 +416,7 @@ class MpvGoom(BaseAnimation):
             if self.mode == MpvMode.FULL:
                 if self.message_counter == 0:
                     if self.messages:
-                        self.goom.message = self.messages[self.message_index]
-                        self.message_index = (self.message_index + 1) % len(self.messages)
+                        self.goom.message = '\n'.join(self.messages)
                 self.message_counter = (self.message_counter + 1) % config.MPLAYERVIS_MSG_FRAMES
 
 
@@ -679,10 +679,11 @@ class PluginInterface(plugin.Plugin):
         This is only called if there is only one track to play
         """
         _debug_('_paused_handler')
+        #rc.post_event does not seem to work
         #rc.post_event(Event(STOP))
         self.stop_visual()
         # need to redraw the screen some how
-        #osd.update()
+        skin.redraw()
 
 
     def item_info(self, fmt=None):
@@ -692,15 +693,19 @@ class PluginInterface(plugin.Plugin):
         """
         _debug_('item_info(fmt=%r)' % (fmt,))
 
+        #print('self.item=\n%s' % (pformat(self.item.__dict__),))
+        #print('self.item.info=\n%s' % (pformat(self.item.info.__dict__),))
         item     = self.item
         info     = item.info
         image    = item.image
-        title    = info['title'] if 'title' in info else item.name
-        artist   = info['artist']
-        album    = info['album']
-        trackno  = info['trackno']
-        trackof  = info['trackof']
-        year     = info['userdate'] if 'userdate' in info else info['year']
+        title    = item.title if hasattr(item, 'title') else info['title'] if 'title' in info else item.name
+        artist   = item.artist if hasattr(item, 'artist') else info['artist']
+        album    = item.album if hasattr(item, 'album') else info['album']
+        trackno  = item.trackno if hasattr(item, 'trackno') else info['trackno']
+        trackof  = item.trackof if hasattr(item, 'trackof') else info['trackof']
+        year     = item.userdate if hasattr(item, 'userdate') else info['userdate'] if 'userdate' in info \
+            else info['year']
+        genre    = item.genre if hasattr(item, 'genre') else item['genre']
         length   = '%i:%02i' % (int(item.length/60), int(item.length%60)) if item.length else ''
         elapsed  = '%i:%02i' % (int(item.elapsed/60), int(item.elapsed%60)) if item.elapsed else ''
 
@@ -712,25 +717,32 @@ class PluginInterface(plugin.Plugin):
             'n' : trackno,
             'N' : trackof,
             'y' : year,
+            'g' : genre,
             's' : length,
             'e' : elapsed,
         }
-        _debug_('song=%r' % (song,))
+        _debug_('song=\n%s' % (pformat(song),))
 
         if self.visual is not None:
             self.visual.messages = []
-            self.visual.message_index = 0
             self.visual.message_counter = 1
-            if song['a']:
-                self.visual.messages.append(str('Artist: %(a)s' % song))
-            if song['l']:
-                self.visual.messages.append(str('Album: %(l)s' % song))
-            if song['n']:
-                self.visual.messages.append(str('Track: %(n)s' % song))
-            if song['y']:
-                self.visual.messages.append(str('Year: %(y)s' % song))
             if song['t']:
                 self.visual.messages.append(str('%(t)s' % song))
+            if song['a']:
+                self.visual.messages.append(str('%(a)s' % song))
+            if song['l']:
+                self.visual.messages.append(str('%(l)s' % song))
+            if song['n'] and song['N']:
+                self.visual.messages.append(str('%(n)s/%(N)s' % song))
+            elif song['n']:
+                self.visual.messages.append(str('%(n)s' % song))
+            if song['g']:
+                self.visual.messages.append(str('%(g)s' % song))
+            if song['y']:
+                self.visual.messages.append(str('%(y)s' % song))
+            # the last line of messages will stay in the middle of the screen
+            # this will cause all message to scroll off the top of the screen
+            self.visual.messages.append('')
 
         if not fmt:
             if year:
@@ -794,18 +806,19 @@ class PluginInterface(plugin.Plugin):
 
     def start_visual(self):
         _debug_('start_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
-        if self.player.playerGUI.succession != PlayListSuccession.FIRST:
-            return
+        #if self.player.playerGUI.succession != PlayListSuccession.FIRST:
+        #    return
         
-        if self.visual and self.visual.running:
+        self.timer.stop()
+
+        if self.visual is not None and self.visual.running:
             return
 
         if self.view == MpvMode.NOVI:
             return
 
         if rc.app() == self.player.eventhandler:
-            title = self.item.title if hasattr(self.item, 'title') and self.item.title else \
-                  self.item.name
+            title = self.item.title if hasattr(self.item, 'title') and self.item.title else self.item.name
             self.visual = MpvGoom(300, 300, 150, 150, title, self.item.image)
             if self.visual is None:
                 raise Exception('Cannot initialise MpvGoom')
@@ -826,7 +839,7 @@ class PluginInterface(plugin.Plugin):
 
     def pause_visual(self):
         _debug_('pause_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
-        self.timer.start(3)
+        self.timer.start(5)
 
 
     def resume_visual(self):
@@ -839,6 +852,8 @@ class PluginInterface(plugin.Plugin):
             self.message = None
             if self.view == MpvMode.FULL:
                 skin.clear()
+        else:
+            self.start_visual()
 
     
     def stop_visual(self):
@@ -852,7 +867,6 @@ class PluginInterface(plugin.Plugin):
             self.visual = None
             self.goom = None
         osd.active = True
-        #if self.view == MpvMode.FULL:
         skin.resume()
 
 
