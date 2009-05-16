@@ -79,8 +79,9 @@ class RecordResource(FreevoResource):
                 fv.printHeader('Scheduled Recordings', 'styles/main.css')
                 fv.printMessagesFinish(
                     ['<b>'+_('ERROR') + '</b>: ' + \
-                      _('No program found on %s at %s.') % \
-                           ('<b>'+chan+'</b>', '<b>'+time.strftime('%x %X', time.localtime(int(start)))+'</b>')+\
+                      _('No program found on %(chan)s at %(start)s.') % ({
+                        'chan': '<b>'+chan+'</b>',
+                        'start': '<b>'+time.strftime('%x %X', time.localtime(int(start)))+'</b>'})+\
                        (' <i>(%s)</i>' % String(prog))])
                 return String(fv.res)
 

@@ -200,12 +200,12 @@ class LibraryResource(FreevoResource):
                         else:
                             try:
                                 os.rename(file_loc, newfile_loc)
-                                messages += [ _( 'Rename %s to %s.' ) % \
-                                    ('<b>'+file_loc+'</b>', '<b>'+newfile_loc+'</b>') ]
+                                messages += [ _( 'Rename %(src)s to %(dst)s.' ) % ({
+                                    'src': '<b>'+file_loc+'</b>', 'dst': '<b>'+newfile_loc+'</b>'}) ]
                             except OSError, e:
-                                messages += [ _( '<h2>%s</h2>' ) % str(e) ]
-                                messages += [ _( 'Rename %s to %s, failed.' ) % \
-                                    ('<b>'+file_loc+'</b>', '<b>'+newfile_loc+'</b>') ]
+                                messages += [ '<h2>%s</h2>' % str(e) ]
+                                messages += [ _( 'Rename %(src)s to %(dst)s, failed.' ) % ({
+                                    'src': '<b>'+file_loc+'</b>', 'dst': '<b>'+newfile_loc+'</b>'}) ]
                     else:
                         messages += [ '<b>'+_('ERROR')+'</b>: '+_('No new file specified.') ]
 
@@ -219,7 +219,7 @@ class LibraryResource(FreevoResource):
                             os.unlink(file_loc_fxd)
                             messages += [ _('Delete %s.') % ('<b>'+file_loc_fxd+'</b>') ]
                     except OSError, e:
-                        messages += [ _( '<h2>%s</h2>' ) % str(e) ]
+                        messages += [ '<h2>%s</h2>' % str(e) ]
                         messages += [ _( 'Delete %s, failed.' ) % ('<b>'+file_loc+'</b>') ]
 
                 elif action == 'download':

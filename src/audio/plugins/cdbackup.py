@@ -205,7 +205,8 @@ class PluginInterface(plugin.ItemPlugin):
     def show_status(self, arg=None, menuw=None):
         t = self.rip_thread
         if t.current_track != -1:
-            pop = AlertBox(text=_('Ripping in progress\nTrack %d of %d') % (t.current_track, t.max_track))
+            pop = AlertBox(text=_('Ripping in progress\nTrack %(current)d of %(total)d') % ({
+                'current': t.current_track, 'total': t.max_track}))
             pop.show()
 
 
@@ -338,7 +339,8 @@ class main_backup_thread(threading.Thread):
                 _debug_(_('Directory %s already exists') % pathname)
             else:
                 # FIXME: popup
-                _debug_(_('Cannot rip to "%s"! (%s)') % (pathname, e.strerror))
+                _debug_(_('Cannot rip to "%(file)s"! (%(why)s)') % ({
+                    'file': pathname, 'why': e.strerror}))
 
         try:
             mycoverart = '%s/mmpython/disc/%s.jpg' % (config.FREEVO_CACHEDIR, discid)

@@ -509,7 +509,8 @@ class VPVideoItem(VideoItem):
                     AlertBox(text=_('Fetching "%s" failed\nNo data') % self.filename).show()
                     return
             except youtube.DownloadError, why:
-                AlertBox(text=_('Fetching "%s" failed:\n%s') % (self.filename, why)).show()
+                AlertBox(text=_('Fetching "%(filename)s" failed:\n%(why)s') % ({
+                    'filename': self.filename, 'why': why})).show()
                 return
 
         # call the play funuction of VideoItem

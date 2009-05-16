@@ -70,9 +70,11 @@ class PluginInterface(plugin.ItemPlugin):
             if (totalspace == 0): # no space perhaps a bad path
                 diskfree = _( 'Bad Path' )
             elif (totalspace > 1073741824): # more than 1024 Mb
-                diskfree = _( '%i free of %i GB total (%i%% free)' ) % (freespacegb, totalspacegb, percentage)
+                diskfree = _( '%(freespace)i free of %(totalspace)i GB total (%(percentage)i%% free)' ) % ({
+                    'freespace': freespacegb, 'totalspace': totalspacegb, 'percentage': percentage})
             else:
-                diskfree = _( '%i free of %i MB total (%i%% free)' ) % (freespacemb, totalspacemb, percentage)
+                diskfree = _( '%(freespace)i free of %(totalspace)i MB total (%(percentage)i%% free)' ) % ({
+                    'freespace': freespacemb, 'totalspace': totalspacemb, 'percentage': percentage})
             return  [ ( self.dud, diskfree) ]
         else:
             return []

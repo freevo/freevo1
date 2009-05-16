@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # LastFM radio player plug-in (http://www.last.fm/listen)
 # -----------------------------------------------------------------------
-# $Id$
+# $Id: lastfm2.py 11512 2009-05-15 19:46:46Z duncan $
 #
 # Notes: For the API 1.2
 # http://code.google.com/p/thelastripper/wiki/LastFM12UnofficialDocumentation
@@ -284,8 +284,8 @@ class LastFMItem(AudioItem):
             self.location_url = entry.location_url
             self.length = entry.duration
             basename = os.path.join(config.LASTFM_DIR, entry.artist, entry.album, entry.title)
-            self.basename = basename.lower().replace(' ', '_').\
-                replace('.', '').replace('\'', '').replace(':', '').replace(',', '')
+            self.basename = str(basename.lower().replace(' ', '_').\
+                replace('.', '').replace('\'', '').replace(':', '').replace(',', ''))
             if not os.path.exists(os.path.dirname(self.basename)):
                 _debug_('make directory %r' % (os.path.dirname(self.basename),), DINFO)
                 os.makedirs(os.path.dirname(self.basename), 0777)

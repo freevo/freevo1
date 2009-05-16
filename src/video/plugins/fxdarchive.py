@@ -132,7 +132,7 @@ class PluginInterface(plugin.ItemPlugin):
                         msg = _("But I couldn't copy a cover image file.")
             self.ismovie = False
         box.destroy()
-        box = PopupBox(text=_('%d fxd files archived. %s') % (self.nfiles, msg))
+        box = PopupBox(text=_('%(nfiles)d fxd files archived. %(msg)s') % ({'nfiles': self.nfiles, 'msg': msg}))
         box.show()
         time.sleep(3)
         box.destroy()

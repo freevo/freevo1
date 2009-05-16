@@ -633,8 +633,8 @@ class VideoItem(Item):
 
             elif not result:
                 # No media at all was found: error
-                ConfirmBox(text=(_('No media found for "%s".\nPlease insert the media "%s".')) %
-                     (self.name, self.media_id), handler=self.play).show()
+                ConfirmBox(text=(_('No media found for "%(name)s".\nPlease insert the media "%(media_id)s".')) %
+                     ({'name': self.name, 'media_id': self.media_id}), handler=self.play).show()
             return
 
         # normal plackback of one file
@@ -646,8 +646,8 @@ class VideoItem(Item):
                     util.mount(mountdir)
                 else:
                     self.menuw.show()
-                    ConfirmBox(text=(_('No media found for "%s".\nPlease insert the media "%s".')) % \
-                        (file, self.media_id), handler=self.play).show()
+                    ConfirmBox(text=(_('No media found for "%(file)s".\nPlease insert the media "%(media_id)s".')) % \
+                        ({'file': file, 'media_id': self.media_id}), handler=self.play).show()
                     return
 
             elif self.media:
@@ -660,8 +660,8 @@ class VideoItem(Item):
                 self.media = media
             else:
                 self.menuw.show()
-                ConfirmBox(text=(_('No media found for "%s".\nPlease insert the media "%s".')) % \
-                    (self.media_id, self.url), handler=self.play).show()
+                ConfirmBox(text=(_('No media found for "%(media_id)s".\nPlease insert the media "%(url)s".')) % ({
+                    'media_id': self.media_id, 'url': self.url}), handler=self.play).show()
                 return
 
         mplayer_options = self.mplayer_options.split(' ')

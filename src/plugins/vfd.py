@@ -295,7 +295,7 @@ class PluginInterface(plugin.DaemonPlugin):
         attempts = 3
         while attempts > 0:
             try:
-                _debug_(_("Sending data %r attempt=%d"%(data,4-attempts)), 2)
+                _debug_("Sending data %r attempt=%d" % (data, 4-attempts), 2)
                 time.sleep(self.sleepLength)
                 r=self.vfd.controlMsg(0x21,   # Message to Class Interface
                                0x09,

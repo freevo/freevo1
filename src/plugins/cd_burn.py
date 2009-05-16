@@ -181,9 +181,9 @@ class BurnCDItem:
         _debug_('check_program(program=%r, program_name=%r)' % (program, program_name))
         if not (os.path.exists(program) and os.path.isfile(program) and os.access(program, os.X_OK)):
             _debug_("Program Error")
-            AlertBox(text=_('Cannot find %s (%s). '+\
-                'Please configure the right path in your config file and make sure it has the right permissions.' \
-                % (program_name, program)), handler=self.menu_back).show()
+            AlertBox(text=_('Cannot find %(program_name)s (%(program)s). '+\
+                'Please configure the right path in your config file and make sure it has the right permissions.' % ({
+                    'program_name': program_name, 'program': program})), handler=self.menu_back).show()
             return 0
         else:
             return 1
@@ -269,8 +269,8 @@ class BurnCDItem:
                 c = os.stat(a)[ST_SIZE]
                 t_sum = t_sum + (int(c)/1024/1024)
 
-            ConfirmBox(text=_('Start burning %s entries? ( %d Mb )') % (t_files, t_sum),
-                     handler=self.start_burning, default_choice=0).show()
+            ConfirmBox(text=_('Start burning %(num)s entries? ( %(size)d Mb )') % ({
+                'num': t_files, 'size': t_sum}), handler=self.start_burning, default_choice=0).show()
 
 
     def clean_up_burndir(self):

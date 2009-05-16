@@ -91,8 +91,10 @@ class IndexResource(FreevoResource):
         else:
             fv.res += '<p class="normal">'+_('No programs scheduled to record.')+'</p>\n'
 
-        diskfree = _('%i of %i Mb free in %s') % (((util.freespace(config.TV_RECORD_DIR) / 1024) / 1024), \
-            ((util.totalspace(config.TV_RECORD_DIR) /1024) /1024), config.TV_RECORD_DIR)
+        diskfree = _('%(free)i of %(total)i Mb free in %(dir)s') % ({
+            'free': ((util.freespace(config.TV_RECORD_DIR) / 1024) / 1024),
+            'total': ((util.totalspace(config.TV_RECORD_DIR) /1024) /1024),
+            'dir': config.TV_RECORD_DIR})
         fv.res += '<p class="normal">' + diskfree + '</p>\n'
         fv.res += '</div>'
         fv.printWebRemote()
