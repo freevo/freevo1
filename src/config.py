@@ -615,7 +615,13 @@ elif CONF.display == 'dxr3':
 #
 if os.path.isfile(os.environ['FREEVO_CONFIG']):
     _debug_('Loading cfg: %s' % os.environ['FREEVO_CONFIG'])
-    execfile(os.environ['FREEVO_CONFIG'], globals(), locals())
+    _debug_('Loading freevo configuration file: "%s"' % os.environ['FREEVO_CONFIG'], DINFO)
+    try:
+        execfile(os.environ['FREEVO_CONFIG'], globals(), locals())
+    except Exception, why:
+        traceback.print_exc()
+        raise SystemExit
+    _debug_('Loaded freevo configuration file: "%s"' % os.environ['FREEVO_CONFIG'], DINFO)
 else:
     print
     print "Error: %s: no such file" % os.environ['FREEVO_CONFIG']
@@ -630,12 +636,15 @@ for dirname in cfgfilepath:
     overridefile = dirname + '/local_conf.py'
     _debug_('Trying local configuration file "%s"...' % overridefile)
     if os.path.isfile(overridefile):
-        _debug_('Loading local configuration file "%s"' % overridefile, DINFO)
-        #new_globals = {}
-        new_locals = {}
-        execfile(overridefile, globals(), new_locals)
-        #globals().update(new_globals)
-        locals().update(new_locals)
+        _debug_('Loading local configuration file: "%s"' % overridefile, DINFO)
+        our_locals = {}
+        try:
+            execfile(overridefile, globals(), our_locals)
+        except Exception, why:
+            traceback.print_exc()
+            raise SystemExit
+        locals().update(our_locals)
+        _debug_('Loaded local configuration file: "%s"' % overridefile, DINFO)
 
         try:
             CONFIG_VERSION
