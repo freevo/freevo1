@@ -5,6 +5,9 @@
 # $Id$
 #
 # Notes:
+#   There are two ways to get the radar map:
+#     - parse the link http://www.weather.com/outlook/travel/businesstraveler/map/<zip>?from=LAPmaps&bypassredirect=true
+#     - look in the http://cgi.weather.com/looper/archive/ directory for the latest image
 #
 # Todo:
 #   - i18n support
@@ -137,10 +140,9 @@ def wget(url):
     _debug_('wget(%s)' % (url), 2)
     txdata = None
     txheaders = {
-        'User-Agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.4) Gecko/2008102920 Firefox/3.0.4'
-
+        'User-Agent' : 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10'
     }
-    print 'getting url %r...' % (url)
+    _debug_('getting url %r...' % (url), DINFO)
     req = urllib2.Request(url, txdata, txheaders)
     try:
         t1 = time.time()
@@ -153,16 +155,16 @@ def wget(url):
         if response.msg == 'OK':
             return data
         _debug_('Downloaded "%s" in %.1f seconds' % (url, t2 - t1))
-    except urllib2.HTTPError, error:
-        print 'getting %r failed: %s' % (url, error)
-    except ValueError, error:
+    except urllib2.HTTPError, why:
+        _debug_('Download of %r failed: %s' % (url, why), DWARNING)
+    except ValueError, why:
         try:
             fd = open(url)
             data = fd.read()
             fd.close()
             return data
         except:
-            print 'invalid url %r failed: %s' % (url, error)
+            _debug_('invalid url %r failed: %s' % (url, why), DWARNING)
     return None
 
 
@@ -235,7 +237,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('ONECLICK_URL_CURC', 'http://ff.1click.weather.com/weather/local/%s?cc=*%s', 'Current Conditions URL'),
             ('ONECLICK_URL_DAYF', 'http://ff.1click.weather.com/weather/local/%s?dayf=5%s', 'Day Forecast URL'),
             ('ONECLICK_URL_ELOC', 'http://ff.1click.weather.com/weather/local/%s?eloc=st', 'Extended Location URL'),
-            ('ONECLICK_URL_MAP',  'http://www.weather.com/weather/map/%s?from=LAPmaps', 'Radar Map URL')
+            ('ONECLICK_URL_MAP',  'http://www.weather.com/weather/map/%s?from=LAPmaps&bypassredirect=true', 'Radar Map URL')
         ]
 
     def items(self, parent):
@@ -337,8 +339,7 @@ class WeatherItem(Item):
         self.cacheCurrent = '%s/current.pickle' % (self.cacheDir)
         self.cacheForecast = '%s/forecast.pickle' % (self.cacheDir)
         self.mapFile = '%s/map.jpeg' % (self.cacheDir)
-        self.mapPage1 = '%s/mappage1.html' % (self.cacheDir)
-        self.mapPage2 = '%s/mappage2.html' % (self.cacheDir)
+        self.mapPage = '%s/mappage.html' % (self.cacheDir)
         if not os.path.isdir(self.cacheDir):
             os.mkdir(self.cacheDir, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
         self.last_update = 0
@@ -359,7 +360,7 @@ class WeatherItem(Item):
                 self.loadFromCache()
         except IOError, e:
             self.error = 1
-            print "failed to update data for '%s': %s" % (self.location, e)
+            _debug_("failed to update data for '%s': %s" % (self.location, e), DWARNING)
         else:
             # set the last update timestamp
             self.last_update = os.path.getmtime(self.cacheCurrent)
@@ -367,8 +368,8 @@ class WeatherItem(Item):
             # now convert the self.weatherData structure to parsable information
             try:
                 self.convertWeatherData()
-            except Exception, error:
-                print 'Failed to convert data for %s: %s' % (self.location, error)
+            except Exception, why:
+                _debug_('Failed to convert data for %s: %s' % (self.location, why), DWARNING)
 
 
     def needsRefresh(self):
@@ -393,16 +394,16 @@ class WeatherItem(Item):
             try:
                 elocationData = wget(self.url_eloc)
                 self.elocationData = elocationData
-            except Exception, error:
-                print 'Failed to get extended location data for %s: %s' % (self.location, error)
+            except Exception, why:
+                _debug_('Failed to get extended location data for %s: %s' % (self.location, why), DWARNING)
         else:
             self.elocationData = util.read_pickle(self.cacheElocation)
 
         try:
             self.currentData = wget(self.url_curc)
             #print 'currentData:', self.currentData
-        except Exception, error:
-            print 'Failed to get the current conditions data for %s: %s' % (self.location, error)
+        except Exception, why:
+            _debug_('Failed to get the current conditions data for %s: %s' % (self.location, why), DWARNING)
             if os.path.isfile(self.cacheCurrent):
                 self.currentData = util.read_pickle(self.cacheCurrent)
             else:
@@ -410,8 +411,8 @@ class WeatherItem(Item):
         try:
             self.forecastData = wget(self.url_dayf)
             #print 'forecastData:', self.forecastData
-        except Exception, error:
-            print 'Failed to get the forecast data for %s: %s' % (self.location, error)
+        except Exception, why:
+            _debug_('Failed to get the forecast data for %s: %s' % (self.location, why), DWARNING)
             if os.path.isfile(self.cacheForecast):
                 self.forecastData = util.read_pickle(self.cacheForecast)
             else:
@@ -440,8 +441,9 @@ class WeatherItem(Item):
                 try:
                     self.weatherMapData = wget(self.mapuri)
                     self.saveMapToCache()
-                except Exception, error:
-                    print 'Cannot download the map for "%s" from %s: %s' % (self.location, self.mapuri, error)
+                except Exception, why:
+                    _debug_('Cannot download the map for "%s" from %s: %s' % (self.location, self.mapuri, why),
+                        DWARNING)
                 return
             finally:
                 if GUI:
@@ -453,32 +455,20 @@ class WeatherItem(Item):
                 popup.show()
             # get the first web page
             weatherPage = wget(self.mapurl)
-            if config.DEBUG:
-                f = open(self.mapPage1, 'w')
+            if config.DEBUG and weatherPage:
+                f = open(self.mapPage, 'w')
                 f.write(weatherPage)
                 f.close()
             try:
                 # find link to map page
-                regexp = re.compile ('if \(isMinNS4\) var mapNURL = "([^"]*)";', re.IGNORECASE)
+                regexp = re.compile('NAME="mapImg"\s*SRC="([^"]*)"', re.IGNORECASE|re.MULTILINE)
                 results = regexp.search(weatherPage)
-                print 'weatherPage=%r' % (results.groups())
-                weatherPage2 = "http://www.weather.com/%s" % (results.groups()[0])
-
-                mapPage = wget(weatherPage2)
-                if config.DEBUG:
-                    f = open(self.mapPage2, 'w')
-                    f.write(weatherPage)
-                    f.close()
-                # find a link to the real weather map
-                regexp = re.compile('<img NAME="mapImg" SRC="(http://image.weather.com[^"]*jpg)"', re.IGNORECASE)
-                results = regexp.search(mapPage)
-                print 'mapPage=%r' % (results.groups())
                 self.mapuri = results.groups()[0]
                 self.weatherMapData = wget(self.mapuri)
                 self.saveMapToCache()
                 return
-            except Exception, error:
-                print 'Cannot download the map for "%s" from %s: %s' % (self.location, self.mapurl, error)
+            except Exception, why:
+                _debug_('Cannot download the map for "%s" from %s: %s' % (self.location, self.mapurl, why), DWARNING)
 
         finally:
             if GUI:
@@ -497,8 +487,8 @@ class WeatherItem(Item):
                 imgfd = os.open(self.mapFile, os.O_CREAT|os.W_OK)
                 os.write(imgfd, self.weatherMapData)
                 os.close(imgfd)
-        except Exception, error:
-            print 'failed saving weather map to cache "%s": %s' % (self.mapFile, error)
+        except Exception, why:
+            _debug_('failed saving weather map to cache "%s": %s' % (self.mapFile, why), DWARNING)
 
     def loadFromCache(self):
         """ load the data and the map from the cache """
@@ -509,8 +499,8 @@ class WeatherItem(Item):
 
         try:
             size = int(os.stat(self.mapFile)[6])
-        except Exception, error:
-            _debug_('failed loading weather map for "%s" from cache: %s' % (self.location, error), DWARNING)
+        except Exception, why:
+            _debug_('failed loading weather map for "%s" from cache: %s' % (self.location, why), DWARNING)
             pass
         else:
             imgfd = os.open(self.mapFile, os.R_OK)
@@ -674,7 +664,7 @@ class WeatherItem(Item):
             self.city = dnam[0]
             self.state = ''
             self.country = dnam[1]
-        print 'city=%s, state=%s, country=%s' % (self.city, self.state, self.country)
+        _debug_('city=%s, state=%s, country=%s' % (self.city, self.state, self.country), DINFO)
 
         # reset variables
         self.date = []
@@ -746,7 +736,7 @@ class WeatherItem(Item):
                 icon = os.path.join(WEATHER_DIR, WEATHER_ICONS[num][2])
         if not os.path.isfile(icon):
             icon = os.path.join(WEATHER_DIR, WEATHER_ICONS['na'][0])
-        print '%s: %s %s' % (num, icon, os.path.split(WEATHER_ICONS[num][0])[1])
+        _debug_('%s: %s %s' % (num, icon, os.path.split(WEATHER_ICONS[num][0])[1]))
         return icon
 
 
@@ -755,7 +745,7 @@ class WeatherItem(Item):
         _debug_('getMoonImage()', 2)
 
         icon = os.path.join(WEATHER_DIR, 'moons', '%s.png' % (num))
-        print '%s: %s' % (num, icon)
+        _debug_('%s: %s' % (num, icon), DINFO)
         return icon
 
 
@@ -992,13 +982,13 @@ class WeatherBaseScreen(skin.Area):
             lines.append('%s:' % (_('Tonight')))
             lines.append('  %s: %s' % (_('Sunset'), weather.getSunset()))
             lines.append('  %s: %s' % (_('Moon Phase'), weather.getMoonPhase()))
-        except Exception, error:
-            print error
+        except Exception, why:
+            _debug_(why, DWARNING)
             import traceback, sys
             output = apply(traceback.format_exception, sys.exc_info())
             output = ''.join(output)
             output = urllib.unquote(output)
-            print output
+            _debug(output)
 
         y = y_start
         for line in lines:
@@ -1011,8 +1001,8 @@ class WeatherBaseScreen(skin.Area):
             y_start = self.content.y + self.yscale(300)
             #self.draw_image(weather.getMoonImage(weather.getMoonIcon()),
             #(x_start, y_start, self.xscale(90), self.yscale(90)))
-        except Exception, error:
-            print error
+        except Exception, why:
+            _debug_(why, DWARNING)
 
 
     def week_item(self, x, y, text, font, width=90, align='center'):
