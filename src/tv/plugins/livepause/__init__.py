@@ -164,6 +164,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Gets the required configuration variables
         """
+        from tv.plugins.livepause import backend
         return [('LIVE_PAUSE2_BUFFER_PATH', '/tmp/freevo/livepause', 'Location of the buffer file used for pausing live TV'),
                 ('LIVE_PAUSE2_BUFFER_SIZE', 2048, 'Maximum size of the pause buffer in MB. (Default 2GB)'),
                 ('LIVE_PAUSE2_BUFFER_TIMEOUT', 5*60, 'Timeout to disable buffering after exiting watching tv'),
