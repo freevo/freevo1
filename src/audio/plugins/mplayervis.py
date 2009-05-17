@@ -593,24 +593,24 @@ class PluginInterface(plugin.Plugin):
         if plugin.isevent(event) == 'DETACH':
             PluginInterface.detached = True
             self.stop_visual()
-            
+
         elif plugin.isevent(event) == 'ATTACH':
             PluginInterface.detached = False
             self.start_visual()
-            
+
         elif event == PLAY_START:
             if self.player.playerGUI.succession == PlayListSuccession.FIRST:
                 self.start_visual()
             else:
                 self.resume_visual()
             self.item_info(self.message_fmt)
-                
+
         elif event == PLAY_END:
             if self.player.playerGUI.succession == PlayListSuccession.LAST:
                 self.stop_visual()
             else:
                 self.pause_visual()
-                
+
         elif event == STOP:
             PluginInterface.detached = False
             self.stop_visual()
@@ -808,7 +808,7 @@ class PluginInterface(plugin.Plugin):
         _debug_('start_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
         #if self.player.playerGUI.succession != PlayListSuccession.FIRST:
         #    return
-        
+
         self.timer.stop()
 
         if self.visual is not None and self.visual.running:
@@ -855,7 +855,7 @@ class PluginInterface(plugin.Plugin):
         else:
             self.start_visual()
 
-    
+
     def stop_visual(self):
         _debug_('stop_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
         self.timer.stop()

@@ -80,7 +80,7 @@ class EditFavoriteResource(FreevoResource):
                 fv.printMessagesFinish(
                     [ '<b>'+_('ERROR') + '</b>: ' + \
                       ( _('No program found on %(chan)s at %(start)s.') % ({
-                        'chan': '<b>'+chan+'</b>', 
+                        'chan': '<b>'+chan+'</b>',
                         'start': '<b>'+time.strftime('%x %X', time.localtime(int(start))) + '</b>'})
                       ) + ' <i>(%s)</i>' % String(prog)
                     ])

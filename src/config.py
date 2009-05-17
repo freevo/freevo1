@@ -97,7 +97,7 @@ class Logger:
         if not appname:
             appname = 'prompt'
         try:
-            self.logfile = '%s/%s-%s.log' % (FREEVO_LOGDIR, appname, os.getuid())
+            self.logfile = os.path.join(FREEVO_LOGDIR, '%s-%s.log' % (appname, os.getuid()))
             self.fp = open(self.logfile, 'a')
             logging.basicConfig(level=LOGGING, \
                 #datefmt='%a, %H:%M:%S',
@@ -528,7 +528,7 @@ _debug_('CACHEDIR: %s %s' % (OS_CACHEDIR, FREEVO_CACHEDIR), DINFO)
 # Check that freevo_config.py is not found in the config file dirs
 #
 for dirname in cfgfilepath[1:]:
-    freevoconf = dirname + '/freevo_config.py'
+    freevoconf = os.path.join(dirname, 'freevo_config.py')
     if os.path.isfile(freevoconf):
         print (('\nERROR: freevo_config.py found in %s, please remove it ' +
                 'and use local_conf.py instead!') % freevoconf)
@@ -538,7 +538,7 @@ for dirname in cfgfilepath[1:]:
 # Search for freevo.conf:
 #
 for dirname in cfgfilepath:
-    freevoconf = dirname + '/freevo.conf'
+    freevoconf = os.path.join(dirname, 'freevo.conf')
     _debug_('Trying freevo configuration file "%s"...' % freevoconf)
     if os.path.isfile(freevoconf):
         _debug_('Loading freevo configuration file "%s"' % freevoconf, DINFO)
@@ -633,7 +633,7 @@ else:
 # Search for local_conf.py:
 #
 for dirname in cfgfilepath:
-    overridefile = dirname + '/local_conf.py'
+    overridefile = os.path.join(dirname, 'local_conf.py')
     _debug_('Trying local configuration file "%s"...' % overridefile)
     if os.path.isfile(overridefile):
         _debug_('Loading local configuration file: "%s"' % overridefile, DINFO)

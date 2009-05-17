@@ -348,7 +348,6 @@ LOCAL_CONF_CHANGES = [
     (5.22,
      """Added RECORDSERVER_SECRET and RECORDSERVER_PORT2=18002 for kaa.rpc
      Renamed audio plug-in audio.playlist to audio.playlists
-     Added ENCODINGSERVER_SAVE_DIR for re-encoded DVDs
      Added TV_CHANNELS_COMPARE as a lambda to sort the channels
      """),
     (5.23,
@@ -396,6 +395,8 @@ LOCAL_CONF_CHANGES = [
      Renamed IMAGEVIEWER_ASPECT to OSD_PIXEL_ASPECT as this affects not just images
      Added AUTOSHUTDOWN_WAKEUP_TIME_PAD to control how much time to allow for
      system boot to complete when waking up from an AUTOSHUTDOWN.
+     Added ENCODINGSERVER_SAVEDIR for re-encoded DVDs
+     Added FREEVO_TEMPDIR for temporary files
      """),
 ]
 
@@ -749,6 +750,11 @@ SYS_USE_NETWORK = True
 # Will be used to avoid extremely long automounter timeouts.
 #
 HOST_ALIVE_CHECK = 'ping -c 1 -W 1 %s > /dev/null 2>&1'
+
+#
+# Directory to store temporary files
+#
+FREEVO_TEMPDIR = '/tmp'
 
 #
 # Directory location to save files when the normal filesystem
@@ -2182,10 +2188,10 @@ WWW_JAVASCRIPT = 'scripts/display_prog-head.js'
 ENCODINGSERVER_UID = 0
 ENCODINGSERVER_GID = 0
 
-
 ENCODINGSERVER_IP   = 'localhost'
 ENCODINGSERVER_PORT = 18002
 ENCODINGSERVER_SECRET = 'secret2'
+ENCODINGSERVER_SAVEDIR = '.' #os.path.join(FREEVO_TEMPDIR, 'encodings')
 
 # ======================================================================
 # Freevo builtin commdetect server settings:
@@ -2196,7 +2202,6 @@ COMMDETECTSERVER_GID = 0
 COMMDETECTSERVER_IP   = 'localhost'
 COMMDETECTSERVER_PORT = 6667
 
-
 # ======================================================================
 # Freevo builtin rss server settings:
 # ======================================================================
@@ -2205,7 +2210,7 @@ RSSSERVER_GID = 0
 
 RSS_CHECK_INTERVAL = 3600
 RSS_FEEDS = '/etc/freevo/rss.feeds'
-RSS_DOWNLOAD = '/tmp'
+RSS_DOWNLOAD = os.path.join(FREEVO_TEMPDIR, 'rssdownloads')
 RSS_VIDEO = 'you must set RSS_VIDEO in your local_conf.py'
 RSS_AUDIO = 'you must set RSS_AUDIO in your local_conf.py'
 

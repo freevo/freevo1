@@ -53,9 +53,9 @@ def uniquify_filename(filename,directory=None,extensions=None):
     If 'extensions' contains a list of extensions, then only files in
     the directory with those extensions are considered (note that the
     extensions must have a 'dot' in front). If 'filename' is not an
-    absolute path, the directory is specified in 'directory'.  
+    absolute path, the directory is specified in 'directory'.
     Example usage: uniquify_filename('/sbin/mkfs')
-    """        
+    """
     assert type(extensions) == tuple or type(extensions) == list or \
         extensions == None
     if directory == None:

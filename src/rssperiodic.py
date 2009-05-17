@@ -221,8 +221,14 @@ def createFxd(item, filename):
 def checkForUpdates():
     try:
         file = open(config.RSS_FEEDS, 'r')
-    except IOError:
-        _debug_('Could not open configuration file %s' % (config.RSS_FEEDS), DERROR)
+    except IOError, why:
+        _debug_('Could not open configuration file %r: %s' % (config.RSS_FEEDS, why), DERROR)
+        return
+    try:
+        if not os.path.isdir(config.RSS_DOWNLOAD):
+            os.makedirs(config.RSS_DOWNLOAD)
+    except OSError, why:
+        _debug_('Could not create the download directory %r: %s' % (config.RSS_DOWNLOAD, why), DERROR)
         return
 
     for line in file:

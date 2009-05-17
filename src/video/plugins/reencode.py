@@ -106,7 +106,7 @@ class PluginInterface(plugin.ItemPlugin):
         if item.type == 'video' and item.mode == 'file':
             self.item = item
             self.title = item.name
-            self.source = item.filename            
+            self.source = item.filename
             self.output = os.path.splitext(item.filename)[0]
             _debug_('item.__dict__:' % item.__dict__, 3)
             return [ (self.encoding_profile_menu, _('Transcode this program...')) ]

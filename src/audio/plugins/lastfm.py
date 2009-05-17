@@ -6,7 +6,7 @@
 #
 # Notes: For the API 1.2
 # http://code.google.com/p/thelastripper/wiki/LastFM12UnofficialDocumentation
-# Todo:
+# Todo: I hate to say it but this needs fixing
 #
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework

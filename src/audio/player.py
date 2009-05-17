@@ -204,7 +204,7 @@ class PlayListSuccession:
         self.mode = self.setmode(mode)
 
     def setmode(self, s):
-        #mode if isinstance(mode, PlayListSuccession) else 
+        #mode if isinstance(mode, PlayListSuccession) else
         return PlayListSuccession.FIRST if s is None    else \
                PlayListSuccession.FIRST if s == 'first' else \
                PlayListSuccession.NEXT  if s == 'next'  else \

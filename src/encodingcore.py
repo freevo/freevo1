@@ -316,7 +316,7 @@ class EncodingJob:
 
     def setContainer(self, container):
         """Set a container to hold the audio & video streams"""
-        #safety checks
+        #safety checks, should raise an exception
         if container not in self.encodingopts.getContainerList():
             return 'Unknown container format'
 
@@ -324,11 +324,13 @@ class EncodingJob:
 
 
     def full_output_file_name(self):
-        if hasattr(config, 'ENCODINGSERVER_SAVE_DIR') and config.ENCODINGSERVER_SAVE_DIR:
-            if not os.path.exists(config.ENCODINGSERVER_SAVE_DIR):
-                os.makedirs(self.ENCODINGSERVER_SAVE_DIR, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
-            return ('%s/%s.%s' % (config.ENCODINGSERVER_SAVE_DIR, os.path.basename(self.output), self.container))
-        else:
+        try:
+            if not os.path.isdir(config.ENCODINGSERVER_SAVEDIR):
+                os.makedirs(self.ENCODINGSERVER_SAVEDIR, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
+            return os.path.join(config.ENCODINGSERVER_SAVEDIR,
+                '%s.%s' % (os.path.basename(self.output), self.container))
+        except OSError, why:
+            _debug_('Cannot save encoding to %r: %s' % (config.ENCODINGSERVER_SAVEDIR, why), DWARNING)
             return ('%s.%s' % (self.output, self.container))
 
 
@@ -470,19 +472,19 @@ class EncodingJob:
                 self.length = 0
 
         position = str(int(self.length / 2.0))
-        arguments = [ '-vo', 'png:z=1:outdir=/tmp', '-ao', 'null', '-frames', '8', '-ss', position, '-zoom' ]
+        arguments = [ '-vo', 'png:z=1', '-ao', 'null', '-frames', '8', '-ss', position, '-zoom' ]
         if self.titlenum:
             arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.titlenum ]
         else:
             arguments += [ self.source ]
 
+        # chdir to tmp so we have write access
+        os.chdir(config.FREEVO_TEMPDIR)
         self._run(mplayer, arguments, self._videothumb_parse, None, 0, 'data.png')
 
 
     def _videothumb_parse(self, lines, data):
         from util import vfs
-        # chdir to tmp so we have write access
-        os.chdir('/tmp')
         for line in lines:
             if line:
                 _debug_(line)
@@ -494,11 +496,11 @@ class EncodingJob:
             capture = captures[-1]
             try:
                 vfsdir = os.path.dirname(self.output)
-                if not os.path.exists(vfsdir):
+                if not os.path.isdir(vfsdir):
                     os.makedirs(vfsdir)
                 _debug_('copying %r->%r' % (capture, self.output))
                 shutil.copy(capture, self.output)
-            except Exception, why:
+            except OSError, why:
                 _debug_('%s' % why, DINFO)
                 try:
                     shutil.copy(capture, vfs.getoverlay(self.output))
