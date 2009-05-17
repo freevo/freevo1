@@ -71,9 +71,9 @@ class MPlayer:
         self.current_vg = None
 
 
-    def Play(self, mode, tuner_channel=None):
+    def play(self, mode, tuner_channel=None):
         """ """
-        _debug_('MPlayer.Play(mode=%r, tuner_channel=%r)' % (mode, tuner_channel), 2)
+        _debug_('MPlayer.play(mode=%r, tuner_channel=%r)' % (mode, tuner_channel), 2)
         # Try to see if the channel is not tunable
         try:
             channel = int(tuner_channel)
@@ -292,7 +292,7 @@ class MPlayer:
 
 
 
-    def Stop(self, channel_change=0):
+    def stop(self, channel_change=0):
         mixer = plugin.getbyname('MIXER')
         if mixer and not channel_change:
             mixer.setLineinVolume(0)
@@ -316,11 +316,14 @@ class MPlayer:
             lcfp.write('\n')
             lcfp.close()
 
+        dialog.disable_overlay_display()
+
+
     def eventhandler(self, event, menuw=None):
         s_event = '%s' % event
 
         if event == em.STOP or event == em.PLAY_END:
-            self.Stop()
+            self.stop()
             rc.post_event(em.PLAY_END)
             return True
 
@@ -362,8 +365,8 @@ class MPlayer:
             _debug_('chan=%s, nextchannum=%s, nextchan=%s nextvg=%s' % (chan, nextchannum, nextchan, nextvg))
 
             if self.current_vg != nextvg:
-                self.Stop(channel_change=1)
-                self.Play('tv', nextchan)
+                self.stop(channel_change=1)
+                self.play('tv', nextchan)
                 return True
 
             if self.mode == 'vcr':
@@ -379,8 +382,8 @@ class MPlayer:
                         self.app.write('dvb_set_channel %s %s\n' % (nextchannum, card))
                         self.fc.chanSet(nextchan, True)
                 else:
-                    self.Stop(channel_change=1)
-                    self.Play('tv', nextchan)
+                    self.stop(channel_change=1)
+                    self.play('tv', nextchan)
                 return True
 
             elif self.current_vg.group_type == 'ivtv':
