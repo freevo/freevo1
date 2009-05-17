@@ -24,6 +24,8 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
 --------------------------------
 svn co svn://svn.freevo.org/freevo/tags/REL-1_8_4/freevo freevo-1.8.4
 
+ * '''Added support for Python-2.6'''
+ * '''Removed support for Python-2.4'''
  * New audio icecast plug-in (F#2680204)
  * New audio shoutcast plug-in (F#2680192)
  * New convert_favorites_txt help to convert a favorites.txt to a favorites.pickle (F#2512372)
