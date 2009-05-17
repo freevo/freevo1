@@ -13,14 +13,21 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
 
+== Release 1.8.5 (2009-??-??) ==
+--------------------------------
+svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
+
+ * New improvements to the rc.app() interface (F#2772598)
+ * Updated encoding server uniquely identify different re-enoding of files (F#2489762)
+
 == Release 1.8.4 (2009-05-26) ==
 --------------------------------
+svn co svn://svn.freevo.org/freevo/tags/REL-1_8_4/freevo freevo-1.8.4
 
  * New audio icecast plug-in (F#2680204)
  * New audio shoutcast plug-in (F#2680192)
  * New convert_favorites_txt help to convert a favorites.txt to a favorites.pickle (F#2512372)
  * New skinable dialogs (F#2308911)
- * New improvements to the rc.app() interface (F#2772598)
  * New "freevo cache" option --cropdetect to detect and add crop options to fxd files (F#2791887)
  * New rtorrent module to allow torrents to be downloaded from freevo (F#2580403)
  * New OSD dialog screen designer (F#2621369)
@@ -31,7 +38,6 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
  * Updated command plug-in to allow images to be specified in the fxd file (F#2778822)
  * Updated dvdbackup plug-in to allow the audio codec to be specified (F#2791303)
  * Updated encoding server to run jobs as nice (F#2763076)
- * Updated encoding server uniquely identify different re-enoding of files (F#2489762)
  * Updated French translation (F#2784895)
  * Updated ivtv_xine_tv plugin with a record menu screen, xine-ui patch required (F#2373921)
  * Updated play state dialogues with time elapsed / total time (F#2594055)
