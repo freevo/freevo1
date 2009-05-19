@@ -12,8 +12,12 @@ import sys
 # Freevo distutils stuff
 sys.path.append('./src')
 import version
-from util.distribution import setup, Extension, check_libs, docbook_finder
 from distutils import core
+from util.distribution import setup, Extension, check_libs, docbook_finder
+#try:
+#    from setuptools import setup
+#except ImportError:
+#    from util.distribution import setup
 
 
 libs_to_check = [
@@ -117,18 +121,21 @@ if (len(sys.argv) < 2 or sys.argv[1].lower() not in ('i18n', '--help', '--help-c
     import traceback
     if os.path.isdir('.svn'):
         try:
+            import re
             from subprocess import Popen, PIPE
             os.environ['LC_ALL']='C'
-            p1 = Popen(["svn", "info", "--revision=BASE"], stdout=PIPE, env=os.environ)
-            p2 = Popen(["sed", "-n", "/Revision:/s/Revision: *\([0-9]*\)/\\1/p"], stdin=p1.stdout, stdout=PIPE)
-            revision = p2.communicate()[0]
+            p = Popen(["svn", "info", "--revision=BASE"], stdout=PIPE, env=os.environ)
+            info = p.communicate()[0]
+            p.wait()
+            del(p)
+            revision  = re.search('\nRevision: (\d*)\n', info).groups()[0]
             fh = open('src/revision.py', 'w')
             try:
                 fh.write('"""\n')
                 fh.write('Freevo revision number\n')
                 fh.write('"""\n')
                 fh.write('\n')
-                fh.write('__revision__ = \'%s\'\n' % revision.strip('\n'))
+                fh.write('__revision__ = %r\n' % (revision,))
             finally:
                 fh.close()
         except Exception, why:
