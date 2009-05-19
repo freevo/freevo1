@@ -114,6 +114,7 @@ class Runtime(core.Command):
 
 # check if everything is in place
 if (len(sys.argv) < 2 or sys.argv[1].lower() not in ('i18n', '--help', '--help-commands')):
+    import traceback
     if os.path.isdir('.svn'):
         try:
             from subprocess import Popen, PIPE
@@ -130,8 +131,8 @@ if (len(sys.argv) < 2 or sys.argv[1].lower() not in ('i18n', '--help', '--help-c
                 fh.write('__revision__ = \'%s\'\n' % revision.strip('\n'))
             finally:
                 fh.close()
-        except Exception, e:
-            print e
+        except Exception, why:
+            traceback.print_exc()
 
     if (not os.path.isdir('./Docs/installation/html')):
         print 'Docs/howto not found. Please run ./autogen.sh'
