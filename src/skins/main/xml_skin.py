@@ -35,9 +35,9 @@ import copy
 import types
 import re
 import traceback
+
 import config
 import util
-
 import osd
 import plugin
 
@@ -970,9 +970,16 @@ class XMLSkin:
         self.font     = copy.deepcopy(self._font)
         layout        = copy.deepcopy(self._layout)
 
+        """
+        .
+        share/icons/themes/<skin>
+        share/images
+        share/skins/main
+        share/skins/plugins
+        """
         if not os.path.isdir(self.icon_dir):
             self.icon_dir = os.path.join(config.ICON_DIR, 'themes', self.icon_dir)
-        search_dirs = self.skindirs + [ config.IMAGE_DIR, self.icon_dir, '.' ]
+        search_dirs = [ '.', self.icon_dir, config.IMAGE_DIR, ] + self.skindirs
 
         for f in self.font:
             self.font[f].prepare(self._color, scale=self.font_scale)
