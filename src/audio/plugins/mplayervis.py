@@ -120,13 +120,14 @@ class MpvGoom(BaseAnimation):
     message    = None
     coversurf  = None
 
-    def __init__(self, x, y, width, height, title=None, coverfile=None):
+    def __init__(self, x, y, width, height, title=None, coverfilename=None):
         """
         Initialise the MPlayer Visualization Goom
         """
-        _debug_('MpvGoom.__init__(x=%r y=%r width=%r height=%r coverfile=%r)' % (x, y, width, height, coverfile))
+        _debug_('%s.__init__(x=%r y=%r width=%r height=%r coverfilename=%r)' % (
+            self.__class__, x, y, width, height, coverfilename))
         self.mode = MpvMode(config.MPLAYERVIS_MODE)
-        self.coverfile = coverfile
+        self.coverfilename = coverfilename
         self.showfps = False
 
         if not os.path.exists(MMAP_FILE):
@@ -141,6 +142,8 @@ class MpvGoom(BaseAnimation):
         self.goom = pygoom.PyGoom(width, height, MMAP_FILE, songtitle=String(title) or '')
         self.infodata = None
 
+        self.width = width
+        self.height = height
         self.fade_step = config.MPLAYERVIS_FADE_STEP
         self.init_counter = self.fade_step * config.MPLAYERVIS_INIT_COUNTER
         self.fade_in_wait_counter = self.fade_step * config.MPLAYERVIS_FADE_IN_WAIT_COUNTER
@@ -170,15 +173,6 @@ class MpvGoom(BaseAnimation):
         _debug_('MpvGoom.__del__')
 
 
-    def set_cover(self, coverfile):
-        """
-        Set a blend image to toggle between visual and cover
-        Updated when resolution is changed
-        """
-        _debug_('set_cover(coverfile=%r)' % (coverfile,))
-        self.coverfile = coverfile
-
-
     def set_visual(self, visual):
         """ pass the visualisation effect to goom """
         _debug_('set_visual(visual=%r)' % (visual,))
@@ -206,26 +200,30 @@ class MpvGoom(BaseAnimation):
         return alpha
 
 
-    def set_resolution(self, x, y, width, height, zoom=1):
-        """ Set the resolution of the goom window """
-        _debug_('set_resolution(x=%r, y=%r, width=%r, height=%r, zoom=%r)' % (x, y, width, height, zoom))
-        r = Rect(x, y, width / zoom, height / zoom)
-        if r == self.rect:
-            return
-        self.rect = r
-
-        # clear info
-        self.infodata = None
-
-        _debug_('self.goom.resolution(width=%r, height=%r)' % (width / zoom, height / zoom))
-        self.goom.resolution(width / zoom, height / zoom)
+    def set_coverimage(self, coverfilename):
+        """
+        Set a blend image to toggle between visual and cover
+        Updated when resolution is changed
+        """
+        _debug_('%s.set_coverimage(coverfilename=%r)' % (self.__class__, coverfilename))
+        self.coverfilename = coverfilename
+        self.set_coverimagesurf(coverfilename)
 
 
+    def set_coverimagesurf(self, coverfilename):
+        """
+        Get the cover image surface
+        The image is scaled to the size of the suface keeping the aspect of the surface
+
+        @param coverfilename: the file name for the cover image
+        @returns: a surface
+        """
+        _debug_('%s.set_coverimagesurf(coverfilename=%r)' % (self.__class__, coverfilename))
         # change the cover if necessary
         coversurf = None
-        if self.coverfile:
+        if coverfilename:
             try:
-                coversurf = image.load(self.coverfile).convert()
+                coversurf = image.load(coverfilename).convert()
                 #coversurf.set_colorkey(-1) # make top-left pixel transparent
             except Exception, why:
                 _debug_(why, DWARNING)
@@ -237,21 +235,43 @@ class MpvGoom(BaseAnimation):
 
             if aspect < 1.0:
                 #w = self.rect.width
-                w = width
+                w = self.width
                 h = float(w) / aspect
                 x = 0
                 #y = (self.rect.height - h) / 2
-                y = (height - h) / 2
+                y = (self.height - h) / 2
             else:
                 #h = self.rect.height
-                h = height
+                h = self.height
                 w = float(h) * aspect
                 y = 0
                 #x = (self.rect.width - w)  / 2
-                x = (width - w)  / 2
+                x = (self.width - w)  / 2
 
             self.coversurf = (transform.scale(coversurf, (w, h)), x, y)
-            self.c_timer   = time.time()
+        else:
+            self.coversurf = coversurf
+        _debug_('self.coversurf=%r coversurf=%r' % (self.coversurf, coversurf))
+
+
+    def set_resolution(self, x, y, width, height, zoom=1):
+        """ Set the resolution of the goom window """
+        _debug_('%s.set_resolution(x=%r, y=%r, width=%r, height=%r, zoom=%r)' % (
+            self.__class__, x, y, width, height, zoom))
+        self.width = width
+        self.height = height
+        r = Rect(x, y, width / zoom, height / zoom)
+        if r == self.rect:
+            return
+        self.rect = r
+
+        # clear info
+        self.infodata = None
+
+        _debug_('self.goom.resolution(width=%r, height=%r)' % (width / zoom, height / zoom))
+        self.goom.resolution(width / zoom, height / zoom)
+        self.set_coverimagesurf(self.coverfilename)
+        self.c_timer   = time.time()
 
 
     def set_fullscreen(self):
@@ -461,6 +481,7 @@ class MpvGoom(BaseAnimation):
             return True
         except Exception, why:
             traceback.print_exc()
+            _debug_(why, DWARNING)
 
 
     def poll(self, current_time):
@@ -754,6 +775,7 @@ class PluginInterface(plugin.Plugin):
         try:
             result = fmt % song
         except Exception, why:
+            traceback.print_exc()
             _debug_(why, DERROR)
         _debug_('item_info: result=%r' % (result,))
         return result
@@ -782,8 +804,8 @@ class PluginInterface(plugin.Plugin):
             osd.active = False
 
         self.visual.set_fullscreen()
-        skin.suspend()
         skin.clear()
+        skin.suspend()
         rc.app(self)
 
 
@@ -805,7 +827,8 @@ class PluginInterface(plugin.Plugin):
 
 
     def start_visual(self):
-        _debug_('start_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
+        print('%s.start_visual() self.view=%r self.succession=%r' % (self.__class__,
+            self.view, self.player.playerGUI.succession))
         #if self.player.playerGUI.succession != PlayListSuccession.FIRST:
         #    return
 
@@ -838,16 +861,16 @@ class PluginInterface(plugin.Plugin):
 
 
     def pause_visual(self):
-        _debug_('pause_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
+        _debug_('%s.pause_visual() self.view=%r self.succession=%r' % (self.__class__,
+            self.view, self.player.playerGUI.succession))
         self.timer.start(5)
 
 
     def resume_visual(self):
-        _debug_('resume_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
+        _debug_('%s.resume_visual() self.view=%r self.succession=%r' % (self.__class__,
+            self.view, self.player.playerGUI.succession))
         self.timer.stop()
         if self.visual is not None:
-            title = self.item.title if hasattr(self.item, 'title') else self.item.name
-            self.visual.set_songtitle(title)
             self.title = None
             self.message = None
             if self.view == MpvMode.FULL:
@@ -857,7 +880,8 @@ class PluginInterface(plugin.Plugin):
 
 
     def stop_visual(self):
-        _debug_('stop_visual() self.view=%r self.succession=%r' % (self.view, self.player.playerGUI.succession))
+        _debug_('%s.stop_visual() self.view=%r self.succession=%r' % (self.__class__,
+            self.view, self.player.playerGUI.succession))
         self.timer.stop()
         if self.visual is not None:
             _debug_('self.visual.running=%r -> False' % (self.visual.running,))
@@ -876,9 +900,13 @@ class PluginInterface(plugin.Plugin):
         @param command: mplayer command
         @param player: the player object
         """
-        _debug_('%s.play(command=%r, player=%r)' % (self.__module__, command, player))
+        _debug_('%s.play(command=%r, player=%r)' % (self.__class__, command, player))
         self.player = player
         self.item   = player.playerGUI.item
+        if self.visual is not None:
+            title = self.item.title if hasattr(self.item, 'title') else self.item.name
+            self.visual.set_songtitle(title)
+            self.visual.set_coverimage(self.item.image)
 
         #if config.MPLAYERVIS_HAS_TRACK:
         #    return command + [ '-af', 'export=%s' % MMAP_FILE + ',track=5:1500' ]
@@ -886,7 +914,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def stop(self):
-        _debug_('%s.stop()' % (self.__module__,))
+        _debug_('%s.stop()' % (self.__class__,))
 
 
     def stdout(self, line):
