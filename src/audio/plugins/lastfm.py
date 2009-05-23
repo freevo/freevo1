@@ -554,8 +554,8 @@ class LastFMTuner(Thread):
     This class is responsible for getting the play list and the tracks
     """
     def __init__(self, station_url, parent=None, menuw=None):
+        Thread.__init__(self)
         self.name = parent.station if parent is not None else 'LastFMTuner'
-        Thread.__init__(self, name=self.name)
         self.station_url = station_url
         self.parent = parent
         self.menuw = menuw
