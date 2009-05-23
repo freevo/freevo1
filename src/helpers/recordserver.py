@@ -532,7 +532,6 @@ class RecordServer:
             return (False, ratedConflicts, [])
 
         if config.TV_RECORD_CONFLICT_RESOLUTION:
-            _debug_('Conflict resolution enabled', DINFO)
             ratedConflicts = []
             myScheduledRecordings = copy.deepcopy(self.getScheduledRecordings())
 
@@ -593,11 +592,12 @@ class RecordServer:
             #Find least conflicted
             for (conflictedRating, conflictedPrograms, tempProgram) in ratedConflicts:
                 #Cannot handle multiple conflicts
-                conflictedProgram = conflictedPrograms[0]
-                if conflictedRating < tempRating:
-                    tempRating = conflictedRating
-                    tempConflicted = conflictedProgram
-                    tempProg = tempProgram
+                if conflictedPrograms:
+                    conflictedProgram = conflictedPrograms[0]
+                    if conflictedRating < tempRating:
+                        tempRating = conflictedRating
+                        tempConflicted = conflictedProgram
+                        tempProg = tempProgram
             conflictedProgram = tempConflicted
             prog = tempProgram
 
@@ -1445,6 +1445,9 @@ class RecordPostProcess(Thread):
 
 
 def main():
+    if config.TV_RECORD_CONFLICT_RESOLUTION:
+        _debug_('Conflict resolution enabled', DINFO)
+
     socket = ('', config.RECORDSERVER_PORT)
     secret = config.RECORDSERVER_SECRET
     _debug_('socket=%r, secret=%r' % (socket, secret))
