@@ -72,7 +72,7 @@ def delete_old_files_1():
             del_list.append(os.path.join(config.FREEVO_CACHEDIR, name))
 
     del_list += util.recursefolders(config.OVERLAY_DIR, 1, 'mmpython', 1)
-    del_list += util.match_files(config.OVERLAY_DIR+'/disc', ['mmpython', 'freevo'])
+    del_list += util.match_files(os.path.join(config.OVERLAY_DIR, 'disc'), ['mmpython', 'freevo'])
 
     for file in util.match_files_recursively(config.OVERLAY_DIR, ['png']):
         if file.endswith('.fvt.png'):
@@ -103,7 +103,7 @@ def delete_old_files_2():
     sys.__stdout__.flush()
     num = 0
     for file in util.match_files_recursively(config.OVERLAY_DIR, ['raw']):
-        if file.startswith(config.OVERLAY_DIR + '/disc/'):
+        if file.startswith(os.path.join(config.OVERLAY_DIR, 'disc')):
             continue
         if not vfs.isfile(file[len(config.OVERLAY_DIR):-4]):
             os.unlink(file)
@@ -115,9 +115,9 @@ def delete_old_files_2():
     subdirs.reverse()
     for file in subdirs:
         if not os.path.isdir(file[len(config.OVERLAY_DIR):]) and not \
-               file.startswith(config.OVERLAY_DIR + '/disc'):
-            for metafile in ('cover.png', 'cover.png.raw', 'cover.jpg', 'cover.jpg.raw',
-                             'mmpython.cache', 'freevo.cache'):
+                file.startswith(os.path.join(config.OVERLAY_DIR, 'disc')):
+            for metafile in ('cover.png', 'cover.png.raw', 'cover.jpg', 'cover.jpg.raw', 'mmpython.cache',
+                    'freevo.cache'):
                 if os.path.isfile(os.path.join(file, metafile)):
                     os.unlink(os.path.join(file, metafile))
             if not os.listdir(file):
@@ -127,7 +127,7 @@ def delete_old_files_2():
     print checking('deleting old entries in meta-info'),
     sys.__stdout__.flush()
     for filename in util.recursefolders(config.OVERLAY_DIR, 1, 'freevo.cache', 1):
-        if filename.startswith(config.OVERLAY_DIR + '/disc'):
+        if filename.startswith(os.path.join(config.OVERLAY_DIR, 'disc')):
             continue
         sinfo = os.stat(filename)
         if not sinfo[ST_SIZE]:
@@ -136,7 +136,7 @@ def delete_old_files_2():
         dirname = os.path.dirname(filename)[len(config.OVERLAY_DIR):]
         data    = util.read_pickle(filename)
         for key in copy.copy(data):
-            if not os.path.exists(dirname + '/' + key):
+            if not os.path.exists(os.path.join(dirname, str(key))):
                 del data[key]
         util.save_pickle(data, filename)
     print 'done'
@@ -196,7 +196,7 @@ def cache_thumbnails():
             pass
 
         for bad_dir in ('.svn', '.xvpics', '.thumbnails', '.pics'):
-            if filename.find('/' + bad_dir + '/') > 0:
+            if filename.find(os.path.join(os.path.sep, bad_dir + '')) > 0:
                 try:
                     files.remove(filename)
                 except:
@@ -250,7 +250,7 @@ def cache_www_thumbnails(defaults):
             pass
 
         for bad_dir in ('.svn', '.xvpics', '.thumbnails', '.pics'):
-            if filename.find('/' + bad_dir + '/') > 0:
+            if filename.find(os.path.join(os.path.sep, bad_dir + '')) > 0:
                 try:
                     files.remove(filename)
                 except:
@@ -473,7 +473,7 @@ def create_metadata():
         for d in getattr(config, '%s_ITEMS' % type.upper()):
             try:
                 d = d[1]
-                if d == '/':
+                if d == os.path.sep:
                     print 'ERROR: %s_ITEMS contains root directory, skipped.' % type
                     continue
 
@@ -490,7 +490,7 @@ def create_metadata():
 
     # walk though each directory
     for s in subdirs['all']:
-        if s.find('/.') > 0:
+        if s.find(os.path.join(os.path.sep, '.')) > 0:
             continue
 
         # create the DirItems
@@ -691,12 +691,12 @@ if __name__ == "__main__":
         for d in copy.copy(getattr(config, '%s_ITEMS' % type)):
             if not isstring(d):
                 d = d[1]
-            if d == '/':
+            if d == os.path.sep:
                 print 'ERROR: %s_ITEMS contains root directory, skipped.' % type
                 setattr(config, '%s_ITEMS' % type, [])
 
-    if os.path.isdir('%s/playlists' % config.FREEVO_CACHEDIR):
-        config.AUDIO_ITEMS.append(('Playlists', '%s/playlists' % config.FREEVO_CACHEDIR))
+    if os.path.isdir(os.path.join(config.FREEVO_CACHEDIR, 'playlists')):
+        config.AUDIO_ITEMS.append(('Playlists', os.path.join(config.FREEVO_CACHEDIR, 'playlists')))
     delete_old_files_1()
     delete_old_files_2()
 
