@@ -88,7 +88,7 @@ class MenuItem(Item):
             return '<%-.16s: %r>' % (self.name, self.__class__)
         if hasattr(self, 'type') and self.type:
             return '<%r: %r>' % (self.type, self.__class__)
-        return '<%r: %r>' % (self.__class__,)
+        return '<%r>' % (self.__class__,)
 
 
     def actions(self):
