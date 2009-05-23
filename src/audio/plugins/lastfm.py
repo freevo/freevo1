@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # LastFM radio player plug-in (http://www.last.fm/listen)
 # -----------------------------------------------------------------------
-# $Id: lastfm2.py 11512 2009-05-15 19:46:46Z duncan $
+# $Id: lastfm.py 11544 2009-05-23 16:20:42Z duncan $
 #
 # Notes: For the API 1.2
 # http://code.google.com/p/thelastripper/wiki/LastFM12UnofficialDocumentation
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     GUI = False
 else:
     #Freevo modules
-    import skin, osd
+    import skin, osd, rc
     from audio.player import PlayerGUI
     from gui.AlertBox import AlertBox
     from event import *
@@ -378,11 +378,11 @@ class LastFMWebServices:
         @param filename: path to downloaded file
         @param entry: metadata for the entry
         """
-        #print('%s.fetch(url=%r, filename=%r, headers=%r, entry=%r)' % (self.__class__, url, filename, headers, entry))
+        _debug_('%s.fetch(url=%r, filename=%r, headers=%r, entry=%r)' % (self.__class__, url, filename, headers, entry))
         if not self.session:
             self._login()
         self.downloader = LastFMFetcher(url, filename, headers)
-        self.downloader.name = os.path.basename(filename)
+        self.downloader.name = os.path.basename(filename) if filename is not None else 'fetch'
         self.downloader.setDaemon(1)
         self.downloader.start()
         return self.downloader
@@ -554,9 +554,8 @@ class LastFMTuner(Thread):
     This class is responsible for getting the play list and the tracks
     """
     def __init__(self, station_url, parent=None, menuw=None):
-        if parent is not None:
-            name = parent.station
-        Thread.__init__(self, name=name)
+        self.name = parent.station if parent is not None else 'LastFMTuner'
+        Thread.__init__(self, name=self.name)
         self.station_url = station_url
         self.parent = parent
         self.menuw = menuw
