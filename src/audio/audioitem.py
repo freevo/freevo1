@@ -147,7 +147,7 @@ class AudioItem(Item):
                     break;
 
         # additional url types
-        if url.startswith('cdda://'):
+        if url and url.startswith('cdda://'):
             self.network_play = False
             self.mode = 'cdda'
             self.mimetype = 'cdda'
