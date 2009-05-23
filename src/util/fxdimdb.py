@@ -803,6 +803,10 @@ class FxdImdb:
             traceback.print_exc()
             _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
             return self.id_list
+        except Exception, why:
+            traceback.print_exc()
+            _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
+            return self.id_list
         items = soup.findAll('a', href=re.compile('/title/tt'))
         ids = set([])
         for item in items:
