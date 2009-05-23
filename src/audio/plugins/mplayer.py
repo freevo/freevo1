@@ -205,7 +205,7 @@ class MPlayer:
         try:
             for p in self.plugins:
                 if p.eventhandler(event):
-                    print('%s handled by %s' % (event, p))
+                    _debug_('%s handled by %s' % (event, p))
                     return True
         except Exception, why:
             import traceback

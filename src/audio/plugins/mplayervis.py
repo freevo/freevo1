@@ -827,7 +827,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def start_visual(self):
-        print('%s.start_visual() self.view=%r self.succession=%r' % (self.__class__,
+        _debug_('%s.start_visual() self.view=%r self.succession=%r' % (self.__class__,
             self.view, self.player.playerGUI.succession))
         #if self.player.playerGUI.succession != PlayListSuccession.FIRST:
         #    return

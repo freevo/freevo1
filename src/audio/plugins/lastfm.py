@@ -152,7 +152,7 @@ class LastFMXSPF:
 
 
 
-class LastFMDownloader(Thread):
+class LastFMFetcher(Thread):
     """
     Download the stream to a file
 
@@ -368,7 +368,7 @@ class LastFMWebServices:
         return reply
 
 
-    def download(self, url, filename, headers, entry=None):
+    def fetch(self, url, filename, headers, entry=None):
         """
         Download album cover or track to last.fm directory.
 
@@ -378,10 +378,10 @@ class LastFMWebServices:
         @param filename: path to downloaded file
         @param entry: metadata for the entry
         """
-        #print('%s.download(url=%r, filename=%r, headers=%r, entry=%r)' % (self.__class__, url, filename, headers, entry))
+        #print('%s.fetch(url=%r, filename=%r, headers=%r, entry=%r)' % (self.__class__, url, filename, headers, entry))
         if not self.session:
             self._login()
-        self.downloader = LastFMDownloader(url, filename, headers)
+        self.downloader = LastFMFetcher(url, filename, headers)
         self.downloader.name = os.path.basename(filename)
         self.downloader.setDaemon(1)
         self.downloader.start()
@@ -529,12 +529,14 @@ class LastFMAudioItem(AudioItem):
         if os.path.exists(self.filename):
             from kaa.metadata.audio import eyeD3
             try:
+                _debug_('artist=%r album=%r title=%r' % (self.artist, self.album, self.title))
                 tag = eyeD3.Tag()
                 tag.link(self.filename)
-                tag.header.setVersion(eyeD3.ID3_V2_3)
-                tag.setArtist(self.artist)
-                tag.setAlbum(self.album)
-                tag.setTitle(self.title)
+                tag.header.setVersion(eyeD3.ID3_V2_4)
+                tag.setTextEncoding(eyeD3.UTF_8_ENCODING)
+                tag.setArtist(Unicode(self.artist))
+                tag.setAlbum(Unicode(self.album))
+                tag.setTitle(Unicode(self.title))
                 #tag.setGenre(self.genre)
                 if os.path.exists(self.image):
                     tag.addImage(eyeD3.ImageFrame.FRONT_COVER, self.image)
@@ -584,35 +586,50 @@ class LastFMTuner(Thread):
                 #print('make directory %r' % (os.path.dirname(basename),))
                 os.makedirs(os.path.dirname(basename), 0777)
 
-            imagepath = os.path.join(basename + os.path.splitext(entry.image_url)[1].lower())
-            image_downloader = self.webservices.download(entry.image_url, imagepath, image_hdrs)
+            
+            imagepath = basename + os.path.splitext(entry.image_url)[1].lower() if entry.image_url else None
+            image_fetcher = self.webservices.fetch(entry.image_url, imagepath, image_hdrs)
 
-            trackpath = os.path.join(basename + os.path.splitext(entry.location_url)[1].lower())
-            track_downloader = self.webservices.download(entry.location_url, trackpath, track_hdrs, entry)
+            trackpath = basename + os.path.splitext(entry.location_url)[1].lower()
+            track_fetcher = self.webservices.fetch(entry.location_url, trackpath, track_hdrs, entry)
 
             self.playlist.append(LastFMAudioItem(self.parent, entry, trackpath, imagepath))
             #print('%s.playlist=%s' % (self.__class__, pformat(list(self.playlist))))
+        except LastFMError, why:
+            print('LastFMError(1)=%s' % why)
+            image_fetcher.stop()
+            track_fetcher.stop()
+            return
 
-            while image_downloader.isAlive() or track_downloader.isAlive():
+        try:
+            while image_fetcher.isAlive() or track_fetcher.isAlive():
                 if not self.running:
                     break
                 time.sleep(0.5)
 
-            if image_downloader.result:
+            if image_fetcher.result:
                 _debug_('image %r downloaded' % (os.path.basename(imagepath),))
             elif os.path.exists(imagepath):
                 _debug_('image %r removed' % (os.path.basename(imagepath),))
                 os.remove(imagepath)
 
-            if track_downloader.result:
+            if track_fetcher.result:
                 _debug_('track %r downloaded' % (os.path.basename(trackpath),))
             elif os.path.exists(trackpath):
                 _debug_('track %r removed' % (os.path.basename(trackpath),))
                 os.remove(trackpath)
             #print('%s.playlist=%s' % (self.__class__, pformat(list(self.playlist))))
-
         except LastFMError, why:
-            traceback.print_exc()
+            print('LastFMError(2)=%s' % why)
+            image_fetcher.stop()
+            track_fetcher.stop()
+            if hasattr(why, 'code'):
+                print(why.code)
+            if hasattr(why, 'message'):
+                print(why.message)
+            print(self.playing())
+            self.playlist.pop()
+            print(self.playing())
 
 
     def run(self):
@@ -634,9 +651,7 @@ class LastFMTuner(Thread):
             try:
                 counter += 1
                 xspf = self.webservices.request_xspf()
-                #print(xspf)
                 feed = self.xspf.parse(xspf)
-                #print('feed=%s' % (pformat(feed),))
                 for entry in feed.entries[:]:
                     if not self.running:
                         break
@@ -879,13 +894,16 @@ class PluginInterface(MainMenuPlugin):
             ('LASTFM_LANG', 'en', 'Language of last fm metadata (cn,de,en,es,fr,it,jp,pl,ru,sv,tr)'),
             ('LASTFM_DIR', os.path.join(config.FREEVO_CACHEDIR, 'lastfm'), 'Directory to save lastfm files'),
             ('LASTFM_LOCATIONS', [], 'LastFM locations'),
-            ('LASTFM_CACHE_SIZE', 100 * 1024, 'Cache size of the buffer before playing'),
-            ('LASTFM_BLOCK_SIZE', 100 * 1024, 'Cache size of the buffer before playing'),
+            ('LASTFM_CACHE_SIZE', 150 * 1024, 'Cache size of the buffer before playing'),
+            ('LASTFM_BLOCK_SIZE', 100 * 1024, 'Block size of the buffer to retrieve'),
         ]
 
 
     def items(self, parent):
         """
+        Set the main menu item
+
+        @returns: MenuItem
         """
         _debug_('%s.items(parent=%r)' % (self.__class__, parent))
         return [ LastFMMainMenuItem(parent, self) ]
