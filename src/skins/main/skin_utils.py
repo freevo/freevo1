@@ -97,11 +97,11 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
         if isinstance(item.image, imlib2.Image):
             image = osd.loadbitmap(item.image)
         else:
-            if not os.path.exists(item.image):
+            if not os.path.exists(str(item.image)):
                 return None, 0, 0
 
         for folder in ('.thumbs', '.images'):
-            image_parts = os.path.split(item.image)
+            image_parts = os.path.split(str(item.image))
             imagefile = os.path.join(image_parts[0], folder, image_parts[1])
             if os.path.exists(imagefile):
                 break
