@@ -13,14 +13,14 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
 
-== Release 1.8.5 (2009-??-??) ==
+== Release 1.9.1 (2009-??-??) ==
 --------------------------------
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
 
  * New improvements to the rc.app() interface (F#2772598)
  * Updated encoding server uniquely identify different re-enoding of files (F#2489762)
 
-== Release 1.8.4 (2009-05-26) ==
+== Release 1.9.0 (2009-05-26) ==
 --------------------------------
 svn co svn://svn.freevo.org/freevo/tags/REL-1_8_4/freevo freevo-1.8.4
 
@@ -40,7 +40,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_8_4/freevo freevo-1.8.4
  * Updated command plug-in to allow images to be specified in the fxd file (F#2778822)
  * Updated dvdbackup plug-in to allow the audio codec to be specified (F#2791303)
  * Updated encoding server to run jobs as nice (F#2763076)
- * Updated French translation (F#2784895)
+ * Updated French translation (F#2784895, F#2795784)
  * Updated ivtv_xine_tv plugin with a record menu screen, xine-ui patch required (F#2373921)
  * Updated play state dialogues with time elapsed / total time (F#2594055)
  * Updated encoding crop detection (F#2500046)
