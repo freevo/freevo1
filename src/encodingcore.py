@@ -318,8 +318,7 @@ class EncodingJob:
         """Set a container to hold the audio & video streams"""
         #safety checks, should raise an exception
         if container not in self.encodingopts.getContainerList():
-            return 'Unknown container format'
-
+            return 'Unknown container format %r' % (container,)
         self.container = container
 
 
@@ -1078,7 +1077,7 @@ class EncodingQueue:
 
         _debug_('PID %s' % self.currentjob.pid)
 
-        output=self.currentjob.full_output_file_name()
+        output = self.currentjob.full_output_file_name()
         # check eventually that there is no file by the same name
         unique_output = uniquify_filename(output)
 
