@@ -40,11 +40,11 @@ import copy
 import rc
 from pprint import pformat
 
-import util.mediainfo as mediainfo
 import kaa.metadata
 
 import config
 import util
+import util.mediainfo as mediainfo
 
 import menu
 import skin
@@ -229,7 +229,11 @@ class DirItem(Playlist):
                 parser.set_handler('skin', self.read_folder_fxd)
                 parser.parse()
             except:
-                print 'fxd file %r corrupt' % (self.folder_fxd,)
+                _debug_('fxd file %r corrupt, removed' % (self.folder_fxd,), DWARNING)
+                try:
+                    os.remove(self.folder_fxd)
+                except OSError, why:
+                    _debug_('fxd file %r not removed' % (self.folder_fxd,), DINFO)
                 traceback.print_exc()
 
 
