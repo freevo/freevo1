@@ -36,6 +36,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_8_4/freevo freevo-1.8.4
  * New screen-saver module, "life" (F#2371097)
  * New screen-saver module, "flames" (F#2376752)
  * New tv guide plug-in "categories" (F#2743961)
+ * New zoneminder plug-in (F#2790321)
  * Updated autoshutdown plug-in to allow a configurable start-up delay (F#2784634)
  * Updated command plug-in to allow images to be specified in the fxd file (F#2778822)
  * Updated dvdbackup plug-in to allow the audio codec to be specified (F#2791303)
