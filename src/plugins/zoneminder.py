@@ -82,17 +82,17 @@ class ZoneMinderCommon():
         auth = ''
         if config.ZONEMINDER_SERVER_AUTH_TYPE == 'builtin':
             if config.ZONEMINDER_SERVER_AUTH_RELAY == 'plain':
-                auth = '&user=%s&pass=%s' % ( config.ZONEMINDER_SERVER_USERNAME, config.ZONEMINDER_SERVER_PASSWORD)
+                auth = '&user=%s&pass=%s' % (config.ZONEMINDER_SERVER_USERNAME, config.ZONEMINDER_SERVER_PASSWORD)
             if config.ZONEMINDER_SERVER_AUTH_RELAY == 'hashed':
                 # $time = localtime();
                 # $auth_key = ZM_AUTH_HASH_SECRET.$_SESSION['username'].$_SESSION['password_hash'].$_SESSION['remote_addr'].$time[2].$time[3].$time[4].$time[5];
-                # $auth = md5( $auth_key );
+                # $auth = md5($auth_key);
                 lt = localtime()
                 auth_key = md5.new()
                 auth_key.update(config.ZONEMINDER_SERVER_AUTH_HASH_SECRET)
                 auth_key.update(config.ZONEMINDER_SERVER_USERNAME)
                 auth_key.update(config.ZONEMINDER_SERVER_PASSWORD_HASH)
-                if config.ZONEMINDER_CLIENT_IPV4_ADDRESS != '':
+                if config.ZONEMINDER_CLIENT_IPV4_ADDRESS:
                     auth_key.update(config.ZONEMINDER_CLIENT_IPV4_ADDRESS)
                 else:
                     my_ipv4_address = socket.gethostbyname(socket.gethostname())
@@ -106,38 +106,40 @@ class ZoneMinderCommon():
 
 
     def start_stream(self):
-        if config.ZONEMINDER_SERVER_USE_SSL == True:
-            self.conn = httplib.HTTPSConnection(config.ZONEMINDER_SERVER_HOST,
-                    port=int(config.ZONEMINDER_SERVER_PORT),
-                    key_file=config.ZONEMINDER_SERVER_SSL_KEY,
-                    cert_file=config.ZONEMINDER_SERVER_SSL_CERT,
+        if config.ZONEMINDER_SERVER_USE_SSL:
+            self.conn = httplib.HTTPSConnection(
+                config.ZONEMINDER_SERVER_HOST,
+                port=int(config.ZONEMINDER_SERVER_PORT),
+                key_file=config.ZONEMINDER_SERVER_SSL_KEY,
+                cert_file=config.ZONEMINDER_SERVER_SSL_CERT,
             )
         else:
             self.conn = httplib.HTTPConnection(config.ZONEMINDER_SERVER_HOST,
-                    port=int(config.ZONEMINDER_SERVER_PORT) )
+                    port=int(config.ZONEMINDER_SERVER_PORT))
         self.conn.connect()
         try:
             self.conn.putrequest('GET', self.build_request())
             self.conn.endheaders()
-        except socket.error,e:
+        except socket.error, e:
             self.stream_file = None
             PopupBox(text=_('Error: %s') % e[1]).show()
             return
-        except httplib.HTTPException,e:
+        except httplib.HTTPException, e:
             self.stream_file = None
             PopupBox(text=_('Error: %s') % e.message).show()
             return
         response = self.conn.getresponse()
         if response.status != 200:
             self.stream_file = None
-            PopupBox(text=_('HTTP Status %d:%s') % (response.status, response.reason ) ).show()
+            PopupBox(text=_('HTTP Status %(status)d:%(reason)s') % (
+                {'status': response.status, 'reason': response.reason})).show()
             return
         ct = response.getheader('content-type')
         boundary = ct[ct.find('=') + 1:]
         self.stream_file = response.fp
 
     def get_picture(self):
-        if self.stream_file == None:
+        if self.stream_file is None:
             return None
 
         image_parser = ImageFile.Parser()
@@ -164,7 +166,7 @@ class ZoneMinderCommon():
 
     def display_montage(self, x, y, width, height, surface):
         global montage_waiting, montage_surfaces
-        if self.stream_file == None:
+        if self.stream_file is None:
             return
         while montage_waiting:
             for e in pygame.event.get():
@@ -179,10 +181,10 @@ class ZoneMinderCommon():
             picture = self.get_picture()
             try:
                 montage_surface_lock.acquire()
-                if picture == None:
+                if picture is None:
                     del(montage_surfaces[self.id])
                     return
-                surface.screen.blit(pygame.transform.scale(picture, (width, height)), (x,y))
+                surface.screen.blit(pygame.transform.scale(picture, (width, height)), (x, y))
                 montage_surfaces[self.id] = True
                 if montage_surfaces.values().count(False) == 0:
                     pygame.display.flip()
@@ -193,7 +195,7 @@ class ZoneMinderCommon():
 
 
     def display(self, surface = osd):
-        if self.stream_file == None:
+        if self.stream_file is None:
             return
         waiting = True
         while waiting:
@@ -202,11 +204,9 @@ class ZoneMinderCommon():
                     if e.key == pygame.K_ESCAPE:
                         waiting = False
             picture = self.get_picture()
-            if picture == None:
+            if picture is None:
                 continue
-            surface.screen.blit(
-                    pygame.transform.scale(picture, surface.screen.get_size()),
-                    (0,0))
+            surface.screen.blit(pygame.transform.scale(picture, surface.screen.get_size()), (0, 0))
             pygame.display.flip()
         skin.redraw()
 
@@ -275,9 +275,9 @@ class ZoneMinder():
 
     def list_events(self, where=None, orderby=None):
         sql = """SELECT E.Name AS Name,Cause,Length, StartTime, MonitorId, M.Name AS MonitorName, E.Id AS EventId, FrameId FROM Events AS E,Monitors AS M, (SELECT FrameId FROM Frames WHERE EventId=22105 AND Type='Alarm' ORDER BY FrameId LIMIT 1) AS F WHERE E.MonitorId=M.Id"""
-        if where != None:
+        if where is not None:
             sql += """ AND %s""" % where
-        if orderby != None:
+        if orderby is not None:
             sql += """ ORDER BY %s""" % orderby
         c = self.db.cursor()
         c.execute(sql)
@@ -326,12 +326,12 @@ class PluginInterface(plugin.MainMenuPlugin):
             self.reason = 'the file \'%s\' is not readable' % filename
             return
 
-        if config.ZONEMINDER_SERVER_USE_SSL == True:
-            if config.ZONEMINDER_SERVER_SSL_KEY != None:
+        if config.ZONEMINDER_SERVER_USE_SSL:
+            if config.ZONEMINDER_SERVER_SSL_KEY is not None:
                 if not os.path.isfile(config.ZONEMINDER_SERVER_SSL_KEY):
                     self.reason = 'the ssl key file \'%s\' is not readable' % config.ZONEMINDER_SERVER_SSL_KEY
                     return
-            if config.ZONEMINDER_SERVER_SSL_CERT != None:
+            if config.ZONEMINDER_SERVER_SSL_CERT is not None:
                 if not os.path.isfile(config.ZONEMINDER_SERVER_SSL_CERT):
                     self.reason = 'the ssl certificate file \'%s\' is not readable' % config.ZONEMINDER_SERVER_SSL_CERT
                     return
@@ -386,7 +386,7 @@ class ZoneMinderLiveStreamMenu(Item):
             self.menus.append(MenuItem(name.capitalize(), self.live, id))
 
     def actions(self):
-        items = [ ( self.create_mainmenu , _('Stream') ) ]
+        items = [ (self.create_mainmenu, _('Stream')) ]
         return items
 
     def create_mainmenu(self, arg=None, menuw=None):
@@ -447,7 +447,7 @@ class ZoneMinderEventsMenu(Item):
         ]
 
     def actions(self):
-        items = [ ( self.create_mainmenu , _('Stream') ) ]
+        items = [ (self.create_mainmenu, _('Stream')) ]
         return items
 
     def create_mainmenu(self, arg=None, menuw=None):
@@ -470,7 +470,7 @@ class ZoneMinderEventsByTimeMenu(Item):
         ]
 
     def actions(self):
-        items = [ ( self.create_mainmenu , _('Stream') ) ]
+        items = [ (self.create_mainmenu, _('Stream')) ]
         return items
 
     def create_mainmenu(self, arg=None, menuw=None):
@@ -514,7 +514,7 @@ class ZoneMinderEventsByMonitorMenu(Item):
             self.menus.append(MenuItem(name.capitalize(), self.events, id))
 
     def actions(self):
-        items = [ ( self.create_mainmenu , _('Stream') ) ]
+        items = [ (self.create_mainmenu, _('Stream')) ]
         return items
 
     def create_mainmenu(self, arg=None, menuw=None):
@@ -557,7 +557,7 @@ class ZoneMinderMainMenu(Item):
         ]
 
     def actions(self):
-        items = [ ( self.create_mainmenu , _('CCTV') ) ]
+        items = [ (self.create_mainmenu, _('CCTV')) ]
         return items
 
     def create_mainmenu(self, arg=None, menuw=None):
