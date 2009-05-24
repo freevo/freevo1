@@ -526,7 +526,7 @@ class LastFMAudioItem(AudioItem):
         """
         _debug_('%s.add_metadata()' % (self.__class__,))
         #print('%s.__dict__=%s' % (self.__class__, pformat(self.__dict__)))
-        if os.path.exists(self.filename):
+        if self.filename and os.path.exists(self.filename):
             from kaa.metadata.audio import eyeD3
             try:
                 _debug_('artist=%r album=%r title=%r' % (self.artist, self.album, self.title))
@@ -538,7 +538,7 @@ class LastFMAudioItem(AudioItem):
                 tag.setAlbum(Unicode(self.album))
                 tag.setTitle(Unicode(self.title))
                 #tag.setGenre(self.genre)
-                if os.path.exists(self.image):
+                if self.image and os.path.exists(self.image):
                     tag.addImage(eyeD3.ImageFrame.FRONT_COVER, self.image)
                 tag.update()
             except Exception, why:
@@ -608,13 +608,13 @@ class LastFMTuner(Thread):
 
             if image_fetcher.result:
                 _debug_('image %r downloaded' % (os.path.basename(imagepath),))
-            elif os.path.exists(imagepath):
+            elif imagepath and os.path.exists(imagepath):
                 _debug_('image %r removed' % (os.path.basename(imagepath),))
                 os.remove(imagepath)
 
             if track_fetcher.result:
                 _debug_('track %r downloaded' % (os.path.basename(trackpath),))
-            elif os.path.exists(trackpath):
+            elif trackpath and os.path.exists(trackpath):
                 _debug_('track %r removed' % (os.path.basename(trackpath),))
                 os.remove(trackpath)
             #print('%s.playlist=%s' % (self.__class__, pformat(list(self.playlist))))
