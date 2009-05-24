@@ -359,8 +359,7 @@ class Playlist(Item):
         """
         play the playlist
         """
-        _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        print('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
+        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__class__, arg, menuw))
         if not self.menuw:
             self.menuw = menuw
 
