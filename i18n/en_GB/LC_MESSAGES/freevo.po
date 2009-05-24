@@ -2249,31 +2249,31 @@ msgstr "UV Index"
 
 #: plugins/oneclick.py:981
 msgid "As of"
-msgstr "As of:"
+msgstr "As of"
 
 #: plugins/oneclick.py:984
 msgid "Temperature"
-msgstr "Temperature:"
+msgstr "Temperature"
 
 #: plugins/oneclick.py:985
 msgid "Dew Point"
-msgstr "Dew Point:"
+msgstr "Dew Point"
 
 #: plugins/oneclick.py:989
 msgid "Winds"
-msgstr "Winds:"
+msgstr "Winds"
 
 #: plugins/oneclick.py:990
 msgid "Tonight"
-msgstr "Tonight:"
+msgstr "Tonight"
 
 #: plugins/oneclick.py:991
 msgid "Sunset"
-msgstr "Sunset:"
+msgstr "Sunset"
 
 #: plugins/oneclick.py:992
 msgid "Moon Phase"
-msgstr "Moon Phase:"
+msgstr "Moon Phase"
 
 #: plugins/oneclick.py:1044
 msgid "LO"
@@ -3974,7 +3974,7 @@ msgstr "searching IMDB..."
 
 #: video/plugins/imdb.py:156
 msgid "Connecting to IMDB failed:"
-msgstr "Connecting IMDB failed:"
+msgstr "Connecting to IMDB failed:"
 
 #: video/plugins/imdb.py:174
 msgid "IMDB Query"
