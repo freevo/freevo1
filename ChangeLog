@@ -18,7 +18,6 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
 
  * New improvements to the rc.app() interface (F#2772598)
- * Updated encoding server uniquely identify different re-enoding of files (F#2489762)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------
@@ -40,11 +39,12 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_8_4/freevo freevo-1.8.4
  * Updated autoshutdown plug-in to allow a configurable start-up delay (F#2784634)
  * Updated command plug-in to allow images to be specified in the fxd file (F#2778822)
  * Updated dvdbackup plug-in to allow the audio codec to be specified (F#2791303)
+ * Updated encoding crop detection (F#2500046)
  * Updated encoding server to run jobs as nice (F#2763076)
+ * Updated encoding server uniquely identify different re-enoding of files (F#2489762)
  * Updated French translation (F#2784895, F#2795784)
  * Updated ivtv_xine_tv plugin with a record menu screen, xine-ui patch required (F#2373921)
  * Updated play state dialogues with time elapsed / total time (F#2594055)
- * Updated encoding crop detection (F#2500046)
  * Updated recordings manager with 'Add to Favorites' and 'Search for more' (F#2661790)
  * Fixed alsamixer mute variable error (B#2497746)
  * Fixed busy not being removed correctly (B#1928513)
