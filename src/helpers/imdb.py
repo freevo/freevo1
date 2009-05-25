@@ -74,6 +74,8 @@ a special DVD or VCD title to the list of files""")
         help='specify the CD/DVD device [default:%default]')
     parser.add_option('-a', '--add', action='store_true', dest='add', default=False,
         help='add a video file to the fxd file [default:%default]')
+    parser.add_option('--encoding', action='store', dest='encoding', default='utf-8', metavar='ENC',
+        help='terminal encoding to display the results [default:%default]')
     return parser.parse_args()
 
 
@@ -155,7 +157,7 @@ if __name__ == "__main__":
                 title = 'http://www.imdb.com/title/tt%s/  %s  %s (%s)' % (result[:1] + result[:3])
             else:
                 title = 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
-            print '%s' % title.encode('utf-8')
+            print '%s' % title.encode(opts.encoding)
         sys.exit(0)
 
     if opts.guess:
@@ -171,7 +173,7 @@ if __name__ == "__main__":
                 title = 'http://www.imdb.com/title/tt%s/  %s  %s (%s)' % (result[:1] + result[:3])
             else:
                 title = 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
-            print '%s' % title.encode('utf-8')
+            print '%s' % title.encode(opts.encoding)
         sys.exit(0)
 
     # normal usage
