@@ -70,7 +70,7 @@ except ImportError, why:
 v = 'unknown'
 try:
     import kaa.version
-    if kaa.version.VERSION < 0.4:
+    if kaa.version.VERSION < 0.6:
         v = kaa.version.VERSION
         raise ImportError
 except (AttributeError, ImportError):
