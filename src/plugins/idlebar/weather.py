@@ -75,11 +75,11 @@ class WeatherFetcher(Thread):
 
                 if pr.getTemperatureCelsius():
                     if self.tempunits == 'F':
-                        self.temperature = '%2d' % pr.getTemperatureFahrenheit()
+                        self.temperature = '%2d' % int(pr.getTemperatureFahrenheit())
                     elif self.tempunits == 'K':
-                        self.temperature = '%3d' % pr.getTemperatureCelsius() + 273
+                        self.temperature = '%3d' % int(pr.getTemperatureCelsius() + 273)
                     else:
-                        self.temperature = '%2d' % pr.getTemperatureCelsius()
+                        self.temperature = '%2d' % int(pr.getTemperatureCelsius())
                 else:
                     self.temperature = '?'
 
@@ -98,6 +98,8 @@ class WeatherFetcher(Thread):
                     _debug_('Failed to create %r: %s' % (self.cachefile, why), DWARNING)
 
             except Exception, why:
+                import traceback
+                traceback.print_exc()
                 _debug_(why, DERROR)
 
             _debug_('WeatherFetcher(%r).ran' % (self.metarcode,), 1)
