@@ -55,7 +55,6 @@ import config
 import util
 
 import kaa.metadata as mmpython
-#Constants
 
 try:
     import freevo.version as version
@@ -250,7 +249,7 @@ class FxdImdb:
                 appended = False
                 for search_word in words:
                     if not appended and result[1] and result[1].lower().find(search_word.lower()) != -1:
-                        new_list.append(result)
+                        new_list.append(tuple([util.unescape(i) for i in result]))
                         appended = True
             self.id_list = new_list
             _debug_('id_list has now %s items' % (len(self.id_list)))

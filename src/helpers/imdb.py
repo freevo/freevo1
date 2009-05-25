@@ -150,11 +150,12 @@ if __name__ == "__main__":
             print 'No results'
         for result in results:
             if result[3]:
-                print 'http://www.imdb.com/title/tt%s/  %s  %s (%s) %s' % (result[:1] + result[:4])
+                title = 'http://www.imdb.com/title/tt%s/  %s  %s (%s) %s' % (result[:1] + result[:4])
             elif result[2]:
-                print 'http://www.imdb.com/title/tt%s/  %s  %s (%s)' % (result[:1] + result[:3])
+                title = 'http://www.imdb.com/title/tt%s/  %s  %s (%s)' % (result[:1] + result[:3])
             else:
-                print 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
+                title = 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
+            print '%s' % title.encode('utf-8')
         sys.exit(0)
 
     if opts.guess:
@@ -165,11 +166,12 @@ if __name__ == "__main__":
             print 'No results'
         for result in results:
             if result[3]:
-                print 'http://www.imdb.com/title/tt%s/  %s  %s (%s) %s' % (result[:1] + result[:4])
+                title = 'http://www.imdb.com/title/tt%s/  %s  %s (%s) %s' % (result[:1] + result[:4])
             elif result[2]:
-                print 'http://www.imdb.com/title/tt%s/  %s  %s (%s)' % (result[:1] + result[:3])
+                title = 'http://www.imdb.com/title/tt%s/  %s  %s (%s)' % (result[:1] + result[:3])
             else:
-                print 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
+                title = 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
+            print '%s' % title.encode('utf-8')
         sys.exit(0)
 
     # normal usage

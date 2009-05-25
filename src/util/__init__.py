@@ -71,6 +71,7 @@ if sys.argv[0].find('setup.py') == -1:
     import vfs
     from misc import *
     from fileops import *
+    from unescape import *
 
     import fxdparser
     import objectcache
