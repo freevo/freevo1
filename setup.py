@@ -167,16 +167,28 @@ os.path.walk('./Docs/plugin_writing', docbook_finder, data_files)
 scripts = ['freevo']
 
 # now start the python magic
-setup (name         = "freevo",
-       version      = version.__version__,
-       description  = "Freevo",
-       author       = "Krister Lagerstrom, et al.",
-       author_email = "freevo-devel@lists.sourceforge.net",
-       url          = "http://www.freevo.org",
-       license      = "GPL",
-
-       i18n         = 'freevo',
-       scripts      = scripts,
-       data_files   = data_files,
-       cmdclass     = { 'runtime': Runtime }
-       )
+setup (
+    name             = "freevo",
+    version          = version.__version__,
+    description      = "Freevo",
+    long_description = "Freevo Multimedia System",
+    author           = "Krister Lagerstrom, et al.",
+    author_email     = "freevo-devel@lists.sourceforge.net",
+    maintainer       = "Duncan Webb",
+    maintainer_email = "duncan@freevo.org",
+    url              = "http://www.freevo.org",
+    license          = "GPL",
+    download_url     = "https://sourceforge.net/project/showfiles.php?group_id=46652&package_id=39526",
+    i18n             = 'freevo',
+    scripts          = scripts,
+    data_files       = data_files,
+    cmdclass         = { 'runtime': Runtime },
+    classifiers      = [
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: End Users/Desktop",
+        "Intended Audience :: Developers",
+        "License :: GPL",
+        "Programming Language :: Python",
+    ],
+    platforms       = [ 'Linux', 'FreeBSD', 'Unix' ],
+)

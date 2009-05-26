@@ -374,17 +374,24 @@ def setup(**attrs):
     os.path.walk('./i18n', data_finder, data_files)
 
     core.setup(
-        name         = attrs['name'],
-        version      = attrs['version'],
-        description  = attrs['description'],
-        author       = attrs['author'],
-        author_email = attrs['author_email'],
-        url          = attrs['url'],
+        name             = attrs['name'],
+        version          = attrs['version'],
+        description      = attrs['description'],
+        long_description = attrs['long_description'],
+        author           = attrs['author'],
+        author_email     = attrs['author_email'],
+        #maintainer       = attrs['maintainer'],
+        #maintainer_email = attrs['maintainer_email'],
 
-        scripts      = attrs['scripts'],
-        package_dir  = package_dir,
-        packages     = packages,
-        data_files   = attrs['data_files'] + data_files,
+        url              = attrs['url'],
+        download_url     = attrs['download_url'],
+        license          = attrs['license'],
+        platforms        = attrs['platforms'],
 
-        cmdclass     = cmdclass
+        scripts          = attrs['scripts'],
+        package_dir      = package_dir,
+        packages         = packages,
+        data_files       = attrs['data_files'] + data_files,
+
+        cmdclass         = cmdclass
         )
