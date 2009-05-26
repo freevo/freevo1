@@ -762,7 +762,7 @@ class LastFMStation(Item):
 
         if error and self.menuw:
             AlertBox(text=error).show()
-            rc.post_event(rc.PLAY_END)
+            rc.post_event(PLAY_END)
 
 
     def playnext(self, arg=None, menuw=None):
