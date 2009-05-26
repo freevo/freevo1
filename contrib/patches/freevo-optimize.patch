@@ -1,0 +1,12 @@
+Index: freevo
+===================================================================
+--- freevo	(revision 8240)
++++ freevo	(working copy)
+@@ -467,4 +467,7 @@
+         print 'freevo still running, run \'freevo stop\' to stop'
+     sys.exit(0)
+ 
++if python[0].find('python') != -1:
++    python = [ python[0] , '-OO' ] + python[1:]
++
+ start(name, python + proc , bg, check)

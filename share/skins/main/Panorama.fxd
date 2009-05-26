@@ -1,0 +1,851 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<freevo>
+    <skin include="basic" geometry="800x600">
+
+        <!-- 
+        *******************************************************
+        ** DEFAULT ANF GENERAL SETTINGS
+        ******************************************************* -->
+        <iconset theme="Panorama" />
+        <setvar name="box_under_icon" val="0" />
+        <setvar name="anamorphic" val="1" />
+        <color label="selectionBg" value="0x80208747" />
+        <color label="selectionBorder" value="0x4052d26e" />
+
+        <!-- Redefine of the type default -->
+        <menuset label="normal text style">
+            <view x="20" y="100" width="225" height="300" />
+            <listing layout="listing" x="255" y="100" width="465" height="470">
+                <image filename="up.png" label="uparrow" x="760" y="110" />
+                <image filename="down.png" label="downarrow" x="760" y="max-32" />
+            </listing>
+        </menuset>
+
+        <!-- default without an image -->
+        <menuset label="default no image" inherits="normal text style">
+            <view visible="no" />
+            <listing x="20" width="730" />
+        </menuset>
+
+        <!-- default with description and image -->
+        <menuset label="default description" inherits="normal text style">
+            <listing height="350" />
+            <info layout="description" visible="yes" x="20" y="460" width="760" height="130" />
+        </menuset>
+
+        <!-- default with description without an image -->
+        <menuset label="default description no image" inherits="default description">
+            <view visible="no" />
+            <listing x="20" width="730" />
+        </menuset>
+
+        <!-- default view area -->
+        <layout label="view">
+            <content align="center" valign="center">
+                <item type="default">
+                    <rectangle size="0" bgcolor="0x80000000" radius="8" x="-10" y="-10" width="max+20"
+                    height="max+20" />
+                </item>
+            </content>
+        </layout>
+
+        <!-- default listing area -->
+        <layout label="listing">
+            <background />
+            <content type="text" spacing="2">
+                <item type="default" font="grey" />
+                <item type="selected" font="white">
+                    <rectangle bgcolor="selectionBg" color="selectionBorder" size="2" x="-10" y="-3" width="max+20"
+                    height="max+6" radius="10" />
+                </item>
+            </content>
+        </layout>
+
+        <!-- default info area -->
+        <layout label="description">
+            <background>
+                <rectangle size="0" radius="10" bgcolor="0xaa000000" />
+            </background>
+            <content x="10" y="10" type="text" height="max-20" width="max-20" spacing="20" font="default">
+                <item type="default">
+                    <if expression="description">
+                        <text font="info value" mode="soft" height="max" expression="description" />
+                    </if>
+                </item>
+            </content>
+        </layout>
+        <image label="background" filename="panorama/background.jpg" />
+        <image label="logo" filename="panorama/logo.png" />
+        <image label="scheduledtv" filename="panorama/myth_tv.png" />
+
+        <!-- 
+        *******************************************************
+        ** VIDEO MENU
+        ******************************************************* -->
+        <menu type="video">
+            <style text="text with info style" />
+        </menu>
+
+        <menuset label="video" inherits="normal text style">
+            <screen layout="video screen" />
+        </menuset>
+        <menuset label="text with info style" inherits="normal text style">
+
+            <!-- 4. listing area: the list of all items -->
+            <screen layout="video screen" visible="yes" />
+            <view layout="view" x="10" y="90" width="210" height="250" align="left" />
+            <listing x="30" y="350" width="710" height="230">
+                <image filename="up.png" label="uparrow" x="750" y="350" />
+                <image filename="down.png" label="downarrow" x="750" y="max-32" />
+            </listing>
+            <info layout="video info" x="230" y="100" width="520" height="300" />
+        </menuset>
+
+        <layout label="video screen">
+            <background>
+                <image image="background" x="0" y="0" label="background" />
+                <rectangle size="0" bgcolor="0x80000000" radius="10" x="10" y="90" width="780" height="250" />
+                <image filename="panorama/watermark_video.png" x="608" y="344" width="192" height="256" />
+            </background>
+        </layout>
+
+        <layout label="video info">
+            <content x="0" y="0" type="text" spacing="20" font="default">
+                <item type="video">
+                    <if expression="tv_show_name">
+                        <text font="info tagline" expression="tv_show_name" />
+                        <newline />
+                        <if expression="tv_show_ep">
+                            <text font="info tagline" expression="tv_show_ep" />
+                            <newline />
+                        </if>
+                    </if>
+                    <if expression="not tv_show_name">
+                        <text font="info tagline" width="max" expression="name" />
+                        <newline />
+                    </if>
+                    <if expression="tagline">
+                        <text font="info tagline">&quot;</text>
+                        <text font="info tagline" width="max" expression="tagline" dim="no" />
+                        <text font="info tagline">&quot;</text>
+                        <newline />
+                    </if>
+                    <if expression="plot">
+                        <goto_pos x="20" mode="relative" />
+                        <text font="info plot" height="120" mode="soft" align="justified" expression="plot" />
+                        <newline />
+                    </if>
+                    <goto_pos y="190" mode="absolute" />
+                    <if expression="year">
+                        <text font="info value">(</text>
+                        <text font="info value" expression="year" />
+                        <text font="info value">)</text>
+                    </if>
+                    <if expression="runtime">
+                        <goto_pos x="30" mode="relative" />
+                        <text font="info value" expression="runtime" />
+                        <newline />
+                    </if>
+                </item>
+                <item type="dir">
+                    <text font="info tagline" width="max" expression="name" />
+                    <newline />
+                    <if expression="tagline">
+                        <text font="info tagline" width="max" expression="tagline" />
+                        <newline />
+                        <goto_pos y="10" mode="relative" />
+                    </if>
+                    <if expression="plot">
+                        <goto_pos x="10" mode="relative" />
+                        <text font="info plot" height="max" mode="soft" align="justified" expression="plot" />
+                        <newline />
+                    </if>
+                    <if expression="content and not plot">
+                        <text font="info plot" height="max" mode="soft" align="justified" expression="content" />
+                        <newline />
+                    </if>
+                    <if expression="not content and not plot">
+                        <text font="info value" width="max" expression="num_items" />
+                        <text font="info value"> Items</text>
+                        <!-- other values are num_play_items and num_dir_items -->
+                    </if>
+                    <newline />
+                </item>
+                <item type="playlist">
+                    <text font="info label">Playlist</text>
+                    <newline />
+                    <if expression="len(playlist)&gt;0">
+                        <text font="info value" expression="len(playlist)" />
+                        <text font="info value">items in this playlist</text>
+                        <newline />
+                    </if>
+                    <if expression="len(playlist)==0">
+                        <text font="info value">This playlist is empty!</text>
+                        <newline />
+                    </if>
+                </item>
+                <item type="track">
+                    <if expression="trackno">
+                        <text font="info tagline"> Track</text>
+                        <text font="info tagline" expression="trackno" />
+                        <newline />
+                        <goto_pos y="10" mode="relative" />
+                    </if>
+                    <if expression="length:min">
+                        <text font="info value" expression="length:min" />
+                        <newline />
+                    </if>
+                    <if expression="len(audio)">
+                        <text font="info value" expression="len(audio)" />
+                        <text font="info value"> Audio tracks</text>
+                        <newline />
+                    </if>
+                    <if expression="len(subtitles)">
+                        <text font="info value" expression="len(subtitles)" />
+                        <text font="info value"> Subtitles</text>
+                        <newline />
+                    </if>
+                    <if expression="len(chapters)">
+                        <text font="info value" expression="len(chapters)" />
+                        <text font="info value"> Chapters</text>
+                        <newline />
+                    </if>
+                </item>
+            </content>
+        </layout>
+
+        <!-- 
+        *******************************************************
+        ** AUDIO MENU
+        ******************************************************* -->
+        <menu type="audio">
+            <style text="audio" />
+        </menu>
+
+        <menuset label="audio" inherits="normal text style">
+            <screen layout="audio screen" />
+            <view layout="view" x="15" y="90" width="200" height="270" />
+            <listing layout="listing" x="228" y="90" width="525" height="480" />
+            <info layout="audio info" x="25" y="370" width="195" height="190" />
+        </menuset>
+
+        <layout label="audio screen">
+            <background>
+                <image image="background" x="0" y="0" label="background" />
+                <image filename="panorama/watermark_music.png" x="608" y="344" width="192" height="256" />
+                <rectangle size="0" bgcolor="0x80000000" radius="10" x="10" y="80" width="210" height="560" />
+            </background>
+        </layout>
+
+        <!-- <layout label="audio list">
+            <content type="text" spacing="2">
+                <item type="default" font="grey"/>
+                <item type="selected" font="white">
+                    <rectangle bgcolor="0xaa000000" size="0" x="-10" y="-3" width="max+20"
+                        height="max+6" radius="15"/>
+                </item>
+            </content>
+            <content type="image+text" spacing="-16">
+                <item type="default" width="84" height="112" font="small" align="center" valign="center"/>
+                <item type="selected" width="128" height="168" font="none"
+                    align="center" valign="center">
+                    <rectangle color="selectionBorder" size="2" x="-3" y="-3"
+                        bgcolor="0xff000000" width="max+6" height="max+6"/> </item>
+            </content>
+        </layout> -->
+
+        <layout label="audio info">
+            <content x="0" y="0" type="text" spacing="10" font="default">
+
+                <!-- audio dir -->
+                <item type="default">
+                    <if expression="display_type == &#39;audio&#39; and artist">
+                        <text font="info tagline" expression="artist" />
+                        <newline />
+                    </if>
+                    <if expression="display_type == &#39;audio&#39; and album">
+                        <text font="info value" expression="album" mode="soft" />
+                        <newline />
+                    </if>
+                    <if expression="not type == &#39;playlist&#39; and not album and not artist">
+                        <text font="info tagline" expression="name" mode="soft" />
+                        <newline />
+                    </if>
+                    <if expression="display_type == &#39;audio&#39; and userdate">
+                        <if expression="album or artist">
+                            <text font="info value" expression="userdate" />
+                            <newline />
+                        </if>
+                    </if>
+                    <if expression="display_type == &#39;audio&#39; and length">
+                        <text font="info value" expression="length" />
+                        <newline />
+                    </if>
+                    <if expression="type == &#39;playlist&#39;">
+                        <text font="info value" width="max" expression="len(playlist)" />
+                        <text font="info value"> Items</text>
+                        <newline />
+                    </if>
+                </item>
+                <item type="audio">
+                    <if expression="artist">
+                        <text font="info tagline" expression="artist" />
+                        <newline />
+                    </if>
+                    <if expression="album">
+                        <text font="info value" expression="album" />
+                        <newline />
+                    </if>
+                    <if expression="not album and not artist">
+                        <text font="info tagline" expression="name" mode="soft" />
+                        <newline />
+                        <if expression="description">
+
+                            <!-- e.g. webradio -->
+                            <text font="info value" expression="description" height="max" mode="soft" />
+                        </if>
+                    </if>
+                    <if expression="parent(audio_advanced_sort)">
+                        <text font="info value"> Track</text>
+                        <text font="info value" expression="trackno" />
+                        <if expression="trackof">
+                            <text font="info value">of</text>
+                            <text font="info value" expression="trackof" />
+                        </if>
+                        <newline />
+                    </if>
+                    <if expression="date">
+                        <text font="info value" expression="date" />
+                        <newline />
+                    </if>
+                    <if expression="length">
+                        <text font="info value" expression="length" />
+                        <newline />
+                    </if>
+                </item>
+                <item type="audiocd">
+                    <if expression="title">
+                        <text font="info tagline" expression="title" />
+                        <newline />
+                    </if>
+                    <if expression="artist">
+                        <text font="info value" expression="artist" />
+                        <newline />
+                    </if>
+                    <if expression="len(tracks)">
+                        <text font="info value" expression="len(tracks)" />
+                        <text width="130" font="info label"> Tracks</text>
+                        <newline />
+                    </if>
+                </item>
+            </content>
+        </layout>
+
+        <!-- 
+        *******************************************************
+        ** IMAGE MENU
+        ******************************************************* -->
+        <menu type="image">
+            <style image="image" text="normal text style (image)" />
+            <style text="normal text style (image)" />
+        </menu>
+
+        <menuset label="image" inherits="normal text style">
+            <screen layout="image screen" />
+            <listing y="80" x="60" height="430" width="700" layout="image list" />
+            <info layout="image info" x="10" y="510" width="780" height="80" />
+            <view visible="no" />
+        </menuset>
+
+        <menuset label="normal text style (image)" inherits="normal text style">
+            <screen layout="image screen" visible="yes" />
+        </menuset>
+
+        <layout label="image screen">
+            <background>
+                <image image="background" x="0" y="0" label="background" />
+                <image filename="panorama/watermark_gallery.png" x="608" y="344" width="192" height="256" />
+            </background>
+        </layout>
+
+        <!-- listing area for image with images (preview) -->
+        <layout label="image list">
+            <content type="image+text" spacing="0">
+                <item type="default" width="96" height="128" align="center" font="small" valign="center">
+                    <shadow x="5" y="5" color="0xaa000000" visible="yes" />
+                </item>
+                <item type="selected" width="96" height="128" font="small" align="center" valign="center">
+                    <shadow x="5" y="5" color="0xaa000000" visible="yes" />
+                    <rectangle color="0x00ffffff" bgcolor="0xffffffffff" size="2" x="-8" y="-8" width="max+16"
+                    height="max+16" />
+                </item>
+            </content>
+        </layout>
+
+        <layout label="image info">
+            <background>
+                <rectangle size="0" radius="10" bgcolor="0xaa000000" />
+            </background>
+            <content x="10" y="10" type="text" height="max-20" width="max-20" spacing="20" font="default">
+                <item type="dir">
+                    <text font="info tagline" width="max" expression="name" />
+                    <newline />
+                    <text font="info value" width="max" expression="num_items" />
+                    <text font="info value"> Items</text>
+                    <!-- other values are num_play_items and num_dir_items -->
+                </item>
+                <item type="playlist">
+                    <text font="info tagline" width="max" expression="name" />
+                    <newline />
+                    <text font="info value" width="max" expression="len(playlist)" />
+                    <text font="info value"> Items</text>
+                    <!-- other values are num_play_items and num_dir_items -->
+                </item>
+                <item type="image">
+                    <text font="info tagline" expression="name" />
+                    <goto_pos x="50" mode="relative" />
+                    <if expression="date">
+                        <text font="info value" width="max" align="right" expression="date" />
+                    </if>
+                    <newline />
+                    <if expression="description">
+                        <text font="info plot" height="max" mode="soft" expression="description" />
+                        <newline />
+                    </if>
+                    <if expression="not description">
+                        <if expression="location">
+                            <text font="info label">Location:</text>
+                            <text font="info value" mode="soft" expression="location" />
+                        </if>
+                        <if expression="not location">
+                            <if expression="geometry">
+                                <text font="info value" expression="geometry" />
+                            </if>
+                        </if>
+                    </if>
+                </item>
+            </content>
+        </layout>
+
+        <!-- 
+        *******************************************************
+        ** MAIN MENU
+        ******************************************************* -->
+        <main imagedir="panorama">
+            <item label="tv" name="Watch TV" image="panorama/myth_tv.png" />
+            <item label="video" name="Watch a Movie" image="panorama/myth_video.png" />
+            <item label="audio" name="Listen to Music" image="panorama/myth_music.png" />
+            <item label="image" name="Look at Pictures" image="panorama/myth_gallery.png" />
+            <item label="games" name="Play a Game" image="panorama/myth_joystick.png" />
+            <item label="weather" name="Weather Forecast" image="panorama/myth_weather.png" />
+            <item label="shutdown" name="Shutdown" image="panorama/myth_shutdown.png" />
+        </main>
+
+        <!-- definition of the main menu -->
+        <menuset label="main menu">
+            <screen layout="screen watermark" visible="yes">
+                <area x="0" y="0" width="800" height="600" />
+            </screen>
+
+            <!-- <listing layout="main listing" visible="yes">
+                <area x="200" y="250" width="200" height="256"/>
+            </listing> -->
+            <listing layout="list_main" x="140" y="180" width="320" height="390" />
+            <view visible="no" />
+        </menuset>
+
+        <layout label="screen watermark">
+            <background>
+                <image image="background" x="0" y="0" label="background" />
+                <image x="480" y="192" width="192" height="256" label="watermark" />
+                <image x="0" y="530" width="152" height="70" label="logo" filename="panorama/watermark_logo.png" />
+            </background>
+        </layout>
+
+        <!-- main menu listing area -->
+        <layout label="list_main">
+            <content align="left" type="text" spacing="10">
+                <item type="default" font="main" />
+                <item type="selected" font="main selected">
+                    <rectangle bgcolor="selectionBg" color="selectionBorder" size="2" y="-5" x="-10" width="max+20"
+                    height="max+10" radius="15" />
+                </item>
+            </content>
+        </layout>
+
+        <!-- redefine the main menu listing area -->
+        <!-- <layout label="main listing">
+            <content type="text" spacing="10">
+                <item type="default" font="grey big" align="center"/>
+                <item type="selected" font="white big" align="center">
+                    <rectangle bgcolor="selectionBg" color="selectionBorder" size="2" x="-3" y="-3"
+                        width="max+6" height="max+6" radius="15"/>
+                </item>
+            </content>
+        </layout> -->
+
+        <layout label="tv listing">
+            <content type="text">
+                <item type="past" font="tv grey">
+                    <rectangle bgcolor="0xff000000" color="0x000000" size="1" x="-5" y="-5" width="max+10"
+                    height="max+10" />
+                </item>
+                <item type="label" font="tv" width="80">
+                    <rectangle bgcolor="tv label" size="1" color="0x000000" x="-5" y="-5" width="max+10"
+                    height="max+10" />
+                </item>
+                <item type="default" font="tv">
+                    <rectangle bgcolor="0x880000a0" color="0x000000" size="1" x="-5" y="-5" width="max+10"
+                    height="max+10" />
+                </item>
+                <item type="head" font="tv">
+                    <rectangle bgcolor="tv label" size="1" color="0x000000" x="-5" y="-5" width="max+10"
+                    height="max+10" />
+                </item>
+                <item type="scheduled" font="tv">
+                    <rectangle bgcolor="0x14ba05" size="1" color="0x000000" x="-5" y="-5" width="max+10"
+                    height="max+10" />
+                </item>
+            </content>
+        </layout>
+
+        <!-- 
+        *******************************************************
+        ** TV DEFINITIONS
+        ******************************************************* -->
+        <menu type="tv">
+            <style text="text with tv info style" />
+        </menu>
+
+        <menu type="tv main menu">
+            <style text="text with tv info style (main)" />
+        </menu>
+
+        <menu type="tv program menu">
+            <style text="text with program info style" />
+        </menu>
+
+        <menu type="tv favorite menu">
+            <style text="text with favorite info style" />
+        </menu>
+
+        <menu type="tv manual record menu">
+            <style text="text with manual record info style" />
+        </menu>
+
+        <menuset label="tv menu">
+            <screen layout="screen" x="0" y="0" width="800" height="600" />
+            <title visible="no" />
+            <info layout="tv info" x="10" y="80" width="760" height="125" />
+            <listing layout="tv listing" x="10" y="220" width="750" height="350">
+                <image x="765" y="220" width="24" height="32" label="uparrow" filename="up.png" />
+                <image x="765" y="max-32" width="24" height="32" label="downarrow" filename="down.png" />
+                <image width="9" height="16" label="leftarrow" filename="left.png" />
+                <image width="9" height="16" label="rightarrow" filename="right.png" />
+            </listing>
+        </menuset>
+
+        <menuset label="tv" inherits="normal text style">
+            <view visible="no" />
+            <listing x="100" width="680">
+                <image label="uparrow" x="290" y="110" />
+                <image label="downarrow" x="max-32" y="520" />
+            </listing>
+            <screen layout="tv menu screen" />
+        </menuset>
+
+        <menuset label="text with tv info style" inherits="text with info style">
+            <screen layout="tv screen" visible="yes" />
+        </menuset>
+
+        <menuset label="text with tv info style (main)" inherits="text with info style">
+            <screen layout="tv screen" visible="yes" />
+            <info layout="tv extended info" x="30" y="100" width="740" height="230" />
+            <view visible="no" />
+        </menuset>
+
+        <menuset label="text with program info style" inherits="text with tv info style (main)">
+            <info layout="tv program info" />
+        </menuset>
+
+        <menuset label="text with favorite info style" inherits="text with tv info style (main)">
+            <info layout="tv favorite info" />
+        </menuset>
+
+        <menuset label="text with manual record info style" inherits="text with tv info style (main)">
+            <info layout="tv manual record info" />
+        </menuset>
+
+        <layout label="tv screen">
+            <background>
+                <image image="background" x="0" y="0" label="background" />
+                <rectangle size="0" bgcolor="0x80000000" radius="10" x="10" y="90" width="780" height="250" />
+                <image filename="panorama/watermark_tv.png" x="608" y="344" width="192" height="256" />
+            </background>
+        </layout>
+
+        <layout label="tv extended info">
+            <content x="0" y="0" type="text" spacing="20" font="default">
+                <item type="default">
+                    <text font="info tagline" width="max" height="max" expression="function:comingup" mode="soft" />
+                </item>
+            </content>
+        </layout>
+
+        <layout label="tv program info">
+            <background>
+                <image image="scheduledtv" x="-5" y="0" width="192" height="256" label="top" />
+            </background>
+            <content x="260" />
+        </layout>
+
+        <!-- tv info area -->
+        <layout label="tv info">
+            <background>
+                <rectangle size="0" bgcolor="0x80000000" radius="10" width="max" />
+            </background>
+            <content x="10" y="10" height="max-20" width="max-20" type="text" spacing="10" font="tv">
+                <item type="default">
+                    <if expression="title">
+                        <text font="tv title" expression="title" />
+                    </if>
+                    <if expression="sub_title">
+                        <text font="info tagline">-</text>
+                        <text font="info tagline" expression="sub_title" />
+                    </if>
+                    <text font="tv time" width="max" align="right" expression="time" />
+                    <newline />
+                    <if expression="desc">
+                        <text font="info plot" height="max" mode="soft" expression="desc" />
+                        <newline />
+                    </if>
+                </item>
+            </content>
+        </layout>
+
+        <font label="tv" name="DejaVuSansCondensed" size="14" color="0xffffff" />
+        <font label="tv selected" name="DejaVuSansCondensed" size="14" color="0x164668">
+            <shadow visible="no" color="0xa0000000" border="yes" />
+        </font>
+        <font label="tv time" name="DejaVuSansCondensed" size="14" color="0xeeeeee" />
+        <font label="tv title" name="DejaVuSansCondensed" size="16" color="0xffffff" />
+        <font label="tv grey" name="DejaVuSansCondensed" size="14" color="0xa0bbbbbb" />
+        <font label="tv highlight" name="DejaVuSansCondensed.ttf" size="14" color="0xa0eeee00" />
+        <color label="tv selection" value="0x88ffee30" />
+
+        <!-- 
+        *******************************************************
+        ** AUDIO PLAYER DEFINITIONS
+        ******************************************************* -->
+        <player>
+            <screen layout="player screen" x="0" y="0" width="800" height="600" />
+            <info layout="player info blurr" x="310" y="120" width="500" height="350" />
+            <view layout="player blurr" x="30" y="120" width="263" height="350" />
+            <title visible="no" />
+        </player>
+
+        <layout label="player screen">
+            <background>
+                <image image="background" x="0" y="0" label="background" />
+                <image filename="panorama/watermark_music.png" x="608" y="344" width="192" height="256" />
+                <image filename="frame.png" x="5" y="100" width="max-10" height="390" />
+            </background>
+        </layout>
+
+        <layout label="player blurr">
+            <content align="center" valign="center" />
+        </layout>
+
+        <layout label="player info blurr">
+            <background>
+                <rectangle bgcolor="0xe0f0f0ff" size="0" x="300" y="286" width="160" height="max-10" radius="10" />
+            </background>
+            <content>
+                <item type="default">
+                    <if expression="title">
+                        <text font="player title" expression="title" />
+                        <newline />
+                    </if>
+                    <if expression="not title">
+                        <text font="player title" expression="name" />
+                        <newline />
+                    </if>
+                    <if expression="description">
+                        <text font="player info" expression="description" />
+                        <newline />
+                    </if>
+                    <if expression="stream_name">
+                        <text font="player info" expression="stream_name" />
+                        <newline />
+                    </if>
+                    <if expression="artist">
+                        <text font="player artist" expression="artist" />
+                        <text font="player artist"></text>
+                    </if>
+                    <if expression="date">
+                        <text font="player artist">(</text>
+                        <text font="player artist" expression="date" />
+                        <text font="player artist">)</text>
+                    </if>
+                    <newline />
+                    <goto_pos y="15" mode="relative" />
+                    <if expression="album">
+                        <text font="player info" expression="album" />
+                        <if expression="not trackno">
+                            <newline />
+                        </if>
+                    </if>
+                    <if expression="trackno">
+                        <if expression="album">
+                            <text font="player info">-</text>
+                        </if>
+                        <if expression="not album">
+                            <text font="player info">Track:</text>
+                        </if>
+                        <text font="player info" expression="trackno" />
+                    </if>
+                    <if expression="trackof">
+                        <text font="player info">/</text>
+                        <text font="player info" expression="trackof" />
+                    </if>
+                    <if expression="not trackof">
+                        <if expression="parent(num_audio_items)">
+                            <text font="player info">/</text>
+                            <text font="player info" expression="parent(num_audio_items)" />
+                        </if>
+                        <if expression="not parent(num_audio_items) and parent(num_items)">
+                            <text font="player info">/</text>
+                            <text font="player info" expression="parent(num_items)" />
+                        </if>
+                    </if>
+                    <newline />
+                    <goto_pos y="30" mode="relative" />
+                    <if expression="bitrate">
+                        <text font="player info" expression="bitrate" />
+                        <text font="player info">kbps</text>
+                        <if expression="samplerate">
+                            <text font="player info">-</text>
+                        </if>
+                        <if expression="not samplerate">
+                            <newline />
+                        </if>
+                    </if>
+                    <if expression="samplerate">
+                        <text font="player info" expression="samplerate" />
+                        <text font="player info"> Hz</text>
+                    </if>
+                    <newline />
+                    <goto_pos x="310" y="300" mode="absolute" />
+                    <if expression="elapsed">
+                        <text font="player time" expression="elapsed" />
+                    </if>
+                    <if expression="length">
+                        <text font="player time">/</text>
+                        <text font="player time" expression="length" />
+                    </if>
+                </item>
+            </content>
+        </layout>
+
+        <font label="player" name="DejaVuSansCondensed" size="18" color="0xffffff" />
+        <font label="player title" name="DejaVuSansCondensed" size="22" color="0xffffff" />
+        <font label="player artist" name="DejaVuSansCondensed" size="18" color="0xffffff" />
+        <font label="player info" name="DejaVuSansCondensed" size="14" color="0xffffff" />
+        <font label="player time" name="DejaVuSansMono" size="16" color="0xffffff" />
+
+        <!-- 
+        *******************************************************
+        ** Splashscreen
+        ******************************************************* -->
+        <splashscreen>
+            <screen layout="screen" />
+            <content layout="splashscreen" x="0" y="0" width="800" height="600" />
+        </splashscreen>
+
+        <layout label="splashscreen">
+            <background>
+                <image filename="panorama/splashlogo.png" x="0" y="150" width="800" height="256" />
+            </background>
+            <content x="30" y="400" width="740" font="splashscreen font" spacing="10" />
+        </layout>
+
+        <font label="splashscreen font" name="DejaVuSansCondensed" size="20" color="0xffffff" />
+
+        <!-- 
+        *******************************************************
+        ** POPUP DEFINITIONS
+        ******************************************************* -->
+        <layout label="popup">
+            <background>
+                <rectangle x="5" y="5" size="0" bgcolor="0xa0000000" radius="5" />
+                <rectangle width="max-5" height="max-5" color="0x000000" size="2" bgcolor="0xffffff" radius="5" />
+                <rectangle x="5" y="5" width="max-15" height="max-15" color="0x000000" size="2"
+                bgcolor="widget background" radius="5" />
+            </background>
+            <content x="8" y="8" width="max-21" height="max-21">
+
+                <!-- special button settings -->
+                <item type="button">
+                    <rectangle color="0x000000" bgcolor="widget item background" size="2" radius="6" />
+                </item>
+                <!-- special settings for selected buttons -->
+                <item type="button selected">
+                    <rectangle color="0x000000" bgcolor="widget selected background" size="2" radius="6" />
+                </item>
+            </content>
+        </layout>
+
+        <font label="widget" name="DejaVuSansCondensed" size="14"></font>
+        <font label="selected widget" name="DejaVuSansCondensed" size="14"></font>
+
+        <!-- 
+        *******************************************************
+        ** FONT DEFINITIONS
+        ******************************************************* -->
+        <font label="small" name="DejaVuSansCondensed" size="10" color="0xffffff" />
+        <font label="none" name="DejaVuSansCondensed" size="1" color="0xff000000" />
+        <font label="default" name="DejaVuSansCondensed" size="16" color="0xffffff"></font>
+        <font label="info font" name="DejaVuSansCondensed" size="16" color="0xffffff"></font>
+        <font label="title" name="DejaVuSansCondensed" size="18" color="0xffffff"></font>
+        <font label="subtitle" name="DejaVuSansCondensed" size="18" color="0xffffff"></font>
+        <font label="main" name="DejaVuSansCondensed" size="16" color="0xffffff"></font>
+        <font label="main selected" name="DejaVuSansCondensed" size="16" color="0xffffff"></font>
+        <font label="grey" name="DejaVuSansCondensed" size="16" color="0xdddddd"></font>
+        <font label="white" name="DejaVuSansCondensed" size="16" color="0xffffff"></font>
+        <font label="grey big" name="DejaVuSansCondensed" size="18" color="0xdddddd"></font>
+        <font label="white big" name="DejaVuSansCondensed" size="18" color="0xffffff"></font>
+
+        <!-- info area -->
+        <font label="info plot" name="DejaVuSansCondensed" size="13" color="0xffffff" />
+        <font label="info tagline" name="DejaVuSansCondensed-Oblique" size="15" color="0xffffff" />
+        <font label="info label" name="DejaVuSansCondensed" size="14" color="0xffffff" />
+        <font label="info value" name="DejaVuSansCondensed" size="14" color="0xffffff" />
+        <font label="clock" name="DejaVuSansCondensed" size="16" color="0xffffff" />
+
+        <!-- Basic Fonts -->
+        <font label="micro0" name="DejaVuSansCondensed" size="8" color="default0"></font>
+        <font label="micro1" name="DejaVuSansCondensed" size="8" color="default1"></font>
+        <font label="micro2" name="DejaVuSansCondensed" size="8" color="default2"></font>
+        <font label="tiny0" name="DejaVuSansCondensed" size="10" color="default0"></font>
+        <font label="tiny1" name="DejaVuSansCondensed" size="10" color="default1"></font>
+        <font label="tiny2" name="DejaVuSansCondensed" size="10" color="default2"></font>
+        <font label="small0" name="DejaVuSansCondensed" size="12" color="default0"></font>
+        <font label="small1" name="DejaVuSansCondensed" size="12" color="default1"></font>
+        <font label="small2" name="DejaVuSansCondensed" size="12" color="default2"></font>
+        <font label="medium0" name="DejaVuSansCondensed" size="16" color="default0"></font>
+        <font label="medium1" name="DejaVuSansCondensed" size="16" color="default1"></font>
+        <font label="medium2" name="DejaVuSansCondensed" size="16" color="default2"></font>
+        <font label="large0" name="DejaVuSansCondensed" size="20" color="default0"></font>
+        <font label="large1" name="DejaVuSansCondensed" size="20" color="default1"></font>
+        <font label="large2" name="DejaVuSansCondensed" size="20" color="default2"></font>
+        <font label="huge0" name="DejaVuSansCondensed" size="28" color="default0"></font>
+        <font label="huge1" name="DejaVuSansCondensed" size="28" color="default1"></font>
+        <font label="huge2" name="DejaVuSansCondensed" size="28" color="default2"></font>
+        <color label="default0" value="0xffffff" />
+        <color label="default1" value="0xffffaa" />
+        <color label="default2" value="0xcccccc" />
+    </skin>
+</freevo>
+<!--
+vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=xml:
+-->

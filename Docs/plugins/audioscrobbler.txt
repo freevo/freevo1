@@ -1,0 +1,62 @@
+*******************************************
+*					  *
+*	      audioscrobbler.py		  *
+*					  *
+*Submit song information to AudioScrobbler*
+*					  *
+*    Written by Erik /ikea/ Petterson	  *
+*******************************************
+
+
+____________________________________
+|            * Contact *	   |
+| email: petterson.erik@gmail.com  |
+| irc: #freevo @ irc.freenode.net  |
+------------------------------------
+
+Please mail me if you have strange problems or if you got everything up and running.
+Want to keep track of the number of users to see if I should keep developing this plugin.
+
+This is for the 2.5.x series of Freevo, might not work with all versions of Python and Freevo though.
+Tested and reported to work with: Freevo 1.5.3 and Python 2.3
+
+Copyright Erik Pettersson
+The code is under the GNU Public License (see COPYING for more info)
+
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MER-
+CHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program; if not, write to the Free Software Foundation, Inc.,
+59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+
+
+
+
+*** INSTALL ***
+
+The only things you need for this plugin is three lines in the configuration file for Freevo.
+
+
+plugin.activate('audioscrobbler')
+AS_USER = 'username'
+AS_PASSWORD = 'password'
+
+
+There is one optional for debugging (spams alot, so I don't use the normal debug option).
+AS_DEBUG = True 
+
+No need to set it to False if you don't want to use it.
+
+If you run into problems, *please* turn debug on and email all the info to me. Thanks.
+
+
+Erik Pettersson
