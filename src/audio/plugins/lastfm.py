@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # LastFM radio player plug-in (http://www.last.fm/listen)
 # -----------------------------------------------------------------------
-# $Id: lastfm.py 11544 2009-05-23 16:20:42Z duncan $
+# $Id$
 #
 # Notes: For the API 1.2
 # http://code.google.com/p/thelastripper/wiki/LastFM12UnofficialDocumentation
@@ -40,6 +40,7 @@ from threading import Thread
 from collections import deque
 from pprint import pprint, pformat
 from xml.etree.cElementTree import XML
+from hashlib import md5
 
 # freevo modules, config is always first
 import config
@@ -241,7 +242,6 @@ class LastFMWebServices:
             self.downloader = None
         except IOError, why:
             self._login()
-            raise LastFMError(why)
 
 
     def _urlopen(self, url, lines=True):
@@ -287,7 +287,7 @@ class LastFMWebServices:
         #print('login(arg=%r)' % (arg,))
         username = config.LASTFM_USER
         password_txt = config.LASTFM_PASS
-        password = md5.new(config.LASTFM_PASS)
+        password = md5(config.LASTFM_PASS)
         login_url='http://ws.audioscrobbler.com/radio/handshake.php' + \
             '?version=%s&platform=linux' % (LastFMWebServices._version) + \
             '&username=%s&passwordmd5=%s' % (config.LASTFM_USER, password.hexdigest()) + \
@@ -438,8 +438,8 @@ class LastFMWebServices:
         timestamp = time.strftime('%s', time.gmtime(time.time()))
         username = config.LASTFM_USER
         password = config.LASTFM_PASS
-        auth = md5.new(md5.new(password).hexdigest()+timestamp).hexdigest()
-        auth2 = md5.new(md5.new(password.lower()).hexdigest()+timestamp).hexdigest()
+        auth = md5(md5(password).hexdigest()+timestamp).hexdigest()
+        auth2 = md5(md5(password.lower()).hexdigest()+timestamp).hexdigest()
         url = 'http://ws.audioscrobbler.com//ass/pwcheck.php?' + \
             'time=%s&' % timestamp + \
             'username=%s&' % username + \
