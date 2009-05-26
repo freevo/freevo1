@@ -233,6 +233,7 @@ class EncodingJob:
         self._generateCL = self._GenerateCLMencoder
         self.encodingopts = EncodingOptions()
         self.source = source
+        #note that we strip the extension from the self.output file name
         self.output = output
         self.temp_output = None #temporary output file for mencoder job
         self.name = friendlyname
@@ -323,14 +324,8 @@ class EncodingJob:
 
 
     def full_output_file_name(self):
-        try:
-            if not os.path.isdir(config.ENCODINGSERVER_SAVEDIR):
-                os.makedirs(self.ENCODINGSERVER_SAVEDIR, stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
-            return os.path.join(config.ENCODINGSERVER_SAVEDIR,
-                '%s.%s' % (os.path.basename(self.output), self.container))
-        except OSError, why:
-            _debug_('Cannot save encoding to %r: %s' % (config.ENCODINGSERVER_SAVEDIR, why), DWARNING)
-            return ('%s.%s' % (self.output, self.container))
+        #note that we strip the extension from the self.output file name
+        return '%s.%s' % (self.output, self.container)
 
 
     def setVideoCodec(self, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
@@ -1069,11 +1064,12 @@ class EncodingQueue:
 
         #get the first queued object
         self.currentjob = self.qlist[0]
-        #print 'self.currentjob:',; pprint(self.currentjob.__dict__)
-        #print 'self.currentjob.thread:',; pprint(self.currentjob.thread.__dict__)
-        print 'self.currentjob.idnr:', self.currentjob.idnr
-        print 'self.currentjob.status:', self.currentjob.status
-        print 'self.currentjob.thread.returncode:', self.currentjob.thread.returncode
+        if config.DEBUG >= 2:
+            #print 'self.currentjob:',; pprint(self.currentjob.__dict__)
+            #print 'self.currentjob.thread:',; pprint(self.currentjob.thread.__dict__)
+            print 'self.currentjob.idnr:', self.currentjob.idnr
+            print 'self.currentjob.status:', self.currentjob.status
+            print 'self.currentjob.thread.returncode:', self.currentjob.thread.returncode
 
         _debug_('PID %s' % self.currentjob.pid)
 

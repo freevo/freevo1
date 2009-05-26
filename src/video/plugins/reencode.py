@@ -38,6 +38,7 @@ import util
 from video.encodingclient import EncodingClientActions
 from gui.AlertBox import AlertBox
 from gui.PopupBox import PopupBox
+from util.misc import uniquify_filename
 
 
 class PluginInterface(plugin.ItemPlugin):
@@ -60,6 +61,7 @@ class PluginInterface(plugin.ItemPlugin):
         self.output = ''
         self.resetprofile()
         self.timeslice = [ None, None ]
+        self.warn_once_savedir = True
 
     def resetprofile(self):
         self.profile = {}
@@ -100,6 +102,29 @@ class PluginInterface(plugin.ItemPlugin):
     #    return self.item.eventhandler(event, menuw=menuw, arg=arg)
 
 
+    def prepare_output(self, source):
+        """Prepare the output file path. Note that we strip the extension from the output file name"""
+        output = os.path.splitext(source)[0]
+        directory = os.path.dirname(output)
+        #can we write in that directory? If so, the reencoded file will go there
+        if directory and os.path.isabs(output) and os.path.isdir(directory) and \
+                os.access(directory, os.R_OK | os.W_OK | os.X_OK):
+            return output
+        basename = os.path.basename(output)
+        if basename == '':
+            basename = 'reencoded_video'
+
+        # check that we have a default place where we can write the resulting
+        # reencoded file (it is up to the user to create the dir with correct
+        # permission)
+        directory = config.ENCODINGSERVER_SAVEDIR
+        if directory and os.path.isdir(directory) and os.access(directory, os.R_OK | os.W_OK | os.X_OK):
+            return os.path.join(directory, basename)
+        else:
+            #in this case, it all ends into a temporary file
+            return os.path.join('.', basename)
+
+
     def actions(self, item):
         _debug_('actions(self, item)', 2)
 
@@ -107,7 +132,10 @@ class PluginInterface(plugin.ItemPlugin):
             self.item = item
             self.title = item.name
             self.source = item.filename
-            self.output = os.path.splitext(item.filename)[0]
+            #this is temporarily set , since it is called too often
+            #(even when browsing a directory ot TV recordings)
+            self.output = '(to be set later)'
+            #
             _debug_('item.__dict__:' % item.__dict__, 3)
             return [ (self.encoding_profile_menu, _('Transcode this program...')) ]
         return []
@@ -121,8 +149,11 @@ class PluginInterface(plugin.ItemPlugin):
         if attr == 'disp_title':
             return '%s' % (self.title)
         if attr == 'disp_filename':
-            # note that this may later be changed by the uniquify_filename()
-            return '%s' % (os.path.splitext(os.path.basename(self.source))[0])+'.'+self.profile['container']
+            # note that this may be changed by the encodingserver
+            # by calling the uniquify_filename()
+            # in particular if many jobs are encoded in short sequence
+            self.output = self.prepare_output(self.source)
+            return uniquify_filename(self.output + '.' +self.profile['container'])
         elif attr == 'disp_container':
             return '%s' % (self.profile['container'])
         elif attr == 'disp_resolution':
@@ -414,6 +445,19 @@ class PluginInterface(plugin.ItemPlugin):
         _debug_('create_job(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
 
         profile = arg
+
+        # note that this may later be changed by the uniquify_filename()
+        self.output = self.prepare_output(self.source)
+
+        if self.output[:2] == './' and self.warn_once_savedir :
+            #it will go into the encodingserver temporary dir, and we cant tell it from
+            # this process
+            self.warn_once_savedir = False
+
+            AlertBox(text=_('This encoding job will be written to a temporary '
+                'directory. Please set the variable ENCODINGSERVER_SAVEDIR to a '
+                'directory where the reencoded file can be written to.')).show()
+            return
 
         #we are going to create a job and send it to the encoding server, this can take some time while analyzing
 

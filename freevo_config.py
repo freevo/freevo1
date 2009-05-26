@@ -2191,7 +2191,12 @@ ENCODINGSERVER_GID = 0
 ENCODINGSERVER_IP   = 'localhost'
 ENCODINGSERVER_PORT = 18002
 ENCODINGSERVER_SECRET = 'secret2'
-ENCODINGSERVER_SAVEDIR = '.' #os.path.join(FREEVO_TEMPDIR, 'encodings')
+
+#If the original file is in a writable directory, then
+# the reencoded file will go in the same directory.
+#Otherwise, it will go to this directory.
+#(Use an absolute path where the user can write).
+ENCODINGSERVER_SAVEDIR = None
 
 # ======================================================================
 # Freevo builtin commdetect server settings:
