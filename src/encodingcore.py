@@ -437,7 +437,7 @@ class EncodingJob:
         Parses Mplayer output to obtain ideal cropping parameters, and do
         PAL/NTSC detection from QuickRip, heavily adapted, new algo.
 
-        @todo: give this another name, it does more then crop detection only
+        TODO: give this another name, it does more then crop detection only
         """
         id_pattern = re.compile('^(ID_.*)=(.*)')
         id_info = {}

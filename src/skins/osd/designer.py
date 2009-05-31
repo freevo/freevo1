@@ -77,35 +77,40 @@ class InvalidValueError(Exception):
 class DesignerObject(object):
     """
     Base class for all designer objects.
-    @ivar properties: A tuple of tuples containing a property name, text
-    description, property type and optionally additional type information.
-    Property type is one of the following:
-     - PROP_TYPE_STRING (string) - can be followed by either a list of options
-                                   or a function to call to retrieve the list.
-     - PROP_TYPE_INT (int)       - Followed by a tuple containing the lower and
-                                   upper bounds.
 
-     - PROP_TYPE_IMAGE (image)   - Filename of an image file (.png or .jpeg/.jpg)
-                                   in the icon theme directory, or an expression
-                                   that evaluates to an image file in the icon
-                                   directory.
-
-     - PROP_TYPE_BOOL (bool)     - True of false value
-
-     - PROP_TYPE_OPTION (option) - A fixed list of options one of which must be
-                                   selected follows this.
-
-    @iver has_children: Whether this object can have children.
+    @ivar has_children: Whether this object can have children.
     @ivar children: List of children this child contains.
     @ivar parent: The parent of this object.
     @ivar type: String describing the type of object.
     @ivar signals: Available signals include:
-        property-changed: Emitted when a property is changed,
-            passes object,property, old_value, new_value
-        child-added: Emitted when a child is added,
-            passes object, child
-        child-removed: Emitted when a child is removed,
-            passes object, child
+
+        - property-changed: Emitted when a property is changed, passes
+          object,property, old_value, new_value
+
+        - child-added: Emitted when a child is added, passes object, child
+
+        - child-removed: Emitted when a child is removed, passes object, child
+
+    @ivar properties: A tuple of tuples containing a property name, text
+          description, property type and optionally additional type
+          information.
+
+          Property type is one of the following:
+
+            - PROP_TYPE_STRING (string): can be followed by either a list of
+              options or a function to call to retrieve the list.
+
+            - PROP_TYPE_INT (int): Followed by a tuple containing the lower and
+              upper bounds.
+
+            - PROP_TYPE_IMAGE (image): Filename of an image file (.png or
+              .jpeg/.jpg) in the icon theme directory, or an expression that
+              evaluates to an image file in the icon directory.
+
+            - PROP_TYPE_BOOL (bool): True of false value
+
+            - PROP_TYPE_OPTION (option): A fixed list of options one of which
+              must be selected follows this.
     """
     def __init__(self, node=None):
         self.properties = ()

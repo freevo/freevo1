@@ -59,20 +59,26 @@ class PluginInterface(plugin.ItemPlugin):
 
     Config parameters:
 
-     Required:
-      MONITOR_ASPECT: something like 16:9, 4:3, etc
+        - Required:
 
-     Optional:
-      ASPECTS: list of aspects you want in the video submenu separated by comma;
-               defaults to '16:9,4:3,14:9,16:10'
-      AUTOFILL_ASPECT: if current video's detected aspect matches this value
-               it will be automatically changed to PREFERRED_ASPECT_FOR_AUTOFILL
-               without entering the menu. Example: '4:3'
-      PREFERRED_ASPECT_FOR_AUTOFILL: See AUTOFILL_ASPECT. Example: '14:9'
-      KEEP_ASPECT: if set to True the video will be cropped but it won't be
-               aspect changed. In other words, there could still be horizontal
-               or vertical black bars, but the original aspect will be kept;
-               defaults to False.
+            - MONITOR_ASPECT: something like 16:9, 4:3, etc
+
+        - Optional:
+
+            - ASPECTS: list of aspects you want in the video submenu separated by
+            comma; defaults to '16:9,4:3,14:9,16:10'
+
+            - AUTOFILL_ASPECT: if current video's detected aspect matches this
+            value it will be automatically changed to
+            PREFERRED_ASPECT_FOR_AUTOFILL without entering the menu. Example:
+            '4:3'
+
+            - PREFERRED_ASPECT_FOR_AUTOFILL: See AUTOFILL_ASPECT. Example: '14:9'
+
+            - KEEP_ASPECT: if set to True the video will be cropped but it won't
+            be aspect changed. In other words, there could still be horizontal
+            or vertical black bars, but the original aspect will be kept;
+            defaults to False.
     """
     def __init__(self):
         """ Initialise the PluginInterface and set default values for config"""

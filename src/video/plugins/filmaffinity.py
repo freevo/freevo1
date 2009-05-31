@@ -77,7 +77,8 @@ class PluginInterface(plugin.ItemPlugin):
        This plugin obtains movie information in Spanish from the FilmAffinity
        website
 
-       Configuration:
+       Configuration::
+
            plugin.activate('video.filmaffinity')
            FILMAFFINITY_REMOVE_FROM_LABEL = ('\(.*?\)', '\[.*?\]', 'cd[0-9]+(-[0-9])?', 'title[0-9]+', 'by .*$')
            FILMAFFINITY_REMOVE_FROM_SEARCHSTRING = ('spanish','xvid','dvdrip','parte','[0-9]*','dvdscreener','mp3')
