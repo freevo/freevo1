@@ -1,0 +1,949 @@
+<?xml version="1.0" ?>
+<freevo>
+ <skin geometry="800x600" include="info">
+  <iconset theme="tuxntosh2"/>
+<!-- 
+TODO:
+TV:     Nothing defined
+Images: defaults to video/audio
+-->
+<!-- BACKGROUND -->
+<setvar name="box_under_icon" val="1" />
+<image label="background" filename="blackground.png" width="800" height="600"/>
+<!-- 
+*******************************************************
+** MAIN MENU
+******************************************************* -->
+<main>
+  <item label="tv" name="Television" image="../icons/themes/tuxntosh2/mainmenu/54x54/tv.png"/>
+  <item label="video" name="Movies" image="TuxnTosh/tuxntosh_movies.png"/>
+  <item label="audio" name="Music" image="TuxnTosh/tuxntosh_audio.png"/>
+  <item label="image" name="Images" image="TuxnTosh/tuxntosh_photo.png"/>
+  <item label="games" name="Games" image="watermarks/crystal_games.png"/>
+  <item label="headlines" name="Headlines" image="watermarks/rain_headlines.png"/>
+  <item label="commands" name="Commands" image="watermarks/rain_commands.png"/>
+  <item label="mail" name="Email" image="watermarks/rain_email.png"/>
+  <item label="shutdown" name="Shutdown" image="watermarks/crystal_shutdown.png"/>
+</main>
+
+<!-- 
+*******************************************************
+** Layout: screens
+******************************************************* -->
+
+<!-- default -->
+<layout label="default screen">
+ <background>
+  <image image="background" x="0" y="0" label="background"/>
+ </background>
+</layout>
+
+<!-- menu with watermark -->
+<layout label="screen watermark">
+ <background> 
+  <image image="background" x="0" y="0" label="background"/>
+  <image x="0" y="150" width="400" height="450" label="watermark"/>
+ </background>
+</layout>
+
+<!--
+*******************************************************
+** Colors
+******************************************************* -->
+
+<color label="light" value="0xffffff"/>
+<color label="dark" value="0xdddddd"/>
+<color label="black" value="0x303030"/>
+<color label="blackblack" value="0x000000"/>
+<color label="dark shadow" value="0x707070"/>
+<color label="contrast" value="0xccaa66"/>
+<color label="blue" value="0x757fff"/>
+<color label="selection" value="0x404040"/>
+<!--
+*******************************************************
+** Fonts
+******************************************************* -->
+
+<!-- the main menu fonts -->
+<font label="main" name="Vera" size="14" color="dark" >
+  <shadow x="1" y="1" color="dark shadow" visible="yes" />
+</font>
+<font label="main selected" name="Vera" size="14" color="light">
+  <shadow x="1" y="1" color="black" visible="yes" />
+</font>
+
+<!-- font used in the info area -->
+<font label="info title" name="Vera" size="12" color="dark">
+ <shadow x="1" y="1" color="black" visible="yes" />
+</font>
+<font label="info label" name="Vera" size="11" color="dark">
+ <shadow x="1" y="1" color="black" visible="yes" />
+</font>
+<font label="info value" name="Vera" size="11" color="contrast">
+ <shadow x="1" y="1" color="black" visible="yes" />
+</font>
+
+<!-- fonts for listing area ************************ -->
+<font label="item" size="14" name="Vera" color="dark" align="left">
+  <shadow x="1" y="1" color="dark shadow" visible="yes" />
+</font>
+<font label="selected" size="14" name="Vera" color="light" align="left">
+ <shadow x="1" y="1" color="dark shadow" visible="yes" />
+</font>
+
+<!-- misc fonts ************************************* -->
+<font label="splashscreen font" name="Vera" size="20" color="light">
+ <shadow x="1" y="1" color="black" visible="yes" />
+</font>
+<font label="popup" size="14" name="Vera" color="dark" />
+<font label="widget" size="16" name="Vera" color="light"/>
+<font label="selected widget" size="16" name="Vera" color="contrast"/>
+<font label="default" size="12" name="Vera" color="light"/>
+<font label="small" size="10" name="Vera" color="dark"/>
+<font label="title" size="20" name="Vera" color="light" align="center">
+ <shadow visible="yes" color="black" x="1" y="1"/>
+</font>
+<font label="title small" size="20" name="Vera" color="light" align="center">
+ <shadow visible="yes" color="black" x="1" y="1"/>
+</font>
+
+<font label="detachbar" size="12" name="Vera" color="light">
+ <shadow x="1" y="1" color="black" visible="yes" />
+</font>
+
+<!-- idlebar fonts ****************************** -->
+<font label="clock" size="14" name="Vera" color="dark shadow" />
+<font label="weather" size="20" name="Vera" color="dark shadow" />
+
+<font label="osd" name="Vera.ttf" size="24" color="0xffffff">
+    <shadow visible="yes" color="0x000000" border="yes"/>
+</font>
+
+<!-- 
+*******************************************************
+** POPUP DEFINITIONS
+******************************************************* -->
+
+        <layout label="popup">
+            <background>
+                <rectangle x="5" y="5" size="0" bgcolor="0xa0000000" radius="5"/>
+                <rectangle width="max-5" height="max-5" color="0x000000" size="2" 
+                    bgcolor="0x0c00ff" radius="5"/>
+                <rectangle x="5" y="5" width="max-15" height="max-15" color="0x000000" 
+	            size="2" bgcolor="widget background" radius="5"/>
+            </background>
+            <content x="8" y="8" width="max-21" height="max-21">
+	        <!-- special button settings -->
+                <item type="button">
+                    <rectangle color="0x000000" bgcolor="widget item background" 
+                        size="2" radius="6"/>
+                </item>
+         	<!-- special settings for selected buttons -->
+                <item type="button selected">
+                    <rectangle color="0x000000" bgcolor="widget selected background" 
+                        size="2" radius="6"/>
+                </item>
+	    </content>
+        </layout>
+        
+        <font label="widget" name="Arial_Bold" size="14">
+            <shadow visible="yes" color="0x000000" border="yes"/>
+        </font>
+
+        <font label="selected widget" name="Arial_Bold" size="14">
+            <shadow visible="yes" color="0x000000" border="yes"/>
+        </font>
+        
+	<color label="widget text" value="0xffffff"/>
+	<color label="widget background" value="0x000000"/>
+	<color label="widget item background" value="0x303030"/>
+	<color label="widget selected background" value="0x0c00ff"/>
+
+<!--
+*******************************************************
+** Menus
+******************************************************* -->
+<menu type="all">
+ <style text="default textual" />
+</menu>
+
+<menu type="main">
+ <style text="main menu" />
+</menu>
+
+<menu type="video">
+ <style text="video textual" />
+<!--<style image="video icon" text="video textual"/>-->
+</menu>
+
+<menu type="audio">
+ <style text="audio textual" />
+ <!--<style image="audio icon" text="audio textual"/>-->
+</menu>
+
+<menu type="image">
+ <style image="image textual" text="image textual"/>
+ <!--<style text="image icon"/>-->
+</menu>
+
+<menu type="mail">
+ <style image="mail textual" text="mail textual"/>
+</menu>
+
+<menu type="games">
+ <style image="games textual" text="mail textual"/>
+</menu>
+
+<splashscreen>
+ <screen layout="screen blank" x="0" y="0" width="800" height="600"/>
+ <content layout="splashscreen" x="0" y="0" width="800" height="600"/>
+</splashscreen>
+
+<layout label="splashscreen">
+ <background>
+  <image filename="mactvsplash.png" x="0" y="0" width="800" height="600"/>
+ </background>
+ <content x="30" y="400" width="740" font="splashscreen font" spacing="10"/>
+</layout>
+
+<layout label="menuicon">
+ <background>
+  <image filename="mactvsplash.png" x="0" y="0" width="100" height="100"/>
+ </background>
+ <content x="30" y="400" width="740" font="splashscreen font" spacing="10"/>
+</layout>
+
+<layout label="screen blank">
+ <background>
+  <image image="background" x="0" y="0" label="background"/>
+ </background>
+</layout>
+
+<headlines>
+ <screen layout="default screen" x="0" y="0" width="800" height="600"/>
+  <title visible="not idlebar" layout="title" x="10" y="10" width="780" height="60"/>
+  <info layout="info" x="10" y="110" width="780" height="480"/>
+</headlines>
+
+<!--
+*******************************************************
+** Menusets
+******************************************************* -->
+
+<!-- main ************************** -->
+<menuset label="main menu">
+ <screen layout="screen watermark"/>
+ <title layout="default title" x="400" y="60" width="400" height="60"/>
+  <listing layout="main menu list" x="410" y="140" width="345" height="420"/> 
+</menuset>
+
+<!-- general *********************** -->
+<menuset label="default textual">
+ <!--<screen layout="default screen" x="0" y="0" width="800" height="600" />-->
+ <view layout="default view" x="40" y="140" width="320" height="340" align="center"/>
+ <listing layout="default list" x="410" y="140" width="345" height="420">
+  <image label="uparrow" x="760" y="124" filename="up.png" width="18" height="10"/>
+  <image label="downarrow" x="760" y="max+10" filename="down.png" width="18" height="10"/>
+ </listing>
+ <info visible="no"/>
+</menuset>
+
+
+<!-- video ************************** -->
+<menuset label="video default" inherits="default textual">
+<!--<text layout="video title" x="400" y="60" width="400" height="60"/>-->
+<title layout="video title" x="400" y="60" width="400" height="60"/>
+ <info visible="yes" layout="video info" x="0" y="500" width="370" height="150"/>
+</menuset>
+
+<!-- MODE 0 -->
+<menuset label="video icon" inherits="video default">
+ <listing layout="default icon list" y="140" height="420">
+  <image label="uparrow" x="760" y="124" filename="up.png" width="18" height="10"/>
+  <image label="downarrow" x="760" y="max+10" filename="down.png" width="18" height="10"/>
+ </listing>
+</menuset>
+
+<!-- MODE 1 -->
+<menuset label="video textual" inherits="video default">
+ <listing layout="video text list" height="420" y="140">
+  <image label="uparrow" x="760" y="124" filename="up.png" width="18" height="10"/>
+  <image label="downarrow" x="760" y="max+10" filename="down.png" width="18" height="10"/>
+ </listing>
+</menuset>
+
+<!-- audio **************************** -->
+<menuset label="audio default" inherits="default textual">
+<title layout="audio title" x="400" y="60" width="400" height="60"/>
+ <info visible="yes" layout="audio info" x="10" y="500" width="370" height="150"/>
+</menuset>
+
+<!-- MODE 0 -->
+<menuset label="audio icon" inherits="audio default">
+ <listing layout="default icon list" y="140" height="420">
+  <image label="uparrow" y="124" filename="up.png" width="18" height="10"/>
+  <image label="downarrow" y="max+10" filename="down.png" width="18" height="10"/>
+ </listing>
+</menuset>
+
+<!-- MODE 1 -->
+<menuset label="audio textual" inherits="audio default">
+ <listing layout="audio text list" height="420" y="140">
+  <image label="uparrow" y="124" filename="up.png" width="18" height="10"/>
+  <image label="downarrow" y="max+10" filename="down.png" width="18" height="10"/>
+ </listing>
+</menuset>
+
+<!-- image **************************** -->
+<menuset label="image default" inherits="default textual">
+<title layout="image title" x="400" y="60" width="400" height="60"/>
+<view layout="default view" x="20" y="140" width="340" height="500" />
+ <info visible="yes" layout="image info" x="10" y="500" width="370" height="150"/>
+</menuset>
+
+<!-- MODE 0 -->
+<menuset label="image icon" inherits="image default">
+ <listing layout="default icon list" y="140" height="420">
+  <image label="uparrow" y="124" filename="up.png" width="18" height="10"/>
+  <image label="downarrow" y="max+10" filename="down.png" width="18" height="10"/>
+ </listing>
+</menuset>
+
+<!-- MODE 1 -->
+<menuset label="image textual" inherits="image default">
+ <listing layout="image text list" height="420" y="140">
+  <image label="uparrow" y="124" filename="up.png" width="18" height="10"/>
+  <image label="downarrow" y="max+10" filename="down.png" width="18" height="10"/>
+ </listing>
+</menuset>
+
+<!-- mail ***************************** -->
+<menuset label="mail default" inherits="default textual">
+<title layout="default title" x="400" y="60" width="400" height="60"/>
+ <info visible="yes" layout="mail info" x="400" y="500" width="780" height="150"/>
+</menuset>
+
+<menuset label="mail textual" inherits="mail default">
+ <listing layout="mail text list" height="420" y="140">
+  <image label="uparrow" y="124" filename="up.png" width="18" height="10"/>
+  <image label="downarrow" y="max+10" filename="down.png" width="18" height="10"/>
+ </listing>
+</menuset>
+
+<!-- games **************************** -->
+<menuset label="games default" inherits="default textual">
+<title layout="games title" x="400" y="60" width="400" height="60"/>
+ <info visible="no" layout="mail info" x="400" y="500" width="780" height="150"/>
+</menuset>
+
+<menuset label="games textual" inherits="games default">
+ <listing layout="games text list" height="420" y="140">
+  <image label="uparrow" y="124" filename="up.png" width="18" height="10"/>
+  <image label="downarrow" y="max+10" filename="down.png" width="18" height="10"/>
+ </listing>
+</menuset>
+
+<!--
+*******************************************************
+** Layouts: views
+******************************************************* -->
+<layout label="default title">
+ <!--<content x="0" y="0" type="menu" font="title" align="center" valign="bottom">-->
+ <content layout="menuicon" type="menu" font="title" align="left" valign="center" icon="/usr/share/freevo/icons/themes/tuxntosh2/appletux.jpeg" />
+</layout>
+
+<layout label="video title">
+ <!--<content x="0" y="0" type="menu" font="title" align="center" valign="bottom">-->
+ <content layout="menuicon" type="menu" font="title" align="left" valign="center" icon="/usr/share/freevo/icons/themes/tuxntosh2/mimetypes/video.png" />
+</layout>
+
+<layout label="image title">
+ <!--<content x="0" y="0" type="menu" font="title" align="center" valign="bottom">-->
+ <content layout="menuicon" type="menu" font="title" align="left" valign="center" icon="/usr/share/freevo/icons/themes/tuxntosh2/mimetypes/image.png" />
+</layout>
+
+<layout label="audio title">
+ <!--<content x="0" y="0" type="menu" font="title" align="center" valign="bottom">-->
+ <content layout="menuicon" type="menu" font="title" align="left" valign="center" icon="/usr/share/freevo/icons/themes/tuxntosh2/mimetypes/audio.png" />
+</layout>
+
+<layout label="games title">
+ <!--<content x="0" y="0" type="menu" font="title" align="center" valign="bottom">-->
+ <content layout="menuicon" type="menu" font="title" align="left" valign="center" icon="/usr/share/freevo/icons/themes/tuxntosh2/mimetypes/cdrom.png" />
+</layout>
+
+<layout label="default view">
+ <content type="text">
+   <item type="default" font="main" align="left">
+     <rectangle bgcolor="selection" color="blackblack" size="0" x="-3" y="-3" width="max+6" height="max+6" radius="6" />
+   </item>
+ </content>
+</layout>
+
+<!--
+*******************************************************
+** Layouts: lists
+******************************************************* -->
+
+<!-- main menu -->
+<layout label="main menu list">
+  <content type="text" spacing="-4" align="left">
+    <item type="default" font="main" align="left">
+      <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/notselecteddir.png" x="-20" y="-8" height="max+16" width="max+20" />
+    </item>
+    <item type="selected" font="main selected" align="left">
+      <!--<rectangle bgcolor="black" color="blue" size="0" x="-3" y="-3" width="max+6" height="max+6" radius="6" />-->
+      <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttondir.png" x="-20" y="-12" height="max+16" width="max+20" />
+    </item>
+  </content>
+</layout>
+
+<!-- general **************************** -->
+
+<layout label="default list">
+ <content type="text" spacing="-4">
+  <item type="default" font="item" align="left"/>
+  <item type="selected" font="selected" align="left">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+ </content>
+</layout>
+
+<layout label="default icon list">
+ <content type="image" spacing="-4" align="left">
+  <item type="default" width="80" height="90" align="center" valign="center"/>
+  <item type="selected" width="85" height="95" align="center" valign="center">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+ </content>
+</layout>
+
+<!-- video **************************** -->
+<layout label="video text list">
+ <content type="text" spacing="-4" align="left">
+  <item type="default" font="item"/>
+  <item type="selected" font="selected">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttondir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="playlist" font="item"/><!--icon="mimetypes/playlist_video.png"/>-->
+  <item type="playlist selected" font="selected"><!-- icon="mimetypes/playlist_video.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonplaylist.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="dir" font="item"><!-- icon="mimetypes/folder_video.png"/>-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/notselecteddir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+  <item type="dir selected" font="selected"><!-- icon="mimetypes/folder_video.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttondir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="video" font="item"/><!-- icon="mimetypes/video.png"/>-->
+  <item type="video selected" font="selected"><!-- icon="mimetypes/video.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="vcd" font="item"/><!-- icon="mimetypes/vcd.png"/>-->
+  <item type="vcd selected" font="selected"><!-- icon="mimetypes/vcd.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="dvd" font="item"/><!-- icon="mimetypes/dvd.png"/>-->
+  <item type="dvd selected" font="selected"><!-- icon="mimetypes/dvd.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="empty_cdrom" font="item"/><!-- icon="mimetypes/empty_cdrom.png"/>-->
+  <item type="empty_cdrom selected" font="selected"><!-- icon="mimetypes/empty_cdrom.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+ </content>
+</layout>
+
+<!-- audio **************************** -->
+<layout label="audio text list">
+ <content type="text" spacing="-4" align="left">
+  <item type="default" font="item" />
+  <item type="selected" font="selected">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttondir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="playlist" font="item"/><!-- icon="mimetypes/playlist_audio.png"/>-->
+  <item type="playlist selected" font="selected"><!--  icon="mimetypes/playlist_audio.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonplaylist.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="dir" font="item"> <!--icon="mimetypes/folder_audio.png"/>-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/notselecteddir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+  <item type="dir selected" font="selected"> <!--icon="mimetypes/folder_audio.png">-->
+        <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttondir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+  <item type="audio" font="item"/> <!--icon="mimetypes/audio.png"/>-->
+  <item type="audio selected" font="selected" > <!--icon="mimetypes/audio.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="audiocd" font="item"/> <!--icon="mimetypes/audiocd.png"/>-->
+  <item type="audiocd selected" font="selected" > <!--icon="mimetypes/audiocd.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="empty_cdrom" font="item"/> <!-- icon="mimetypes/empty_cdrom.png"/>-->
+  <item type="empty_cdrom selected" font="selected" > <!--icon="mimetypes/empty_cdrom.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+ </content>
+</layout>
+
+<!-- image **************************** -->
+<layout label="image text list">
+ <content type="text" spacing="-4" align="left" valign="center">
+  <item type="default" font="item" />
+  <item type="selected" font="selected">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttondir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="playlist" font="item"/><!-- icon="mimetypes/playlist_image.png"/>-->
+  <item type="playlist selected" font="selected"><!-- icon="mimetypes/playlist_image.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonplaylist.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="dir" font="item"> <!-- icon="mimetypes/folder_image.png"/>-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/notselecteddir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+  <item type="dir selected" font="selected"> <!-- icon="mimetypes/folder_image.png">-->
+        <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttondir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="image" font="item"/> <!--  icon="mimetypes/image.png"/>-->
+  <item type="image selected" font="selected" > <!-- icon="mimetypes/image.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="empty_cdrom" font="item"/> <!--  icon="mimetypes/empty_cdrom.png"/>-->
+  <item type="empty_cdrom selected" font="selected" > <!-- icon="mimetypes/empty_cdrom.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+   <item type="cdrom" font="item"/> <!--  icon="mimetypes/empty_cdrom.png"/>-->
+  <item type="cdrom selected" font="selected" > <!-- icon="mimetypes/empty_cdrom.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+ </content>        
+</layout>
+
+<!-- mail **************************** -->
+
+<layout label="mail text list">
+ <content type="text" spacing="2" align="left">
+  <item type="default" font="item" />
+  <item type="selected" font="selected">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="mailbox" font="item"> <!-- icon="mimetypes/folder.png"/>-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/notselecteddir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+  <item type="mailbox selected" font="selected"><!-- icon="mright_out.png">--><!-- icon="mimetypes/folder.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttondir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+  
+  <item type="newemail" font="item" align="left" icon="mimetypes/out_file.png">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+  <item type="newemail selected" font="selected" align="left" icon="mimetypes/out_file.png">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="email" font="item" align="left" icon="mimetypes/file.png">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+  <item type="email selected" font="selected" align="left" icon="mimetypes/file.png">
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+ </content>
+</layout>
+
+<!-- games *************************** -->
+
+<layout label="games text list">
+ <content type="text" spacing="2" align="left">
+  <item type="default" font="item" />
+  <item type="selected" font="selected">
+        <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttonnodir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+
+  <item type="dir" font="item" > <!-- icon="mimetypes/folder.png"/>-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/notselecteddir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+  <item type="dir selected" font="selected"> <!-- icon="mimetypes/folder.png">-->
+    <image label="itemselected" filename="/usr/share/freevo/images/TuxnTosh/buttondir.png" x="-20" y="-12" height="max+16" width="max+20" />
+  </item>
+ </content>
+</layout>
+
+<!--
+*******************************************************
+** Layouts: info
+******************************************************* -->
+
+<!--
+<layout label="video title">
+ 
+ <content font="title" align="center" valign="bottom">
+  <item>
+   <image filename="../icons/themes/tuxntosh/mimetypes/video.png"/>
+   <text width="130" align="right" font="info label">Movies</text>
+  </item>
+ </content>
+</layout>
+-->
+
+<!-- video **************************** -->
+<layout label="video info">
+ <content x="0" y="0">
+  <item type="default" font="small" />            
+
+<!--
+  <item type="dir">
+   <if expression="name">
+    <text height="line_height" align="left" font="info title" mode="hard" expression="name" />
+   	<newline />
+   </if>
+   <if expression="dir">
+    <text height="line_height" align="left" font="info value" mode="hard" expression="dir" />
+    <newline />
+   </if>
+  </item>
+-->
+  <item type="dir">
+    <newline />
+  </item>
+
+  <item type="video">
+   <if expression="year">
+    <text width="130" align="right" font="info label">Year:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="year"/>
+    <newline/>
+   </if>
+   <if expression="genre">
+    <text width="130" align="right" font="info label">Genre:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="genre"/>
+    <newline/>
+   </if>
+   <if expression="rating">
+    <text width="130" align="right" font="info label">Rating:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="rating"/>
+    <newline/>
+   </if>
+   <if expression="length">
+    <text width="130" align="right" font="info label">Runtime:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="length"/>
+    <newline/>
+   </if>
+   <if expression="not year or not genre or not rating">
+    <text width="130" align="right" font="info label">Type:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="type"/>
+    <newline/>
+   </if>
+   <if expression="geometry">
+    <text width="130" align="right" font="info label">Resolution:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="geometry"/>
+    <if expression="aspect">
+     <text font="info value"> (</text>
+     <text font="info value" expression="aspect"/>
+     <text font="info value">)</text>
+    </if>
+    <newline/>
+   </if>
+  </item>
+
+  <item type="playlist">
+   <if expression="len(playlist)>1">
+    <text font="info value" expression="len(playlist)"/>
+    <text font="info value"> movies in this playlist.</text>
+    <newline/>
+   </if>
+   <if expression="len(playlist)==1">
+    <text font="info value">Just one movie in this playlist.</text>
+    <newline/>
+   </if>
+
+   <if expression="len(playlist)==0">
+    <text font="info value">This playlist is empty!</text>
+    <newline/>
+   </if>
+  </item>
+ </content>
+</layout>
+
+<!-- audio **************************** -->
+<layout label="audio info">
+ <content x="0" y="0">
+  <item type="audio">
+   <if expression="title">
+    <if expression="track">
+     <text height="line_height" align="left" font="info title" mode="hard" expression="track" />
+     <text font="info title"> - </text>
+    </if>
+<!--    <text height="line_height" align="left" font="info title" mode="hard" expression="title" />-->
+    <newline />
+   </if>
+   <if expression="artist">
+    <text height="line_height" width="90" align="right" font="info label" mode="hard">Artist:</text>
+    <goto_pos x="10" mode="relative" />
+    <text height="line_height" align="left" font="info value" mode="hard" expression="artist" />
+    <newline />
+   </if>
+   <if expression="album">
+    <text height="line_height" width="90" align="right" font="info label" mode="hard">Album:</text>
+    <goto_pos x="10" mode="relative" />
+    <text height="line_height" align="left" font="info value" mode="hard" expression="album" />
+    <if expression="userdate">
+     <text font="info value"> (</text>
+     <text height="line_height" align="left" font="info value" mode="hard" expression="userdate" />
+     <text font="info value">)</text>
+    </if>
+    <newline />
+    <if expression="length">
+     <text height="line_height" width="90" align="right" font="info label" mode="hard">Length:</text>
+     <goto_pos x="10" mode="relative"/>
+     <text height="line_height" align="left" font="info value" mode="hard" expression="length" />
+    </if>
+   </if>
+  </item>
+  <item type="dir">
+<!--   <if expression="name">
+    <text height="line_height" align="left" font="info title" mode="hard" expression="name" />
+    <newline />
+   </if>
+   <if expression="dir">
+    <text height="line_height" align="left" font="info value" mode="hard" expression="dir" />
+    <newline />
+   </if>-->
+  </item>
+  <item type="playlist">
+   <if expression="name">
+    <text height="line_height" align="left" font="info title" mode="hard" expression="name" />
+    <newline />
+   </if>
+   <goto_pos x="10" mode="relative" />
+   <if expression="len(playlist)>1">
+    <text font="info value" expression="len(playlist)"/>
+    <text font="info value"> songs in playlist</text>
+    <newline/>
+   </if>
+   <if expression="len(playlist)==1">
+    <text font="info value">One song in playlist</text>
+    <newline/>
+   </if>
+   <if expression="len(playlist)==0">
+    <text font="info value">No songs in playlist</text>
+    <newline/>
+   </if>
+  </item>
+ </content>
+</layout>
+
+<!-- image **************************** -->
+<layout label="image info">
+ <content x="0" y="0">
+  <item type="default" font="default" />
+  <item type="image">
+   <if expression="width and height">
+    <text width="120" font="info label" align="right">Geometry:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="width"/>
+    <text font="info value">x</text>
+    <text font="info value" expression="height"/>
+    <newline/>
+   </if>
+
+   <if expression="date">
+    <text width="120" font="info label" align="right">Date:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="date"/>
+    <newline/>
+   </if>
+
+   <if expression="description">
+    <text font="info plot" height="max" mode="soft" expression="description"/>
+    <newline/>
+   </if>
+  </item>
+
+<!--  <item type="dir">
+   <if expression="name">
+    <text height="line_height" align="right" font="info title" mode="hard" expression="name" />
+    <newline />
+   </if>
+
+   <if expression="dir">
+    <text height="line_height" align="left" font="info value" mode="hard" expression="dir" />
+    <newline />
+   </if>
+  </item>-->
+
+  <item type="playlist">
+   <if expression="len(playlist)>1">
+    <text font="info value" expression="len(playlist)"/>
+    <text font="info value"> pictures in this slideshow.</text>
+    <newline/>
+   </if>
+
+   <if expression="len(playlist)==1">
+    <text font="info value">Just one picture in this slideshow.</text>
+    <newline/>
+   </if>
+
+   <if expression="len(playlist)==0">
+    <text font="info value">This slideshow is empty!</text>
+    <newline/>
+   </if>
+  </item>
+ </content>
+</layout>
+
+<!-- mail **************************** -->
+<layout label="mail info">
+ <content x="0" y="0" type="text" spacing="20">
+  <item type="mailbox">
+   <if expression="newmails">
+    <text align="right" width="130" font="info label">New mails:</text>
+     <goto_pos x="10" mode="relative"/>
+     <text font="info value" expression="newmails"/>
+     <newline/>
+   </if>
+   <if expression="mails">
+    <text align="right" width="130" font="info label">Total mails:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="mails"/>
+   </if>
+  </item>
+  <item type="email">
+   <if expression="Subject">
+    <text align="right" width="100" font="info label">Subject:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="Subject"/>
+    <newline />
+   </if>
+   <if expression="From">
+    <text align="right" width="100" font="info label">From:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="From"/>
+    <newline/>
+   </if>
+   <if expression="Date">
+    <text align="right" width="100" font="info label">Date:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="Date"/>
+   </if>
+  </item>
+  <item type="newemail">
+   <text align="right" font="info label">New mail</text>
+   <newline/>
+   <if expression="Subject">
+    <text align="right" width="100" font="info label">Subject:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="Subject"/>
+    <newline />
+   </if>
+   <if expression="From">
+    <text align="right" width="100" font="info label">From:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="From"/>
+    <newline/>
+   </if>
+   <if expression="Date">
+    <text align="right" width="100" font="info label">Date:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="Date"/>
+   </if>
+  </item>
+ </content>
+</layout>
+
+<!--
+*******************************************************
+** Player
+******************************************************* -->
+<player>
+ <screen layout="default screen" x="0" y="0" width="800" height="600"/>
+ <view layout="player view" x="50" y="200" width="200" height="200"/>
+ <info layout="player info" x="260" y="150" width="490" height="300"/>
+ <title visible="no"/>
+</player>
+
+<layout label="player view">
+<background>
+  <rectangle size="1" bgcolor="0xaa111111" color="0x66555555" radius="10" width="max" height="max"/>
+ </background>
+ <content valign="center">
+  <item type="default">
+   <rectangle width="max-4" height="max-4"/>
+  </item>
+ </content>
+</layout>
+
+<layout label="player info">
+<background>
+  <rectangle size="1" bgcolor="0xaa111111" color="0x66555555" radius="10" width="max" height="max"/>
+ </background>
+<!-- <background>
+  <rectangle size="1" bgcolor="0xaa000000" color="0x66000000" radius="10" width="max"/>
+ </background>-->
+ <content x="10" y="10" height="max-10" width="max-10" type="text" spacing="10">
+  <item type="audio">
+   <text width="460" font="info label" align="right">Now playing</text>
+   <newline/>
+   <goto_pos y="30" mode="relative"/>
+   <if expression="title">
+    <text font="info title" expression="title"/>
+   </if>
+   <if expression="not title">
+    <text font="info title" expression="name"/>
+   </if>
+   <newline/>
+   <goto_pos y="20" mode="relative"/>
+   <if expression="artist">
+    <text width="100" align="left" font="info label">Artist</text>
+    <text font="info value" expression="artist"/>
+    <newline/>
+   </if>
+   <if expression="album">
+    <text width="100" align="left" font="info label">Album</text>
+    <text font="info value" expression="album"/>
+    <if expression="date">
+     <text font="info value"> (</text>
+     <text font="info value" expression="date"/>
+     <text font="info value">)</text>
+    </if>
+    <newline/>
+   </if>
+   <if expression="trackno">
+    <text width="100" align="left" font="info label">Track</text>
+    <text font="info value" expression="trackno"/>
+    <newline/>
+   </if>
+   <if expression="length">
+    <text width="100" align="left" font="info label">Length</text>
+    <text font="info value" expression="length"/>
+    <newline/>
+   </if>
+   <if expression="elapsed">
+    <text  valign="bottom" width="100" align="left" font="info label">Elapsed</text>
+    <text font="info value" expression="elapsed"/>
+    <newline/>
+   </if>
+  </item>
+ </content>
+</layout>
+
+</skin>
+</freevo>

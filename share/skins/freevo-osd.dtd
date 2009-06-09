@@ -1,0 +1,141 @@
+<!ENTITY % align "(left | center | right | justified)">
+<!ENTITY % valign "(top | center | bottom)">
+
+<!ELEMENT freevo (osds)>
+
+<!ELEMENT osds (name, author?, description?, version?, (font|color|osd|widgetstyle)*)>
+<!ATTLIST osds
+    geometry CDATA #REQUIRED
+    icontheme CDATA #IMPLIED
+    include CDATA #IMPLIED>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ATTLIST author
+    email CDATA #REQUIRED>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT version (#PCDATA)>
+
+<!ELEMENT osd ((text|image|percent|widget|menu)*)>
+<!ATTLIST osd
+    name ID #REQUIRED
+    x CDATA #REQUIRED
+    y  CDATA #REQUIRED
+    width CDATA #REQUIRED
+    height CDATA #REQUIRED
+>
+
+
+
+<!ELEMENT font EMPTY>
+<!ATTLIST font
+    label CDATA #REQUIRED
+    name CDATA #IMPLIED
+    size CDATA #IMPLIED
+    color CDATA #IMPLIED
+>
+
+<!ELEMENT color EMPTY>
+<!ATTLIST color
+    label CDATA #REQUIRED
+    value CDATA #REQUIRED
+>
+
+<!ELEMENT text EMPTY>
+<!ATTLIST text
+    name CDATA #IMPLIED
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+        font CDATA #REQUIRED
+        align %align; "left"
+        valign %valign; "top"
+        fgcolor CDATA #IMPLIED
+        bgcolor CDATA #IMPLIED
+        expression CDATA #REQUIRED
+>
+
+<!ELEMENT image EMPTY>
+<!ATTLIST image
+    name CDATA #IMPLIED
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+    src CDATA #REQUIRED
+    srcexpr CDATA #IMPLIED
+        expression CDATA #REQUIRED
+    scale (noscale | horizontal | vertical | both | aspect) "noscale"
+>
+
+<!ELEMENT percent EMPTY>
+<!ATTLIST percent
+    name CDATA #IMPLIED
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    width CDATA #IMPLIED
+    height CDATA #IMPLIED
+        vertical CDATA #IMPLIED
+    src CDATA #REQUIRED
+        expression CDATA #REQUIRED
+>
+
+<!ELEMENT widget EMPTY>
+<!ATTLIST widget
+    name CDATA #REQUIRED
+    style CDATA #REQUIRED
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    width CDATA #REQUIRED
+    height CDATA #REQUIRED
+    from CDATA #REQUIRED
+    left CDATA #REQUIRED
+    right CDATA #REQUIRED
+    up CDATA #REQUIRED
+    down CDATA #REQUIRED
+    >
+
+<!ELEMENT menu EMPTY>
+<!ATTLIST menu
+    name CDATA #REQUIRED
+    style CDATA #REQUIRED
+    x CDATA #REQUIRED
+    y CDATA #REQUIRED
+    width CDATA #REQUIRED
+    height CDATA #REQUIRED
+    itemsperpage CDATA #REQUIRED
+    >
+
+
+<!ELEMENT widgetstyle (widgetstate*)>
+<!ATTLIST widgetstyle name CDATA #REQUIRED>
+
+<!ELEMENT widgetstate ((text|image|percent)*)>
+<!--
+    Standard states are:
+
+    normal   - Enabled but doesn't have input focus
+    active   - Enabled and has input focus
+    disabled - Disabled
+
+    pressed  - Buttons and MenuItems only, after the user has 'pressed' (selected) the item.
+
+    highlighted - MenuItems only, when the menu doesn't have input focus, but the currently selected item still shows.
+
+    ToggleButton/ToggleMenuItem only, standard starts but with the state of the toggle appended:
+
+    normal_selected
+    normal_unselected
+    active_selected
+    active_unselected
+    disabled_selected
+    disabled_unselected
+
+    ToggleMenuItem only:
+
+    highlighted_selected
+    highlighted_unselected
+
+-->
+<!ATTLIST widgetstate state CDATA "normal">
