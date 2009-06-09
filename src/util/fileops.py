@@ -382,8 +382,7 @@ def mount(dir, force=False):
         so, se = p.communicate()
         if rc in (1,32,):
             _debug_('mounting %r: %s' % (dir, se), DWARNING)
-            from util.misc import print_upper_execution_stack
-            print_upper_execution_stack()
+            traceback.print_stack()
         if os.path.ismount(dir) and not dir in mounted_dirs:
             mounted_dirs.append(dir)
     if force and not dir in mounted_dirs:
