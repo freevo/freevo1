@@ -17,12 +17,17 @@ from pygame.locals import *
 if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
 
+sys.path.append('.')
+
 import pygoom
 
 if pygoom.HEXVERSION < 0x000200f0:
     sys.exit('Error, pygoom too old')
 print '0x%08x' % pygoom.HEXVERSION, pygoom.VERSION
-pygoom.debug(1)
+
+pygoom.debug(3)
+
+os.environ.pop('SDL_VIDEODRIVER')
 
 width, height = (320, 240)
 
