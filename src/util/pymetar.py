@@ -680,7 +680,7 @@ class ReportParser:
         wcloud = self.match_WeatherPart(CLOUD_RE_STR)
         if wcloud is not None :
             stype = wcloud[:3]
-            if (stype == "CLR") or (stype == "SKC") :
+            if stype == "CLR" or stype == "SKC":
                 return ("Clear sky", "sun")
             elif stype == "BKN" :
                 return ("Broken clouds", "suncloud")
@@ -702,7 +702,7 @@ class ReportParser:
         """
         wcond = self.match_WeatherPart(COND_RE_STR)
         if wcond is not None :
-            if (len(wcond)>3) and (wcond.startswith('+') or wcond.startswith('-')) :
+            if len(wcond) > 3 and (wcond.startswith('+') or wcond.startswith('-')) :
                 wcond = wcond[1:]
             if wcond.startswith('+') or wcond.startswith('-') :
                 pphen = 1
@@ -782,12 +782,11 @@ class ReportParser:
         parsed values filled in. Note: This function edits the
         WeatherReport object you supply!"""
         if self.Report is None and MetarReport is None:
-            raise EmptyReportException, \
-                "No report given on init and ParseReport()."
+            raise EmptyReportException('No report given on init and ParseReport')
         elif MetarReport is not None:
             self.Report=MetarReport
 
-        lines=self.Report.fullreport.split("\n")
+        lines = self.Report.fullreport.split("\n")
 
         for line in lines:
             try:
@@ -795,11 +794,11 @@ class ReportParser:
             except ValueError:
                 header=data=line
 
-            header=header.strip()
-            data=data.strip()
+            header = header.strip()
+            data = data.strip()
 
             # The station id inside the report
-            if header.find("("+self.Report.givenstationid+")")!=-1:
+            if header.find("("+self.Report.givenstationid+")") != -1:
                 try:
                     loc,p=data.split("(",1)
                     loc=loc.strip()
@@ -825,28 +824,26 @@ class ReportParser:
                 self.Report.altitude=ht
 
             # The line containing date and timr of the report
-
-            elif (data.find("UTC"))!=-1:
+            elif data.find("UTC") != -1:
                 local,rt=data.split("/")
                 self.Report.rtime=rt.strip()
 
             # temperature
-
-            elif (header == "Temperature"):
-                f,i,c,i=data.split(None,3)
-                self.Report.tempf=int(f)
-                # The string we have split is "(NN C)", hence the slice
-                self.Report.temp=int(c[1:])
+            elif header == "Temperature":
+                # data is something like:
+                # '62 F (17 C)' and may have decimal points
+                m = re.search('(\d+).* F.*\((\d+).* C\)', data)
+                self.Report.tempf = int(m.group(1)) if m and len(m.groups()) >= 1 else 999
+                self.Report.temp = int(m.group(2)) if m and len(m.groups()) >= 2 else 99
 
 
             # wind dir and speed
-
-            elif (header == "Wind"):
-                if (data.find("Calm")!=-1):
+            elif header == "Wind":
+                if data.find("Calm") != -1:
                     self.Report.windspeed=0.0
                     self.Report.winddir=None
                     self.Report.windcomp=None
-                elif (data.find("Variable")!=-1):
+                elif data.find("Variable") != -1:
                     v,a,speed,r=data.split(" ",3)
                     self.Report.windspeed=(float(speed)*0.44704)
                     self.Report.winddir=None
@@ -858,8 +855,7 @@ class ReportParser:
                     self.Report.windspeed=(float(speed)*0.44704)
 
             # visibility
-
-            elif (header == "Visibility"):
+            elif header == "Visibility":
                 for d in data.split():
                     try:
                         self.Report.vis=float(d)*1.609344
@@ -868,43 +864,37 @@ class ReportParser:
                         pass
 
             # dew point
-
-            elif (header == "Dew Point"):
-                f,i,c,i=data.split(None,3)
-                self.Report.dewpf=int(f)
-                # The string we have split is "(NN C)", hence the slice
-                self.Report.dewp=int(c[1:])
+            elif header == "Dew Point":
+                # data is something like:
+                # '41 F (5 C)' and may have decimal points
+                m = re.search('(\d+).* F.*\((\d+).* C\)', data)
+                self.Report.dewpf = int(m.group(1)) if m and len(m.groups()) >= 1 else 999
+                self.Report.dewp = int(m.group(2)) if m and len(m.groups()) >= 2 else 99
 
             # humidity
-
-            elif (header == "Relative Humidity"):
+            elif header == "Relative Humidity":
                 h,i=data.split("%",1)
                 self.Report.humid=int(h)
 
             # pressure
-
-            elif (header == "Pressure (altimeter)"):
+            elif header == "Pressure (altimeter)":
                 p,r=data.split(" ",1)
                 self.Report.press=(float(p)*33.863886)
 
             # shot weather desc. ("rain", "mist", ...)
-
-            elif (header == "Weather"):
+            elif header == "Weather":
                 self.Report.weather=data
 
             # short desc. of sky conditions
-
-            elif (header == "Sky conditions"):
+            elif header == "Sky conditions":
                 self.Report.sky=data
 
             # the encoded report itself
-
-            elif (header == "ob"):
+            elif header == "ob":
                 self.Report.code=data.strip()
 
             # the cycle value ("time slot")
-
-            elif (header == "cycle"):
+            elif header == "cycle":
                 self.Report.cycle=int(data)
 
         # cloud info
@@ -932,21 +922,23 @@ class ReportParser:
         return self.Report
 
 class ReportFetcher:
-    """Fetches a report from a given METAR id, optionally taking into
-       account a different baseurl and using environment var-specified
-       proxies."""
-
+    """
+    Fetches a report from a given METAR id, optionally taking into account a
+    different baseurl and using environment var-specified proxies.
+    """
     def __init__(self, MetarStationCode=None, baseurl="http://weather.noaa.gov/pub/data/observations/metar/decoded/"):
         """Set stationid attribute"""
         self.stationid=MetarStationCode
         self.baseurl=baseurl
 
+
     def FetchReport(self, StationCode=None):
-        """Fetch a report for a given station ID from the baseurl given
-        upon creation of the ReportFetcher instance."""
+        """
+        Fetch a report for a given station ID from the baseurl given upon
+        creation of the ReportFetcher instance.
+        """
         if self.stationid is None and StationCode is None:
-            raise EmptyIDException, \
-                "No ID given on init and FetchReport()."
+            raise EmptyIDException('No ID given on init and FetchReport')
         elif StationCode is not None:
             self.stationid=StationCode
 
@@ -957,13 +949,13 @@ class ReportFetcher:
         try:
             fn=urllib2.urlopen(self.reporturl)
         except urllib2.HTTPError, why:
-            raise NetworkException, why
+            raise NetworkException(why)
 
         # Dump entire report in a variable
         self.fullreport=fn.read()
 
         if fn.info().status:
-            raise NetworkException, "Could not fetch METAR report"
+            raise NetworkException('Could not fetch METAR report')
 
         report=WeatherReport(self.stationid)
         report.reporturl=self.reporturl
