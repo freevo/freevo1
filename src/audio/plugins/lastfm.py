@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # LastFM radio player plug-in (http://www.last.fm/listen)
 # -----------------------------------------------------------------------
-# $Id: lastfm.py 11544 2009-05-23 16:20:42Z duncan $
+# $Id$
 #
 # Notes: For the API 1.2
 # http://code.google.com/p/thelastripper/wiki/LastFM12UnofficialDocumentation
@@ -40,6 +40,7 @@ from threading import Thread
 from collections import deque
 from pprint import pprint, pformat
 from xml.etree.cElementTree import XML
+from hashlib import md5
 
 # freevo modules, config is always first
 import config
@@ -90,8 +91,10 @@ class LastFMError(Exception):
         Exception.__init__(self)
         self.why = why
         self.url = url
+        self.code = code
 
     def __str__(self):
+        return '%s' % (self.why,)
         return '%s' % (self.why,) if self.url is None else '%s: %s' % (self.why, self.url)
 
 
@@ -166,6 +169,7 @@ class LastFMFetcher(Thread):
         self.headers = headers
         self.size = 0
         self.result = False
+        self.reason = None
 
 
     def run(self):
@@ -195,11 +199,17 @@ class LastFMFetcher(Thread):
             fd.close()
             f.close()
         except urllib2.HTTPError, why:
+            if why.code not in (404,):
+                self.reason = '%r: %s' % (self.filename, why)
             _debug_('%s: %s' % (self.url, why))
+            print('%s: %s' % (self.url, why))
+            print('%r: %s/%s' % (self.filename, why.code, why.message))
         except ValueError, why:
+            self.reason = '%r: %s' % (self.filename, why)
             traceback.print_exc()
             _debug_('%s: %s' % (self.url, why))
         except Exception, why:
+            self.reason = '%r: %s' % (self.filename, why)
             traceback.print_exc()
         _debug_('%s.run(%s) finished' % (self.__class__, self.name))
 
@@ -239,9 +249,9 @@ class LastFMWebServices:
             self.base_url = self.cachefd.readline().strip('\n')
             self.base_path = self.cachefd.readline().strip('\n')
             self.downloader = None
+            self.reason = None
         except IOError, why:
             self._login()
-            raise LastFMError(why)
 
 
     def _urlopen(self, url, lines=True):
@@ -279,7 +289,7 @@ class LastFMWebServices:
             raise LastFMError(why, url, why.code)
         except Exception, why:
             _debug_('%s: %s' % (url, why))
-            raise LastFMError(url, why)
+            raise LastFMError(why, url)
 
 
     def _login(self, arg=None):
@@ -287,7 +297,7 @@ class LastFMWebServices:
         #print('login(arg=%r)' % (arg,))
         username = config.LASTFM_USER
         password_txt = config.LASTFM_PASS
-        password = md5.new(config.LASTFM_PASS)
+        password = md5(config.LASTFM_PASS)
         login_url='http://ws.audioscrobbler.com/radio/handshake.php' + \
             '?version=%s&platform=linux' % (LastFMWebServices._version) + \
             '&username=%s&passwordmd5=%s' % (config.LASTFM_USER, password.hexdigest()) + \
@@ -344,10 +354,14 @@ class LastFMWebServices:
                         return True
                 return False
             except LastFMError, why:
+                print('LastFMError(0)=%s' % why)
+                self.reason = str(why)
                 return None
             except AttributeError, why:
+                self.reason = str(why)
                 return None
             except IOError, why:
+                self.reason = str(why)
                 return None
         finally:
             if GUI:
@@ -376,9 +390,14 @@ class LastFMWebServices:
 
         @param url: location of item to download
         @param filename: path to downloaded file
+        @param headers: http request headers
         @param entry: metadata for the entry
         """
         _debug_('%s.fetch(url=%r, filename=%r, headers=%r, entry=%r)' % (self.__class__, url, filename, headers, entry))
+        if filename is None:
+            self.reason = 'No file name'
+            return None
+
         if not self.session:
             self._login()
         self.downloader = LastFMFetcher(url, filename, headers)
@@ -399,7 +418,7 @@ class LastFMWebServices:
 
 
     def love(self):
-        """Send "Love" information to audioscrobbler"""
+        """Send "Love" message to audioscrobbler"""
         _debug_('%s.love()' % (self.__class__,))
         if not self.session:
             self._login
@@ -409,7 +428,7 @@ class LastFMWebServices:
 
 
     def ban(self):
-        """Send "Ban" information to audioscrobbler"""
+        """Send "Ban" message to audioscrobbler"""
         _debug_('%s.ban()' % (self.__class__,))
         if not self.session:
             self._login
@@ -420,26 +439,24 @@ class LastFMWebServices:
 
     def test_user_pass(self):
         """
-        Test User/Pass
+        Validate a User name and Password combination::
 
-        This way you can check, whether a user/pass is valid.
-
-        http://ws.audioscrobbler.com/ass/pwcheck.php?
-            time=[TS]&username=[USER]&auth=[AUTH1]&auth2=[AUTH2]&defaultplayer=[PLAYER]
+            http://ws.audioscrobbler.com/ass/pwcheck.php?time=[TS]&username=[USER]&auth=[AUTH1]&auth2=[AUTH2]&defaultplayer=[PLAYER]}
 
         Variables:
-
-        * TS: Unix timestamp of the current time.
-        * USER: Username.
-        * AUTH1: md5( md5(password) + Timestamp), An md5 sum of an md5 sum of the password, plus the timestamp as salt.
-        * AUTH2: Second possible Password. The client uses md5( md5(toLower(password)) + Timestamp)
-        * PLAYER: See Appendix
+            - TS: Unix time-stamp of the current time.
+            - USER: Username.
+            - AUTH1: md5(md5(password) + Timestamp), An md5 sum of an md5 sum
+              of the password, plus the timestamp as salt.
+            - AUTH2: Second possible Password. The client uses md5(
+              md5(toLower(password)) + Timestamp)
+            - PLAYER: See Appendix
         """
         timestamp = time.strftime('%s', time.gmtime(time.time()))
         username = config.LASTFM_USER
         password = config.LASTFM_PASS
-        auth = md5.new(md5.new(password).hexdigest()+timestamp).hexdigest()
-        auth2 = md5.new(md5.new(password.lower()).hexdigest()+timestamp).hexdigest()
+        auth = md5(md5(password).hexdigest()+timestamp).hexdigest()
+        auth2 = md5(md5(password.lower()).hexdigest()+timestamp).hexdigest()
         url = 'http://ws.audioscrobbler.com//ass/pwcheck.php?' + \
             'time=%s&' % timestamp + \
             'username=%s&' % username + \
@@ -553,9 +570,10 @@ class LastFMTuner(Thread):
 
     This class is responsible for getting the play list and the tracks
     """
-    def __init__(self, station_url, parent=None, menuw=None):
+    def __init__(self, station, station_url, parent=None, menuw=None):
         Thread.__init__(self)
         self.name = parent.station if parent is not None else 'LastFMTuner'
+        self.station = station
         self.station_url = station_url
         self.parent = parent
         self.menuw = menuw
@@ -563,6 +581,7 @@ class LastFMTuner(Thread):
         self.webservices = LastFMWebServices()
         self.xspf = LastFMXSPF()
         self.playlist = deque()
+        self.reason = None
 
 
     def retrieve_entry(self, entry):
@@ -587,9 +606,11 @@ class LastFMTuner(Thread):
 
             
             imagepath = basename + os.path.splitext(entry.image_url)[1].lower() if entry.image_url else None
+            print('imagepath=%r' % (imagepath,))
             image_fetcher = self.webservices.fetch(entry.image_url, imagepath, image_hdrs)
 
             trackpath = basename + os.path.splitext(entry.location_url)[1].lower()
+            print('trackpath=%r' % (trackpath,))
             track_fetcher = self.webservices.fetch(entry.location_url, trackpath, track_hdrs, entry)
 
             self.playlist.append(LastFMAudioItem(self.parent, entry, trackpath, imagepath))
@@ -601,23 +622,26 @@ class LastFMTuner(Thread):
             return
 
         try:
-            while image_fetcher.isAlive() or track_fetcher.isAlive():
+            while (image_fetcher and image_fetcher.isAlive()) or (track_fetcher and track_fetcher.isAlive()):
                 if not self.running:
                     break
                 time.sleep(0.5)
 
-            if image_fetcher.result:
-                _debug_('image %r downloaded' % (os.path.basename(imagepath),))
-            elif imagepath and os.path.exists(imagepath):
-                _debug_('image %r removed' % (os.path.basename(imagepath),))
-                os.remove(imagepath)
+            if image_fetcher:
+                print('image_fetcher.result=%r, track_fetcher.result=%r' % (image_fetcher.result, track_fetcher.result))
+                if image_fetcher.reason is None:
+                    _debug_('image %r downloaded' % (os.path.basename(imagepath),))
+                elif imagepath and os.path.exists(imagepath):
+                    _debug_('image %r removed' % (os.path.basename(imagepath),))
+                    os.remove(imagepath)
 
-            if track_fetcher.result:
-                _debug_('track %r downloaded' % (os.path.basename(trackpath),))
-            elif trackpath and os.path.exists(trackpath):
-                _debug_('track %r removed' % (os.path.basename(trackpath),))
-                os.remove(trackpath)
-            #print('%s.playlist=%s' % (self.__class__, pformat(list(self.playlist))))
+            if track_fetcher:
+                if track_fetcher.reason is None:
+                    _debug_('track %r downloaded' % (os.path.basename(trackpath),))
+                elif trackpath and os.path.exists(trackpath):
+                    _debug_('track %r removed' % (os.path.basename(trackpath),))
+                    os.remove(trackpath)
+                #print('%s.playlist=%s' % (self.__class__, pformat(list(self.playlist))))
         except LastFMError, why:
             print('LastFMError(2)=%s' % why)
             image_fetcher.stop()
@@ -640,10 +664,10 @@ class LastFMTuner(Thread):
         Retrieve each entry in the XSPF play list
         """
         _debug_('%s.run(%s)' % (self.__class__, self.name))
-        #print('%s.run(%s)' % (self.__class__, self.station_url))
         counter = 0
         if self.webservices.adjust_station(self.station_url) is None:
-            _debug_('cannot tune station %s' % (self.station_url,), DWARNING)
+            self.reason = '%s' % (self.webservices.reason,)
+            _debug_('cannot tune station %r: %s' % (self.station, self.reason), DWARNING)
             return
 
         while self.running:
@@ -663,8 +687,10 @@ class LastFMTuner(Thread):
 
             except LastFMError, why:
                 traceback.print_exc()
+                self.reason = '%s: %s' % (self.station, why)
                 break
             except Exception, why:
+                self.reason = '%s: %s' % (self.station, why)
                 traceback.print_exc()
                 break
             _debug_('counter=%r' % (counter,))
@@ -699,16 +725,16 @@ class LastFMTuner(Thread):
         pass
 
     def skip(self):
-        _debug_('%s.skip()' % (self.__class__,))
+        print('%s.skip()' % (self.__class__,))
         pass
 
     def ban(self):
-        _debug_('%s.ban()' % (self.__class__,))
-        pass
+        print('%s.ban()' % (self.__class__,))
+        self.webservices.ban()
 
     def love(self):
-        _debug_('%s.love()' % (self.__class__,))
-        pass
+        print('%s.love()' % (self.__class__,))
+        self.webservices.love()
 
 
 
@@ -737,7 +763,7 @@ class LastFMStation(Item):
         return a list of actions for this item
         """
         #print('%s.actions()' % (self.__class__,))
-        items = [ (self.play, _('Listen to %s' % self.name)) ]
+        items = [ (self.play, _('Listen to %s' % Unicode(self.name))) ]
         return items
 
 
@@ -753,16 +779,17 @@ class LastFMStation(Item):
             self.menuw = menuw
             _debug_('self.menuw=%r' % (self.menuw,))
 
-        self.lastfm_tuner = LastFMTuner(self.station_url, self, self.menuw)
+        self.lastfm_tuner = LastFMTuner(self.station, self.station_url, self, self.menuw)
         self.lastfm_tuner.setDaemon(1)
         self.lastfm_tuner.start()
 
         self.nowplaying = None
-        error = self.playnext(arg, self.menuw)
 
+        error = self.playnext(arg, self.menuw)
         if error and self.menuw:
+            # could make this a cancel/retry box
             AlertBox(text=error).show()
-            rc.post_event(rc.PLAY_END)
+            rc.post_event(PLAY_END)
 
 
     def playnext(self, arg=None, menuw=None):
@@ -777,19 +804,25 @@ class LastFMStation(Item):
             #print('%s.playlist=%s' % (self.__class__, pformat(list(self.lastfm_tuner.playlist))))
         # may need to do this differently
         for i in range(100):
+            if self.lastfm_tuner.reason is not None:
+                return '%s' % (self.lastfm_tuner.reason,)
             self.nowplaying = self.lastfm_tuner.playing()
             if self.nowplaying is not None and os.path.exists(self.nowplaying.filename):
                 if os.stat(self.nowplaying.filename)[ST_SIZE] >= config.LASTFM_CACHE_SIZE:
                     break
             time.sleep(0.2)
         else:
-            return 'Not found %r' % (self.nowplaying.filename,)
+            return '%s' % (self.lastfm_tuner.reason,)
 
         #print('%s.nowplaying=%s' % (self.__class__, self.nowplaying))
         if self.lastfm_tuner.isAlive():
-            #print('lastfm_tuner.isAlive')
+            print('lastfm_tuner is alive')
             if self.nowplaying is not None:
                 self.nowplaying.play(arg, menuw)
+        else:
+            print('lastfm_tuner has died: %s' % (self.lastfm_tuner.reason,))
+            return self.lastfm_tuner.reason
+        return None
 
 
     def stop(self, arg=None, menuw=None):
@@ -867,19 +900,23 @@ class PluginInterface(MainMenuPlugin):
     A plug-in to list examples, but can be used to
     show the output of a user command.
 
-    To activate, put the following lines in local_conf.py:
-    | plugin.activate('examples', level=45)
-    | EXAMPLE1 = "string"
-    | EXAMPLE2 = "string"
+    To activate, put the following lines in local_conf.py::
+
+        plugin.activate('audio.lastfm', level=45)
     """
     def __init__(self):
         """
+        Construct an instance of the LastFM audio plug-in
         """
         self.name = 'LastFM Radio'
         _debug_('%s.__init__()' % (self.__class__,))
         MainMenuPlugin.__init__(self)
         #print('%s.__dict__=%s' % (self.__class__, self.__dict__,))
         #print('dir(self)=%s' % (dir(self),))
+        lastfm_session = os.path.join(config.FREEVO_CACHEDIR, 'lastfm.session')
+        if os.path.exists(lastfm_session):
+            print('%r removed' % (lastfm_session,))
+            os.remove(lastfm_session)
 
 
     def config(self):
@@ -923,7 +960,7 @@ if __name__ == '__main__':
 
     station = 'lastfm://globaltags/jazz'
     station_url = urllib.quote_plus(station)
-    lastfm_tuner = LastFMTuner(station_url)
+    lastfm_tuner = LastFMTuner('Jazz', station_url)
     lastfm_tuner.setDaemon(1)
     lastfm_tuner.start()
     
