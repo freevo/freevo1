@@ -134,12 +134,17 @@ PyGoom_process(PyGoomObject *self, PyObject *args)
 
     if (self->mmap_area) {
         if (self->mmap_area->count != self->mmap_area_count) {
-            if (debug >= 3) {
+            if (debug >= 4) {
                 printf("mmap_area->count=%llu, self->mmap_area_count=%llu\n", 
                     self->mmap_area->count, self->mmap_area_count);
             }
+            if (debug >= 3) {
+                printf("memcpy(data=%p, self->mmap_area=%p + sizeof(data_t)=%u, sizeof(gint16)=%u * 2 * 512)\n",
+                    data, self->mmap_area, (unsigned)sizeof(data_t), (unsigned)sizeof(gint16));
+            }
             self->mmap_area_count = self->mmap_area->count;
-            memcpy(data, self->mmap_area + sizeof(data_t), sizeof(gint16) * 2 * 512);
+            //memcpy(data, self->mmap_area + sizeof(data_t), sizeof(gint16) * 2 * 512);
+            memcpy(data, self->mmap_area + sizeof(data_t), sizeof(gint16) * 1 * 512);
         }
     }
     else {
@@ -418,6 +423,10 @@ PyGoom_init(PyGoomObject *self, PyObject *args, PyObject *kwds)
             PyErr_Format(PyExc_IOError, "export file '%s' cannot be mapped", mmapfile);
             return -1;
         }
+        if (debug >= 1) {
+            printf("sizeof(data_t)=%u sizeof(gint16)=%u\n", (unsigned)sizeof(data_t), (unsigned)sizeof(gint16));
+            printf("nch=%d, bs=%d, count=%llu\n", self->mmap_area->nch, self->mmap_area->bs, self->mmap_area->count);
+        }
         self->mmap_area = mremap(self->mmap_area, sizeof(data_t), sizeof(data_t) + self->mmap_area->bs, 0);
         if (! self->mmap_area) {
             PyErr_Format(PyExc_IOError, "export file '%s' cannot be re-mapped", mmapfile);
@@ -510,6 +519,7 @@ pygoom_debug(PyObject *self, PyObject *args)
 	if (!PyArg_ParseTuple(args, "i:debug", &debug)) {
 		return NULL;
 	}
+    printf("debugging set to %d\n", debug);
 
 	Py_INCREF(Py_None);
     return Py_None;
@@ -557,7 +567,7 @@ initpygoom(void)
 
 	updateModuleDict(m);
 
-	Py_INCREF(&PyGoomType);
+	Py_INCREF((PyObject *)&PyGoomType);
 	PyModule_AddObject(m, "PyGoom", (PyObject *)&PyGoomType);
 
 

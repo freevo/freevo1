@@ -34,10 +34,10 @@ typedef struct
   unsigned long long count;
 } data_t;
 
-SDL_Surface* surf =  NULL;
-data_t*   mmap_area;
-int16_t   data[ 2 ][ 512 ];
-uint32_t  *render_data = NULL;
+SDL_Surface *surf = NULL;
+data_t *mmap_area;
+int16_t data[2][512];
+uint32_t *render_data = NULL;
 unsigned long long counter = 0;
 
 PluginInfo *goomInfo = NULL;
@@ -48,29 +48,29 @@ int width = 100;
 int height = 100;
 int fd = 0;
 float fps = 0;
-char* sharedfile = 0;
-char* message = 0;
-char* songtitle = 0;
+char *sharedfile = 0;
+char *message = 0;
+char *songtitle = 0;
 
 /* ***** Method Declarations ***************************************************/
 int data_import_init(void);
 void data_import_clean(void);
 int set_resolution(void);
 
-static PyObject* pygoom_set_exportfile(PyObject *self, PyObject *args);
-static PyObject* pygoom_get_exportfile(PyObject *self, PyObject *args);
-static PyObject* pygoom_set_resolution(PyObject *self, PyObject *args);
-static PyObject* pygoom_get_resolution(PyObject *self, PyObject *args);
-static PyObject* pygoom_set_visual(PyObject *self, PyObject *args);
-static PyObject* pygoom_get_visual(PyObject *self, PyObject *args);
-static PyObject* pygoom_set_message(PyObject *self, PyObject *args);
-static PyObject* pygoom_get_message(PyObject *self, PyObject *args);
-static PyObject* pygoom_set_title(PyObject *self, PyObject *args);
-static PyObject* pygoom_get_title(PyObject *self, PyObject *args);
-static PyObject* pygoom_set_fps(PyObject *self, PyObject *args);
-static PyObject* pygoom_get_fps(PyObject *self, PyObject *args);
-static PyObject* pygoom_process(PyObject *self, PyObject *args);
-static PyObject* pygoom_cleanup(PyObject *self, PyObject *args);
+static PyObject *pygoom_set_exportfile(PyObject *self, PyObject *args);
+static PyObject *pygoom_get_exportfile(PyObject *self, PyObject *args);
+static PyObject *pygoom_set_resolution(PyObject *self, PyObject *args);
+static PyObject *pygoom_get_resolution(PyObject *self, PyObject *args);
+static PyObject *pygoom_set_visual(PyObject *self, PyObject *args);
+static PyObject *pygoom_get_visual(PyObject *self, PyObject *args);
+static PyObject *pygoom_set_message(PyObject *self, PyObject *args);
+static PyObject *pygoom_get_message(PyObject *self, PyObject *args);
+static PyObject *pygoom_set_title(PyObject *self, PyObject *args);
+static PyObject *pygoom_get_title(PyObject *self, PyObject *args);
+static PyObject *pygoom_set_fps(PyObject *self, PyObject *args);
+static PyObject *pygoom_get_fps(PyObject *self, PyObject *args);
+static PyObject *pygoom_process(PyObject *self, PyObject *args);
+static PyObject *pygoom_cleanup(PyObject *self, PyObject *args);
 
 /* ***** Python Declarations ***************************************************/
 // methods defined by the module
