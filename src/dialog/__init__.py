@@ -191,61 +191,6 @@ def show_message(message):
     if _display:
         _display.show_message(message)
 
-def show_alert(message, type=None, handler=None):
-    """
-    Helper function to show a message that requires user input to close.
-
-    @param message: Message to display.
-    @param type: The type of the alert to show either None, 'warning' or 'error'.
-    @param handler: Function to call when dialog is closed.
-    """
-    if not is_dialog_supported():
-        raise DialogsNotSupportedError()
-
-    from dialog.dialogs import ButtonDialog
-    dialog = ButtonDialog(((_('Close'), handler),), message, type=type)
-    dialog.show()
-
-def show_confirmation(message, proceed_handler=None, cancel_handler=None,
-                               proceed_text=None, cancel_text=None, type=None):
-    """
-    Helper function to show a message that requires confirmation to proceed
-    (ie an OK/Cancel).
-
-    @param message: Message to display.
-    @param proceed_handler: Function to call if OK is selected.
-    @param cancel_handler: Function to call if Cancel is selected.
-    @param proceed_text: Text to use for the proceed button (defaults to OK if this is None).
-    @param cancel_text: Text to use for the cancel button (defaults to Cancel if this is None).
-    @param type: Type of the dialog box being display, can be one of the standard ButtonDialog types.
-    """
-    if not is_dialog_supported():
-        raise DialogsNotSupportedError()
-
-    if proceed_text is None:
-        proceed_text = _('OK')
-
-    if cancel_text is None:
-        cancel_text = _('Cancel')
-
-    from dialog.dialogs import ButtonDialog
-    dialog = ButtonDialog(((proceed_text, proceed_handler),
-                           (cancel_text, cancel_handler, True)),
-                           message,
-                           type=type)
-    dialog.show()
-
-def show_working_indicator(message):
-    """
-    Helper function to show that some work is taking place and that freevo hasn't
-    crashed.
-    @param message: Message to be displayed by the dialog.
-    @return: A dialog object which the caller should call hide() on when work has completed.
-    """
-    from dialog.dialogs import ProgressDialog
-    dialog = ProgressDialog(message, indeterminate=True)
-    dialog.show()
-    return dialog
 
 def show_play_state(state, get_time_info=None):
     """
@@ -283,10 +228,3 @@ def handle_event(event):
 def handle_mouse_event(event):
     if _display and hasattr(_display, 'handle_mouse_event'):
         _display.handle_mouse_event(event)
-
-class DialogsNotSupportedError(Exception):
-    """
-    Exception that is raised when an attempt is made to show a dialog and the
-    active display doesn't support dialogs.
-    """
-    pass
