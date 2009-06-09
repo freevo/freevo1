@@ -958,7 +958,7 @@ class OSD:
         draw a normal box
         """
         _debug_('drawbox(x0=%s, y0=%s, x1=%s, y1=%s, width=%s, color=%s, fill=%s, layer=%s)' % (
-            x0, y0, x1, y1, width, color, fill, layer), 1)
+            x0, y0, x1, y1, width, color, fill, layer), 2)
         self.mutex.acquire()
         try:
             # Make sure the order is top left, bottom right
