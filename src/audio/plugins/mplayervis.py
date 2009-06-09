@@ -34,7 +34,7 @@ Native Freevo MPlayer Audio Visualization Plugin
 
 __author__ = 'Viggo Fredriksen <viggo@katatonic.org>'
 
-import os, time
+import os, time, string
 from threading import Lock
 try:
     import pygoom
@@ -139,7 +139,7 @@ class MpvGoom(BaseAnimation):
         #pygoom.debug(2)
         BaseAnimation.__init__(self, (x, y, width, height), fps=100, bg_update=False, bg_redraw=False)
         # goom doesn't handle Unicode, so make it a string
-        self.goom = pygoom.PyGoom(width, height, MMAP_FILE, songtitle=String(title) or '')
+        self.goom = pygoom.PyGoom(width, height, MMAP_FILE, songtitle=self.to_str(title) or '')
         self.infodata = None
 
         self.width = width
@@ -166,11 +166,38 @@ class MpvGoom(BaseAnimation):
         self.timer = Timer(self.goom_surface_update)
         self.last_time = 0
         self.message_counter = 1 # skip message at start
-        self.messages = []
+        self.message = ''
 
 
     def __del__(self):
-        _debug_('MpvGoom.__del__')
+        _debug_('%s.__del__', (self.__class__,))
+
+
+    def to_str(self, s):
+        translation_table \
+            = '         \t\n  \n  ' \
+            + '                ' \
+            + ' !"#$%&\'()*+,-./' \
+            + '0123456789:;<=>?' \
+            + '@ABCDEFGHIJKLMNO' \
+            + 'PQRSTUVWXYZ[\]^_' \
+            + '`abcdefghijklmno' \
+            + 'pqrstuvwxyz{|}~ ' \
+            + '                ' \
+            + '                ' \
+            + '                ' \
+            + '                ' \
+            + 'AAAAAAACEEEEIIII' \
+            + 'DNOOOOOxOUUUUYPS' \
+            + 'aaaaaaaceeeeiiii' \
+            + 'onooooo/ouuuuypy' 
+
+        try:
+            r = str(string.translate(s, translation_table))
+        except UnicodeError:
+            r = str(s)
+        print 'to_str(s=%r) -> %s' % (s, r)
+        return r
 
 
     def set_visual(self, visual):
@@ -182,13 +209,13 @@ class MpvGoom(BaseAnimation):
     def set_songtitle(self, songtitle):
         """ pass the song title to goom """
         _debug_('set_songtitle(songtitle=%r)' % (songtitle,))
-        self.goom.songtitle = str(songtitle)
+        self.goom.songtitle = self.to_str(songtitle)
 
 
     def set_message(self, message):
         """ pass a message to goom """
         _debug_('set_message(message=%r)' % (message,))
-        self.goom.message = str(message)
+        self.goom.message = self.to_str(message)
 
 
     def set_alpha(self, high, low):
@@ -435,10 +462,10 @@ class MpvGoom(BaseAnimation):
 
             if self.mode == MpvMode.FULL:
                 if self.message_counter == 0:
-                    if self.messages:
-                        self.goom.message = '\n'.join(self.messages)
+                    print('%s.message=%r' % (self.__class__, self.message))
+                    if self.message:
+                        self.set_message(self.message)
                 self.message_counter = (self.message_counter + 1) % config.MPLAYERVIS_MSG_FRAMES
-
 
             gooms = self.goom.process()
 
@@ -498,24 +525,27 @@ class PluginInterface(plugin.Plugin):
     Native mplayer audiovisualization for Freevo.
     Dependant on the pygoom-2k4-0.2.0 module and goom-2k4
 
-    Activate with:
-    | plugin.activate('audio.mplayervis')
-    | The following can be set in local_conf.py:
-    |   MPLAYERVIS_MODE Set the initial mode of the display, 0 is DOCK, 1 is FULL or 2 is NONE
-    |   MPLAYERVIS_INIT_COUNTER is the number of steps  before the image fades, should be >= 255
-    |   MPLAYERVIS_FADE_IN_WAIT_COUNTER is the number of steps to wait before cover image fades in
-    |   MPLAYERVIS_FADE_OUT_WAIT_COUNTER is the number of steps to wait before cover image fades out
-    |   MPLAYERVIS_FADE_COUNTER is the number of steps for fade transition
-    |   MPLAYERVIS_FADE_STEP is the number of steps per timer loop
-    |   MPLAYERVIS_MESSAGE_FMT is a string format for a message
-    |     %(a)s : artist
-    |     %(l)s : album
-    |     %(n)s : trackno
-    |     %(t)s : title
-    |     %(e)s : elapsed
-    |     %(i)s : item.image
-    |     %(y)s : year
-    |     %(s)s : length
+    Activate with::
+
+        plugin.activate('audio.mplayervis')
+
+    The following can be set in local_conf.py:
+        - MPLAYERVIS_MODE Set the initial mode of the display, 0 is DOCK, 1 is FULL or 2 is NONE
+        - MPLAYERVIS_INIT_COUNTER is the number of steps  before the image fades, should be >= 255
+        - MPLAYERVIS_FADE_IN_WAIT_COUNTER is the number of steps to wait before cover image fades in
+        - MPLAYERVIS_FADE_OUT_WAIT_COUNTER is the number of steps to wait before cover image fades out
+        - MPLAYERVIS_FADE_COUNTER is the number of steps for fade transition
+        - MPLAYERVIS_FADE_STEP is the number of steps per timer loop
+        - MPLAYERVIS_MESSAGE_FMT is a string format for a message:
+            - %(t)s : title
+            - %(a)s : artist
+            - %(l)s : album
+            - %(n)s : trackno
+            - %(N)s : trackof
+            - %(y)s : year
+            - %(g)s : genre
+            - %(s)s : length
+            - %(e)s : elapsed
 
     The number of steps is proportional to time of a fade transition, each step if 1/10 sec
 
@@ -564,6 +594,7 @@ class PluginInterface(plugin.Plugin):
         self.plugin_name = 'audio.mplayervis'
         plugin.register(self, self.plugin_name)
 
+        self.mpvgoom = None
         self.view = MpvMode(config.MPLAYERVIS_MODE)
         self.view_func = [self.dock, self.fullscreen, self.noview]
         self.initialised = False
@@ -582,8 +613,7 @@ class PluginInterface(plugin.Plugin):
             ('MPLAYERVIS_FADE_OUT_WAIT_COUNTER', 0, 'Counter to wait before cover image fade out'),
             ('MPLAYERVIS_FADE_COUNTER', 50, 'Counter for fade transition'),
             ('MPLAYERVIS_FADE_STEP', 3, 'Number of steps per timer loop'),
-            ('MPLAYERVIS_MESSAGE_FMT', 'Artist: %(a)s\n Album: %(l)s\n Title: %(t)s\n Track: %(n)s\n', \
-                'Message format for the message'),
+            ('MPLAYERVIS_MESSAGE_FMT', '%(t)s\n%(a)s\n%(l)s\n%(n)s\n%(s)s\n', 'Message format for the message'),
             ('MPLAYERVIS_FULL_GEOMETRY', '%dx%d' % (config.CONF.width, config.CONF.height), 'Full screen geometry'),
             ('MPLAYERVIS_FULL_ZOOM', 1, 'Fullscreen surface is zoomed by 2^ZOOM'),
             ('MPLAYERVIS_DOCK_ZOOM', 1, 'Docked surface is zoomed by 2^ZOOM'),
@@ -599,7 +629,7 @@ class PluginInterface(plugin.Plugin):
         _debug_('toggle_view()')
         self.view += 1
 
-        if not self.visual:
+        if not self.mpvgoom:
             self.start_visual()
         else:
             self.view_func[self.view]()
@@ -610,6 +640,7 @@ class PluginInterface(plugin.Plugin):
         eventhandler to simulate hide/show of mpav
         """
         _debug_('mplayervis1.eventhandler(event=%r, arg=%r)' % (event.name, arg))
+        print('mplayervis1.eventhandler(event=%r, arg=%r)' % (event.name, arg))
 
         if plugin.isevent(event) == 'DETACH':
             PluginInterface.detached = True
@@ -624,7 +655,10 @@ class PluginInterface(plugin.Plugin):
                 self.start_visual()
             else:
                 self.resume_visual()
-            self.item_info(self.message_fmt)
+            self.message = self.item_info(self.message_fmt)
+            if self.mpvgoom is not None:
+                self.mpvgoom.message = self.message
+            print('%s.message=%r' % (self.__class__, self.message))
 
         elif event == PLAY_END:
             if self.player.playerGUI.succession == PlayListSuccession.LAST:
@@ -641,34 +675,34 @@ class PluginInterface(plugin.Plugin):
             return True
 
         elif event == 'DISPLAY_FPS':
-            if self.visual is not None:
-                self.visual.showfps = not self.visual.showfps
-            _debug_('showfps=%s' % (self.visual.showfps))
+            if self.mpvgoom is not None:
+                self.mpvgoom.showfps = not self.mpvgoom.showfps
+            _debug_('showfps=%s' % (self.mpvgoom.showfps))
             return True
 
         elif event == 'DISPLAY_TITLE':
             if not self.title:
                 self.title = self.item_info('%(t)s')
             _debug_('title=%s' % (self.title))
-            if self.visual is not None:
-                self.visual.set_songtitle(self.title)
+            if self.mpvgoom is not None:
+                self.mpvgoom.set_songtitle(self.title)
             return True
 
         elif event == 'DISPLAY_MESSAGE':
             #self.message = not self.message and self.item_info(self.message_fmt) or ''
             if not self.message:
                 self.message = self.item_info(self.message_fmt)
-            _debug_('message=%s' % (self.message))
-            if self.visual is not None:
-                self.visual.set_message(self.message)
+            _debug_('message=%r' % (self.message))
+            if self.mpvgoom is not None:
+                self.mpvgoom.set_message(self.message)
             return True
 
         elif event == 'NEXT_VISUAL':
             PluginInterface.vis_mode += 1
             if PluginInterface.vis_mode > 9: PluginInterface.vis_mode = -1
             _debug_('vis_mode=%s' % (PluginInterface.vis_mode))
-            if self.visual is not None:
-                self.visual.set_visual(PluginInterface.vis_mode)
+            if self.mpvgoom is not None:
+                self.mpvgoom.set_visual(PluginInterface.vis_mode)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
             return True
 
@@ -677,14 +711,14 @@ class PluginInterface(plugin.Plugin):
             if PluginInterface.vis_mode < -1: PluginInterface.vis_mode = -1
             if PluginInterface.vis_mode > 9: PluginInterface.vis_mode = 9
             _debug_('vis_mode=%s' % (PluginInterface.vis_mode))
-            if self.visual is not None:
-                self.visual.set_visual(PluginInterface.vis_mode)
+            if self.mpvgoom is not None:
+                self.mpvgoom.set_visual(PluginInterface.vis_mode)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
             return True
 
         elif event == OSD_MESSAGE:
-            if self.visual is not None: # and self.view == MpvMode.FULL:
-                self.visual.set_info(event.arg)
+            if self.mpvgoom is not None: # and self.view == MpvMode.FULL:
+                self.mpvgoom.set_info(event.arg)
                 return True
 
         if self.passed_event:
@@ -701,7 +735,7 @@ class PluginInterface(plugin.Plugin):
         """
         _debug_('_paused_handler')
         #rc.post_event does not seem to work
-        #rc.post_event(Event(STOP))
+        #rc.post_event(STOP)
         self.stop_visual()
         # need to redraw the screen some how
         skin.redraw()
@@ -709,86 +743,71 @@ class PluginInterface(plugin.Plugin):
 
     def item_info(self, fmt=None):
         """
-        Set the messages that scroll up the screen
+        Set the message that scroll up the screen
+
+        If the message ends with a newline then all the message lines will
+        scroll off the top of the screen. Otherwise the last line of message
+        will stay in the middle of the screen.
+
+        @param fmt: message format string
         @returns: info about the current playing song
         """
         _debug_('item_info(fmt=%r)' % (fmt,))
 
+        if fmt is None:
+            return ''
+
         #print('self.item=\n%s' % (pformat(self.item.__dict__),))
         #print('self.item.info=\n%s' % (pformat(self.item.info.__dict__),))
-        item     = self.item
-        info     = item.info
-        image    = item.image
-        title    = item.title if hasattr(item, 'title') else info['title'] if 'title' in info else item.name
-        artist   = item.artist if hasattr(item, 'artist') else info['artist']
-        album    = item.album if hasattr(item, 'album') else info['album']
-        trackno  = item.trackno if hasattr(item, 'trackno') else info['trackno']
-        trackof  = item.trackof if hasattr(item, 'trackof') else info['trackof']
-        year     = item.userdate if hasattr(item, 'userdate') else info['userdate'] if 'userdate' in info \
-            else info['year']
-        genre    = item.genre if hasattr(item, 'genre') else item['genre']
-        length   = '%i:%02i' % (int(item.length/60), int(item.length%60)) if item.length else ''
-        elapsed  = '%i:%02i' % (int(item.elapsed/60), int(item.elapsed%60)) if item.elapsed else ''
-
+        item  = self.item
+        info  = item.info
+        image = item.image
         song = {
-            'i' : image,
-            't' : title,
-            'a' : artist,
-            'l' : album,
-            'n' : trackno,
-            'N' : trackof,
-            'y' : year,
-            'g' : genre,
-            's' : length,
-            'e' : elapsed,
+            't': item.title if hasattr(item, 'title') else info['title'] if 'title' in info else item.name,
+            'a': item.artist if hasattr(item, 'artist') else info['artist'],
+            'l': item.album if hasattr(item, 'album') else info['album'],
+            'n': item.trackno if hasattr(item, 'trackno') else info['trackno'],
+            'N': item.trackof if hasattr(item, 'trackof') else info['trackof'],
+            'y': item.userdate if hasattr(item, 'userdate') else info['userdate'] if 'userdate' in info \
+                 else info['year'],
+            'g': item.genre if hasattr(item, 'genre') else item['genre'],
+            's': '%i:%02i' % (int(item.length/60), int(item.length%60)) if item.length else '',
+            'e': '%i:%02i' % (int(item.elapsed/60), int(item.elapsed%60)) if item.elapsed else '',
         }
-        _debug_('song=\n%s' % (pformat(song),))
+        print('song=\n%s' % (pformat(song),))
 
-        if self.visual is not None:
-            self.visual.messages = []
-            self.visual.message_counter = 1
-            if song['t']:
-                self.visual.messages.append(str('%(t)s' % song))
-            if song['a']:
-                self.visual.messages.append(str('%(a)s' % song))
-            if song['l']:
-                self.visual.messages.append(str('%(l)s' % song))
-            if song['n'] and song['N']:
-                self.visual.messages.append(str('%(n)s/%(N)s' % song))
-            elif song['n']:
-                self.visual.messages.append(str('%(n)s' % song))
-            if song['g']:
-                self.visual.messages.append(str('%(g)s' % song))
-            if song['y']:
-                self.visual.messages.append(str('%(y)s' % song))
-            # the last line of messages will stay in the middle of the screen
-            # this will cause all message to scroll off the top of the screen
-            self.visual.messages.append('')
+        message_parts = []
+        keys = fmt.split('\n')
+        #print 'keys=%r' % (keys,)
+        for key in keys:
+            if key == '':
+                message_parts.append('')
+            try:
+                message_part = key % song
+                if message_part:
+                    message_parts.append(message_part)
+            except KeyError:
+                print('unknown key %r' % (key,))
+        message = '\n'.join(message_parts)
+        #print 'message=%r' % (message,)
 
-        if not fmt:
-            if year:
-                fmt = u'%(a)s : %(l)s  %(n)s.  %(t)s (%(y)s)   [%(s)s]'
-            else:
-                fmt = u'%(a)s : %(l)s  %(n)s.  %(t)s [%(s)s]'
+        # don't like this, remove it
+        #if self.mpvgoom is not None:
+        #    self.mpvgoom.message_counter = 1
+        #    self.mpvgoom.message = message
 
-        result = ''
-        try:
-            result = fmt % song
-        except Exception, why:
-            traceback.print_exc()
-            _debug_(why, DERROR)
-        _debug_('item_info: result=%r' % (result,))
-        return result
+        _debug_('item_info: message=%r' % (message,))
+        return message
 
 
     def dock(self):
         _debug_('dock()')
-        self.visual.mode = MpvMode.DOCK
+        self.mpvgoom.mode = MpvMode.DOCK
 
         if rc.app() != self.player.eventhandler:
             rc.app(self.player)
 
-        self.visual.set_dock()
+        self.mpvgoom.set_dock()
         if not self.player.playerGUI.visible:
             osd.active = True
             skin.resume()
@@ -797,13 +816,13 @@ class PluginInterface(plugin.Plugin):
 
     def fullscreen(self):
         _debug_('fullscreen()')
-        self.visual.mode = MpvMode.FULL
+        self.mpvgoom.mode = MpvMode.FULL
 
         if self.player.playerGUI.visible:
             self.player.playerGUI.hide()
             osd.active = False
 
-        self.visual.set_fullscreen()
+        self.mpvgoom.set_fullscreen()
         skin.clear()
         skin.suspend()
         rc.app(self)
@@ -812,12 +831,12 @@ class PluginInterface(plugin.Plugin):
     def noview(self):
         _debug_('noview()')
 
-        self.visual.mode = MpvMode.NOVI
+        self.mpvgoom.mode = MpvMode.NOVI
 
         if rc.app() != self.player.eventhandler:
             rc.app(self.player)
 
-        if self.visual is not None:
+        if self.mpvgoom is not None:
             self.stop_visual()
 
         if not self.player.playerGUI.visible:
@@ -834,7 +853,7 @@ class PluginInterface(plugin.Plugin):
 
         self.timer.stop()
 
-        if self.visual is not None and self.visual.running:
+        if self.mpvgoom is not None and self.mpvgoom.running:
             return
 
         if self.view == MpvMode.NOVI:
@@ -842,20 +861,20 @@ class PluginInterface(plugin.Plugin):
 
         if rc.app() == self.player.eventhandler:
             title = self.item.title if hasattr(self.item, 'title') and self.item.title else self.item.name
-            self.visual = MpvGoom(300, 300, 150, 150, title, self.item.image)
-            if self.visual is None:
+            self.mpvgoom = MpvGoom(300, 300, 150, 150, title, self.item.image)
+            if self.mpvgoom is None:
                 raise Exception('Cannot initialise MpvGoom')
 
             #if self.view == MpvMode.FULL:
-            self.visual.set_info(self.item.name, 10)
+            self.mpvgoom.set_info(self.item.name, 10)
             self.title = None
             self.message = None
 
-            _debug_('self.visual.running=%r -> True' % (self.visual.running,))
-            self.visual.running = True
+            _debug_('self.mpvgoom.running=%r -> True' % (self.mpvgoom.running,))
+            self.mpvgoom.running = True
             self.view_func[self.view]()
-            self.visual.start()
-            self.visual.timer.start(1.0 / config.MPLAYERVIS_FPS)
+            self.mpvgoom.start()
+            self.mpvgoom.timer.start(1.0 / config.MPLAYERVIS_FPS)
             if self.view == MpvMode.FULL:
                 skin.suspend()
 
@@ -870,9 +889,9 @@ class PluginInterface(plugin.Plugin):
         _debug_('%s.resume_visual() self.view=%r self.succession=%r' % (self.__class__,
             self.view, self.player.playerGUI.succession))
         self.timer.stop()
-        if self.visual is not None:
+        if self.mpvgoom is not None:
             self.title = None
-            self.message = None
+            self.message = self.item_info(self.message_fmt)
             if self.view == MpvMode.FULL:
                 skin.clear()
         else:
@@ -883,12 +902,12 @@ class PluginInterface(plugin.Plugin):
         _debug_('%s.stop_visual() self.view=%r self.succession=%r' % (self.__class__,
             self.view, self.player.playerGUI.succession))
         self.timer.stop()
-        if self.visual is not None:
-            _debug_('self.visual.running=%r -> False' % (self.visual.running,))
-            self.visual.timer.stop()
-            self.visual.running = False
-            self.visual.remove()
-            self.visual = None
+        if self.mpvgoom is not None:
+            _debug_('self.mpvgoom.running=%r -> False' % (self.mpvgoom.running,))
+            self.mpvgoom.timer.stop()
+            self.mpvgoom.running = False
+            self.mpvgoom.remove()
+            self.mpvgoom = None
             self.goom = None
         osd.active = True
         skin.resume()
@@ -903,10 +922,10 @@ class PluginInterface(plugin.Plugin):
         _debug_('%s.play(command=%r, player=%r)' % (self.__class__, command, player))
         self.player = player
         self.item   = player.playerGUI.item
-        if self.visual is not None:
+        if self.mpvgoom is not None:
             title = self.item.title if hasattr(self.item, 'title') else self.item.name
-            self.visual.set_songtitle(title)
-            self.visual.set_coverimage(self.item.image)
+            self.mpvgoom.set_songtitle(title)
+            self.mpvgoom.set_coverimage(self.item.image)
 
         #if config.MPLAYERVIS_HAS_TRACK:
         #    return command + [ '-af', 'export=%s' % MMAP_FILE + ',track=5:1500' ]
@@ -934,7 +953,7 @@ class PluginInterface(plugin.Plugin):
             memory_mapped = True
             _debug_("Detected MPlayer 'export' audio filter! Using MPAV.")
 
-        #if not self.visual.running:
-        #    if memory_mapped and not self.visual:
+        #if not self.mpvgoom.running:
+        #    if memory_mapped and not self.mpvgoom:
         #        self.start_visual()
         return
