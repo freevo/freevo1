@@ -43,7 +43,6 @@ import array
 import config
 import util.mediainfo
 import rc
-#from util.misc import print_upper_execution_stack
 
 
 
@@ -542,7 +541,6 @@ class RemovableMedia:
             util.mount(self.mountdir, force=True)
         self.mount_ref_count += 1
         #print '-----------mount ', self.mountdir, ' ref count ', self.mount_ref_count
-        #print_upper_execution_stack()
 
 
     def umount(self):
@@ -552,7 +550,6 @@ class RemovableMedia:
         if self.mount_ref_count == 0:
             util.umount(self.mountdir)
         #print '-----------umount ',self.mountdir,' ref count ',self.mount_ref_count
-        #print_upper_execution_stack()
 
 
     def is_mounted(self):
