@@ -1,6 +1,6 @@
 # -*- coding: iso-8859-1 -*-
 # -----------------------------------------------------------------------
-# idlebar/MultiMail - IdleBar plugins for checking email accounts
+# IdleBar plugins for checking email accounts
 # -----------------------------------------------------------------------
 # $Id$
 #
@@ -46,14 +46,13 @@ class MultiMail(IdleBarPlugin):
     Displays an icon in the idlebar representing the number of emails for a
     specified account. In the case of IMAP, it only lists unread messages
 
-    Activate with:
-    plugin.activate('idlebar.MultiMail.Imap',    level=10, args=(
-        'username', 'password', 'host', 'port', 'folder')) (port and folder are optional)
-    plugin.activate('idlebar.MultiMail.Pop3',    level=10, args=(
-        'username', 'password', 'host', 'port')) (port is optional)
-    plugin.activate('idlebar.MultiMail.Mbox',    level=10, args=('path to mailbox file')
-    plugin.activate('idlebar.MultiMail.Maildir', level=10, args=('path to maildir')
-
+    Activate with::
+        plugin.activate('idlebar.MultiMail.Imap',    level=10, args=(
+            'username', 'password', 'host', 'port', 'folder')) (port and folder are optional)
+        plugin.activate('idlebar.MultiMail.Pop3',    level=10, args=(
+            'username', 'password', 'host', 'port')) (port is optional)
+        plugin.activate('idlebar.MultiMail.Mbox',    level=10, args=('path to mailbox file')
+        plugin.activate('idlebar.MultiMail.Maildir', level=10, args=('path to maildir')
     """
     def __init__(self):
         IdleBarPlugin.__init__(self)

@@ -48,9 +48,9 @@ class PluginInterface(DaemonPlugin):
     """
     Speak context info through Festival Text-to-Speech engine
 
-    @requires: festival installed and configured U{http://www.cstr.ed.ac.uk/}
+    requires: festival installed and configured U{http://www.cstr.ed.ac.uk/}
 
-    @requires: PyFest installed U{http://users.wpi.edu/~squirrel/programs/others/}
+    requires: PyFest installed U{http://users.wpi.edu/~squirrel/programs/others/}
 
     To activate this plugin, just put the following line into your local_conf.py:
 

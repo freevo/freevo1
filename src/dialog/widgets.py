@@ -102,7 +102,7 @@ class WidgetModel(object):
         Returns a text string describing the state of the model.
         Used by the skin module when determine how to draw the widget.
 
-        @return A string describing the current state of the widget.
+        @return: A string describing the current state of the widget.
         """
         if self.visible:
             if self.enabled:

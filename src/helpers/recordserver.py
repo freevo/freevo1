@@ -867,7 +867,7 @@ class RecordServer:
         the number of seconds of the minute. The AtTimer is not 100% accurate
         need to allow a few seconds for it.
 
-        @return the time in seconds
+        @returns: the time in seconds
         """
         now = list(time.localtime(time.time() + 60 - 3))
         # round down to the nearest minute

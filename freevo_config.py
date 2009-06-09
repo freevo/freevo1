@@ -11,6 +11,13 @@
 #    you # want a alsa as mplayer audio out, just put
 #    "MPLAYER_AO_DEV = # 'alsa9'" in local_conf.py
 #
+#    This file has the format::
+#
+#        # Note line 1
+#        # Note line 2
+#        # Note line n
+#        VAR = 'default value' # tool tip text
+#
 # How config files are loaded:
 #
 # [$freevo-bindir/ is the directory where the freevo start-script is
@@ -422,9 +429,9 @@ if int(str(CONF.version).split('.')[1]) != int(str(FREEVO_CONF_VERSION).split('.
 # General freevo settings:
 # ======================================================================
 
-POLL_TIME             = 0.01         # time in seconds that the poll handlers are called
-                                     # a lower rate of 0.05 is less demanding for less
-                                     # powerful processors
+# time in seconds that the poll handlers are called a lower rate of 0.05 is
+# less demanding for less powerful processors
+POLL_TIME             = 0.01         # time per poll in secs
 
 AUDIO_DEVICE          = '/dev/dsp'   # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?
 AUDIO_INPUT_DEVICE    = '/dev/dsp1'  # e.g.: /dev/dsp0, /dev/audio, /dev/alsa/?

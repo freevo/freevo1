@@ -31,9 +31,9 @@
 """
 Module used to display information on top of the menu or video.
 
-There are 2 types of display,
- 1. OSD     - Displays information on top of the menu/main skin.
- 2. Overlay - Displays information on top of video/external apps.
+There are 2 types of display:
+    1. OSD     - Displays information on top of the menu/main skin.
+    2. Overlay - Displays information on top of video/external apps.
 
 @var PLAY_STATE_PLAY: Play state constant for playing.
 @var PLAY_STATE_PAUSE: Play state constant for paused.
@@ -44,8 +44,8 @@ There are 2 types of display,
 @var PLAY_STATE_PLAY_SLOW: Play state constant for playing slow.
 @var PLAY_STATE_PLAY_FAST: Play state constant for playing fast.
 
-@var overlay_display_support_dialogs Whether the display to use if none is
-provided by the application, supports dialogs.
+@var overlay_display_support_dialogs: Whether the display to use if none is
+    provided by the application, supports dialogs.
 """
 import skins.osd.xml
 import config
