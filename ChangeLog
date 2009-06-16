@@ -11,17 +11,16 @@ X is the category and #nnnnnnn is the tracker number.
 (B)ugs             http://sourceforge.net/tracker/?group_id=46652&atid=446895
 (F)eature requests http://sourceforge.net/tracker/?group_id=46652&atid=446898
 
-svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
-
 == Release 1.9.1 (2009-??-??) ==
 --------------------------------
-svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.8.x
+svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
 
  * New improvements to the rc.app() interface (F#2772598)
+ * Updated web interface to allow a TV favourite to be manually added (F#2804991)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------
-svn co svn://svn.freevo.org/freevo/tags/REL-1_8_4/freevo freevo-1.8.4
+svn co svn://svn.freevo.org/freevo/tags/REL-1_9_0/freevo freevo-1.9.0
 
  * '''Added support for Python-2.6'''
  * '''Removed support for Python-2.4'''

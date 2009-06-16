@@ -72,6 +72,9 @@ class EditFavoriteResource(FreevoResource):
         else:
             num_favorites = 0
 
+        priority = num_favorites + 1
+
+        # add new favorite from epg
         if action == 'add' and chan and start:
             (result, prog) = self.recordclient().findProgNow(chan, start)
 
@@ -86,13 +89,20 @@ class EditFavoriteResource(FreevoResource):
                     ])
                 return String(fv.res)
 
-            priority = num_favorites + 1
-
             fav = Favorite(prog.title, prog, TRUE, TRUE, TRUE, priority, FALSE)
+
+        # edit existing favorite
         elif action == 'edit' and name:
             (result, fav) = self.recordclient().getFavoriteNow(name)
+
+        # default: add new favorite by hand
         else:
-            pass
+            action = 'new'            
+            result = True
+            fav = Favorite(FALSE, FALSE, TRUE, 'ANY', 'ANY', priority, FALSE)
+            fav.name = ''
+            fav.title = ''            
+            fav.mod = 'ANY'
 
         if not result:
             fv.printHeader('Edit Favorite', 'styles/main.css')
@@ -104,7 +114,7 @@ class EditFavoriteResource(FreevoResource):
 
         guide = tv.epg_xmltv.get_guide()
 
-        fv.printHeader(_('Edit Favorite'), 'styles/main.css')
+        fv.printHeader(_('Edit Favorite'), 'styles/main.css', selected=_('Favorites'))
         fv.res += '&nbsp;<br/>\n'
         # This seems out of place.
         #fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
@@ -115,7 +125,8 @@ class EditFavoriteResource(FreevoResource):
         #fv.tableClose()
 
         fv.res += '<br><form name="editfavorite" method="get" action="favorites.rpy">'
-
+        
+        # table header
         fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
         fv.tableRowOpen('class="chanrow"')
         fv.tableCell(_('Name of favorite'), 'class="guidehead" colspan="1"')
@@ -134,13 +145,19 @@ class EditFavoriteResource(FreevoResource):
 
         fv.tableRowOpen('class="chanrow"')
 
+        # favorite name
         cell = '<input type="hidden" name="oldname" value="%s">' % fav.name
         cell += '<input type="text" size="20" name="name" value="%s">' % fav.name
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
-        cell = '<input type="hidden" name="title" value="%s">%s' % (fav.title, fav.title)
+        # program title
+        if action == 'new':
+            cell = '<input type="text" size="20" name="title" value="%s">' % fav.title
+        else:
+            cell = '<input type="hidden" name="title" value="%s">%s' % (fav.title, fav.title)
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
+        # channel
         cell = '\n<select name="chan" selected="%s">\n' % fav.channel
         cell += '  <option value=ANY>'+_('ANY CHANNEL')+'</option>\n'
 
@@ -155,6 +172,7 @@ class EditFavoriteResource(FreevoResource):
         cell += '</select>\n'
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
+        # day of week
         cell = '\n<select name="dow">\n' \
                '   <option value="ANY">'+_('ANY DAY')+'</option>\n' \
                '   <option value="0">'+_('Mon')+'</option>\n' \
@@ -168,6 +186,7 @@ class EditFavoriteResource(FreevoResource):
 
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
+        # time of day
         cell = '\n<select name="mod" selected="%s">\n' % fav.mod
         cell += '          <option value="ANY">'+_('ANY TIME')+'</option>\n'
         cell += """
@@ -223,6 +242,7 @@ class EditFavoriteResource(FreevoResource):
         """
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
+        # record duplicates
         if config.TV_RECORD_DUPLICATE_DETECTION:
             if hasattr(fav, 'allowDuplicates'):
                 cell = '\n<select name="allowDuplicates" selected="%s">\n' % \
@@ -234,6 +254,7 @@ class EditFavoriteResource(FreevoResource):
             cell += '</select>\n'
             fv.tableCell(cell, 'class="'+status+'" colspan="1"')
 
+        # record only new episodes
         if config.TV_RECORD_ONLY_NEW_DETECTION:
             if hasattr(fav, 'onlyNew'):
                 cell = '\n<select name="onlyNew" selected="%s">\n' % fav.onlyNew
@@ -250,7 +271,8 @@ class EditFavoriteResource(FreevoResource):
         #     cell += '  <option value="%s">%s</option>\n' % (i+1, i+1)
         # cell += '</select>\n'
         # fv.tableCell(cell, 'class="'+status+'" colspan="1"')
-
+        
+        # action
         cell = '<input type="hidden" name="priority" value="%s">' % fav.priority
         cell += '<input type="hidden" name="action" value="%s">' % action
         cell += '<input type="submit" value="'+_('Save')+'">'
