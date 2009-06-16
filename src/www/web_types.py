@@ -387,7 +387,19 @@ class HTMLResource:
     </form>
     """
 
-
+    def printAddFavorite(self):
+        """
+        Creates an 'Add Favorite' button"""
+        
+        self.res += """
+        <form id="FavoriteForm" action="edit_favorite.rpy" method="get">
+            <center>
+                <input type="hidden" name="action" value="new" />
+                <input type="submit" value='"""+_('Add Favorite')+"""'>
+            </center>
+        </form>
+        """
+        
     def printAdvancedSearchForm(self):
         """
         Creates the advanced search form.

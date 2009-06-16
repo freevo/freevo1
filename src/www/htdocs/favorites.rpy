@@ -74,8 +74,9 @@ class FavoritesResource(FreevoResource):
 
         if action == 'remove':
             self.recordclient().removeFavoriteNow(name)
-        elif action == 'add':
-            self.recordclient().addEditedFavoriteNow(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
+        elif action == 'add' or action == 'new':
+            if name != '' and title != '':
+                self.recordclient().addEditedFavoriteNow(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
         elif action == 'edit':
             self.recordclient().removeFavoriteNow(oldname)
             self.recordclient().addEditedFavoriteNow(name, title, chan, dow, mod, priority, allowDuplicates, onlyNew)
@@ -192,6 +193,8 @@ class FavoritesResource(FreevoResource):
 
         fv.tableClose()
 
+        fv.printAddFavorite()
+        
         fv.printSearchForm()
 
         fv.printLinks()

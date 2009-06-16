@@ -13,6 +13,12 @@ X is the category and #nnnnnnn is the tracker number.
 
 svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.9.x
 
+== Release 1.9.1 (2009-??-??) ==
+--------------------------------
+svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
+
+ * Updated web interface to allow a TV favourite to be manually added (F#2804991)
+
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------
 svn co svn://svn.freevo.org/freevo/tags/REL-1_9_0/freevo freevo-1.9.0
