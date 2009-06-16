@@ -126,3 +126,16 @@ class ImageItem(Item):
 
         if self.parent and hasattr(self.parent, 'cache_next'):
             self.parent.cache_next()
+
+
+    def rename_possible(self):
+        """
+        Returns True if the image item can be renamed.
+        """
+        try:
+            if self.info and self.parent.DIRECTORY_USE_MEDIAID_TAG_NAMES and self.info['title']:
+                # sorry, unable to edit media tag info
+                return False
+        except:
+            pass
+        return self.files and not self.files.read_only

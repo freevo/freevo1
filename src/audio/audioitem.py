@@ -46,7 +46,6 @@ class AudioItem(Item):
     """
     This is the common class to get information about audiofiles.
     """
-
     def __init__(self, url, parent, name=None, scan=True):
         self.type = 'audio'
         Item.__init__(self, parent)
@@ -76,8 +75,10 @@ class AudioItem(Item):
             images = ()
             covers = ()
             files =()
+
             def image_filter(x):
                 return re.match('.*(jpg|png)$', x, re.IGNORECASE)
+
             def cover_filter(x):
                 result = re.search(config.AUDIO_COVER_REGEXP, x, re.IGNORECASE)
                 if result: _debug_('cover_filter(%s): %r' % (x, result.group()), 2)
@@ -253,3 +254,17 @@ class AudioItem(Item):
 
         # last fallback: return filename
         return os.path.split(self.filename)[1]
+
+
+    def rename_possible(self):
+        """
+        Returns True if the video item can be renamed.
+        """
+        try:
+            if self.info and self.parent.DIRECTORY_USE_MEDIAID_TAG_NAMES and self.info['title']:
+                # sorry, unable to edit media tag info
+                return False
+        except:
+            pass
+
+        return self.files and not self.files.read_only
