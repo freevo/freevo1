@@ -413,10 +413,6 @@ class VideoItem(Item):
         return self.name
 
 
-    # ------------------------------------------------------------------------
-    # actions:
-
-
     def actions(self):
         """
         Menu actions for a video item.
@@ -812,9 +808,78 @@ class VideoItem(Item):
         return Item.eventhandler(self, event, menuw)
 
 
+    def rename_possible(self):
+        """
+        Returns True if the video item can be renamed.
+        """
+        try:
+            if self.info and self.parent.DIRECTORY_USE_MEDIAID_TAG_NAMES and self.info['title']:
+                # sorry, unable to edit media tag info
+                return False
+        except:
+            pass
+        return self.files and not self.files.read_only
+        
+
+    def rename(self, newname):
+        """
+        Try and rename the video item.
+        If there is a .fxd file associated, the title is renamed in the .fxd file.
+        If there is no .fxd file, and the video is a single file, that file and
+        associated files are renamed .
+        If there is no .fxd file, and the video is composed by a set of files, the
+        whole set is renamed.
+        """
+        if not self.files.fxd_file:
+            # no .fxd file
+            if len(self.subitems) > 1:
+                # rename each file of the set
+                # search for the numeric pattern to get its length
+                pat = re.compile(config.VIDEO_AUTOJOIN_REGEX)
+                firstfile = self.subitems[0].files.files[0]
+                mat = pat.search(firstfile)
+                if mat is not None:
+                    start = firstfile.find(mat.group(1), mat.start())
+                    end = start + len(mat.group(1))
+                    numlen = end - start
+                else:
+                    # sould not append, but default numeric pattern length is 2
+                    numlen = 2
+                # first file is number 1
+                num = 1
+                for subitem in self.subitems:
+                    if not subitem.files.rename('%s%0*d' % (newname, numlen, num), False, True, True):
+                        return False
+                    num += 1
+                self.name=newname
+                return True
+            else:
+                # simple file rename
+                if self.files.rename(newname):
+                    self.name=newname
+                    return True
+                return False
+        else:
+            # change the title in the .fxd file
+            self.fxd_rename_newname = newname
+            try:
+                parser = util.fxdparser.FXD(self.files.fxd_file)
+                parser.set_handler('movie', self.fxd_rename, mode='w')
+                parser.parse()
+                parser.save()
+            except Exception, e:
+                return False
+            return True
+
+
+    def fxd_rename(self, fxd, node):
+        fxd.setattr(node, 'title', self.fxd_rename_newname)
+        self.name=self.fxd_rename_newname
+
+
+
 ########################
 # Show Details
-
 import skin
 # Create the skin_object object
 skin_object = skin.get_singleton()

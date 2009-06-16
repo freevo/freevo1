@@ -17,6 +17,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1/freevo freevo-1.9.x
 --------------------------------
 svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
 
+ * Updated OSD to allow items to be renamed (F#2796072)
  * Updated web interface to allow a TV favourite to be manually added (F#2804991)
 
 == Release 1.9.0 (2009-05-26) ==

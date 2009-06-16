@@ -35,12 +35,13 @@ import plugin
 import util
 
 from gui.ConfirmBox import ConfirmBox
+from skin.widgets import TextEntryScreen
+from gui.AlertBox import AlertBox
 
 class PluginInterface(plugin.ItemPlugin):
     """
     small plugin to delete files
     """
-
     def config(self):
         return [ ('FILE_OPS_ALLOW_DELETE_IMAGE', True,
                   'Add delete image to the menu.'),
@@ -48,6 +49,7 @@ class PluginInterface(plugin.ItemPlugin):
                   'Add delete edl to the menu.'),
                  ('FILE_OPS_ALLOW_DELETE_INFO', True,
                   'Add delete info to the menu.') ]
+
 
     def actions(self, item):
         """
@@ -70,6 +72,8 @@ class PluginInterface(plugin.ItemPlugin):
                 items.append((self.confirm_image_delete, _('Delete image'), 'delete_image'))
             if item.files.delete_possible():
                 items.append((self.confirm_delete, _('Delete'), 'delete'))
+            if item.rename_possible():
+                items.append((self.rename_box, _('Rename'), 'rename'))
         return items
 
 
@@ -79,20 +83,24 @@ class PluginInterface(plugin.ItemPlugin):
                    handler=self.delete_file, default_choice=1,
                    handler_message=_('Deleting...')).show()
 
+
     def confirm_info_delete(self, arg=None, menuw=None):
         self.menuw = menuw
         ConfirmBox(text=_('Delete info about\n \'%s\'?') % self.item.name,
                    handler=self.delete_info, default_choice=1).show()
+
 
     def confirm_edl_delete(self, arg=None, menuw=None):
         self.menuw = menuw
         ConfirmBox(text=_('Delete edl about\n \'%s\'?') % self.item.name,
                    handler=self.delete_edl, default_choice=1).show()
 
+
     def confirm_image_delete(self, arg=None, menuw=None):
         self.menuw = menuw
         ConfirmBox(text=_('Delete image about\n \'%s\'?') % self.item.name,
                    handler=self.delete_image, default_choice=1).show()
+
 
     def safe_unlink(self, filename):
         try:
@@ -100,10 +108,12 @@ class PluginInterface(plugin.ItemPlugin):
         except Exception, why:
             print 'can\'t delete %r: %s' % (filename, why)
 
+
     def delete_file(self):
         self.item.files.delete()
         if self.menuw:
             self.menuw.delete_submenu(True, True)
+
 
     def delete_info(self):
         self.safe_unlink(self.item.files.image)
@@ -112,10 +122,12 @@ class PluginInterface(plugin.ItemPlugin):
         if self.menuw:
             self.menuw.delete_submenu(True, True)
 
+
     def delete_edl(self):
         self.safe_unlink(self.item.files.edl_file)
         if self.menuw:
             self.menuw.delete_submenu(True, True)
+
 
     def delete_image(self):
         self.safe_unlink(self.item.files.image)
@@ -125,3 +137,25 @@ class PluginInterface(plugin.ItemPlugin):
             self.item.image = None
         if self.menuw:
             self.menuw.delete_submenu(True, True)
+
+
+    def rename_box(self, arg=None, menuw=None):
+        """
+        shows rename interface
+        """
+        txt = TextEntryScreen((_('Rename'), self.rename), _('Rename'), self.item.name)
+        txt.show(menuw)
+
+
+    def rename(self, menuw, newname=''):
+        """
+        renames the item
+        """
+        _debug_('rename %s to %s' % (self.item.name, newname), 2)
+        oldname = self.item.name
+        if self.item.rename(newname):
+            AlertBox(text=_('Rename %s to %s.') % (oldname, newname)).show()
+        else:
+            AlertBox(text=_('Rename %s to %s, failed.') % (oldname, newname)).show()
+        menuw.delete_menu()
+        menuw.refresh()

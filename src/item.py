@@ -89,6 +89,35 @@ class FileInformation:
         return self.files
 
 
+    def rename_possible(self):
+        return self.files and not self.read_only and len(self.files) == 1
+    
+
+    def rename(self, newname, fxd = True, image = True, edl = True):
+        """
+        Try and rename the file.
+        It is possible only if there is only one file in the collection.
+        """
+        if len(self.files) == 1:
+            try:
+                files = []
+                if fxd: files.append(self.fxd_file)
+                if image: files.append(self.image)
+                if edl: files.append(self.edl_file)
+                files.extend(self.files)
+                for f in files:
+                    if not f:
+                        continue
+                    dirname = os.path.dirname(f)
+                    file_base, file_ext = os.path.splitext(f)
+                    os.rename(f, dirname + '/' + newname + file_ext)
+            except OSError, e:
+                return False
+            return True
+        else:
+            return False
+
+
     def copy_possible(self):
         return self.files != []
 
@@ -573,3 +602,23 @@ class Item:
                 r = self.__getitem__(attr)
                 return Unicode(r)
             return attr
+    
+
+    def rename_possible(self):
+        """
+        Return True if the item can be renamed.
+        False by default, to be overriden where needed.
+        """
+        return False
+    
+
+    def rename(self, newname):
+        """
+        Try and rename the item.
+        Default is to rename the main file, image and edl. Override where needed.
+        """
+        if self.files:
+            if self.files.rename(newname, False, True, True):
+                self.name = newname
+                return True
+        return False

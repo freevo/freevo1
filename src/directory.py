@@ -349,7 +349,6 @@ class DirItem(Playlist):
         return Item.__getitem__(self, key)
 
 
-    # eventhandler for this item
     def eventhandler(self, event, menuw=None):
         _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
         if event == DIRECTORY_CHANGE_DISPLAY_TYPE and menuw.menustack[-1] == self.menu:
@@ -477,7 +476,6 @@ class DirItem(Playlist):
             self.media.umount()
 
         return items
-
 
 
     def cwd(self, arg=None, menuw=None):
@@ -962,15 +960,46 @@ class DirItem(Playlist):
         menuw.pushmenu(m)
 
 
+    def rename_possible(self):
+        return self.files and not self.files.read_only
 
 
+    def rename(self, newname):
+        """
+        Try and rename the directory item.
+        If there is a .fxd file associated, the title is renamed inside.
+        If there is no .fxd file, the directory and cover img if any are renamed.
+        """
+        if not os.path.exists(self.folder_fxd):
+            # no .fxd file
+            # do not rename the cover file !
+            if self.files.rename(newname, False, False, False):
+                self.name=newname
+                return True
+            return False
+        else:
+            # change the title in the .fxd file
+            self.fxd_rename_newname = newname
+            try:
+                parser = util.fxdparser.FXD(self.folder_fxd)
+                parser.set_handler('folder', self.fxd_rename, mode='w')
+                parser.parse()
+                parser.save()
+            except Exception, e:
+                return False
+            return True
+      
+
+    def fxd_rename(self, fxd, node):
+        fxd.setattr(node, 'title', self.fxd_rename_newname)
+        self.name=self.fxd_rename_newname
+   
 # ======================================================================
 
 class Dirwatcher(plugin.DaemonPlugin):
     """
     Directory handling
     """
-
     def __init__(self):
         _debug_('Dirwatcher.__init__()', 2)
         plugin.DaemonPlugin.__init__(self)
@@ -1071,6 +1100,8 @@ class Dirwatcher(plugin.DaemonPlugin):
     def poll(self):
         if self.dir and self.menuw and self.menuw.menustack[-1] == self.item_menu and not rc.app():
             self.scan()
+
+
 
 # and activate that DaemonPlugin
 dirwatcher = Dirwatcher()
