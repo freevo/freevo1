@@ -375,7 +375,10 @@ class VideoItem(Item):
                         length = s.length
                     if not length:
                         continue
-                    total += length
+                    try:
+                        total += length
+                    except ValueError:
+                        _debug_('Invalid length: %r' % (length,))
                 total = '%s min' % str(int(total) / 60)
             else:
                 if self.info['length']:
