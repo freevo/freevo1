@@ -32,13 +32,16 @@
 import sys, os
 import re
 from pprint import pprint, pformat
+
 import config
+import event
+from helpers import plugins
 
 #print('config=%s' % pformat(dir(config)))
 #print('our_locals=%s' % (pformat(config.our_locals),))
 
-print os.environ['FREEVO_CONFIG']
-print config.overridefile
+print('freevo_config is %r' % (os.environ['FREEVO_CONFIG'],))
+print('local_conf is %r' % (config.overridefile,))
 
 def parse_freevo_config(filename):
     """
@@ -138,11 +141,62 @@ def parse_freevo_config(filename):
             notes = []
             tips = []
         else:
-            print('***=%s' % line)
+            #print('***=%s' % line)
+            pass
     return items
 
 
-items = parse_freevo_config(os.environ['FREEVO_CONFIG'])
-print('items=\n%s' % pformat(items))
-print(items['TV_VIDEO_GROUPS'])
+def build_config(doc_items):
+    config_var_pat = re.compile('^[A-Z].*$')
+    items = []
+    for var in dir(config):
+        if config_var_pat.match(var) is None:
+            continue
+        if var in ('LOCAL_CONF_CHANGES', 'EVENTS'):
+            continue
 
+        #print 'var=%r' % (var,)
+        if var in doc_items:
+            tip = doc_items[var][0]
+            note = doc_items[var][1]
+        else:
+            tip = ''
+            note = ''
+        if var in config.our_locals:
+            overridden = True
+            value = config.our_locals[var]
+        else:
+            overridden = False
+            try:
+                value = eval('config.%s' % var)
+            except AttributeError, why:
+                print '%r: %s' % (var, why)
+                value = None
+
+        if isinstance(value, event.Event):
+            continue
+        #print('%s%r=%r' % ('*** ' if overridden else '    ', var, value))
+        items.append((var, value, overridden, tip, note))
+    return items
+            
+
+def build_plugin_list():
+    return plugins.parse_plugins()
+
+
+def main():
+    print 'building documentation from freevo_config...'
+    doc_items = parse_freevo_config(os.environ['FREEVO_CONFIG'])
+    #print('doc_items=\n%s' % pformat(doc_items))
+    print 'building configuration...'
+    cfg_items = build_config(doc_items)
+    #print('cfg_items=\n%s' % pformat(cfg_items))
+    print 'building plug-in configuration...'
+    plugin_items = build_plugin_list()
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except StandardException, why:
+        print why
