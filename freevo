@@ -34,6 +34,7 @@ import os
 import sys
 import time
 import pprint
+import re
 
 from subprocess import Popen, PIPE
 from optparse import Option, BadOptionError, OptionValueError, OptionParser, IndentedHelpFormatter
@@ -178,15 +179,15 @@ def get_python(check_freevo):
     get the newest version of python [ with freevo installed ]
     """
     _debug_('version=%r' % (sys.version))
-    if sys.hexversion >= 0x02040000:
+    if sys.hexversion >= 0x02060000:
         # python seems to be ok
         search = ('python', 'python2')
-    elif sys.hexversion >= 0x02030000:
-        # try python2.4, else take python
-        search = ('python2.4', 'python')
+    elif sys.hexversion >= 0x02050000:
+        # try python2.5, else take python
+        search = ('python2.5', 'python')
     else:
-        # python is too old, try to find python2.4 or python2
-        search = ('python2.4', 'python2')
+        # python is too old, try to find python2.5 or python2
+        search = ('python2.5', 'python2')
 
     for python in search:
         for path in os.environ['PATH'].split(':'):
@@ -215,10 +216,8 @@ def get_python(check_freevo):
                         return python, data[:-1]
 
                 child.wait()
-                child.fromchild.close()
-                if child.childerr:
-                    child.childerr.close()
-                child.tochild.close()
+                child.stdout.close()
+                child.stdin.close()
 
     # nothing found? That's bad!
     if check_freevo:
@@ -364,8 +363,6 @@ def get_revision():
     revision = 0
     if os.path.isdir('.svn'):
         try:
-            from subprocess import Popen, PIPE
-            import re
             os.environ['LC_ALL']='C'
             p = Popen(["svn", "info", "--revision=BASE"], stdout=PIPE, env=os.environ)
             info = p.communicate()[0]
@@ -475,7 +472,7 @@ if os.path.isdir(os.path.join(os.path.dirname(freevo_script), 'src/plugins')):
         #
         # no runtime, get best python version
         #
-        python = get_python(0)
+        python = get_python(False)
         if not python:
             sys.exit("Can't find python >= 2.5")
         python = [ python ]
@@ -488,7 +485,7 @@ else:
         for path in os.environ['PATH'].split(':'):
             if os.path.isfile(os.path.join(path, freevo_script)):
                 freevo_script = os.path.join(path, freevo_script)
-    python, freevo_python = get_python(1)
+    python, freevo_python = get_python(True)
     if not python:
         sys.exit("Can't find python version with installed freevo")
 
