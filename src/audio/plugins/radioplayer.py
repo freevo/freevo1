@@ -62,7 +62,7 @@ class RadioPlayer:
 
     @ivar mode: current mode of the radio
     @ivar name: name if the plug-in
-    @ivar app_mode: mode of the application
+    @ivar event_context: mode of the application
     @ivar app: None
     @ivar starttime: counter
     """

@@ -101,9 +101,9 @@ class ImageViewer(GUIObject):
         """
         _debug_('view(item, zoom=%s, rotation=%s)' % (zoom, rotation), 2)
         if zoom:
-            self.app_mode    = 'image_zoom'
+            self.event_context    = 'image_zoom'
         else:
-            self.app_mode    = 'image'
+            self.event_context    = 'image'
 
         filename = item.filename
 

@@ -103,7 +103,7 @@ class FXMMS:
     """
     def __init__(self):
         self.name     = 'fxmms'
-        self.app_mode = 'audio'
+        self.event_context = 'audio'
         self.app      = None
         self.is_alive = False  #flag for osd update thread
         self.idle     = 0      #timer for osd update thread

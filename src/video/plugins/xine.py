@@ -97,7 +97,7 @@ class Xine:
         """ Xine contructor """
         _debug_('Xine.__init__(type=%r)' % (type,), 2)
         self.name      = 'xine'
-        self.app_mode  = 'video'
+        self.event_context  = 'video'
         self.xine_type = type
         self.app       = None
         self.plugins   = []
@@ -222,7 +222,7 @@ class Xine:
 
         elif item.mimetype == 'cue':
             command.append('vcd://%s' % item.filename)
-            self.app_mode = 'vcd'
+            self.event_context = 'vcd'
 
         else:
             if (len(options) > 1):

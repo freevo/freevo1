@@ -119,7 +119,7 @@ class LastFMXSPF:
         #print('xml=%s' % (xml,))
         if xml == 'No recs :(':
             raise LastFMError('No records in XSPF')
-        
+
         try:
             tree = XML(xml)
         except SyntaxError, why:
@@ -604,7 +604,7 @@ class LastFMTuner(Thread):
                 #print('make directory %r' % (os.path.dirname(basename),))
                 os.makedirs(os.path.dirname(basename), 0777)
 
-            
+
             imagepath = basename + os.path.splitext(entry.image_url)[1].lower() if entry.image_url else None
             print('imagepath=%r' % (imagepath,))
             image_fetcher = self.webservices.fetch(entry.image_url, imagepath, image_hdrs)
@@ -859,7 +859,7 @@ class LastFMMainMenuItem(MenuItem):
         MenuItem.__init__(self, parent=parent, skin_type='lastfm')
         # Here we overwrite the text of the skins menu item so it can be translated
         self.name = _('LastFM Radio')
-        self.app_mode = 'audio'
+        self.event_context = 'audio'
 
 
     def actions(self):
@@ -947,7 +947,7 @@ class PluginInterface(MainMenuPlugin):
 
 
 if __name__ == '__main__':
-    # Test harness 
+    # Test harness
     """
     To run this test harness need to have defined in local_conf.py:
 
@@ -963,7 +963,7 @@ if __name__ == '__main__':
     lastfm_tuner = LastFMTuner('Jazz', station_url)
     lastfm_tuner.setDaemon(1)
     lastfm_tuner.start()
-    
+
     playlist = 0
     while lastfm_tuner.isAlive():
         try:
@@ -980,4 +980,3 @@ if __name__ == '__main__':
 
     print('goodbye')
     raise SystemExit
-

@@ -69,7 +69,7 @@ class Xine:
 
     def __init__(self):
         self.name         = 'xine'
-        self.app_mode     = 'audio'
+        self.event_context     = 'audio'
         self.app          = None
         self.command = '%s -V none -A %s --stdctl' % (config.CONF.fbxine, config.XINE_AO_DEV)
         if config.XINE_HAS_NO_LIRC:

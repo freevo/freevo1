@@ -62,7 +62,7 @@ class MPlayer:
 
     def __init__(self):
         self.name     = 'mplayer'
-        self.app_mode = 'audio'
+        self.event_context = 'audio'
         self.app      = None
 
 

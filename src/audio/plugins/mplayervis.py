@@ -190,7 +190,7 @@ class MpvGoom(BaseAnimation):
             + 'AAAAAAACEEEEIIII' \
             + 'DNOOOOOxOUUUUYPS' \
             + 'aaaaaaaceeeeiiii' \
-            + 'onooooo/ouuuuypy' 
+            + 'onooooo/ouuuuypy'
 
         try:
             r = str(string.translate(s, translation_table))
@@ -567,7 +567,7 @@ class PluginInterface(plugin.Plugin):
         _debug_('PluginInterface.__init__()')
         plugin.Plugin.__init__(self)
         self._type    = 'mplayer_audio'
-        self.app_mode = 'audio'
+        self.event_context = 'audio'
         self.title    = None
         self.message  = None
         self.infodata = None
