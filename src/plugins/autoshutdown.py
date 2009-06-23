@@ -4,7 +4,7 @@
 # -----------------------------------------------------------------------
 # $Id$
 #
-# Author: thehog@t3i.nl
+# Author: rvpaasen@t3i.nl
 # Notes:
 # Todo:
 #
@@ -71,64 +71,191 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     Plugin to shutdown Freevo from the main menu
 
-    At each shutdown this plugin configures the system to bootup for the next
-    recording or a configured default time.  The wakeup can be done via
-    acpi-alarm or nvram-wakeup.  Moreover it adds warning information about the
-    next recording to the shutdown confirmation messages.
+    At each shutdown this plugin configures the system to bootup for the
+    next recording or a configured default time. The wakeup can be done via
+    acpi-alarm or nvram-wakeup. Moreover it adds warning information about
+    the next recording to the shutdown confirmation messages. This plugin
+    calls the shutdown infrastructure of Freevo, so make sure that the
+    following has been configured:
+    | SYS_SHUTDOWN_ENABLE = 1
+    | SYS_SHUTDOWN_CMD = 'sudo shutdown -h now'
+    | SYS_RESTART_CMD = 'sudo shutdown -r now'
 
-    Activate with:
+    Activate the main menu plugin with:
     | plugin.remove('shutdown')
     | plugin.activate('autoshutdown',level=90)
 
-    Configuration:
-    | SYS_SHUTDOWN_ENABLE = 1
-    | AUTOSHUTDOWN_METHOD = 'acpi|nvram'
-    | AUTOSHUTDOWN_WAKEUP_CMD = PATH/TO/THE/WAKEUP_SCRIPT
-    | AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = '13:00'
+    Activate the companion timer plugin (optional):
+    | plugin.activate('autoshutdown.autoshutdowntimer')
+
+    -- autoshutdown menu item configuration --
+
+    AUTOSHUTDOWN_CONFIRM:
+    Set to True to popup dialog boxes for confirmation. This applies to
+    menu plugin only, not to the autoshutdowntimer.
+    | AUTOSHUTDOWN_CONFIRM = True
+
+    -- autoshutdown timer configuration --
+
+    AUTOSHUTDOWN_TIMER_TIMEOUT:
+    Set the timeout in minutes after which the system is shutdown. The
+    allowed idle time and the running processes (see below) are evaluated
+    to determine if a shutdown is allowed. Menu navigation in freevo will
+    reset the timer. This applies to autoshutdowntimer plugin only.
+    | AUTOSHUTDOWN_TIMER_TIMEOUT = 60
+
+    -- autoshutdown core configuration --
+
+    AUTOSHUTDOWN_PRETEND:
+    Set to True to disable the actual shutdown command. Use this when
+    configuring and testing the autoshutdown plugin.
+    | AUTOSHUTDOWN_PRETEND = False
+
+    AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME:
+    Set the default time at which to wakeup if there are no recordings
+    scheduled. The time is specified in localtime 24 hour format. Set to
+    None to disable a default wakeup time. Use this if a tv guide needs
+    to be downloaded an a regular basis.
+    | AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME = "13:00"
+
+    AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP:
+    Set to True to always wakeup at the default wakeup time. Set to False to
+    only wakeup at the default wakeup time when no recordings are scheduled.
     | AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP = True
+
+    AUTOSHUTDOWN_WAKEUP_TIME_PAD:
+    Amount of pad time (in seconds) to start system boot ahead of the next
+    wakeup event so that system will be ready.  Default is 180 (3 minutes).
     | AUTOSHUTDOWN_WAKEUP_TIME_PAD = 180
 
-    The wakeup methode can be either nvram or acpi.
+    AUTOSHUTDOWN_ALLOWED_IDLE_TIME:
+    The number of minutes that may be spent idle until the next scheduled
+    recording or default wakeup. That is, if the gap between "now" and the
+    next recording or default wakeup is less than the allowed idle time then
+    a shutdown is not performed but the system is left running. If the period
+    from now to the next recording or default wakeup is more than the allowed
+    idle time, then the system is shut down and a wakeup is scheduled. Use
+    this to reduce the number of shutdown/boot sequences.
+    | AUTOSHUTDOWN_ALLOWED_IDLE_TIME = 45
 
-    NVRAM:
-    If you want to use nvram-wakeup, you will need a working nvram
-    configuration first.  (This plugin can deal automatically with the often
-    needed reboot).  Put the path to nvram-wakeup in AUTOSHUTDOWN_WAKEUP_CMD.
+    AUTOSHUTDOWN_WHILE_USER_LOGGED:
+    If set to True, the system will automatically shutdown even if someone
+    is logged in, as reported by 'who'. Set to False to avoid Freevo to
+    shutdown on your face.
+    | AUTOSHUTDOWN_WHILE_USER_LOGGED = True
 
-    More variables:
-    | AUTOSHUTDOWN_NVRAM_OPT = '--syslog'
-    | AUTOSHUTDOWN_BIOS_NEEDS_REBOOT = True
+    AUTOSHUTDOWN_PROCESS_LIST:
+    List the processes that will prevent an automatic shutdown. If there are
+    important programs that should not be interrupted, then add them to this
+    list. Set to None if a shutdown is always allowed.
+    | AUTOSHUTDOWN_PROCESS_LIST = [
+    |   'mencoder','transcode','cdrecord',
+    |   'emerge','tvgids.sh','tv_grab','sshd:'
+    | ]
 
-    Your boot loader can be either GRUB or LILO:
-    | AUTOSHUTDOWN_BOOT_LOADER = 'GRUB|LILO'
-    | AUTOSHUTDOWN_REMOUNT_BOOT_CMD = '/bin/mount'
-    | AUTOSHUTDOWN_REMOUNT_BOOT_OPT = '/boot -o remount,rw'
-    | AUTOSHUTDOWN_GRUB_CMD = '/sbin/grub-set-default 0'
-    | AUTOSHUTDOWN_GRUB_OPT = '0'
-    | AUTOSHUTDOWN_LILO_CMD = '/sbin/lilo'
-    | AUTOSHUTDOWN_LILO_OPT = '-R PowerOff'
+    AUTOSHUTDOWN_METHOD:
+    The wakeup can be done via acpi-alarm or nvram-wakeup. Set to 'acpi' to
+    use the acpi method, set to 'nvram' to use nvram.
+    | AUTOSHUTDOWN_METHOD = 'nvram'
+    
+    The following configures either the acpi or nvram method:
 
-    ACPI:
-    If you want to use acpi instead, you need to create a small script:
+    -- autoshutdown acpi-alarm configuration --
 
-    !/bin/sh
-    ##############################
-    #acpi_wakeup.sh
-    ##############################
-    echo '$1' > /proc/acpi/alarm
+        This method uses the wakeup on alarm function that most BIOSs have.
+        The wakeup time is set by a simple:
 
-    and put its path in AUTOSHUTDOWN_WAKEUP_CMD.  You have to be root or use
-    sudo for this to work.
+            "echo 2004-08-02 20:15:00 >/proc/acpi/alarm"
+
+        On most mainbords you will have to ENABLE "Wake on Timer", "Resume
+        on Alarm", "RTC Alarm Resume" or similar things for the acpi wakeup
+        method to work. If you want to use acpi, you need to create a small
+        script:
+
+            !/bin/sh
+            echo "$1" >/proc/acpi/alarm
+
+        Note that Freevo needs to run this with root privilege.
+        | AUTOSHUTDOWN_ACPI_CMD = "sudo /PATH/TO/set_acpi.sh"
+
+    -- autoshutdown nvram-wakeup configuration --
+
+        This method uses the nvram-wakeup utility to write the wakeup alarm to
+        the RTC in bios. Read the nvram-wakeup documentation about this topic,
+        a working nvram-wakeup configuration is needed. Some bios's need a
+        reboot to activate the timer. Note that Freevo needs to run this with
+        root privilege.
+        | AUTOSHUTDOWN_NVRAM_CMD = "sudo /usr/bin/nvram-wakeup --syslog"
+        | AUTOSHUTDOWN_BIOS_NEEDS_REBOOT = True
+
+        If the bios needs a reboot to activate RTC timer, this can be done
+        via lilo or grub. Both can shutdown the system immediately after
+        rebooting. Set to "GRUB" or "LILO":
+        | AUTOSHUTDOWN_BOOT_LOADER = "GRUB"
+
+    -- autoshutdown reboot lilo configuration --
+
+        The following command with will reboot and poweroff the system
+        using lilo. Note that Freevo needs to run this with root
+        privilege.
+        | AUTOSHUTDOWN_LILO_CMD = "/sbin/lilo -R PowerOff"
+
+    -- autoshutdown reboot grub configuration --
+
+        The grub-set-default command will reboot the system into a menu
+        entry listed in /boot/gruub/grub.conf. Add a entry in grub.conf
+        above all other entries. This entry will perform the shutdown and
+        set the default entry for the next boot (probably the next entry,
+        entry 1). For example:
+
+            # /boot/grub/grub.conf
+
+            # entry 0
+            title=PowerOff
+            savedefault 1
+            halt
+
+            # entry 1
+            title=Gentoo Linux 2.6.29-gentoo-r5
+            root (hd0,0)
+            kernel /boot/bzImage-2.6.29-gentoo-r5 root=/dev/hda3
+            savedefault
+
+        Set the command to run grub-set-default. Note that Freevo needs to
+        run this with root privilege.
+        | AUTOSHUTDOWN_GRUB_CMD = "sudo /sbin/grub-set-default 0"
+
+        Grub needs to write to /boot/grub/grub.conf. Set the command and
+        options to remount the /boot partition writeable. Set to None if
+        this is not needed. Note that Freevo needs to run this with root
+        privilege.
+        | AUTOSHUTDOWN_REMOUNT_BOOT_CMD = "sudo /bin/mount /boot -o remount,rw"
+
     """
 
     def config(self):
+        PLIST = ['mencoder','transcode','cdrecord','emerge','tvgids.sh','tv_grab','sshd:']
         return [
-            ('SYS_SHUTDOWN_ENABLE', 1, 'System shutdown enabled'),
-            ('AUTOSHUTDOWN_METHOD', 'acpi', 'acpi or nvram'),
-            ('AUTOSHUTDOWN_WAKEUP_CMD', None, 'path to the wakeup script'),
-            ('AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME', '13:00', 'Daily wake up time'),
-            ('AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP', True, 'Force daily wake up'),
-            ('AUTOSHUTDOWN_WAKEUP_TIME_PAD', 180, 'Allow time for system to boot'),
+            ('SYS_SHUTDOWN_ENABLE', 1, 'enable system shutdown'),
+            ('SYS_SHUTDOWN_CMD', 'sudo shutdown -h now', 'shutdown command'),
+            ('SYS_RESTART_CMD', 'sudo shutdown -r now', 'reboot command'),
+            ('AUTOSHUTDOWN_CONFIRM', True, 'popup dialog boxes'),
+            ('AUTOSHUTDOWN_TIMER_TIMEOUT', 30, 'autoshutdowntimer timeout'),
+            ('AUTOSHUTDOWN_PRETEND', False, 'pretend shutdown, for testing purpose'),
+            ('AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME', '13:00', 'daily wake up time'),
+            ('AUTOSHUTDOWN_FORCE_DEFAULT_WAKEUP', True, 'force daily wake up'),
+            ('AUTOSHUTDOWN_WAKEUP_TIME_PAD', 180, 'seconds to start ahead of time set'),
+            ('AUTOSHUTDOWN_ALLOWED_IDLE_TIME', 45, 'minutes of idle time allowed'),
+            ('AUTOSHUTDOWN_WHILE_USER_LOGGED', True, 'shutdown even when someone is logged in'),
+            ('AUTOSHUTDOWN_PROCESS_LIST', PLIST, 'list of processes that prevent a shutdown'),
+            ('AUTOSHUTDOWN_METHOD', None, 'acpi or nvram (or None to disable)'),
+            ('AUTOSHUTDOWN_ACPI_CMD', 'sudo /path/to/set_acpi.sh', 'acpi wakeup command'),
+            ('AUTOSHUTDOWN_NVRAM_CMD', 'sudo /usr/bin/nvram-wakeup --syslog', 'nvram wakeup command'),
+            ('AUTOSHUTDOWN_BIOS_NEEDS_REBOOT', False, 'reboot to program RTC timer'),
+            ('AUTOSHUTDOWN_BOOT_LOADER', None, 'lilo or grub (or None to disable)'),
+            ('AUTOSHUTDOWN_LILO_CMD', 'sudo /sbin/lilo -R PowerOff', 'lilo command'),
+            ('AUTOSHUTDOWN_GRUB_CMD', 'sudo /sbin/grub-set-default 0', 'grub command'),
+            ('AUTOSHUTDOWN_REMOUNT_BOOT_CMD', 'sudo /bin/mount /boot -o remount,rw', 'remount command'),
         ]
 
 
@@ -266,9 +393,6 @@ class ShutdownMenuItem(Item):
         old = menuw.menustack[-1].selected
         pos = menuw.menustack[-1].choices.index(menuw.menustack[-1].selected)
         new = menu.MenuItem(newname, old.function, old.arg, old.type)
-#       new.image = old.image
-#       if hasattr(old, 'display_type'):
-#           new.display_type = old.display_type
         menuw.menustack[-1].choices[pos] = new
         menuw.menustack[-1].selected = menuw.menustack[-1].choices[pos]
         menuw.init_page()
@@ -298,26 +422,21 @@ class autoshutdowntimer(plugin.DaemonPlugin):
     This plugin provides a timer which causes a shutdown of the system
     after a certain idle time has passed.
 
-    Activate with:
-    plugin.activate('autoshutdown.autoshutdowntimer')
+    Activate the companion main menu plugin (optional):
+    | plugin.remove('shutdown')
+    | plugin.activate('autoshutdown',level=90)
 
-    Variables:
-    AUTOSHUTDOWN_TIMER_TIMEOUT=30
-    AUTOSHUTDOWN_ALLOWED_IDLE_TIME = 15
+    Activate the timer plugin with:
+    | plugin.activate('autoshutdown.autoshutdowntimer')
 
-    After AUTOSHUTDOWN_TIMER_TIMEOUT minutes of idle time the system goes down,
-    unless the time until the next recording is
-    less than AUTOSHUTDOWN_ALLOWED_IDLE_TIME.
+    In short, after AUTOSHUTDOWN_TIMER_TIMEOUT minutes of idle time the
+    system goes down, unless the time until the next recording is less
+    than AUTOSHUTDOWN_ALLOWED_IDLE_TIME, or, one of the processed listed
+    in AUTOSHUTDOWN_PROCESS_LIST is running.
 
-    Moreover one can define a list of external commands,
-    which freevo should check for before shutting down the
-    system. If one of these commands is running,
-    the shutdown is stopped.
-
-    AUTOSHUTDOWN_PROCESS_LIST = ['mplayer', 'tv_grab']
-
-    In the shutdown menu there is a item to pause/resume
-    the automatic shutdown.
+    In the shutdown menu there is a item to pause/resume the automatic
+    shutdown timer. The actual shutdown behaviour (e.g. whether to use
+    acpi or nvram) is defined in the autoshutdown plugin.
 
     """
 
@@ -501,6 +620,10 @@ def shutdown_action(action=None):
     _debug_('shutdown_action(action=%r)' % (action,), 1)
     if (action == Shutdown.SHUTDOWN_WAKEUP):
         action = __schedule_wakeup_and_shutdown()
+
+    if config.AUTOSHUTDOWN_PRETEND:
+        action = Shutdown.IGNORE
+
     if (action == Shutdown.RESTART_SYSTEM):
         shutdown(menuw=None, mode=ShutdownModes.SYSTEM_RESTART)
     elif (action == Shutdown.SHUTDOWN_SYSTEM):
@@ -529,41 +652,44 @@ def __schedule_wakeup_and_shutdown():
         wakeup_utc_s = get_next_wakeup()
     except ExNoWakeupNeeded:
         _debug_('No wakeup needed, shutting down')
-        if not config.AUTOSHUTDOWN_PRETEND:
-            next_action = Shutdown.SHUTDOWN_SYSTEM
-        else:
-            next_action = Shutdown.IGNORE
+        next_action = Shutdown.SHUTDOWN_SYSTEM
     else:
         # wake up a little earlier because of the time the booting takes
         # set in local_conf.py, freevo_config.py or defaults to 180 seconds (3 minutes)
         wakeup_utc_s = wakeup_utc_s - int(config.AUTOSHUTDOWN_WAKEUP_TIME_PAD)
 
         # let's see which methode we should use for wakeup
-        if config.AUTOSHUTDOWN_METHOD.upper() == 'ACPI':
-            cmd = '%s %r' % (config.AUTOSHUTDOWN_WAKEUP_CMD, time.strftime('%F %H:%M', time.localtime(wakeup_utc_s)))
+        if config.AUTOSHUTDOWN_METHOD == None:
+            _debug_('No wakeup method set, just shutting down')
+            next_action =  Shutdown.SHUTDOWN_SYSTEM
+        elif config.AUTOSHUTDOWN_METHOD.upper() == 'ACPI':
+            cmd = '%s %r' % (config.AUTOSHUTDOWN_ACPI_CMD, time.strftime('%F %H:%M', time.localtime(wakeup_utc_s)))
             _debug_('Wakeup-command %s' % cmd)
-            __syscall(cmd)
+            __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
             next_action =  Shutdown.SHUTDOWN_SYSTEM
         elif config.AUTOSHUTDOWN_METHOD.upper() == 'NVRAM':
-            cmd = '%s %s --settime %d' % \
-                (config.AUTOSHUTDOWN_WAKEUP_CMD, config.AUTOSHUTDOWN_NVRAM_OPT, int(wakeup_utc_s))
-            ec = __syscall(cmd)
+            cmd = '%s --settime %d' % \
+                (config.AUTOSHUTDOWN_NVRAM_CMD, int(wakeup_utc_s))
+            ec = __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
             if ec != 256 and ec != 0:
                 _debug_('Wakeup-command command %r failed!' % cmd, DERROR)
                 raise ExInternalError
             elif ec == 256 or config.AUTOSHUTDOWN_BIOS_NEEDS_REBOOT:
                 # needs a reboot
-                if config.AUTOSHUTDOWN_BOOT_LOADER.upper() == 'GRUB':
+                if config.AUTOSHUTDOWN_BOOT_LOADER == None:
+                    _debug_('No boot loader set, not shutting down')
+                    next_action = Shutdown.IGNORE                
+                elif config.AUTOSHUTDOWN_BOOT_LOADER.upper() == 'GRUB':
                     if config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD:
-                        cmd = '%s %s' % (config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD, config.AUTOSHUTDOWN_REMOUNT_BOOT_OPT)
-                        __syscall(cmd)
+                        cmd = config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD
+                        __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
                     cmd = config.AUTOSHUTDOWN_GRUB_CMD
-                    __syscall(cmd)
+                    __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
                     _debug_('Wakeup set, reboot needed')
                     next_action = Shutdown.RESTART_SYSTEM
                 elif config.AUTOSHUTDOWN_BOOT_LOADER.upper() == 'LILO':
-                    cmd = '%s %s' % (config.AUTOSHUTDOWN_LILO_CMD, config.AUTOSHUTDOWN_LILO_OPT)
-                    __syscall(cmd)
+                    cmd = config.AUTOSHUTDOWN_LILO_CMD
+                    __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
                     _debug_('Wakeup set, reboot needed')
                     next_action = Shutdown.RESTART_SYSTEM
                 else:
