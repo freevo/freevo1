@@ -19,7 +19,8 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Updated autoshutdown plug-in with improved configuration and bug fixes (B#2808009)
  * Updated OSD to allow items to be renamed (F#2796072)
  * Updated web interface to allow a TV favourite to be manually added (F#2804991)
- * Fix for ivtv control name changes (B#2801870)
+ * Fixed ivtv control name changes (B#2801870)
+ * Fixed livepause plug-in when the TV_CHANNELS have varying number of items (B#2808035)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------

@@ -170,9 +170,9 @@ class InfoDialog(InputDialog):
     def __get_guide_channel(self, channel):
         result = ''
 
-        for tv_channel_id, tv_display_name, tv_tuner_id in config.TV_CHANNELS:
-            if channel == tv_display_name:
-                result = tv_channel_id
+        for entry in config.TV_CHANNELS:
+            if channel == entry[1]:
+                result = entry[0]
                 break
 
         return result
@@ -181,11 +181,11 @@ class InfoDialog(InputDialog):
         result = ''
         prev_channel = ''
 
-        for tv_channel_id, tv_display_name, tv_tuner_id in config.TV_CHANNELS:
-            if channel == tv_display_name:
+        for entry in config.TV_CHANNELS:
+            if channel == entry[1]:
                 result = prev_channel
                 break
-            prev_channel = tv_display_name
+            prev_channel = entry[1]
 
         return result
 
@@ -193,12 +193,12 @@ class InfoDialog(InputDialog):
         result = ''
         return_next_channel = False
 
-        for tv_channel_id, tv_display_name, tv_tuner_id in config.TV_CHANNELS:
+        for entry in config.TV_CHANNELS:
             if return_next_channel:
-                result = tv_display_name
+                result = entry[1]
                 break
 
-            if channel == tv_display_name:
+            if channel == entry[1]:
                 return_next_channel = True
 
         return result
