@@ -213,7 +213,7 @@ class IVTVController(Controller):
     Class to control an IVTV based card.
     """
     def __init__(self):
-        COntroller.__init__(self)
+        Controller.__init__(self)
         self.settings = None
 
     def start_filling(self, buffer, videogroup, channel, timeout):

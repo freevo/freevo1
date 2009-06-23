@@ -609,9 +609,9 @@ class LivePauseController:
     def __get_display_channel(self):
         channel = self.last_channel
 
-        for tv_channel_id, tv_display_name, tv_tuner_id in config.TV_CHANNELS:
-            if self.last_channel == tv_tuner_id:
-                channel = tv_display_name
+        for entry in config.TV_CHANNELS:
+            if self.last_channel == entry[2]:
+                channel = entry[1]
 
         return channel
 
