@@ -16,6 +16,7 @@ X is the category and #nnnnnnn is the tracker number.
 svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
 
  * New improvements to the rc.app() interface (F#2772598)
+ * New iplayer plug-in for BBC IPlayer/ITV Player/Hulu Player (F#2809981)
  * Updated autoshutdown plug-in with improved configuration and bug fixes (B#2808009)
  * Updated OSD to allow items to be renamed (F#2796072)
  * Updated web interface to allow a TV favourite to be manually added (F#2804991)
