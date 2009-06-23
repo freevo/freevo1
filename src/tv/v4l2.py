@@ -765,8 +765,7 @@ class Videodev:
         _debug_('getcontrol(name=%r)' % (name,), 2)
         key = self.ctrlname(name)
         if not self.controls.has_key(key):
-            _debug_('control \"%s\" does not exist' % (name), DWARNING)
-            return 0
+            raise AttributeError('Cannot getcontrol \"%s\" does not exist' % (name))
         (id, type, name, min, max, step, default, flags, value) = self.controls[key]
         return value
 
@@ -778,8 +777,7 @@ class Videodev:
         _debug_('setcontrol(name=%r, value=%r)' % (name, value), 2)
         key = self.ctrlname(name)
         if not self.controls.has_key(key):
-            _debug_('control \"%s\" does not exist' % (name), DWARNING)
-            return None
+            raise AttributeError('Cannot setcontrol \"%s\" does not exist' % (name))
         (id, type, name, min, max, step, default, flags, oldvalue) = self.controls[key]
         self.controls[key] = (id, type, name, min, max, step, default, flags, value)
 

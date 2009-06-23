@@ -141,7 +141,10 @@ class IVTV(tv.v4l2.Videodev):
             audio_bitmask = 0
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Sampling Frequency') << 0)
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Layer II Bitrate') << 2)
-            audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Encoding Layer') << 6)
+            try:
+                audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Encoding Layer') << 6)
+            except AttributeError, why:
+                audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Encoding') << 6)
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Stereo Mode') << 8)
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Stereo Mode Extension') << 10)
             audio_bitmask |= (tv.v4l2.Videodev.getcontrol(self, 'Audio Emphasis') << 12)
@@ -267,7 +270,10 @@ class IVTV(tv.v4l2.Videodev):
             tv.v4l2.Videodev.updatecontrol(self, 'Video Aspect', codec.aspect-1)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Sampling Frequency', (codec.audio_bitmask >> 0) & 0x03)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Layer II Bitrate', (codec.audio_bitmask >> 2) & 0x0F)
-            tv.v4l2.Videodev.updatecontrol(self, 'Audio Encoding Layer', (codec.audio_bitmask >> 6) & 0x01)
+            try:
+                tv.v4l2.Videodev.updatecontrol(self, 'Audio Encoding Layer', (codec.audio_bitmask >> 6) & 0x01)
+            except AttributeError, why:
+                tv.v4l2.Videodev.updatecontrol(self, 'Audio Encoding', (codec.audio_bitmask >> 6) & 0x01)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Stereo Mode', (codec.audio_bitmask >> 8) & 0x03)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Stereo Mode Extension', (codec.audio_bitmask >> 10) & 0x03)
             tv.v4l2.Videodev.updatecontrol(self, 'Audio Emphasis', (codec.audio_bitmask >> 12) & 0x03)
