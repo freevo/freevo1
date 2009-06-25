@@ -396,6 +396,7 @@ class MPlayer:
         eventhandler for mplayer control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
+        _debug_('%s.eventhandler(event=%s)' % (self.__class__, event))
         if not self.app:
             return self.item.eventhandler(event)
 
@@ -468,7 +469,7 @@ class MPlayer:
                 dialog.show_play_state(dialog.PLAY_STATE_PAUSE, self.get_stored_time_info)
                 self.app.write('pause\n')
             else:
-                self.app.write('pause\n')
+                self.app.write('speed_set 1.0\n')
                 dialog.show_play_state(dialog.PLAY_STATE_PLAY, self.get_time_info)
 
             return True
