@@ -812,8 +812,6 @@ plugin.activate('tv.manual_record')
 # Dialog Display Plugins
 # ======================================================================
 plugin.activate('dialog.osd_display')
-if CONF.display in ('x11', 'xv'):
-    plugin.activate('dialog.x11_overlay_display')
 
 # Speak plugin to output menu items via festival
 # plugin.activate('speak')
