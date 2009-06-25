@@ -40,6 +40,11 @@ table.library { margin-left: auto;
                 }
 
 table.library td { padding: 1em; }
+
+table.remote td { background-color: #fff; color: #F00000; font-size: 1.25em; font-weight: bolder }
+table.remote td a { background-color: #fff; color: #800000; font-size: 1em; font-weight: bolder }
+table.remote td a:hover { color: #638BCA; }
+
 img.right { float: right; }
 
 td { padding: 4px; margin: 0px; border-style: none; }
