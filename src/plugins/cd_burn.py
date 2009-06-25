@@ -180,7 +180,8 @@ class BurnCDItem:
         """
         _debug_('check_program(program=%r, program_name=%r)' % (program, program_name))
         if not (os.path.exists(program) and os.path.isfile(program) and os.access(program, os.X_OK)):
-            _debug_("Program Error")
+            _debug_('Cannot find %(program_name)s (%(program)s).' % ({
+                'program_name': program_name, 'program': program}))
             AlertBox(text=_('Cannot find %(program_name)s (%(program)s). '+\
                 'Please configure the right path in your config file and make sure it has the right permissions.' % ({
                     'program_name': program_name, 'program': program})), handler=self.menu_back).show()
@@ -248,10 +249,10 @@ class BurnCDItem:
         _debug_('burn_data_cd()')
         #lets check if we have all we need
         if not self.check_program(program=config.CDBURN_CDRECORD_PATH, program_name="cdrecord"):
-            _debug_("Unable to find %s" %config.CDBURN_CDRECORD_PATH)
+            _debug_("Unable to find %s" % config.CDBURN_CDRECORD_PATH)
             return
         if not self.check_program(program=config.CDBURN_MKISOFS_PATH,  program_name="mkisofs"):
-            _debug_("Unable to find %s" %config.CDBURN_MKISOFS_PATH)
+            _debug_("Unable to find %s" % config.CDBURN_MKISOFS_PATH)
             return
 
         if not self.clean_up_burndir():
@@ -259,10 +260,9 @@ class BurnCDItem:
 
         #if list of files not to big just display it
         if len(self.files) <= 4:
-            ConfirmBox(text=_('Start burning %s ?') % self.files,
-                       handler=self.start_burning, default_choice=0).show()
-        #else display the size of the burning
+            ConfirmBox(text=_('Start burning %s ?') % self.files, handler=self.start_burning, default_choice=0).show()
         else:
+            # display the size of the burning
             t_sum = 0
             t_files = len(self.files)
             for a in self.files:
@@ -639,7 +639,7 @@ class MainBurnThread(threading.Thread):
                 self.update_status(status="error", description="Could not create the image file")
                 return
 
-            _debug_('Mkisofs done')
+            _debug_('mkisofs done')
             self.status = "Burning files to CD"
 
             cdrecord_cmd = '%s -eject -v -driveropts=burnfree speed=%s dev=%s %s' % \
@@ -824,7 +824,7 @@ class PluginInterface(plugin.ItemPlugin):
         if self.thread_burn and self.thread_burn.running == 1:
             show_burn_menu = 1;
 
-        if ( item.type == 'audio' or item.type == 'image' or item.type == 'video' or item.type == 'dir' or item.type == 'playlist'):
+        if item.type in ('audio', 'image', 'video', 'dir', 'playlist'):
             show_burn_menu = 1;
 
         _debug_(_('Should show the menu? %i' % show_burn_menu), 2)
@@ -859,7 +859,6 @@ class PluginInterface(plugin.ItemPlugin):
             to_return.append( (self.thread_burn.show_status, 'Show burning status' ));
             to_return.append( (self.stop_burning, 'Stop the burn process' ));
             return self.draw_menu(menuw=menuw, items=to_return)
-
 
         _debug_('filling menu, item type = %s' % item.type)
         if item.type == 'dir':
