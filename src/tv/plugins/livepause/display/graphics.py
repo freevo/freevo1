@@ -52,28 +52,36 @@ class GraphicsOSD(OSD):
         self.buffer_pos_dialog = BufferPositionDialog()
         self.last_dialog = None
 
+
     def display_info(self, info_function):
         self.info_dialog.info_function = info_function
         self.info_dialog.info_channel = None
         self.info_dialog.show()
         self.last_dialog = self.info_dialog
 
+
     def display_channel_number(self, channel):
         self.channel_banner.set_channel(channel)
         self.channel_banner.show()
         self.last_dialog = self.channel_banner
+
 
     def display_buffer_pos(self, info_function):
         self.buffer_pos_dialog.info_function = info_function
         self.buffer_pos_dialog.show()
         self.last_dialog = self.buffer_pos_dialog
 
+
     def hide(self):
         if self.last_dialog:
             self.last_dialog.hide()
             self.last_dialog = None
 
+
+
 class InfoDialog(InputDialog):
+    """
+    """
     def __init__(self):
         super(InfoDialog, self).__init__('livepause_info', 3.0)
         self.info_function = None
@@ -115,7 +123,8 @@ class InfoDialog(InputDialog):
             self.show()
             return True
 
-        return super(InfoDialog, self).handle_event(event)
+        return super(InfoDialog, self).eventhandler(event)
+
 
     def get_info_dict(self):
         info_dict = self.info_function()
@@ -172,6 +181,7 @@ class InfoDialog(InputDialog):
         info_dict['current_time'] = time.localtime(info_dict['current_time'])
         return info_dict
 
+
     def __get_guide_channel(self, channel):
         result = ''
 
@@ -181,6 +191,7 @@ class InfoDialog(InputDialog):
                 break
 
         return result
+
 
     def __get_previous_channel(self, channel):
         result = ''
@@ -193,6 +204,7 @@ class InfoDialog(InputDialog):
             prev_channel = entry[1]
 
         return result
+
 
     def __get_next_channel(self, channel):
         result = ''
@@ -208,10 +220,15 @@ class InfoDialog(InputDialog):
 
         return result
 
+
+
 class BufferPositionDialog(Dialog):
+    """
+    """
     def __init__(self):
         super(BufferPositionDialog, self).__init__('livepause_bufferpos', 3.0)
         self.info_function = None
+
 
     def get_info_dict(self):
         info_dict = self.info_function()
@@ -223,9 +240,13 @@ class BufferPositionDialog(Dialog):
         return info_dict
 
 
+
 class ChannelBanner(Dialog):
+    """
+    """
     def __init__(self):
         super(ChannelBanner, self).__init__('channelbanner', 3.0)
+
 
     def set_channel(self, channel_number):
         if channel_number > len(config.TV_CHANNELS):
@@ -247,6 +268,7 @@ class ChannelBanner(Dialog):
         print 'info_dict'
         print info_dict
         print
+
 
     def get_info_dict(self):
         return self.info_dict
