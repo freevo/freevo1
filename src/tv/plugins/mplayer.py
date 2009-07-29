@@ -123,7 +123,12 @@ class MPlayer:
             'vf': [],
             'tv': '',
             'url': '',
+            'disable_osd': False,
         }
+
+        if dialog.overlay_display_supports_dialogs:
+            # Disable the mplayer OSD if we have a better option.
+            args['disable_osd'] = True
 
         if mode == 'tv':
             if vg.group_type == 'ivtv':
@@ -233,6 +238,7 @@ class MPlayer:
         if args['vf']:
             command += ['-vf', '%s' % ','.join(args['vf'])]
         command += str('%(tv)s' % args).split()
+	command += args['disable_osd'] and ['-osdlevel', '0'] or []
 
         # use software scaler?
         if '-nosws' in command:
@@ -406,13 +412,16 @@ class MPlayer:
             return True
 
         elif event == em.TOGGLE_OSD:
+	    if dialog.is_dialog_supported():
+                dialog.show_play_state(dialog.PLAY_STATE_INFO, self.fc)
+            else:
             # Display the channel info message
-            tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
-            now = time.strftime(config.TV_TIME_FORMAT)
-            msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
-            cmd = 'osd_show_text "%s"\n' % msg
-            self.app.write(cmd)
-            return False
+                tuner_id, chan_name, prog_info = self.fc.getChannelInfo()
+                now = time.strftime(config.TV_TIME_FORMAT)
+                msg = '%s %s (%s): %s' % (now, chan_name, tuner_id, prog_info)
+                cmd = 'osd_show_text "%s"\n' % msg
+                self.app.write(cmd)
+                return False
 
         elif event == em.OSD_MESSAGE:
             self.app.write('osd_show_text "%s"\n' % event.arg);

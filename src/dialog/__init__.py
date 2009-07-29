@@ -66,6 +66,7 @@ PLAY_STATE_SEEK_BACK    = 'seekback'
 PLAY_STATE_SEEK_FORWARD = 'seekforward'
 PLAY_STATE_PLAY_SLOW    = 'slow'
 PLAY_STATE_PLAY_FAST    = 'fast'
+PLAY_STATE_INFO       = 'info'
 
 def init():
     # Load the skin file
@@ -247,7 +248,7 @@ def show_working_indicator(message):
     dialog.show()
     return dialog
 
-def show_play_state(state, get_time_info=None):
+def show_play_state(state, item, get_time_info=None):
     """
     Helper function to show the playing state of the current media.
 
@@ -260,13 +261,14 @@ def show_play_state(state, get_time_info=None):
                     seekforward
                     slow
                     fast
+                    info
     @param get_time_info: A function to call to retrieve information about the
     current position and total play time, or None if not available. The function
     will return a tuple of elapsed time, total time and percent through the file.
     Both total time and percent position are optional.
     """
     if _display:
-        _display.show_play_state(state, get_time_info)
+        _display.show_play_state(state, item, get_time_info)
 
 
 def handle_event(event):

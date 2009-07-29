@@ -319,7 +319,7 @@ class PlayStateDialog(Dialog):
     """
     Low priority dialog to display play state and time information.
     """
-    def __init__(self, state, get_time_info=None):
+    def __init__(self, state, item, get_time_info=None):
         """
         Creates a new instance.
 
@@ -332,14 +332,16 @@ class PlayStateDialog(Dialog):
          - seekforward
          - slow
          - fast
+	 - info
         @param get_time_info: A function to call to retrieve information about the
         current position and total play time, or None if not available. The function
         will return a tuple of elapsed time, total time and percent through the file.
         Both total time and percent position are optional.
         """
-        super(PlayStateDialog, self).__init__('play_state', 3.0)
+	super(PlayStateDialog, self).__init__('play_state', 3.0)
         self.priority = Dialog.LOW_PRIORITY
         self.state = state
+        self.item = item
         self.get_time_info = get_time_info
         self.update_interval = 1.0
 
@@ -352,6 +354,13 @@ class PlayStateDialog(Dialog):
         total_time_str = ''
         percent_pos = 0.0
         percent_str = ''
+
+	try:
+	    channel = self.item.getChannel()
+	    mode = 'tv'
+	except AttributeError:
+	    mode = 'video'	
+
 
         if self.get_time_info:
             time_info = self.get_time_info()
@@ -375,10 +384,61 @@ class PlayStateDialog(Dialog):
                     percent_pos = time_info[2]
                 else:
                     percent_pos = float(current_time) / float(total_time)
-                percent_str = '%d%%' % percent_pos
+                percent_str = '%d%%' % (percent_pos * 100)
 
+	attr = {}
+	if mode == 'video':
+	    if self.item.parent.type == 'video':
+		attr['title'] = self.item.parent.name
+	    else:
+		attr['title'] = self.item.name
+	    if not attr['title']:
+		attr['title'] = "Not Available"
+
+	    attr['tagline'] = self.item.getattr('tagline')
+	    if not attr['tagline'] and self.item.parent.type == 'video':
+		attr['tagline'] = self.item.parent.getattr('tagline')
+	    if not attr['tagline']:
+		attr['tagline'] = None
+
+	    attr['image'] = self.item.image
+	    if not attr['image']:
+		attr['image'] = 'cover_na.png'
+
+	    attributes = ['year', 'genre', 'rating', 'runtime' ]
+	    for attribute in attributes:
+		attr[attribute] = self.item.getattr(attribute)
+                if not attr[attribute] and self.item.parent.type == 'video':
+            	    attr[attribute] = self.item.parent.getattr(attribute)
+                if not attr[attribute]:
+                    attr[attribute] = "Not Available"
+                attr[attribute] = attribute.title() + ": " + attr[attribute]
+	else:
+	    channel_number = self.item.getChannelNum()
+	    channel_logo = 'cover_tv.png'
+	    
+	    channel_id, channel_name, channel_info = self.item.getChannelInfo()
+	    attr['title'] = channel_name
+	    attr['image'] = channel_logo
+	    attr['tagline'] = channel_info
+	    attr['year'] = None
+	    attr['genre'] = None
+	    attr['rating'] = None
+	    attr['runtime'] = None
+
+	self.time = time.strftime("%H:%M", time.localtime())
+	self.date = time.strftime("%Y/%m/%y", time.localtime())
 
         return {'state'            : self.state,
+                'title'     	   : attr['title'],
+		'image'		   : attr['image'],
+		'tagline'	   : attr['tagline'],
+		'year'		   : attr['year'],
+		'genre'		   : attr['genre'],
+		'rating'	   : attr['rating'],
+		'runtime'	   : attr['runtime'],
+		'time'		   : self.time,
+		'date'		   : self.date,
                 'current_time'     : current_time,
                 'total_time'       : total_time,
                 'current_time_str' : current_time_str,

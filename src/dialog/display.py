@@ -98,7 +98,7 @@ class Display(object):
         """
         pass
 
-    def show_play_state(self, state, get_time_info=None):
+    def show_play_state(self, state, item, get_time_info=None):
         """
         show the playing state of the current media.
 
@@ -111,6 +111,8 @@ class Display(object):
          - seekforward
          - slow
          - fast
+	 - info 
+	@param item: The item we play. Can be a FreevoChannels item or a VideoItem.
         @param get_time_info: A function to call to retrieve information about the
         current position and total play time, or None if not available. The function
         will return a tuple of total time and elapsed time.
@@ -131,6 +133,9 @@ class Display(object):
             self.show_message(_('Slow'))
         elif state == 'fast':
             self.show_message(_('Fast'))
+        elif state == 'info':
+            self.show_message(_('Info'))
+
 
     def handle_event(self, event):
         """
@@ -248,8 +253,8 @@ class GraphicsDisplay(Display):
         dialog = dialogs.MessageDialog(message)
         dialog.show()
 
-    def show_play_state(self, state, get_time_info=None):
-        dialog = dialogs.PlayStateDialog(state, get_time_info)
+    def show_play_state(self, state, item, get_time_info=None):
+        dialog = dialogs.PlayStateDialog(state, item, get_time_info)
         dialog.show()
 
     def show_dialog(self, dialog, duration):
@@ -294,8 +299,7 @@ class GraphicsDisplay(Display):
                 self._lock.release()
                 return
             else:
-                _debug_('Dialog is same priority hiding previous dialog')
-                self.hide_dialog(self.current_dialog)
+                _debug_('Dialog is same priority as previous dialog')
 
         self.__set_current_dialog(dialog, duration, self.current_dialog == dialog)
 

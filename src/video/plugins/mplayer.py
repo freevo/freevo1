@@ -453,9 +453,9 @@ class MPlayer:
         if event == TOGGLE_OSD:
             if dialog.is_dialog_supported():
                 if self.paused:
-                    dialog.show_play_state(dialog.PLAY_STATE_PAUSE , self.get_stored_time_info)
+                    dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_stored_time_info)
                 else:
-                    dialog.show_play_state(dialog.PLAY_STATE_PLAY, self.get_time_info)
+                    dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_time_info)
             else:
                 self.app.write('osd\n')
             return True
@@ -466,11 +466,11 @@ class MPlayer:
             # otherwise the act of requesting the current position resumes playback!
             if self.paused:
                 self.stored_time_info = self.get_time_info()
-                dialog.show_play_state(dialog.PLAY_STATE_PAUSE, self.get_stored_time_info)
+                dialog.show_play_state(dialog.PLAY_STATE_PAUSE, self.item, self.get_stored_time_info)
                 self.app.write('pause\n')
             else:
                 self.app.write('speed_set 1.0\n')
-                dialog.show_play_state(dialog.PLAY_STATE_PLAY, self.get_time_info)
+                dialog.show_play_state(dialog.PLAY_STATE_PLAY, self.item, self.get_time_info)
 
             return True
 
@@ -502,12 +502,11 @@ class MPlayer:
                     dialog.show_message(_('Seeking not possible'))
                     return False
 
-            if event.arg > 0:
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.get_time_info)
-            else:
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.get_time_info)
-
             self.app.write('seek %s\n' % event.arg)
+            if event.arg > 0:
+                dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.item, self.get_time_info)
+            else:
+                dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.item, self.get_time_info)
             return True
 
         if event == VIDEO_AVSYNC:
@@ -613,8 +612,10 @@ class MPlayer:
         time_pos = self.app.get_property('time_pos')
         length = self.app.get_property('length')
         percent_pos = self.app.get_property('percent_pos')
-        return (int(float(time_pos)), int(float(length)), int(percent_pos) / 100.0)
-
+        if time_pos and length and percent_pos:
+            return (int(float(time_pos)), int(float(length)), int(percent_pos) / 100.0)
+        else:
+            return None
 
 # ======================================================================
 
@@ -661,7 +662,7 @@ class MPlayerApp(childapp.ChildApp2):
         self.get_property_ans = None
         self.output_event.clear()
         self.write('get_property %s\n' % property)
-        self.output_event.wait()
+        self.output_event.wait(config.MPLAYER_PROPERTY_TIMEOUT)
         return self.get_property_ans
 
     def stop_event(self):

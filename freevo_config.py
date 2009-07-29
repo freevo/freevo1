@@ -115,7 +115,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.27
+LOCAL_CONF_VERSION = 5.28
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -406,6 +406,9 @@ LOCAL_CONF_CHANGES = [
      Added FREEVO_TEMPDIR for temporary files
      Split AUTOSHUTDOWN_WAKEUP_CMD into  AUTOSHUTDOWN_ACPI_CMD_OPT and AUTOSHUTDOWN_NVRAM_CMD_OPT
      Removed AUTOSHUTDOWN_LILO_CMD_OPT, AUTOSHUTDOWN_GRUB_CMD_OPT and AUTOSHUTDOWN_REMOUNT_BOOT_CMD_OPT
+     """),
+    (5.28,
+     """ Added MPLAYER_PROPERTY_TIMEOUT to control how long freevo waits for mplayer property calls
      """),
 ]
 
@@ -1523,6 +1526,14 @@ MPLAYER_ARGS = {
 # this many seconds.
 #
 MPLAYER_SEEK_TIMEOUT = 8
+
+#
+# Number (or fraction) of seconds before mplayer property calls time out.
+# Property calls are used to retrive information from mplayer from the
+# slave interface. Mostly for the OSD display. If you experience problems
+# with the OSD make this number higher. 
+# 
+MPLAYER_PROPERTY_TIMEOUT = 0.1
 
 #
 # Autocrop files when playing. This is useful for files in 4:3 with black
