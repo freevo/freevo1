@@ -43,7 +43,7 @@ import array
 import config
 import util.mediainfo
 import rc
-
+import skin
 
 
 try:
@@ -230,6 +230,7 @@ class autostart(plugin.DaemonPlugin):
                 media.move_tray(direction='toggle')
                 return True
 
+
     def shutdown(self):
         shutdown()
 
@@ -247,6 +248,7 @@ class rom_items(plugin.MainMenuPlugin):
         global im_thread
         if not im_thread:
             init()
+
 
     def items(self, parent):
         """
@@ -289,6 +291,7 @@ class rom_items(plugin.MainMenuPlugin):
             item.media.move_tray(direction='toggle')
             return True
         return False
+
 
 
 class RemovableMedia:
@@ -627,7 +630,6 @@ class Identify_Thread(threading.Thread):
             _debug_('opening %r failed: %s' % (media.devicename, e))
             return
 
-
         # if there is a disc, the tray can't be open
         media.tray_open = False
         disc_info = util.mediainfo.disc_info(media, force_rebuild)
@@ -684,7 +686,6 @@ class Identify_Thread(threading.Thread):
 
         if movie_info:
             image = movie_info.image
-
 
         # DVD/VCD/SVCD:
         if info['mime'] in ('video/vcd', 'video/dvd'):
@@ -800,7 +801,6 @@ class Identify_Thread(threading.Thread):
             if not title:
                 title = label
 
-
         # If there are no videos and only audio files (and maybe images)
         # it is an audio disc (autostart will auto play everything)
         elif not num_video and num_audio:
@@ -864,15 +864,13 @@ class Identify_Thread(threading.Thread):
                 media.videoitem.fxd_file = fxd_file
 
         media.item.media = media
-        return
 
 
     def check_all(self):
         """ Check all drives """
-        if rc.app():
+        if not skin.active():
             # Some app is running, do not scan, it's not necessary
             return
-
         self.lock.acquire()
         try:
             for media in config.REMOVABLE_MEDIA:
@@ -897,7 +895,7 @@ class Identify_Thread(threading.Thread):
         rebuild_file = os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database')
         # Make sure the movie database is rebuilt at startup
         util.touch(rebuild_file)
-        while 1:
+        while True:
             try:
                 # Check if we need to update the database
                 # This is a simple way for external apps to signal changes
@@ -909,9 +907,7 @@ class Identify_Thread(threading.Thread):
                     for media in config.REMOVABLE_MEDIA:
                         media.drive_status = CDS_NO_INFO #media.get_drive_status()
 
-                if not rc.app():
-                    # check only in the menu
-                    self.check_all()
+                self.check_all()
 
                 for i in range(4):
                     # wait some time
@@ -922,6 +918,9 @@ class Identify_Thread(threading.Thread):
                         return
             except SystemExit:
                 break
+            except:
+                _debug_('Exception whilst checking removable media!' + traceback.format_exc(), DERROR)
+
 
 
 if __name__ == '__main__':
