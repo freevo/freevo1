@@ -185,7 +185,7 @@ def parse_plugins(plugin_name=''):
                 fname = re.sub('^src.', '', file)
                 fname = re.sub('^%s.' % os.environ['FREEVO_PYTHON'], '', fname)
                 fname = re.sub('/', '.', os.path.splitext(fname)[0])
-                fname = re.sub('plugins.', '', fname)
+                fname = re.sub('^plugins.', '', fname)
                 fname = re.sub('.__init__', '', fname)
 
                 type = start.match(line).group(2).strip()
