@@ -538,12 +538,19 @@ class PluginInterface(plugin.ItemPlugin):
         results.close()
 
         img = soup.find('img',src=re.compile('imgs/movies'))
+        trs = img.findParent('table').findAll('tr')
+        img_ratings = soup.find('img',src=re.compile('imgs/ratings'))
+
+#       _debug_("Tag %s" % trs)
 
         self.title = soup.find('img',src=re.compile('movie.gif$')).nextSibling.string.strip().encode('latin-1')
         self.info['director'] = stripTags(soup.find(text='DIRECTOR').parent.parent.parent.td.nextSibling.nextSibling.contents).strip()
         self.info['year'] = soup.find(text=re.compile('A\xd1O')).parent.parent.parent.table.td.string.strip()
         self.info['country'] = ''
-        self.info['rating'] = img.parent.parent.nextSibling.nextSibling.td.string + ' ' + img.parent.parent.parent.findAll('tr')[4].td.string.strip()
+
+        if img_ratings:
+            self.info['rating'] = img_ratings['alt'] + ' (' + trs[1].td.string + '/' + trs[4].td.string.strip('(')
+
         self.info['tagline'] = soup.find(text='TITULO ORIGINAL').parent.parent.parent.td.nextSibling.nextSibling.b.string.strip().encode('latin-1')
         self.info['actor']= stripTags(soup.find(text='REPARTO').parent.parent.nextSibling.nextSibling.contents).strip()
 
@@ -562,9 +569,13 @@ class PluginInterface(plugin.ItemPlugin):
             self.info['genre'] = generoCritica[:generoCritica.find('/')-3].strip()
 
         #self.imagefile = self.tmppath + vfs.basename(self.title)
-        self.image_url = img['src']
-
-        #soup.find('img',src=re.compile('imgs/movies'))['src']
+        # filmaffinity renders two types of html code. The new one
+        #  with an <a> tag to show a big image and the old one without it
+        #
+        if img.parent.has_key('href'):
+            self.image_url = img.parent['href']
+        else:
+            self.image_url = img['src']
 
         return (self.title, self.info, self.image_url)
 
