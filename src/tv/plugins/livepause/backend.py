@@ -358,6 +358,7 @@ class LivePauseApp(childapp.ChildApp):
         self.code = 0
         self.message = ''
         self.events_enabled = True
+        self.overtaken_last_sent = 0
         self.send_event = send_event
         childapp.ChildApp.__init__(self, [command, '-f', buffer_file, '-s', str(size)], callback_use_rc=False)
 
@@ -482,7 +483,12 @@ class LivePauseApp(childapp.ChildApp):
             to_send = DATA_ACQUIRED
 
         elif line == '!Overtaken':
-            to_send = READER_OVERTAKEN
+            now = time.time()
+            # To prevent swamping the event queue with overflow messages
+            # only send an event if we haven't sent one for at least 1.0 second.
+            if now - self.overtaken_last_sent >= 1.0:
+                to_send = READER_OVERTAKEN
+                self.overtaken_last_sent = now
 
         elif line == '!Starved':
             to_send = READER_STARVED
