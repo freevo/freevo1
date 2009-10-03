@@ -74,7 +74,7 @@ def make_query(filename, dirtitle):
     values['title'] = util.escape(a['title'])
     values['album'] = util.escape(a['album'])
     values['genre'] = util.escape(a['genre'])
-    values['year'] = inti(a['date'])
+    values['year'] = inti(a['userdate'])
     values['track'] = int(t[0])
     values['track_total'] = int(t[1])
     values['bpm'] = a['bitrate'] and int(a['bitrate']) or -1
@@ -209,7 +209,7 @@ class AudioParser:
                 data = mediainfo.get(song)
                 for type in ('artist', 'album'):
                     setattr(self, type, self.strcmp(getattr(self, type), data[type]))
-                self.year = self.strcmp(self.year, data['date'])
+                self.year = self.strcmp(self.year, data['userdate'])
                 if data['length']:
                     self.length += int(data['length'])
                 use_tracks = use_tracks and data['trackno']
@@ -308,7 +308,7 @@ class PlaylistParser(AudioParser):
                 data = mediainfo.get(song.filename)
                 for type in ('artist', 'album'):
                     setattr(self, type, self.strcmp(getattr(self, type), data[type]))
-                self.year = self.strcmp(self.year, data['date'])
+                self.year = self.strcmp(self.year, data['userdate'])
                 if data['length']:
                     self.length += int(data['length'])
             except OSError:
