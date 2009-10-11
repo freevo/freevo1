@@ -537,9 +537,13 @@ class PluginInterface(plugin.ItemPlugin):
         soup = BeautifulSoup(results.read(), convertEntities='html')
         results.close()
 
-        img = soup.find('img',src=re.compile('imgs/movies'))
-        trs = img.findParent('table').findAll('tr')
-        img_ratings = soup.find('img',src=re.compile('imgs/ratings'))
+        img = soup.find('img',src=re.compile('.*-full\.jpg$'))
+        if img:
+            trs = img.findParent('table').findAll('tr')
+            img_ratings = soup.find('img',src=re.compile('imgs/ratings'))
+        else:
+            trs = None
+            img_ratings = None
 
 #       _debug_("Tag %s" % trs)
 
@@ -572,10 +576,11 @@ class PluginInterface(plugin.ItemPlugin):
         # filmaffinity renders two types of html code. The new one
         #  with an <a> tag to show a big image and the old one without it
         #
-        if img.parent.has_key('href'):
-            self.image_url = img.parent['href']
-        else:
-            self.image_url = img['src']
+        if img:
+            if img.parent.has_key('href'):
+                self.image_url = img.parent['href']
+            else:
+                self.image_url = img['src']
 
         return (self.title, self.info, self.image_url)
 
