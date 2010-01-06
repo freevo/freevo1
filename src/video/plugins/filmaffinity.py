@@ -316,10 +316,11 @@ class PluginInterface(plugin.ItemPlugin):
             else:
                 self.searchstring = self.item.name
 
-            for id,name,year in self.guessFilmAffinity(self.searchstring, self.disc_set):
+            for id, name, year in self.guessFilmAffinity(self.searchstring, self.disc_set):
                 try:
+                    uname = Unicode(name)
                     for i in self.item.parent.play_items:
-                        if i.name == name:
+                        if i.name == uname:
                             if not i in duplicates:
                                 duplicates.append(i)
                 except:
@@ -547,15 +548,15 @@ class PluginInterface(plugin.ItemPlugin):
 
 #       _debug_("Tag %s" % trs)
 
-        self.title = soup.find('img',src=re.compile('movie.gif$')).nextSibling.string.strip().encode('latin-1')
-        self.info['director'] = stripTags(soup.find(text='DIRECTOR').parent.parent.parent.td.nextSibling.nextSibling.contents).strip()
-        self.info['year'] = soup.find(text=re.compile('A\xd1O')).parent.parent.parent.table.td.string.strip()
-        self.info['country'] = ''
+        self.title = soup.find('img', src=re.compile('movie.gif$')).nextSibling.string.strip().encode('latin-1')
+        self.info['director'] = stripTags(soup.find(text='DIRECTOR').findParent('table').td.nextSibling.nextSibling.contents).strip()
+        self.info['year'] = soup.find(text='AÑO').parent.parent.parent.table.td.string.strip()
+        self.info['country'] = soup.find('img', src=re.compile('^\/imgs\/countries\/'))['title'].strip()
 
         if img_ratings:
             self.info['rating'] = img_ratings['alt'] + ' (' + trs[1].td.string + '/' + trs[4].td.string.strip('(')
 
-        self.info['tagline'] = soup.find(text='TITULO ORIGINAL').parent.parent.parent.td.nextSibling.nextSibling.b.string.strip().encode('latin-1')
+        self.info['tagline'] = soup.find(text='TÍTULO ORIGINAL').findParent('table').td.nextSibling.nextSibling.b.string.strip().encode('latin-1')
         self.info['actor']= stripTags(soup.find(text='REPARTO').parent.parent.nextSibling.nextSibling.contents).strip()
 
         sinopsis = None       # Usually the word SINOPSIS exits
