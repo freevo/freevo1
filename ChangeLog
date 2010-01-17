@@ -26,6 +26,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Fixed FilmAffinity plug-in crashing on some movies (B#2835447)
  * Fixed FilmAffinity web page layout change (B#2872627)
  * Fixed FilmAffinity web page layout change (B#2900061)
+ * Fixed freevo script for Gentoo eselect nonsense (B#2904361)
  * Fixed ivtv control name changes (B#2801870)
  * Fixed livepause back-end when the buffer overflows freevo stops respond (B#2830288)
  * Fixed livepause incorrect function (B#2808038)
