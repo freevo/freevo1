@@ -153,7 +153,7 @@ class ProgramItem(Item):
             else:
                 msgtext = _('This Program is in the future. Do you want to record it?')
                 confirmbtn = _('Record')
-            dialog.show_confirmation(msgtext, confirmbtn, lambda: self.toggle_rec(menuw=menuw))
+            dialog.show_confirmation(msgtext, lambda: self.toggle_rec(menuw=menuw), proceed_text=confirmbtn)
             return
         else:
             # check if the device is free

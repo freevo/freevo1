@@ -31,6 +31,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Fixed livepause incorrect function (B#2808038)
  * Fixed livepause plug-in when the TV_CHANNELS have varying number of items (B#2808035)
  * Fixed plugins helper creating incorrect plug-in name (B#2824746)
+ * Fixed TV guide swapping the OK and Cancel buttons (B#2904179)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------
