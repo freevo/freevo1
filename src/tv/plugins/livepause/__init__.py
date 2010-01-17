@@ -435,7 +435,7 @@ class LivePauseController:
 
     def __playing_tv_record(self, event, menuw):
         if self.recording:
-            self.backend.cancel_save()
+            self.backend.cancelsave()
             self.recording = False
         else:
             self.recording = True

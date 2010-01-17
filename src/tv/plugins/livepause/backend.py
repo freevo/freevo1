@@ -329,7 +329,7 @@ class LocalBackend(Backend):
 
     def cancelsave(self):
         if self.livepause_app:
-            self.livepause_app.cancelsave()
+            self.livepause_app.cancel_save()
 
     def send_event(self, to_send):
         to_send.post()

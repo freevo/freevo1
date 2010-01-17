@@ -63,10 +63,10 @@ def start_recording(backend, channel_id):
         filename_array = { 'progname': String('Manual Recording'),
                            'title'   : String('') }
         start_time = buffer_info[3]
-        end_time = current_buffer_time + config.LIVE_PAUSE2_INSTANT_RECORD_LENGTH
+        end_time = start_time + config.LIVE_PAUSE2_INSTANT_RECORD_LENGTH
 
     filemask = config.TV_RECORD_FILE_MASK % filename_array
-    filemask = time.strftime(filemask, time.localtime(current_buffer_time))
+    filemask = time.strftime(filemask, time.localtime(start_time))
     filename = os.path.join(config.TV_RECORD_DIR, progname2filename(filemask).rstrip(' -_:') + \
                             config.TV_RECORD_FILE_SUFFIX)
 
@@ -83,7 +83,7 @@ def _get_program(current_time, channel_id):
 
     channels = epg_xmltv.get_guide().get_programs(start=current_time,
                                                  stop=current_time,
-                                                 channel_id=[channel_id])
+                                                 channel_id=channel_id)
 
     if channels and channels[0] and channels[0].programs:
         return channels[0].programs[0]
