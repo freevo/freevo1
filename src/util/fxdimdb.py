@@ -311,7 +311,8 @@ class FxdImdb:
         dvd = 0
 
         try:
-            soup = BeautifulSoup(results.read(), convertEntities='xml')
+            #soup = BeautifulSoup(results.read(), convertEntities='xml')
+            soup = BeautifulSoup(results.read())
         except UnicodeDecodeError:
             print "Unicode error: check that /usr/lib/python2.x/site.py has the correct default encoding"
             traceback.print_exc()
@@ -797,7 +798,8 @@ class FxdImdb:
         m = re.compile('/title/tt([0-9]*)/')
         y = re.compile('\(([^)]+)\)')
         try:
-            soup = BeautifulSoup(results.read(), convertEntities='xml')
+            #soup = BeautifulSoup(results.read(), convertEntities='xml')
+            soup = BeautifulSoup(results.read())
         except HTMLParser.HTMLParseError, why:
             traceback.print_exc()
             _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
@@ -840,7 +842,8 @@ class FxdImdb:
         Returns a new id for getIMDBid with TV series episode data
         """
         try:
-            soup = BeautifulSoup(results.read(), convertEntities='xml')
+            #soup = BeautifulSoup(results.read(), convertEntities='xml')
+            soup = BeautifulSoup(results.read())
         except UnicodeDecodeError:
             print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
             pass
