@@ -950,6 +950,8 @@ class ReportFetcher:
             fn=urllib2.urlopen(self.reporturl)
         except urllib2.HTTPError, why:
             raise NetworkException(why)
+        except urllib2.URLError, why:
+            raise NetworkException(why)
 
         # Dump entire report in a variable
         self.fullreport=fn.read()
