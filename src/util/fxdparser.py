@@ -34,7 +34,7 @@ import stat
 import traceback
 
 # XML support
-from util.qp_xml import Parser
+from qp_xml import Parser
 
 import config
 import util

@@ -426,7 +426,7 @@ def umount_all():
 
 def resolve_media_mountdir(*arg):
     """
-    get the mount point of the media with media_id
+    get the media with given media_id , and add its mountpoint to the filename
     """
     _debug_('resolve_media_mountdir(arg=%r)' % (arg,), 2)
     if len(arg) == 1 and isinstance(arg[0], dict):
@@ -438,16 +438,15 @@ def resolve_media_mountdir(*arg):
     else:
         raise KeyError
 
-    mountdir = ''
+    media = None
     # Find on what media it is located
     for media in config.REMOVABLE_MEDIA:
         if media_id == media.id:
             # Then set the filename
-            mountdir = media.mountdir
             file     = vfs.join(media.mountdir, file)
             break
 
-    return mountdir, file
+    return media, file
 
 
 def check_media(media_id):
