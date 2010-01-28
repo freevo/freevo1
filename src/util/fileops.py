@@ -524,7 +524,7 @@ def create_thumbnail(filename, thumbnail=None):
         try:
             image = kaa.imlib2.open_from_memory(thumbnail)
         except Exception, why:
-            _debug_('invalid thumbnail %r: %s', (filename, why), DINFO)
+            _debug_('invalid thumbnail %r: %s' % (filename, why), DINFO)
 
     if not image:
         if __freevo_app__ == 'main':
