@@ -32,8 +32,6 @@
 import sys, os, stat, string, urllib
 import time
 
-from www.web_types import HTMLResource, FreevoResource
-from twisted.web.woven import page
 import util
 import config
 import kaa.metadata as metadata

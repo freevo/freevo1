@@ -36,7 +36,6 @@ import os, sys, time
 import config
 import socket
 
-from twisted.web.woven import page
 from twisted.web.resource import Resource
 from tv.record_client import RecordClient
 
@@ -69,23 +68,6 @@ class RecordClientActions:
     def __call__(self):
         return RecordClientResource().recordclient
 
-
-
-class FreevoPage(page.Page):
-    """
-    """
-    def __init__(self, model=None, template=None):
-        #print 'FreevoPage.__init__(model=%r, template=%r)' % (model, template)
-
-        if not model:
-            model = {'foo': 'bar'}
-        if not template:
-            template = '<html><head><title>ERROR</title></head>' + \
-                       '<body>ERROR: no template</body></html>'
-
-        page.Page.__init__(self, model, template=template)
-
-        self.addSlash = 0
 
 
 class FreevoResource(Resource):

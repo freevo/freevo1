@@ -33,7 +33,6 @@ import sys, string
 import time
 
 from www.web_types import HTMLResource, FreevoResource
-from twisted.web.woven import page
 
 import util.tv_util as tv_util
 import util

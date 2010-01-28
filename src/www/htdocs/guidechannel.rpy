@@ -33,7 +33,6 @@ import sys, string
 import time
 import datetime
 
-from twisted.web.woven import page
 from twisted.web import static
 
 import util.tv_util as tv_util
