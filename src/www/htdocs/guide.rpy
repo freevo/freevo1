@@ -32,8 +32,6 @@
 import sys, string
 import time
 
-from twisted.web.woven import page
-
 import config
 import util.tv_util as tv_util
 import util

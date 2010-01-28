@@ -35,6 +35,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Fixed livepause plug-in when the TV_CHANNELS have varying number of items (B#2808035)
  * Fixed plugins helper creating incorrect plug-in name (B#2824746)
  * Fixed TV guide swapping the OK and Cancel buttons (B#2904179)
+ * Fixed web pages that imported twisted.web.woven.page which has been removed from Twisted (B#2936634)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------
