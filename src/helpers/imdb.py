@@ -38,8 +38,8 @@ from optparse import OptionParser
 try:
     import config
 except ImportError:
-    print 'imdb.py can\'t be executed outside the Freevo environment.'
-    print 'Please use \'freevo imdb [args]\' instead'
+    print "imdb.py can't be executed outside the Freevo environment."
+    print "Please use 'freevo imdb [args]' instead"
     sys.exit(0)
 
 from util.fxdimdb import FxdImdb, makeVideo
@@ -116,8 +116,6 @@ if __name__ == "__main__":
         sys.exit(u'--search requires <search pattern>')
     elif opts.guess and len(args) < 1:
         sys.exit(u'--guess requires <guess pattern>')
-    #elif opts.tv and len(args) < 1:
-    #    sys.exit(u'--tv requires <imdb id>')
     tv_marker = (opts.season or opts.episode) and '"' or ''
 
     if opts.rom_drive is not None:
@@ -183,14 +181,6 @@ if __name__ == "__main__":
         results = fxd.getIMDBid(opts.tv, opts.season, opts.episode)
         if len(results) == 0:
             print 'No results'
-        #for result in results:
-        #    if result[3]:
-        #        title = 'http://www.imdb.com/title/tt%s/  %s  %s (%s) %s' % (result[:1] + result[:4])
-        #    elif result[2]:
-        #        title = 'http://www.imdb.com/title/tt%s/  %s  %s (%s)' % (result[:1] + result[:3])
-        #    else:
-        #        title = 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
-        #    title = results
         title = 'http://www.imdb.com/title/tt%s/  %s' % (results, results)
         print '%s' % title.encode(opts.encoding)
         sys.exit(0)

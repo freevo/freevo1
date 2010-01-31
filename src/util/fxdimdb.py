@@ -49,8 +49,14 @@ import codecs
 import os
 import traceback
 from pprint import pprint, pformat
-from BeautifulSoup import BeautifulSoup, NavigableString
-from html5lib import HTMLParser, treebuilders
+try:
+    from html5lib import HTMLParser, treebuilders
+    from html5lib.treebuilders.soup import NavigableString
+    using_html5lib = True
+except ImportError:
+    import HTMLParser
+    from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup, NavigableString
+    using_html5lib = False
 
 import config
 import util
@@ -313,10 +319,11 @@ class FxdImdb:
         dvd = 0
 
         try:
-            #soup = BeautifulSoup(results.read(), convertEntities='xml')
-            parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
-            soup = parser.parse(results.read()) #, encoding='latin-1') #, convertEntities='xml')
-
+            if using_html5lib:
+                parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
+                soup = parser.parse(results.read())
+            else:
+                soup = BeautifulSoup(results.read(), convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
         except UnicodeDecodeError:
             print "Unicode error: check that /usr/lib/python2.x/site.py has the correct default encoding"
             traceback.print_exc()
@@ -795,9 +802,11 @@ class FxdImdb:
         m = re.compile('/title/tt(\d+)/')
         y = re.compile('\((\d+)\) *(.*)')
         try:
-            #soup = BeautifulSoup(results.read(), convertEntities='xml')
-            parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
-            soup = parser.parse(results.read()) #, encoding='latin-1') #, convertEntities='xml')
+            if using_html5lib:
+                parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
+                soup = parser.parse(results.read())
+            else:
+                soup = BeautifulSoup(results.read(), convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
         except HTMLParser.HTMLParseError, why:
             traceback.print_exc()
             _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
@@ -849,9 +858,11 @@ class FxdImdb:
         Returns a new id for getIMDBid with TV series episode data
         """
         try:
-            #soup = BeautifulSoup(results.read(), convertEntities='xml')
-            parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
-            soup = parser.parse(results.read()) #, encoding='latin-1') #, convertEntities='xml')
+            if using_html5lib:
+                parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
+                soup = parser.parse(results.read())
+            else:
+                soup = BeautifulSoup(results.read(), convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
         except UnicodeDecodeError:
             print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
             pass
