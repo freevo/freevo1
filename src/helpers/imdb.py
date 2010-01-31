@@ -38,8 +38,8 @@ from optparse import OptionParser
 try:
     import config
 except ImportError:
-    print 'imdb.py can\'t be executed outside the Freevo environment.'
-    print 'Please use \'freevo imdb [args]\' instead'
+    print "imdb.py can't be executed outside the Freevo environment."
+    print "Please use 'freevo imdb [args]' instead"
     sys.exit(0)
 
 from util.fxdimdb import FxdImdb, makeVideo
@@ -53,19 +53,19 @@ def parse_options(defaults):
     parser = OptionParser(version='%prog 1.0', conflict_handler='resolve', usage="""
 Search IMDB for a movie or a TV show
 
-freevo imdb [options] <search> [<output> <video file> [<video file>]]
+freevo imdb [options] | [<result> <fxd file> <video file> [<video file>]]
 
-Generate <output>.fxd for the movie.  Files is a list of files that belongs to
-this movie.  Use [dvd|vcd] to add the whole disc or use [dvd|vcd][title] to add
-a special DVD or VCD title to the list of files""")
+Generate a fxd for the movie.  Files is a list of files that belongs to this
+movie.  Use [dvd|vcd] to add the whole disc or use [dvd|vcd][title] to add a
+special DVD or VCD title to the list of files""")
     parser.add_option('-v', '--verbose', action='count', default=0,
         help='set the level of verbosity [default:%default]')
     parser.add_option('-s', '--search', action='store_true', dest='search', default=False,
         help='search imdb for string [default:%default]')
     parser.add_option('-g', '--guess', action='store_true', dest='guess', default=False,
         help='search imdb for possible filename match [default:%default]')
-    parser.add_option('--tv', action='store_true', dest='tv', default=False,
-        help='specify the search is a tv programme [default:%default]')
+    parser.add_option('--tv', action='store', dest='tv', default=None,
+        help='specify the id of a tv programme for a eipsode search [default:%default]')
     parser.add_option('--season', dest='season', default=None,
         help='specify the season in the search [default:%default]')
     parser.add_option('--episode', dest='episode', default=None,
@@ -116,7 +116,7 @@ if __name__ == "__main__":
         sys.exit(u'--search requires <search pattern>')
     elif opts.guess and len(args) < 1:
         sys.exit(u'--guess requires <guess pattern>')
-    tv_marker = (opts.tv or opts.season or opts.episode) and '"' or ''
+    tv_marker = (opts.season or opts.episode) and '"' or ''
 
     if opts.rom_drive is not None:
         driveset = True
@@ -174,6 +174,15 @@ if __name__ == "__main__":
             else:
                 title = 'http://www.imdb.com/title/tt%s/  %s  %s' % (result[:1] + result[:2])
             print '%s' % title.encode(opts.encoding)
+        sys.exit(0)
+
+    if opts.tv:
+        print "Searching IMDB for '%s' season:%s episode:%s..." % (opts.tv, opts.season, opts.episode)
+        results = fxd.getIMDBid(opts.tv, opts.season, opts.episode)
+        if len(results) == 0:
+            print 'No results'
+        title = 'http://www.imdb.com/title/tt%s/  %s' % (results, results)
+        print '%s' % title.encode(opts.encoding)
         sys.exit(0)
 
     # normal usage

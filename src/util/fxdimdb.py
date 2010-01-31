@@ -48,8 +48,15 @@ import sys
 import codecs
 import os
 import traceback
-from BeautifulSoup import BeautifulSoup, NavigableString
-import HTMLParser
+from pprint import pprint, pformat
+try:
+    from html5lib import HTMLParser, treebuilders
+    from html5lib.treebuilders.soup import NavigableString
+    using_html5lib = True
+except ImportError:
+    import HTMLParser
+    from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup, NavigableString
+    using_html5lib = False
 
 import config
 import util
@@ -232,6 +239,7 @@ class FxdImdb:
         response.close()
 
         _debug_('id_list has %s items' % (len(self.id_list)))
+        #print 'id_list=%s' % (pformat(self.id_list))
         if len(self.id_list) > 20:
             # too many results, check if there are stupid results in the list
             words = []
@@ -311,8 +319,11 @@ class FxdImdb:
         dvd = 0
 
         try:
-            #soup = BeautifulSoup(results.read(), convertEntities='xml')
-            soup = BeautifulSoup(results.read())
+            if using_html5lib:
+                parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
+                soup = parser.parse(results.read())
+            else:
+                soup = BeautifulSoup(results.read(), convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
         except UnicodeDecodeError:
             print "Unicode error: check that /usr/lib/python2.x/site.py has the correct default encoding"
             traceback.print_exc()
@@ -337,67 +348,60 @@ class FxdImdb:
             self.info['year'] = y[1:-1]
         except (AttributeError, TypeError, ValueError):
             self.info['title'] = self.title
-            self.info['year'] = title.find('a').string.strip()
+            try:
+                self.info['year'] = title.find('a').contents[0].strip()
+            except AttributeError:
+                self.info['year'] = ''
 
         # Find the <div> with class info, each <h5> under this provides info
+        wanted_keys = ('release_date', 'genre', 'tagline', 'plot', 'plot_keywords',
+                       'also_known_as', 'mpaa', 'runtime', 'country', 'language', 
+                       'color', 'aspect_ratio', 'sound_mix', 'certification',
+                       )
+        
         for info in main.findAll('div', {'class' : 'info'}):
             infoh5 = info.find('h5')
             if not infoh5:
                 continue
             try:
-                infostr = infoh5.next
-                key = infostr.string.strip(':').lower().replace(' ', '_')
-                nextsibling = nextsibling = infoh5.nextSibling.strip()
-                sections = info.findAll('a', { 'href' : re.compile('/Sections') })
-                lists = info.findAll('a', { 'href' : re.compile('/List') })
-                if len(nextsibling) > 0:
-                    self.info[key] = nextsibling
+                infostr = infoh5.find(text=True)
+                key = infostr.strip().strip(':').lower().replace(' ', '_')
+                if key not in wanted_keys:
+                    continue
+                content = info.find('div', {'class' : 'info-content'})
+                infocontent = content.find(text=True)
+                if infocontent:
+                    infocontent = infocontent.strip()
+                sections = info.findAll('a', { 'href' : re.compile('^/Sections') })
+                lists = info.findAll('a', { 'href' : re.compile('^/List') })
+                keywords = info.findAll('a', { 'href' : re.compile('^/keyword') })
+                #print 'key=%s content=%r keywords=%r sections=%r lists=%r' % (key, infocontent, keywords, sections, lists)
+                if len(infocontent) > 0:
+                    self.info[key] = infocontent
                 elif len(sections) > 0:
                     items = []
                     for item in sections:
-                        items.append(item.string)
+                        items.append(item.contents[0].strip())
                     self.info[key] = ' / '.join(items)
                 elif len(lists) > 0:
                     items = []
                     for item in lists:
-                        items.append(item.string)
+                        items.append(item.contents[0].strip())
+                    self.info[key] = ' / '.join(items)
+                elif len(keywords) > 0:
+                    items = []
+                    for item in keywords:
+                        items.append(item.contents[0].strip())
                     self.info[key] = ' / '.join(items)
             except:
                 pass
 
-        # Find Plot Outline/Summary:
-        # Normally the tag is named "Plot Outline:" - however sometimes
-        # the tag is "Plot Summary:" or just "Plot:". Search for all strings.
-        imdb_result = soup.find(text='Plot Outline:')
-        if not imdb_result:
-            imdb_result = soup.find(text='Plot Summary:')
-        if not imdb_result:
-            imdb_result = soup.find(text='Plot:')
-        if imdb_result:
-            self.info['plot'] = imdb_result.next.strip()
-        else:
-            self.info['plot'] = u''
-
-        # Find tagline - sometimes the tagline is missing.
-        # Use an empty string if no tagline could be found.
-        imdb_result = soup.find(text='Tagline:')
-        if imdb_result:
-            self.info['tagline'] = imdb_result.next.strip()
-        else:
-            self.info['tagline'] = u''
-
         rating = soup.find(text='User Rating:').findNext(text=re.compile('/10'))
-        if rating:
+        try:
             votes = rating.findNext('a')
-            self.info['rating'] = rating.strip() + ' (' + votes.string.strip() + ')'
-        else:
+            self.info['rating'] = rating.strip() + ' (' + votes.contents[0].strip() + ')'
+        except AttributeError:
             self.info['rating'] = ''
-
-        runtime = soup.find(text='Runtime:')
-        if runtime and runtime.next:
-            self.info['runtime'] = runtime.next.strip()
-        else:
-            self.info['runtime'] = ''
 
         # Replace special characters in the items
         for (k,v) in self.info.items():
@@ -795,11 +799,14 @@ class FxdImdb:
         _debug_('parsesearchdata(results=%r, url=%r, id=%r)' % (results, url, id))
 
         self.id_list = []
-        m = re.compile('/title/tt([0-9]*)/')
-        y = re.compile('\(([^)]+)\)')
+        m = re.compile('/title/tt(\d+)/')
+        y = re.compile('\((\d+)\) *(.*)')
         try:
-            #soup = BeautifulSoup(results.read(), convertEntities='xml')
-            soup = BeautifulSoup(results.read())
+            if using_html5lib:
+                parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
+                soup = parser.parse(results.read())
+            else:
+                soup = BeautifulSoup(results.read(), convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
         except HTMLParser.HTMLParseError, why:
             traceback.print_exc()
             _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
@@ -808,28 +815,37 @@ class FxdImdb:
             traceback.print_exc()
             _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
             return self.id_list
-        items = soup.findAll('a', href=re.compile('/title/tt'))
+        items = soup.findAll('a', href=re.compile('^/title/tt'))
         ids = set([])
         for item in items:
-            idm = m.search(item['href'])
+            idm = item.attrMap['href']
             if not idm:
                 continue
-            if isinstance(item.next.next, NavigableString):
-                yrm = y.findall(item.next.next)
-
-            id = idm.group(1)
-            name = item.string
-            # skip empty names
-            if not name:
+            m_match = m.match(idm)
+            if not m_match:
+                # skip invalid titles
                 continue
-            # skip duplicate ids
+            id = m_match.group(1)
             if id in ids:
+                # skip duplicate ids
                 continue
+            name = item.contents[0]
+            if not isinstance(name, NavigableString):
+                # skip empty names
+                continue
+            if isinstance(item.next.next, NavigableString):
+                yrm = item.next.next.strip()
             ids.add(id)
-            year = len(yrm) > 0 and yrm[0] or '0000'
-            type = len(yrm) > 1 and yrm[1] or ''
+            y_match = y.match(yrm)
+            if y_match:
+                year = y_match.group(1)
+                type = y_match.group(2)
+            else:
+                year = '0000'
+                type = ''
             #print 'url', item['href']
             #print item.parent.findChildren(text=re.compile('[^ ]'))
+            #print 'id=%s name=%s year=%s type=%s' % (id, name, year, type)
             self.id_list += [ ( id, name, year, type ) ]
 
         for item in self.id_list:
@@ -842,8 +858,11 @@ class FxdImdb:
         Returns a new id for getIMDBid with TV series episode data
         """
         try:
-            #soup = BeautifulSoup(results.read(), convertEntities='xml')
-            soup = BeautifulSoup(results.read())
+            if using_html5lib:
+                parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
+                soup = parser.parse(results.read())
+            else:
+                soup = BeautifulSoup(results.read(), convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
         except UnicodeDecodeError:
             print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
             pass
@@ -971,9 +990,6 @@ class FxdImdb:
         self.image = vfs.basename(self.image)
 
         _debug_('Downloaded cover image from %s' % (self.image_url))
-        print "Freevo knows nothing about the copyright of this image, please"
-        print "go to %s to check for more information about private." % self.image_url
-        print "use of this image"
 
 
     def str2XML(self, line):
