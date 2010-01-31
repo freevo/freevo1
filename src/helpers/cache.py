@@ -290,37 +290,40 @@ def cache_cropdetect(defaults):
         _debug_('fxd_movie_read=%r' % (fxd.user_data['filename'],), 2)
         fileinfo = fxd.user_data['fileinfo']
         for filename in fileinfo.files:
-            if fxd.user_data['defaults']['dry_run']:
-                print filename,
-                continue
-            if not os.path.exists(filename):
-                raise encodingcore.EncodingError('file %r does not exist' % filename)
-            encjob = encodingcore.EncodingJob(None, None, None, None)
-            encjob.source = filename
-            fileext = os.path.splitext(filename)[1]
-            if not fileext or fileext == '.iso':
-                data = kaa.metadata.parse(filename)
-                titlenum = 0
-                longest = 0
-                for track in data.tracks:
-                    if track.length > longest:
-                        longest = track.length
-                        titlenum = track.trackno
-                if titlenum == 0:
-                    raise encodingcore.EncodingError('longest track not found')
-                encjob.titlenum = titlenum
-            encjob._identify()
-            encjob._wait(5)
-            if 'ID_LENGTH' not in encjob.id_info:
-                raise encodingcore.EncodingError('no length')
-            encjob.length = float(encjob.id_info['ID_LENGTH'])
-            if encjob.length < 5 or encjob.length > 5 * 60 * 60:
-                raise encodingcore.EncodingError('invalid length of %s' % (encjob.length))
-            encjob._cropdetect()
-            encjob._wait(10)
-            fxd.user_data['encjob'] = encjob
-            fxd.user_data['crop'] = encjob.crop
-            #print '%r: crop=%s' % (fileinfo.files.fxd_file, encjob.crop)
+            try:
+                if fxd.user_data['defaults']['dry_run']:
+                    print filename,
+                    continue
+                if not os.path.exists(filename):
+                    raise encodingcore.EncodingError('file %r does not exist' % filename)
+                encjob = encodingcore.EncodingJob(None, None, None, None)
+                encjob.source = filename
+                fileext = os.path.splitext(filename)[1]
+                if not fileext or fileext == '.iso':
+                    data = kaa.metadata.parse(filename)
+                    titlenum = 0
+                    longest = 0
+                    for track in data.tracks:
+                        if track.length > longest:
+                            longest = track.length
+                            titlenum = track.trackno
+                    if titlenum == 0:
+                        raise encodingcore.EncodingError('longest track not found')
+                    encjob.titlenum = titlenum
+                encjob._identify()
+                encjob._wait(5)
+                if 'ID_LENGTH' not in encjob.id_info:
+                    raise encodingcore.EncodingError('no length')
+                encjob.length = float(encjob.id_info['ID_LENGTH'])
+                if encjob.length < 5 or encjob.length > 5 * 60 * 60:
+                    raise encodingcore.EncodingError('invalid length of %s' % (encjob.length))
+                encjob._cropdetect()
+                encjob._wait(10)
+                fxd.user_data['encjob'] = encjob
+                fxd.user_data['crop'] = encjob.crop
+                #print '%r: crop=%s' % (fileinfo.files.fxd_file, encjob.crop)
+            except Exception, why:
+                print traceback.print_exc()
 
 
     def fxd_movie_write(fxd, node):

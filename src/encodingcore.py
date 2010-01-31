@@ -33,7 +33,7 @@ Interface to the encoding server, to re-encode video to a different format.
 """
 
 #Import statements
-from threading import Thread
+from threading import Thread, Lock
 from time import sleep
 import sys, os, re #, ConfigParser, copy
 from subprocess import Popen, PIPE
@@ -442,7 +442,7 @@ class EncodingJob:
         id_pattern = re.compile('^(ID_.*)=(.*)')
         id_info = {}
 
-        for line in lines:
+        for line in [l.rstrip() for l in lines]:
             id_match = id_pattern.match(line)
             if id_match:
                 id_info[id_match.groups()[0]] = id_match.groups()[1]
@@ -522,6 +522,7 @@ class EncodingJob:
         pass our ideal values back to the client which can verify them visually
         if needed.
         """
+        self.crop_results = {}
         if self.length is None:
             self._identify()
             self._wait()
@@ -544,12 +545,21 @@ class EncodingJob:
         if sstep > 0:
             arguments += [ '-demuxer', 'lavf', '-sstep', str(sstep) ]
 
-        if self.titlenum:
-            arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.titlenum ]
+        mid_length = int(self.length) / 2
+        if self.length > 90:
+            positions = [mid_length - 35, mid_length, mid_length + 35]
         else:
-            arguments += [ self.source ]
+            positions = [mid_length]
+        for pos in positions:
+            arguments = self.timeslice_mencoder + [ '-ss', '%s' % pos, '-identify', '-frames', '20', '-vo', 'md5sum',
+                '-ao', 'null', '-nocache', '-speed', '100', '-noframedrop', '-vf', 'cropdetect=20:16' ]
+            if self.titlenum:
+                arguments += [ '-dvd-device', self.source, 'dvd://%s' % self.titlenum ]
+            else:
+                arguments += [ self.source ]
 
-        self._run(mplayer, arguments, self._cropdetect_parse, None, 0, None)
+            self._run(mplayer, arguments, self._cropdetect_parse, None, 0, None)
+            self._wait()
 
 
     def _cropdetect_parse(self, lines, data): #seek to remove data
@@ -570,9 +580,6 @@ class EncodingJob:
         re_ana1 = re.compile('ASPECT', re.IGNORECASE)
         re_ana2 = re.compile('1.33')
         re_ana3 = re.compile('0.00')
-        crop_options = {}
-        #common_crop = ''
-        #cc_hits = 2
 
         foundrate = False
 
@@ -581,21 +588,18 @@ class EncodingJob:
                 self.finishedanalyze = True
                 return
             crop = str(self.info.video[0].width)+':'+str(self.info.video[0].height)+':0:0'
-            crop_options[crop] = 1
+            self.crop_results[crop] = 1
         except Exception, why:
             pass
-        for line in lines:
-            line = line.strip('\n')
+        for line in [l.rstrip() for l in lines]:
             if re_crop.search(line):
                 crop = re_crop.search(line).group(1)
-                try:
-                    crop_options[crop] = crop_options[crop] + 1
-                    #if crop_options[crop] > cc_hits:
-                    #    common_crop = crop
-                except:
-                    crop_options[crop] = 1
+                if crop in self.crop_results:
+                    self.crop_results[crop] += 1
+                else:
+                    self.crop_results[crop] = 1
 
-            #try to see if this is a PAL DVD, an NTSC Progressive DVD, ar an NTSC DVD
+            #try to see if this is a PAL DVD, a NTSC Progressive DVD, or a NTSC DVD
             if not foundrate: # and self.info.mime == 'video/dvd':
                 if re_fps_23.search(line):
                     self.fps = 23.976
@@ -622,7 +626,8 @@ class EncodingJob:
                     self.ana = False
                 elif re_ana3.search(line):
                     try:
-                        if not (self.info.video[0].has_key('width') / self.info.video[0].has_key('height')) > 1.3334:
+                        # what a odd line of code
+                        if not (self.info.video[0].has_key('width')/self.info.video[0].has_key('height')) > 1.3334:
                             self.ana = False
                     except:
                         pass
@@ -633,26 +638,23 @@ class EncodingJob:
             if int(self.info.aspect*100) == 1.33:
                 self.ana = False
             else:
-                self.ana =  True
+                self.ana = True
 
         if not foundrate: # unknown frame rate setting to 29.970
             self.fps = 29.970
 
-        #  unknown frame rate setting to 29.970
-        if not foundrate: self.fps = 29.970
+        _debug_('All collected crop results: %s' % self.crop_results)
 
-        _debug_('All collected cropopts: %s' % crop_options)
-
-        #if we didn't find cropping options (seems to happen sometimes on VERY short dvd titlenums)
-        if crop_options == {}:
-            #end analyzing
+        #if we didn't find cropping options (seems to happen sometimes on VERY short DVD titles)
+        if self.crop_results == {}:
+            #end analysing
             self.finishedanalyze = True
             return
 
-        #some homegrown sleezy alghorythm to pick the best crop options
+        #some home-grown sleazy algorithm to pick the best crop options
         hcounter = 0
         possible_crop = []
-        for crop, counter in crop_options.items():
+        for crop, counter in self.crop_results.items():
             if counter == hcounter:
                 possible_crop += [crop]
             if counter > hcounter:
@@ -665,7 +667,6 @@ class EncodingJob:
             for crop in possible_crop:
                 if crop < self.crop:
                     self.crop = crop
-
 
         #make the final crop outputs a resolution which is a multiple of 16, v and h ....
         crop = split(self.crop, ':')
@@ -680,14 +681,14 @@ class EncodingJob:
 
         self.crop = join(adjustedcrop, ':')
 
-        _debug_('Selected crop option: %s' % self.crop)
+        _debug_('Selected crop setting: %s' % self.crop)
 
-        #end analyzing
+        #end analysing
         self.finishedanalyze = True
 
 
     def _GenerateCLMencoder(self):
-        """Generate the command line(s) to be executed, using MEncoder for encoding"""
+        """Generate the command line(s) to be executed, using Mencoder for encoding"""
         #calculate the video bit rate
         self._CalcVideoBR()
 
