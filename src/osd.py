@@ -164,12 +164,12 @@ class OSDFont:
 
     def charsize(self, c):
         _debug_('charsize(c=%r)' % (c,), 2)
-        #c = Unicode(c)
+        uc = Unicode(c)
         try:
-            return self.chars[c]
-        except:
-            w = self.font.size(c)[0]
-            self.chars[c] = w
+            return self.chars[uc]
+        except KeyError:
+            w = self.font.size(uc)[0]
+            self.chars[uc] = w
             return w
 
     def stringsize(self, s):
