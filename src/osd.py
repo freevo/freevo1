@@ -33,12 +33,14 @@ B{NOTE} Do not use the OSD object inside a thread.
 # Python modules
 import time
 import os
+import stat
 import kaa.imlib2
+import re
 import traceback
-import threading
-import thread
+import threading, thread
 from types import *
 from fcntl import ioctl
+import cStringIO
 
 # Freevo modules
 import config
@@ -162,12 +164,12 @@ class OSDFont:
 
     def charsize(self, c):
         _debug_('charsize(c=%r)' % (c,), 2)
-        #c = Unicode(c)
+        uc = Unicode(c)
         try:
-            return self.chars[c]
-        except:
-            w = self.font.size(c)[0]
-            self.chars[c] = w
+            return self.chars[uc]
+        except KeyError:
+            w = self.font.size(uc)[0]
+            self.chars[uc] = w
             return w
 
     def stringsize(self, s):
@@ -465,26 +467,28 @@ class OSD:
         pygame.time.delay(10)   # pygame.time.get_ticks don't seem to work otherwise
 
 
-        def focused_app(self):
-            if len(self.app_list):
-                return self.app_list[-1]
-            else:
-                return None
+    def focused_app(self):
+        _debug_('focused_app()', 2)
+        if len(self.app_list):
+            return self.app_list[-1]
+        else:
+            return None
 
 
-        def add_app(self, app):
-            self.app_list.append(app)
+    def add_app(self, app):
+        _debug_('add_app(app=%r)' % (app,), 2)
+        self.app_list.append(app)
 
 
-        def remove_app(self, app):
-            _times = self.app_list.count(app)
-            for _time in range(_times):
-                self.app_list.remove(app)
-            if _times and hasattr(self.focused_app(), 'event_context'):
-                _debug_('app is %s' % self.focused_app(), 2)
-                _debug_('osd: Setting context to %s' % self.focused_app().get_event_context(), 2)
-                rc.set_context(self.focused_app().get_event_context())
-
+    def remove_app(self, app):
+        _debug_('remove_app(app=%r)' % (app,), 2)
+        _times = self.app_list.count(app)
+        for _time in range(_times):
+            self.app_list.remove(app)
+        if _times and hasattr(self.focused_app(), 'event_context'):
+            _debug_('app is %s' % self.focused_app(), 2)
+            _debug_('osd: Setting context to %s' % self.focused_app().get_event_context(), 2)
+            rc.set_context(self.focused_app().get_event_context())
 
     def __find_current_widget__(self, widget):
         _debug_('__find_current_widget__(widget=%r)' % (widget,), 2)
@@ -523,7 +527,7 @@ class OSD:
                 return
 
             _debug_('pygame event=%s' % (event), 2)
-            #print('pygame event=%s' % (event))
+            #print('pygame event=%s' % (event)) #DJW
 
             if config.SYS_USE_JOYSTICK:
                 _debug_('pygame event=%s' % (event))
@@ -534,7 +538,7 @@ class OSD:
                         dialog.handle_mouse_event(event)
                         # Swallow all mouse events if a dialog is showing even if not over a widget.
                         continue
-                    app = rc.focused_app()
+                    app = self.focused_app()
                     # Menu
                     if app and hasattr(app, 'menustack'):
                         menu = app.menustack[-1]
@@ -561,7 +565,7 @@ class OSD:
                         dialog.handle_mouse_event(event)
                         # Swallow all mouse events if a dialog is showing even if not over a widget.
                         continue
-                    app = rc.focused_app()
+                    app = self.focused_app()
                     # Menu
                     if app and hasattr(app, 'back_one_menu'):
                         # Left click = Enter
