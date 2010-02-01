@@ -237,6 +237,10 @@ EVENT_DEVS = []
 #
 # SYS_USE_NETWORK = True
 
+# Follow symlinks in media directories
+#
+# SYS_FOLLOW_SYMLINKS = False
+
 #
 # Directory to store temporary files
 #
@@ -1505,7 +1509,7 @@ CACHE_IMAGES = 1
 # ======================================================================
 # ENCODINGSERVER_UID = 0
 # ENCODINGSERVER_GID = 0
-# 
+#
 # ENCODINGSERVER_IP   = 'localhost'
 # ENCODINGSERVER_PORT = 18002
 # ENCODINGSERVER_SECRET = 'secret2'

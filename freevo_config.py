@@ -409,6 +409,7 @@ LOCAL_CONF_CHANGES = [
      """),
     (5.28,
      """ Added MPLAYER_PROPERTY_TIMEOUT to control how long freevo waits for mplayer property calls
+     Added SYS_FOLLOW_SYMLINKS to follow symlinks, default is false
      """),
 ]
 
@@ -615,6 +616,10 @@ SYS_USE_NETWORK = True
 # Will be used to avoid extremely long automounter timeouts.
 #
 HOST_ALIVE_CHECK = 'ping -c 1 -W 1 %s > /dev/null 2>&1'
+
+# Follow symlinks in media directories
+#
+SYS_FOLLOW_SYMLINKS = False
 
 #
 # Directory to store temporary files
@@ -1531,8 +1536,8 @@ MPLAYER_SEEK_TIMEOUT = 8
 # Number (or fraction) of seconds before mplayer property calls time out.
 # Property calls are used to retrive information from mplayer from the
 # slave interface. Mostly for the OSD display. If you experience problems
-# with the OSD make this number higher. 
-# 
+# with the OSD make this number higher.
+#
 MPLAYER_PROPERTY_TIMEOUT = 0.1
 
 #
@@ -2189,6 +2194,9 @@ DEBUG = 0
 
 # enable the pdb (python debugger), don't set this unless you know how to use the debugger
 DEBUG_DEBUGGER = 0
+
+# Like debug but print to stdout, the console
+DEBUG_CONSOLE = 0
 
 #
 # Activate blending between different menu screens
