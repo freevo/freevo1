@@ -2179,6 +2179,9 @@ DEBUG = 0
 # enable the pdb (python debugger), don't set this unless you know how to use the debugger
 DEBUG_DEBUGGER = 0
 
+# Like debug but print to stdout, the console
+DEBUG_CONSOLE = 0
+
 #
 # Activate blending between different menu screens
 #

@@ -37,7 +37,7 @@ from threading import Thread, Lock
 from time import sleep
 import sys, os, re #, ConfigParser, copy
 from subprocess import Popen, PIPE
-from pprint import pprint
+from pprint import pprint, pformat
 from copy import copy
 from string import split, join
 from util.misc import uniquify_filename
@@ -447,8 +447,8 @@ class EncodingJob:
             if id_match:
                 id_info[id_match.groups()[0]] = id_match.groups()[1]
 
-        if config.DEBUG >= 2:
-            print 'id_info:',; pprint(id_info)
+        if config.DEBUG_CONSOLE:
+            print 'id_info: '+ pformat(id_info)
 
         self.id_info = id_info
 
@@ -500,9 +500,7 @@ class EncodingJob:
                     shutil.copy(capture, vfs.getoverlay(self.output))
                     _debug_('copied %r to %r' % (capture, vfs.getoverlay(self.output)))
                 except Exception, why:
-                    print why
-                    _debug_('%s' % why, DINFO)
-                    _debug_('unable to write file %r' % self.output, DWARNING)
+                    _debug_('unable to write file %r: %s' % (self.output, why), DWARNING)
         else:
             _debug_('error creating capture for "%s"' % self.source, DWARNING)
 
@@ -567,7 +565,7 @@ class EncodingJob:
         Parses Mplayer output to obtain ideal cropping parameters, and do
         PAL/NTSC detection from QuickRip, heavily adapted, new algo.
         """
-        #print '_cropdetect_parse(self, lines=%r, data=%r)' % (lines, data)
+        #_debug_('_cropdetect_parse(self, lines=%r, data=%r)' % (lines, data))
 
         re_crop = re.compile('.*-vf crop=(\d*:\d*:\d*:\d*).*')
         re_ntscprog = re.compile('24fps progressive NTSC content detected')
@@ -680,8 +678,7 @@ class EncodingJob:
         self.cropres = ( int(adjustedcrop[0]), int(adjustedcrop[1]) )
 
         self.crop = join(adjustedcrop, ':')
-
-        _debug_('Selected crop setting: %s' % self.crop)
+        _debug_('Selected crop option: %s' % self.crop)
 
         #end analysing
         self.finishedanalyze = True
@@ -1065,12 +1062,13 @@ class EncodingQueue:
 
         #get the first queued object
         self.currentjob = self.qlist[0]
-        if config.DEBUG >= 2:
+        if config.DEBUG_CONSOLE:
             #print 'self.currentjob:',; pprint(self.currentjob.__dict__)
             #print 'self.currentjob.thread:',; pprint(self.currentjob.thread.__dict__)
-            print 'self.currentjob.idnr:', self.currentjob.idnr
-            print 'self.currentjob.status:', self.currentjob.status
-            print 'self.currentjob.thread.returncode:', self.currentjob.thread.returncode
+            print 'self.currentjob.idnr: ' + repr(self.currentjob.idnr)
+            print 'self.currentjob.status: ' + repr(self.currentjob.status)
+            if hasattr(self.currentjob, 'thread'):
+                print 'self.currentjob.thread.returncode: ' + repr(self.currentjob.thread.returncode)
 
         _debug_('PID %s' % self.currentjob.pid)
 
