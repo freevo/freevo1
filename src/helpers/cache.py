@@ -322,6 +322,8 @@ def cache_cropdetect(defaults):
                 fxd.user_data['encjob'] = encjob
                 fxd.user_data['crop'] = encjob.crop
                 #print '%r: crop=%s' % (fileinfo.files.fxd_file, encjob.crop)
+            except encodingcore.EncodingError, why:
+                print '%s' % why
             except Exception, why:
                 print traceback.print_exc()
 

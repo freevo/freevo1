@@ -91,7 +91,11 @@ def parse_movie(fxd, node):
     item.name  = title
     item.image = fxd.childcontent(node, 'cover-img')
     if item.image:
-        item.image = vfs.abspath(os.path.join(dirname, item.image))
+        try:
+            item.image = vfs.abspath(os.path.join(dirname, str(item.image)))
+        except UnicodeEncodeError:
+            _debug_('os.path.join(dirname=%r, item.image=%r)' % (dirname, item.image))
+            raise
         image = item.image
 
     fxd.parse_info(node, item, {'runtime': 'length'})
