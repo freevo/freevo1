@@ -162,16 +162,16 @@ class PluginInterface(IdleBarPlugin):
         to cache the date somewhere.
         """
         _debug_('checkweather()', 2)
+        temperature, icon = '?', 'na.png'
         try:
-            temperature, icon = '?', 'na.png'
             if os.path.isfile(self.cachefile):
                 cachefd = open(self.cachefile, 'r')
                 newlist = map(string.rstrip, cachefd.readlines())
                 temperature, icon = newlist
                 cachefd.close()
-            return temperature, icon
         except Exception, why:
             _debug_(why, DERROR)
+        return temperature, icon
 
 
     def calc_positions(self, osd, image_w, image_h, text_w, text_h):
