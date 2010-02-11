@@ -239,6 +239,8 @@ def match_files_recursively_helper(result, dirname, names):
     help function for match_files_recursively
     """
     if dirname:
+        (files, dirs, follow_symlinks) = result
+        dirs.append(os.path.abspath(dirname))
         lastdir = dirname[dirname.rfind('/'):]
         if len(lastdir) > 1 and lastdir[1] == '.':
             # ignore directories starting with a dot
@@ -246,7 +248,11 @@ def match_files_recursively_helper(result, dirname, names):
             return result
         for name in names:
             fullpath = vfs.join(dirname, name)
-            result.append(fullpath)
+            if os.path.islink(fullpath) and os.path.isdir(fullpath):
+                if follow_symlinks and not os.path.realpath(fullpath) in dirs:
+                    os.path.walk(fullpath, match_files_recursively_helper, result)
+            else:
+                files.append(fullpath)
 
     return result
 
@@ -256,6 +262,8 @@ def match_files_recursively_skip_protected(result, dirname, names):
     help function for match_files_recursively_skip_protected, skipping directories with a .password file
     """
     if dirname:
+        (files, dirs, follow_symlinks) = result
+        dirs.append(os.path.abspath(dirname))
         lastdir = dirname[dirname.rfind('/'):]
         if os.path.exists(os.path.join(dirname, '.password')):
             _debug_('.password found in "%s"' % dirname)
@@ -264,20 +272,24 @@ def match_files_recursively_skip_protected(result, dirname, names):
             return result
         for name in names:
             fullpath = vfs.join(dirname, name)
-            result.append(fullpath)
+            if os.path.islink(fullpath) and os.path.isdir(fullpath):
+                if follow_symlinks and not os.path.realpath(fullpath) in dirs:
+                    os.path.walk(fullpath, match_files_recursively_skip_protected, result)
+            else:
+                files.append(fullpath)
 
     return result
 
 
-def match_files_recursively(dir, suffix_list, skip_password=False):
+def match_files_recursively(dir, suffix_list, skip_password=False, follow_symlinks=False):
     """
     get all files matching suffix_list in the dir and in it's subdirectories
     """
     all_files = []
     if skip_password:
-        os.path.walk(dir, match_files_recursively_skip_protected, all_files)
+        os.path.walk(dir, match_files_recursively_skip_protected, (all_files, [], follow_symlinks))
     else:
-        os.path.walk(dir, match_files_recursively_helper, all_files)
+        os.path.walk(dir, match_files_recursively_helper, (all_files, [], follow_symlinks))
 
     matches = misc.unique([f for f in all_files if match_suffix(f, suffix_list) ])
 
@@ -286,12 +298,12 @@ def match_files_recursively(dir, suffix_list, skip_password=False):
     return matches
 
 
-def get_subdirs_recursively(dir):
+def get_subdirs_recursively(dir, follow_symlinks=False):
     """
     get all subdirectories recursively in the given directory
     """
     all_files = []
-    os.path.walk(dir, match_files_recursively_helper, all_files)
+    os.path.walk(dir, match_files_recursively_helper, (all_files, [], follow_symlinks))
 
     matches = misc.unique([f for f in all_files if os.path.isdir(f) ])
 

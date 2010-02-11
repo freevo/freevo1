@@ -266,11 +266,11 @@ class Playlist(Item):
                     i.parent = self
                     self.playlist.append(i)
 
-                elif isinstance(i, list) or isinstance(i, tuple) and \
-                     len(i) == 2 and vfs.isdir(i[0]):
+                elif isinstance(i, list) or isinstance(i, tuple) and len(i) == 2 and vfs.isdir(i[0]):
                     # (directory, recursive=True|False)
                     if i[1]:
-                        self.playlist += util.match_files_recursively(i[0], self.suffixlist, skip_password=True)
+                        self.playlist += util.match_files_recursively(i[0], self.suffixlist,
+                            skip_password=True, follow_symlinks=config.SYS_FOLLOW_SYMLINKS)
                     else:
                         self.playlist += util.match_files(i[0], self.suffixlist)
                     # set autoplay to True on such big lists
