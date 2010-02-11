@@ -86,6 +86,10 @@ Please e-mail bugs to: %s""" % (__version__, __author__)
 CLOUD_RE_STR= r"^(CLR|SKC|BKN|SCT|FEW|OVC)([0-9]{3})?$"
 COND_RE_STR = r"^(-|\\+)?(VC|MI|BC|PR|TS|BL|SH|DR|FZ)?(DZ|RA|SN|SG|IC|PE|GR|GS|UP|BR|FG|FU|VA|SA|HZ|PY|DU|SQ|SS|DS|PO|\\+?FC)$"
 
+class NetworkException(Exception):
+    def __init__(self, args=None):
+        self.args=args
+
 class EmptyReportException(Exception):
     def __init__(self, args=None):
         self.args=args
