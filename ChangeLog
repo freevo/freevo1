@@ -23,6 +23,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Updated OSD to allow items to be renamed (F#2796072)
  * Updated web interface to allow a TV favourite to be manually added (F#2804991)
  * Fixed encoding core not to print messages in debug mode (B#2943181)
+ * Fixed encoding core when the action is to copy (B#2943184)
  * Fixed extended metadata dates to use the userdate (B#2871806)
  * Fixed FilmAffinity plug-in crashing on some movies (B#2835447)
  * Fixed FilmAffinity web page layout change (B#2872627)

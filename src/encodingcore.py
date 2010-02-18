@@ -803,8 +803,9 @@ class EncodingJob:
 
         # set video encoder options
         if self.altprofile is None:
-            args = [
-                '-ovc', mappings['vcodec'][self.vcodec][0], mappings['vcodec'][self.vcodec][1],
+            args = [ '-ovc', mappings['vcodec'][self.vcodec][0] ,]
+            if self.vcodec != 'copy':
+                args += [ mappings['vcodec'][self.vcodec][1],
                         mappings['vcodec'][self.vcodec][2] % (self.vbrate, self.threads, vpass, aspect ) ]
         else:  # Allow encoder options from client
             aprofile = '%s:vbitrate=%s:threads=%s%s%s' % (self.altprofile, self.vbrate, self.threads, vpass, aspect)
@@ -1075,6 +1076,16 @@ class EncodingQueue:
         output = self.currentjob.full_output_file_name()
         # check eventually that there is no file by the same name
         unique_output = uniquify_filename(output)
+
+        if hasattr(self.currentjob,'thread'):
+            if self.currentjob.thread.returncode:
+                _debug_('Failed job:'+ ' '.join(self.currentjob.thread.command), DWARNING)
+                #we are done with this job, remove it
+                del self.qlist[0]
+                del self.qdict[self.currentjob.idnr]
+                #currently, keep running  until the queue is empty
+                self._runQueue()
+                return
 
         if self.currentjob.status == status.vpassfinal:
             _debug_('Job %s finished' % self.currentjob.idnr, DINFO)
