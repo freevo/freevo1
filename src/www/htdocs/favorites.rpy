@@ -116,12 +116,8 @@ class FavoritesResource(FreevoResource):
         fv.tableRowClose()
 
         def sortByPriority(a,b):
-            if (a.priority < b.priority):
-                return -1
-            elif (a.priority > b.priority):
-                return 1
-            else:
-                return 0
+            return int(a.priority) - int(b.priority)
+
         favs = favorites.values()
         favs.sort(sortByPriority)
         for fav in favs:
