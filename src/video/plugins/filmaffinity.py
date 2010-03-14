@@ -1,4 +1,4 @@
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 # -----------------------------------------------------------------------
 # Plugin for FILMAFFINITY support
 # -----------------------------------------------------------------------
@@ -49,7 +49,6 @@ import socket
 socket.setdefaulttimeout(30.0)
 import urllib2, urlparse, commands
 import sys
-import codecs
 import os
 import traceback
 
@@ -206,8 +205,9 @@ class PluginInterface(plugin.ItemPlugin):
     def getFilmAffinityPage(self, url):
         """url
         Set an filmaffinity number for object, and fetch data"""
+
         self.myurl = 'http://www.filmaffinity.com/' + urllib2.quote(urllib2.unquote(url))
-        #print "Now trying to get %s" % self.myurl
+        _debug_("Now trying to get %s" % self.myurl)
         req = urllib2.Request(self.myurl, txdata, txheaders)
 
         try:
@@ -559,19 +559,19 @@ class PluginInterface(plugin.ItemPlugin):
         self.info['tagline'] = soup.find(text='TÍTULO ORIGINAL').findParent('table').td.nextSibling.nextSibling.b.string.strip().encode('latin-1')
         self.info['actor']= stripTags(soup.find(text='REPARTO').parent.parent.nextSibling.nextSibling.contents).strip()
 
-        sinopsis = None       # Usually the word SINOPSIS exits
-        generoCritica = None  # but if it doesn't we look for GENERO Y CRITICA
-        try:
-            sinopsis = soup.find(text=re.compile('SINOPSIS')).string
-        except:
-            generoCritica = soup.find(text=re.compile('NERO Y CR')).parent.parent.nextSibling.nextSibling.string
-
+        sinopsis = soup.find(text='SINOPSIS')
         if sinopsis:
-            self.info['plot'] = sinopsis[sinopsis.find('SINOPSIS')+10:].strip()
-            self.info['genre'] = sinopsis[:sinopsis.find('SINOPSIS')-3].strip()
-        elif generoCritica:
-            self.info['plot'] = generoCritica[generoCritica.find('/')+2:].strip()
-            self.info['genre'] = generoCritica[:generoCritica.find('/')-3].strip()
+            td = sinopsis.findNext('td')
+            _debug_('PLOT: %s' % td.contents)
+            self.info['plot'] = '\n'.join([td.string for td in td.findAll(text=True)]).strip().encode('latin-1')
+
+        genero = soup.find(text='GÉNERO')
+        if genero:
+            td = genero.findNext('td')
+
+            _debug_('GENRE: %s' % td.contents)
+            
+            self.info['genre'] = '/'.join([td.string for td in td.findAll('a')]).strip().encode('latin-1')
 
         #self.imagefile = self.tmppath + vfs.basename(self.title)
         # filmaffinity renders two types of html code. The new one
