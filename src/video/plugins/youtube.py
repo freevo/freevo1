@@ -74,9 +74,15 @@ from video.videoitem import VideoItem
 from subprocess import Popen
 from item import Item
 from gui.PopupBox import PopupBox
+import osd
 
+osd  = osd.get_singleton()
 
-standardfeeds=['top_rated', 'top_favorites', 'most_viewed', 'most_popular', 'most_recent', 'most_discussed', 'most_linked', 'most_responded', 'recently_featured', 'watch_on_mobile']
+standardfeeds = [
+    'top_rated', 'top_favorites', 'most_viewed', 'most_popular',
+    'most_recent', 'most_discussed', 'most_linked', 'most_responded',
+    'recently_featured', 'watch_on_mobile'
+]
 
 def decodeAcute(chain):
     return chain.replace('&aacute;', 'á') \
@@ -119,11 +125,20 @@ class PluginInterface(plugin.MainMenuPlugin):
     |     ('user2', 'description2'),
     |     ('standardfeed_1', 'description'),
     |     ('standardfeed_2', 'description'),
+    |     # standard feeds are:
+    |     ("top_rated", "Top rated"),
+    |     ("top_favorites", "Top favorites"),
+    |     ("most_viewed", "Most viewed"),
+    |     ("most_popular", "Most popular"),
+    |     ("most_recent", "Most recent"),
+    |     ("most_discussed", "Most discussed"),
+    |     ("most_responded", "Most responded"),
+    |     ("recently_featured", "Recently featured"),
     |     ...
     | ]
-    | Standard feeds as http://code.google.com/apis/youtube/reference.html#Standard_feeds
+    | Standard feeds see http://code.google.com/apis/youtube/2.0/reference.html#Standard_feeds
     | YOUTUBE_DIR = '/tmp/'
-    | YOUTUBE_REGION_CODE as http://code.google.com/apis/youtube/reference.html#Region_specific_feeds
+    | YOUTUBE_REGION_CODE see http://code.google.com/apis/youtube/2.0/reference.html#Region_specific_feeds
     """
     def __init__(self):
         _debug_('PluginInterface.__init__()', 2)
@@ -215,6 +230,8 @@ class YoutubeVideo(Item):
 
     def watchvideo(self, arg=None, menuw=None):
         """Watch it"""
+        osd.busyicon.wait(config.OSD_BUSYICON_TIMER[0])
+        stream = None
         cmd = config.YOUTUBE_DL + ' -g "http://www.youtube.com/watch?v=' + arg[1] + '"'
         proceso = Popen(cmd, shell=True, bufsize=1024, stdout=subprocess.PIPE, universal_newlines=1)
         follow = proceso.stdout
@@ -222,7 +239,11 @@ class YoutubeVideo(Item):
             mess = follow.readline()
             if mess:
                 stream =  mess.strip()
+        if stream is None:
+            _debug_("Cannot process command '%s'" % (cmd,), DWARNING)
+            return
         # Create a fake VideoItem
+        osd.busyicon.stop()
         playvideo2 = YoutubeVideoItem(_('bla'), stream, self)
         playvideo2.player_rating = 10
         playvideo2.menuw = menuw
