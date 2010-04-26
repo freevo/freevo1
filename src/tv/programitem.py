@@ -167,9 +167,9 @@ class ProgramItem(Item):
                 # XXX: In the future add the options to watch what we are
                 #      recording or cancel it and watch TV.
                 msgtext = _('Sorry, you cannot watch TV while recording. ')
-                msgtext+= _('If this is not true then remove ')
-                msgtext+= tvlockfile + '.'
-                dialog.show_alert(msg_text)
+                msgtext += _('If this is not true then remove ')
+                msgtext += tvlockfile + '.'
+                dialog.show_alert(msgtext)
             else:
                 # everything is ok, we can start watching!
                 self.parent.hide()

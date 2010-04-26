@@ -44,6 +44,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Fixed plugins helper creating incorrect plug-in name (B#2824746)
  * Fixed recordserver's handling of program conflicts (B#2949789)
  * Fixed TV guide swapping the OK and Cancel buttons (B#2904179)
+ * Fixed TV program item message box error (B#2989068)
  * Fixed web pages that imported twisted.web.woven.page which has been removed from Twisted (B#2936634)
  * Fixed web server for a regression bug (B#2977257)
  * Fixed web server updating of favorites (B#2954480)
