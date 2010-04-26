@@ -503,10 +503,11 @@ class RecordServer:
                 thisprog = progs[proglist[i]]
                 nextprog = progs[proglist[i+1]]
                 if thisprog.stop > nextprog.start:
-                    conflictRating = conflictRating+1
                     if thisprog == prog:
+                        conflictRating += 1
                         conflicts.append(nextprog)
                     elif nextprog == prog:
+                        conflictRating += 1
                         conflicts.append(thisprog)
             self.removeRecordingFromSchedule(prog, myScheduledRecordings)
             return (conflictRating, conflicts)
@@ -515,20 +516,20 @@ class RecordServer:
         def getRatedConflicts(self, prog, myScheduledRecordings):
             _debug_('getRatedConflicts(prog=%r, myScheduledRecordings=%r)' % (prog, myScheduledRecordings), 2)
             ratedConflicts = []
-            occurances = exactMatch(self, prog)
-            if not occurances:
+            occurrences = exactMatch(self, prog)
+            if not occurrences:
                 #program no longer exists
-                return (False, None, [])
-            #Search through all occurances of looking for a non-conflicted occurance
-            for oneOccurance in occurances:
-                (rating, conflictedProgs) = getConflicts(self, oneOccurance, myScheduledRecordings)
+                return (True, None, [])
+            #Search through all occurrences of looking for a non-conflicted occurrence
+            for oneOccurrence in occurrences:
+                (rating, conflictedProgs) = getConflicts(self, oneOccurrence, myScheduledRecordings)
                 if rating == 0:
                     _debug_('No Conflict', DINFO)
                     programsToChange = []
-                    programsToChange.append(('add', oneOccurance))
+                    programsToChange.append(('add', oneOccurrence))
                     return(True, ratedConflicts, programsToChange)
                 _debug_('Conflict Found', DINFO)
-                ratedConflicts.append((rating, conflictedProgs, oneOccurance))
+                ratedConflicts.append((rating, conflictedProgs, oneOccurrence))
             return (False, ratedConflicts, [])
 
         if config.TV_RECORD_CONFLICT_RESOLUTION:
