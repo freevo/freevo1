@@ -103,7 +103,7 @@
                 <image filename="up.png" label="uparrow" x="750" y="350"/>
                 <image filename="down.png" label="downarrow" x="750" y="max-32"/>
             </listing>
-            <info layout="video info" x="300" y="100" width="450" height="300"/>
+            <info layout="video info" x="300" y="100" width="450" height="240"/>
         </menuset>
 
         <layout label="video screen">
@@ -141,11 +141,11 @@
                     </if>
                     <if expression="plot">
                         <goto_pos x="20" mode="relative"/>
-                        <text font="info plot" height="120" mode="soft"
+                        <text font="info plot" height="160" mode="soft"
                             align="justified" expression="plot"/>
                         <newline/>
                     </if>
-                    <goto_pos y="190" mode="absolute"/>
+                    <goto_pos y="215" mode="absolute"/>
                     <if expression="year">
                         <text font="info value">(</text>
                         <text font="info value" expression="year"/>
