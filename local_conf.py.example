@@ -145,6 +145,9 @@ CONFIG_VERSION = 5.27
 #    'emerge','tvgids.sh','tv_grab','sshd:'
 # ]
 
+# -- autoshutdown process check configuration --
+# AUTOSHUTDOWN_PROCESS_CHECK = '/home/user/bin/freevoshutdown_check'
+
 # -- choice of wakeup method --
 # AUTOSHUTDOWN_METHOD = None
 # AUTOSHUTDOWN_METHOD = 'nvram'

@@ -153,11 +153,23 @@ class PluginInterface(plugin.MainMenuPlugin):
     |   'emerge','tvgids.sh','tv_grab','sshd:'
     | ]
 
+    AUTOSHUTDOWN_PROCESS_CHECK:
+    Command to check external processes before shutdown (in runtime) and
+    prevent the shutdown.
+    It can be useful in following cases:
+    - to check if an active ssh connection is present;
+    - to check if a file is open;
+    - to check if a process is in-progress and so on.
+    The command should return the exit code
+        0   if external processes are running to prevent the shutdown,
+        1   if external processes are stopped to allow the shutdown.
+    | AUTOSHUTDOWN_PROCESS_LIST = '/home/user/bin/freevoshutdown_check'
+
     AUTOSHUTDOWN_METHOD:
     The wakeup can be done via acpi-alarm or nvram-wakeup. Set to 'acpi' to
     use the acpi method, set to 'nvram' to use nvram.
     | AUTOSHUTDOWN_METHOD = 'nvram'
-    
+
     The following configures either the acpi or nvram method:
 
     -- autoshutdown acpi-alarm configuration --
@@ -248,6 +260,8 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('AUTOSHUTDOWN_ALLOWED_IDLE_TIME', 45, 'minutes of idle time allowed'),
             ('AUTOSHUTDOWN_WHILE_USER_LOGGED', True, 'shutdown even when someone is logged in'),
             ('AUTOSHUTDOWN_PROCESS_LIST', PLIST, 'list of processes that prevent a shutdown'),
+            ('AUTOSHUTDOWN_PROCESS_CHECK', '/home/user/bin/freevoshutdown_check',
+                'command to check external processes before shutdown'),
             ('AUTOSHUTDOWN_METHOD', None, 'acpi or nvram (or None to disable)'),
             ('AUTOSHUTDOWN_ACPI_CMD', 'sudo /path/to/set_acpi.sh', 'acpi wakeup command'),
             ('AUTOSHUTDOWN_NVRAM_CMD', 'sudo /usr/bin/nvram-wakeup --syslog', 'nvram wakeup command'),
@@ -337,10 +351,7 @@ class ShutdownMenuItem(Item):
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('RESTART SYSTEM?')
             info = self.message_check(wakeup=False)
-            if (info == None):
-                info = ''
-            else:
-                info = '\n\n' + info
+            info = '' if info is None else '\n\n' + info
             msg =  title + '\n' + _('(wakeup disabled)') + info
             ConfirmBox(text=msg, handler=self.restart_system, default_choice=1).show()
         else:
@@ -352,10 +363,7 @@ class ShutdownMenuItem(Item):
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('SHUTDOWN SYSTEM?')
             info = self.message_check(wakeup=False)
-            if (info == None):
-                info = ''
-            else:
-                info = '\n\n' + info
+            info = '' if info is None else '\n\n' + info
             msg =  title + '\n' + _('(wakeup disabled)') + info
             ConfirmBox(text=msg, handler=self.shutdown_system, default_choice=1).show()
         else:
@@ -367,10 +375,7 @@ class ShutdownMenuItem(Item):
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('SHUTDOWN FREEVO?')
             info = self.message_check(wakeup=False)
-            if (info == None):
-                info = ''
-            else:
-                info = '\n\n' + info
+            info = '' if info is None else '\n\n' + info
             msg =  title + '\n' + _('(wakeup disabled)') + info
             ConfirmBox(text=msg, handler=self.shutdown_freevo, default_choice=1).show()
         else:
@@ -659,14 +664,14 @@ def __schedule_wakeup_and_shutdown():
         wakeup_utc_s = wakeup_utc_s - int(config.AUTOSHUTDOWN_WAKEUP_TIME_PAD)
 
         # let's see which methode we should use for wakeup
-        if config.AUTOSHUTDOWN_METHOD == None:
+        if config.AUTOSHUTDOWN_METHOD is None:
             _debug_('No wakeup method set, just shutting down')
-            next_action =  Shutdown.SHUTDOWN_SYSTEM
+            next_action = Shutdown.SHUTDOWN_SYSTEM
         elif config.AUTOSHUTDOWN_METHOD.upper() == 'ACPI':
             cmd = '%s %r' % (config.AUTOSHUTDOWN_ACPI_CMD, time.strftime('%F %H:%M', time.localtime(wakeup_utc_s)))
             _debug_('Wakeup-command %s' % cmd)
             __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
-            next_action =  Shutdown.SHUTDOWN_SYSTEM
+            next_action = Shutdown.SHUTDOWN_SYSTEM
         elif config.AUTOSHUTDOWN_METHOD.upper() == 'NVRAM':
             cmd = '%s --settime %d' % \
                 (config.AUTOSHUTDOWN_NVRAM_CMD, int(wakeup_utc_s))
@@ -676,9 +681,9 @@ def __schedule_wakeup_and_shutdown():
                 raise ExInternalError
             elif ec == 256 or config.AUTOSHUTDOWN_BIOS_NEEDS_REBOOT:
                 # needs a reboot
-                if config.AUTOSHUTDOWN_BOOT_LOADER == None:
+                if config.AUTOSHUTDOWN_BOOT_LOADER is None:
                     _debug_('No boot loader set, not shutting down')
-                    next_action = Shutdown.IGNORE                
+                    next_action = Shutdown.IGNORE
                 elif config.AUTOSHUTDOWN_BOOT_LOADER.upper() == 'GRUB':
                     if config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD:
                         cmd = config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD
@@ -808,7 +813,7 @@ def __check_processes():
     @returns: True/False
     """
     _debug_('__check_processes()', 2)
-    if not config.AUTOSHUTDOWN_PROCESS_LIST:
+    if not config.AUTOSHUTDOWN_PROCESS_LIST and not config.AUTOSHUTDOWN_PROCESS_CHECK:
         return False
     else:
         delimiter='|'
@@ -820,7 +825,15 @@ def __check_processes():
             return True
         else:
             _debug_('no external process(es) running')
-            return False
+
+            if config.AUTOSHUTDOWN_PROCESS_CHECK is not None:
+                result = __syscall(config.AUTOSHUTDOWN_PROCESS_CHECK)
+                if result == 0:
+                    _debug_('AUTOSHUTDOWN_PROCESS_CHECK: external process(es) running')
+                    return True
+                else:
+                    _debug_('AUTOSHUTDOWN_PROCESS_CHECK: no external process(es) running')
+                    return False
 
 
 def __syscall(cmd, pretend=False):
