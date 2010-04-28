@@ -1039,6 +1039,68 @@ class RecordServer:
                 else:
                     os.remove(self.tv_lockfile)
 
+            elif event == OS_EVENT_POPEN2:
+                pid = event.arg[1]
+                _debug_('OS_EVENT_POPEN2 pid: %s' % pid, DINFO)
+                event.arg[0].child = util.popen3.Popen3(event.arg[1])
+
+            elif event == OS_EVENT_WAITPID:
+                pid = event.arg[0]
+                _debug_('waiting for pid %s' % (pid), DINFO)
+
+                for i in range(20):
+                    try:
+                        wpid = os.waitpid(pid, os.WNOHANG)[0]
+                    except OSError:
+                        # forget it
+                        continue
+                    if wpid == pid:
+                        _debug_('pid %s terminated' % (pid), DINFO)
+                        break
+                    time.sleep(0.1)
+                else:
+                    _debug_('pid %s still running' % (pid), DINFO)
+
+            elif event == OS_EVENT_KILL:
+                pid = event.arg[0]
+                sig = event.arg[1]
+
+                _debug_('killing pid %s with signal %s' % (pid, sig), DINFO)
+                try:
+                    os.kill(pid, sig)
+                except OSError:
+                    pass
+
+                for i in range(20):
+                    try:
+                        wpid = os.waitpid(pid, os.WNOHANG)[0]
+                    except OSError:
+                        # forget it
+                        continue
+                    if wpid == pid:
+                        _debug_('killed pid %s with signal %s' % (pid, sig), DINFO)
+                        break
+                    time.sleep(0.1)
+                # We fall into this else from the for loop when break is not executed
+                else:
+                    _debug_('killing pid %s with signal 9' % (pid), DINFO)
+                    try:
+                        os.kill(pid, 9)
+                    except OSError:
+                        pass
+                    for i in range(20):
+                        try:
+                            wpid = os.waitpid(pid, os.WNOHANG)[0]
+                        except OSError:
+                            # forget it
+                            continue
+                        if wpid == pid:
+                            _debug_('killed pid %s with signal 9' % (pid), DINFO)
+                            break
+                        time.sleep(0.1)
+                    else:
+                        _debug_('failed to kill pid %s' % (pid), DINFO)
+
             else:
                 if hasattr(event, 'arg'):
                     _debug_('event=%s arg=%r not handled' % (event, event.arg), DWARNING)
