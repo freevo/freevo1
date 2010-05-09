@@ -102,8 +102,8 @@ class DirItem(Playlist):
     class for handling directories
     """
     def __init__(self, directory, parent, name='', display_type=None, add_args=None, create_metainfo=True):
-        if directory.startswith('/misc'):
-            _debug_('DirItem.__init__(directory=%r, parent=%r, name=%r, display_type=%r, add_args=%r, create_metainfo=%r)' % (directory, parent, name, display_type, add_args, create_metainfo), 2)
+        _debug_('%s.__init__(directory=%r, parent=%r, name=%r, display_type=%r, add_args=%r, create_metainfo=%r)' % (
+            self.__class__, directory, parent, name, display_type, add_args, create_metainfo), 2)
         self.autovars = [ ('num_dir_items', 0), ('show_all_items', False) ]
         Playlist.__init__(self, parent=parent, display_type=display_type)
         self.type = 'dir'
@@ -187,7 +187,7 @@ class DirItem(Playlist):
             self.files.image = image
 
         # Check for a folder.fxd in current dir
-        self.folder_fxd = directory+'/folder.fxd'
+        self.folder_fxd = os.path.join(directory, 'folder.fxd')
         if vfs.isfile(self.folder_fxd):
             self.set_fxd_file(self.folder_fxd)
 
@@ -258,10 +258,13 @@ class DirItem(Playlist):
 
         # read attributes
         self.name = Unicode(fxd.getattr(node, 'title', self.name))
-
-        image = fxd.childcontent(node, 'cover-img')
+        image = fxd.getattr(node, 'cover-img')
         if image and vfs.isfile(os.path.join(self.dir, image)):
             self.image = os.path.join(self.dir, image)
+        else:
+            image = fxd.childcontent(node, 'cover-img')
+            if image and vfs.isfile(os.path.join(self.dir, image)):
+                self.image = os.path.join(self.dir, image)
 
         # parse <info> tag
         fxd.parse_info(fxd.get_children(node, 'info', 1), self, {'description': 'content', 'content': 'content' })
