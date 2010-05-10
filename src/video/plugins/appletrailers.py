@@ -30,6 +30,9 @@
 import os
 import urllib
 
+import socket
+socket.setdefaulttimeout(5)
+
 import config
 import plugin
 import menu
@@ -61,7 +64,8 @@ def _fetch_image(url):
     fn = os.path.join(cachedir, fn)
 
     if not os.path.exists(fn):
-        urllib.urlretrieve(url, fn)
+        urllib.FancyURLopener.version = 'QuickTime/7.5'
+        urllib.urlretrieve(url,fn)
 
     return fn
 
@@ -115,6 +119,7 @@ class TrailerVideoItem(VideoItem):
         VideoItem.__init__(self, url, parent)
         self.name = name
         self.description = "URL: " + url
+        self.mplayer_options = '-user-agent QuickTime/7.5'
 
 class Trailer(Item):
     def __init__(self, name, title, trailer, parent):
