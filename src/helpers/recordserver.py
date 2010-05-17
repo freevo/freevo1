@@ -1452,7 +1452,7 @@ class RecordPostProcess(Thread):
                       vfs.getoverlay(os.path.splitext(self.prog.filename)[0] + '.png'))
 
         if config.VCR_POST_REC:
-            util.popen3.Popen3(config.VCR_POST_REC)
+            util.popen3.Popen3(config.VCR_POST_REC % self.prog.__dict__)
 
         if config.TV_RECORD_REMOVE_COMMERCIALS:
             (result, response) = commdetectConnectionTest('connection test')

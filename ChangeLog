@@ -24,6 +24,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Updated playlist to follow symlinks when enabled (B#2941814)
  * Updated media folders to follow symbolic links if enabled in configuration (F#)
  * Updated OSD to allow items to be renamed (F#2796072)
+ * Updated recording server to pass programme attributes to the VCR_POST_REC command (B#2985990)
  * Updated web interface to allow a TV favourite to be manually added (F#2804991)
  * Updated youtube plug-in to show when busy (F#2887544)
  * Fixed apple trailers plug-in for user agent requirements (B#2994707)
