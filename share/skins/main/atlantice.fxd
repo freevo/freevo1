@@ -302,7 +302,11 @@
                         <newline/>
                     </if>
                     <goto_pos x="30" y="10" mode="relative"/>
-                    <if expression="year">
+                    <if expression="userdate">
+                        <text font="video value">Date :  </text>
+                        <text font="video value" expression="userdate" />
+                    </if>
+                    <if expression="year and not userdate">
                         <text font="video value">Year :  </text>
                         <text font="video value" expression="year"/>
                     </if>
