@@ -444,7 +444,13 @@ Images: defaults to video/audio
   </item>
 
   <item type="video">
-   <if expression="year">
+   <if expression="userdate">
+    <text width="130" align="right" font="info label">Date:</text>
+    <goto_pos x="10" mode="relative"/>
+    <text font="info value" expression="userdate"/>
+    <newline/>
+   </if>
+   <if expression="year and not userdate">
     <text width="130" align="right" font="info label">Year:</text>
     <goto_pos x="10" mode="relative"/>
     <text font="info value" expression="year"/>
