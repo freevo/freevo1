@@ -37,10 +37,11 @@ except ImportError:
 
 import config
 import util.tv_util as tv_util
+import time
 
 # The file format version number. It must be updated when incompatible
 # changes are made to the file format.
-TYPES_VERSION = 3
+TYPES_VERSION = 4
 
 schedule_locked = False
 
@@ -56,6 +57,7 @@ class ScheduledRecordings:
         self.program_list = {}
         self.manual_recordings = self.loadManualRecordings()
         self.favorites = self.loadFavorites()
+        self.deleted_favorites = {}
         global schedule_locked
         schedule_locked = False
 
@@ -107,6 +109,10 @@ class ScheduledRecordings:
             schedule_fh = open(config.TV_RECORD_SCHEDULE, 'rb')
             recordSchedule = pickle.load(schedule_fh)
             schedule_fh.close()
+            if recordSchedule.TYPES_VERSION == 3:
+                _debug_('Upgrading record schedule to version 4', DINFO)
+                recordSchedule.TYPES_VERSION = TYPES_VERSION
+                recordSchedule.deleted_favorites = {}
         except IOError, why:
             _debug_('loadRecordSchedule: %s' % why, DWARNING)
             return None
@@ -126,6 +132,7 @@ class ScheduledRecordings:
         if schedule_locked:
             return
         _debug_('saveRecordSchedule()', 2)
+        self.cleanPastFavoriteProgDeleted()
         try:
             schedule_fh = open(config.TV_RECORD_SCHEDULE, 'wb')
             pickle.dump(self, schedule_fh)
@@ -290,6 +297,49 @@ class ScheduledRecordings:
         """ Delete all favorites from the favorites dictonary """
         _debug_('clearFavorites()', 2)
         self.favorites = {}
+
+
+    def markFavoriteProgAsDeleted(self, prog, key=None):
+        """ Mark a favorite program as not to be schedule when next scheduling favorites"""
+        _debug_('markFavoriteProgAsDeleted(%r, key=%r)' % (prog, key), 2)
+        if not self.deleted_favorites.has_key(key):
+            self.deleted_favorites[key] = prog
+            _debug_('%s "%s" added' % (key, prog), 2)
+        else:
+            _debug_('We already know about this recording \"%s\"' % (key), DINFO)
+        _debug_('"%s" items' % len(self.deleted_favorites), 2)
+
+
+    def unmarkFavoriteProgAsDeleted(self, prog, key=None):
+        """ Unmark a favorite program as deleted so that it may be schedule when next scheduling favorites"""
+        _debug_('unmarkFavoriteProgAsDeleted(%r, key=%r)' % (prog, key), 2)
+        if self.deleted_favorites.has_key(key):
+            del self.deleted_favorites[key]
+            _debug_('%s "%s" removed' % (key, prog), 2)
+        else:
+            _debug_('We do not know about this recording \"%s\"' % (prog), 2)
+        _debug_('"%s" items' % len(self.deleted_favorites), 2)
+
+    def isFavoriteProgDeleted(self, prog, key=None):
+        """ 
+        Determine whether the favorite program has been marked as deleted so
+        should not be schedule to record when scheduling favorites.
+        """
+        _debug_('isFavoriteProgDeleted(%r, key=%r)' % (prog, key), 2)
+        return self.deleted_favorites.has_key(key)
+
+    def cleanPastFavoriteProgDeleted(self):
+        """ Remove any favorite programs that are marked as deleted but are in the past. """
+        _debug_('Cleaning deleted favorites (current %d)' % (len(self.deleted_favorites),), 2)
+        now = time.time()
+        deleted_favorites = {}
+        for key,prog in self.deleted_favorites.items():
+            _debug_('Prog: %s'% prog, 2)
+            if prog.stop > now:
+                deleted_favorites[key] = prog
+        self.deleted_favorites = deleted_favorites
+        _debug_('After clean %d'% (len(self.deleted_favorites),), 2)
+
 
 
 class Favorite:

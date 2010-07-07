@@ -453,10 +453,11 @@ class RecordServer:
         if not inputSchedule:
             if config.TV_RECORD_DUPLICATE_DETECTION:
                 self.addDuplicate(prog)
+            schedule.unmarkFavoriteProgAsDeleted(prog, tv_util.getKey(prog))
             self.saveScheduledRecordings(schedule)
 
 
-    def removeRecordingFromSchedule(self, prog=None, inputSchedule=None):
+    def removeRecordingFromSchedule(self, prog=None, inputSchedule=None, mark_fav_deleted=True):
         _debug_('removeRecordingFromSchedule(%r, inputSchedule=%r)' % (prog, inputSchedule), 2)
         if inputSchedule:
             schedule = inputSchedule
@@ -466,6 +467,10 @@ class RecordServer:
         if not inputSchedule:
             if config.TV_RECORD_DUPLICATE_DETECTION:
                 self.removeDuplicate(prog)
+            favs = self.getFavorites()
+            is_fav, favorite = self.isProgAFavorite(prog, favs)
+            if mark_fav_deleted and is_fav:
+                schedule.markFavoriteProgAsDeleted(prog, tv_util.getKey(prog))
             self.saveScheduledRecordings(schedule)
 
 
@@ -738,7 +743,7 @@ class RecordServer:
 
 
     @kaa.rpc.expose('removeScheduledRecording')
-    def removeScheduledRecording(self, prog=None):
+    def removeScheduledRecording(self, prog=None, mark_fav_deleted=True):
         _debug_('removeScheduledRecording(prog=%r)' % (prog,), 2)
         if prog is None:
             return (False, _('program is not set'))
@@ -753,7 +758,7 @@ class RecordServer:
 
         recording = hasattr(prog, 'isRecording') and prog.isRecording
 
-        self.removeRecordingFromSchedule(prog)
+        self.removeRecordingFromSchedule(prog, mark_fav_deleted=mark_fav_deleted)
 
         now = self.timenow()
 
@@ -1386,13 +1391,14 @@ class RecordServer:
                 # do not yet remove programs currently being recorded:
                 isRec = hasattr(prog, 'isRecording') and prog.isRecording
                 if not isRec:
-                    self.removeScheduledRecording(prog)
+                    self.removeScheduledRecording(prog, mark_fav_deleted=False)
 
         for ch in guide.chan_list:
             for prog in ch.programs:
                 (isFav, favorite) = self.isProgAFavorite(prog, favs)
+                isDeleted = self.getScheduledRecordings().isFavoriteProgDeleted(prog, tv_util.getKey(prog))
                 isRec = hasattr(prog, 'isRecording') and prog.isRecording
-                if isFav and not isRec:
+                if isFav and not isDeleted and not isRec:
                     prog.isFavorite = favorite
                     self.scheduleRecording(prog)
 
