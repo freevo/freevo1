@@ -375,6 +375,16 @@ class RecordClientActions:
         _debug_('removeScheduledRecordingNow.result=%r' % (result,), 2)
         return result
 
+    def getConflicts(self, prog):
+        """ Retrieve the programs that conflict with the specified prog """
+        _debug_('getConflicts(prog=%r)' % (prog,), 2)
+        inprogress = self._recordserver_rpc('getConflicts', prog)
+        if inprogress is None:
+            return (None, self.recordserverdown)
+        inprogress.wait()
+        result = inprogress.result
+        _debug_('getConflicts.result=%r' % (result,), 2)
+        return result
 
     #--------------------------------------------------------------------------------
     # record server calls using a callback

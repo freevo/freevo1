@@ -28,6 +28,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Updated web interface to allow a TV favourite to be manually added (F#2804991)
  * Updated youtube plug-in to show when busy (F#2887544)
  * Updated recordserver to remember removed instances of a favourite (F#2832582)
+ * Updated recordserver and frontend to display a manual conflict resolution (F#2832618)
  * Fixed apple trailers plug-in for user agent requirements (B#2994707)
  * Fixed encoding core not to print messages in debug mode (B#2943181)
  * Fixed encoding core when the action is to copy (B#2943184)

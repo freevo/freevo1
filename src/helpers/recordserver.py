@@ -473,6 +473,23 @@ class RecordServer:
                 schedule.markFavoriteProgAsDeleted(prog, tv_util.getKey(prog))
             self.saveScheduledRecordings(schedule)
 
+    @kaa.rpc.expose('getConflicts')
+    def checkForConflicts(self, prog):
+        _debug_('checkForConflicts(prog=%r)' % (prog, ), 2)
+        progs = self.getScheduledRecordings().getProgramList()
+        proglist = list(progs)
+        proglist.sort(self.progsTimeCompare)
+        conflictRating = 0
+        conflicts = []
+        for i in range(0, len(proglist)):
+            otherprog = progs[proglist[i]]
+            if (prog.start >= otherprog.start) and (prog.start < otherprog.stop) or \
+                (prog.stop > otherprog.start) and (prog.stop < otherprog.stop) or \
+                (otherprog.start >= prog.start) and (otherprog.start < prog.stop) or \
+                (otherprog.stop > prog.start) and (otherprog.stop < prog.stop):
+                conflictRating += 1
+                conflicts.append(otherprog)
+        return (conflictRating, conflicts)
 
     def conflictResolution(self, prog):
         _debug_('conflictResolution(prog=%r)' % (prog,), 2)
@@ -694,11 +711,11 @@ class RecordServer:
         global guide
 
         if prog is None:
-            return (False, _('program is not set'))
+            return ('error', _('program is not set'))
 
         now = self.timenow()
         if now > prog.stop:
-            return (False, _('program cannot record as it is over'))
+            return ('error', _('program cannot record as it is over'))
 
         self.updateGuide()
 
@@ -708,30 +725,41 @@ class RecordServer:
             _debug_('Only new episode detection: %s reason %s' % (onlyNewBool, onlyNewReason), 2)
             if not onlyNewBool:
                 #failed only new episode check (old episode, etc)
-                return (False, onlyNewReason)
+                return ('error', onlyNewReason)
 
             (duplicateBool, duplicateReason) = self.checkDuplicateDetection(prog)
             _debug_('Duplicate detection: %s reason %s' % (duplicateBool, duplicateReason), 2)
             if not duplicateBool:
                 #failed duplicate check (duplicate, etc)
-                return (False, duplicateReason)
+                return ('error', duplicateReason)
+            schedule = self.getScheduledRecordings()
+            if schedule.isFavoriteProgDeleted(prog, tv_util.getKey(prog)):
+                schedule.unmarkFavoriteProgAsDeleted(prog, tv_util.getKey(prog))
 
-        (ableToResolveBool, resolutionReason, progsToChange) = self.conflictResolution(prog)
-        _debug_('Conflict resolution: %s reason %s' % (ableToResolveBool, resolutionReason), 2)
-        if not ableToResolveBool:
-            #No viable solution was found
-            return (False, resolutionReason)
-
-        if progsToChange:
-            for (cmd, prog) in progsToChange:
+        if config.TV_RECORD_CONFLICT_RESOLUTION:
+            (ableToResolveBool, resolutionReason, progsToChange) = self.conflictResolution(prog)
+            _debug_('Conflict resolution: %s reason %s' % (ableToResolveBool, resolutionReason), 2)
+            if not ableToResolveBool:
+                #No viable solution was found
+                return ('error', resolutionReason)
+            
+            if progsToChange:
+                for (cmd, prog) in progsToChange:
+                    prog = self.setTunerid(prog)
+                    if cmd == 'add':
+                        _debug_('adding %s to schedule' % (prog.title), 2)
+                        self.addRecordingToSchedule(prog)
+                    elif cmd == 'del':
+                        _debug_('removed %s from schedule' % (prog.title), 2)
+                        self.removeRecordingFromSchedule(prog)
+            else:
                 prog = self.setTunerid(prog)
-                if cmd == 'add':
-                    _debug_('adding %s to schedule' % (prog.title), 2)
-                    self.addRecordingToSchedule(prog)
-                elif cmd == 'del':
-                    _debug_('removed %s from schedule' % (prog.title), 2)
-                    self.removeRecordingFromSchedule(prog)
+                _debug_('added %s to schedule' % (prog.title), DINFO)
+                self.addRecordingToSchedule(prog)
         else:
+            conflicts,conflictingProgs = self.checkForConflicts(prog)
+            if conflicts:
+                return ('conflict', _('program conflicts with existing scheduled programs.'))
             prog = self.setTunerid(prog)
             _debug_('added %s to schedule' % (prog.title), DINFO)
             self.addRecordingToSchedule(prog)
@@ -739,7 +767,7 @@ class RecordServer:
         # check, maybe we need to start right now
         self.check_to_record()
 
-        return (True, _('program scheduled to record'))
+        return ('ok', _('program scheduled to record'))
 
 
     @kaa.rpc.expose('removeScheduledRecording')

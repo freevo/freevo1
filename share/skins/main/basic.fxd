@@ -464,6 +464,10 @@
             <style text="text with manual record info style"/>
         </menu>
 
+        <menu type="tv conflict menu">
+            <style text="text with conflict info style"/>
+        </menu>
+
         <menuset label="tv menu">
             <screen layout="screen" x="0" y="0" width="800" height="600"/>
             <title visible="not idlebar" layout="title" x="10" y="10" 
@@ -499,6 +503,10 @@
 
         <menuset label="text with manual record info style" inherits="tv submenu">
             <info layout="tv manual record info"/>
+        </menuset>
+
+        <menuset label="text with conflict info style" inherits="tv submenu">
+            <info layout="tv conflict info"/>
         </menuset>
 
         <!-- tv listing area -->
@@ -678,6 +686,14 @@
                         <text font="info value" expression="disp_stoptime" mode="soft" />
                         <newline/>
                     </if>
+                </item>
+            </content>
+        </layout>
+
+        <layout label="tv conflict info">
+            <content x="0" y="0" type="text" spacing="20" font="default">
+                <item type="default">
+                    <text font="tv" width="max"  height="max" expression="conflict_info"/>
                 </item>
             </content>
         </layout>

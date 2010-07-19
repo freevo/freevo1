@@ -188,11 +188,9 @@ class ProgramItem(Item):
         if self.scheduled:
             # remove this program from schedule it it is already scheduled
             self.remove_program(menuw=menuw)
-            self.scheduled = False
         else:
             # otherwise add it to schedule without more questions
             self.schedule_program(menuw=menuw)
-            self.scheduled = True
 
 
     def schedule_program(self, arg=None, menuw=None):
@@ -200,16 +198,21 @@ class ProgramItem(Item):
         _debug_('schedule_program(arg=%r, menuw=%r)' % (arg, menuw), 2)
         # schedule the program
         (status, reason) = self.recordclient.scheduleRecordingNow(self.prog)
-        if status:
+        if status == 'ok':
+            self.scheduled = True
             menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
                 self.parent.update(force=True)
             else:
                 menuw.refresh(reload=True)
             msgtext= _('"%s" has been scheduled for recording') % self.name
+        elif status == 'conflict':
+            msgtext=_('Conflict detected!')
+            self.resolve_conflict(menuw)
+            return
         else:
             # something went wrong
-            msgtext = _('Scheduling failed')+(':\n%s' % reason)
+            msgtext = _('Scheduling failed: ')+ _(reason)
 
         dialog.show_message(msgtext)
 
@@ -220,6 +223,7 @@ class ProgramItem(Item):
         # remove the program
         (status, reason) = self.recordclient.removeScheduledRecordingNow(self.prog)
         if status:
+            self.scheduled = False
             menuw.delete_submenu(refresh=False)
             if hasattr(self.parent, 'update'):
                 self.parent.update(force=True)
@@ -314,6 +318,35 @@ class ProgramItem(Item):
         # this tries to imitated freevo's internal way of creating submenus
         menuw.make_submenu(_('Program Menu'), self.actions(), self)
         menuw.show()
+
+    def resolve_conflict(self, menuw):
+        rating, conflictingProgs = self.recordclient.getConflicts(self.prog)
+        prog_text = self.prog.getattr('time') + u' ' + self.prog.title
+        other_prog_text = u''
+        for cprog in conflictingProgs:
+            if other_prog_text:
+                other_prog_text += u'\n'
+            other_prog_text += cprog.getattr('time') + u' ' + cprog.title
+        self.conflict_info = _('%s\nConflicts with:\n%s') % (prog_text, other_prog_text)
+        cancel_mi = menu.MenuItem(_('Cancel'), menuw.back_one_menu)
+        if len(conflictingProgs) == 1:
+            schedule_text = _('Remove other program and schedule')
+        else:
+            schedule_text = _('Remove other programs and schedule')
+
+        schedule_mi = menu.MenuItem(schedule_text, self.remove_and_schedule, conflictingProgs)
+        conflict_menu = menu.Menu(_('Resovle Conflict'), [schedule_mi, cancel_mi], item_types='tv conflict menu')
+        conflict_menu.infoitem = self
+        menuw.delete_submenu(refresh = False)
+        menuw.pushmenu(conflict_menu)
+        menuw.refresh()
+
+
+    def remove_and_schedule(self, arg=None, menuw=None):
+        for prog in arg:
+            self.recordclient.removeScheduledRecordingNow(prog)
+        menuw.back_one_menu()
+        self.schedule_program(menuw=menuw)
 
 
 # Create the skin_object object
