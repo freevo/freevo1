@@ -57,6 +57,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Fixed web pages that imported twisted.web.woven.page which has been removed from Twisted (B#2936634)
  * Fixed web server for a regression bug (B#2977257)
  * Fixed web server updating of favorites (B#2954480)
+ * Fixed bug in FXDhandler that affects shopingcart plugin (B#2974031)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------

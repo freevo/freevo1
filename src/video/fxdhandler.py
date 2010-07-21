@@ -227,11 +227,26 @@ def parse_movie(fxd, node):
         # if there is more than one item add them to subitems
         if len(video) > 1:
             # a list of files
+            subitem_matched = False
             for s in video:
                 #id, url, item.media_id, mplayer_options, player, is_playlist = parse_video_child(fxd, s, dirname)
                 video_child = parse_video_child(fxd, s, dirname)
-                v = VideoItem(video_child[1], parent=item, info=item.info, parse=False)
-                v.files = None
+                url = video_child[1]
+
+                v = VideoItem(url, parent=item, info=item.info, parse=False)
+
+                if url.startswith('file://'):
+                    v.files = FileInformation()
+
+                    v.files.append(url[7:])
+                    if url == item.url and not subitem_matched:
+                        subitem_matched = True
+                        v.files.fxd_file  = fxd.filename
+                        if item.image:
+                            v.files.image = item.image
+                else:
+                    v.files = None
+
                 v.media_id, v.mplayer_options, player, is_playlist = video_child[2:]
                 if player:
                     v.force_player = player
