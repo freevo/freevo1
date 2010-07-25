@@ -50,6 +50,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Fixed plugins helper creating incorrect plug-in name (B#2824746)
  * Fixed recordserver's handling of program conflicts (B#2949789)
  * Fixed recordserver not handling the popen events (B#2985990)
+ * Fixed recordserver reencode not work (B#3033720)
  * Fixed skin blurr info window sizes (B#2989071)
  * Fixed skins userdate field so it is shown for recordings (B#3009193)
  * Fixed TV guide swapping the OK and Cancel buttons (B#2904179)

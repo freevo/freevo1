@@ -1472,6 +1472,7 @@ class RecordPostProcess(Thread):
     def __init__(self, prog):
         Thread.__init__(self)
         self.prog = prog
+        self.es = EncodingClientActions()
 
 
     def run(self):
