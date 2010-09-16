@@ -20,6 +20,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * New iplayer plug-in for BBC IPlayer (F#2809981)
  * New Skype plug-in (F#2855837)
  * New Russian translation (F#3000021)
+ * New udisks plugin that uses dbus to find removable storage.
  * Updated autoshutdown plug-in with improved configuration and bug fixes (B#2808009)
  * Updated autoshutdown plug-in with AUTOSHUTDOWN_PROCESS_CHECK (F#2942579)
  * Updated playlist to follow symlinks when enabled (B#2941814)

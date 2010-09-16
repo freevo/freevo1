@@ -723,6 +723,9 @@ rom_plugins = {}
 for t in ('video', 'audio', 'image', 'games'):
     rom_plugins[t] = plugin.activate('rom_drives.rom_items', type=t, level=50)
 
+# Use udisks to find removable storage
+plugin.activate('udisks')
+
 # Set to true to allow destination to be clobbered
 SHOPPINGCART_CLOBBER = False
 
