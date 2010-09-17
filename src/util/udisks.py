@@ -203,9 +203,9 @@ def get_udisks_interface():
     try:
         return UDisksProxy()
     except:
-        traceback.print_exc()
+        pass
     try:
         return DeviceKitDisksProxy()
     except:
-        traceback.print_exc()
+        pass
     return None
