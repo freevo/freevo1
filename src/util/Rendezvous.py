@@ -543,9 +543,9 @@ class DNSIncoming(object):
                     next = self.offset + 1
                 self.offset = ((len & 0x3F) << 8) | ord(self.data[self.offset])
                 if self.offset >= first:
-                    raise "Bad domain name (circular) at " + str(hex(self.offset))
+                    raise Exception("Bad domain name (circular) at " + str(hex(self.offset)))
             else:
-                raise "Bad domain name at " + str(hex(self.offset))
+                raise Exception("Bad domain name at " + str(hex(self.offset)))
 
         if next >= 0:
             self.offset = next

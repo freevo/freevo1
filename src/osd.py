@@ -864,7 +864,7 @@ class OSD:
                 if cache:
                     cache[url] = image
         else:
-            raise 'wrong image type%r' % url
+            raise Exception('wrong image type%r' % url)
 
         # convert the surface to speed up blitting later
         if image:
