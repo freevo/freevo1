@@ -11,7 +11,7 @@ X is the category and #nnnnnnn is the tracker number.
 (B)ugs             http://sourceforge.net/tracker/?group_id=46652&atid=446895
 (F)eature requests http://sourceforge.net/tracker/?group_id=46652&atid=446898
 
-== Release 1.9.1 (2009-??-??) ==
+== Release 1.9.1 (2010-??-??) ==
 --------------------------------
 svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
 
@@ -61,6 +61,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Fixed web server for a regression bug (B#2977257)
  * Fixed web server updating of favorites (B#2954480)
  * Fixed bug in FXDhandler that affects shopingcart plugin (B#2974031)
+ * Fixed password don't work in 1.9.0 (B#3079625)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------

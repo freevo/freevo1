@@ -536,10 +536,10 @@ class DirItem(Playlist):
         if self.media:
             self.media.mount()
 
-        if vfs.isfile(os.path.join(self.dir + '.password')):
+        if vfs.isfile(os.path.join(self.dir, '.password')):
             _debug_('password protected dir', DINFO)
             try:
-                pwfile = vfs.open(os.path.join(self.dir + '.password'))
+                pwfile = vfs.open(os.path.join(self.dir, '.password'))
                 line = pwfile.readline()
                 pwfile.close()
             except IOError, e:
