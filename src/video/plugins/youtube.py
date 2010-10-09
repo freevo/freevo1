@@ -51,7 +51,7 @@
 #
 # -----------------------------------------------------------------------
 
-__author__           = 'Alberto González Rodríguez'
+__author__           = 'Alberto Gonzï¿½lez Rodrï¿½guez'
 __author_email__     = 'alberto@pesadilla.org'
 __maintainer__       = __author__
 __maintainer_email__ = __author_email__
@@ -145,12 +145,6 @@ class PluginInterface(plugin.MainMenuPlugin):
         if not config.SYS_USE_NETWORK:
             self.reason = 'SYS_USE_NETWORK not enabled'
             return
-        if not hasattr(config, 'YOUTUBE_VIDEOS') or not config.YOUTUBE_VIDEOS:
-            self.reason = 'YOUTUBE_VIDEOS not defined'
-            return
-        if not hasattr(config, 'YOUTUBE_DIR') or not config.YOUTUBE_DIR:
-            self.reason = 'YOUTUBE_DIR not defined'
-            return
         plugin.MainMenuPlugin.__init__(self)
 
         if not os.path.isdir(config.YOUTUBE_DIR):
@@ -161,10 +155,19 @@ class PluginInterface(plugin.MainMenuPlugin):
         """returns the config variables used by this plugin"""
         _debug_('config()', 2)
         return [
-            ('YOUTUBE_VIDEOS', None, 'id and description to get/watch videos of youtube'),
+            ('YOUTUBE_VIDEOS', [("top_rated", "Top rated"),
+                                ("top_favorites", "Top favorites"),
+                                ("most_viewed", "Most viewed"),
+                                ("most_popular", "Most popular"),
+                                ("most_recent", "Most recent"),
+                                ("most_discussed", "Most discussed"),
+                                ("most_responded", "Most responded"),
+                                ("recently_featured", "Recently featured")],
+                                'id and description to get/watch videos of youtube'),
             ('YOUTUBE_DIR', config.FREEVO_CACHEDIR + '/youtube', 'directory to save youtube files'),
-            ('YOUTUBE-DL', 'youtube-dl', 'The youtube downloader'),
+            ('YOUTUBE_DL', 'youtube-dl', 'The youtube downloader'),
             ('YOUTUBE_REGION_CODE', None, 'To retrieve region-specific standard feeds'),
+            ('YOUTUBE_FORMAT', None, 'The video format to use.')
         ]
 
 
@@ -197,7 +200,7 @@ class YoutubeVideo(Item):
         Item.__init__(self, parent)
         self.name = _('Youtube videos')
         self.type = 'youtube'
-
+        self.image = config.IMAGE_DIR + '/youtube.png'
 
     def actions(self):
         """Only one action, return user list"""
@@ -232,7 +235,11 @@ class YoutubeVideo(Item):
         """Watch it"""
         osd.busyicon.wait(config.OSD_BUSYICON_TIMER[0])
         stream = None
-        cmd = config.YOUTUBE_DL + ' -g "http://www.youtube.com/watch?v=' + arg[1] + '"'
+        fmt = ''
+        if config.YOUTUBE_FORMAT:
+            fmt = '-f ' +  config.YOUTUBE_FORMAT
+
+        cmd = '%s %s -g "http://www.youtube.com/watch?v=%s"' % (config.YOUTUBE_DL, fmt, arg[1])
         proceso = Popen(cmd, shell=True, bufsize=1024, stdout=subprocess.PIPE, universal_newlines=1)
         follow = proceso.stdout
         while proceso.poll() == None:
