@@ -113,6 +113,24 @@ def readfile(filename):
     return ret
 
 
+def human_size(space):
+    """
+    Convert a number of bytes into a human readable/understandable size.
+    """
+    ret = ''
+    metrics = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+
+    for p, suffix in enumerate(metrics):
+        div = pow(1000, p)
+        s = space / div
+        if s < 1000:
+            if p == 0 and s == 1:
+                return '1 byte'
+            return '%d%s' % (s, suffix)
+
+    return '%d %s' % (s, suffix)
+
+
 def freespace(path):
     """
     freespace(path) -> integer

@@ -345,9 +345,15 @@ class DirItem(Playlist):
                 return None
 
             space = getattr(util, key)(self.dir) / 1000000
-            if space > 1000:
-                space='%s,%s' % (space / 1000, space % 1000)
-            return space
+
+            return util.human_size(space)
+
+        if key == 'usage':
+            f = util.freespace(self.dir)
+            t = util.totalspace(self.dir)
+            return _('%(freespace)s of %(totalspace)s free' % ({
+                        'freespace' : util.human_size(f),
+                        'totalspace': util.human_size(t)}))
 
         return Item.__getitem__(self, key)
 

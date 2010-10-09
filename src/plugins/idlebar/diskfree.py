@@ -105,9 +105,9 @@ class PluginInterface(IdleBarPlugin):
         self.time = time.time()
         freespace = util.freespace(config.TV_RECORD_DIR)
         totalspace = util.totalspace(config.TV_RECORD_DIR)
-        self.diskfree = _('%iGB') % (((freespace / 1024) / 1024) / 1024)
-        self.freespace = (((freespace / 1024) / 1024) / 1024)
-        self.totalspace = (((totalspace / 1024) / 1024) / 1024)
+        self.diskfree = _('%s') % util.human_size(freespace)
+        self.freespace = (freespace / 1000000000)
+        self.totalspace = (totalspace / 1000000000)
         self.percent = self.totalspace and (self.totalspace - self.freespace) * 1.0 / self.totalspace or 0.0
 
 

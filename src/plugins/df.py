@@ -57,10 +57,6 @@ class PluginInterface(plugin.ItemPlugin):
         if item.type == 'dir' and hasattr(item, 'dir'):
             freespace = util.freespace(item.dir)
             totalspace = util.totalspace(item.dir)
-            freespacemb = (freespace / 1024) / 1024
-            freespacegb = freespacemb / 1024
-            totalspacemb = (totalspace / 1024) / 1024
-            totalspacegb = totalspacemb / 1024
             try:
                 percentage = freespace * 100.0 / totalspace
             except ZeroDivisionError, e:
@@ -69,12 +65,11 @@ class PluginInterface(plugin.ItemPlugin):
 
             if (totalspace == 0): # no space perhaps a bad path
                 diskfree = _( 'Bad Path' )
-            elif (totalspace > 1073741824): # more than 1024 Mb
-                diskfree = _( '%(freespace)i free of %(totalspace)i GB total (%(percentage)i%% free)' ) % ({
-                    'freespace': freespacegb, 'totalspace': totalspacegb, 'percentage': percentage})
             else:
-                diskfree = _( '%(freespace)i free of %(totalspace)i MB total (%(percentage)i%% free)' ) % ({
-                    'freespace': freespacemb, 'totalspace': totalspacemb, 'percentage': percentage})
+                diskfree = _( '%(freespace)s free of %(totalspace)s total (%(percentage)i%% free)' ) % ({
+                    'freespace': util.human_size(freespace),
+                    'totalspace': util.human_size(totalspace),
+                    'percentage': percentage})
             return  [ ( self.dud, diskfree) ]
         else:
             return []
