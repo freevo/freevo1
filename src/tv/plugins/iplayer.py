@@ -28,9 +28,10 @@
 #
 # -----------------------------------------------------------------------
 """
-Plugin to browse and view content from BBC IPlayer/Listen again, ITV Player and 
-Hulu websites using the get_iplayer script.
-See http://linuxcentre.net/getiplayer/ for details of get_iplayer.
+Plugin to browse and view content from BBC IPlayer/Listen again website using
+the get_iplayer script.
+See http://www.infradead.org/get_iplayer/html/get_iplayer.html for details of
+get_iplayer.
 """
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
@@ -43,6 +44,8 @@ import threading
 import traceback
 import time
 import urllib
+import tarfile
+import stat
 
 import config
 import dialog.dialogs
@@ -60,16 +63,18 @@ GIP_MAPPINGS = {
     'bbc tv': ('tv', _('BBC IPlayer')),
     'bbc radio': ('radio', _('BBC Radio listen again')),
     'bbc podcast': ('podcast', _('BBC Podcasts')),
-    'itv' : ('itv', _('ITV Player')),
-    'hulu': ('hulu', _('Hulu'))
     }
-IPLAYER_WEB_PORT = 15536
+
+IPLAYER_WEB_PORT = 0
+GET_IPLAYER = ''
+version_last_checked = 0
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
-    Plugin to browse and view content from BBC IPlayer/Listen again, ITV Player and
-    Hulu websites using the get_iplayer script.
-    See http://linuxcentre.net/getiplayer/ for details of get_iplayer.
+    Plugin to browse and view content from BBC IPlayer/Listen again website using
+    the get_iplayer script.
+    See http://www.infradead.org/get_iplayer/html/get_iplayer.html for details
+    of get_iplayer.
 
     Activate with:
     | plugin.activate('tv.iplayer',level=5)
@@ -80,10 +85,13 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         normal plugin init, but sets _type to 'mainmenu_tv'
         """
+        global IPLAYER_WEB_PORT
         plugin.MainMenuPlugin.__init__(self)
         self._type = 'mainmenu_tv'
         self.parent = None
-        self.http_server = HTTPServer(('', IPLAYER_WEB_PORT), IPlayerRequestHandler)
+        self.http_server = HTTPServer(('', 0), IPlayerRequestHandler)
+        IPLAYER_WEB_PORT = self.http_server.server_address[1]
+
         self.stop = False
         thread = threading.Thread(target=self.serve_forever)
         thread.setDaemon(True)
@@ -106,11 +114,13 @@ class PluginInterface(plugin.MainMenuPlugin):
         Returns config variables for this plugin.
         @return: A List of config variables for this plugin.
         """
-        return  [('IPLAYER_TYPES', ['bbc tv', 'itv'],
-                        'A list of types of content to show for. Options are: bbc tv, bbc radio, bbc podcast, itv, hulu'),
+        return  [('IPLAYER_TYPES', ['bbc tv'],
+                        'A list of types of content to show for. Options are: bbc tv, bbc radio, bbc podcast'),
                  ('IPLAYER_DOWNLOAD_DIR', '.', 'Directory to store the downloads in.'),
                  ('IPLAYER_DOWNLOAD_MODE_VIDEO', 'iphone,flashhigh,flashnormal',
                     'Try to download content in the specified type order. (see get_iplayer --vmode parameter for details)'),
+                 ('IPLAYER_GET_IPLAYER', '',
+                    'The get_iplayer application path. Set this to None (or not defined in your local_conf.py) to allow automatic downloading and update.'),
                  ('IPLAYER_RTMPDUMP_PATH', '', 'Path to rtmpdump utility for downloading flash content')]
 
     def shutdown(self):
@@ -127,6 +137,87 @@ class PluginInterface(plugin.MainMenuPlugin):
         items.append(IPlayerDownloadQueueItem(parent))
 
         return items
+
+
+def update_get_iplayer():
+    """
+    Attempt to download/update get_iplayer.
+    """
+    global GET_IPLAYER, version_last_checked
+
+    if config.IPLAYER_GET_IPLAYER or (time.time() - version_last_checked) < 360:
+        # Don't attempt to update a manually configure downloader or
+        # if we've already checked for an update in the last hour.
+        return
+
+    GET_IPLAYER = os.path.join(config.FREEVO_STATICDIR, 'get_iplayer')
+
+    version_file_path = GET_IPLAYER + '.version'
+    current_version = None
+    try:
+        f = open(version_file_path)
+        current_version = f.read()
+        f.close()
+    except:
+        traceback.print_exc()
+        pass
+    
+    get_iplayer_base_url = 'ftp://ftp.infradead.org/pub/get_iplayer/'
+    # Work out the latest version of get_iplayer
+    try:
+        u = urllib.urlopen(get_iplayer_base_url)
+        line = u.read()
+        u.close()
+    except:
+        traceback.print_exc()
+        return
+
+    latest_major = 0
+    latest_minor = 0
+    latest_name = ''
+    for name, major, minor, comp in re.findall('(get_iplayer-([0-9]+)\.([0-9]+)\.tar.(bz2|gz))', line):
+        try:
+            major = int(major)
+            minor = int(minor)
+            if (major > latest_major) or (major == latest_major and minor > latest_minor):
+                latest_major, latest_minor = major, minor
+                latest_name = name
+        except:
+            pass
+        
+    latest_version = '%d.%d' % (latest_major, latest_minor)
+
+    _debug_('get_iplayer: Current Version: %s Latest Version: %s' % (current_version, latest_version))
+
+    if latest_version == current_version:
+        # No need to update as we already have the latest version
+        return
+
+    try:
+        get_iplayer_tar_path = os.path.join(config.FREEVO_STATICDIR, latest_name)
+        urllib.urlretrieve(get_iplayer_base_url + latest_name, get_iplayer_tar_path)
+
+        tf = tarfile.open(get_iplayer_tar_path)
+        get_iplayer_ti = None
+        for ti in tf.getmembers():
+            if ti.name.endswith('get_iplayer') and ti.isfile():
+                get_iplayer_ti = ti
+                break
+
+        if get_iplayer_ti:
+            tif = tf.extractfile(get_iplayer_ti)
+            f = open(GET_IPLAYER, 'wb')
+            f.write(tif.read())
+            f.close()
+            os.chmod(GET_IPLAYER, stat.S_IRWXU)
+            
+            f = open(version_file_path, 'w')
+            f.write(latest_version)
+            f.close()
+    except:
+        traceback.print_exc()
+        return
+    version_last_checked = time.time()
 
 
 class IPlayerServiceItem(Item):
@@ -158,6 +249,8 @@ class IPlayerServiceItem(Item):
         """
         build the items for the menu
         """
+        update_get_iplayer()
+
         items = [IPlayerProgramListItem(self, self.gip_type, _('Browse all'), 0, ''),
                  IPlayerListItem(self, self.gip_type,_('Browse by Channel'), 'channel'),
                  IPlayerListItem(self, self.gip_type,_('Browse by Category'), 'categories'),
@@ -865,7 +958,8 @@ def get_download_queue():
 # Helper functions
 #-------------------------------------------------------------------------------
 def query_get_iplayer(cmd, gip_type, line_cb, arg):
-    process = subprocess.Popen('%s %s --type %s' % (config.CONF.get_iplayer, cmd, gip_type), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+    update_get_iplayer()
+    process = subprocess.Popen('%s %s --type %s' % (GET_IPLAYER, cmd, gip_type), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
     # Read version, GPL and blank line
     for i in xrange(5):
         line = process.stdout.readline()
