@@ -35,15 +35,14 @@ are a member of a series are placed in a series menu and the menu placed
 at the top level.
 """
 
-from gui.PopupBox import PopupBox
 import os
 import os.path
 import datetime
 import traceback
 import re
-import stat
 import copy
 import rc
+import time
 import util.mediainfo as mediainfo
 
 import config
@@ -52,12 +51,13 @@ import util
 
 import plugin
 import fxditem
+import dialog
+import dialog.dialogs
 
 from item import Item
 from playlist import Playlist
 from directory import DirItem
 from event import *
-from gui import ConfirmBox, AlertBox, ProgressBox, PopupBox
 from menu import MenuItem, Menu
 from video import VideoItem
 from tv.record_client import RecordClient
@@ -99,6 +99,9 @@ sorting_reversed = False
 series_sorting = 0
 series_sorting_reversed = False
 status_order = 0
+
+view_methods = ['name', 'name+(date/episodes)']
+view_method = 1
 
 
 class PluginInterface(plugin.MainMenuPlugin):
@@ -188,7 +191,7 @@ class RecordingsDirectory(Item):
         build the items for the directory
         """
         if not os.path.exists(self.dir):
-            AlertBox(text=_('Recordings Directory does not exist')).show()
+            dialog.show_alert(_('Recordings Directory does not exist'))
             return
 
         items = segregated_recordings
@@ -229,7 +232,9 @@ class RecordingsDirectory(Item):
                 self.menuw.refresh()
         else:
             # normal menu build
-            item_menu = Menu(self.name, items, reload_func=self.reload, item_types='tv')
+            item_menu = Menu(self.name, items, reload_func=self.reload, item_types=view_method and 'recordings manager' or 'tv')
+            if view_method:
+                item_menu.table = (75, 25)
             menuw.pushmenu(item_menu)
 
             self.menu  = item_menu
@@ -255,9 +260,7 @@ class RecordingsDirectory(Item):
 
         item = menuw.menustack[-1].selected
         item.name = item.name[:item.name.find(u'\t') + 1]  + _(eval('%s_methods[%s]' % (arg,arg), globals()))
-
-        copy_and_replace_menu_item(menuw, item)
-        menuw.init_page()
+        item.dirty = True
         menuw.refresh()
 
 
@@ -270,11 +273,19 @@ class RecordingsDirectory(Item):
 
         item = menuw.menustack[-1].selected
         item.name = item.name[:item.name.find(u'\t') + 1]  + self.configure_get_icon(eval(arg, globals()))
-
-        copy_and_replace_menu_item(menuw, item)
-        menuw.init_page()
+        item.dirty = True
         menuw.refresh()
 
+    def configure_view_method(self, arg=None, menuw=None):
+        global view_method
+        view_method += 1
+        if view_method >= len(view_methods):
+            view_method = 0
+        self.save_settings()
+        item = menuw.menustack[-1].selected
+        item.name = _('View')+ u'\t' + _(view_methods[view_method])
+        item.dirty = True
+        menuw.refresh()
 
     def configure_get_icon(self, value):
         """
@@ -292,6 +303,8 @@ class RecordingsDirectory(Item):
         document me
         """
         items = [
+            MenuItem(_('View')+ u'\t' + _(view_methods[view_method]),
+                self.configure_view_method),
             MenuItem(_('Sort by') + u'\t' + _(sorting_methods[sorting]),
                 self.configure_sorting, 'sorting'),
             MenuItem(_('Reverse sort')+ u'\t' + self.configure_get_icon(sorting_reversed),
@@ -374,11 +387,8 @@ class RecordingsDirectory(Item):
                 node.children.remove(child)
 
         # add current vars as setvar
-        fxd.add(fxd.XMLnode('setvar', (('name', 'sorting'),                 ('val', sorting))),          node, None)
-        fxd.add(fxd.XMLnode('setvar', (('name', 'sorting_reversed'),        ('val', sorting_reversed))), node, None)
-        fxd.add(fxd.XMLnode('setvar', (('name', 'series_sorting'),          ('val', series_sorting))),   node, None)
-        fxd.add(fxd.XMLnode('setvar', (('name', 'series_sorting_reversed'), ('val', series_sorting_reversed))), node, None)
-        fxd.add(fxd.XMLnode('setvar', (('name', 'status_order'),            ('val', status_order))),     node, None)
+        for var in ['sorting', 'sorting_reversed', 'series_sorting', 'series_sorting_reversed', 'status_order', 'view_method']:
+            fxd.add(fxd.XMLnode('setvar', (('name', var), ('val', eval(var)))), node, None)
 
 
 # ======================================================================
@@ -415,9 +425,12 @@ class RecordedProgramItem(VideoItem):
 
         try:
             self.timestamp = float(self.video_item['recording_timestamp'])
+            self.timestamp_str = Unicode(time.strftime('%H:%M %d/%m', time.localtime(self.timestamp)))
+            
         except ValueError:
             self.timestamp = 0.0
-
+            self.timestamp_str = u''
+        self.table_fields = [name, self.timestamp_str]
         self.set_icon()
 
 
@@ -454,8 +467,8 @@ class RecordedProgramItem(VideoItem):
         self.update_fxd(self.watched, self.keep)
         self.set_icon()
         if menuw:
-            copy_and_replace_menu_item(menuw, self)
-            menuw.refresh(reload=True)
+            self.dirty = True
+            menuw.refresh()
 
 
     def mark_as_watched(self, arg=None, menuw=None):
@@ -466,8 +479,8 @@ class RecordedProgramItem(VideoItem):
         self.update_fxd(self.watched, self.keep)
         self.set_icon()
         if menuw:
-            copy_and_replace_menu_item(menuw, self)
-            menuw.refresh(reload=True)
+            self.dirty = True
+            menuw.refresh()
 
 
     def set_name_to_episode(self):
@@ -475,6 +488,7 @@ class RecordedProgramItem(VideoItem):
         Set the name of this recorded program item to the name of
         the episode of this program.
         """
+        used_timestamp = False
         episode_name = self.video_item['tagline']
         if not episode_name:
             episode_name = self.video_item['subtitle']
@@ -483,24 +497,25 @@ class RecordedProgramItem(VideoItem):
                 pat = re.compile(config.TVRM_EPISODE_FROM_PLOT)
                 episode = pat.match(self.video_item['plot']).group(1)
                 episode_name = episode.strip()
-            except Exception, e:
+            except:
                 episode_name = None
         if not episode_name and (self.timestamp > 0.0):
             try:
                 episode = datetime.datetime.fromtimestamp(self.timestamp)
                 episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
-            except Exception, e:
+            except:
                 episode_name = None
         if not episode_name:
             try:
                 episode = datetime.datetime.fromtimestamp(os.path.getctime(self.video_item['filename']))
                 episode_name = episode.strftime(config.TVRM_EPISODE_TIME_FORMAT)
-            except Exception, e:
+            except:
                 episode_name = None
         if not episode_name:
             episode_name = _('(Unnamed)')
         self.video_item['tagline'] = episode_name
         self.name = Unicode(episode_name)
+        self.table_fields[0] = self.name
 
     # ======================================================================
     # Helper methods
@@ -564,7 +579,7 @@ class RecordedProgramItem(VideoItem):
 
 
     def id(self):
-        return self.sort('date+name')
+        return self.sort(SORTING_DATE_NAME)
 
 # ======================================================================
 # Series Menu Class
@@ -581,6 +596,7 @@ class Series(Item):
         self.set_url(None)
         self.type = 'dir'
         self.name = name
+        self.table_fields = [name, _('%d Episodes') % len(items)]
         self.playlist = None
         self.update(items)
 
@@ -638,7 +654,9 @@ class Series(Item):
                 self.set_icon()
         else:
             # normal menu build
-            item_menu = Menu(self.name, self.items,reload_func=self.reload, item_types = 'tv')
+            item_menu = Menu(self.name, self.items,reload_func=self.reload, item_types=view_method and 'recordings manager' or 'tv')
+            if view_method:
+                item_menu.table = (75, 25)
             menuw.pushmenu(item_menu)
 
             self.menu  = item_menu
@@ -660,18 +678,19 @@ class Series(Item):
         Confirm the user wants to delete an entire series.
         """
         self.menuw = menuw
-        ConfirmBox(text=_('Do you wish to delete the series\n \'%s\'?') % self.name,
-                   handler=self.delete_all, default_choice=1,
-                   handler_message=_('Deleting...')).show()
+        dialog.show_confirmation(_('Do you wish to delete the series\n \'%s\'?') % self.name, self.delete_all, proceed_text=_('Delete series'))
 
 
     def delete_all(self):
         """
         Delete all programs in a series.
         """
+        progress = dialog.dialogs.ProgressDialog(_('Deleting...'), indeterminate=True)
+        progress.show()
         for item in self.items:
             item.files.delete()
             del(item)
+        progress.hide()
         if self.menuw:
             self.menuw.delete_submenu(True, True)
 
@@ -685,8 +704,8 @@ class Series(Item):
                 item.mark_to_keep()
         self.set_icon()
         if menuw:
-            copy_and_replace_menu_item(menuw, self)
-            menuw.refresh(reload=True)
+            self.dirty = True
+            menuw.refresh()
 
 
     def add_to_favorites(self, arg=None, menuw=None):
@@ -754,11 +773,11 @@ class Series(Item):
         if key == 'tagline':
             return unicode('%d ' % len(self.items)) + _('episodes')
         if key == 'content':
-            content = ''
+            content = u''
             for i in range(0, len(self.items)):
                 content += self.items[i].name
                 if i < (len(self.items) - 1):
-                    content += ', '
+                    content += u', '
             return content
 
         return Item.__getitem__(self,key)
@@ -879,7 +898,6 @@ class DiskManager(plugin.DaemonPlugin):
         """
         Update the list of recordings.
         """
-        import time
         global all_recordings, segregated_recordings, series_table
         files       = vfs.listdir(config.TV_RECORD_DIR, include_overlay=True)
         num_changes = mediainfo.check_cache(config.TV_RECORD_DIR)
@@ -973,6 +991,7 @@ class DiskManager(plugin.DaemonPlugin):
                     series_table[name] = item
 
             items.append(item)
+        segregated_recordings = items
         segregate_time = time.time() - segregate_time
 
         clean_time = time.time()
@@ -984,14 +1003,13 @@ class DiskManager(plugin.DaemonPlugin):
         clean_time = time.time() - clean_time
 
         _debug_('Recordings Manager update_recordings times')
-        _debug_('cache_time     ', cache_time)
-        _debug_('parse_time     ', parse_time)
-        _debug_('rpitem_time    ', rpitem_time)
-        _debug_('series_time    ', series_time)
-        _debug_('segregate_time ', segregate_time)
-        _debug_('clean_time     ', clean_time)
+        _debug_('cache_time     %f' % cache_time)
+        _debug_('parse_time     %f' % parse_time)
+        _debug_('rpitem_time    %f' % rpitem_time)
+        _debug_('series_time    %f' % series_time)
+        _debug_('segregate_time %f' % segregate_time)
+        _debug_('clean_time     %f' % clean_time)
 
-        segregated_recordings = items
         all_recordings = rpitems
 
         self.last_time = vfs.mtime(config.TV_RECORD_DIR)
@@ -1053,7 +1071,7 @@ def copy_and_replace_menu_item(menuw, item):
         menu.choices[idx] = cloned_item
         if menu.selected is item:
             menu.selected = cloned_item
-    except ValueError, e:
+    except ValueError:
         menuw.delete_submenu(True, True)
 
 
@@ -1077,12 +1095,11 @@ def search_for_more(arg=None, menuw=None):
     parent, title = arg
     # this might take some time, thus we open a popup messages
     _debug_(String('searching for: %s' % title), 2)
-    pop = PopupBox(text=_('Searching, please wait...'))
-    pop.show()
+    pop = dialog.show_working_indicator(_('Searching, please wait...'))
 
     # do the search
     (status, matches) = RecordClient().findMatchesNow(title)
-    pop.destroy()
+    pop.hide()
     if status:
         items = []
         _debug_('search found %s matches' % len(matches), 2)
@@ -1094,12 +1111,12 @@ def search_for_more(arg=None, menuw=None):
     elif matches == 'no matches':
         # there have been no matches
         msgtext = _('No matches found for %s') % self.title
-        AlertBox(text=msgtext).show()
+        dialog.show_alert(msgtext)
         return
     else:
         # something else went wrong
         msgtext = _('Search failed') +(':\n%s' % matches)
-        AlertBox(text=msgtext).show()
+        dialog.show_alert(msgtext)
         return
 
     # create a menu from the search result

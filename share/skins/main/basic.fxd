@@ -468,6 +468,10 @@
             <style text="text with conflict info style"/>
         </menu>
 
+        <menu type="recordings manager">
+            <style text="recordings manager"/>
+        </menu>
+
         <menuset label="tv menu">
             <screen layout="screen" x="0" y="0" width="800" height="600"/>
             <title visible="not idlebar" layout="title" x="10" y="10" 
@@ -498,7 +502,11 @@
         </menuset>
 
         <menuset label="text with favorite info style" inherits="tv submenu">
-            <info layout="tv favorite info"/>
+            <info layout="tv favorite info" height="120"/>
+            <listing y="230" height="370 - buttonbar_height">
+                <image x="750" y="230" label="uparrow"/>
+                <image x="750" label="downarrow"/>
+            </listing>
         </menuset>
 
         <menuset label="text with manual record info style" inherits="tv submenu">
@@ -713,7 +721,30 @@
 
         <color label="tv label" value="0x88000066"/>
         <color label="tv selection" value="0x88ffffff"/>
+        
+        <menuset label="recordings manager">
 
+            <!-- 1. screen: the complete background area -->
+            <screen layout="screen" x="0" y="0" width="800" height="600"/>
+
+            <!-- 2. title: the area where the title of the menu (e.g. directory name -->
+            <!-- will be displayed -->
+            <title  visible="not idlebar" layout="title" x="10" y="10"
+                width="780" height="80"/>
+
+            <!-- 3. view area: the cover image for audio/video, a thumbnail for image -->
+            <view layout="view" x="670" y="90" width="120"  height="120"/>
+            <info layout="info" x="10"  y="90" width="660" height="120"/>
+
+            <!-- 4. listing area: the list of all items -->
+            <listing layout="listing" x="50" y="220" width="730" height="370 - (buttonbar * (buttonbar_height + 10))">
+                <image x="10" y="220" width="32" height="32" label="uparrow"
+                    filename="up.png"/>
+                <image x="10" y="max-32" width="32" height="32" label="downarrow"
+                    filename="down.png"/>
+            </listing>
+            
+        </menuset>
 
         <!-- 
         *******************************************************

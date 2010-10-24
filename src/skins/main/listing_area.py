@@ -186,7 +186,7 @@ class Listing_Area(Skin_Area):
         i = 0
         for choice in self.menuw.menu_items:
             try:
-                if self.last_choices[1][i] != choice:
+                if (self.last_choices[1][i] != choice) or (hasattr(choice, 'dirty') and choice.dirty):
                     return True
                 i += 1
             except IndexError:
@@ -234,6 +234,9 @@ class Listing_Area(Skin_Area):
         tvs_shortname = True
 
         for choice in menuw.menu_items:
+
+            if hasattr(choice, 'dirty'):
+                choice.dirty = False
 
             items_geometry = self.last_get_items_geometry[1]
 
@@ -380,7 +383,15 @@ class Listing_Area(Skin_Area):
                 # item _must_ have that many tabs as the table needs!!!
                 if hasattr(menu, 'table'):
                     table_x = x0 + hskip + x_icon
-                    table_text = text.split('\t')
+                    if hasattr(choice, 'table_fields'):
+                        table_text = choice.table_fields
+                    else:
+                        table_text = text.split('\t')
+                        
+                    if len(table_text) < len(menu.table):
+                        _debug_('Menu item: %r doesn\'t have enough table entries!', DERROR)
+                        table_text.extend([''] * (len(menu.table) - len(table_text)))
+
                     for i in range(len(menu.table)):
                         table_w = ((width-icon_x-len(table_text)*5)*menu.table[i]) / 100
                         if i != len(menu.table) - 1:
@@ -389,7 +400,7 @@ class Listing_Area(Skin_Area):
                         if table_text[i].find('ICON_') == 0:
                             x_mod, table_text[i] = text_or_icon(settings, table_text[i],
                                                                 table_x, table_w, val.font)
-                            if not isstring(table_text[i]):
+                            if not isinstance(table_text[i], basestring):
                                 self.drawimage(table_text[i], (table_x + x_mod, y0 + vskip))
                                 table_text[i] = ''
 
