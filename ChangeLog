@@ -21,6 +21,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * New Skype plug-in (F#2855837)
  * New Russian translation (F#3000021)
  * New udisks plugin that uses dbus to find removable storage.
+ * New Tv Reminder plugin (F#1567969)
  * Updated autoshutdown plug-in with improved configuration and bug fixes (B#2808009)
  * Updated autoshutdown plug-in with AUTOSHUTDOWN_PROCESS_CHECK (F#2942579)
  * Updated playlist to follow symlinks when enabled (B#2941814)
@@ -883,7 +884,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-6/freevo freevo-1.x
   * Identify media now return correct titles again
   * Network access when using the runtime
   * TV recording bug
- * CD Audio playing (w. CDDB) by Thomas Schüppel
+ * CD Audio playing (w. CDDB) by Thomas Schï¿½ppel
  * Use "freevo setup" instead of "./configure" to set up Freevo
  * New display mode for the image browser, with nice thumbnails etc
  * New display mode for the video browser
@@ -910,7 +911,7 @@ svn co svn://svn.freevo.org/freevo/branches/rel-1-6/freevo freevo-1.x
  * Moved a number of doc files to the Freevo Wiki.
  * Bins support (http://jsautret.free.fr/BINS/index.html)
  * Faster TV channel change
- * Added Thomas Schüppels objectcache patch.
+ * Added Thomas Schï¿½ppels objectcache patch.
  * Code cleanup / restructuring (xmms support dropped for now)
  * Speeded up the keyboard handling.
  * Changed keyboard volume +/- keys

@@ -50,6 +50,7 @@ from tv.record_client import RecordClient
 from tv.channels import FreevoChannels, CHANNEL_ID
 from tv.record_types import Favorite
 
+import plugin
 
 class ProgramItem(Item):
     """
@@ -125,9 +126,13 @@ class ProgramItem(Item):
             else:
                 items.append((self.add_favorite, _('Add to favorites')))
 
-        # 'Seach for more of this'
+        # 'Search for more of this'
         if not self.context == 'search':
             items.append((self.find_more, _('Search for more of this program')))
+
+        plugins_list = plugin.get('tv_program')
+        for p in plugins_list:
+            items += p.items(self.prog)
 
         return items
 
