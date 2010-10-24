@@ -959,11 +959,15 @@ def get_download_queue():
 #-------------------------------------------------------------------------------
 def query_get_iplayer(cmd, gip_type, line_cb, arg):
     update_get_iplayer()
-    process = subprocess.Popen('%s %s --type %s' % (GET_IPLAYER, cmd, gip_type), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+    process = subprocess.Popen('%s %s --type %s' % (GET_IPLAYER, cmd, gip_type),
+                                stdin=subprocess.PIPE, 
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT,
+                                shell=True)
     # Read version, GPL and blank line
     for i in xrange(5):
         line = process.stdout.readline()
-
+    process.stdin.write('n\n') # In case we get asked about wanting to delete recordings
     for line in process.stdout:
         line_cb(arg, line[:-1])
 
