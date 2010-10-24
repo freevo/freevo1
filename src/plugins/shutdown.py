@@ -40,7 +40,8 @@ from gui import ConfirmBox
 from item import Item
 from plugin import MainMenuPlugin
 
-from dialog.dialogs import ButtonDialog
+from dialog.dialogs import ButtonDialog, WidgetDialog
+from dialog.widgets import ButtonModel
 
 class ShutdownModes:
     FREEVO_SHUTDOWN = 'freevo_shutdown'
@@ -161,18 +162,29 @@ class ShutdownItem(Item):
         """
         _debug_('ShutdownItem.actions()', 2)
         if config.SYS_SHUTDOWN_CONFIRM:
-            items = [ (self.confirm_freevo, _('Shutdown Freevo') ),
+            if config.SHUTDOWN_NEW_STYLE_DIALOG:
+                items = [ (self.new_confirm_exit, _('Shutdown Freevo'))]
+            else:
+                items = [ (self.confirm_freevo, _('Shutdown Freevo') ),
                           (self.confirm_system, _('Shutdown system') ),
                           (self.confirm_system_restart, _('Restart system') ) ]
         else:
             items = [ (self.shutdown_freevo, _('Shutdown Freevo') ),
                           (self.shutdown_system, _('Shutdown system') ),
                           (self.shutdown_system_restart, _('Restart system') ) ]
-        if config.SYS_SHUTDOWN_ENABLE:
+        if config.SYS_SHUTDOWN_ENABLE and not config.SHUTDOWN_NEW_STYLE_DIALOG:
             items = [ items[1], items[0], items[2] ]
 
         return items
 
+    def new_confirm_exit(self, arg=None, menuw=None):
+        """
+        Pops up a ConfirmBox.
+        """
+        _debug_('confirm_freevo(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        self.menuw = menuw
+        dialog = ShutdownDialog()
+        dialog.show()
 
     def confirm_freevo(self, arg=None, menuw=None):
         """
@@ -180,6 +192,7 @@ class ShutdownItem(Item):
         """
         _debug_('confirm_freevo(arg=%r, menuw=%r)' % (arg, menuw), 2)
         self.menuw = menuw
+
         what = _('Do you really want to shut down Freevo?')
         dialog = ButtonDialog(((_('Shutdown'), self.shutdown_freevo), (_('Cancel'), None, True)),
                                what, ButtonDialog.QUESTION_TYPE)
@@ -233,6 +246,36 @@ class ShutdownItem(Item):
         _debug_('shutdown_system_restart(arg=%r, menuw=%r)' % (arg, menuw), 2)
         shutdown(menuw=menuw, mode=ShutdownModes.SYSTEM_RESTART)
 
+
+class ShutdownDialog(WidgetDialog):
+    def __init__(self):
+        self.exit_model = ButtonModel(_('Exit'))
+        self.exit_model.signals['activated'].connect(self.button_activated)
+        self.exit_model.signals['pressed'].connect(self.button_pressed)
+        self.reboot_model = ButtonModel(_('Reboot'))
+        self.reboot_model.signals['activated'].connect(self.button_activated)
+        self.reboot_model.signals['pressed'].connect(self.button_pressed)
+        self.shutdown_model = ButtonModel(_('Shutdown'))
+        self.shutdown_model.signals['activated'].connect(self.button_activated)
+        self.shutdown_model.signals['pressed'].connect(self.button_pressed)
+        super(ShutdownDialog, self).__init__('shutdown', { 'exit':self.exit_model, 'reboot':self.reboot_model,'shutdown':self.shutdown_model}, {})
+        if config.SYS_SHUTDOWN_ENABLE:
+            self.shutdown_model.set_active(True)
+        else:
+            self.exit_model.set_active(True)
+
+    def button_activated(self, button):
+        self.info['message'] = button.text
+
+    def button_pressed(self, button):
+        self.hide()
+        if self.exit_model == button:
+            shutdown(mode=ShutdownModes.FREEVO_SHUTDOWN)
+        elif self.reboot_model == button:
+            shutdown(mode=ShutdownModes.SYSTEM_RESTART)
+        elif self.shutdown_model == button:
+            shutdown(mode=ShutdownModes.SYSTEM_SHUTDOWN)
+        
 
 
 class PluginInterface(MainMenuPlugin):

@@ -115,7 +115,7 @@ from event import *
 # of the config file doesn't match, Freevo won't start. If the minor version
 # is different, there will be only a warning
 
-LOCAL_CONF_VERSION = 5.28
+LOCAL_CONF_VERSION = 5.29
 
 # Description of changes in each new version
 FREEVO_CONF_CHANGES = [
@@ -411,6 +411,10 @@ LOCAL_CONF_CHANGES = [
      """ Added MPLAYER_PROPERTY_TIMEOUT to control how long freevo waits for mplayer property calls
      Added SYS_FOLLOW_SYMLINKS to follow symlinks, default is false
      """),
+    (5.29,
+     """ Added SHUTDOWN_NEW_STYLE_DIALOG to control whether the new shutdown dialog is used or the old
+     multi-option menu.
+     """)
 ]
 
 
@@ -499,6 +503,7 @@ SYS_RESTART_CMD  = 'shutdown -r now'  # like SYS_SHUTDOWN_CMD, only for reboot
 SYS_SHUTDOWN_ENABLE = 0  # Performs a whole system shutdown at SHUTDOWN!
                          # For standalone boxes.
 
+SHUTDOWN_NEW_STYLE_DIALOG=True # New style shutdown dialog
 # ======================================================================
 # Main menu items
 # ======================================================================

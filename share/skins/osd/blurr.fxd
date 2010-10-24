@@ -175,5 +175,23 @@
 <text name="Message" x="5" y="0" width="740" height="40" expression="message" font="message" align="left" valign="center"/>
 </osd>
 
+<osd name="shutdown" x="150" y="200" width="500" height="250">
+<image name="background" x="0" y="0" width="500" height="250" expression="True" scale="noscale" align="left" valign="top" src="dialog_bg.png"/>
+<text name="text" x="20" y="20" width="460" height="50" expression="message" font="message" align="center" valign="center"/>
+<widget name="exit" x="30" y="86" width="128" height="128" style="shutdown_button" left="shutdown" right="reboot" up="" down=""/>
+<widget name="reboot" x="186" y="86" width="128" height="128" style="shutdown_button" left="exit" right="shutdown" up="" down=""/>
+<widget name="shutdown" x="342" y="86" width="128" height="128" style="shutdown_button" left="reboot" right="exit" up="" down=""/>
+<image name="exit" x="30" y="86" width="128" height="128" expression="True" scale="noscale" align="left" valign="top" src="application-exit"/>
+<image name="reboot" x="186" y="86" width="128" height="128" expression="True" scale="noscale" align="left" valign="top" src="system-reboot"/>
+<image name="shutdown" x="342" y="86" width="128" height="128" expression="True" scale="noscale" align="left" valign="top" src="system-shutdown"/>
+</osd>
+<widgetstyle name="shutdown_button">
+<widgetstate state="normal"/>
+<widgetstate state="active">
+<image name="Image1" x="0" y="0" width="width" height="height" expression="True" scale="noscale" align="left" valign="top" src="selected-128x128.png"/>
+</widgetstate>
+<widgetstate state="disabled"/>
+<widgetstate state="pressed"/>
+</widgetstyle>
 </osds>
 </freevo>

@@ -50,7 +50,7 @@
 #
 # -----------------------------------------------------------------------
 
-CONFIG_VERSION = 5.27
+CONFIG_VERSION = 5.29
 
 # ======================================================================
 # General freevo settings:
@@ -113,6 +113,14 @@ CONFIG_VERSION = 5.27
 #
 # SYS_SHUTDOWN_CMD = "sudo shutdown -h now"
 # SYS_RESTART_CMD = "sudo shutdown -r now"
+
+#
+# New Style shutdown dialog
+#
+# True for the new style dialog
+# False for the original style dialog
+
+# SHUTDOWN_NEW_STYLE_DIALOG=True
 
 # ======================================================================
 # AUTOSHUTDOWN CONFIGURATION
