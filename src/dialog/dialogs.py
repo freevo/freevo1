@@ -44,7 +44,6 @@ from pygame.locals import *
 import rc
 import event
 import dialog
-import threading
 
 import kaa
 
@@ -808,40 +807,27 @@ class ProgressDialog(Dialog):
 
 class DialogUpdater(object):
     def __init__(self, dialog):
+        import pygame.time
+
         self.dialog = dialog
         self.state = 'running'
-        self.event = threading.Event()
-        self.thread = threading.Thread(target=self.__update_dialog)
-        self.thread.setDaemon(True)
-        self.thread.start()
+        self.timer = kaa.OneShotTimer(self.__update_dialog)
+        self.timer.start(self.dialog.update_interval)
+        self.delay = self.dialog.update_interval
+        self.clock = pygame.time.Clock()
 
     def pause(self):
-        self.set_state('pause')
+        self.timer.stop()
+
 
     def resume(self):
-        self.set_state('running')
+        clock.tick()
+        self.start(self.delay)
 
     def stop(self):
-        self.set_state('quit')
-
-    def set_state(self, state):
-        if self.state != state:
-            self.state = state
-            self.event.set()
+        self.timer.stop()
 
     def __update_dialog(self):
-        import pygame.time
-        clock = pygame.time.Clock()
-        delay = self.dialog.update_interval
-        while self.state != 'quit':
-            if delay > 0.0:
-                self.event.wait(delay)
-            if self.event.isSet():
-                self.event.clear()
-                if self.state == 'pause':
-                    self.event.wait()
-                    self.event.clear()
-                    clock.tick()
-            if self.state == 'running':
-                self.dialog.display.redraw_dialog(self.dialog)
-            delay = self.dialog.update_interval - (clock.tick() / 1000.0)
+        self.dialog.display.redraw_dialog(self.dialog)
+        self.delay = self.dialog.update_interval - (self.clock.tick() / 1000.0)
+        self.timer.start(self.delay)

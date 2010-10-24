@@ -43,7 +43,6 @@ the higher priority dialog closes.
 """
 
 import time
-import threading
 import traceback
 
 import config
@@ -212,6 +211,16 @@ class AppTextDisplay(Display):
     def show_message(self, message):
         self.write_message(message)
 
+def CallInMainThread(func):
+    """
+    Decorator to ensure a function is called in the main thread.
+    """
+    def new_func(*args, **kwargs):
+        return kaa.MainThreadCallable(func, *args, **kwargs)()
+    new_func.__name__ = func.__name__
+    new_func.__doc__ = func.__doc__
+    new_func.__dict__.update(func.__dict__)
+    return new_func
 
 class GraphicsDisplay(Display):
     """
@@ -228,7 +237,6 @@ class GraphicsDisplay(Display):
         self.current_time_details = None
         self.waiting = {dialogs.Dialog.NORMAL_PRIORITY:None, dialogs.Dialog.LOW_PRIORITY:None}
         self.hide_dialog_timer = kaa.OneShotTimer(self.__hide_dialog)
-        self._lock = threading.RLock()
         self.volume_dialog = None
 
     def handle_event(self, event):
@@ -242,28 +250,30 @@ class GraphicsDisplay(Display):
         if self.current_dialog and hasattr(self.current_dialog, 'handle_mouse_event'):
             self.current_dialog.handle_mouse_event(evt)
 
-
+    @CallInMainThread
     def show_volume(self, level, muted, channel=None):
         if self.volume_dialog is None:
             self.volume_dialog = dialogs.VolumeDialog()
         self.volume_dialog.set_details(level, muted, channel)
         self.volume_dialog.show()
 
+    @CallInMainThread
     def show_message(self, message):
         dialog = dialogs.MessageDialog(message)
         dialog.show()
 
+    @CallInMainThread
     def show_play_state(self, state, item, get_time_info=None):
         dialog = dialogs.PlayStateDialog(state, item, get_time_info)
         dialog.show()
 
+    @CallInMainThread
     def show_dialog(self, dialog, duration):
         """
         Show the supplied dialog for upto duration seconds.
         @param dialog: The dialog to render.
         @param duration: The maximum length of time to display the dialog. Use 0.0 to display until hidden.
         """
-        self._lock.acquire()
 
         if self.current_dialog and self.current_dialog != dialog:
             _debug_('Dialog already open, current priority %s new dialog priority %s' % (self.current_dialog.priority, dialog.priority))
@@ -296,34 +306,33 @@ class GraphicsDisplay(Display):
             elif dialog.priority < self.current_dialog.priority:
                 _debug_('Queuing new dialog')
                 self.waiting[dialog.priority] = (dialog, duration, False)
-                self._lock.release()
                 return
             else:
                 _debug_('Dialog is same priority as previous dialog')
 
         self.__set_current_dialog(dialog, duration, self.current_dialog == dialog)
 
-        self._lock.release()
 
+    @CallInMainThread
     def redraw_dialog(self, dialog):
         """
         Redraw the specified dialog if it is the current dialog show.
         This operation will not affect the duration the dialog is displayed for.
         @param dialog: The dialog to redraw.
         """
-        self._lock.acquire()
+        
         if self.current_dialog is not None and self.current_dialog == dialog:
             try:
                 self.show_image(dialog.render(), dialog.skin.position)
             except:
                 _debug_('Exception caught while trying to render dialog!\n' + traceback.format_exc(), DERROR)
-        self._lock.release()
-
+        
+    @CallInMainThread
     def hide_all_dialogs(self):
         """
         Hide currently showing and queued dialogs.
         """
-        self._lock.acquire()
+        
         if self.current_dialog:
             self.hide_dialog_timer.stop()
             self.hide_image()
@@ -335,14 +344,15 @@ class GraphicsDisplay(Display):
                     dialog, duration, prepared = self.waiting[dialogs.Dialog.NORMAL_PRIORITY]
                     dialog.finish()
                     self.waiting[priority] = None
-        self._lock.release()
+        
 
+    @CallInMainThread
     def hide_dialog(self, dialog):
         """
         Hide a currently display dialog.
         @param dialog: The dialog to hide.
         """
-        self._lock.acquire()
+        
         if self.current_dialog is not None:
             if self.current_dialog == dialog:
                 priority = self.current_dialog.priority
@@ -371,8 +381,6 @@ class GraphicsDisplay(Display):
                     if waiting[2]:
                         dialog.finish()
                     self.waiting[dialog.priority] = None
-
-        self._lock.release()
 
     def disabled(self):
         self.hide_all_dialogs()
