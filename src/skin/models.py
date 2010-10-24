@@ -39,6 +39,7 @@ class ScrollableText:
         """
         Initialise the scrollable text area with the text to scroll.
         """
+        self.first_line_index = 0
         self.text = text
         self.page = []
         self.lines = []
@@ -49,6 +50,10 @@ class ScrollableText:
         Returns the page of text to display.
         """
         return self.page
+
+    def get_page_details(self):
+        return (self.first_line_index, len(self.lines), self.max_lines)
+
 
     def __get_line__(self, string, max_width, font, word_splitter, hard):
         """

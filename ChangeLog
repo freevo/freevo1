@@ -16,6 +16,8 @@ X is the category and #nnnnnnn is the tracker number.
 svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
 
  * New blurr OSD theme (F#2826636)
+ * New style of shutdown dialog with all options shown (use back to exit the dialog)
+ * Add scrollbars to description screen.
  * New improvements to the rc.app() interface (F#2772598)
  * New iplayer plug-in for BBC IPlayer (F#2809981)
  * New Skype plug-in (F#2855837)

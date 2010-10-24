@@ -89,6 +89,17 @@ class Scrollabletext_Area(Skin_Area):
             if scrollable_text.more_lines_up() and area.images['uparrow']:
                 self.drawimage(area.images['uparrow'].filename, area.images['uparrow'])
 
+            if (scrollable_text.more_lines_down() or scrollable_text.more_lines_up()) and \
+                    area.images['scrollbar']:
+                offset, total_lines, lines_per_page = scrollable_text.get_page_details()
+                v = copy.copy(area.images['scrollbar'])
+                if isinstance(area.images['scrollbar'].height, types.TupleType):                   
+                    v.height = eval_attr(v.height, content.height)
+                v.y += int(float(v.height) * (float(offset) / float(total_lines)))
+                h = int(float(v.height) * (float(lines_per_page) / float(total_lines)))
+                v.height = min(v.height, h)
+                self.drawimage(area.images['scrollbar'].filename, v)
+
             if scrollable_text.more_lines_down() and area.images['downarrow']:
                 if isinstance(area.images['downarrow'].y, types.TupleType):
                     v = copy.copy(area.images['downarrow'])

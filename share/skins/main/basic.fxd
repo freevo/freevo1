@@ -857,6 +857,7 @@
             <info layout="tvguideinfo program details" x="10" y="70" width="780" height="80"/>
             <scrollabletext layout="info" x="10" y="160" width="740" height="420 - buttonbar_height">
                 <image x="758" y="160" width="32" height="32" label="uparrow" filename="up.png"/>
+                <image x="764" y="194" width="16" height="max - 68" label="scrollbar" filename="scrollbar.png"/>
                 <image x="758" y="max-32" width="32" height="32" label="downarrow" filename="down.png"/>
             </scrollabletext>
         </tvguideinfo>
