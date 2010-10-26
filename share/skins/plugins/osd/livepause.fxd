@@ -7,7 +7,7 @@
     <version>1.0</version>
     <osd name="livepause_state" x="50" y="236" width="700" height="80">
       <image name="Percent Background" x="145" y="50" width="410" height="30" expression="True" scale="noscale" src="base/livepause_state_bg.png"/>
-      <text name="State" x="0" y="0" width="700" height="40" expression="state_string" font="VeraBd/20" align="center" valign="center" fgcolor="255,154,40"/>
+      <text name="State" x="0" y="0" width="700" height="40" expression="state_string" font="DejaVuSans-Bold/20" align="center" valign="center" fgcolor="255,154,40"/>
       <percent name="Percent" x="150" y="55" width="400" height="20" expression="percent" src="base/livepause_state_bar.png" vertical="False"/>
     </osd>
     <osd name="livepause_info" x="50" y="400" width="700" height="150">
@@ -32,7 +32,7 @@
       <text name="Current" x="301" y="6" width="95" height="25" expression="strftime('%H:%M',current_time)" font="info" align="center" valign="top"/>
       <text name="End" x="607" y="6" width="95" height="25" expression="strftime('%H:%M',end_time)" font="info" align="left" valign="top"/>
     </osd>
-    <font label="info" name="VeraBd" size="16" color="255,255,255,255"/>
-    <font label="description" name="VeraBd" size="14" color="255,255,255,255"/>
+    <font label="info" name="DejaVuSans-Bold" size="16" color="255,255,255,255"/>
+    <font label="description" name="DejaVuSans-Bold" size="14" color="255,255,255,255"/>
   </osds>
 </freevo>

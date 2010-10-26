@@ -68,16 +68,16 @@
         valign="center"/>
     </layout>
 
-    <font label="title" name="VeraBd" size="29" color="0xffffff">
+    <font label="title" name="DejaVuSans-Bold" size="29" color="0xffffff">
       <shadow visible="yes" color="0x80000000" x="3" y="3"/>
     </font>
 
     <font label="item" color="0xffffff"/>
 
-    <font label="main" name="VeraBd" size="20" color="0xdddddd">
+    <font label="main" name="DejaVuSans-Bold" size="20" color="0xdddddd">
       <shadow x="1" y="1" color="0x000000" visible="yes"/>
     </font>
-    <font label="main selected" name="VeraBd" size="20" color="0xffffff">
+    <font label="main selected" name="DejaVuSans-Bold" size="20" color="0xffffff">
       <shadow x="1" y="1" color="0x000000" visible="yes"/>
     </font>
 
@@ -89,11 +89,11 @@
       <shadow x="1" y="1" color="0x000000" visible="yes"/>
     </font>
     
-    <font label="info tagline" name="VeraBd" size="16" color="0xffffff">
+    <font label="info tagline" name="DejaVuSans-Bold" size="16" color="0xffffff">
       <shadow x="1" y="1" color="0x000000" visible="yes"/>
     </font>
     
-    <font label="info plot" name="VeraBd" size="16" color="0xffffff">
+    <font label="info plot" name="DejaVuSans-Bold" size="16" color="0xffffff">
       <shadow x="1" y="1" color="0x000000" visible="yes"/>
     </font>
     
@@ -103,12 +103,12 @@
       <shadow x="1" y="1" color="0x000000" visible="yes"/>
     </font>
 
-    <!--<font label="widget" name="VeraBd" size="16" color="0x000000"/>-->
-    <font label="widget" name="VeraBd.ttf" size="14">
+    <!--<font label="widget" name="DejaVuSans-Bold" size="16" color="0x000000"/>-->
+    <font label="widget" name="DejaVuSans-Bold.ttf" size="14">
       <shadow visible="yes" color="0x000000" border="yes"/>
     </font>
 
-    <font label="selected widget" name="VeraBd.ttf" size="14">
+    <font label="selected widget" name="DejaVuSans-Bold.ttf" size="14">
       <shadow visible="yes" color="0x000000" border="yes"/>
     </font>
 
@@ -117,7 +117,7 @@
     <color label="widget item background" value="0xefb744"/>
     <color label="widget selected background" value="0xfffe8d"/>
 
-    <font label="default" name="Vera" size="18" color="0xffffff"/>
+    <font label="default" name="DejaVuSans" size="18" color="0xffffff"/>
 
 
     <!-- 

@@ -627,7 +627,7 @@
             <shadow visible="no" color="0x000000" border="yes"/>
         </font>
         <font label="tv grey" name="Arial_Bold" size="14" color="0xa0bbbbbb"/>
-        <font label="tv highlight" name="VeraBd.ttf" size="14" color="0xa0eeee00"/>
+        <font label="tv highlight" name="DejaVuSans-Bold.ttf" size="14" color="0xa0eeee00"/>
         <font label="tv time" name="Arial_Bold" size="14" color="0xffffff"/>
         <font label="tv title" name="Arial_Bold" size="16" color="0xffffff"/>
 

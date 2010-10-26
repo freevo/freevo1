@@ -863,7 +863,7 @@ CACHE_IMAGES = 1
 # Font aliases
 # All names must be lowercase! All alternate fonts must be in './share/fonts/'
 #
-# OSD_FONT_ALIASES = { 'arial_bold.ttf' : 'VeraBd.ttf' }
+# OSD_FONT_ALIASES = { 'arial_bold.ttf' : 'DejaVuSans-Bold.ttf' }
 
 # For non-european character sets the OSD_FORCE_FONTNAME and
 # OSD_FORCE_FONTSIZE can be set. The size is a scaling ratio, ie 1.2.

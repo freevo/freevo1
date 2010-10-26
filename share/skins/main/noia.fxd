@@ -7,7 +7,7 @@
 
     <image label="background" filename="blurr_naxos"/>
     
-    <font label="title area" name="VeraBd" size="22" color="0xffffff">
+    <font label="title area" name="DejaVuSans-Bold" size="22" color="0xffffff">
       <shadow visible="yes" color="0x80000000" x="3" y="3"/>
     </font>
 
@@ -36,12 +36,12 @@
     </font>
 
     <color label="widget background" value="0xefb744"/>
-    <font label="widget" name="VeraBd" size="16" color="0x000000"/>
+    <font label="widget" name="DejaVuSans-Bold" size="16" color="0x000000"/>
     <color label="widget text" value="0x0000ff"/>
     <color label="widget item background" value="0xefb744"/>
     <color label="widget selected background" value="0xfffe8d"/>
 
-    <font label="default" name="Vera" size="18" color="0xffffff"/>
+    <font label="default" name="DejaVuSans" size="18" color="0xffffff"/>
 
 
     <layout label="audio list">

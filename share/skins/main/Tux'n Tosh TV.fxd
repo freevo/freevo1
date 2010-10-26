@@ -65,57 +65,57 @@ Images: defaults to video/audio
 ******************************************************* -->
 
 <!-- the main menu fonts -->
-<font label="main" name="Vera" size="14" color="dark" >
+<font label="main" name="DejaVuSans" size="14" color="dark" >
   <shadow x="1" y="1" color="dark shadow" visible="yes" />
 </font>
-<font label="main selected" name="Vera" size="14" color="light">
+<font label="main selected" name="DejaVuSans" size="14" color="light">
   <shadow x="1" y="1" color="black" visible="yes" />
 </font>
 
 <!-- font used in the info area -->
-<font label="info title" name="Vera" size="12" color="dark">
+<font label="info title" name="DejaVuSans" size="12" color="dark">
  <shadow x="1" y="1" color="black" visible="yes" />
 </font>
-<font label="info label" name="Vera" size="11" color="dark">
+<font label="info label" name="DejaVuSans" size="11" color="dark">
  <shadow x="1" y="1" color="black" visible="yes" />
 </font>
-<font label="info value" name="Vera" size="11" color="contrast">
+<font label="info value" name="DejaVuSans" size="11" color="contrast">
  <shadow x="1" y="1" color="black" visible="yes" />
 </font>
 
 <!-- fonts for listing area ************************ -->
-<font label="item" size="14" name="Vera" color="dark" align="left">
+<font label="item" size="14" name="DejaVuSans" color="dark" align="left">
   <shadow x="1" y="1" color="dark shadow" visible="yes" />
 </font>
-<font label="selected" size="14" name="Vera" color="light" align="left">
+<font label="selected" size="14" name="DejaVuSans" color="light" align="left">
  <shadow x="1" y="1" color="dark shadow" visible="yes" />
 </font>
 
 <!-- misc fonts ************************************* -->
-<font label="splashscreen font" name="Vera" size="20" color="light">
+<font label="splashscreen font" name="DejaVuSans" size="20" color="light">
  <shadow x="1" y="1" color="black" visible="yes" />
 </font>
-<font label="popup" size="14" name="Vera" color="dark" />
-<font label="widget" size="16" name="Vera" color="light"/>
-<font label="selected widget" size="16" name="Vera" color="contrast"/>
-<font label="default" size="12" name="Vera" color="light"/>
-<font label="small" size="10" name="Vera" color="dark"/>
-<font label="title" size="20" name="Vera" color="light" align="center">
+<font label="popup" size="14" name="DejaVuSans" color="dark" />
+<font label="widget" size="16" name="DejaVuSans" color="light"/>
+<font label="selected widget" size="16" name="DejaVuSans" color="contrast"/>
+<font label="default" size="12" name="DejaVuSans" color="light"/>
+<font label="small" size="10" name="DejaVuSans" color="dark"/>
+<font label="title" size="20" name="DejaVuSans" color="light" align="center">
  <shadow visible="yes" color="black" x="1" y="1"/>
 </font>
-<font label="title small" size="20" name="Vera" color="light" align="center">
+<font label="title small" size="20" name="DejaVuSans" color="light" align="center">
  <shadow visible="yes" color="black" x="1" y="1"/>
 </font>
 
-<font label="detachbar" size="12" name="Vera" color="light">
+<font label="detachbar" size="12" name="DejaVuSans" color="light">
  <shadow x="1" y="1" color="black" visible="yes" />
 </font>
 
 <!-- idlebar fonts ****************************** -->
-<font label="clock" size="14" name="Vera" color="dark shadow" />
-<font label="weather" size="20" name="Vera" color="dark shadow" />
+<font label="clock" size="14" name="DejaVuSans" color="dark shadow" />
+<font label="weather" size="20" name="DejaVuSans" color="dark shadow" />
 
-<font label="osd" name="Vera.ttf" size="24" color="0xffffff">
+<font label="osd" name="DejaVuSans.ttf" size="24" color="0xffffff">
     <shadow visible="yes" color="0x000000" border="yes"/>
 </font>
 

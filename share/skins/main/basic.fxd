@@ -210,16 +210,16 @@
         </layout>
 
         <!-- font used in this layouts -->
-        <font label="title area" name="VeraBd.ttf" size="24" color="0xffffff"/>
-        <font label="subtitle" name="VeraBd.ttf" size="18" color="0xffffff"/>
+        <font label="title area" name="DejaVuSans-Bold" size="24" color="0xffffff"/>
+        <font label="subtitle" name="DejaVuSans-Bold" size="18" color="0xffffff"/>
 
-        <font label="item" name="VeraBd.ttf" size="16" color="0xdddddd"/>
-        <font label="selected" name="VeraBd.ttf" size="16" color="0xffffff"/>
+        <font label="item" name="DejaVuSans-Bold" size="16" color="0xdddddd"/>
+        <font label="selected" name="DejaVuSans-Bold" size="16" color="0xffffff"/>
 
-        <font label="main" name="VeraBd.ttf" size="24" color="0xdddddd"/>
-        <font label="main selected" name="VeraBd.ttf" size="24" color="0xffffff"/>
+        <font label="main" name="DejaVuSans-Bold" size="24" color="0xdddddd"/>
+        <font label="main selected" name="DejaVuSans-Bold" size="24" color="0xffffff"/>
 
-        <font label="info font" name="VeraBd.ttf" size="16" color="0xffffff"/>
+        <font label="info font" name="DejaVuSans-Bold" size="16" color="0xffffff"/>
 
         <!-- selection color -->
         <color label="selection" value="0xa0000000"/>
@@ -234,10 +234,10 @@
         <image label="logo" filename="logo.png"/>
 
         <!-- bmovl -->
-        <font label="bmovl title" name="Vera" size="18" color="0xffffff"/>
-        <font label="bmovl text" name="Vera" size="14" color="0xffffff"/>
-        <font label="bmovl timer" name="VeraMono" size="12" color="0xffffff"/>
-        <font label="bmovl clock" name="Vera" size="14" color="0xffffff"/>
+        <font label="bmovl title" name="DejaVuSans" size="18" color="0xffffff"/>
+        <font label="bmovl text" name="DejaVuSans" size="14" color="0xffffff"/>
+        <font label="bmovl timer" name="DejaVuSansMono" size="12" color="0xffffff"/>
+        <font label="bmovl clock" name="DejaVuSans" size="14" color="0xffffff"/>
 
 
 
@@ -246,37 +246,37 @@
         ** MISC FONTS/COLORS
         ******************************************************* -->
 
-        <font label="default" name="VeraBd.ttf" size="16" color="0xffffff"/>
+        <font label="default" name="DejaVuSans-Bold" size="16" color="0xffffff"/>
 
-        <font label="tiny0"  name="VeraBd.ttf" size="10" color="default0"/>
-        <font label="tiny1"  name="VeraBd.ttf" size="10" color="default1"/>
-        <font label="tiny2"  name="VeraBd.ttf" size="10" color="default2"/>
+        <font label="tiny0"  name="DejaVuSans-Bold" size="10" color="default0"/>
+        <font label="tiny1"  name="DejaVuSans-Bold" size="10" color="default1"/>
+        <font label="tiny2"  name="DejaVuSans-Bold" size="10" color="default2"/>
 
-        <font label="small0"  name="VeraBd.ttf" size="12" color="default0"/>
-        <font label="small1"  name="VeraBd.ttf" size="12" color="default1"/>
-        <font label="small2"  name="VeraBd.ttf" size="12" color="default2"/>
+        <font label="small0"  name="DejaVuSans-Bold" size="12" color="default0"/>
+        <font label="small1"  name="DejaVuSans-Bold" size="12" color="default1"/>
+        <font label="small2"  name="DejaVuSans-Bold" size="12" color="default2"/>
 
-        <font label="medium0" name="VeraBd.ttf" size="16" color="default0"/>
-        <font label="medium1" name="VeraBd.ttf" size="16" color="default1"/>
-        <font label="medium2" name="VeraBd.ttf" size="16" color="default2"/>
+        <font label="medium0" name="DejaVuSans-Bold" size="16" color="default0"/>
+        <font label="medium1" name="DejaVuSans-Bold" size="16" color="default1"/>
+        <font label="medium2" name="DejaVuSans-Bold" size="16" color="default2"/>
 
-        <font label="large0"  name="VeraBd.ttf" size="20" color="default0"/>
-        <font label="large1"  name="VeraBd.ttf" size="20" color="default1"/>
-        <font label="large2"  name="VeraBd.ttf" size="20" color="default2"/>
+        <font label="large0"  name="DejaVuSans-Bold" size="20" color="default0"/>
+        <font label="large1"  name="DejaVuSans-Bold" size="20" color="default1"/>
+        <font label="large2"  name="DejaVuSans-Bold" size="20" color="default2"/>
 
-        <font label="huge0"  name="VeraBd.ttf" size="28" color="default0"/>
-        <font label="huge1"  name="VeraBd.ttf" size="28" color="default1"/>
-        <font label="huge2"  name="VeraBd.ttf" size="28" color="default2"/>
+        <font label="huge0"  name="DejaVuSans-Bold" size="28" color="default0"/>
+        <font label="huge1"  name="DejaVuSans-Bold" size="28" color="default1"/>
+        <font label="huge2"  name="DejaVuSans-Bold" size="28" color="default2"/>
 
         <color label="default0" value="0xffffff"/>
         <color label="default1" value="0xffffaa"/>
         <color label="default2" value="0xcccccc"/>
 
         <!-- plugin fonts -->
-        <font label="osd" name="Vera.ttf" size="24" color="0xffffff">
+        <font label="osd" name="DejaVuSans" size="24" color="0xffffff">
             <shadow visible="yes" color="0x000000" border="yes"/>
         </font>
-        <font label="detachbar" name="VeraBd.ttf" size="10" color="0xffffff"/>
+        <font label="detachbar" name="DejaVuSans-Bold" size="10" color="0xffffff"/>
 
 
 
@@ -315,8 +315,8 @@
             </content>
         </layout>
 
-        <font label="widget" name="VeraBd.ttf" size="16" color="0xffffff"/>
-        <font label="selected widget" name="VeraBd.ttf" size="16" color="0x164668"/>
+        <font label="widget" name="DejaVuSans-Bold" size="16" color="0xffffff"/>
+        <font label="selected widget" name="DejaVuSans-Bold" size="16" color="0x164668"/>
 
         <color label="widget text" value="0xffffff"/>
         <color label="widget background" value="0x001F4A95"/>
@@ -433,11 +433,11 @@
             </content>
         </layout>
 
-        <font label="player title" name="VeraBd.ttf" size="24" color="0xffffff">
+        <font label="player title" name="DejaVuSans-Bold" size="24" color="0xffffff">
             <shadow x="2" y="2" color="0x000000" visible="yes"/>
         </font>
-        <font label="player artist" name="VeraBd.ttf" size="18" color="0xffffff"/>
-        <font label="player info"   name="VeraBd.ttf" size="14" color="0xffffaa"/>
+        <font label="player artist" name="DejaVuSans-Bold" size="18" color="0xffffff"/>
+        <font label="player info"   name="DejaVuSans-Bold" size="14" color="0xffffaa"/>
 
         <color label="player mask" value="0x80000000"/>
 
@@ -706,18 +706,18 @@
             </content>
         </layout>
 
-        <font label="tv" name="VeraBd.ttf" size="16" color="0xffffff"/>
-        <font label="tv selected" name="VeraBd.ttf" size="16" color="0xffff66">
+        <font label="tv" name="DejaVuSans-Bold" size="16" color="0xffffff"/>
+        <font label="tv selected" name="DejaVuSans-Bold" size="16" color="0xffff66">
             <shadow visible="yes" color="0x000000" x="1" y="1"/>
         </font>
-        <font label="tv grey" name="VeraBd.ttf" size="16" color="0xa0bbbbbb"/>
-        <font label="tv highlight" name="VeraBd.ttf" size="16" color="0xa0eeee00"/>
-        <font label="tv time" name="VeraBd.ttf" size="14" color="0xffffaa"/>
-        <font label="tv title" name="VeraBd.ttf" size="24" color="0xffffff">
+        <font label="tv grey" name="DejaVuSans-Bold" size="16" color="0xa0bbbbbb"/>
+        <font label="tv highlight" name="DejaVuSans-Bold" size="16" color="0xa0eeee00"/>
+        <font label="tv time" name="DejaVuSans-Bold" size="14" color="0xffffaa"/>
+        <font label="tv title" name="DejaVuSans-Bold" size="24" color="0xffffff">
             <shadow x="2" y="2" color="0x000000" visible="yes"/>
         </font>
-        <font label="tv subtitle" name="VeraBI.ttf" size="18" color="0xffffff"/>
-        <font label="tv description"    name="VeraBd.ttf" size="16" color="0xffffff"/>
+        <font label="tv subtitle" name="DejaVuSans-BoldOblique" size="18" color="0xffffff"/>
+        <font label="tv description"    name="DejaVuSans-Bold" size="16" color="0xffffff"/>
 
         <color label="tv label" value="0x88000066"/>
         <color label="tv selection" value="0x88ffffff"/>
@@ -859,7 +859,7 @@
                 spacing="10"/>
         </layout>
 
-        <font label="splashscreen font" name="Vera.ttf" size="20"
+        <font label="splashscreen font" name="DejaVuSans" size="20"
             color="0xffffff"/>
 
 
