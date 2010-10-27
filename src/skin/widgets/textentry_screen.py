@@ -28,15 +28,31 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+import time
 
 from event import *
 from skin.models import Button, ButtonGroup, TextEntry
 
 import skin
 skin_object = skin.get_singleton()
-#skin_object:
+
 if skin_object:
     skin_object.register('textentry', ('screen', 'title','textentry', 'buttongroup', 'plugin'))
+
+key_press_timeout = 0.75
+
+number_chars = (" 0",
+                ".,-1",
+                "ABC2",
+                "DEF3",
+                "GHI4",
+                "JKL5",
+                "MNO6",
+                "PQRS7",
+                "TUV8",
+                "WXYZ9")
+
+
 
 class TextEntryScreen:
     def __init__(self, action, title, text='', alpha=True, numeric=True, symbol=True):
@@ -127,6 +143,8 @@ class TextEntryScreen:
         elif symbol:
             self.button_group = self.symbols_button_group
 
+        self.last_key = None
+        self.last_key_press = 0
 
     def show(self, menuw):
         """
@@ -156,6 +174,7 @@ class TextEntryScreen:
         if event is MENU_SELECT:
             self.button_group.selected_button.select()
             event_consumed = True
+            self.last_key = None
 
         elif event in (MENU_LEFT, MENU_RIGHT, MENU_DOWN, MENU_UP):
             if event is MENU_LEFT:
@@ -167,6 +186,33 @@ class TextEntryScreen:
             elif event is MENU_UP:
                 redraw = self.button_group.move_up()
             event_consumed = True
+            self.last_key = None
+
+        elif event == BUTTON:
+            if event.arg == '*':
+                self.modify_char()
+                self.last_key = None
+                self.last_key_press = time.time()
+                event_consumed = True
+            else:
+                n = -1
+                try:
+                    n = int(event.arg)
+                except:
+                    pass
+                if n >=0 and n <= 9:
+                    now = time.time()
+                    
+                    if self.last_key == event.arg and \
+                        (now - self.last_key_press) < key_press_timeout:
+                        self.modify_char()
+                    else:
+                        # New key press
+                        self.insert_char(number_chars[n][0])
+
+                    self.last_key = event.arg
+                    self.last_key_press = now
+                    event_consumed = True
 
         if redraw:
             self.refresh()
@@ -174,13 +220,33 @@ class TextEntryScreen:
         return event_consumed
 
 
-    def insert_key(self, arg):
+    def insert_char(self, arg):
         """
         Button action to insert a character.
         """
         self.text_entry.insert_char_at_caret(arg)
         self.refresh()
 
+    def modify_char(self):
+        """
+        Modify the current character to be the next character in the number_char
+        entry string for the last key pressed.
+        """
+        ch = self.text_entry.get_char_at_caret()
+        new_ch = None
+        for number_group in number_chars:
+            i = number_group.find(ch)
+            if i != -1:
+                i += 1
+                if i >= len(number_group):
+                    i = 0
+                new_ch = number_group[i]
+                break
+
+        if new_ch is not None:
+            self.text_entry.replace_char_at_caret(new_ch)
+            self.refresh()
+        
 
     def move_caret(self, arg):
         """
@@ -229,7 +295,7 @@ class TextEntryScreen:
                 text = _('Space')
             else:
                 text = key
-            button_group.set_button(r, c, Button(text, self.insert_key, key))
+            button_group.set_button(r, c, Button(text, self.insert_char, key))
             c += 1
             if c == 5:
                 r += 1

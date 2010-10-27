@@ -919,12 +919,14 @@
             <textentry layout="text entry" x="10" y="80 + idlebar_height" width="780" height="40"/>
             <buttongroup layout="keyboard" x="10" y="130 + idlebar_height" width="780" height="390 - idlebar_height"/>
         </textentry>
-        
+
+        <font label="text entry" name="DejaVuSans" size="16" color="0x000000"/>
+
         <layout label="text entry">
             <background >
-                <rectangle size="2" color="0x000000" bgcolor="0xff000000" radius="0"/>
+                <rectangle size="2" color="0x000000" bgcolor="0xffffff" radius="0"/>
             </background>
-            <content x="2" y="2" width="MAX-4" height="MAX-4" type="text" spacing="20" font="default" />
+            <content x="4" y="4" width="MAX-8" height="MAX-8" type="text" spacing="20" font="text entry" />
         </layout>
 
         <layout label="keyboard">

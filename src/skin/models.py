@@ -233,6 +233,22 @@ class TextEntry:
         # TODO: Right to Left handling
         self.caret_position += 1
 
+    def replace_char_at_caret(self, char):
+        """
+        Replace one character at the current caret position
+        """
+        if self.caret_position == 0:
+            return
+        if self.caret_position == 1:
+            self.text = char + self.text[1:]
+        else:
+            self.text = self.text[:self.caret_position - 1] + char + self.text[self.caret_position:]
+
+    def get_char_at_caret(self):
+        """
+        Return the character at current caret position.
+        """
+        return self.text[self.caret_position - 1]
 
 class Button:
     """
