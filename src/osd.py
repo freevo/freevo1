@@ -104,7 +104,7 @@ PERIOD  EJECT
 F10     Screenshot
 L       Subtitle
 """
-
+MAX_DIM_SURFACES = 10
 
 # Module variable that contains an initialized OSD() object
 _singleton = None
@@ -397,6 +397,8 @@ class OSD:
         pygame.display.init()
         pygame.font.init()
 
+        self.pygame_1_8 = (pygame.version.vernum[0] == 1 and pygame.version.vernum[1] >= 8)
+
         self.depth = 32
         self.hw    = 0
 
@@ -417,6 +419,7 @@ class OSD:
         self.screensaver_running = False
         self.dialog_layer = self.screen.convert_alpha()
         self.dialog_layer.fill((0, 0, 0, 128))
+        self.dim_surfaces = {}
 
         if config.CONF.display == 'x11' and config.START_FULLSCREEN_X == 1:
             self.toggle_fullscreen()
@@ -644,6 +647,10 @@ class OSD:
         shutdown the display
         """
         _debug_('OSD.shutdown()', 1)
+        _debug_('Dimming Surfaces', 1)
+        for size, (s,c) in self.dim_surfaces.items():
+            _debug_('    %d x %d: Count = %d' % (size[0], size[1], c), 1)
+            
         import plugin
         if not plugin.is_active('dialog.x11_overlay_display'):
             pygame.quit()
@@ -1132,6 +1139,31 @@ class OSD:
         # calc the matching and rest string and return all this
         return (width+ellipses_size, string[:c]+ellipses, string[c:], False)
 
+    def __get_dimming_surface(self, surface, size):
+        if size in self.dim_surfaces:
+            s,c = self.dim_surfaces[size]
+            c += 1
+        else:
+            if len(self.dim_surfaces) >= MAX_DIM_SURFACES:
+                least_used = None
+                least_used_count = 0xffffffff
+                for size,(s,c) in self.dim_surfaces.items():
+                    if c < least_used_count:
+                        least_used = size
+                        least_used_count = c
+                if least_used:
+                    _debug_('Removing dim surface %d x %d count %d' % (least_used + (least_used_count,)), 1)
+                    del self.dim_surfaces[least_used]
+            s = pygame.Surface(size, 0, surface)
+            c = 1
+            alpha = 255
+            step = 255 / size[0]
+            for x in xrange(0, size[0]):
+                pygame.draw.rect(s, (255,255,255,alpha), pygame.Rect(x,0,x,size[1]))
+                alpha -= step
+        self.dim_surfaces[size] = s,c
+        return s
+
 
     def __draw_transparent_text__(self, surface, pixels=30):
         """
@@ -1140,18 +1172,24 @@ class OSD:
         """
         _debug_('__draw_transparent_text__(surface=%r, pixels=%r)' % (surface, pixels), 2)
         try:
-            opaque_mod = float(1)
-            opaque_stp = opaque_mod/float(pixels)
-            w, h       = surface.get_size()
-            alpha      = pygame.surfarray.pixels_alpha(surface)
+            if self.pygame_1_8:
+                w, h       = surface.get_size()
+                pixels = min(pixels, w)
+                surf = self.__get_dimming_surface(surface, (pixels,h))
+                surface.blit(surf,(w - pixels, 0), None, BLEND_RGBA_MULT)
+            else:
+                opaque_mod = float(1)
+                opaque_stp = opaque_mod/float(pixels)
+                w, h       = surface.get_size()
+                alpha      = pygame.surfarray.pixels_alpha(surface)
 
-            # transform all the alpha values in x, y range
-            # any speedup could help alot
-            for x in range(max(w-pixels, 0), w):
-                for y in range(0, h):
-                    if alpha[x, y] != 0:
-                        alpha[x, y] = int(alpha[x, y] * opaque_mod)
-                opaque_mod -= opaque_stp
+                # transform all the alpha values in x, y range
+                # any speedup could help alot
+                for x in range(max(w-pixels, 0), w):
+                    for y in range(0, h):
+                        if alpha[x, y] != 0:
+                            alpha[x, y] = int(alpha[x, y] * opaque_mod)
+                    opaque_mod -= opaque_stp
         except Exception, e:
             _debug_('__draw_transparent_text__: %s' % e, DERROR)
             if config.DEBUG:
