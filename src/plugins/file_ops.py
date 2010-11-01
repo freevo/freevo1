@@ -34,7 +34,8 @@ import config
 import plugin
 import util
 
-from gui.ConfirmBox import ConfirmBox
+import dialog
+from dialog.dialogs import ProgressDialog
 from skin.widgets import TextEntryScreen
 from gui.AlertBox import AlertBox
 
@@ -79,27 +80,26 @@ class PluginInterface(plugin.ItemPlugin):
 
     def confirm_delete(self, arg=None, menuw=None):
         self.menuw = menuw
-        ConfirmBox(text=_('Do you wish to delete\n \'%s\'?') % self.item.name,
-                   handler=self.delete_file, default_choice=1,
-                   handler_message=_('Deleting...')).show()
+        dialog.show_confirmation(_('Do you wish to delete\n \'%s\'?') % self.item.name,
+                   self.delete_file, proceed_text=_('Delete'))
 
 
     def confirm_info_delete(self, arg=None, menuw=None):
         self.menuw = menuw
-        ConfirmBox(text=_('Delete info about\n \'%s\'?') % self.item.name,
-                   handler=self.delete_info, default_choice=1).show()
+        dialog.show_confirmation(_('Delete info about\n \'%s\'?') % self.item.name,
+                   self.delete_info, proceed_text=_('Delete info'))
 
 
     def confirm_edl_delete(self, arg=None, menuw=None):
         self.menuw = menuw
-        ConfirmBox(text=_('Delete edl about\n \'%s\'?') % self.item.name,
-                   handler=self.delete_edl, default_choice=1).show()
+        dialog.show_confirmation(_('Delete edl about\n \'%s\'?') % self.item.name,
+                   self.delete_edl, proceed_text=_('Delete edl'))
 
 
     def confirm_image_delete(self, arg=None, menuw=None):
         self.menuw = menuw
-        ConfirmBox(text=_('Delete image about\n \'%s\'?') % self.item.name,
-                   handler=self.delete_image, default_choice=1).show()
+        dialog.show_confirmation(_('Delete image about\n \'%s\'?') % self.item.name,
+                   self.delete_image, proceed_text=_('Delete image'))
 
 
     def safe_unlink(self, filename):
@@ -110,7 +110,10 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def delete_file(self):
+        dialog = ProgressDialog(_('Deleting...'), indeterminate=True)
+        dialog.show()
         self.item.files.delete()
+        dialog.hide()
         if self.menuw:
             self.menuw.delete_submenu(True, True)
 
