@@ -719,6 +719,10 @@ CLOCK_FORMAT = '%a %d %H:%M'
 # Daemon plug-ins
 # ======================================================================
 
+plugin.activate('fullscreen')
+plugin.activate('help')
+plugin.activate('screenshot')
+
 # autostarter when inserting roms while Freevo is in the MAIN MENU
 plugin.activate('rom_drives.autostart')
 plugin.activate('ejectromdrives')

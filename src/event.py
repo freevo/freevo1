@@ -103,6 +103,10 @@ MIXER_VOLUP            = Event('MIXER_VOLUP', arg=5)
 MIXER_VOLDOWN          = Event('MIXER_VOLDOWN', arg=5)
 MIXER_MUTE             = Event('MIXER_MUTE')
 
+FULLSCREEN_TOGGLE      = Event('FULLSCREEN_TOGGLE')
+HELP_TOGGLE            = Event('HELP_TOGGLE')
+SCREENSHOT             = Event('SCREENSHOT')
+
 # Events for 6-channel audio control.
 MIXER_SUR_VOLUP        = Event('MIXER_SUR_VOLUP', arg=5)
 MIXER_SUR_VOLDOWN      = Event('MIXER_SUR_VOLDOWN', arg=5)
@@ -526,7 +530,10 @@ GAMES_EVENTS = {
 GLOBAL_EVENTS = {
     'VOL+'      : MIXER_VOLUP,
     'VOL-'      : MIXER_VOLDOWN,
-    'MUTE'      : MIXER_MUTE
+    'MUTE'      : MIXER_MUTE,
+    'HELP'      : HELP_TOGGLE,
+    'FULLSCREEN': FULLSCREEN_TOGGLE,
+    'SCREENSHOT': SCREENSHOT
     }
 
 
@@ -579,6 +586,9 @@ DEFAULT_KEYMAP = {
     key.K_a           : 'LANG',
     key.K_RIGHTBRACKET: 'NEXT',
     key.K_LEFTBRACKET : 'PREV',
+    key.K_z           : 'FULLSCREEN',
+    key.K_h           : 'HELP',
+    key.K_F10         : 'SCREENSHOT'
     }
 
 

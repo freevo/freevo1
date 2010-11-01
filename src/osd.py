@@ -448,9 +448,8 @@ class OSD:
         pygame.key.set_repeat(500, 30)
         self.mousehidetime = time.time()
 
-        self._help       = 0  # Is the helpscreen displayed or not
+        self._help       = False  # Is the helpscreen displayed or not
         self._help_saved = pygame.Surface((self.width, self.height))
-        self._help_last  = 0
 
         # Remove old screenshots
         os.system('rm -f /tmp/freevo_ss*.bmp')
@@ -628,19 +627,8 @@ class OSD:
                 if event.key in config.KEYMAP.keys():
                     # Turn off the helpscreen if it was on
                     if self._help:
-                        self._helpscreen()
+                        self.toggle_helpscreen()
                     return config.KEYMAP[event.key]
-
-                elif event.key == K_h:
-                    self._helpscreen()
-
-                elif event.key == K_z:
-                    self.toggle_fullscreen()
-
-                elif event.key == K_F10:
-                    # Take a screenshot
-                    pygame.image.save(self.screen, '/tmp/freevo_ss%s.bmp' % self._screenshotnum)
-                    self._screenshotnum += 1
 
                 else:
                     # don't know what this is, return it as it is
@@ -714,6 +702,13 @@ class OSD:
             self.render.restartall()
         finally:
             self.mutex.release()
+
+    def screenshot(self, filename):
+        """
+        Save a copy of the current screen to the specified file.
+        """
+        # Take a screenshot
+        pygame.image.save(self.screen, filename)
 
 
     def toggle_fullscreen(self):
@@ -1622,12 +1617,12 @@ class OSD:
             self.mutex.release()
 
 
-    def _helpscreen(self):
-        _debug_('_helpscreen()', 2)
+    def toggle_helpscreen(self):
+        _debug_('toggle_helpscreen()', 2)
         if not pygame.display.get_init():
             return
 
-        self._help = {0:1, 1:0}[self._help]
+        self._help = not self._help
         if self._help:
             _debug_('Help on')
             # Save current display
