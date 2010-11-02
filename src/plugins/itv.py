@@ -47,7 +47,7 @@ import urllib
 
 #freevo modules
 import config, menu, rc, plugin, skin, osd, util
-from gui.PopupBox import PopupBox
+import dialog
 from item import Item
 from skin.widgets import ScrollableTextScreen
 from video import VideoItem
@@ -160,8 +160,8 @@ class HeadlinesSiteItem(Item):
         # create Reader object
         reader = Sax2.Reader()
 
-        popup = PopupBox(text=_('Fetching headlines...'))
-        popup.show()
+        popup = dialog.show_working_indicator(_('Fetching headlines...'))
+        
 
         # parse the document
         try:
@@ -206,7 +206,7 @@ class HeadlinesSiteItem(Item):
             pfile = os.path.join(self.cachedir, 'itv-%i' % self.location_index)
             util.save_pickle(headlines, pfile)
 
-        popup.destroy()
+        popup.hide()
         return headlines
 
 

@@ -36,7 +36,7 @@ import config
 import plugin
 import util
 import rc
-from gui import PopupBox
+import dialog
 
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -80,10 +80,9 @@ class PluginInterface(plugin.DaemonPlugin):
                 _debug_('new device %s' % (d))
                 for device, message, action in config.USB_HOTPLUG:
                     if d == device:
-                        pop = PopupBox(text=message)
-                        pop.show()
+                        pop = dialog.show_working_indicator(message)
                         os.system(action)
-                        pop.destroy()
+                        pop.hide()
                         break
                 else:
                     changes = True

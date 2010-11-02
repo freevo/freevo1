@@ -40,7 +40,7 @@ import plugin
 import config
 import shutil
 import util
-from gui import PopupBox, AlertBox
+import dialog
 import rc
 import event as em
 import menu
@@ -60,8 +60,8 @@ class PluginInterface(plugin.ItemPlugin):
         self.cart = []
 
     def moveHere(self, arg=None, menuw=None):
-        popup = PopupBox(text=_('Moving files...'))
-        popup.show()
+        popup = dialog.show_working_indicator(_('Moving files...'))
+
         try:
             for cartfile in self.cart:
                 cartfile.files.move(self.item.dir)
@@ -70,14 +70,14 @@ class PluginInterface(plugin.ItemPlugin):
         except AttributeError, e:
             print 'Move not possible: %s' % e
             print self.item.__dict__
-        popup.destroy()
+        popup.hide()
         self.cart = []
         rc.post_event(em.MENU_BACK_ONE_MENU)
 
 
     def copyHere(self, arg=None, menuw=None):
-        popup = PopupBox(text=_('Copying files...'))
-        popup.show()
+        popup = dialog.show_working_indicator(_('Copying files...'))
+        
         try:
             for cartfile in self.cart:
                 cartfile.files.copy(self.item.dir)
@@ -86,7 +86,7 @@ class PluginInterface(plugin.ItemPlugin):
         except AttributeError, e:
             print 'Copy not possible: %s' % e
             print self.item.__dict__
-        popup.destroy()
+        popup.hide()
         self.cart = []
         rc.post_event(em.MENU_BACK_ONE_MENU)
 

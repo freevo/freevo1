@@ -55,7 +55,10 @@ import fxditem
 from item import Item, FileInformation
 from playlist import Playlist
 from event import *
-from gui import InputBox, AlertBox, ProgressBox
+import dialog
+import dialog.dialogs
+
+from gui import InputBox
 
 
 all_variables = [
@@ -550,8 +553,7 @@ class DirItem(Playlist):
                 pwfile.close()
             except IOError, e:
                 _debug_( 'error reading password file for %s : %s' % (self.dir,str(e)), DWARNING )
-                pb = AlertBox(text=(_('Error reading password file:') + str(e)))
-                pb.show()
+                dialog.show_alert(_('Error reading password file:') + str(e))
                 if self.media:
                     self.media.umount()
                 return
@@ -579,8 +581,7 @@ class DirItem(Playlist):
         if word == password:
             self.build(arg, self.menuw)
         else:
-            pb = AlertBox(text=_('Password incorrect'))
-            pb.show()
+            dialog.show_alert(_('Password incorrect'))
             return
 
 
@@ -621,7 +622,7 @@ class DirItem(Playlist):
             if hasattr(self.menu, 'skin_force_text_view'):
                 del self.menu.skin_force_text_view
         elif not os.path.exists(self.dir):
-            AlertBox(text=_('Directory %r does not exist' % (self.dir))).show()
+            dialog.show_alert(_('Directory %r does not exist' % (self.dir)))
             return
 
         display_type = self.display_type
@@ -650,11 +651,11 @@ class DirItem(Playlist):
         if skin.active():
             if (num_changes > 10) or (num_changes and self.media):
                 if self.media:
-                    pop = ProgressBox(text=_('Scanning disc, be patient...'), full=num_changes)
+                    pop = CacheProgressDialog(_('Scanning disc, be patient...'), num_changes)
                 else:
-                    pop = ProgressBox(text=_('Scanning directory, be patient...'), full=num_changes)
+                    pop = CacheProgressDialog(_('Scanning directory, be patient...'), num_changes)
                 pop.show()
-                callback=pop.tick
+                callback=pop.processed_file
 
         elif len(files) > config.OSD_BUSYICON_TIMER[1]:
             # many files, just show the busy icon now
@@ -748,7 +749,7 @@ class DirItem(Playlist):
             items = [ pl ] + items
 
         if pop:
-            pop.destroy()
+            pop.hide()
 
         # stop the timer. If the icons is drawn, it will stay there
         # until the osd is redrawn, if not, we don't need it to pop
@@ -1109,10 +1110,19 @@ class Dirwatcher(plugin.DaemonPlugin):
 
 
     def poll(self):
-        if self.dir and self.menuw and self.menuw.menustack[-1] == self.item_menu and not rc.app():
+        if self.dir and self.menuw and self.menuw.menustack[-1] == self.item_menu and \
+                isinstance(rc.focused_app(), menu.MenuWidget):
             self.scan()
 
+class CacheProgressDialog(dialog.dialogs.ProgressDialog):
+    def __init__(self, message, total):
+        super(CacheProgressDialog, self).__init__(message, '0/%d' % total, 0.0)
+        self.total = total
+        self.count = 0
 
+    def processed_file(self):
+        self.count += 1
+        self.update_progress('%d/%d' % (self.count , self.total), float(self.count) / float(self.total))
 
 # and activate that DaemonPlugin
 dirwatcher = Dirwatcher()

@@ -38,7 +38,8 @@ import re
 
 from item import Item
 from image.imageitem import ImageItem
-from gui.AlertBox import AlertBox
+
+import dialog
 
 class ApodMainMenuItem(Item):
     """
@@ -91,7 +92,7 @@ class ApodMainMenuItem(Item):
             #unreachable or url error
             realurl = url % 'index.html'
             print 'APOD ERROR: could not open %s' % realurl
-            AlertBox(text=_('Unable to open URL')).show()
+            dialog.show_alert(_('Unable to open URL'))
             return
 
         apodfile = os.path.join(self.apoddir,os.path.basename(apodpichref))
@@ -104,7 +105,7 @@ class ApodMainMenuItem(Item):
             #unreachable or url error
             realurl = url % apodpichref
             print 'APOD ERROR: could not open %s' % realurl
-            AlertBox(text=_('Unable to open URL')).show()
+            dialog.show_alert(_('Unable to open URL'))
             return
 
 class PluginInterface(plugin.MainMenuPlugin):
