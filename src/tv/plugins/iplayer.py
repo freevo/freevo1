@@ -117,11 +117,11 @@ class PluginInterface(plugin.MainMenuPlugin):
         return  [('IPLAYER_TYPES', ['bbc tv'],
                         'A list of types of content to show for. Options are: bbc tv, bbc radio, bbc podcast'),
                  ('IPLAYER_DOWNLOAD_DIR', '.', 'Directory to store the downloads in.'),
-                 ('IPLAYER_DOWNLOAD_MODE_VIDEO', 'iphone,flashhigh,flashnormal',
+                 ('IPLAYER_DOWNLOAD_MODE_VIDEO', 'flashhd1,flashhd2,flashhigh1,flashhigh2,flashstd1,flashstd2',
                     'Try to download content in the specified type order. (see get_iplayer --vmode parameter for details)'),
                  ('IPLAYER_GET_IPLAYER', '',
                     'The get_iplayer application path. Set this to None (or not defined in your local_conf.py) to allow automatic downloading and update.'),
-                 ('IPLAYER_RTMPDUMP_PATH', '', 'Path to rtmpdump utility for downloading flash content')]
+                 ('IPLAYER_RTMPDUMP_PATH', '/usr/local/bin/rtmpdump', 'Path to rtmpdump utility for downloading flash content')]
 
     def shutdown(self):
         self.stop = True
@@ -159,33 +159,18 @@ def update_get_iplayer():
         current_version = f.read()
         f.close()
     except:
-        traceback.print_exc()
         pass
-    
+
+    version_url = 'http://www.infradead.org/get_iplayer/VERSION-get_iplayer'
     get_iplayer_base_url = 'ftp://ftp.infradead.org/pub/get_iplayer/'
     # Work out the latest version of get_iplayer
+    latest_version = ''
     try:
-        u = urllib.urlopen(get_iplayer_base_url)
-        line = u.read()
+        u = urllib.urlopen(version_url)
+        latest_version = u.read().strip()
         u.close()
     except:
-        traceback.print_exc()
         return
-
-    latest_major = 0
-    latest_minor = 0
-    latest_name = ''
-    for name, major, minor, comp in re.findall('(get_iplayer-([0-9]+)\.([0-9]+)\.tar.(bz2|gz))', line):
-        try:
-            major = int(major)
-            minor = int(minor)
-            if (major > latest_major) or (major == latest_major and minor > latest_minor):
-                latest_major, latest_minor = major, minor
-                latest_name = name
-        except:
-            pass
-        
-    latest_version = '%d.%d' % (latest_major, latest_minor)
 
     _debug_('get_iplayer: Current Version: %s Latest Version: %s' % (current_version, latest_version))
 
@@ -194,26 +179,36 @@ def update_get_iplayer():
         return
 
     try:
-        get_iplayer_tar_path = os.path.join(config.FREEVO_STATICDIR, latest_name)
-        urllib.urlretrieve(get_iplayer_base_url + latest_name, get_iplayer_tar_path)
+        if os.path.exists(GET_IPLAYER):
+            # Use get_iplayer itself to update.
+            os.system(GET_IPLAYER + ' -u')
+        else:
+            # We don't have a copy yet so do a manual download.
+            manifest_url = 'http://www.infradead.org/get_iplayer/MANIFEST.v' + latest_version
+            u = urllib.urlopen(manifest_url)
+            download_url = ''
+            for line in u:
+                ftype, url = line.strip().split(' ', 2)
+                if ftype == 'bin':
+                    download_url = url
+                    break
+            u.close()
+            if download_url:
+                urllib.urlretrieve(download_url, GET_IPLAYER)
+                os.chmod(GET_IPLAYER, stat.S_IRWXU)
+                # Force the download of the plugins etc.
+                if 'http_proxy' in os.environ:
+                    proxy = ' -p ' + os.environ['http_proxy']
+                else:
+                    proxy = ''
+                os.system(GET_IPLAYER + proxy)
+            else:
+                return
 
-        tf = tarfile.open(get_iplayer_tar_path)
-        get_iplayer_ti = None
-        for ti in tf.getmembers():
-            if ti.name.endswith('get_iplayer') and ti.isfile():
-                get_iplayer_ti = ti
-                break
-
-        if get_iplayer_ti:
-            tif = tf.extractfile(get_iplayer_ti)
-            f = open(GET_IPLAYER, 'wb')
-            f.write(tif.read())
-            f.close()
-            os.chmod(GET_IPLAYER, stat.S_IRWXU)
-            
-            f = open(version_file_path, 'w')
-            f.write(latest_version)
-            f.close()
+        # Update the version file
+        f = open(version_file_path, 'w')
+        f.write(latest_version)
+        f.close()
     except:
         traceback.print_exc()
         return
@@ -892,13 +887,17 @@ class DownloadQueue:
         basename = get_item_basename(*self.current_download[1:])
         fxd_file = basename + '.fxd'
         fxd_file = fxd_file.replace('/', '_')
-        cmd = (config.CONF.get_iplayer,
+        cmd = [config.CONF.get_iplayer,
                 '--type', self.current_download[0],
                 '--pid', self.current_download[1],
                 '-o', config.IPLAYER_DOWNLOAD_DIR,
                 '--file-prefix', basename,
-                '--fxd', fxd_file,
-                '--vmode', config.IPLAYER_DOWNLOAD_MODE_VIDEO)
+                '--fxd', fxd_file]
+
+        if config.IPLAYER_DOWNLOAD_MODE_VIDEO:
+            cmd += ['--vmode', config.IPLAYER_DOWNLOAD_MODE_VIDEO]
+        if config.IPLAYER_RTMPDUMP_PATH:
+            cmd += ['--flvstreamer', config.IPLAYER_RTMPDUMP_PATH]
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, preexec_fn=self.setupprocess)
 
 
