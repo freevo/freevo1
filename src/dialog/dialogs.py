@@ -229,20 +229,10 @@ class InputDialog(Dialog):
     def __init__(self, name, duration):
         super(InputDialog, self).__init__(name, duration)
         self.event_context = 'input'
-        self.signals['hidden'].connect(InputDialog.__hidden)
-        self.signals['shown'].connect(InputDialog.__shown)
-
-    @staticmethod
-    def __shown(dialog):
-        rc.add_app(dialog)
-
-    @staticmethod
-    def __hidden(dialog):
-        rc.remove_app(dialog)
 
     def eventhandler(self, event):
-        if event == 'STOP':
-            self.display.hide_dialog()
+        if event in ('STOP', 'INPUT_EXIT'):
+            self.hide()
             return True
         return False
 
@@ -331,7 +321,7 @@ class PlayStateDialog(Dialog):
          - seekforward
          - slow
          - fast
-	 - info
+         - info
         @param get_time_info: A function to call to retrieve information about the
         current position and total play time, or None if not available. The function
         will return a tuple of elapsed time, total time and percent through the file.
@@ -354,11 +344,11 @@ class PlayStateDialog(Dialog):
         percent_pos = 0.0
         percent_str = ''
 
-	try:
-	    channel = self.item.getChannel()
-	    mode = 'tv'
-	except AttributeError:
-	    mode = 'video'	
+        try:
+            channel = self.item.getChannel()
+            mode = 'tv'
+        except AttributeError:
+            mode = 'video'
 
 
         if self.get_time_info:
@@ -366,84 +356,90 @@ class PlayStateDialog(Dialog):
 
         if time_info:
             current_time = time_info[0]
-            current_time_hours = current_time / (60 *60)
-            current_time_minutes = (current_time/60) - (current_time_hours * 60)
-            current_time_seconds = current_time - (((current_time_hours * 60 ) + current_time_minutes) * 60)
-            current_time_str = '%02d:%02d:%02d' % (current_time_hours,current_time_minutes,current_time_seconds)
+            current_time_hours = current_time / (60 * 60)
+            current_time_minutes = (current_time / 60) - (current_time_hours * 60)
+            current_time_seconds = current_time - (((current_time_hours * 60) + current_time_minutes) * 60)
+            current_time_str = '%02d:%02d:%02d' % (current_time_hours, current_time_minutes, current_time_seconds)
 
             if len(time_info) > 1:
                 total_time = time_info[1]
-                total_time_hours = total_time / (60 *60)
-                total_time_minutes = (total_time/60) - (total_time_hours * 60)
-                total_time_seconds = total_time - (((total_time_hours * 60 ) + total_time_minutes) * 60)
+                total_time_hours = total_time / (60 * 60)
+                total_time_minutes = (total_time / 60) - (total_time_hours * 60)
+                total_time_seconds = total_time - (((total_time_hours * 60) + total_time_minutes) * 60)
 
-                total_time_str   = '%02d:%02d:%02d' % (total_time_hours,total_time_minutes,total_time_seconds)
+                total_time_str   = '%02d:%02d:%02d' % (total_time_hours, total_time_minutes, total_time_seconds)
 
                 if len(time_info) > 2:
                     percent_pos = time_info[2]
                 else:
-                    percent_pos = float(current_time) / float(total_time)
+                    if total_time > 0:
+                        percent_pos = float(current_time) / float(total_time)
+                    else:
+                        percent_pos = 0.0
                 percent_str = '%d%%' % (percent_pos * 100)
 
-	attr = {}
-	if mode == 'video':
-	    if self.item.parent.type == 'video':
-		attr['title'] = self.item.parent.name
-	    else:
-		attr['title'] = self.item.name
-	    if not attr['title']:
-		attr['title'] = "Not Available"
+        attr = {}
+        if mode == 'video':
+            if self.item.parent.type == 'video':
+                attr['title'] = self.item.parent.name
+            else:
+                attr['title'] = self.item.name
+            if not attr['title']:
+                attr['title'] = "Not Available"
 
-	    attr['tagline'] = self.item.getattr('tagline')
-	    if not attr['tagline'] and self.item.parent.type == 'video':
-		attr['tagline'] = self.item.parent.getattr('tagline')
-	    if not attr['tagline']:
-		attr['tagline'] = None
+            attr['tagline'] = self.item.getattr('tagline')
+            if not attr['tagline'] and self.item.parent.type == 'video':
+                attr['tagline'] = self.item.parent.getattr('tagline')
+            if not attr['tagline']:
+                attr['tagline'] = None
 
-	    attr['image'] = self.item.image
-	    if not attr['image']:
-		attr['image'] = 'cover_na.png'
+            attr['image'] = self.item.image
+            if not attr['image']:
+                attr['image'] = 'cover_na.png'
 
-	    attributes = ['year', 'genre', 'rating', 'runtime' ]
-	    for attribute in attributes:
-		attr[attribute] = self.item.getattr(attribute)
+            attributes = ['year', 'genre', 'rating', 'runtime' ]
+            for attribute in attributes:
+                attr[attribute] = self.item.getattr(attribute)
                 if not attr[attribute] and self.item.parent.type == 'video':
-            	    attr[attribute] = self.item.parent.getattr(attribute)
+                    attr[attribute] = self.item.parent.getattr(attribute)
                 if not attr[attribute]:
                     attr[attribute] = "Not Available"
                 attr[attribute] = attribute.title() + ": " + attr[attribute]
-	else:
-	    channel_number = self.item.getChannelNum()
-	    channel_logo = 'cover_tv.png'
-	    
-	    channel_id, channel_name, channel_info = self.item.getChannelInfo()
-	    attr['title'] = channel_name
-	    attr['image'] = channel_logo
-	    attr['tagline'] = channel_info
-	    attr['year'] = None
-	    attr['genre'] = None
-	    attr['rating'] = None
-	    attr['runtime'] = None
+        else:
+            channel_number = self.item.getChannelNum()
+            channel_logo = 'cover_tv.png'
 
-	self.time = time.strftime("%H:%M", time.localtime())
-	self.date = time.strftime("%Y/%m/%y", time.localtime())
+            channel_id, channel_name, channel_info = self.item.getChannelInfo()
 
-        return {'state'            : self.state,
-                'title'     	   : attr['title'],
-		'image'		   : attr['image'],
-		'tagline'	   : attr['tagline'],
-		'year'		   : attr['year'],
-		'genre'		   : attr['genre'],
-		'rating'	   : attr['rating'],
-		'runtime'	   : attr['runtime'],
-		'time'		   : self.time,
-		'date'		   : self.date,
-                'current_time'     : current_time,
-                'total_time'       : total_time,
-                'current_time_str' : current_time_str,
-                'total_time_str'   : total_time_str,
-                'percent'          : percent_pos,
-                'percent_str'      : percent_str,
+            attr['title'] = channel_name
+            attr['image'] = channel_logo
+            attr['tagline'] = channel_info
+            attr['year'] = None
+            attr['genre'] = None
+            attr['rating'] = None
+            attr['runtime'] = None
+
+        now = time.localtime()
+        time_str = time.strftime("%H:%M", now)
+        date_str = time.strftime("%Y/%m/%y", now)
+
+        return {'state': self.state,
+                'title': attr['title'],
+                'image': attr['image'],
+                'tagline': attr['tagline'],
+                'year': attr['year'],
+                'genre': attr['genre'],
+                'rating': attr['rating'],
+                'runtime': attr['runtime'],
+                'time_raw' : now,
+                'time': time_str,
+                'date': date_str,
+                'current_time': current_time,
+                'total_time': total_time,
+                'current_time_str': current_time_str,
+                'total_time_str': total_time_str,
+                'percent': percent_pos,
+                'percent_str': percent_str,
                 }
 
 class WidgetDialog(InputDialog):
@@ -505,7 +501,7 @@ class WidgetDialog(InputDialog):
             handled = self.selected_widget.handle_event(event)
 
         if not handled:
-            if self.exit_hides_dialog and event == 'INPUT_EXIT':
+            if self.exit_hides_dialog and event in ('INPUT_EXIT', 'STOP'):
                 self.hide()
                 self.force_redraw = False
                 handled = True
@@ -536,7 +532,7 @@ class WidgetDialog(InputDialog):
         self.processing_event = False
 
         if self.force_redraw:
-            self.show()
+            self.redraw()
             self.force_redraw = False
 
         return handled
@@ -752,6 +748,8 @@ class ProgressDialog(Dialog):
     """
 
     INDETERMINATE_UPDATE = 0.03
+    INDETERMINATE_SIZE = 0.25
+    INDETERMINATE_INC = 0.05
 
     def __init__(self, message, progress_text=u'', progress_percent=0.0, indeterminate=False):
         super(ProgressDialog, self).__init__('progress', 0)
@@ -760,8 +758,9 @@ class ProgressDialog(Dialog):
         self.progress_percent = progress_percent
         self.indeterminate = False
         self.last_update = 0
-        self.indeterminate_pos = -0.01
-        self.indeterminate_dir = -0.01
+        self.indeterminate_pos = 0.0
+        self.indeterminate_dir = ProgressDialog.INDETERMINATE_INC
+        self.indeterminate_size = ProgressDialog.INDETERMINATE_SIZE
         if indeterminate:
             self.set_indeterminate(True)
 
@@ -772,7 +771,7 @@ class ProgressDialog(Dialog):
             if indeterminate:
                 self.last_update = 0
                 self.indeterminate_pos = 0.00
-                self.indeterminate_dir = -0.05
+                self.indeterminate_dir = ProgressDialog.INDETERMINATE_INC
                 self.update_interval = ProgressDialog.INDETERMINATE_UPDATE
             else:
                 self.update_interval = 0.0
@@ -793,14 +792,16 @@ class ProgressDialog(Dialog):
             now = time.time()
             if now - self.last_update >= ProgressDialog.INDETERMINATE_UPDATE:
                 self.indeterminate_pos += self.indeterminate_dir
-                if self.indeterminate_pos <= -1.0:
-                    self.indeterminate_dir = 0.05
+                if self.indeterminate_pos >= (1.0 - self.indeterminate_size):
+                    self.indeterminate_dir = -ProgressDialog.INDETERMINATE_INC
+                    self.indeterminate_pos = (1.0 - self.indeterminate_size)
 
-                if self.indeterminate_pos > -0.01:
-                    self.indeterminate_dir = -0.05
+                if self.indeterminate_pos < 0.0:
+                    self.indeterminate_dir = ProgressDialog.INDETERMINATE_INC
+                    self.indeterminate_pos = 0.0
 
                 self.last_update = now
-            dict['progress_percent'] = self.indeterminate_pos
+            dict['progress_percent'] = (self.indeterminate_pos, self.indeterminate_size)
         else:
             dict['progress_percent'] = self.progress_percent
         return dict
