@@ -214,7 +214,9 @@ class LivePauseController:
 
         # Setup Event Maps
         self.event_maps = {}
-        self.event_maps[State.IDLE] = {}
+        self.event_maps[State.IDLE] = {
+            'READER_OVERTAKEN'    : self.__idle_reader_overtaken,
+            }
 
         self.event_maps[State.TUNING] = {
             'DATA_STARTED' : self.__tuning_data_started,
@@ -247,6 +249,7 @@ class LivePauseController:
             'BUTTON'              : self.__playing_button_pressed,
             'TOGGLE_OSD'          : self.__playing_display_info,
             'SEEK'                : self.__playing_seek,
+            'SECONDS_LEFT'        : self.__playing_seconds_left,
             'READER_OVERTAKEN'    : self.__playing_reader_overtaken,
             'DATA_ACQUIRED'       : None,
             'DATA_TIMEDOUT'       : None,
@@ -375,6 +378,11 @@ class LivePauseController:
             self.stop()
         return True
 
+    def __idle_reader_overtaken(self, event, menuw):
+        # Seek ten seconds forward from the end of the buffer.
+        self.backend.seek(10, now=True)
+        return True
+
     def __tuning_data_started(self, event, menuw):
         self.__change_state(State.BUFFERING)
         return True
@@ -449,10 +457,21 @@ class LivePauseController:
             dialog.show_message(_('Recording stopped'))
         self.recording = False
 
+    def __playing_seconds_left(self, event, menuw):
+        if self.player.paused:
+            self.player.resume()
+            dialog.show_message(_('Out of buffer space, playback resumed'))
+        else:
+            _debug_('while playing ~%d seconds left in buffer before overwrite' % event.arg)
+        return True
+    
     def __playing_reader_overtaken(self, event, menuw):
         if self.player.paused:
             self.player.resume()
-        dialog.show_message(_('Out of buffer space'))
+            dialog.show_message(_('Out of buffer space, playback resumed'))
+        else:
+            dialog.show_message(_('Out of buffer space'))
+            _debug_('Out of buffer space while playing!')
         return True
 
     def __playing_button_pressed(self, event, menuw):

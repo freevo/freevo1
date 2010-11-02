@@ -103,10 +103,11 @@ class Backend(object):
         """
         pass
 
-    def seek(self, time_delta):
+    def seek(self, time_delta, now=False):
         """
         Seek specified number of seconds back or forward in the ring buffer.
         @param time_delta: Number of second to seek back (-ve) or forward (+ve).
+        @param now: Whether the seek should be done immediately or on the next connection.
         """
         pass
 
@@ -204,8 +205,8 @@ class RemoteBackendClient(Backend):
             return False
         inprogress.wait()
 
-    def seek(self, time_delta):
-        inprogress = self._rpc('seek', time_delta)
+    def seek(self, time_delta, now=False):
+        inprogress = self._rpc('seek', time_delta, now)
         if inprogress is None:
             return False
         inprogress.wait()
@@ -274,9 +275,9 @@ class LocalBackend(Backend):
         if self.livepause_app:
             self.livepause_app.seekto(to_time)
 
-    def seek(self, time_delta):
+    def seek(self, time_delta, now=False):
         if self.livepause_app:
-            self.livepause_app.seek(time_delta)
+            self.livepause_app.seek(time_delta, now)
 
     def disable_buffering(self):
         if self.device_in_use:
@@ -409,12 +410,17 @@ class LivePauseApp(childapp.ChildApp):
         """
         self.send_command_wait_for_output('seektoonc %d' % time_pos )
 
-    def seek(self, time_delta):
+    def seek(self, time_delta, now=False):
         """
         Seek relative to the current read position.
         @param time_delta: Number of seconds to seek, backwards or forwards.
+        @param now: Whether the seek should be done immediately or on the next connection.
         """
-        self.send_command_wait_for_output('seekonc %d' % time_delta )
+        if now:
+            cmd = 'seek %d' % time_delta
+        else:
+            cmd = 'seekonc %d' % time_delta
+        self.send_command_wait_for_output(cmd)
 
     def save(self, filename, time_start, time_end):
         """
@@ -501,6 +507,11 @@ class LivePauseApp(childapp.ChildApp):
 
         elif line == '!Save Started':
             to_send = SAVE_STARTED
+
+        elif line[0] == '!':
+            if line.endswith('seconds left'):
+                to_send = Event('SECONDS_LEFT', int(line[1]))
+
 
         if to_send and self.send_event:
             self.send_event(to_send)
