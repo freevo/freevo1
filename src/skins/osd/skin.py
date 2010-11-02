@@ -120,6 +120,7 @@ class OSDDialog(object):
         self.image = imlib2.new(self.size)
         for obj in self.objects:
             obj.prepare()
+    
 
     def render(self, value_dict):
         self.image.clear()
@@ -382,7 +383,7 @@ class OSDText(OSDObject):
 
 
 class OSDImage(OSDObject):
-    def __init__(self, pos, size, image, expr, image_expr=None, scale=None):
+    def __init__(self, pos, size, image, expr, image_expr=None, scale=None, valign='top', halign='left'):
         OSDObject.__init__(self, pos, size)
         _debug_('OSDImage (%s,%s) %sx%s "%s" "%s" "%s" "%s"' % (pos[0], pos[1], size[0], size[1], image, expr, image_expr, scale), 2)
         self.image_name = image
@@ -390,6 +391,8 @@ class OSDImage(OSDObject):
         self.image = None
         self.scale = scale
         self.expr = expr
+        self.halign = halign
+        self.valign = valign
 
     def prepare(self):
         if self.image_name:
@@ -417,7 +420,21 @@ class OSDImage(OSDObject):
             if to_draw:
                 x = eval_or_int(self.pos[0], value_dict)
                 y = eval_or_int(self.pos[1], value_dict)
-                image.blend(to_draw, dst_pos=(x,y))
+                if self.halign == 'left':
+                    x_offset = 0
+                elif self.halign == 'center':
+                    x_offset = (self.size[0] - to_draw.width) / 2
+                else:
+                    x_offset = self.size[0] - to_draw.width
+
+                if self.valign == 'top':
+                    y_offset = 0
+                elif self.valign == 'center':
+                    y_offset = (self.size[1] - to_draw.height) / 2
+                else:
+                    y_offset = self.size[1] - to_draw.height
+
+                image.blend(to_draw, dst_pos=(x + x_offset,y + y_offset))
 
     def finish(self):
         self.image = None
@@ -432,12 +449,13 @@ class OSDPercent(OSDImage):
         percent = 0.0
         try:
             percent = eval(self.expr, value_dict)
-            if percent >= 0:
-                percent = min(1.0, max(0.0, percent))
         except:
             report_error('Failed to evaluate percent expression \"%s\"' % self.expr)
 
-        if percent >= 0.0:
+        x = y = w = h = 0
+
+        if isinstance(percent,float):
+            percent = min(1.0, max(0.0, percent))
             if self.vertical:
                 im_x = 0
                 x = eval_or_int(self.pos[0], value_dict)
@@ -453,33 +471,29 @@ class OSDPercent(OSDImage):
                 y = eval_or_int(self.pos[1], value_dict)
                 w = int(float(self.size[0]) * percent)
                 h = self.size[1]
-        else:
-
-            if self.vertical:
-                max_size = self.size[1]
-            else:
-                max_size = self.size[0]
-
-            max_size = ((max_size * 12) / 16)
-            indeterminate_pos = (max_size * percent) * -1
-
+        
+        elif isinstance(percent, (tuple,list)):
             # Indeterminate/bouncing bar
             if self.vertical:
                 im_x = 0
+                im_y = int(self.size[1] * percent[0])
+
                 x = eval_or_int(self.pos[0], value_dict)
                 w = self.size[0]
-                h = int(self.size[1] / 4)
-                im_y = indeterminate_pos
+
+                h = int(self.size[1] * percent[1])               
                 y = eval_or_int(self.pos[1], value_dict) + im_y
 
             else:
-                im_x = indeterminate_pos
+                im_x = int(self.size[0] * percent[0])
                 im_y = 0
+
                 x = eval_or_int(self.pos[0], value_dict) + im_x
                 y = eval_or_int(self.pos[1], value_dict)
-                w = int(self.size[0] / 4)
+
+                w = int(self.size[0] * percent[1])
                 h = self.size[1]
-        #print 'percent=%r im_xy = %d,%d xy=%d,%d wh=%dx%d' % (percent, im_x, im_y, x,y, w, h)
+        
         if w and h:
             image.blend(self.image,src_pos=(im_x,im_y), src_size=(w,h), dst_pos=(x,y))
 

@@ -766,7 +766,9 @@ class ImageObject(DialogChildObject):
                                              ('expr', 'Expression', PROP_TYPE_STRING),
                                              ('src', 'Source', PROP_TYPE_IMAGE),
                                              ('src_is_expr', 'Source is Expression', PROP_TYPE_BOOL),
-                                             ('scale', 'Scaling', PROP_TYPE_OPTION, ('noscale', 'horizontal','vertical','both','aspect'))
+                                             ('scale', 'Scaling', PROP_TYPE_OPTION, ('noscale', 'horizontal','vertical','both','aspect')),
+                                             ('align', 'H Align', PROP_TYPE_OPTION, ('left', 'center', 'right')),
+                                             ('valign', 'V Align', PROP_TYPE_OPTION, ('top', 'center', 'bottom')),
                                              )
         if node:
             self.expr = attr_str(node, 'expression', 'True')
@@ -777,20 +779,24 @@ class ImageObject(DialogChildObject):
                 self.src_is_expr = False
                 self.src = attr_str(node, 'src', '')
             self.scale = attr_str(node, 'scale', 'noscale')
+            self.align = attr_str(node, 'align', 'left')
+            self.valign = attr_str(node, 'valign', 'top')
         else:
             self.expr = 'True'
             self.src = ''
             self.src_is_expr = False
             self.scale = 'noscale'
+            self.align = 'left'
+            self.valign = 'top'
         if self.name is None:
             self.name = 'Image%d' % ImageObject.count
             ImageObject.count += 1
-        self.skin_object = osd_skin.OSDImage((self.x, self.y), (self.width, self.height), None, self.expr, None, self.scale)
+        self.skin_object = osd_skin.OSDImage((self.x, self.y), (self.width, self.height), None, self.expr, None, self.scale, self.valign, self.align)
 
 
     def get_attrs(self):
         attrs = super(ImageObject,self).get_attrs() + (('expression', self.expr),
-                 ('scale', self.scale))
+                 ('scale', self.scale), ('align', self.align), ('valign', self.valign))
         if self.src_is_expr:
             attrs += (('srcexpr', self.src),)
         else:
@@ -807,6 +813,8 @@ class ImageObject(DialogChildObject):
             self.skin_object.image_name =  osd_skin.find_image(self.src)
         self.skin_object.scale = self.scale
         self.skin_object.expr = self.expr
+        self.skin_object.valign = self.valign
+        self.skin_object.halign = self.align
         return super(ImageObject, self).get_skin_object()
 
 class PercentObject(ImageObject):

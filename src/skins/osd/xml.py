@@ -175,7 +175,8 @@ class Image(XMLOSDObject):
         self.srcexpr = attr_str(node, 'srcexpr', '')
         self.scale = scale
         self.scale_type = attr_str(node, 'scale', 'noscale')
-
+        self.align = attr_str(node, 'align', 'left')
+        self.valign = attr_str(node, 'valign', 'top')
 
     def resolve_src(self):
         if self.src:
@@ -190,7 +191,7 @@ class Image(XMLOSDObject):
 
     def instantiate(self):
         self.resolve_src()
-        return skin.OSDImage(self.pos, self.size, self.src, self.expression, self.srcexpr, self.scale_type)
+        return skin.OSDImage(self.pos, self.size, self.src, self.expression, self.srcexpr, self.scale_type, self.valign, self.align)
 
 class Percent(Image):
     def __init__(self, node, scale):
