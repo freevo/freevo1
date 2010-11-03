@@ -103,6 +103,8 @@ status_order = 0
 view_methods = ['name', 'name+(date/episodes)']
 view_method = 1
 
+WEEK=(24 * 60 * 60) * 7
+YEAR = WEEK * 52
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -151,6 +153,9 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('TVRM_CONSIDER_UNWATCHED_AFTER', 45, 'Number of days after which to consider deleting unwatched shows if space is required'),
             ('TVRM_EPISODE_FROM_PLOT', None, 'Regular expression to extract the episode name from the plot'),
             ('TVRM_EPISODE_TIME_FORMAT', '%c', 'When the episode name cannot be found use timestamp in this format'),
+            ('TVRM_DATETIME_THIS_WEEK', '%a %H:%M', 'When the program was record in the last 7 days use this date time format'),
+            ('TVRM_DATETIME_THIS_MONTH', '%d/%m %H:%M', 'When the program was record in the last 31 days use this date time format'),
+            ('TVRM_DATETIME_OLDER', '%d/%m/%y', 'When the program was record over a year ago use this date time format'),
         ]
 
 
@@ -196,6 +201,7 @@ class RecordingsDirectory(Item):
 
         items = segregated_recordings
         items.sort(lambda l, o: cmp(o.sort(sorting).upper(), l.sort(sorting).upper()))
+        map(lambda x: x.update_info(), items)
         if sorting_reversed:
             items.reverse()
 
@@ -423,15 +429,26 @@ class RecordedProgramItem(VideoItem):
         if os.path.isfile(imagefile):
             self.image = imagefile
 
+        self.update_info()
+        self.set_icon()
+
+
+    def update_info(self):
         try:
             self.timestamp = float(self.video_item['recording_timestamp'])
-            self.timestamp_str = Unicode(time.strftime('%H:%M %d/%m', time.localtime(self.timestamp)))
-            
+            now = time.time()
+            diff = now - self.timestamp
+            if diff < WEEK:
+                time_str = time.strftime(config.TVRM_DATETIME_THIS_WEEK, time.localtime(self.timestamp))
+            elif diff < YEAR:
+                time_str = time.strftime(config.TVRM_DATETIME_THIS_MONTH, time.localtime(self.timestamp))
+            else:
+                time_str = time.strftime(config.TVRM_DATETIME_OLDER, time.localtime(self.timestamp))
+            self.timestamp_str = Unicode(time_str)
         except ValueError:
             self.timestamp = 0.0
             self.timestamp_str = u''
-        self.table_fields = [name, self.timestamp_str]
-        self.set_icon()
+        self.table_fields = [self.name, self.timestamp_str]
 
 
     def actions(self):
@@ -595,11 +612,13 @@ class Series(Item):
 
         self.set_url(None)
         self.type = 'dir'
-        self.name = name
-        self.table_fields = [name, _('%d Episodes') % len(items)]
+        self.name = name    
         self.playlist = None
         self.update(items)
+        self.update_info()
 
+    def update_info(self):
+        self.table_fields = [self.name, _('%d Episodes') % len(self.items)]
 
     def actions(self):
         """
@@ -653,6 +672,7 @@ class Series(Item):
                 # a series item updated its watched/keep state.
                 self.set_icon()
         else:
+            map(lambda x: x.update_info(), self.items)
             # normal menu build
             item_menu = Menu(self.name, self.items,reload_func=self.reload, item_types=view_method and 'recordings manager' or 'tv')
             if view_method:
