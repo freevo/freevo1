@@ -9,8 +9,8 @@
     <osd name="volume" x="90" y="460" width="675" height="90">
       <percent name="Image1" x="130" y="10" width="370" height="80" expression="float(volume)/100.0" src="volume_bar.png" vertical="False"/>
       <image name="Image2" x="130" y="0" width="370" height="87" expression="muted" scale="noscale" align="left" valign="top" src="muted.png"/>
-      <text name="Text1" x="0" y="0" width="130" height="85" expression="channel_name" font="Vera/20" align="left" valign="top" fgcolor="white"/>
-      <text name="Text2" x="500" y="0" width="155" height="90" expression="'%d%%' % volume" font="Vera/40" align="right" valign="bottom" fgcolor="white"/>
+      <text name="Text1" x="0" y="0" width="130" height="85" expression="channel_name" font="DejaVuSans/20" align="left" valign="top" fgcolor="white"/>
+      <text name="Text2" x="500" y="0" width="155" height="90" expression="'%d%%' % volume" font="DejaVuSans/40" align="right" valign="bottom" fgcolor="white"/>
     </osd>
     <osd name="message" x="10" y="62" width="780" height="40">
       <image name="Background" x="0" y="0" width="780" height="40" expression="True" scale="both" align="left" valign="top" src="message_bg.png"/>
@@ -36,7 +36,7 @@
     </osd>
     <osd name="menu" x="275" y="135" width="250" height="345">
       <image name="Image7" x="0" y="0" width="250" height="345" expression="True" scale="noscale" align="left" valign="top" src="menu_bg.png"/>
-      <text name="Text7" x="10" y="15" width="230" height="40" expression="title" font="Vera/14" align="left" valign="top"/>
+      <text name="Text7" x="10" y="15" width="230" height="40" expression="title" font="DejaVuSans/14" align="left" valign="top"/>
       <menu name="menu" x="10" y="65" width="230" height="260" style="menu" left="" right="" up="" down="" itemsperpage="6"/>
     </osd>
     <osd name="bboptionsmenu" x="584" y="265" width="216" height="275">
@@ -107,13 +107,13 @@
         <text name="Text19" x="2" y="2" width="width - 4" height="height-4" expression="model.text" font="menu_pressed" align="left" valign="center"/>
       </widgetstate>
     </widgetstyle>
-    <font label="message" name="Vera" size="14" color="white"/>
-    <font label="button" name="Vera" size="12" color="black"/>
-    <font label="button_selected" name="VeraBd" size="14" color="white"/>
-    <font label="button_pressed" name="VeraBd" size="14" color="black"/>
-    <font label="menu" name="VeraBd" size="12" color="white"/>
-    <font label="menu_selected" name="VeraBd" size="12" color="white"/>
-    <font label="menu_pressed" name="VeraBd" size="12" color="black"/>
+    <font label="message" name="DejaVuSans" size="14" color="white"/>
+    <font label="button" name="DejaVuSans" size="12" color="black"/>
+    <font label="button_selected" name="DejaVuSans-Bold" size="14" color="white"/>
+    <font label="button_pressed" name="DejaVuSans-Bold" size="14" color="black"/>
+    <font label="menu" name="DejaVuSans-Bold" size="12" color="white"/>
+    <font label="menu_selected" name="DejaVuSans-Bold" size="12" color="white"/>
+    <font label="menu_pressed" name="DejaVuSans-Bold" size="12" color="black"/>
     <color label="white" value="255,255,255,255"/>
     <color label="gray" value="96,96,96,255"/>
     <color label="black" value="0,0,0,255"/>

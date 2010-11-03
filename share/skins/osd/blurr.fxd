@@ -55,7 +55,7 @@
     </osd>
     <osd name="menu" x="275" y="135" width="250" height="345">
       <image name="Image7" x="0" y="0" width="250" height="345" expression="True" scale="noscale" align="left" valign="top" src="menu_bg.png"/>
-      <text name="Text7" x="10" y="15" width="230" height="40" expression="title" font="Vera/14" align="left" valign="top"/>
+      <text name="Text7" x="10" y="15" width="230" height="40" expression="title" font="DejaVuSans/14" align="left" valign="top"/>
       <menu name="menu" x="10" y="65" width="230" height="260" style="menu" left="" right="" up="" down="" itemsperpage="6"/>
     </osd>
     <osd name="bboptionsmenu" x="584" y="265" width="216" height="275">
@@ -122,14 +122,14 @@
         <text name="Text19" x="2" y="2" width="width - 4" height="height-4" expression="model.text" font="menu_pressed" align="left" valign="center"/>
       </widgetstate>
     </widgetstyle>
-    <font label="message" name="Vera" size="24" color="white"/>
-    <font label="bar" name="VeraBd" size="18" color="white"/>
-    <font label="button" name="Vera" size="12" color="black"/>
-    <font label="button_selected" name="VeraBd" size="14" color="white"/>
-    <font label="button_pressed" name="VeraBd" size="14" color="black"/>
-    <font label="menu" name="VeraBd" size="12" color="white"/>
-    <font label="menu_selected" name="VeraBd" size="12" color="white"/>
-    <font label="menu_pressed" name="VeraBd" size="12" color="black"/>
+    <font label="message" name="DejaVuSans" size="24" color="white"/>
+    <font label="bar" name="DejaVuSans-Bold" size="18" color="white"/>
+    <font label="button" name="DejaVuSans" size="12" color="black"/>
+    <font label="button_selected" name="DejaVuSans-Bold" size="14" color="white"/>
+    <font label="button_pressed" name="DejaVuSans-Bold" size="14" color="black"/>
+    <font label="menu" name="DejaVuSans-Bold" size="12" color="white"/>
+    <font label="menu_selected" name="DejaVuSans-Bold" size="12" color="white"/>
+    <font label="menu_pressed" name="DejaVuSans-Bold" size="12" color="black"/>
     <color label="white" value="255,255,255,255"/>
     <color label="gray" value="96,96,96,255"/>
     <color label="black" value="0,0,0,255"/>
