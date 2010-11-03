@@ -260,6 +260,7 @@ class BrowseBy(Item):
         Item.__init__(self, parent)
         self.name = 'Apple Trailers'
         self.type = 'trailers'
+        self.image = config.IMAGE_DIR + '/apple-trailers.png'
 
     def actions(self):
         return [ (self.make_menu, 'Browse by') ]
