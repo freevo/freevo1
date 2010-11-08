@@ -58,12 +58,25 @@ import alsaaudio
 
 class PluginInterface(plugin.DaemonPlugin):
     """
-    Mixer for ALSA, requires pyalsaaudio module from
-    http://sourceforge.net/projects/pyalsaaudio/
-    http://code.google.com/p/python-alsaaudio/
+    Mixer for ALSA,. This plugin requires the alsaaudio module from
+    http://sourceforge.net/projects/pyalsaaudio/. For Debian, install the
+    python-alsaaudio package and you're all set.
+
+    In addition to the plugin specific variables this plugin also uses the
+    following general configuration variables:
+
+    | MIXER_MAJOR_CTRL      = 'VOL' # Freevo takes control over one audio ctrl
+    |                               # 'VOL', 'PCM' 'OGAIN' etc.
+    | MIXER_MAJOR_MUTE_CTRL = 'PCM' # used in alsamixer.py, There are systems
+    |                               # where volume and mute use different controls
+    | MIXER_CONTROL_ALL     = 1     # Should Freevo take complete control of audio
+    | MIXER_VOLUME_STEP     = 5     # Amount to increment the mixer volume
+    | MIXER_VOLUME_MAX      = 90    # Set what you want maximum volume level to be.
+    | MIXER_VOLUME_DEFAULT  = 40    # Set default volume level.
     """
 
     def __init__(self):
+        plugin.DaemonPlugin.__init__(self)
         self.main_mixer = None
         self.pcm_mixer = None
         self.line_mixer = None
@@ -76,22 +89,22 @@ class PluginInterface(plugin.DaemonPlugin):
         try:
             self.main_mixer = alsaaudio.Mixer(config.ALSA_MIXER_NAME, 0, config.ALSA_CARDID)
         except alsaaudio.ALSAAudioError:
-            print 'Couldn\'t open mixer "%s"' % config.ALSA_MIXER_NAME
+            self.init_failed('Couldn\'t open mixer "%s"' % config.ALSA_MIXER_NAME)
             return
         try:
             self.pcm_mixer = alsaaudio.Mixer(config.ALSA_PCMMIXER_NAME, 0, config.ALSA_CARDID)
         except alsaaudio.ALSAAudioError:
-            print 'Couldn\'t open mixer "%s"' % config.ALSA_PCMMIXER_NAME
+            self.init_failed( 'Couldn\'t open mixer "%s"' % config.ALSA_PCMMIXER_NAME)
             return
         try:
             self.line_mixer = alsaaudio.Mixer(config.ALSA_LINEMIXER_NAME, 0, config.ALSA_LINE_CARDID)
         except alsaaudio.ALSAAudioError:
-            print 'Couldn\'t open mixer "%s"' % config.ALSA_LINEMIXER_NAME
+            self.init_failed('Couldn\'t open mixer "%s"' % config.ALSA_LINEMIXER_NAME)
             return
         try:
             self.mic_mixer = alsaaudio.Mixer(config.ALSA_MICMIXER_NAME, 0, config.ALSA_CARDID)
         except alsaaudio.ALSAAudioError:
-            print 'Couldn\'t open mixer "%s"' % config.ALSA_MICMIXER_NAME
+            self.init_failed('Couldn\'t open mixer "%s"' % config.ALSA_MICMIXER_NAME)
             return
 
         try:
@@ -101,7 +114,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
         # init here
-        plugin.DaemonPlugin.__init__(self)
+        
         self.plugin_name = 'MIXER'
 
         self.default_step = config.MIXER_VOLUME_STEP
@@ -136,15 +149,14 @@ class PluginInterface(plugin.DaemonPlugin):
         freevo plugins -i alsamixer
         '''
         return [
-            ('ALSA_CARDID', 'hw:0', 'Alsa Card id'),
-            ('ALSA_LINE_CARDID', 'hw:0', 'Alsa Line Card id'),
+            ('ALSA_CARDID', 0, 'Alsa Card id'),
+            ('ALSA_LINE_CARDID', 0, 'Alsa Line Card id'),
             ('ALSA_MIXER_NAME', 'Master', 'Alsa Mixer Name'),
             ('ALSA_PCMMIXER_NAME', 'PCM', 'Alsa PCM Mixer Name'),
             ('ALSA_LINEMIXER_NAME', 'Line', 'Alsa Line Mixer Name'),
             ('ALSA_MICMIXER_NAME', 'Mic', 'Alsa Mic Mixer Name'),
             ('ALSA_SYNCMIXER_NAME', 'Master Surround', 'Alsa Sync Mixer Name'),
             ('ALSA_SYNCMIXER', '0', 'Alsa Sync Mixer Name'),
-
         ]
 
 

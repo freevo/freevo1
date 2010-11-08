@@ -739,7 +739,11 @@ plugin.activate('udisks')
 SHOPPINGCART_CLOBBER = False
 
 # mixer
-plugin.activate('mixer')
+try:
+    import alsaaudio
+    plugin.activate('alsamixer')
+except:
+    plugin.activate('mixer')
 
 # add imdb search to the video item menu
 plugin.activate('video.imdb')

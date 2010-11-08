@@ -58,6 +58,14 @@ class Plugin:
             if not hasattr(config, var):
                 setattr(config, var, val)
 
+    def init_failed(self, reason):
+        """
+        Mark this plugin as failed to initialise. This method is need when
+        config variables must have been set, which is perform by Plugin.__init__,
+        but the plugin then finds it is unable to complete initialisation.
+        """
+        del self._type
+        self.reason = reason
 
     def config(self):
         """
