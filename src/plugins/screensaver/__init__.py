@@ -34,7 +34,6 @@
 import time
 import os
 import random
-import threading
 import traceback
 import pygame
 
@@ -46,6 +45,7 @@ from event import Event
 import osd
 import skin
 
+import kaa
 
 
 osd = osd.get_singleton()
@@ -53,7 +53,21 @@ skin = skin.get_singleton()
 
 class PluginInterface(plugin.DaemonPlugin):
     """
-    Yet another Freevo Screensaver
+    An inbuilt Freevo Screensaver that requires no other program be installed to
+    run.
+    This plugin just proves the necessary logic to determine when to launch and
+    stop a screensaver, to see some exciting (!?) graphics on the screen while it
+    is active you need to activate at least one screensaver child plugin.
+
+    For example
+    | plugin.activate('screensaver')
+    | plugin.activate('screensaver.balls')
+    | plugin.activate('screensaver.bouncing_freevo')
+
+    Would activate and cycle between the balls screensaver and the bouncing
+    freevo logo screensaver.
+
+    Use 'freevo plugins -l' to see a list of available ScreenSaverPlugins.
     """
 
     def __init__(self):
@@ -68,6 +82,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.start_delay = config.SCREENSAVER_DELAY
         self.cycle_time = config.SCREENSAVER_CYCLE_TIME
         self.plugins = None
+        self.timer = None
         _debug_('Screensaver install (delay = %d)' % self.start_delay)
 
 
@@ -96,11 +111,6 @@ class PluginInterface(plugin.DaemonPlugin):
         if event.name == 'SCREENSAVER_STOP' and self.screensaver_showing :
             self.stop_saver()
             return True
-
-        # gotta ignore these or video screensavers shutoff before they begin
-        if event.name == 'VIDEO_START' or event.name == 'PLAY_START' or \
-            event.name == 'VIDEO_END' or event.name == 'PLAY_END':
-            return False
 
         if plugin.isevent(event) != 'IDENTIFY_MEDIA':
             self.last_event = time.time()
@@ -133,81 +143,96 @@ class PluginInterface(plugin.DaemonPlugin):
 
         osd.screensaver_running = True
         skin.clear()
+        skin.suspend()
 
-        # Start Screensaver thread
-        self.stop_screensaver = False
-        self.thread = threading.Thread(target=self.__run__)
-        self.thread.start()
+        self.current_saver = None
+        self.index = 0
+        plugins_count = len(self.plugins)
+        _debug_('found %s screensaver(s)' % plugins_count)
+        self.__next()
 
 
     def stop_saver(self):
         _debug_('stop_saver()', 2)
-        self.stop_screensaver = True
-        if hasattr(self, 'thread') and self.thread:
-            self.thread.join()
+        if self.timer is not None:
+            self.timer.stop()
+            self.screensaver_showing = False
+            skin.resume()
+            skin.force_redraw = True
+            skin.redraw()
+            osd.screensaver_running = False
+            osd.update()
+            _debug_('Screensaver thread stopped')
 
-
-    def __run__(self):
-        _debug_('__run__()', 2)
-        current_saver = None
-        index = 0
+    def __next(self):
         plugins_count = len(self.plugins)
-        _debug_('found %s screensaver(s)' % plugins_count)
-        while not self.stop_screensaver:
-            # No current screensaver so select one of the installed screensaver
-            # plugins at random
-            # if current_saver is None:
-            if plugins_count == 1:
-                current_saver = self.plugins[0]
-            elif plugins_count > 1 and plugins_count <= 4:
-                current_saver = self.plugins[index]
-                index += 1
-                if index >= plugins_count:
-                    index = 0
-            elif plugins_count > 4:
-                index = random.randint(0, len(self.plugins) - 1)
-                current_saver = self.plugins[index]
+        # No current screensaver so select one of the installed screensaver
+        # plugins at random
+        # if current_saver is None:
+        if plugins_count == 1:
+            self.current_saver = self.plugins[0]
+        elif plugins_count > 1 and plugins_count <= 4:
+            self.current_saver = self.plugins[self.index]
+            self.index += 1
+            if self.index >= plugins_count:
+                self.index = 0
+        elif plugins_count > 4:
+            self.index = random.randint(0, len(self.plugins) - 1)
+            self.current_saver = self.plugins[self.index]
 
-            # No screensaver found just sleep for 200ms
-            if current_saver is None:
-                time.sleep(0.200)
-            else:
-                self.__run_screensaver__(current_saver)
-
-        self.screensaver_showing = False
-        skin.force_redraw = True
-        skin.redraw()
-        osd.screensaver_running = False
-        osd.update()
-        _debug_('Screensaver thread stopped')
-
+        # No screensaver found just sleep for 200ms
+        if self.current_saver is None:
+            self.timer = kaa.OneShotTimer(self.__next)
+            self.timer.start(0.2)
+        else:
+            self.__run_screensaver__(self.current_saver)
 
     def __run_screensaver__(self, screensaver):
         _debug_('__run_screensaver__(screensaver=%r)' % (screensaver.plugin_name,), 2)
         try:
             fps = screensaver.start(osd.width, osd.height)
-
-            max_iterations = int(self.cycle_time / (1.0 / fps))
+            time_per_frame = 1.0 / fps
+            max_iterations = int(self.cycle_time / time_per_frame)
             iteration = 0
-            clock = pygame.time.Clock()
 
-            while (not self.stop_screensaver) and (iteration < max_iterations):
-                # Draw the screen and update the display
-                screensaver.draw(osd.screen)
-                pygame.display.flip()
+            self.__draw(screensaver, time_per_frame, 0, max_iterations )
 
-                clock.tick(fps)
-                iteration += 1
-
-            screensaver.stop()
         except:
             print 'Screensaver %s crashed!' % screensaver.plugin_name
             traceback.print_exc()
             # Remove the broken screensaver so we don't try to run it again
             self.plugins.remove(screensaver)
 
-        osd.clearscreen(osd.COL_BLACK)
-        osd.update()
+
+    def __draw(self, screensaver, time_per_frame, iteration, max_iterations):
+        s = time.time()
+        try:
+            screensaver.draw(osd.screen)
+            pygame.display.flip()
+        except:
+            iteration = max_iterations
+            print 'Screensaver %s crashed!' % screensaver.plugin_name
+            traceback.print_exc()
+            # Remove the broken screensaver so we don't try to run it again
+            self.plugins.remove(screensaver)
+
+        e = time.time()
+        t = e - s
+        iteration += 1
+        if iteration < max_iterations:
+            d = time_per_frame - t
+            if d < 0.0:
+                d = time_per_frame
+            self.timer = kaa.OneShotTimer(self.__draw, screensaver, time_per_frame, iteration, max_iterations)
+            self.timer.start(d)
+        else:
+            try:
+                screensaver.stop()
+            except:
+                print 'Screensaver %s crashed when stopping' % screensaver.plugin_name
+            osd.clearscreen(osd.COL_BLACK)
+            osd.update()
+            self.__next()
 
 
 
