@@ -48,7 +48,9 @@ import plugin
 import config
 import util
 import menu
+import item
 import rc
+import dialog
 
 from event import *
 
@@ -78,44 +80,10 @@ class PluginInterface(plugin.ItemPlugin):
         resume playback
         """
         t    = max(0, self.item['autobookmark_resume'] - 10)
-        info = mmpython.parse(self.item.filename)
-        if (self.item.player.name == 'xine'):
-            self.write_playlist(t)
-            arg = ("--playlist %s/playlist_xine_%s.tox" % (config.FREEVO_CACHEDIR, t))
-        else:
-            if hasattr(info, 'seek') and t:
-                arg='-sb %s' % info.seek(t)
-            else:
-                arg='-ss %s' % t
+        self.item['resume'] = t
         if menuw:
             menuw.back_one_menu()
         self.item.play(menuw=menuw, arg=arg)
-
-    def write_playlist(self,time):
-        t = time
-        name = '%s/playlist_xine_%s.tox' % (config.FREEVO_CACHEDIR,t)
-
-        # this file has a companion subtitle file?
-        subtitle = None
-        try:
-            for file in glob.glob('%s.*' % os.path.splitext(self.item.filename)[0]):
-                if os.path.splitext(file)[1].lower() in ['.srt', '.sub', '.ssa']:
-                    subtitle = file
-                    break
-        except:
-            pass
-        playlist = open(name,'w')
-        playlist.write ("# toxine playlist\n")
-        playlist.write ("entry {\n")
-        playlist.write ("       identifier = %s;\n" % self.item.filename)
-        playlist.write ("       mrl = %s;\n" % self.item.filename)
-        if subtitle:
-            playlist.write("       subtitle = %s;\n" % subtitle)
-        playlist.write ("       start = %s;\n" % t)
-        playlist.write ("};\n")
-        playlist.write ("# END\n")
-        playlist.close()
-
 
     def bookmark_menu(self,arg=None, menuw=None):
         """
@@ -124,40 +92,29 @@ class PluginInterface(plugin.ItemPlugin):
         bookmarkfile = util.get_bookmarkfile(self.item.filename)
         items = []
         for line in util.readfile(bookmarkfile):
-            file = copy.copy(self.item)
-            file.info = {}
-
-            sec = int(line)
-            hour = int(sec/3600)
-            min = int((sec-(hour*3600))/60)
-            sec = int(sec%60)
-            time = '%0.2d:%0.2d:%0.2d' % (hour,min,sec)
-            # set a new title
-            file.name = Unicode(_('Jump to %s') % (time))
-            if hasattr(file, 'tv_show'):
-                del file.tv_show
-
-            if not self.item.mplayer_options:
-                self.item.mplayer_options = ''
-            if (self.item.player.name == 'xine'):
-                self.write_playlist(int(line))
-                cmd = ' --playlist %s/playlist_xine_%s.tox' % (config.FREEVO_CACHEDIR,int(line))
-                file.mplayer_options = (cmd)
-            else:
-                file.mplayer_options = str(self.item.mplayer_options) +  ' -ss %s' % time
-            items.append(file)
+            item = BookmarkItem(self.item, int(line))
+            items.append(item)
 
         if items:
+            item = menu.MenuItem(name=_('Clear all Bookmarks'), action=self.__clear_bookmarks, arg=self.item)
+            items.append(item)
             moviemenu = menu.Menu(self.item.name, items, fxd_file=self.item.skin_fxd)
             menuw.pushmenu(moviemenu)
         return
 
 
+    def __clear_bookmarks(self, arg=None, menuw=None):
+        self.menuw = menuw
+        dialog.show_confirmation(_('Do you want to delete all bookmarks?'),
+                                    self.__clear_bookmarks_do, proceed_text=_('Delete bookmarks'))
+
+    def __clear_bookmarks_do(self):
+        bookmarkfile = util.get_bookmarkfile(self.item.filename)
+        os.remove(bookmarkfile)
+        menuw.back_one_menu()
+
     def eventhandler(self, item, event, menuw):
         if event in (STOP, USER_END):
-            playlist_remove = ("%s/playlist_xine*.tox" % config.FREEVO_CACHEDIR)
-            for filename in glob.glob(playlist_remove):
-                os.remove(filename)
             if item.mode == 'file' and not item.variants and \
                 not item.subitems and item.elapsed:
                 item.store_info('autobookmark_resume', item.elapsed)
@@ -169,19 +126,6 @@ class PluginInterface(plugin.ItemPlugin):
 
         # Bookmark the current time into a file
         if event == STORE_BOOKMARK:
-            #Get time elapsed for xine video
-            videoplayer = self.item.player.name
-            if (videoplayer == 'xine'):
-                command = ("%s -S get_time" % config.CONF.xine)
-                handle = os.popen(command,'r')
-                position = handle.read();
-                handle.close()
-                try:
-                    item.elapsed = int(position)
-                except ValueError, e:
-                    _debug_('Cannot save bookmark for postion %r: %s' % (position, e))
-                    return False
-
             bookmarkfile = util.get_bookmarkfile(item.filename)
 
             handle = open(bookmarkfile,'a+')
@@ -192,3 +136,41 @@ class PluginInterface(plugin.ItemPlugin):
             return True
 
         return False
+
+class BookmarkItem(item.Item):
+    def __init__(self, video_item, time):
+        item.Item.__init__(self)
+        self.item = video_item
+        self.time = time
+        sec = time
+        hour = int(sec/3600)
+        min = int((sec-(hour*3600))/60)
+        sec = int(sec%60)
+        self.time_str = '%0.2d:%0.2d:%0.2d' % (hour,min,sec)
+        self.name = _('Jump to %s') % self.time_str
+
+    def actions(self):
+        return [(self.play, _('Play from here')), (self.delete, _('Delete'))]
+
+    def play(self, arg=None, menuw=None):
+        self.item['resume'] = self.time
+        if menuw:
+            menuw.back_one_menu()
+        self.item.play(menuw=menuw, arg=None)
+
+    def delete(self, arg=None, menuw=None):
+        self.menuw = menuw
+        dialog.show_confirmation(_('Do you want to delete bookmark \'%s\'?') % self.time_str,
+                                    self.__delete_do, proceed_text=_('Delete bookmark'))
+    def __delete_do(self):
+        bookmarkfile = util.get_bookmarkfile(self.item.filename)
+        handle = open(bookmarkfile)
+        bookmarks = ''
+        for line in handle:
+            if int(line) != self.time:
+                bookmarks += line
+        handle.close()
+        handle = open(bookmarkfile, 'w')
+        handle.write(bookmarks)
+        handle.close()
+        self.menuw.back_one_menu()

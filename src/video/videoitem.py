@@ -48,6 +48,7 @@ import menu
 import configure
 import plugin
 import kaa.metadata as metadata
+import dialog
 
 from gui   import PopupBox, AlertBox, ConfirmBox
 from item  import Item, FileInformation
@@ -583,6 +584,22 @@ class VideoItem(Item):
             AlertBox(text=_('No player for this item found')).show()
             return
 
+        if not self['resume'] and self['autobookmark_resume']:
+            self.__play_args = (arg, menuw)
+            dialog.show_confirmation(_('Do you want to resume play back or play from the start?'),
+                    cancel_handler=self.resume_play, cancel_text=_('From Start'),
+                    proceed_handler=self.resume_resume, proceed_text=_('Resume'))
+        else:
+            self.__play(arg, menuw)
+
+    def resume_play(self):
+        self.__play(*self.__play_args)
+
+    def resume_resume(self):
+        self['resume']  = max(0, self['autobookmark_resume'] - 10)
+        self.__play(*self.__play_args)
+
+    def __play(self, arg=None, menuw=None):
         # execute commands if defined
         if config.VIDEO_PRE_PLAY:
             os.system(config.VIDEO_PRE_PLAY)
@@ -678,6 +695,9 @@ class VideoItem(Item):
         self.menuw.delete_submenu()
 
         error = self.player.play(mplayer_options, self)
+
+        # Clear any resume settings
+        self['resume'] = ''
 
         if error:
             # If we are a subitem we don't show any error message before

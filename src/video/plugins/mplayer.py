@@ -194,7 +194,16 @@ class MPlayer:
             'vf': [],
             'url': url,
             'disable_osd': False,
+            'start_position': [],
         }
+
+        if item['resume']:
+            t = int(item['resume'])
+            info = mmpython.parse(item.filename)
+            if hasattr(info, 'seek') and t:
+                args['start_position']=['-sb' , str(info.seek(t))]
+            else:
+                args['start_position']=['-ss', str(t)]
 
         if config.CONF.x or config.CONF.y:
             args['geometry'] = '-geometry %d:%d' % (config.CONF.x, config.CONF.y)
@@ -349,6 +358,7 @@ class MPlayer:
         command += args['af'] and ['-af', '%s' % ','.join(args['af'])] or []
         command += args['vf'] and ['-vf', '%s' % ','.join(args['vf'])] or []
         command += args['disable_osd'] and ['-osdlevel', '0'] or []
+        command += args['start_position']
 
         # use software scaler?
         #XXX these need to be in the arg list as the scaler will add vf args

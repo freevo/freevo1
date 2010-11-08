@@ -87,6 +87,8 @@ class PluginInterface(plugin.Plugin):
         # register xine as the object to play
         plugin.register(Xine(type), plugin.VIDEO_PLAYER, True)
 
+    def config(self):
+        return (('XINE_USE_FREEVO_OSD', False, 'Use the skinnable freevo OSD (if available) rather than the inbuilt Xine OSD'),)
 
 
 class Xine:
@@ -102,30 +104,8 @@ class Xine:
         self.app       = None
         self.plugins   = []
         self.paused    = False
-
-        config_file_opt = []
-        config_file = dialog.utils.get_xine_config_file()
-        if config_file:
-            config_file_opt = ['--config', config_file]
-
-        network_opt = []
-        if dialog.overlay_display_supports_dialogs:
-            xine_cmd_line = config.XINE_COMMAND + config.XINE_ARGS_DEF
-            if xine_cmd_line.find('--network') == -1 or xine_cmd_line.find(' -n') == -1:
-                network_opt = ['--network']
-
-            passwd_file = '%s/.xine/passwd' % os.environ['HOME']
-            if not os.path.exists(passwd_file):
-                out = open(passwd_file, 'w')
-                out.write('ALL:ALLOW\n')
-                out.close()
-                print _('!WARNING! created a xine passwd file with ALL:ALLOW')
-
-        self.command = [ '--prio=%s' % config.MPLAYER_NICE ] + \
-            config.XINE_COMMAND.split(' ') +  \
-            network_opt + \
-            [ '--stdctl', '-V', config.XINE_VO_DEV, '-A', config.XINE_AO_DEV ] + \
-            config.XINE_ARGS_DEF.split(' ') + config_file_opt
+        self.command   = None
+        self.tmp_playlist = None
 
 
     def ShowMessage(self, msg):
@@ -174,13 +154,38 @@ class Xine:
         self.item = item
         self.options = options
         self.item.elapsed = 0
+        
         if config.EVENTS.has_key(item.mode):
             self.event_context = item.mode
         else:
             self.event_context = 'video'
 
-        if plugin.getbyname('MIXER'):
-            plugin.getbyname('MIXER').reset()
+        if self.command is None:
+            config_file_opt = []
+            network_opt = []
+            if config.XINE_USE_FREEVO_OSD:
+                config_file = dialog.utils.get_xine_config_file()
+                if config_file:
+                    config_file_opt = ['--config', config_file]
+
+
+            if config.XINE_USE_FREEVO_OSD and dialog.overlay_display_supports_dialogs:
+                xine_cmd_line = config.XINE_COMMAND + config.XINE_ARGS_DEF
+                if xine_cmd_line.find('--network') == -1 or xine_cmd_line.find(' -n') == -1:
+                    network_opt = ['--network']
+
+                passwd_file = '%s/.xine/passwd' % os.environ['HOME']
+                if not os.path.exists(passwd_file):
+                    out = open(passwd_file, 'w')
+                    out.write('ALL:ALLOW\n')
+                    out.close()
+                    print _('!WARNING! created a xine passwd file with ALL:ALLOW')
+
+            self.command = [ '--prio=%s' % config.MPLAYER_NICE ] + \
+                config.XINE_COMMAND.split(' ') +  \
+                network_opt + \
+                [ '--stdctl', '-V', config.XINE_VO_DEV, '-A', config.XINE_AO_DEV ] + \
+                config.XINE_ARGS_DEF.split(' ') + config_file_opt
 
         command = copy.copy(self.command)
 
@@ -231,7 +236,13 @@ class Xine:
                     command.append(options[1])
                     command.append(options[2])
             else:
-                command.append(item.url)
+                if item['resume']:
+                    self.item.elapsed = int(item['resume'])
+                    self.tmp_playlist = self.write_playlist(item, self.item.elapsed)
+                    command.append('--playlist')
+                    command.append(self.tmp_playlist)
+                else:
+                    command.append(item.url)
 
         self.stdout_plugins = []
         self.paused    = False
@@ -247,6 +258,13 @@ class Xine:
         _debug_('stop(event=%r)' % (event,), 2)
         if not self.app:
             return
+
+        if self.tmp_playlist:
+            try:
+                os.remove(self.tmp_playlist)
+            except:
+                pass
+            self.tmp_playlist = None
 
         if config.XINE_BOOKMARK:
             # if the file ends do nothing, else get elapsed time
@@ -286,7 +304,8 @@ class Xine:
 
         if event == PAUSE or event == PLAY:
             self.paused = not self.paused
-            dialog.show_play_state(self.paused and dialog.PLAY_STATE_PAUSE or dialog.PLAY_STATE_PLAY, self.get_time_info)
+            if config.XINE_USE_FREEVO_OSD:
+                dialog.show_play_state(self.paused and dialog.PLAY_STATE_PAUSE or dialog.PLAY_STATE_PLAY, self.item, self.get_time_info)
             self.app.write('pause\n')
             return True
 
@@ -299,10 +318,12 @@ class Xine:
             if pos < 0:
                 action='SeekRelative-'
                 pos = 0 - pos
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.get_time_info)
+                if config.XINE_USE_FREEVO_OSD and dialog.is_dialog_supported():
+                    dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.item, self.get_time_info)
             else:
                 action='SeekRelative+'
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.get_time_info)
+                if config.XINE_USE_FREEVO_OSD and dialog.is_dialog_supported():
+                    dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.item, self.get_time_info)
             if pos <= 15:
                 pos = 15
             elif pos <= 30:
@@ -313,8 +334,8 @@ class Xine:
             return True
 
         if event == TOGGLE_OSD:
-            if dialog.is_dialog_supported():
-                dialog.show_play_state(self.paused and dialog.PLAY_STATE_PAUSE or dialog.PLAY_STATE_PLAY, self.get_time_info)
+            if config.XINE_USE_FREEVO_OSD and dialog.is_dialog_supported():
+                dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_time_info)
             else:
                 self.app.write('OSDStreamInfos\n')
             return True
@@ -453,6 +474,38 @@ class Xine:
         except:
             pass
         return 0
+
+    def write_playlist(self, item, start_time):
+        """
+        Create a playlist file to start the specified item at the time supplied.
+        Returns the file name of the playlist created.
+        """
+        name = '%s/playlist_xine_%s.tox' % (config.FREEVO_CACHEDIR,start_time)
+
+        # this file has a companion subtitle file?
+        subtitle = None
+        try:
+            import glob
+            
+            for file in glob.glob('%s.*' % os.path.splitext(item.filename)[0]):
+                if os.path.splitext(file)[1].lower() in ['.srt', '.sub', '.ssa']:
+                    subtitle = file
+                    break
+        except:
+            pass
+
+        playlist = open(name,'w')
+        playlist.write ("# toxine playlist\n")
+        playlist.write ("entry {\n")
+        playlist.write ("       identifier = %s;\n" % item.filename)
+        playlist.write ("       mrl = %s;\n" % item.filename)
+        if subtitle:
+            playlist.write("       subtitle = %s;\n" % subtitle)
+        playlist.write ("       start = %s;\n" % start_time)
+        playlist.write ("};\n")
+        playlist.write ("# END\n")
+        playlist.close()
+        return name
 
 
 class XineApp(childapp.ChildApp2):
