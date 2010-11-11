@@ -129,7 +129,7 @@ class EditFavoriteResource(FreevoResource):
         # table header
         fv.tableOpen('border="0" cellpadding="4" cellspacing="1" width="100%"')
         fv.tableRowOpen('class="chanrow"')
-        fv.tableCell(_('Name of favorite'), 'class="guidehead" colspan="1"')
+        fv.tableCell(_('Name of Favorite'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Program'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Channel'), 'class="guidehead" colspan="1"')
         fv.tableCell(_('Day of week'), 'class="guidehead" colspan="1"')
@@ -159,15 +159,17 @@ class EditFavoriteResource(FreevoResource):
 
         # channel
         cell = '\n<select name="chan" selected="%s">\n' % fav.channel
-        cell += '  <option value=ANY>'+_('ANY CHANNEL')+'</option>\n'
+        cell += '  <option value=ANY'
+        if fav.channel == 'ANY':
+            cell += ' SELECTED'
+        cell += '>'+_('ANY CHANNEL')+'</option>\n'
 
-        i=1
         chan_index = 0
         for ch in guide.chan_list:
+            cell += '  <option value="%s"' % (ch.displayname)
             if ch.displayname == fav.channel:
-                chan_index = i
-            cell += '  <option value="%s">%s</option>\n' % (ch.displayname, ch.displayname)
-            i = i + 1
+                cell += ' SELECTED'
+            cell += '>%s</option>\n' % (ch.displayname)
 
         cell += '</select>\n'
         fv.tableCell(cell, 'class="'+status+'" colspan="1"')
