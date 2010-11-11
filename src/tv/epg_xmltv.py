@@ -249,6 +249,26 @@ def load_guide(XMLTV_FILE=None):
             advisories = []
             ratings = {}
 
+            # Add credits to the description
+            if 'credits' in p:
+                desc += Unicode('\n\n')
+                desc += _('Credits :\n')
+                credits = p['credits']
+                if 'actor' in credits:
+                    desc += Unicode('\n')
+                    desc += _('Actors :\n')
+                    for actor in credits['actor']:
+                        desc += Unicode(actor + '\n')
+                if 'director' in credits:
+                    desc += Unicode('\n')
+                    directors = credits['director']
+                    if len(directors) == 1:
+                        desc += _('Director : %s') % directors[0]
+                    else:
+                        desc += _('Directors :\n')
+                        for d in directors:
+                            desc += Unicode(d + '\n')
+
             if 'rating' in p:
                 for r in p['rating']:
                     if r.get('system') == 'advisory':
