@@ -44,6 +44,8 @@ from pygame.locals import *
 import rc
 import event
 import dialog
+import config 
+import util
 
 import kaa
 
@@ -394,8 +396,14 @@ class PlayStateDialog(Dialog):
                 attr['tagline'] = None
 
             attr['image'] = self.item.image
+	    # Skip thumbnails
+	    if attr['image'].endswith('.raw'):
+		attr['image'] = None
             if not attr['image']:
-                attr['image'] = 'cover_na.png'
+		attr['image'] = self.item.parent.image
+	    if not attr['image']:	
+                attr['image'] = "nocover.png" 
+            _debug_('Cover image for %s is %s' % (self.item.filename, attr['image']))
 
             attributes = ['year', 'genre', 'rating', 'runtime' ]
             for attribute in attributes:
@@ -420,7 +428,12 @@ class PlayStateDialog(Dialog):
             attr['runtime'] = None
 
         now = time.localtime()
-        time_str = time.strftime("%H:%M", now)
+        if config.CLOCK_FORMAT:
+            format = config.CLOCK_FORMAT
+        else:
+            format ='%a %d %H:%M'
+
+        time_str = time.strftime(format, now)
         date_str = time.strftime("%Y/%m/%y", now)
 
         return {'state': self.state,
