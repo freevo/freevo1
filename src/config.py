@@ -304,6 +304,7 @@ IS_RECORDSERVER = 0
 IS_WEBSERVER    = 0
 IS_ENCODINGSERVER = 0
 IS_RSSSERVER = 0
+IS_PROMPT = 0
 
 __builtin__.__dict__['__freevo_app__'] = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 
@@ -317,6 +318,8 @@ if sys.argv[0].find('main.py') == -1:
         IS_ENCODINGSERVER = 1
     elif sys.argv[0].find('rssserver.py') != -1:
         IS_RSSSERVER = 1
+    elif sys.argv[0] == '':
+        IS_PROMPT = 1
 
 #
 # Send debug to stdout as well as to the logfile?
@@ -406,14 +409,15 @@ OS_CACHEDIR, FREEVO_CACHEDIR = make_freevodir('CACHEDIR', '/var/cache', '/var/db
 #
 lock = RLock()
 #if not HELPER:
-old_stdout = sys.stdout
-old_stderr = sys.stderr
-sys.stdout = Logger(sys.argv[0] + ':stdout')
-sys.stderr = Logger(sys.argv[0] + ':stderr')
-ts = time.asctime(time.localtime(time.time()))
-sys.stdout.log('=' * 80)
-sys.stdout.log('Freevo %s r%s started at %s' % (version.__version__, revision.__revision__, ts))
-sys.stdout.log('-' * 80)
+if not IS_PROMPT:
+    old_stdout = sys.stdout
+    old_stderr = sys.stderr
+    sys.stdout = Logger(sys.argv[0] + ':stdout')
+    sys.stderr = Logger(sys.argv[0] + ':stderr')
+    ts = time.asctime(time.localtime(time.time()))
+    sys.stdout.log('=' * 80)
+    sys.stdout.log('Freevo %s r%s started at %s' % (version.__version__, revision.__revision__, ts))
+    sys.stdout.log('-' * 80)
 
 def shutdown():
     sys.stdout.log('-' * 80)
