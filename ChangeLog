@@ -69,6 +69,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Fixed password don't work in 1.9.0 (B#3079625)
  * Fixed string exceptions not allowed in Python 2.6 (B#3055864)
  * Fixed polish fonts incorrecty displayed in headlines (B#3056997)
+ * Fixed submenu in Favorites display (B#3105778)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------

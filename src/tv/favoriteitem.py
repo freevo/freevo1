@@ -87,13 +87,11 @@ class FavoriteItem(Item):
         # needed by the inputbox handler
         self.menuw = None
 
-        self.red_action = (self.display_submenu, _('Edit favorite'))
-        self.green_action = (self.rem_favorite, _('Remove favorite'))
-
 
     def actions(self):
         _debug_('actions()', 2)
-        return [( self.display_submenu, _('Edit favorite'))]
+        return [( self.display_submenu, _('Edit favorite')), \
+                ( self.rem_favorite, _('Remove favorite'))]
 
 
     def display_submenu(self, arg=None, menuw=None):
