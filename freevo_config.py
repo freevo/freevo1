@@ -590,6 +590,14 @@ SYS_USE_JOYSTICK = True
 SYS_USE_MOUSE = False
 
 #
+# Modifiers for KEYMAP
+#
+M_ALT   = 0x10000
+M_CTRL  = 0x20000
+M_SHIFT = 0x40000
+M_SCAN  = 0x80000
+
+#
 # Keymap to map keyboard keys to event strings. You can also add new keys
 # here, e.g. KEYMAP[key.K_x] = 'SUBTITLE'. The K_-names are defined by pygame.
 #

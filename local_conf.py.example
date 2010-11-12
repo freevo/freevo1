@@ -224,6 +224,10 @@ CONFIG_VERSION = 5.29
 #
 # Keymap to map keyboard keys to event strings. You can also add new keys
 # here, e.g. KEYMAP[key.K_x] = 'SUBTITLE'. The K_-names are defined by pygame.
+# Keys can be combined with modifiers like KEYMAP[key.K_x | M_ALT | M_CTRL]
+# When pygame doesn't recognize the key pressed it passes just scancode.
+# This use to happen to "multimedia" keys. In this case special modifier
+# can be used: KEYMAP[scancode | M_SCAN]. 
 #
 
 #

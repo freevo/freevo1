@@ -106,6 +106,20 @@ L       Subtitle
 """
 MAX_DIM_SURFACES = 10
 
+def convert_modifier(modifier):
+    """
+    Converts pygame modifiers to config's modifier
+    """
+    result = 0
+    if modifier & KMOD_ALT:
+        result = result | config.M_ALT
+    if modifier & KMOD_CTRL:
+        result = result | config.M_CTRL
+    if modifier & KMOD_SHIFT:
+        result = result | config.M_SHIFT
+    return result
+
+
 # Module variable that contains an initialized OSD() object
 _singleton = None
 
@@ -627,11 +641,17 @@ class OSD:
                     except:
                         pass
 
-                if event.key in config.KEYMAP.keys():
+                key = event.key
+                if not key:
+                    key = event.scancode
+                    key = key | config.M_SCAN
+                key = key | convert_modifier(event.mod)
+
+                if key in config.KEYMAP.keys():
                     # Turn off the helpscreen if it was on
                     if self._help:
                         self.toggle_helpscreen()
-                    return config.KEYMAP[event.key]
+                    return config.KEYMAP[key]
 
                 else:
                     # don't know what this is, return it as it is

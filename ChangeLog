@@ -14,7 +14,8 @@ X is the category and #nnnnnnn is the tracker number.
 == Release 1.9.1 (2010-??-??) ==
 --------------------------------
 svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
-
+ 
+ * Add key modifiers to key map (F#2871423)
  * New blurr OSD theme (F#2826636)
  * New style of shutdown dialog with all options shown (use back to exit the dialog)
  * Add scrollbars to description screen.
