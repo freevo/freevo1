@@ -167,8 +167,8 @@ class Reminders(plugin.Plugin):
         """
         Get actions for prog.
         """
-        self.current_prog = prog
-        if self.is_reminder_set(prog):
+        self.current_prog = prog.prog
+        if self.is_reminder_set(self.current_prog):
             return ((self.__remove_reminder ,_('Remove reminder')),)
         else:
             return ((self.__add_reminder ,_('Add reminder')),)

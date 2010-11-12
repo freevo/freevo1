@@ -126,13 +126,9 @@ class ProgramItem(Item):
             else:
                 items.append((self.add_favorite, _('Add to favorites')))
 
-        # 'Search for more of this'
-        if not self.context == 'search':
-            items.append((self.find_more, _('Search for more of this program')))
-
         plugins_list = plugin.get('tv_program')
         for p in plugins_list:
-            items += p.items(self.prog)
+            items += p.items(self)
 
         return items
 
@@ -272,45 +268,6 @@ class ProgramItem(Item):
             fav_item.display_submenu(menuw=menuw)
         else:
             dialog.show_alert(_('Cannot edit favorite %s') % self.name)
-
-
-    def find_more(self, arg=None, menuw=None):
-        """
-        Find more of this program
-        """
-        _debug_('find_more(arg=%r, menuw=%r)' % (arg, menuw), 2)
-
-        # this might take some time, thus we open a popup messages
-        _debug_(String('searching for: %s' % self.title), 2)
-        pop = ProgressDialog(_('Searching, please wait...'), indeterminate=True)
-        pop.show()
-        # do the search
-        (status, matches) = self.recordclient.findMatchesNow(self.title)
-        pop.hide()
-        if status:
-            items = []
-            _debug_('search found %s matches' % len(matches), 2)
-            # sort by start times
-            f = lambda a, b: cmp(a.start, b.start)
-            matches.sort(f)
-            for prog in matches:
-                items.append(ProgramItem(self.parent, prog, context='search'))
-        elif matches == 'no matches':
-            # there have been no matches
-            dialog.show_alert(_('No matches found for %s') % self.title)
-            return
-        else:
-            # something else went wrong
-            dialog.show_alert( _('Search failed') +(':\n%s' % matches))
-            return
-
-        # create a menu from the search result
-        search_menu = menu.Menu(_('Search Results'), items, item_types='tv program menu')
-        # do not return from the search list to the submenu
-        # where the search was initiated
-        menuw.delete_submenu(refresh = False)
-        menuw.pushmenu(search_menu)
-        menuw.refresh()
 
 
     def display_submenu(self, arg=None, menuw=None):

@@ -53,6 +53,9 @@ from menu import MenuItem, Menu
 from tv.programitem import ProgramItem
 from skin.widgets import TextEntryScreen
 
+from dialog.dialogs import ProgressDialog
+
+MAX_RESULTS = 500
 
 class PluginInterface(plugin.MainMenuPlugin):
     """
@@ -64,15 +67,53 @@ class PluginInterface(plugin.MainMenuPlugin):
 
         self._type = 'mainmenu_tv'
         self.parent = None
+        self.prog_menu = SearchProgramMenu()
+        plugin.register(self.prog_menu, "Search Program")
+        plugin.activate(self.prog_menu)
 
 
     def items(self, parent):
         self.parent = parent
         return [SearchPrograms(parent)]
 
+class SearchProgramMenu(plugin.Plugin):
+    def __init__(self):
+        plugin.Plugin.__init__(self)
+        self._type = 'tv_program'
+        self.current_prog = None
+
+    def items(self, prog):
+        """
+        Get actions for prog.
+        """
+        self.current_prog = prog
+        if prog.context == 'more_programs':
+            return []
+        return [(self.more_programs, _('Search for more of this program'))]
+        
+
+    def more_programs(self, arg=None, menuw=None):
+        pdialog = ProgressDialog(_('Searching, please wait...'))
+        pdialog.show()
+        now = time.time()
+        guide = tv.epg_xmltv.get_guide()
+        total_channels = len(guide.chan_list)
+        items = []
+        for i,ch in enumerate(guide.chan_list):
+            for prog in ch.programs:
+                if now >= prog.stop:
+                    continue
+                if prog.title.startswith(self.current_prog.prog.title):
+                    items.append(ProgramItem(self.current_prog, prog, context='more_programs'))
+            pdialog.update_progress(unicode(''), float(i)/float(total_channels))
+
+        items.sort(lambda x,y: cmp(x.prog.start, y.prog.start))
+        pdialog.hide()
+        search_menu = Menu(_('Search Results'), items, item_types='tv program menu')
+        menuw.pushmenu(search_menu)
+        menuw.refresh()
 
 class SearchPrograms(Item):
-
     def __init__(self, parent):
         Item.__init__(self, parent, skin_type='tv')
         self.name = _('Search Programs')
@@ -88,76 +129,44 @@ class SearchPrograms(Item):
 
 
     def search_for_programs(self, menuw, text):
-        pop = PopupBox(text=_('Searching, please wait...'))
-        pop.show()
-        (result, matches) = self.findMatches(text)
-        pop.destroy()
-
-        items = []
-        if result:
-            _debug_('search found %s matches' % len(matches))
-
-            f = lambda a, b: cmp(a.start, b.start)
-            matches.sort(f)
-            for prog in matches:
-                items.append(ProgramItem(self, prog, context='search'))
-        else:
-            if matches == 'no matches':
-                msgtext = _('No matches found for %s') % text
-                AlertBox(text=msgtext).show()
-                return
-            AlertBox(text=_('Cannot find program: %s') % matches).show()
+        if not text:
+            dialog.show_alert(_('Please specify something to search for!'))
             return
+        title_only = False
+        pdialog = ProgressDialog(_('Searching, please wait...'))
+        pdialog.show()
+
+        guide = tv.epg_xmltv.get_guide()
+        regex = re.compile('.*' + text + '\ *', re.IGNORECASE)
+        now = time.time()
+        items = []
+        total_channels = len(guide.chan_list)
+        for i,ch in enumerate(guide.chan_list):
+            for prog in ch.programs:
+                if now >= prog.stop:
+                    continue
+                if title_only:
+                    match = regex.match(prog.title)
+                else:
+                    match = regex.match(prog.title) or regex.match(prog.desc) \
+                        or regex.match(prog.sub_title)
+
+                if match:
+                    items.append(ProgramItem(self.parent, prog, context='search'))
+
+                if len(items) >= MAX_RESULTS:
+                    break
+            pdialog.update_progress(unicode(''), float(i)/float(total_channels))
+
+        items.sort(lambda x,y: cmp(x.prog.start, y.prog.start))
+        pdialog.hide()
+
+        if len(items) == 0:
+            dialog.show_alert(_('No matches found for %s') % text)
+            return      
+
         search_menu = Menu(_('Search Results'), items, item_types='tv program menu')
         menuw.pushmenu(search_menu)
         menuw.refresh()
 
-
-    def findMatches(self, find=None, movies_only=None):
-        global guide
-
-        _debug_('findMatches: %s' % find, DINFO)
-
-        matches = []
-        max_results = 500
-
-        if not find and not movies_only:
-            _debug_('nothing to find', DINFO)
-            return (FALSE, 'no search string')
-
-        self.updateGuide()
-
-        pattern = '.*' + find + '\ *'
-        regex = re.compile(pattern, re.IGNORECASE)
-        now = time.time()
-
-        for ch in guide.chan_list:
-            for prog in ch.programs:
-                if now >= prog.stop:
-                    continue
-                if not find or regex.match(prog.title) or regex.match(prog.desc) \
-                   or regex.match(prog.sub_title):
-                    if movies_only:
-                        # We can do better here than just look for the MPAA
-                        # rating.  Suggestions are welcome.
-                        if 'MPAA' in prog.getattr('ratings').keys():
-                            matches.append(prog)
-                            _debug_('PROGRAM MATCH 2: %s' % prog, DINFO)
-                    else:
-                        # We should never get here if not find and not
-                        # movies_only.
-                        matches.append(prog)
-                        _debug_('PROGRAM MATCH 3: %s' % prog, DINFO)
-                if len(matches) >= max_results:
-                    break
-
-        _debug_('Found %d matches.' % len(matches), DINFO)
-
-        if matches:
-            return (TRUE, matches)
-        return (FALSE, 'no matches')
-
-
-    def updateGuide(self):
-        global guide
-        guide = tv.epg_xmltv.get_guide()
+        
