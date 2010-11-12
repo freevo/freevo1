@@ -820,10 +820,17 @@ plugin_record = plugin.activate('tv.generic_record')
 plugin.activate('tv.scheduled_recordings')
 
 # TV menu plugin to view recordings
-plugin.activate('tv.view_recordings')
+plugin.activate('tv.recordings_manager')
 
 # TV menu plugin to view and edit favorites
 plugin.activate('tv.view_favorites')
+
+# TV menu plugin to search for programs
+plugin.activate('tv.search_programs')
+
+# TV menu plugin to allow the use to set reminders for programs they want to
+# watch.
+plugin.activate('tv.remind')
 
 # TV menu plugin to manually schedule recordings
 plugin.activate('tv.manual_record')
