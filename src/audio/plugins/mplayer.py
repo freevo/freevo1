@@ -337,9 +337,15 @@ class MPlayerApp(childapp.ChildApp2):
             titleIndex = line.find(titleKey)
             if titleIndex != -1:
                 titleStart = titleIndex + len(titleKey)
-                titleEnd = line.find("'", titleStart)
+                titleEnd = line.find("';", titleStart)
                 if titleEnd > titleStart:
-                    self.item.info['artist'] = line[titleStart:titleEnd]
+                    breakIndex = line.find(" - ", titleStart)
+                    if breakIndex != -1:
+                        self.item.info['artist'] = line[titleStart:breakIndex].strip()
+                        self.item.info['title'] = line[breakIndex+2:titleEnd].strip()
+                        self.item.info['stream_name'] = self.item.name
+                    else:
+                        self.item.info['artist'] = line[titleStart:titleEnd]
 
         else:
             for keywords in self.STREAM_KEYWORDS:
