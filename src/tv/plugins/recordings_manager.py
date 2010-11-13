@@ -177,7 +177,7 @@ class RecordingsDirectory(Item):
         self.settings_fxd = os.path.join(self.dir, 'folder.fxd')
         self.load_settings()
 
-        self.blue_action = (self.configure, _('Configure directory'))
+        self.button4_action = (self.configure, _('Configure directory'))
 
 
     # ======================================================================
@@ -187,7 +187,7 @@ class RecordingsDirectory(Item):
         """
         return a list of actions for this item
         """
-        items = [(self.browse, _('Browse directory')) , self.blue_action]
+        items = [(self.browse, _('Browse directory')) , self.button4_action]
         return items
 
 
@@ -407,9 +407,13 @@ class RecordedProgramItem(VideoItem):
     """
     def __init__(self, name, video_item):
         VideoItem.__init__(self, url=video_item.url, parent=video_item.parent)
+        self.update_item(name, video_item)
+
+    def update_item(self, name, video_item):
         self.video_item = video_item
         self.name = name
         self.files = video_item.files
+        self.type = 'video'
 
         keep = self.video_item['keep']
         if not keep:
@@ -456,6 +460,13 @@ class RecordedProgramItem(VideoItem):
         return the default action
         """
         actions = VideoItem.actions(self)
+        from plugins.file_ops import PluginInterface as FileOps
+        for i,action in enumerate(actions):
+            if isinstance(action, tuple):
+                if action[0] == FileOps.delete_info:
+                    del actions[i]
+                    break
+        
         items = actions[0:2]
         items.append((self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')))
         items.append((self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched')))
@@ -962,6 +973,14 @@ class DiskManager(plugin.DaemonPlugin):
                 # keeps the episode title not the series title.
                 rpitem.name = rpitem.video_item.name
                 rpitems.append(rpitem)
+                if hasattr(rpitem, 'mtime'):
+                    if vfs.mtime(rpitem.files.fxd_file) > rpitem.mtime:
+                        new_rpitem = fxditem.mimetype.get(self.recordings_dir_item, [rpitem.files.fxd_file])[0]
+                        if rpitem in rpitems:
+                            loc = rpitems.index(rpitem)
+                            rpitems[loc].update_item(new_rpitem.name, new_rpitem)
+                            rpitems[loc].mtime = vfs.mtime(new_rpitem.files.fxd_file)
+                            rpitems[loc].dirty = True
 
         # Parse only the added files.
         parse_time = time.time()
@@ -973,6 +992,7 @@ class DiskManager(plugin.DaemonPlugin):
         # Add the new recordings
         for recorded_item in added_recordings:
             rpitem = RecordedProgramItem(recorded_item.name, recorded_item)
+            rpitem.mtime = vfs.mtime(recorded_item.files.fxd_file)
             rpitems.append(rpitem)
         rpitem_time = time.time() - rpitem_time
 
@@ -1059,7 +1079,8 @@ class DiskManager(plugin.DaemonPlugin):
         today = datetime.date.today()
 
         for recorded_item in all_recordings:
-            if recorded_item.watched and not recorded_item.keep:
+            accessed = time() - os.stat(recorded_item.filename)[7]
+            if recorded_item.watched and not recorded_item.keep and (accessed > 3600):
                 watched_candidates.append(recorded_item)
 
             elif not recorded_item.watched and not recorded_item.keep:
