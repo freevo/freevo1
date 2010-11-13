@@ -110,7 +110,7 @@ def eval_attr(attr_value, max):
             p = plugin.getbyname('buttonbar')
             if p:
                 attr_global_dict['buttonbar'] = 1
-                attr_global_dict['buttonbar_height'] = 60
+                attr_global_dict['buttonbar_height'] = config.BUTTONBAR_HEIGHT
             else:
                 attr_global_dict['buttonbar'] = 0
                 attr_global_dict['buttonbar_height'] = 0

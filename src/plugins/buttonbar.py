@@ -104,7 +104,13 @@ class PluginInterface(plugin.DaemonPlugin):
         self.bar     = None
         self.barfile = ''
         self.surface = None
-        self.colors = ['red', 'green', 'yellow', 'blue']
+        self.colors = config.BUTTONBAR_ORDER
+
+        self.events = []
+        for index in self.colors:
+            eventname = 'BUTTONBAR_' + index.upper()
+            self.events.append(eventname)
+
         self.actions = [None, None, None, None]
         if not hasattr(config, 'BUTTONBAR_TVGUIDE_ACTIONS'):
             self.tvguide_actions = [MenuItem('-1 Day', action= self.advance_tv_guide, arg= -24),
@@ -115,34 +121,39 @@ class PluginInterface(plugin.DaemonPlugin):
             # Process TV Guide buttons
             self.tvguide_actions = [None, None, None, None]
             for index in range(0, len(self.colors)):
+                actionstr = ''
+                if config.BUTTONBAR_TVGUIDE_ACTIONS.has_key('button' + str(index+1)):
+                    actionstr = config.BUTTONBAR_TVGUIDE_ACTIONS['button' + str(index+1)]
                 if config.BUTTONBAR_TVGUIDE_ACTIONS.has_key(self.colors[index]):
                     actionstr = config.BUTTONBAR_TVGUIDE_ACTIONS[self.colors[index]]
-                    if actionstr == 'record':
-                        self.tvguide_actions[index] = MenuItem(_('Record'),
-                                                      action=self.send_event_to_menu,
-                                                      arg= event.TV_START_RECORDING)
-                    elif actionstr == 'enter':
-                        self.tvguide_actions[index] = MenuItem(_('More options'),
-                                                      action=self.show_options,
-                                                      arg=None)
-                                                      #action=self.send_event_to_menu,
-                                                      #arg= event.MENU_SUBMENU)
-                    elif actionstr == 'info':
-                        self.tvguide_actions[index] = MenuItem(_('Full Description'),
-                                                      action=self.show_program_info)
-                    elif actionstr == 'now':
-                        self.tvguide_actions[index] = MenuItem(_('Now'),
-                                                      action=self.jump_to_now)
+                
 
-                    elif actionstr.startswith('adv:'):
-                        hours = eval(actionstr[4:])
-                        self.tvguide_actions[index] = MenuItem('Advance %d hours' % hours,
-                                                      action= self.advance_tv_guide,
-                                                      arg= hours)
-                    else:
-                        msgtext = _('WARNING: ')
-                        msgtext+= _('"%s" is not a valid argument for the button bar. ') % actionstr
-                        _debug_(msgtext, DERROR)
+                if actionstr == 'record':
+                    self.tvguide_actions[index] = MenuItem(_('Record'),
+                                                  action=self.send_event_to_menu,
+                                                  arg= event.TV_START_RECORDING)
+                elif actionstr == 'enter':
+                    self.tvguide_actions[index] = MenuItem(_('More options'),
+                                                  action=self.show_options,
+                                                  arg=None)
+                                                  #action=self.send_event_to_menu,
+                                                  #arg= event.MENU_SUBMENU)
+                elif actionstr == 'info':
+                    self.tvguide_actions[index] = MenuItem(_('Full Description'),
+                                                  action=self.show_program_info)
+                elif actionstr == 'now':
+                    self.tvguide_actions[index] = MenuItem(_('Now'),
+                                                  action=self.jump_to_now)
+
+                elif actionstr.startswith('adv:'):
+                    hours = eval(actionstr[4:])
+                    self.tvguide_actions[index] = MenuItem('Advance %d hours' % hours,
+                                                  action= self.advance_tv_guide,
+                                                  arg= hours)
+                else:
+                    msgtext = _('WARNING: ')
+                    msgtext+= _('"%s" is not a valid argument for the button bar. ') % actionstr
+                    _debug_(msgtext, DERROR)
 
 
 
@@ -206,19 +217,25 @@ class PluginInterface(plugin.DaemonPlugin):
         # record           - Set the selected program to record.
         # info               - Display more information on the selected program.
         return [('BUTTONBAR_TVGUIDE_ACTIONS',
-                    { 'red':'adv:-24',
-                       'green':'adv:-6',
-                       'yellow':'adv:6',
-                       'blue':'adv:24'
+                    {  'button1':'adv:-24',
+                       'button2':'adv:-6',
+                       'button3':'adv:6',
+                       'button4':'adv:24'
                     },
-                    'actions to display in the button bar when the TV Guide is visible.')]
+                    'actions to display in the button bar when the TV Guide is visible.'),
+                ('BUTTONBAR_ORDER',
+                    ['red', 'green', 'yellow', 'blue'],
+                    'The order the color buttons will appear'),
+                ('BUTTONBAR_HEIGHT',
+                    60,
+                    'The height of the button bar')]
 
 
     def draw(self, (type, object), osd):
         """
         Draw a background and color buttons
         """
-        BUTTON_BAR_HEIGHT = 60
+        bar_height = config.BUTTONBAR_HEIGHT
         menu = osd.menu
 
         actions = self.get_actions(menu)
@@ -229,7 +246,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         # draw Button bar
         w = osd.width + (2 * osd.x)
-        h = osd.y + BUTTON_BAR_HEIGHT
+        h = osd.y + bar_height
         y = ((osd.y * 2) + osd.height) - h
 
         f = skin_object.get_image('idlebar')
@@ -253,7 +270,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         for index in range(0, len(self.colors)):
             if actions[index] is not None:
-                self.draw_button(osd, x, y, buttonwidth, BUTTON_BAR_HEIGHT, self.colors[index], actions[index])
+                self.draw_button(osd, x, y, buttonwidth, bar_height, self.colors[index], actions[index])
             self.actions[index] = actions[index]
             x += buttonwidth
 
@@ -263,7 +280,7 @@ class PluginInterface(plugin.DaemonPlugin):
         Draw a color button and associated text.
         """
         iconfilename = os.path.join(config.ICON_DIR, 'misc/' + color + 'button.png' )
-        iw,ih = osd.drawimage(iconfilename, (x + 5, y + 7,  -1, -1))
+        iw,ih = osd.drawimage(iconfilename, (x + 5, y + 7,  h - 14, h - 14))
 
         if isinstance(action, MenuItem):
             string = action.name
@@ -283,18 +300,10 @@ class PluginInterface(plugin.DaemonPlugin):
         action = None
         result = False
 
-        if event == BUTTONBAR_RED:
-            action = self.actions[0]
-            result = True
-        elif event == BUTTONBAR_GREEN:
-            action = self.actions[1]
-            result = True
-        elif event == BUTTONBAR_YELLOW:
-            action = self.actions[2]
-            result = True
-        elif event == BUTTONBAR_BLUE:
-            action = self.actions[3]
-            result = True
+        for index in range(0, len(self.events)):
+            if event == self.events[index]:
+                action = self.actions[index]
+                result = True
 
 
         if action is None:
@@ -328,6 +337,10 @@ class PluginInterface(plugin.DaemonPlugin):
             if hasattr(color_object, self.colors[index] + '_action'):
                 found_color_actions = True
                 result[index] = eval('color_object.' +  self.colors[index] + '_action')
+
+            if hasattr(color_object, 'button' + str(index+1) + '_action'):
+                found_color_actions = True
+                result[index] = eval('color_object.button' +  str(index+1) + '_action')
 
         if found_color_actions:
             return result
@@ -374,14 +387,9 @@ class PluginInterface(plugin.DaemonPlugin):
                 elif len(a) == 2 or a[2] != 'MENU_SUBMENU':
                     actions.append(a[:2])
 
-        if len(actions) > 1:
-            result[0] = actions[1]
-        if len(actions) > 2:
-            result[1] = actions[2]
-        if len(actions) > 3:
-            result[2] = actions[3]
-        if len(actions) > 4:
-            result[3] = actions[4]
+        for index in range(1, min(len(actions),4)):
+            result[index-1] = actions[index]
+
 
         # Special case for when there are more than 5 possible actions the last button will 'Enter' the submenu
         if len(actions) > 5:
