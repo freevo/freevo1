@@ -407,6 +407,7 @@ class RecordedProgramItem(VideoItem):
     """
     def __init__(self, name, video_item):
         VideoItem.__init__(self, url=video_item.url, parent=video_item.parent)
+        self.file_ops_no_delete_info = True
         self.update_item(name, video_item)
 
     def update_item(self, name, video_item):
@@ -460,13 +461,6 @@ class RecordedProgramItem(VideoItem):
         return the default action
         """
         actions = VideoItem.actions(self)
-        from plugins.file_ops import PluginInterface as FileOps
-        for i,action in enumerate(actions):
-            if isinstance(action, tuple):
-                if action[0] == FileOps.delete_info:
-                    del actions[i]
-                    break
-        
         items = actions[0:2]
         items.append((self.mark_to_keep, self.keep and _('Unmark to Keep') or _('Mark to Keep')))
         items.append((self.mark_as_watched, self.watched and _('Unmark as Watched') or _('Mark as Watched')))
