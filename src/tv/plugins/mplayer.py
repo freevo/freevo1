@@ -239,6 +239,10 @@ class MPlayer:
             command += ['-vf', '%s' % ','.join(args['vf'])]
         command += str('%(tv)s' % args).split()
 	command += args['disable_osd'] and ['-osdlevel', '0'] or []
+        
+        if config.OSD_SINGLE_WINDOW:
+            command += ['-wid', str(osd.video_window.id)]
+            osd.video_window.show()
 
         # use software scaler?
         if '-nosws' in command:
@@ -305,6 +309,9 @@ class MPlayer:
             mixer.setMicVolume(0)
             mixer.setIgainVolume(0) # Input on emu10k cards.
 
+        if config.OSD_SINGLE_WINDOW:
+            osd.video_window.hide()
+            
         self.app.stop('quit\n')
 
         rc.remove_app(self)

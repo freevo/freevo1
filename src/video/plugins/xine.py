@@ -54,6 +54,9 @@ import dialog.utils
 from dialog.display import AppTextDisplay
 import telnetlib
 
+import osd
+osd = osd.get_singleton()
+
 class PluginInterface(plugin.Plugin):
     """
     Xine plugin for the video player.
@@ -195,6 +198,10 @@ class Xine:
         if not config.XINE_HAS_NO_LIRC and '--no-lirc' in command:
             command.remove('--no-lirc')
 
+        if config.OSD_SINGLE_WINDOW:
+            command += ['-W', str(osd.video_window.id), '--no-mouse']
+            osd.video_window.show()
+
         self.max_audio        = 0
         self.current_audio    = -1
         self.max_subtitle     = 0
@@ -258,6 +265,9 @@ class Xine:
         _debug_('stop(event=%r)' % (event,), 2)
         if not self.app:
             return
+
+        if config.OSD_SINGLE_WINDOW:
+            osd.video_window.hide()
 
         if self.tmp_playlist:
             try:

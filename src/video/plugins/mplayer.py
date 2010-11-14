@@ -41,6 +41,9 @@ import plugin
 import dialog
 from dialog.display import AppTextDisplay
 
+import osd
+osd = osd.get_singleton()
+
 from event import *
 
 
@@ -360,6 +363,10 @@ class MPlayer:
         command += args['disable_osd'] and ['-osdlevel', '0'] or []
         command += args['start_position']
 
+        if config.OSD_SINGLE_WINDOW:
+            command += ['-wid', str(osd.video_window.id)]
+            osd.video_window.show()
+
         # use software scaler?
         #XXX these need to be in the arg list as the scaler will add vf args
         if '-nosws' in command:
@@ -394,7 +401,9 @@ class MPlayer:
 
         if not self.app:
             return
-
+        
+        if config.OSD_SINGLE_WINDOW:
+            osd.video_window.hide()
         self.app.stop('quit\n')
         rc.remove_app(self)
         dialog.disable_overlay_display()

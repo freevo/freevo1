@@ -434,6 +434,22 @@ class OSD:
         self.dialog_layer = self.screen.convert_alpha()
         self.dialog_layer.fill((0, 0, 0, 128))
         self.dim_surfaces = {}
+        
+        self.video_window = None
+        
+        if config.OSD_SINGLE_WINDOW:
+            wm_info = pygame.display.get_wm_info()
+            if 'window' in wm_info:
+                try:
+                    import kaa.display
+                    self.display_window = kaa.display.X11Window(window=int(wm_info['window']))
+                    self.video_window = kaa.display.X11Window(parent=self.display_window,
+                                                              size=(self.width, self.height))
+                except:
+                    print 'OSD_SINGLE_WINDOW disabled!'
+
+        if self.video_window is None:
+            config.OSD_SINGLE_WINDOW = False
 
         if config.CONF.display == 'x11' and config.START_FULLSCREEN_X == 1:
             self.toggle_fullscreen()

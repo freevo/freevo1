@@ -49,6 +49,9 @@ import rc
 import dialog
 import dialog.display
 
+import osd
+osd = osd.get_singleton()
+
 def get_player():
     """
     Find the best Player object available.
@@ -240,6 +243,10 @@ class Xine(Player):
                              '-A', config.XINE_AO_DEV ] + \
                            config.XINE_ARGS_DEF.split(' ') + \
                            config_file_opt
+            
+            if config.OSD_SINGLE_WINDOW:
+                self.command += ['-W', str(osd.video_window.id), '--no-mouse']
+                osd.video_window.show()
 
             if not rc.PYLIRC and '--no-lirc' in self.command:
                 self.command.remove('--no-lirc')
@@ -258,6 +265,8 @@ class Xine(Player):
         if self.app:
             self.app.stop('quit\n')
             self.app = None
+            if config.OSD_SINGLE_WINDOW:
+                osd.video_window.hide()
 
 
     def restart(self):
@@ -345,32 +354,6 @@ class Mplayer(Player):
         self.subtitles = False
         self.paused = False
 
-        # Build the MPlayer command
-        command = ['--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD]
-        command += ['-slave']
-        command += config.MPLAYER_ARGS_DEF.split(' ')
-
-        if dialog.overlay_display_supports_dialogs:
-            command += ['-osdlevel','0']
-
-        if config.DEBUG_CHILDAPP:
-            command += ['-v']
-
-        # Set audio out device
-        command += ['-ao'] + config.MPLAYER_AO_DEV.split(' ')
-
-        # Set video out device
-        command += ['-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS]
-
-        # mode specific args
-        mode = 'default'
-        command += config.MPLAYER_ARGS[mode].split(' ')
-
-        # add any additional arguments
-        if config.MPLAYER_VF_INTERLACED:
-            command += ['-vf', config.MPLAYER_VF_INTERLACED]
-        elif config.MPLAYER_VF_PROGRESSIVE:
-            command += ['-vf', config.MPLAYER_VF_PROGRESSIVE]
 
         self.command = command
 
@@ -380,6 +363,37 @@ class Mplayer(Player):
         Start the player to play from the specified TCP port.
         """
         self.mrl_index = 0
+        if self.command is None:
+            # Build the MPlayer command
+            self.command = ['--prio=%s' % config.MPLAYER_NICE, config.MPLAYER_CMD]
+            self.command += ['-slave']
+            self.command += config.MPLAYER_ARGS_DEF.split(' ')
+
+            if dialog.overlay_display_supports_dialogs:
+                self.command += ['-osdlevel','0']
+
+            if config.DEBUG_CHILDAPP:
+                self.command += ['-v']
+
+            # Set audio out device
+            self.command += ['-ao'] + config.MPLAYER_AO_DEV.split(' ')
+
+            # Set video out device
+            self.command += ['-vo', config.MPLAYER_VO_DEV + config.MPLAYER_VO_DEV_OPTS]
+
+            # mode specific args
+            mode = 'default'
+            self.command += config.MPLAYER_ARGS[mode].split(' ')
+
+            # add any additional arguments
+            if config.MPLAYER_VF_INTERLACED:
+                self.command += ['-vf', config.MPLAYER_VF_INTERLACED]
+            elif config.MPLAYER_VF_PROGRESSIVE:
+                self.command += ['-vf', config.MPLAYER_VF_PROGRESSIVE]
+
+            if config.OSD_SINGLE_WINDOW:
+                self.command += ['-xid', str(osd.video_window.id)]
+                osd.video_window.show()
         # NOTE: We add the slave server MRL twice so that we can toggle between
         # them, this allows use to effectively reset mplayer's rendering pipeline and
         # make it possible to seek quickly.
@@ -394,6 +408,9 @@ class Mplayer(Player):
         if self.app:
             self.app.stop('quit\n')
             self.app = None
+            if config.OSD_SINGLE_WINDOW:
+                osd.video_window.hide()
+
 
 
     def restart(self):
@@ -446,20 +463,8 @@ class Vlc(Player):
     def __init__(self):
         Player.__init__(self, 'http')
         self.app = None
-        self.paused = False
-        command = ['--prio=%s' % config.MPLAYER_NICE, config.CONF.vlc]
-        command += ['-I', 'rc', '--rc-fake-tty',
-                    '--width', str(config.CONF.width),
-                    '--height', str(config.CONF.height),
-                    '--sub-filter', 'marq:logo', '--marq-timeout', '3000', '--marq-marquee', 'Playing', '--logo-file', 'dummy'
-                   ]
-        if hasattr(config, 'VLC_OPTIONS'):
-            command += config.VLC_OPTIONS.split(' ')
-
-        if dialog.overlay_display_supports_dialogs:
-            command += ['--no-osd']
-
-        self.command = command
+        self.paused = Fals
+        self.command = None
         self.current_sub_index = -1
         self.sub_pids = []
         self.current_audio_index = -1
@@ -471,6 +476,23 @@ class Vlc(Player):
         Start the player to play from the specified TCP port.
         """
         self.paused = False
+        if self.command is None:
+            self.command = ['--prio=%s' % config.MPLAYER_NICE, config.CONF.vlc]
+            self.command += ['-I', 'rc', '--rc-fake-tty',
+                        '--width', str(config.CONF.width),
+                        '--height', str(config.CONF.height),
+                        '--sub-filter', 'marq:logo', '--marq-timeout', '3000', '--marq-marquee', 'Playing', '--logo-file', 'dummy'
+                       ]
+            if hasattr(config, 'VLC_OPTIONS'):
+                self.command += config.VLC_OPTIONS.split(' ')
+
+            if dialog.overlay_display_supports_dialogs:
+                self.command += ['--no-osd']
+
+            if config.OSD_SINGLE_WINDOW:
+                self.command += ['--drawable-xid', str(osd.video_window.id)]
+                osd.video_window.show()
+
         # NOTE: We add the slave server MRL twice so that we can toggle between
         # them, this allows use to effectively reset mplayer's rendering pipeline and
         # make it possible to seek quickly.
@@ -485,6 +507,8 @@ class Vlc(Player):
         if self.app:
             self.app.send_command('quit')
             self.app = None
+            if config.OSD_SINGLE_WINDOW:
+                osd.video_window.hide()
 
 
     def restart(self):

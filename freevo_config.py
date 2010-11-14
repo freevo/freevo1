@@ -1431,6 +1431,12 @@ OSD_IDLEBAR_CLOCK_FONT = 'clock'
 #
 OSD_DIALOG_BACKGROUND_DIM = 96
 
+#
+# When running under X and kaa.display is installed use only a single window for
+# freevo menu and video.
+#
+OSD_SINGLE_WINDOW=True
+
 # ======================================================================
 # Freevo remote control settings:
 # ======================================================================

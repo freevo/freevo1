@@ -48,6 +48,7 @@ from tv.channels import FreevoChannels
 from event import *
 import plugin
 
+osd = osd.get_singleton()
 
 class PluginInterface(plugin.Plugin):
     """
@@ -137,6 +138,10 @@ class Xine:
         if not config.XINE_HAS_NO_LIRC and '--no-lirc' in command:
             command.remove('--no-lirc')
 
+        if config.OSD_SINGLE_WINDOW:
+            command += ['-W', str(osd.video_window.id), '--no-mouse']
+            osd.video_window.show()
+
         command.append('dvb://' + tuner_channel)
 
         _debug_('Starting cmd=%s' % command)
@@ -153,6 +158,9 @@ class Xine:
         Stop xine
         """
         if self.app:
+            if config.OSD_SINGLE_WINDOW:
+                osd.video_window.hide()
+
             self.app.stop('quit\n')
             rc.remove_app(self)
             dialog.disable_overlay_display()
