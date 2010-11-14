@@ -354,8 +354,7 @@ class Mplayer(Player):
         self.subtitles = False
         self.paused = False
 
-
-        self.command = command
+        self.command = None
 
 
     def start(self, socket_address):
