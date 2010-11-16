@@ -780,6 +780,15 @@ plugin.activate('video.mplayer')
 # use mplayer for audio playpack
 plugin.activate('audio.mplayer')
 
+# activate xine if available
+if (CONF.display == 'x11' and CONF.xine) or \
+   (CONF.display in ('dfbmga', 'directfb') and CONF.df_xine) or \
+   (CONF.display in ('mga', 'fbdev', 'dxr3') and CONF.fbxine):
+    plugin.activate('video.xine')
+
+if CONF.fbxine:
+    plugin.activate('audio.xine')
+
 # make it possible to detach the player
 plugin.activate('audio.detach', level=20)
 plugin.activate('audio.detachbar')
@@ -1642,11 +1651,6 @@ if CONF.display in ('dfbmga', 'directfb') and CONF.df_xine:
 XINE_ARGS_DEF = "--no-lirc --post='pp:quality=10;expand'"
 
 XINE_AO_DEV = 'oss'                     # alsa or oss
-
-if XINE_COMMAND:
-    plugin.activate('video.xine')
-if CONF.fbxine:
-    plugin.activate('audio.xine')
 
 # Set to False if xine doesn't have '--no-lirc' option
 XINE_HAS_NO_LIRC = True
