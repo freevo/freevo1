@@ -38,7 +38,7 @@ import plugin
 import menu
 import stat
 import time
-import string
+import threading
 import util.fileops
 import util.misc
 
@@ -55,15 +55,15 @@ if not os.path.isdir(cachedir):
     os.mkdir(cachedir,
             stat.S_IMODE(os.stat(config.FREEVO_CACHEDIR)[stat.ST_MODE]))
 
-def _fetch_image(url):
+def _fetch_image(url, download=False):
     idx = url.rfind('/')
     if idx == -1:
         return None
 
-    fn = url[(idx+1):]
+    fn = url.replace('/','_')
     fn = os.path.join(cachedir, fn)
 
-    if not os.path.exists(fn):
+    if download and not os.path.exists(fn):
         urllib.FancyURLopener.version = 'QuickTime/7.5'
         urllib.urlretrieve(url,fn)
 
@@ -78,196 +78,153 @@ class PluginInterface(plugin.MainMenuPlugin):
     def __init__(self):
         plugin.MainMenuPlugin.__init__(self)
 
+    def config(self):
+
+        return [('APPLETRAILERS_RESOLUTION',
+                 '',
+                 'Selects the resolution of the trailers, options are \'\'(Default) for 640p, \'480p\' and \'720p\'' ),
+                 ('APPLETRAILERS_DATE_FORMAT',
+                 '%y-%m-%d',
+                 'How to format the release date of a film')]
+
     def items(self, parent):
-        return [ BrowseBy(parent) ]
+        return [ BrowseMainMenu(parent) ]
+        
 
-class AppleItem(Item):
-    def __init__(self, parent):
-        Item.__init__(self, parent)
-        self.type = 'dir'
-        self.skin_display_type = 'video'
-        self.__load()
 
-    def __progress(self, percent):
-        if percent > self.__last_perc:
-            for i in xrange(percent - self.__last_perc):
-                self.__pop.tick()
-            self.__last_perc = percent
-
-    def __load(self):
-        pfile = os.path.join(cachedir, 'data')
-        if (os.path.isfile(pfile) == 0):
-            self.trailers = applelib.Trailers()
-            self.__pop = ProgressBox(text=_('Scanning Apple for trailers...'), full=100)
-            self.__pop.show()
-            self.__last_perc = -1
-            self.trailers.parse(self.__progress)
-            self.__pop.destroy()
-            util.fileops.save_pickle(self.trailers, pfile)
-        else:
-            self.trailers = util.fileops.read_pickle(pfile)
-            if abs(time.time() - os.path.getmtime(pfile)) > MAX_CACHE_AGE:
-                self.__pop = ProgressBox(text=_('Scanning Apple for trailers...'), full=100)
-                self.__pop.show()
-                self.__last_perc = -1
-                self.trailers.parse(self.__progress)
-                self.__pop.destroy()
-                util.fileops.save_pickle(self.trailers, pfile)
-
-class TrailerVideoItem(VideoItem):
-    def __init__(self, name, url, parent):
-        VideoItem.__init__(self, url, parent)
-        self.name = name
-        self.description = "URL: " + url
-        self.mplayer_options = '-user-agent QuickTime/7.5'
-
-class Trailer(Item):
-    def __init__(self, name, title, trailer, parent):
-        Item.__init__(self, parent)
-        self.name = name
+class TrailerItem(VideoItem):
+    def __init__(self, trailer, parent):
+        VideoItem.__init__(self, trailer.preview_url, parent)
+        self.trailer = trailer
+        self.name = trailer.title
         self.type = 'video'
+        self.mplayer_options = '-user-agent QuickTime/7.5'
 
         self.mode = ''
         self.files = ''
-        self.image = _fetch_image(title['image'])
-        self.description = 'Genres: ' + ','.join(title['genres'])
-        self.description += '\nCategories: ' + ','.join(trailer['categories'])
-        self.description += '\nDate: ' + trailer['date']
+        self.image = _fetch_image(trailer.poster)
+        self.description = trailer.description
+        self.description += 'Genres: ' + ','.join(trailer.genres)
+        self.description += '\nDate: ' + trailer.release_date.strftime(config.APPLETRAILERS_DATE_FORMAT)
 
-        self._title = title
-        self._trailer = trailer
 
-    def actions(self):
-        return [ (self.make_menu, 'Streams') ]
-
-    def make_menu(self, arg=None, menuw=None):
-        entries = []
-        for s in self._trailer["streams"]:
-            if s["size"] is None:
-                name = "Unknown"
-            else:
-                name = s["size"]
-            entries.append(TrailerVideoItem(name, s["url"], self))
-        menuw.pushmenu(menu.Menu(self.name, entries))
-
-class Title(Item):
-    def __init__(self, name, title, parent):
+class BrowseByTitle(Item):
+    def __init__(self, name, items, parent):
         Item.__init__(self, parent)
         self.name = name
-
-        self.image = _fetch_image(title['image'])
-        self.description = "Genres: " + ",".join(title["genres"])
-        self.description += "\n\n%d trailers available" % len(title["trailers"])
-
-        self._title = title
-
-    def actions(self):
-        return [ (self.make_menu, 'Trailers') ]
-
-    def make_menu(self, arg=None, menuw=None):
-        entries = []
-        i = 1
-        for trailer in self._title["trailers"]:
-            name = "Trailer %d" % i
-            entries.append(Trailer(name, self._title, trailer, self))
-            i += 1
-        menuw.pushmenu(menu.Menu(self.name, entries))
-
-class BrowseByTitle(AppleItem):
-    def __init__(self, parent):
-        AppleItem.__init__(self, parent)
-        self.name = _('Browse by Title')
         self.title = _('Trailers')
+        self.items = items
 
     def actions(self):
-        return [ (self.make_menu, 'Titles') ]
+        return [ (self.make_menu, _('Titles')) ]
 
     def make_menu(self, arg=None, menuw=None):
         entries = []
-        for name in self.trailers.sort_by_title():
-            title = self.trailers.titles[name]
-            if len(title["trailers"]) == 1:
-                entries.append(Trailer(name, title, title["trailers"][0], self))
-            else:
-                entries.append(Title(name, title, self))
+        for trailer in self.items:
+            entries.append(TrailerItem(trailer, self))
+        thread = threading.Thread(target=self.download_posters)
+        thread.start()
         menuw.pushmenu(menu.Menu(self.title, entries))
 
-class Genre(BrowseByTitle):
-    def __init__(self, genre, parent):
-        BrowseByTitle.__init__(self, parent)
-        self.name = genre
-        self.title = genre
-        self.trailers.only_genre(genre)
+    def download_posters(self):
+        for trailer in self.items:
+            _fetch_image(trailer.poster, True)
 
-class Category(BrowseByTitle):
-    def __init__(self, category, parent):
-        BrowseByTitle.__init__(self, parent)
-        self.name = category
-        self.title = category
-        self.trailers.only_category(category)
 
-class Studio(BrowseByTitle):
-    def __init__(self, studio, parent):
-        BrowseByTitle.__init__(self, parent)
-        self.name = studio
-        self.title = studio
-        self.trailers.only_category(studio)
+class BrowseByMenu(Item):
+    def __init__(self, title, hash, parent):
+        Item.__init__(self, parent)
+        self.name = title
+        self.hash = hash
 
-class BrowseByGenre(AppleItem):
-    def __init__(self, parent):
-        AppleItem.__init__(self, parent)
-        self.name = _('Browse by Genre')
 
     def actions(self):
-        return [ (self.make_menu, 'Genres') ]
+        return [ (self.make_menu, _('Browse')) ]
+
 
     def make_menu(self, arg=None, menuw=None):
-        genres = []
-        for g in self.trailers.genres:
-            genres.append(Genre(g, self))
-        menuw.pushmenu(menu.Menu(_('Choose a genre'), genres))
+        items = []
+        for key,trailers in self.hash.items():
+            items.append(BrowseByTitle(unicode(key), trailers, self))
+        items.sort(lambda x,y: cmp(x.name, y.name))
+        menuw.pushmenu(menu.Menu(self.name, items))
 
-class BrowseByCategory(AppleItem):
-    def __init__(self, parent):
-        AppleItem.__init__(self, parent)
-        self.name = _('Browse by Category')
 
-    def actions(self):
-        return [ (self.make_menu, 'Categories') ]
+class BrowseByReleaseDate(BrowseByMenu):
+    def __init__(self, hash, parent):
+        BrowseByMenu.__init__(self, _('Browse by Release Date'), hash, parent)
 
-    def make_menu(self, arg=None, menuw=None):
-        categories = []
-        for c in self.trailers.categories:
-            categories.append(Category(c, self))
-        menuw.pushmenu(menu.Menu(_('Choose a category'), categories))
-
-class BrowseByStudio(AppleItem):
-    def __init__(self, parent):
-        AppleItem.__init__(self, parent)
-        self.name = _('Browse by Studio')
-
-    def actions(self):
-        return [ (self.make_menu, 'Studios') ]
 
     def make_menu(self, arg=None, menuw=None):
-        studios = []
-        for s in self.trailers.studios:
-            studios.append(Studio(s, self))
-        menuw.pushmenu(menu.Menu(_('Choose a studio'), studios))
+        items = []
+        dates = self.hash.keys()
+        dates.sort()
+        
+        for date in dates:
+            trailers = self.hash[date]
+            title = date.strftime(config.APPLETRAILERS_DATE_FORMAT)
+            items.append(BrowseByTitle(title, trailers, self))
 
-class BrowseBy(Item):
+        menuw.pushmenu(menu.Menu(self.name, items))
+
+
+class BrowseMainMenu(Item):
     def __init__(self, parent):
         Item.__init__(self, parent)
         self.name = 'Apple Trailers'
         self.type = 'trailers'
         self.image = config.IMAGE_DIR + '/apple-trailers.png'
+        self.trailers = None
+        # Clean up any old pickle files
+        old_pfile = os.path.join(cachedir, 'data')
+        if os.path.isfile(old_pfile):
+            os.unlink(old_pfile)
+
+        pfile = os.path.join(cachedir, 'trailers.pickle')
+        if os.path.isfile(pfile):
+            self.trailers = util.fileops.read_pickle(pfile)
+            old_posters = []
+            for trailer in self.trailers.trailers:
+                old_posters.append(_fetch_image(trailer.poster))
+            old_posters = set(old_posters)
+            if self.trailers.resolution == config.APPLETRAILERS_RESOLUTION:
+                if self.trailers.update_feed():
+                    new_posters = []
+                    for trailer in self.trailers.trailers:
+                        new_posters.append(_fetch_image(trailer.poster))
+                    new_posters = set(new_posters)
+                else:
+                    new_posters = old_posters
+        
+            else:
+                self.trailers = None
+        else:
+            old_posters = set()
+
+
+        if self.trailers is None:
+            self.trailers = applelib.Trailers(config.APPLETRAILERS_RESOLUTION)
+            util.fileops.save_pickle(self.trailers, pfile)
+            new_posters = []
+            for trailer in self.trailers.trailers:
+                new_posters.append(_fetch_image(trailer.poster))
+            new_posters = set(new_posters)
+        
+        # Remove any posters that are no longer required
+        for poster_file in set(old_posters) - set(new_posters):
+            os.unlink(poster_file)
+
 
     def actions(self):
         return [ (self.make_menu, 'Browse by') ]
 
+
     def make_menu(self, arg=None, menuw=None):
         menuw.pushmenu(menu.Menu('Apple Trailers',
-                [ BrowseByGenre(self),
-                  BrowseByCategory(self),
-                  BrowseByStudio(self),
-                  BrowseByTitle(self) ]))
+                [ BrowseByTitle(_("Browse by Title"), self.trailers.trailers, self),
+                  BrowseByReleaseDate(self.trailers.release_dates, self),
+                  BrowseByMenu(_('Browse by Genre'), self.trailers.genres, self),
+                  BrowseByMenu(_('Browse by Actor'), self.trailers.actors, self),
+                  BrowseByMenu(_('Browse by Director'), self.trailers.directors, self),
+                  BrowseByMenu(_('Browse by Studio'), self.trailers.studios, self),
+                  BrowseByMenu(_('Browse by Rating'), self.trailers.ratings, self)]))

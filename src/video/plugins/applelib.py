@@ -26,384 +26,202 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+import traceback
+try:
+    import xml.etree.cElementTree as ET
+except:
+    import xml.etree.ElementTree as ET
 
-import sys
-import os
-import re
+import time
+import datetime
 import urllib
-import urlparse
-import pickle
 
-_DEFAULT_URL = 'http://www.apple.com/trailers/'
+class Trailer:
+    def __init__(self, element):
+        self.cast = []
+        self.genres = []
+        self.poster = ''
+        self.poster_large = ''
+        self.title = ''
+        self.runtime = 0
+        self.rating = ''
+        self.studio = ''
+        self.release_date = 0
+        self.post_date = 0
+        self.director = ''
+        self.description = ''
+        self.preview_url = ''
+        self.preview_size = 0
 
-_FEEDS = (
-        ( 'home/feeds/just_added.json', 'Just Added' ),
-        ( 'home/feeds/exclusive.json', 'Exclusive' ),
-        ( 'home/feeds/just_hd.json', 'HD' ),
-        ( 'home/feeds/most_pop.json', 'Most Popular' ),
-        ( 'home/feeds/genres.json', None ),
-        ( 'home/feeds/studios.json', None),
-        )
+        for ch_element in element:
+            if ch_element.tag == 'info':
+                self.__parse_info(ch_element)
+            elif ch_element.tag == 'cast':
+                self.__parse_cast(ch_element)
+            elif ch_element.tag == 'genre':
+                self.__parse_genre(ch_element)
+            elif ch_element.tag == 'poster':
+                self.__parse_poster(ch_element)
+            elif ch_element.tag == 'preview':
+                self.__parse_preview(ch_element)
 
-# Trailer subpages
-_subpage_link_res = (
-        re.compile(r'''href="(?P<url>[^"]*(?P<size>sm|small|low|240|mid|medium|320|lg|large|high|480|fullscreen)[^"]*\.html[^"]*)"''', re.IGNORECASE),
-        re.compile(r'''movieAddress[^=]*=[^"]*"(?P<url>[^"]*(?P<size>240|320|480|640)[^"]*\.mov[^"]*)"''', re.IGNORECASE),
-        re.compile(r'''<li><a href="(?P<url>/trailers/[^"]*)">''', re.IGNORECASE)
-        )
+    def __parse_info(self, element):
 
-# Extra step before trailer page
-_frontpage_link_re = re.compile(r'''<a[^>]+href="(?P<url>/trailers/[^"]*(?P<type>trailer|teaser)[^"]*)"[^>]*>''', re.IGNORECASE)
+        for ch in element:
+            if ch.tag in ['title', 'rating', 'studio', 'director', 'description']:
+                setattr(self, ch.tag, ch.text)
 
-# Stream link regexps
-_stream_link_res = (
-        re.compile(r'''<param[^>]+name="href"[^>]+value="(?P<url>[^"]+)"[^>]*>''', re.IGNORECASE),
-        re.compile(r'''<param[^>]*name="src"[^>]*value="(?P<url>[^"]*)"[^>]*>''', re.IGNORECASE),
-        re.compile(r'''XHTML[(]([^)]*\'href\',)?\'(?P<url>[^\']*)\'''', re.IGNORECASE),
-        re.compile(r'''\'(?P<url>http[^\']*.mov)\'''', re.IGNORECASE),
-        re.compile(r'''"(?P<url>http[^"]*.mov)"''', re.IGNORECASE),
-        re.compile(r'''<a[^>]+href="(?P<url>http[^"]*.mov)\?width=[0-9]+&amp;height=[0-9]+"[^>]*>''', re.IGNORECASE)
-        )
-# Stream exclude regexps
-_stream_excl_res = (
-        re.compile(r'''trailers/images.*btn''', re.IGNORECASE),
-        )
+            elif ch.tag == 'runtime':
+                rt = ch.text
+                if rt is not None:
+                    colon_pos = rt.find(':')
+                    try:
+                        if colon_pos != -1:
+                            self.runtime = (int(rt[:colon_pos]) * 60 ) + int(rt[colon_pos+1:])
+                        else:
+                            self.runtime = int(colon_pos)
+                    except:
+                        traceback.print_exc()
 
-# Stream URLs in script based pages
-_scriptpage_stream_link_re = re.compile(r'''movieAddress[^=]*=[^"]*"(?P<url>[^"]*(?P<size>240|320|480|640)[^"]*\.mov[^"]*)"''', re.IGNORECASE)
+            elif ch.tag == 'releasedate':
+                if ch.text is not None:
+                    t = time.strptime(ch.text, '%Y-%m-%d')
+                    self.release_date = datetime.date(t.tm_year, t.tm_mon, t.tm_mday)
 
-# Mapping between size code and name
-_sizemap = [
-        (('sm', 'small', 'low', '240'), ('Small', 0)),
-        (('mid', 'medium', '320'), ('Medium', 1)),
-        (('lg', 'large', 'high', '480'), ('Large', 2)),
-        (('extralarge',), ('Extra Large', 3)),
-        (('fullscreen',), ('Fullscreen', 4)),
-        (('teaser',), ('Teaser', -1)),
-        (('trailer',), ('Trailer', -1)),
-        (('480p',), ('Small [HD 480p]', 10)),
-        (('720p',), ('Medium [HD 720p]', 11)),
-        (('1080i',), ('Small [HD 1080i]', 12)),
-        (('1080p',), ('Large [HD 1080p]', 13))
-        ]
+            elif ch.tag == 'postdate':
+                if ch.text is not None:
+                    t = time.strptime(ch.text, '%Y-%m-%d')
+                    self.post_date = datetime.date(t.tm_year, t.tm_mon, t.tm_mday)
+
+    def __parse_cast(self, element):
+        for ch in element.findall('name'):
+            self.cast.append(ch.text)
+
+
+    def __parse_genre(self, element):
+        for ch in element.findall('name'):
+            self.genres.append(ch.text)
+
+    def __parse_poster(self, element):
+        location = element.find('location')
+        if location is not None:
+            self.poster = location.text
+        xlarge = element.find('xlarge')
+        if xlarge is not None:
+            self.poster_large = xlarge.text
+
+    def __parse_preview(self, element):
+        large = element.find('large')
+        if large is not None:
+            self.preview_url = large.text
+            self.preview_size = int(large.get('filesize'))
+
 
 class Trailers:
-    def __init__(self):
-        self.titles = {}
+    """
+    Class containing a list of trailers and cross-references to those trailers.
 
-    def parse(self, callback = None, url = _DEFAULT_URL):
-        self._mark_old()
+    The trailers are available as a simple list in attribute 'trailers' and
+    are available via the cross-reference attributes 'genres', 'actors',
+    'directors' and 'ratings'. Each of these is a dictionary containing the
+    available genres/actors/directors or ratings and the trailer objects that
+    match.
+    """
 
-        self._url = url
-
-        feed_count = 0
-        for feed in _FEEDS:
-            data = self._dl(url + feed[0])
-            try:
-                false = False
-                true = True
-                null = None
-                data = eval(data)
-            except:
-                continue
-
-            title_count = 0
-            for title in data:
-                self.parse_title(title, feed[1])
-
-                title_count += 1
-                callback(100 * feed_count / len(_FEEDS) + 100 * title_count / len(data) / len(_FEEDS))
-
-            feed_count += 1
-            callback(100 * feed_count / len(_FEEDS))
-
-        if callback is not None:
-            callback(100)
-
-        self._prune()
-
-        self.categories = []
-        self.genres = []
-        self.studios = []
-
-        for title in self.titles.keys():
-            if self.titles[title]["studio"] not in self.studios:
-                self.studios.append(self.titles[title]["studio"])
-            for g in self.titles[title]["genres"]:
-                if g not in self.genres:
-                    self.genres.append(g)
-            for t in self.titles[title]["trailers"]:
-                for c in t["categories"]:
-                    if c not in self.categories:
-                        self.categories.append(c)
-
-        return self.titles
-
-    def parse_title(self, title, category):
-        name = title["title"]
-        name = name.strip()
-
-        if not self.titles.has_key(name):
-            self.titles[name] = {"studio":title["studio"], "image":title["poster"], "genres":[], "trailers":[]}
-
-        t = self.titles[name]
-
-        if t.has_key("_old"):
-            del t["_old"]
-
-        for genre in title["genre"]:
-            if genre is not None and genre not in t["genres"]:
-                t["genres"].append(genre)
-
-        # It seems apple is posting bogus data these days. Mistake,
-        # or are they starting to get annoyed by us? The "trailers"
-        # list contains useless URI:s in any case...
-        self.add_trailer(t, title["trailers"][0]["postdate"], title["location"], category)
-
-    def add_trailer(self, t, date = None, url = None, category = None):
-        if url is not None:
-            url = urlparse.urljoin(self._url, url)
-            self._parse_trailer_page(t, url, date, category)
-
-    def _parse_trailer_page(self, title, url, date, category):
-        for t in title["trailers"]:
-            if t["url"] == url:
-                if t.has_key("_old"):
-                    del t["_old"]
-                if date is not None:
-                    t["date"] = date
-                if category is not None and category not in t["categories"]:
-                    t["categories"].append(category)
-                return
-
-        if category is None:
-            categories = []
+    def __init__(self, resolution=None):
+        """
+        Create an object containing a list of trailers of the specified resolution
+        (one of '480p', '720p' or None to get the standard resolution).
+        """
+        if resolution:
+            self.feed_url = 'http://trailers.apple.com/trailers/home/xml/current_%s.xml' % resolution
         else:
-            categories = [category]
+            self.feed_url = 'http://trailers.apple.com/trailers/home/xml/current.xml'
+        self.resolution = resolution
+        self.feed_date = ''
+        self.trailers = []
+        self.genres = {}
+        self.actors = {}
+        self.directors = {}
+        self.ratings = {}
+        self.release_dates = {}
+        self.update_feed()
 
-        t = {"url":url, "date":date, "categories":categories, "streams":[]}
-        title["trailers"].append(t)
 
-        lines = self._dl(url).split("\n")
-
-        streams = []
-
-        # Start by looking from streams directly in the page...
-        for line in lines:
-            substreams = self._extract_streams(url, line)
-            if substreams:
-                for ss in substreams:
-                    for s in streams:
-                        if s["url"] == ss["url"]:
-                            break
+    def update_feed(self):
+        """
+        Update the list trailers.
+        Returns True if the list was updated, or False if not.
+        """
+        try:
+            tree = ET.ElementTree()
+            feed = urllib.urlopen(self.feed_url)
+            tree.parse(feed)
+            feed.close()
+            root = tree.getroot()
+            feed_date = root.get('date')
+            if self.feed_date != feed_date:
+                self.feed_date = feed_date
+                self.trailers = []
+                for record in root.findall('movieinfo'):
+                    self.trailers.append(Trailer(record))
+                self.trailers.sort(lambda x,y: cmp(x.title, y.title))
+                
+                self.genres = {}
+                self.actors = {}
+                self.directors = {}
+                self.ratings = {}
+                self.studios = {}
+                self.release_dates = {}
+                def add_to_hash(table, key, trailer):
+                    if key in table:
+                        table[key].append(trailer)
                     else:
-                        size, key = self._map_size(ss["size"])
-                        self._add_stream(streams,
-                                         {"url":ss["url"],
-                                          "size":size,
-                                          "sort_key":key})
+                        table[key] = [trailer]
 
-        # ...then if none are found, look for subpages...
-        if not streams:
-            for line in lines:
-                for expr in _subpage_link_res:
-                    iterator = expr.finditer(line)
-                    for m in iterator:
-                        try:
-                            page_size, page_key = self._map_size(m.group("size"))
-                        except (IndexError):
-                            page_size = None
-                            page_key = None
+                for trailer in self.trailers:
+                    for actor in trailer.cast:
+                        add_to_hash(self.actors, actor, trailer)
+                    for genre in trailer.genres:
+                        add_to_hash(self.genres, genre, trailer)
+                    add_to_hash(self.ratings, trailer.rating, trailer)
+                    add_to_hash(self.directors, trailer.director, trailer)
+                    add_to_hash(self.studios, trailer.studio, trailer)
+                    add_to_hash(self.release_dates, trailer.release_date, trailer)
 
-                        suburl = urlparse.urljoin(url, m.group("url"))
-                        substreams = self._parse_stream_page(suburl)
-
-                        for ss in substreams:
-                            for s in streams:
-                                if s["url"] == ss["url"]:
-                                    break
-                            else:
-                                if ss["size"] is None:
-                                    size = page_size
-                                    key = page_key
-                                else:
-                                    size, key = self._map_size(ss["size"])
-                                self._add_stream(streams,
-                                                 {"url":ss["url"],
-                                                  "size":size,
-                                                  "sort_key":key})
-
-                iterator = _frontpage_link_re.finditer(line)
-                for m in iterator:
-                    page_size, page_key = self._map_size(m.group("type"))
-
-                    suburl = urlparse.urljoin(url, m.group("url"))
-                    substreams = self._parse_stream_page(suburl)
-                    if substreams:
-                        for ss in substreams:
-                            for s in streams:
-                                if s["url"] == ss["url"]:
-                                    break
-                            else:
-                                if ss["size"] is None:
-                                    size = page_size
-                                    key = page_key
-                                else:
-                                    size, key = self._map_size(ss["size"])
-                                self._add_stream(streams,
-                                                 {"url":ss["url"],
-                                                  "size":size,
-                                                  "sort_key":key})
-                    else:
-                        self._parse_trailer_page(title, suburl, date, category)
-
-        t["streams"] = streams
-
-    def _parse_stream_page(self, url):
-        lines = self._dl(url).split("\n")
-
-        streams = []
-        for line in lines:
-            streams = streams + self._extract_streams(url, line)
-
-        return streams
-
-    def _extract_streams(self, baseurl, line):
-        streams = []
-
-        for expr in _stream_link_res:
-            iterator = expr.finditer(line)
-            for m in iterator:
-                stream_url = urlparse.urljoin(baseurl, m.group("url"))
-
-                size = None
-                if stream_url.find("480p") != -1:
-                    size = "480p"
-                elif stream_url.find("720p") != -1:
-                    size = "720p"
-                elif stream_url.find("1080p") != -1:
-                    size = "1080p"
-                elif stream_url.find("1080i") != -1:
-                    size = "1080i"
-                elif stream_url.find(".320.mov") != -1:
-                    size = "small"
-                elif stream_url.find(".480.mov") != -1:
-                    size = "medium"
-                elif stream_url.find(".640.mov") != -1:
-                    size = "large"
-
-                for excl in _stream_excl_res:
-                    if excl.search(stream_url):
-                        break
-                else:
-                    streams.append({"url":stream_url, "size":size})
-
-        m = _scriptpage_stream_link_re.search(line)
-        if m:
-            stream_url = urlparse.urljoin(baseurl, m.group("url"))
-            for excl in _stream_excl_res:
-                if excl.search(stream_url):
-                    break
-            else:
-                streams.append({"url":stream_url, "size":m.group("size")})
-
-        return streams
-
-    def _map_size(self, size):
-        for sm in _sizemap:
-            if size in sm[0]:
-                return sm[1]
-        return ("Unknown (%s)" % str(size), -10)
-
-    def _dl(self, url):
-        f = urllib.urlopen(url)
-        return f.read()
-
-    def _add_stream(self, list, stream):
-        for s in list:
-            if s['sort_key'] < stream['sort_key']:
-                list.insert(list.index(s), stream)
-                break
-        else:
-            list.append(stream)
-
-    def _mark_old(self):
-        for title in self.titles.keys():
-            self.titles[title]["_old"] = True
-            for trailer in self.titles[title]["trailers"]:
-                trailer["_old"] = True
-
-    def _prune(self):
-        keys = self.titles.keys()
-        for title in keys:
-            if self.titles[title].has_key("_old"):
-                del self.titles[title]
-            else:
-                trailers = []
-                for trailer in self.titles[title]["trailers"]:
-                    if not trailer.has_key("_old"):
-                        trailers.append(trailer)
-                if trailers:
-                    self.titles[title]["trailers"] = trailers
-                else:
-                    del self.titles[title]
-
-    def only_studio(self, studio):
-        keys = self.titles.keys()
-        for title in keys:
-            if studio != self.titles[title]["studio"]:
-                del self.titles[title]
-
-    def only_genre(self, genre):
-        keys = self.titles.keys()
-        for title in keys:
-            if genre not in self.titles[title]["genres"]:
-                del self.titles[title]
-
-    def only_category(self, category):
-        keys = self.titles.keys()
-        for title in keys:
-            trailers = []
-            for trailer in self.titles[title]["trailers"]:
-                if category in trailer["categories"]:
-                    trailers.append(trailer)
-            if trailers:
-                self.titles[title]["trailers"] = trailers
-            else:
-                del self.titles[title]
-
-    def sort_by_title(self):
-        keys = self.titles.keys()
-        keys.sort()
-        return keys
-
-def progress(perc):
-    print "\rProgress: %d %%" % perc,
+                return True
+        except:
+            traceback.print_exc()
+        return False
 
 if __name__ == '__main__':
-    # Use this to test loading subpages
-    if 1:
-        t = Trailers()
-        title = {"trailers":[]}
-        t._parse_trailer_page(title, "http://www.apple.com/trailers/independent/8mileshigh/", None, None)
-        print title
-        sys.exit(0)
+    a = Trailers('720p')
+    for studio,trailers in a.studios.items():
+        print '[Studio] %s' % studio
+        for t in trailers:
+            print '\t%s' % t.title
 
-    try:
-        t = pickle.load(file("trailers.dump"))
-    except:
-        t = Trailers()
-    l = t.parse(progress)
-    pickle.dump(t, file("trailers.dump", "w"))
-    keys = l.keys()
-    keys.sort()
-    for title in keys:
-        print title
-        if l[title]["studio"] is not None:
-            print "\tStudio:\t", l[title]["studio"]
-        if l[title]["genres"]:
-            print "\tGenres:\t", l[title]["genres"]
-        print ""
-        for t in l[title]["trailers"]:
-            print "\t", t
-        print ""
+    for genre,trailers in a.genres.items():
+        print '[Genre] %s' % genre
+        for t in trailers:
+            print '\t%s' % t.title
+
+    for actor,trailers in a.actors.items():
+        print '[Actor] %s' % actor
+        for t in trailers:
+            print '\t%s' % t.title
+
+    for director,trailers in a.directors.items():
+        print '[Director] %s' % director
+        for t in trailers:
+            print '\t%s' % t.title
+
+    for rating,trailers in a.ratings.items():
+        print '[Rating] %s' % rating
+        for t in trailers:
+            print '\t%s' % t.title
+
+    for date,trailers in a.release_dates.items():
+        print '[Date] %s' % date.isoformat()
+        for t in trailers:
+            print '\t%s' % t.title
