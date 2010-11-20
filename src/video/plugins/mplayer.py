@@ -365,7 +365,7 @@ class MPlayer:
 
         if config.OSD_SINGLE_WINDOW:
             command += ['-wid', str(osd.video_window.id)]
-            osd.video_window.show()
+            
 
         # use software scaler?
         #XXX these need to be in the arg list as the scaler will add vf args
@@ -404,6 +404,7 @@ class MPlayer:
         
         if config.OSD_SINGLE_WINDOW:
             osd.video_window.hide()
+            osd.video_window.set_geometry((0,0), (config.CONF.width,config.CONF.height))
         self.app.stop('quit\n')
         rc.remove_app(self)
         dialog.disable_overlay_display()
@@ -544,6 +545,19 @@ class MPlayer:
             self.show_message(event.arg)
             return True
 
+        if event == 'MPLAYER_VO':
+            if config.OSD_SINGLE_WINDOW:
+                w_ratio = float(config.CONF.width) / float(event.arg[0])
+                h_ratio = float(config.CONF.height) / float(event.arg[1])
+                ratio = min(w_ratio, h_ratio)
+                w = int(event.arg[0] * ratio)
+                h = int(event.arg[1] * ratio)
+                x = (config.CONF.width - w) / 2
+                y = (config.CONF.height - h) / 2
+                osd.video_window.set_geometry((x,y), (w,h))
+                osd.video_window.show()
+            return True
+
         # nothing found? Try the eventhandler of the object who called us
         return self.item.eventhandler(event)
 
@@ -646,6 +660,7 @@ class MPlayerApp(childapp.ChildApp2):
 
     def __init__(self, command, mplayer):
         self.RE_TIME   = re.compile("^[AV]: *([0-9]+)").match
+        self.RE_VO     = re.compile("^VO: \[.+\] \d+x\d+ => (\d+)x(\d+)").match
         self.RE_START  = re.compile("^Starting playback\.\.\.").match
         self.RE_EXIT   = re.compile("^Exiting\.\.\. \((.*)\)$").match
         self.item      = mplayer.item
@@ -727,7 +742,13 @@ class MPlayerApp(childapp.ChildApp2):
                 for p in self.elapsed_plugins:
                     p.elapsed(self.item.elapsed)
 
-
+        elif line.startswith('VO:'):
+            m = self.RE_VO(line)
+            if m:
+                w = int(m.group(1))
+                h = int(m.group(2))
+                Event('MPLAYER_VO', (w,h)).post()
+                
         # exit status
         elif line.find("Exiting...") == 0:
             m = self.RE_EXIT(line)
