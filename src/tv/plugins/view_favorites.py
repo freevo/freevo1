@@ -36,6 +36,7 @@ from tv.record_client import RecordClient
 from item import Item
 from tv.favoriteitem import FavoriteItem
 from gui.AlertBox import AlertBox
+import dialog
 
 
 class ViewFavoritesItem(Item):
@@ -49,24 +50,42 @@ class ViewFavoritesItem(Item):
 
     def actions(self):
         _debug_('actions()', 2)
-        return [ ( self.view_favorites , _('View Favorites') ) ]
+        return [ ( self.view_favorites , _('View Favorites') ),
+                 ( self.reschedule_favorites, _('Reschedule Favorites'))]
 
 
     def view_favorites(self, arg=None, menuw=None):
         _debug_('view_favorites(arg=%r, menuw=%r)' % (arg, menuw), 2)
         if not self.recordclient.pingNow():
-            AlertBox(self.recordclient.recordserverdown).show()
+            dialog.show_alert(self.recordclient.recordserverdown)
             return
 
         items = self.get_items()
         if not len(items):
-            AlertBox(_('No favorites.')).show()
+            dialog.show_alert(_('No favorites.'))
             return
 
         favorite_menu = menu.Menu(_( 'View Favorites'), items, reload_func=self.reload, item_types='tv favorite menu')
         self.menuw = menuw
         menuw.pushmenu(favorite_menu)
         menuw.refresh()
+
+
+    def reschedule_favorites(self, arg=None, menuw=None):
+        """
+        Force rescheduling of favorites
+        """
+        _debug_('resched_favs(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        dialog.show_message(_('Rescheduling Favorites...'))
+        self.recordclient.updateFavoritesScheduleCo().connect(self.reschedule_favorites_complete)
+        if menuw:
+            menuw.delete_submenu()
+
+    def reschedule_favorites_complete(self, result):
+        if result:
+            dialog.show_message(_('Favorites rescheduled'))
+        else:
+            dialog.show_alert(_('Reschedule failed'))
 
 
     def reload(self):

@@ -86,7 +86,8 @@ class RecordResource(FreevoResource):
                 return String(fv.res)
 
             self.recordclient().scheduleRecordingNow(prog)
-
+        elif action == 'resched':
+            self.recordclient().updateFavoritesScheduleNow()
         (status, schedule) = self.recordclient().getScheduledRecordingsNow()
         if status:
             progs = schedule.getProgramList()

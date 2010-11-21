@@ -189,6 +189,8 @@ class FavoritesResource(FreevoResource):
 
         fv.tableClose()
 
+        fv.res += '<br/><form action="record.rpy"><center><input type="hidden" name="action" value="resched"/><input type="submit" value="Reschedule Favorites"/></center></form><br/>'
+
         fv.printAddFavorite()
         
         fv.printSearchForm()
