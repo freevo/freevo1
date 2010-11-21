@@ -397,7 +397,7 @@ class PlayStateDialog(Dialog):
 
             attr['image'] = self.item.image
 	    # Skip thumbnails
-	    if attr['image'].endswith('.raw'):
+	    if attr['image'] and attr['image'].endswith('.raw'):
 		attr['image'] = None
             if not attr['image']:
 		attr['image'] = self.item.parent.image
