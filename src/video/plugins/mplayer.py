@@ -477,6 +477,7 @@ class MPlayer:
                 else:
                     dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_time_info)
             else:
+                self.paused = False
                 self.app.write('osd\n')
             return True
 
@@ -521,7 +522,8 @@ class MPlayer:
 
                     dialog.show_message(_('Seeking not possible'))
                     return False
-
+            
+            self.paused = False
             self.app.write('seek %s\n' % event.arg)
             if event.arg > 0:
                 dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.item, self.get_time_info)
