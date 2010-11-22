@@ -212,7 +212,10 @@ class BrowseMainMenu(Item):
         
         # Remove any posters that are no longer required
         for poster_file in set(old_posters) - set(new_posters):
-            os.unlink(poster_file)
+            try:
+                os.unlink(poster_file)
+            except:
+                pass
 
 
     def actions(self):
