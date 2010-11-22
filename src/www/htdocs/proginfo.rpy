@@ -71,7 +71,8 @@ class ProgInfoResource(FreevoResource):
             desc=desc[:desc[:MAX_DESCRIPTION_CHAR].rfind('.')] + '. [...]'
 
         if prog.sub_title:
-            desc = '"%s"<br/>%s' % (prog.sub_title,desc)
+            sub_title = prog.sub_title.strip().replace("'", "\\'")
+            desc = '"%s"<br/>%s' % (sub_title,desc)
         desc = desc.replace("\n", "<br/>")
 
         #if config.LOCALE.lower() != 'utf8' and config.LOCALE.lower() != 'utf-8':
