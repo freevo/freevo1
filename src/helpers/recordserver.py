@@ -1479,12 +1479,10 @@ class RecordPostProcess(Thread):
         _debug_('post-processing started for %s' % (self.prog), DINFO)
 
         try:
-            snapshot(self.prog.filename)
+            ss_file = os.path.splitext(self.prog.filename)[0] + '.png'
+            snapshot(self.prog.filename, ss_file)
         except:
-            # If automatic pickling fails, use on-demand caching when
-            # the file is accessed instead.
-            os.rename(vfs.getoverlay(self.prog.filename + '.raw.tmp'),
-                      vfs.getoverlay(os.path.splitext(self.prog.filename)[0] + '.png'))
+            pass
 
         if config.VCR_POST_REC:
             util.popen3.Popen3(config.VCR_POST_REC % self.prog.__dict__)

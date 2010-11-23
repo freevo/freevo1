@@ -457,13 +457,14 @@ class EncodingJob:
         """
         Generate a video thumbnail of the video
         """
-        if self.length is None:
-            self._identify()
-            self._wait()
-            if self.id_info.has_key('ID_LENGTH'):
-                self.length = float(self.id_info['ID_LENGTH'])
-            else:
-                self.length = 0
+        # Always use mplayer to identify the file as kaa doesn't seem to handle
+        # mpeg2-ts files properly.
+        self._identify()
+        self._wait()
+        if self.id_info.has_key('ID_LENGTH'):
+            self.length = float(self.id_info['ID_LENGTH'])
+        else:
+            self.length = 0
 
         position = str(int(self.length / 2.0))
         arguments = [ '-vo', 'png:z=1', '-ao', 'null', '-frames', '8', '-ss', position, '-zoom' ]
