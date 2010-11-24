@@ -532,7 +532,7 @@ plugin.activate('shutdown', level=90)
 # ======================================================================
 
 # Default config for autoshutdown and its timer are
-# now set by the plugin. Info is available in the
+# now set by the plugin. Info is available in thethe apprentice
 # plugin help.
 
 # plugin.remove('shutdown')
@@ -833,17 +833,17 @@ plugin_record = plugin.activate('tv.generic_record')
 # plugin.remove('tv.generic_record')
 # plugin_record = plugin.activate('tv.ivtv_record')
 
-# TV menu plugin to view scheduled recordings
-plugin.activate('tv.scheduled_recordings')
-
 # TV menu plugin to view recordings
-plugin.activate('tv.recordings_manager')
-
-# TV menu plugin to view and edit favorites
-plugin.activate('tv.view_favorites')
+plugin.activate('tv.recordings_manager', level=1)
 
 # TV menu plugin to search for programs
-plugin.activate('tv.search_programs')
+plugin.activate('tv.search_programs', level=2)
+
+# TV menu plugin to view and edit favorites
+plugin.activate('tv.view_favorites', level=3)
+
+# TV menu plugin to view scheduled recordings
+plugin.activate('tv.scheduled_recordings', level=4)
 
 # TV menu plugin to allow the use to set reminders for programs they want to
 # watch.
@@ -851,6 +851,12 @@ plugin.activate('tv.remind')
 
 # TV menu plugin to manually schedule recordings
 plugin.activate('tv.manual_record')
+
+# Youtube
+plugin.activate('video.youtube')
+
+# Apple Trailers
+plugin.activate('video.appletrailers')
 
 #
 # Enable this for joystick support:
