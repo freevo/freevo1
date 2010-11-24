@@ -6,7 +6,7 @@
     <description>The OSD theme for Blurr, the default freevo theme</description>
     <version>1.0</version>
     <osd name="volume" x="0" y="540" width="800" height="60">
-      <image name="volume_bar_bg" x="0" y="0" width="800" height="60" expression="True" scale="noscale" align="left" valign="top" src="percent_bar_bg.png"/>
+      <image name="volume_bar_bg" x="0" y="0" width="800" height="60" expression="True" scale="both" align="left" valign="top" src="percent_bar_bg.png"/>
       <percent name="volume_bar" x="150" y="0" width="500" height="60" expression="float(volume)/100.0" src="percent_bar.png" vertical="False"/>
       <image name="volume_icon" x="5" y="10" width="40" height="40" expression="True" scale="noscale" align="left" valign="top" src="volume.png"/>
       <image name="volume_icon_muted" x="5" y="10" width="40" height="40" expression="muted" scale="noscale" align="left" valign="top" src="volume_mute.png"/>
