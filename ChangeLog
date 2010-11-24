@@ -75,7 +75,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Fixed submenu in Favorites display (B#3105778)
  * Fixed pause status after seeking in video (B#3108091)
  * Fixed program info pop-up on web page breaking when appostrophes where in the title. (B#3108095)
-
+ * Fixed convert_favorites_txt failing when program title contained an appostrophe (B#2951250)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------

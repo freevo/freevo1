@@ -31,111 +31,43 @@
 #
 # -----------------------------------------------------------------------
 
-import os, sys, codecs
-from pprint import pprint
+import os
+import sys
+import codecs
 from optparse import IndentedHelpFormatter, OptionParser
-
+import re
 import config
 from tv.record_types import Favorite, ScheduledRecordings
 
 FIELDS = ('name', 'title', 'channel', 'dow', 'mod', 'allowDuplicates', 'onlyNew', 'priority')
 
-
-class Lexer:
-    """
-    Class to parse the favorites.txt
-    """
-    IDLE = 0
-    QUOTED = 1
-    NONQUOTED = 2
-    NEWLINE = 3
-
-    def __init__(self, fd):
-        self.fd = fd
-        self.state = Lexer.IDLE
-        self.qstr = None
-        self.linenum = 0
-
-    def read(self):
-        s = ''
-        while True:
-            if self.state == Lexer.NEWLINE:
-                self.state = Lexer.IDLE
-                yield '\n'
-
-            c = fd.read(1)
-            if c == '':
-                break
-            if self.state == Lexer.IDLE:
-                s = ''
-                if c == ' ' or c == '\t':
-                    continue
-                elif c == '\n':
-                    self.state = Lexer.NEWLINE
-                elif c == '"' or c == "'":
-                    self.state = Lexer.QUOTED
-                    self.qstr = c
-                else:
-                    self.state = Lexer.NONQUOTED
-                    s = c
-            elif self.state == Lexer.QUOTED:
-                if c == self.qstr:
-                    self.state = Lexer.IDLE
-                    yield s
-                elif c == '\n':
-                    self.state = Lexer.NEWLINE
-                    yield s
-                else:
-                    s += c
-            elif self.state == Lexer.NONQUOTED:
-                if c == ' ' or c == '\t':
-                    self.state = Lexer.IDLE
-                    yield s
-                elif c == '\n':
-                    self.state = Lexer.NEWLINE
-                    yield s
-                else:
-                    s += c
+RE_FIELDS = re.compile("^'(?P<name>.+)' '(?P<title>.+)' '(?P<channel>.+)' '(?P<dow>.+)' '(?P<mod>.+)' (?P<allowDuplicates>\d) (?P<onlyNew>\d) '(?P<priority>.+)'$")
 
 
 def convert_favorites_txt():
-    f = {}
     linenum = 0
     tokennum = 0
+    types_version = fd.readline()
+    print types_version
     favorites = {}
-    lexer = Lexer(fd)
-    for token in lexer.read():
-        if token == '\n':
-            linenum += 1
-            if linenum == 1:
-                types_version = f['name']
-                print types_version
-                tokennum = 0
-            else:
-                favorite = Favorite()
-                favorite.name = f['name']
-                favorite.title = f['title']
-                favorite.channel = f['channel']
-                favorite.dow = f['dow']
-                favorite.mod = f['mod']
-                favorite.priority = f['priority']
-                favorite.allowDuplicates = int(f['allowDuplicates'])
-                favorite.onlyNew = int(f['onlyNew'])
+    
+    for line in fd:
+        m = RE_FIELDS.match(line)
+        if m:
+            favorite = Favorite()
+            favorite.name = m.group('name')
+            favorite.title = m.group('title')
+            favorite.channel = m.group('channel')
+            favorite.dow = m.group('dow')
+            favorite.mod = m.group('mod')
+            favorite.priority = m.group('priority')
+            favorite.allowDuplicates = int(m.group('allowDuplicates'))
+            favorite.onlyNew = int(m.group('onlyNew'))
 
-                print(favorite)
-                favorites[favorite.name] = favorite
-                tokennum = 0
-                f = {}
+            print(favorite)
+            favorites[favorite.name] = favorite
         else:
-            try:
-                #print('token=%r (%s)' % (token, token))
-                field = FIELDS[tokennum]
-                f[field] = token.strip('"').strip("'").strip()
-                tokennum += 1
-
-            except ValueError, why:
-                print why
-                print tokens
+            print 'Failed to parse line: %r' % line,
 
     return favorites
 
