@@ -57,16 +57,26 @@ class Controller:
             self.connection.close()
             self.connection = None
 
+
+    def get_connection(self):
+        """
+        Retrieve the connection object to use to communicate with the dvbstreamer
+        instance.
+        """
+        if self.connection is None:
+            ctrlcon = ControlConnection(self.host, self.adapter)
+            ctrlcon.open()
+        else:
+            ctrlcon = self.connection
+        return ctrlcon
+
+
     def execute_command(self, command, authenticate=False):
         """
         Send a command to the dvbstreamer instance to execute,
         first authorising if required.
         """
-        if self.transitory or self.connection is None:
-            ctrlcon = ControlConnection(self.host, self.adapter)
-            ctrlcon.open()
-        else:
-            ctrlcon = self.connection
+        ctrlcon = self.get_connection()
         try:
             if authenticate:
                 (ec, em, lines) = ctrlcon.send_command('auth %s %s' % (self.username, self.password))
@@ -77,15 +87,22 @@ class Controller:
         finally:
             if self.transitory:
                 ctrlcon.close()
-            else:
-                self.connection = ctrlcon
+                ctrlcon = None
+
+            self.connection = ctrlcon
         return result
+
 
     def set_current_service(self, service):
         """
         Select the primary service.
         """
-        (errcode, errmsg, msg) = self.execute_command('select ' + service, True)
+        self.connection = self.get_connection()
+        if self.connection.version[:2] in ('0.', '1.'):
+            cmd = 'select ' + service
+        else:
+            cmd = 'select "%s"' % service
+        (errcode, errmsg, msg) = self.execute_command(cmd, True)
         if errcode != 0:
             raise RuntimeError, errmsg
 
