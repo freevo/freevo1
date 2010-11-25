@@ -91,8 +91,7 @@ class CategoriesItem(Item):
         """
         build the items for the menu
         """
-        msgtext = _('Preparing the program guide')
-        guide = tv.epg_xmltv.get_guide(PopupBox(text=msgtext))
+        guide = tv.epg_xmltv.get_guide(popup=True)
         items = []
         for category in sorted(guide.categories):
             items.append(CategoryItem(self, category))
@@ -171,8 +170,7 @@ class CategoryItem(Item):
         """
         build the items for the menu
         """
-        msgtext = _('Preparing the program guide')
-        guide = tv.epg_xmltv.get_guide(PopupBox(text=msgtext))
+        guide = tv.epg_xmltv.get_guide(popup=True)
         showings = {}
 
         for c in guide.get_programs(category=self.category):

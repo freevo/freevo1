@@ -36,6 +36,8 @@ import traceback
 import calendar
 import shutil
 
+import kaa
+
 import config
 import util
 
@@ -59,7 +61,6 @@ class EpgException(Exception):
 
 cached_guide = None
 
-
 def get_guide(popup=False, XMLTV_FILE=None):
     """
     Get a TV guide from memory cache, file cache or raw XMLTV file.
@@ -74,7 +75,7 @@ def get_guide(popup=False, XMLTV_FILE=None):
     if popup:
         import dialog.dialogs
         popup_dialog = dialog.dialogs.ProgressDialog( _('Preparing the program guide'), indeterminate=True)
-
+        
     # Can we use the cached version (if same as the file)?
     if (cached_guide == None or
         (os.path.isfile(XMLTV_FILE) and
@@ -90,8 +91,11 @@ def get_guide(popup=False, XMLTV_FILE=None):
 
             if popup:
                 popup_dialog.show()
-
-            cached_guide = util.read_pickle(pname)
+                inprogress = kaa.ThreadCallable(util.read_pickle, pname)()
+                inprogress.wait()
+                cached_guide = inprogress.result
+            else:
+                cached_guide = util.read_pickle(pname)
 
             epg_ver = None
             try:
@@ -115,12 +119,19 @@ def get_guide(popup=False, XMLTV_FILE=None):
         if not got_cached_guide:
             # Need to reload the guide
 
-            if popup:
-                popup_dialog.show()
+            
 
             _debug_('XMLTV, trying to read raw file (%s)' % XMLTV_FILE)
             try:
-                cached_guide = load_guide(XMLTV_FILE)
+                if popup:
+                    popup_dialog.set_indeterminate(False)
+                    popup_dialog.show()
+                    inprogress = kaa.ThreadCallable(load_guide, XMLTV_FILE, popup_dialog)()
+                    inprogress.wait()
+                    cached_guide = inprogress.result
+                    popup_dialog.set_indeterminate(True)
+                else:
+                    cached_guide = load_guide(XMLTV_FILE)
             except:
                 # Don't violently crash on a incomplete or empty TV.xml please.
                 cached_guide = None
@@ -138,7 +149,10 @@ def get_guide(popup=False, XMLTV_FILE=None):
                     cached_guide.timestamp = os.path.getmtime(config.XMLTV_FILE)
 
                 # Dump a pickled version for later reads
-                util.save_pickle(cached_guide, pname)
+                if popup:
+                    kaa.ThreadCallable(util.save_pickle, cached_guide, pname)().wait()
+                else:
+                    util.save_pickle(cached_guide, pname)
 
     if not cached_guide:
         # An error occurred, return an empty guide
@@ -150,7 +164,7 @@ def get_guide(popup=False, XMLTV_FILE=None):
     return cached_guide
 
 
-def load_guide(XMLTV_FILE=None):
+def load_guide(XMLTV_FILE=None, popup_dialog=None):
     """
     Load a guide from the raw XMLTV file using the xmltv.py support lib.
     Returns a TvGuide or None if an error occurred
@@ -168,7 +182,8 @@ def load_guide(XMLTV_FILE=None):
     else:
         _debug_('XMLTV file (%s) missing!' % XMLTV_FILE)
         gotfile = 0
-
+    if popup_dialog:
+        popup_dialog.update_progress(_('Reading channels'), 0.0)
     # Add the channels that are in the config list, or all if the
     # list is empty
     if config.TV_CHANNELS:
@@ -216,6 +231,9 @@ def load_guide(XMLTV_FILE=None):
             c = TvChannel(id, displayname, tunerid)
             guide.add_channel(c)
 
+    if popup_dialog:
+        popup_dialog.update_progress(_('Reading programmes'), 0.25)
+
     xmltv_programs = None
     if gotfile:
         _debug_('reading \"%s\" xmltv data' % XMLTV_FILE)
@@ -232,7 +250,8 @@ def load_guide(XMLTV_FILE=None):
         needed_ids.append(chan)
 
     _debug_('creating guide for %s' % needed_ids)
-
+    if popup_dialog:
+        popup_dialog.update_progress(_('Processing programmes'), 0.50)
     for p in xmltv_programs:
         if not p['channel'] in needed_ids:
             continue
@@ -309,7 +328,13 @@ def load_guide(XMLTV_FILE=None):
             traceback.print_exc()
             print 'Error in tv guide, skipping'
 
+    if popup_dialog:
+        popup_dialog.update_progress(_('Sorting programmes'), 0.75)
+
     guide.sort()
+
+    if popup_dialog:
+        popup_dialog.update_progress(_('Done'), 1.00)
     return guide
 
 
