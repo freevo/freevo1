@@ -119,16 +119,19 @@ def human_size(space):
     """
     ret = ''
     metrics = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
+    space = float(space)
     for p, suffix in enumerate(metrics):
         div = pow(1000, p)
-        s = space / div
-        if s < 1000:
+        s = space / float(div)
+        if s < 1000.0:
             if p == 0 and s == 1:
                 return '1 byte'
-            return '%d%s' % (s, suffix)
+            break
 
-    return '%d %s' % (s, suffix)
+    result = '%.1f' % s
+    if result.endswith('.0'):
+        result = result[:-2]
+    return result + suffix
 
 
 def freespace(path):
