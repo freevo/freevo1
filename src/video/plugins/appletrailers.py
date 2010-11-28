@@ -42,6 +42,8 @@ import threading
 import util.fileops
 import util.misc
 
+import kaa
+
 from item import Item
 from video.videoitem import VideoItem
 from gui.ProgressBox import ProgressBox
@@ -77,6 +79,11 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
     def __init__(self):
         plugin.MainMenuPlugin.__init__(self)
+        # Clean up any old pickle files
+        old_pfile = os.path.join(cachedir, 'data')
+        if os.path.isfile(old_pfile):
+            os.unlink(old_pfile)
+        
 
     def config(self):
 
@@ -104,8 +111,12 @@ class TrailerItem(VideoItem):
         self.files = ''
         self.image = _fetch_image(trailer.poster)
         self.description = trailer.description
-        self.description += 'Genres: ' + ','.join(trailer.genres)
-        self.description += '\nDate: ' + trailer.release_date.strftime(config.APPLETRAILERS_DATE_FORMAT)
+        self.description += _('\n\nGenres: ') + ','.join(trailer.genres)
+        self.description += _('\n\nDate: ') + trailer.release_date.strftime(config.APPLETRAILERS_DATE_FORMAT)
+        self.description += ('\n\nRating: ') + trailer.rating
+        self.description += ('\n\nDirector: ') + trailer.director
+        self.description += ('\n\nRuntime: %d minutes') % trailer.runtime
+        self.plot = self.description
 
 
 class BrowseByTitle(Item):
@@ -175,11 +186,9 @@ class BrowseMainMenu(Item):
         self.type = 'trailers'
         self.image = config.IMAGE_DIR + '/apple-trailers.png'
         self.trailers = None
-        # Clean up any old pickle files
-        old_pfile = os.path.join(cachedir, 'data')
-        if os.path.isfile(old_pfile):
-            os.unlink(old_pfile)
+        self.inprogress = kaa.ThreadCallable(self.download_trailers)()
 
+    def download_trailers(self):
         pfile = os.path.join(cachedir, 'trailers.pickle')
         if os.path.isfile(pfile):
             self.trailers = util.fileops.read_pickle(pfile)
@@ -187,7 +196,11 @@ class BrowseMainMenu(Item):
             for trailer in self.trailers.trailers:
                 old_posters.append(_fetch_image(trailer.poster))
             old_posters = set(old_posters)
-            if self.trailers.resolution == config.APPLETRAILERS_RESOLUTION:
+
+            s = os.stat(pfile)
+
+            if self.trailers.resolution == config.APPLETRAILERS_RESOLUTION or  \
+              (time.time() - s.st_mtime) > (60*60): # Over an hour ago
                 if self.trailers.update_feed():
                     new_posters = []
                     for trailer in self.trailers.trailers:
@@ -211,7 +224,7 @@ class BrowseMainMenu(Item):
             new_posters = set(new_posters)
         
         # Remove any posters that are no longer required
-        for poster_file in set(old_posters) - set(new_posters):
+        for poster_file in old_posters - set(new_posters):
             try:
                 os.unlink(poster_file)
             except:
@@ -223,6 +236,7 @@ class BrowseMainMenu(Item):
 
 
     def make_menu(self, arg=None, menuw=None):
+        self.inprogress.wait()
         menuw.pushmenu(menu.Menu('Apple Trailers',
                 [ BrowseByTitle(_("Browse by Title"), self.trailers.trailers, self),
                   BrowseByReleaseDate(self.trailers.release_dates, self),
