@@ -42,10 +42,13 @@ import os
 import util
 from kaa.metadata.image import EXIF as exif
 
+import kaa
+thread_pool = kaa.ThreadPool()
+
 
 osd = osd.get_singleton()
 
-format_imagecache = util.objectcache.ObjectCache(30, desc='format_image')
+format_imagecache = util.objectcache.ObjectCache(300, desc='format_image')
 load_imagecache   = util.objectcache.ObjectCache(20, desc='load_image')
 
 
@@ -60,10 +63,7 @@ def pygamesurface_imlib2_scale(image, newsize):
     return pygame.image.frombuffer(buf, newsize, 'RGBA')
 
 
-def format_image(settings, item, width, height, force=0, anamorphic=0):
-    _debug_('format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r)' % \
-        (settings, item, width, height, force, anamorphic), 2)
-
+def generate_cache_key(settings, item, width, height, force=0):
     try:
         type = item.display_type
     except AttributeError:
@@ -85,10 +85,28 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
     if item.media and item.media.item == item:
         cname = '%s-%s' % (cname, item.media)
 
+    return cname
+
+
+def format_image(settings, item, width, height, force=False, anamorphic=False):
+    _debug_('format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r)' % \
+        (settings, item, width, height, force, anamorphic), 2)
+
+    cname = generate_cache_key(settings, item, width, height, force)
     cimage = format_imagecache[cname]
 
     if cimage:
         return cimage
+
+    try:
+        type = item.display_type
+    except AttributeError:
+        try:
+            type = item.info['mime'].replace('/', '_')
+        except:
+            type = item.type
+    if type is None:
+        type = ''
 
     image     = None
     imagefile = None
@@ -211,7 +229,6 @@ def format_image(settings, item, width, height, force=0, anamorphic=0):
         height = int(float(width * i_h) / i_w)
 
     cimage = pygamesurface_imlib2_scale(image, (width, height))
-
     format_imagecache[cname] = cimage, width, height
     return cimage, width, height
 
@@ -266,3 +283,39 @@ def text_or_icon(settings, string, x, width, font):
     if l[1] == 'RIGHT':
         return mod_x, l[3]
     return 0, l[3]
+
+
+
+class AsyncImageFormatter(object):
+    def __init__(self, settings, item, width, height, force, anamorphic, high_priority=False):
+        self.args = (settings, item, width, height, force, anamorphic)
+        self.cancelled = False
+        if high_priority:
+            pool_info = (thread_pool, 1)
+        else:
+            pool_info = (thread_pool, 0)
+        self.inprogress = kaa.ThreadPoolCallable(pool_info, self.__do_format)()
+        self.inprogress.connect(self.__do_callback)
+        self.__cb = None
+        self.__arg = None
+    
+    @property
+    def finished(self):
+        return self.inprogress.finished
+
+    @property
+    def result(self):
+        return self.inprogress.result
+
+    def connect(self, cb, arg):
+        self.__cb = cb
+        self.__arg = arg
+
+    def __do_callback(self, result):
+        if result is not None and self.__cb is not None:
+            self.__cb(result, self.__arg)
+
+    def __do_format(self):
+        if self.cancelled:
+            return
+        return format_image(*self.args)

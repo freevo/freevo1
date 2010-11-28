@@ -35,6 +35,9 @@ import types
 from area import Skin_Area
 from skin_utils import *
 from skin import eval_attr
+
+import skin
+
 import config
 
 class Listing_Area(Skin_Area):
@@ -46,6 +49,8 @@ class Listing_Area(Skin_Area):
         Skin_Area.__init__(self, 'listing')
         self.last_choices = (None, None)
         self.last_get_items_geometry = [ None, None ]
+        self.loading_images = {}
+        self.image_loaded = False
 
 
     def get_items_geometry(self, settings, menu, display_style):
@@ -180,6 +185,9 @@ class Listing_Area(Skin_Area):
         """
         check if the content needs an update
         """
+        if self.image_loaded:
+            return True
+
         if self.last_choices[0] != self.menu.selected:
             return True
 
@@ -191,6 +199,14 @@ class Listing_Area(Skin_Area):
                 i += 1
             except IndexError:
                 return True
+
+
+    def __image_loaded(self, result, image):
+        if image in self.loading_images and result[0] is not None:
+            self.image_loaded = True
+            del self.loading_images[image]
+            
+            skin.redraw()
 
 
     def update_content(self):
@@ -233,6 +249,12 @@ class Listing_Area(Skin_Area):
         all_tvs       = True
         tvs_shortname = True
 
+        anamorphic = self.xml_settings.anamorphic
+    
+        self.image_loaded = False
+        remove_images = self.loading_images.keys()
+        
+
         for choice in menuw.menu_items:
 
             if hasattr(choice, 'dirty'):
@@ -255,7 +277,6 @@ class Listing_Area(Skin_Area):
                 n_val = content.types[ choice.type ]
             else:
                 n_val = content.types['default']
-
 
             if choice == menu.selected:
                 val = s_val
@@ -444,9 +465,15 @@ class Listing_Area(Skin_Area):
                         r = self.get_item_rectangle(val.rectangle, val.width, rec_h)[2]
                     self.drawroundbox(x0 + r.x, y0 + r.y, r.width, r.height, r)
 
-                image, i_w, i_h = format_image(settings, choice, val.width,
-                                               val.height, True, self.xml_settings.anamorphic)
-                if image:
+
+                image_key = generate_cache_key(settings, choice, val.width, val.height, True)
+
+                if image_key in format_imagecache:
+                    image, i_w, i_h = format_imagecache[image_key]
+
+                    if image_key in remove_images:
+                        remove_images.remove(image_key)
+
                     addx = 0
                     addy = 0
                     if val.align == 'center' and i_w < val.width:
@@ -472,6 +499,22 @@ class Listing_Area(Skin_Area):
                                           y0 + addy + val.shadow.y,
                                           image.get_width(), image.get_height(),
                                           (val.shadow.color, 0, 0, 0))
+
+                else:
+                    for v in (s_val, n_val):
+                        image_key = generate_cache_key(settings, choice, v.width, v.height, True)
+                        if image_key in remove_images:
+                            remove_images.remove(image_key)
+                        if image_key not in self.loading_images and image_key not in format_imagecache:
+                            hp = v == s_val and choice == menu.selected
+                            formatter = AsyncImageFormatter(settings, choice,
+                                                            v.width, v.height,
+                                                            True, anamorphic, hp)
+                            formatter.connect(self.__image_loaded, image_key)
+                            self.loading_images[image_key] = formatter
+                    
+                    self.drawroundbox(x0, y0, val.width, val.height, (0, 1, 0xffffff, 0))
+
 
                 if content.type == 'image+text':
                     wdg_x = x0
@@ -510,5 +553,10 @@ class Listing_Area(Skin_Area):
         except:
             # empty menu / missing images
             pass
+
+        for image_key in remove_images:
+            if image_key in self.loading_images:
+                self.loading_images[image_key].cancelled = True
+                del self.loading_images[image_key]
 
         self.last_choices = (menu.selected, copy.copy(menuw.menu_items))

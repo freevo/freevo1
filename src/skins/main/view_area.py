@@ -32,7 +32,7 @@
 from area import Skin_Area
 from skin_utils import *
 
-
+import skin
 
 class View_Area(Skin_Area):
     """
@@ -42,6 +42,9 @@ class View_Area(Skin_Area):
     def __init__(self):
         Skin_Area.__init__(self, 'view')
         self.image = None
+        self.image_loaded = False
+        self.loading_image = None
+        self._image = None
 
 
     def update_content_needed(self):
@@ -54,8 +57,19 @@ class View_Area(Skin_Area):
         if hasattr(item, 'image') and item.image:
             image = item.image
 
-        return Unicode(image) != Unicode(self.image)
+        if Unicode(image) != Unicode(self.image):
+            self._image = None
+            self.image_loaded = False
+            
+        return Unicode(image) != Unicode(self.image) or self.image_loaded
 
+    def __loaded(self, result, image):
+        if self.image == image:
+            self.loading_image = None
+            self._image = result
+            self.image_loaded = True
+            
+            skin.redraw()
 
     def update_content(self):
         """
@@ -66,6 +80,8 @@ class View_Area(Skin_Area):
         layout    = self.layout
         area      = self.area_val
         content   = self.calc_geometry(layout.content, copy_object=True)
+
+        self.image_loaded = False
 
         if hasattr(item, 'type') and content.types.has_key(item.type):
             val = content.types[item.type]
@@ -103,8 +119,14 @@ class View_Area(Skin_Area):
 
         addx = content.x + content.spacing
         addy = content.y + content.spacing
-
-        image, i_w, i_h = format_image(self.settings, item, width, height, 0, self.xml_settings.anamorphic)
+        if self._image:
+            image, i_w, i_h = self._image
+        else:
+            if self.loading_image:
+                self.loading_image.cancelled = True
+            self.loading_image = AsyncImageFormatter(self.settings, item, width, height, 0, self.xml_settings.anamorphic)
+            self.loading_image.connect(self.__loaded, self.image)
+            image = None
 
         if not image:
             return

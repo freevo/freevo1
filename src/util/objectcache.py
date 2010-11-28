@@ -27,7 +27,7 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
-
+from threading import RLock
 
 import config
 
@@ -44,21 +44,39 @@ class ObjectCache:
         self.lru = []  # Least recently used (lru) list, index 0 is lru
         self.cachesize = cachesize
         self.desc = desc
+        self.lock = RLock()
+
+    def keys(self):
+        self.lock.acquire()
+        keys = self.cache.keys()
+        self.lock.release()
+        return keys
+
+
+    def __contains__(self, key):
+        self.lock.acquire()
+        result = key in self.cache
+        self.lock.release()
+        return result
 
 
     def __getitem__(self, key):
+        self.lock.acquire()
         if isinstance(key, str):
             key = unicode(key, config.LOCALE)
 
         try:
             del self.lru[self.lru.index(key)]
             self.lru.append(key)
-            return self.cache[key]
+            result = self.cache[key]
         except:
-            return None
+            result = None
+        self.lock.release()
+        return result
 
 
     def __setitem__(self, key, object):
+        self.lock.acquire()
         if isinstance(key, str):
             key = unicode(key, config.LOCALE)
 
@@ -77,6 +95,7 @@ class ObjectCache:
 
         self.cache[key] = object
         self.lru.append(key)
+        self.lock.release()
 
 
     def __delitem__(self, key):
@@ -85,10 +104,11 @@ class ObjectCache:
 
         if not key in self.cache:
             return
-
+        
+        self.lock.acquire()
         del self.cache[key]
         del self.lru[self.lru.index(key)]
-
+        self.lock.release()
 
 #
 # Simple test...
