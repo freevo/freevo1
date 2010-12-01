@@ -391,7 +391,7 @@ class Mplayer(Player):
                 self.command += ['-vf', config.MPLAYER_VF_PROGRESSIVE]
 
             if config.OSD_SINGLE_WINDOW:
-                self.command += ['-xid', str(osd.video_window.id)]
+                self.command += ['-wid', str(osd.video_window.id)]
                 osd.video_window.show()
         # NOTE: We add the slave server MRL twice so that we can toggle between
         # them, this allows use to effectively reset mplayer's rendering pipeline and
@@ -462,7 +462,7 @@ class Vlc(Player):
     def __init__(self):
         Player.__init__(self, 'http')
         self.app = None
-        self.paused = Fals
+        self.paused = False
         self.command = None
         self.current_sub_index = -1
         self.sub_pids = []
@@ -495,7 +495,7 @@ class Vlc(Player):
         # NOTE: We add the slave server MRL twice so that we can toggle between
         # them, this allows use to effectively reset mplayer's rendering pipeline and
         # make it possible to seek quickly.
-        mrl = 'http://@%s:%d' % socket_address
+        mrl = 'http://%s:%d' % socket_address
         self.app = VlcApp(self.command + [mrl])
 
 
