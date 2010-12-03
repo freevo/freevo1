@@ -212,8 +212,8 @@ class YoutubeVideo(Item):
         """Menu for choose user"""
         _debug_('userlist(arg=%r, menuw=%r)' % (arg, menuw), 2)
         users = []
-        for user, description in config.YOUTUBE_VIDEOS:
-            users.append(menu.MenuItem(description, self.videolist, (user, description)))
+        for item in config.YOUTUBE_VIDEOS:
+            users.append(menu.MenuItem(item[1], self.videolist, item))
         users.append(menu.MenuItem('Search video', self.search_video, 0))
         menuw.pushmenu(menu.Menu(_('Choose please'), users))
 
@@ -227,7 +227,10 @@ class YoutubeVideo(Item):
     def videolist(self, arg=None, menuw=None):
         """Menu for video"""
         _debug_('videolist(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        items = self.video_list(_('Retrieving video list'), arg[0])
+        video_type = "uploaded"
+        if len(arg) > 2 and arg[2]:
+            video_type = arg[2]
+        items = self.video_list(_('Retrieving video list'), arg[0], video_type.lower())
         menuw.pushmenu(menu.Menu(_('Videos available'), items))
 
 
@@ -275,15 +278,26 @@ class YoutubeVideo(Item):
                 continue
             mi = menu.MenuItem(video.title.text, self.watchvideo, id[1])
             mi.arg = (video.title.text, id[1])
-            text = util.htmlenties2txt(video.content)
-            mi.description = decodeAcute(re.search('<span>([^\<]*)<', text).group(1))
+            if video.content.type == "text" and video.content.text:
+                mi.description = video.content.text
+            elif video.content.type == "html":
+                text = util.htmlenties2txt(video.content.text)
+                match = re.search('<span>([^\<]*)<', text)
+                if match:
+                    mi.description = decodeAcute(match.group(1))
+                else:
+                    mi.description = text
+                match = re.search('src="([^\"]*)"', text)
+                if match:
+                    tempimage = match.group(1)
+                    file = config.YOUTUBE_DIR + '/' + id[1].replace('-', '_') + '.jpg'
+                    if not os.path.exists(file):
+                        aimage = urllib.urlretrieve(tempimage, file)
+                    mi.image = file
+            else:
+                mi.description = ""
             mi.description += '\n' + _('User') + ': ' + video.author[0].name.text
             mi.description += '. ' + date[0]
-            tempimage = re.search('src="([^\"]*)"', text).group(1)
-            file = config.YOUTUBE_DIR + '/' + id[1].replace('-', '_') + '.jpg'
-            if not os.path.exists(file):
-                aimage = urllib.urlretrieve(tempimage, file)
-            mi.image = file
             items.append(mi)
         nfeed = service.GetNext(gfeed)
         if nfeed:
@@ -312,7 +326,7 @@ class YoutubeVideo(Item):
         menuw.pushmenu(menu.Menu(_('Videos available'), items))
 
 
-    def video_list(self, title, user):
+    def video_list(self, title, user, video_type):
         """Get the video list for a specific user"""
         _debug_('video_list(self=%r, title=%r, user=%r)' % (self, title, user), 2)
         if user in standardfeeds:
@@ -323,6 +337,10 @@ class YoutubeVideo(Item):
             if user not in ('most_recent', 'recently_featured', 'watch_on_mobile'):
                 feed += '?time=today'
         else:
-            feed = 'http://gdata.youtube.com/feeds/users/' + user + '/uploads?orderby=updated'
+            feed = 'http://gdata.youtube.com/feeds/users/' + user
+            if video_type == "favorites":
+                feed += '/favorites'
+            else:
+                feed += '/uploads?orderby=updated'
         items = self.get_and_build_list(feed)
         return items

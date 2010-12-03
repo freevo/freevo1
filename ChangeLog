@@ -21,6 +21,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Add scrollbars to description screen.
  * Add new view style to the recordings manager interface.
  * Add option to reschedule favorites (B#3108214)
+ * User's favorites support in youtube plugin (F#3121274)
  * New improvements to the rc.app() interface (F#2772598)
  * New iplayer plug-in for BBC IPlayer (F#2809981)
  * New Skype plug-in (F#2855837)
