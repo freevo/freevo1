@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <freevo>
-  <osds geometry="800x600" icontheme="blurr" include="base">
-    <name>Blurr</name>
+  <osds geometry="800x600" icontheme="geexbox">
+    <name>geexbox</name>
     <author email="hvogel@hennevogel.de">Henne Vogelsang</author>
-    <description>The OSD theme for Blurr, the default freevo theme</description>
+    <description>The OSD theme for the geexbox freevo theme</description>
     <version>1.0</version>
     <osd name="volume" x="0" y="0" width="800" height="600">
-      <image name="volume_bar_bg" x="0" y="555" width="800" height="45" expression="True" scale="both" align="left" valign="top" src="percent_bar_bg.png"/>
+      <image name="volume_bg" x="0" y="0" width="800" height="600" expression="True" align="left" valign="top" src="percent_bar_bg.png"/>
       <percent name="volume_bar" x="150" y="555" width="500" height="45" expression="float(volume)/100.0" src="percent_bar.png" />
       <image name="volume_icon" x="5" y="565" width="30" height="30" expression="True" scale="both" align="left" valign="top" src="volume.png"/>
       <image name="volume_icon_muted" x="5" y="565" width="30" height="30" expression="muted" scale="both" align="left" valign="top" src="volume_mute.png"/>
       <text name="percentage" x="10" y="563" width="780" height="30" expression="'%d%%' % volume" font="menu" align="right" valign="top"/>
     </osd>
     <osd name="play_state" x="0" y="0" width="800" height="600">
-      <image name="idlebar" x="0" y="0" width="800" height="45" expression="True" align="center" valign="top" src="idlebar.png"/>
-      <image name="play_pause_seek" x="5" y="7" width="30" height="30" expression="True" align="left" valign="top" scale="both" srcexpr="'%s.png' % state"/>
-      <image name="info_frame" x="0" y="0" width="800" height="600" expression="state == 'info'" scale="both" align="left" valign="top" src="frame.png"/>
+      <image name="back_trans" x="0" y="0" width="800" height="600" expression="True" align="left" valign="top" src="back_trans.png"/>
+      <image name="back" x="0" y="0" width="800" height="600" expression="state == 'info'" align="left" valign="top" src="back.png"/>
+      <image name="info_cover" x="0" y="114" width="800" height="368" expression="state == 'info' and image" scale="aspect" align="right" valign="center" srcexpr="'%s' % image"/>
+      <image name="play_pause_seek" x="20" y="7" width="30" height="30" expression="True" align="left" valign="top" scale="both" srcexpr="'%s.png' % state"/>
       <text name="info_time" x="10" y="7" width="780" height="30" expression="time" font="clock" align="right" valign="top"/>
-      <text name="info_title" x="105" y="130" width="800" height="30" expression="state == 'info' and title" font="clock" align="left" valign="top"/>
-      <text name="info_tagline" x="105" y="165" width="320" height="90" expression="state == 'info' and tagline" font="menu" align="left" valign="top"/>
-      <text name="info_year" x="132" y="295" width="293" height="30" expression="state == 'info' and year" font="menu" align="left" valign="top"/>
-      <text name="info_genre" x="121" y="315" width="304" height="30" expression="state == 'info' and genre" font="menu" align="left" valign="top"/>
-      <text name="info_rating" x="117" y="335" width="308" height="30" expression="state == 'info' and rating" font="menu" align="left" valign="top"/>
-      <text name="info_runtime" x="105" y="355" width="320" height="60" expression="state == 'info' and runtime" font="menu" align="left" valign="top"/>
-      <image name="info_cover" x="0" y="45" width="800" height="510" expression="state == 'info' and image" scale="aspect" align="right" valign="center" srcexpr="'%s' % image"/>
-      <image name="seek_bar_bg" x="0" y="555" width="800" height="45" expression="True" align="center" valign="top" src="percent_bar_bg.png"/>
-      <percent name="seek_bar" x="150" y="555" width="500" height="45" expression="percent" align="center" valign="top" src="percent_bar.png"/>
+      <text name="info_title" x="15" y="200" width="585" height="30" expression="state == 'info' and title" font="clock" align="left" valign="top"/>
+      <text name="info_tagline" x="15" y="230" width="430" height="90" expression="state == 'info' and tagline" font="menu" align="left" valign="top"/>
+      <text name="info_year" x="15" y="320" width="500" height="30" expression="state == 'info' and year" font="menu" align="left" valign="top"/>
+      <text name="info_genre" x="15" y="350" width="500" height="30" expression="state == 'info' and genre" font="menu" align="left" valign="top"/>
+      <text name="info_rating" x="15" y="380" width="500" height="30" expression="state == 'info' and rating" font="menu" align="left" valign="top"/>
+      <text name="info_runtime" x="15" y="410" width="320" height="60" expression="state == 'info' and runtime" font="menu" align="left" valign="top"/>
+      <percent name="seek_bar" x="150" y="540" width="500" height="60" expression="percent" align="center" valign="top" src="percent_bar.png"/>
       <text name="current_time" x="10" y="563" width="780" height="30" expression="current_time_str" font="menu" align="left" valign="top"/>
       <text name="total_time" x="10" y="563" width="780" height="30" expression="total_time_str" font="menu" align="right" valign="top"/>
     </osd>
