@@ -89,6 +89,8 @@ class View_Area(Skin_Area):
             val = content.types['default']
 
         if hasattr(item, 'image') and item.image:
+            if self.image != item.image:
+                self._image = None
             self.image = item.image
         else:
             self.image = None
