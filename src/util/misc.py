@@ -395,10 +395,10 @@ def tagmp3 (filename, title=None, artist=None, album=None, track=None,
     return
 
 
-def htmlenties2txt(string):
+def htmlenties2txt(string, encoding="latin-1"):
     """
-    Converts a string to a string with all html entities resolved.
-    Returns the result as Unicode object (that may conatin chars outside 256.
+    Resolves all the HTML entities in the input string.
+    Returns a Unicode string with the entities resolved.
     """
     e = copy.deepcopy(htmlentitydefs.entitydefs)
     e['ndash'] = "-";
@@ -407,6 +407,10 @@ def htmlenties2txt(string):
     e['lsquo'] = "`";
     e['hellip'] = '...'
 
+    try:
+        string = string.decode(encoding)
+    except:
+        pass
     string = Unicode(string).replace("&#039", "'").replace("&#146;", "'")
 
     i = 0
@@ -432,10 +436,7 @@ def htmlenties2txt(string):
                 replacement = e[entity[1:-1]]
             except KeyError:
                 continue
-        try:
-            string = string.replace(entity, replacement.decode("latin-1"))
-        except UnicodeError:
-            string = string.replace(entity, replacement)
+        string = string.replace(entity, replacement)
     return string
 
 
