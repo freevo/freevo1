@@ -30,6 +30,7 @@ libs_to_check = [
     ('twisted', 'http://www.twistedmatrix.com/'),
     ('zope.interface', 'http://www.zope.org/Products/ZopeInterface'),
     ('twisted.web.microdom', 'http://www.twistedmatrix.com/'),
+    ('imdb', 'http://imdbpy.sourceforge.net/'),
     #('Numeric', 'http://numeric.scipy.org/'),
 ]
 

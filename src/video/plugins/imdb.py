@@ -10,7 +10,7 @@
 #        You can also set imdb_search on a key (e.g. '1') by setting
 #        EVENTS['menu']['1'] = Event(MENU_CALL_ITEM_ACTION, arg='imdb_search_or_cover_search')
 #
-# Todo:  - function to add to an existing fxd file
+# Todo:  - function to add to an existing s file
 #        - DVD/VCD support
 #
 # -----------------------------------------------------------------------
@@ -34,7 +34,14 @@
 #
 # -----------------------------------------------------------------------
 
+# based on original implementation by 'den_RDC (rdc@kokosnoot.com)'
+__author__           = 'den_RDC (rdc@kokosnoot.com)'
+__maintainer__       = 'Maciej Mike Urbaniak'
+__maintainer_email__ = 'maciej@urbaniak.org'
+__version__          = 'Revision 0.2'
+__license__          = 'GPL' 
 
+# Module Imports
 import os
 
 import menu
@@ -42,18 +49,26 @@ import config
 import plugin
 import re
 import time
-import urllib2
 
-from util.fxdimdb import FxdImdb, makeVideo, makePart, point_maker
+from util.fxdimdb import FxdImdb, makeVideo, makePart, point_maker, FxdImdb_Error
 from gui.PopupBox import PopupBox
-from util import htmlenties2txt
+
+try:
+    import imdb
+except ImportError:
+    _debug_('It seems that you do not have imdbpy installed!', DERROR)
 
 class PluginInterface(plugin.ItemPlugin):
     """
     You can add IMDB information for video items with the plugin.
 
-    activate with:
-    | plugin.activate('video.imdb')
+    Make sure you have imdbpy installed, on Debian do:
+    | apt-get install python-imdbpy
+    
+    Check out http://imdbpy.sourceforge.net/?page=download for imdbpy package for your distribution
+    
+    Activate with:
+    | plugin.activate('video.imdb2')
 
     You can also set imdb_search on a key (e.g. '1') by setting
     | EVENTS['menu']['1'] = Event(MENU_CALL_ITEM_ACTION, arg='imdb_search_or_cover_search')
@@ -63,8 +78,7 @@ class PluginInterface(plugin.ItemPlugin):
         if not config.SYS_USE_NETWORK:
             self.reason = 'SYS_USE_NETWORK not enabled'
             return
-        self.season = None
-        self.episode = None
+        self.fxd = FxdImdb()
         plugin.ItemPlugin.__init__(self)
 
 
@@ -85,7 +99,6 @@ class PluginInterface(plugin.ItemPlugin):
             return name[:-1]
         else:
             return ''
-
 
     def actions(self, item):
         self.item = item
@@ -118,54 +131,44 @@ class PluginInterface(plugin.ItemPlugin):
         """
         search imdb for this item
         """
-        fxd = FxdImdb()
-
-        box = PopupBox(text=_('searching IMDB...'))
-        box.show()
 
         items = []
 
+        box = PopupBox(text=_('Searching IMDB...'))
+        box.show()
+
+        if self.disc_set:
+            self.searchstring = self.item.media.label
+        else:
+            self.searchstring = self.item.name
+    
         try:
-            duplicates = []
-            if self.disc_set:
-                self.searchstring = self.item.media.label
-            else:
-                self.searchstring = self.item.name
-
-            for id,name,year,type in fxd.guessImdb(self.searchstring, self.disc_set):
+            #guess the title from the filename
+            results = self.fxd.guessImdb(self.searchstring, self.disc_set)
+            
+            # loop through the results and create menu
+            # should not use imdbpy objects here as imdbpy should be encapsulated by FxdImdb
+            # but for now it's to much work to do this the right way. 
+            # It works so let's deal with it later.
+            for movie in results:
                 try:
-                    for i in self.item.parent.play_items:
-                        if i.name == name:
-                            if not i in duplicates:
-                                duplicates.append(i)
-                except:
-                    pass
-                try:
-                    #items.append(menu.MenuItem('%s (%s, %s)' % (htmlenties2txt(name), year, type),
-                    items.append(menu.MenuItem('%s (%s, %s)' % (name, year, type),
-                        self.imdb_create_fxd, (id, year)))
-                except UnicodeError, e:
+                    # OK, we have a regular movie here, no nested episodes
+                    items.append(menu.MenuItem('%s (%s) (%s)' % (movie['long imdb title'], movie['kind'], movie.movieID), 
+                                 self.imdb_create_fxd, (movie.movieID, movie['kind'])))
+                except Unicode, e:
                     print e
-            # if filename had a season/episode lets' grab it
-            self.season = hasattr(fxd, 'season') and fxd.season or ''
-            self.episode = hasattr(fxd, 'episode') and fxd.episode or ''
 
-        except urllib2.HTTPError, why:
-            _debug_('%s', (why,), DWARNING)
+        except FxdImdb_Error, error:
+            _debug_('%s' % (error,), DWARNING)
             box.destroy()
-            box = PopupBox(text=_('Connecting to IMDB failed:') + str(why))
+            box = PopupBox(text=_('Connection to IMDB failed: ') + str(error))
             box.show()
             time.sleep(2)
             box.destroy()
             return
 
-        # for d in duplicates:
-        #     items = [
-        #         menu.MenuItem('Add to "%s"' % d.name, self.imdb_add_to_fxd, (d, 'add')),
-        #         menu.MenuItem('Variant to "%s"' % d.name, self.imdb_add_to_fxd, (d, 'variant'))
-        #     ] + items
-
         box.destroy()
+
         if config.IMDB_AUTOACCEPT_SINGLE_HIT and len(items) == 1:
             self.imdb_create_fxd(arg=items[0].arg, menuw=menuw)
             return
@@ -206,16 +209,23 @@ class PluginInterface(plugin.ItemPlugin):
         # go back in menustack
         for i in range(back):
             menuw.delete_menu()
+        menuw.refresh()
 
 
     def imdb_create_fxd(self, arg=None, menuw=None):
         """
         create fxd file for the item
         """
-        fxd = FxdImdb()
-
-        box = PopupBox(text=_('getting data...'))
+        box = PopupBox(text=_('Getting data...'))
         box.show()
+
+        try:
+            self.fxd.retrieveImdbData(arg[0])
+
+        except FxdImdb_Error, error:
+            _debug_('%s' % (error,), DWARNING)
+            box.destroy()
+            return
 
         #if this exists we got a cdrom/dvdrom
         if self.item.media and self.item.media.devicename:
@@ -223,57 +233,26 @@ class PluginInterface(plugin.ItemPlugin):
         else:
             devicename = None
 
-        # restore season/episode if we have it
-        fxd.getIMDBid(arg[0], self.season, self.episode)
-
         if self.disc_set:
-            fxd.setDiscset(devicename, None)
+            self.fxd.setDiscset(devicename, None)
         else:
             if self.item.subitems:
                 for i in range(len(self.item.subitems)):
                     video = makeVideo('file', 'f%s' % i,
                                       os.path.basename(self.item.subitems[i].filename),
                                       device=devicename)
-                    fxd.setVideo(video)
+                    self.fxd.setVideo(video)
             else:
                 video = makeVideo('file', 'f1', os.path.basename(self.item.filename),
                                   device=devicename)
-                fxd.setVideo(video)
-            fxd.setFxdFile(os.path.splitext(self.item.filename)[0])
+                self.fxd.setVideo(video)
+            self.fxd.setFxdFile(os.path.splitext(self.item.filename)[0])
 
-        fxd.writeFxd()
+        self.fxd.writeFxd()
+        self.fxd = FxdImdb()
+        print 'About to go back'
         self.imdb_menu_back(menuw)
         box.destroy()
-
-
-    def imdb_add_to_fxd(self, arg=None, menuw=None):
-        """
-        add item to fxd file
-        BROKEN, PLEASE FIX
-        """
-
-        #if this exists we got a cdrom/dvdrom
-        if self.item.media and self.item.media.devicename:
-            devicename = self.item.media.devicename
-        else: devicename = None
-
-        fxd = FxdImdb()
-        fxd.setFxdFile(arg[0].fxd_file)
-
-        if self.item.mode in ('dvd', 'vcd'):
-            fxd.setDiscset(devicename, None)
-        else:
-            num = len(fxd.video) + 1
-            video = makeVideo('file', 'f%s' % num, self.item.filename, device=devicename)
-            fxd.setVideo(video)
-
-            if arg[1] == 'variant':
-                part = makePart('Variant %d' % num, 'f%s' % num)
-
-                if fxd.variant:
-                    part = [ makePart('Variant 1', 'f1'), part ]
-
-                fxd.setVariants(part)
-
-        fxd.writeFxd()
-        self.imdb_menu_back(menuw)
+        print 'Box destroyed'
+   
+ 

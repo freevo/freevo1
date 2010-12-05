@@ -26,7 +26,7 @@
 # -----------------------------------------------------------------------
 
 
-import sys, string, random, time, os, re, pwd, stat, threading, hashlib, datetime, copy
+import sys, time, os, re, pwd, stat, threading, hashlib, datetime, copy
 from threading import Thread
 try:
     import cPickle as pickle
@@ -1477,12 +1477,16 @@ class RecordPostProcess(Thread):
 
     def run(self):
         _debug_('post-processing started for %s' % (self.prog), DINFO)
-
+        filebase = os.path.splitext(self.prog.filename)[0]
         try:
-            ss_file = os.path.splitext(self.prog.filename)[0] + '.png'
+            ss_file = filebase + '.png'
             snapshot(self.prog.filename, ss_file)
         except:
             pass
+
+        # Touch the fxd file after creating the thumbnail so that the recordings
+        # manager picks it up.
+        os.utime(filebase + '.fxd', None)
 
         if config.VCR_POST_REC:
             util.popen3.Popen3(config.VCR_POST_REC % self.prog.__dict__)

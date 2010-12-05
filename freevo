@@ -57,15 +57,15 @@ scripts to get more informations about options.
 
   %s
 
-Example: freevo imdb -- --help"
+Example: freevo imdbpy -- --help"
          freevo webserver --daemon"
 
 You can also create a symbolic link to freevo with the name of the
 script you want to execute. E.g. put a link imdb pointing to freevo
 in your path to access the imdb helper script
 
-Example: ln -s /path/to/freevo imdb
-         imdb -- --help
+Example: ln -s /path/to/freevo imdbpy
+         imdbpy -- --help
 
 Before running freevo the first time, you need to run 'freevo setup'
 After that, you can run freevo without parameter.

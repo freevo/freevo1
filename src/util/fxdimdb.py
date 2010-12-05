@@ -35,28 +35,25 @@
 # subroutines completely in lowercase are regarded as more "private" functions
 # sub-routines are regarded as public
 
-#some data
-__author__ = "den_RDC (rdc@kokosnoot.com)"
-__version__ = "Revision 0.1"
-__copyright__ = "Copyright (C) 2003 den_RDC"
-__license__ = "GPL"
+# based on original implementation by 'den_RDC (rdc@kokosnoot.com)'
+__author__           = 'den_RDC (rdc@kokosnoot.com)'
+__maintainer__       = 'Maciej Mike Urbaniak'
+__maintainer_email__ = 'maciej@urbaniak.org'
+__version__          = 'Revision 0.2'
+__license__          = 'GPL' 
 
-#Module Imports
+# Module Imports
 import re
 import urllib, urllib2, urlparse
 import sys
 import codecs
 import os
 import traceback
-from pprint import pprint, pformat
+
 try:
-    from html5lib import HTMLParser, treebuilders
-    from html5lib.treebuilders.soup import NavigableString
-    using_html5lib = True
-except ImportError:
-    import HTMLParser
-    from BeautifulSoup import BeautifulSoup, BeautifulStoneSoup, NavigableString
-    using_html5lib = False
+    import imdb
+except:
+    _debug_('It seems that you do not have imdbpy installed!', DERROR)
 
 import config
 import util
@@ -70,21 +67,20 @@ except:
     import version
     import revision
 
-imdb_title_list = '/tmp/imdb-movies.list'
-imdb_title_list_url = 'ftp://ftp.funet.fi/pub/mirrors/ftp.imdb.com/pub/movies.list.gz'
-imdb_titles = None
-imdb_info_tags = ('year', 'genre', 'tagline', 'plot', 'rating', 'runtime');
 
+imdb_ctitle     = '/tmp/imdb-movies.list'
+imdb_ctitle_url = 'ftp://ftp.funet.fi/pub/mirrors/ftp.imdb.com/pub/movies.list.gz'
+imdb_titles     = None
+imdb_info_tags  = ('year', 'genre', 'tagline', 'plot', 'rating', 'runtime', 'mpaa');
 
 # headers for urllib2
-txdata = None
+txdata    = None
 txheaders = {
     'User-Agent': 'freevo %s (%s)' % (version, sys.platform),
     'Accept-Language': 'en-us',
 }
 
 #Begin class
-
 class FxdImdb:
     """Class for creating fxd files and fetching imdb information"""
 
@@ -95,29 +91,28 @@ class FxdImdb:
         # no other choice is given
         # FYI, the other choice always exists : add a subroutine or ask :)
 
-        self.id_list = []
-        self.id = None
-        self.isdiscset = False
-        self.title = ''
-        self.info = {}
+        self.imdb = imdb.IMDb()
+        self.title = ''    # Full title that will be written to the FXD file
+        self.ctitle         = []    # Contains parsed from filename title, and if exist season, episode
+        self.id             = None  # IMDB ID of the movie
+        self.isdiscset      = False
+        self.info           = {}    # Full movie info
 
-        self.image = None # full path image filename
-        self.image_urls = [] # possible image url list
-        self.image_url = None # final image url
+        self.image          = None  # full path image filename
+        self.image_urls     = []    # possible image url list
+        self.image_url      = None  # final image url
 
-        self.fxdfile = None # filename, full path, WITHOUT extension
+        self.fxdfile        = None  # filename, full path, WITHOUT extension
 
-        self.append = False
-        self.device = None
-        self.regexp = None
+        self.append         = False
+        self.device         = None
+        self.regexp         = None
         self.mpl_global_opt = None
-        self.media_id = None
-        self.file_opts = []
-        self.video = []
-        self.variant = []
-        self.parts = []
-        self.var_mplopt = []
-        self.var_names = []
+        self.media_id       = None
+        self.file_opts      = []
+        self.video          = []
+        self.variant        = []
+        self.parts          = []
 
         #initialize self.info
         for t in imdb_info_tags:
@@ -128,9 +123,12 @@ class FxdImdb:
         self.image_url_handler['www.impawards.com'] = self.impawards
 
 
-    def guessImdb(self, filename, label=False):
-        """Guess possible imdb movies from file name. Same return as searchImdb"""
-        _debug_('guessImdb(filename=%r, label=%r)' % (filename, label))
+    def parseTitle(self, filename, label=False):
+        """
+        Parse the title
+        Return tuple of title, season and episode (if exist)
+        """
+        _debug_('parseTitle(filename=%r, label=%r)' % (filename, label))
 
         # Special name rule for the encoding server
         m = re.compile('DVD \[([^]]*).*')
@@ -144,7 +142,7 @@ class FxdImdb:
         # if so we will remember season and episode but will take it off from name
 
         # find <season>X<episode>
-        season = ''
+        season  = ''
         episode = ''
         m = re.compile('([0-9]+)[xX]([0-9]+)')
         res = m.search(name)
@@ -168,18 +166,19 @@ class FxdImdb:
         name = re.sub(',', ' ', name)
 
         _debug_('name=%s season=%s episode=%s' % (name, season, episode))
+
         if label:
             for r in config.IMDB_REMOVE_FROM_LABEL:
                 try:
                     name = re.sub(r, '', name)
-                except Exception, e:
-                    print e
+                except Exception, exc:
+                    _debug_('%s', (exc,), DWARNING)
         else:
             for r in config.IMDB_REMOVE_FROM_NAME:
                 try:
                     name = re.sub(r, '', name)
-                except Exception, e:
-                    print e
+                except Exception, exc:
+                    _debug_('%s', (exc,), DWARNING)
 
         parts = re.split('[\._ -]', name)
         name = ''
@@ -188,264 +187,145 @@ class FxdImdb:
                 # originally: not re.search(p, '[A-Za-z]'):
                 # not sure what's meant with that
                 name += '%s ' % p
-        return self.searchImdb(name, season, episode)
+
+        return tuple([name, season, episode])
 
 
-    def searchImdb(self, name, season=None, episode=None):
+    def guessImdb(self, filename, label=False):
         """
-        Search IMDB for the name
-
-        @param name: name to search for
-        @type name: string
-        @returns: id list with tuples (id, name, year, type)
+        Guess possible titles from file name
+        Return tuple of title, season and episode (if exist)
         """
-        _debug_('searchImdb(name=%r, season=%r, episode=%r)' % (name, season, episode))
-        tv_marker = (season and episode) and '"' or ''
-        name = tv_marker+name.strip().strip(tv_marker)+tv_marker
-        _debug_('searching imdb for "%s"' % (name))
-        url = 'http://us.imdb.com/Tsearch?title=%s&restrict=Movies+and+TV' % urllib.quote(str(name))
-        url = 'http://www.imdb.com/find?s=tt;site=aka;q=%s' % urllib.quote(str(name))
-        _debug_('url="%s"' % (url,))
+        _debug_('guessImdb(filename=%r, label=%r)' % (filename, label))
 
-        req = urllib2.Request(url, txdata, txheaders)
-        searchstring = name
+        self.ctitle = self.parseTitle(filename, label)
+
+        return self.searchImdb(self.ctitle[0], self.ctitle[1], self.ctitle[2])
+
+    def searchImdb(self, title, season=None, episode=None):
+        """
+        Search IMBD for a title
+        """
 
         try:
-            response = urllib2.urlopen(req)
-        except urllib2.HTTPError, error:
-            raise FxdImdb_Net_Error("IMDB unreachable : " + error)
-
-        response_url = response.geturl()
-        _debug_('response.url="%s"' % (response_url,))
-
-        m = re.compile('/title/tt([0-9]*)/')
-        idm = m.search(response_url)
-        if idm: # Direct Hit
-            id = idm.group(1)
+            # Look up possible movie matches directly at IMDB.
+            # NOTE:
+            # imdb does support advanced search for titles of the series but unfortunately 
+            # imdbpy does not so we have do this the hard way, present the user with a list
+            # to choose from. If we could search for a series title directly we'd have a great 
+            # propability for a unique hit and thus would not need to present the selection menu.
+            # We try to reduce the search result by filtering initial result for tv (mini) series only.
+            
+            results = self.imdb.search_movie(title)
+            print 'Found %s items' % len(results)
+            
+            # if series we remove all non series objects to narrow down the search results
             if season and episode:
-                id = self.getIMDBid(id, season, episode)
-            response.close()
-            return [(id, name.title(), u'', '' )]
-
-        if config.DEBUG >= 2:
-            tmpfilename = '/tmp/%s.html' % name.replace(' ', '_').lower()
-            tmp = open(tmpfilename, 'w')
-            tmp.write(response.read())
-            tmp.close()
-            response.close()
-            response = open(tmpfilename, 'r')
-
-        data = self.parsesearchdata(response, url=response_url)
-        response.close()
-
-        _debug_('id_list has %s items' % (len(self.id_list)))
-        #print 'id_list=%s' % (pformat(self.id_list))
-        if len(self.id_list) > 20:
-            # too many results, check if there are stupid results in the list
-            words = []
-
-            # make a list of all words (no numbers) in the search string
-            for p in re.split('[\._ -]', searchstring):
-                #XXX this is incorrect for number only searches
-                #if p and not p[0] in '0123456789':
-                #    words.append(p)
-                words.append(p)
-
-            # at least one word has to be in the result
-            new_list = []
-            for result in self.id_list:
-                appended = False
-                for search_word in words:
-                    if not appended and result[1] and result[1].lower().find(search_word.lower()) != -1:
-                        new_list.append(tuple([util.unescape(i) for i in result]))
-                        appended = True
-            self.id_list = new_list
-            _debug_('id_list has now %s items' % (len(self.id_list)))
-        return self.id_list
-
-
-    def getIMDBid(self, id, season=None, episode=None):
-        """id (number)
-        Set an imdb_id number for object, and fetch data"""
-
-        self.id = id
-
-        _debug_('id=%s season=%s episode=%s' % (id, season, episode))
-        if season is None or episode is None:
-            episodeid = id
-        else:
-            # This is a TV series, lets use a special search
-            url = 'http://www.imdb.com/title/tt%s/episodes' % id
-            _debug_('url=%r' % (url,))
-            req = urllib2.Request(url, txdata, txheaders)
-
-            try:
-                idpage = urllib2.urlopen(req)
-            except urllib2.HTTPError, why:
-                raise FxdImdb_Net_Error('IMDB unreachable' + str(why))
-
-            episodeid = self.find_episode(idpage, id, season, episode)
-            idpage.close()
-
-        # do the standard search
-        url = 'http://www.imdb.com/title/tt%s' % episodeid
-        _debug_('url=%r' % (url,))
-        req = urllib2.Request(url, txdata, txheaders)
-
-        try:
-            idpage = urllib2.urlopen(req)
-        except urllib2.HTTPError, why:
-            raise FxdImdb_Net_Error('IMDB unreachable' + str(why))
-
-        if config.DEBUG >= 2:
-            tmpfilename = '/tmp/%s.html' % id
-            tmp = open(tmpfilename, 'w')
-            tmp.write(idpage.read())
-            tmp.close()
-            idpage.close()
-            idpage = open(tmpfilename, 'r')
-
-        self.parse_data(idpage, id, episodeid, season, episode)
-        idpage.close()
-
-        _debug_('episodeid=%s' % (episodeid,))
-        return episodeid
-
-
-    def parse_data(self, results, id, episodeid, season, episode):
-        """results (imdb html page), imdb_id
-        Returns tuple of (title, info(dict), image_urls)"""
-
-        dvd = 0
-
-        try:
-            if using_html5lib:
-                parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
-                soup = parser.parse(results.read())
+                for item in results[:]:
+                    if len(item.keys()) == 0 or  item['kind'] == 'video game' or \
+                                                (item['kind'] != 'tv series' and 
+                                                 item['kind'] != 'tv mini series'):
+                        results.remove(item)
+            # else if not series we remove all series objects to narrow down the search results
             else:
-                soup = BeautifulSoup(results.read(), convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
-        except UnicodeDecodeError:
-            print "Unicode error: check that /usr/lib/python2.x/site.py has the correct default encoding"
-            traceback.print_exc()
-            return (None, None, None)
+                for item in results[:]:
+                    if len(item.keys()) == 0 or (item['kind'] == 'video game' or 
+                                                 item['kind'] == 'tv series' or 
+                                                 item['kind'] == 'tv mini series'):
+                        results.remove(item)
 
-        # The parse tree can be now reduced by, everything outside this is not required:
-        main = soup.find('div', {'id': 'tn15main'})
-        #title = soup.title
-        title = soup.find('h1')
-        #this no longer works
-        #image = soup.find('img', { 'title':title.next.strip() })
-        #if image:
-        #    self.info['image'] = image['src']
+        except imdb.IMDbError, error:
+            _debug_('%s', (error,), DWARNING)
+            raise FxdImdb_Error(str(error))
 
-        self.title = title.next.strip()
+        return results
 
-        #is this a series? series pages a little different
+
+    def retrieveImdbData(self, id, season=None, episode=None):
+        """
+        Given IMDB ID retrieves full info about the Title directly from IMDB via HTTP
+        using imdbpy.
+        """
+
         try:
-            self.title = "%s - S%sE%02d - %s" % (self.title, season, int(episode), title.find('em').string.strip())
-            self.info['title'] = self.title
-            y = title.find('em').next.next.string.strip()
-            self.info['year'] = y[1:-1]
-        except (AttributeError, TypeError, ValueError):
-            self.info['title'] = self.title
-            try:
-                self.info['year'] = title.find('a').contents[0].strip()
-            except AttributeError:
-                self.info['year'] = ''
+            # Get a Movie object with the data about the movie identified by the given movieID.
+            movie = self.imdb.get_movie(id)
 
-        # Find the <div> with class info, each <h5> under this provides info
-        wanted_keys = ('release_date', 'genre', 'tagline', 'plot', 'plot_keywords',
-                       'also_known_as', 'mpaa', 'runtime', 'country', 'language', 
-                       'color', 'aspect_ratio', 'sound_mix', 'certification',
-                       )
-        
-        for info in main.findAll('div', {'class' : 'info'}):
-            infoh5 = info.find('h5')
-            if not infoh5:
-                continue
-            try:
-                infostr = infoh5.find(text=True)
-                key = infostr.strip().strip(':').lower().replace(' ', '_')
-                if key not in wanted_keys:
-                    continue
-                content = info.find('div', {'class' : 'info-content'})
-                infocontent = content.find(text=True)
-                if infocontent:
-                    infocontent = infocontent.strip()
-                sections = info.findAll('a', { 'href' : re.compile('^/Sections') })
-                lists = info.findAll('a', { 'href' : re.compile('^/List') })
-                keywords = info.findAll('a', { 'href' : re.compile('^/keyword') })
-                #print 'key=%s content=%r keywords=%r sections=%r lists=%r' % (key, infocontent, keywords, sections, lists)
-                if len(infocontent) > 0:
-                    self.info[key] = infocontent
-                elif len(sections) > 0:
-                    items = []
-                    for item in sections:
-                        items.append(item.contents[0].strip())
-                    self.info[key] = ' / '.join(items)
-                elif len(lists) > 0:
-                    items = []
-                    for item in lists:
-                        items.append(item.contents[0].strip())
-                    self.info[key] = ' / '.join(items)
-                elif len(keywords) > 0:
-                    items = []
-                    for item in keywords:
-                        items.append(item.contents[0].strip())
-                    self.info[key] = ' / '.join(items)
-            except:
-                pass
+            if not movie:
+                _debug_('It seems that there\'s no movie with MovieId "%s"' % arg[0], DWARNING)
+                raise FxdImdb_Error('No movie with MovieId "%s"' % arg[0])
 
-        rating = soup.find(text='User Rating:').findNext(text=re.compile('/10'))
+            if season and episode:
+                self.ctitle = tuple([movie['title'], season, episode])
+
+            # check if we have a series episode
+            if self.ctitle[2] and (movie['kind'] == 'tv series' or movie['kind'] == 'tv mini series'):
+                # retrieve episode info
+                self.imdb.update(movie, 'taglines')
+                self.imdb.update(movie, 'episodes')
+                episode = movie['episodes'][int(self.ctitle[1])][int(self.ctitle[2])]
+                self.imdb.update(episode)
+                self.imdb_retrieve_movie_data(movie, episode)
+                return episode.movieID
+            else:
+                self.imdb.update(movie, 'taglines')
+                self.imdb_retrieve_movie_data(movie)
+                return movie.movieID
+
+        except imdb.IMDbError, error:
+            _debug_('%s', (error,), DWARNING)
+            raise FxdImdb_Error(str(error))
+
+
+    def retrieveImdbBulkSeriesData(self, id, items):
+        """
+        Given IMDB ID retrieves full info about the series and episodes 
+        directly from IMDB via HTTP using imdbpy. Used by imbdpy helper.
+        """
+
+        fxds = []
+
         try:
-            votes = rating.findNext('a')
-            self.info['rating'] = rating.strip() + ' (' + votes.contents[0].strip() + ')'
-        except AttributeError:
-            self.info['rating'] = ''
+            # Get a Movie object with the data about the movie identified by the given movieID.
+            movie = self.imdb.get_movie(id)
 
-        # Replace special characters in the items
-        for (k,v) in self.info.items():
-            self.info[k] = self.convert_entities(v)
+            if not movie:
+                _debug_('It seems that there\'s no movie with MovieId "%s"' % id, DWARNING)
+                raise FxdImdb_Error('No movie with MovieId "%s"' % id)
 
-        if config.DEBUG >= 2:
-            for (k,v) in self.info.items():
-                _debug_('items=%s:%s' % (k, v))
-            _debug_('id="%s", dvd="%s"' % (id, dvd))
-            _debug_(self.info, 2)
+            if (movie['kind'] != 'tv series' and movie['kind'] != 'tv mini series'):
+                _debug_('It seems that supplied MovieId "%s" is not a TV Series ID. Aborting.' % id, DWARNING)
+                raise FxdImdb_Error('No a TV Series. MovieId "%s"' % id)
+                
+            self.imdb.update(movie, 'episodes')
+            self.imdb.update(movie, 'taglines')
 
-        # Add impawards.com poster URLs.
-        self.impawardsimages(self.info['title'], self.info['year'])
+            for item in items:
+            
+                fxd = FxdImdb()
 
-        # Add images from IMDB database. These images are much smaller than
-        # the impawards ones.
-        if not id:
-            return (self.title, self.info, self.image_urls)
+                try:
+                    # parse the name to get title, season and episode numbers
+                    fxd.ctitle = fxd.parseTitle(item[2])
+                    episode = movie['episodes'][int(fxd.ctitle[1])][int(fxd.ctitle[2])]
+                    self.imdb.update(episode)
+                    fxd.imdb_retrieve_movie_data(movie, episode)
 
-        if not dvd:
-            url = 'http://us.imdb.com/title/tt%s/dvd' % id
-            _debug_('url="%s"' % (url))
-            req = urllib2.Request(url, txdata, txheaders)
+                except FxdImdb_Error, error:
+                    _debug_('%s', (error,), DWARNING)
+                    return
 
-            try:
-                r = urllib2.urlopen(req)
-                soup.feed(r.read())
-                r.close()
-                divs = soup.findAll('table', { 'class' : 'dvd_section' })
-                for div in divs:
-                    image = div.find('img')
-                    if image['src'].find('http') < 0:
-                        continue
-                    self.image_urls += [ image['src'] ]
-            except urllib2.HTTPError, error:
-                pass
-            except UnicodeDecodeError:
-                # FIXME:
-                # This is a bad hack. Some character could not be converted to ascii.
-                # We ignore these errors as it does not really affect the FXD output.
-                pass
-        _debug_('image_urls=%s' % (self.image_urls))
+                video = makeVideo('file', 'f1', os.path.basename(item[0]), device=None)
+                fxd.setVideo(video)
+                fxd.setFxdFile(os.path.splitext(item[0])[0])
 
-        return (self.title, self.info, self.image_urls)
+                fxds.append(fxd)
+
+        except imdb.IMDbError, error:
+            _debug_('%s', (error,), DWARNING)
+            raise FxdImdb_Error(str(error))
+
+        return fxds
 
 
     def setFxdFile(self, fxdfilename=None, overwrite=False):
@@ -499,6 +379,7 @@ class FxdImdb:
                 self.video += [ video ]
         if mplayer_opt and 'mplayer_opt' in mpl_global_opt:
             self.mpl_global_opt = mplayer_opt['mplayer_opt']
+
 
     def setVariants(self, *parts, **mplayer_opt):
         """
@@ -573,8 +454,11 @@ class FxdImdb:
 
 
     def isDiscset(self):
-        """Check if fxd file describes a disc-set, returns 1 for true, 0 for false
-        None for invalid file"""
+        """
+        Check if fxd file describes a disc-set, returns 1 for true, 0 for false
+        None for invalid file
+        """
+        
         try:
             file = vfs.open(self.fxdfile + '.fxd')
         except IOError:
@@ -587,19 +471,223 @@ class FxdImdb:
         return 0
 
 
-
 #------ private functions below .....
 
-    def convert_entities(self, contents):
-        s = contents.strip()
-        s = s.replace('\n',' ')
-        s = s.replace('  ',' ')
-        s = s.replace('&','&amp;')
-        s = s.replace('&amp;#','&#')
-        s = s.replace('<','&lt;')
-        s = s.replace('>','&gt;')
-        s = s.replace('"','&quot;')
-        return s
+    def imdb_retrieve_movie_data(self, movie, episode=None):
+        """
+        Retrives all movie data (including Episode's if TV Series)
+        """
+
+        self.id = self.imdb.get_imdbID(movie)
+        _debug_('Retrieved movie data:\n "%s"' % movie.summary(), DINFO)
+
+        self.title = self.get_title(movie, episode)
+        self.info['genre'] = self.get_genre(movie)
+        self.info['tagline'] = self.get_tagline(movie)
+        self.info['year'] = self.get_year(movie, episode)
+        self.info['rating'] = self.get_rating(movie, episode)
+        self.info['plot'] = self.get_plot(movie, episode)
+        self.info['runtime'] = self.get_runtimes(movie, episode)
+        self.info['mpaa'] = self.get_mpaa(movie)
+        #self.info['runtime'] = self.item['length:min']
+
+        # try to retrieve movie poster urls, first from impawards.com, then from IMDB
+        self.impawardsimages(movie['title'], self.info['year'], episode)
+
+        if movie.has_key('full-size cover url'):
+            self.image_urls += [ movie['full-size cover url'] ]
+
+
+    def get_tagline(self, movie):
+        """
+        Returns first tagline of the movie
+        """
+        if movie.has_key('taglines'):
+            return movie.get('taglines')[0]
+
+        return ''
+
+
+    def get_genre(self, movie):
+        """
+        Returns concatenated string of movie genres
+        """
+        if movie.has_key('genres'):
+            return '%s' % ' '.join(movie.get('genres'))
+
+        return ''
+    
+
+    def get_title(self, movie, episode):
+        """
+        Builds a movie/episode title
+        """
+        if episode and episode.has_key('title'):
+            ep = config.IMDB_SEASON_EPISODE_FORMAT % (int(self.ctitle[1]), int(self.ctitle[2]))
+            return '%s %s %s' % (movie['title'], ep, episode['title'])
+      
+        return movie.get('title')
+
+
+    def get_year(self, movie, episode):
+        """
+        Returns the year of the movie or the original air date of the series episode
+        """
+        if episode and episode.has_key('original air date'):
+            return episode['original air date']
+        
+        return movie.get('year')
+
+
+    def get_mpaa(self, movie):
+        """
+        Retrieves MPAA rating or formatted certificate data
+        """
+        if movie.has_key('mpaa'):
+            #If it exists, this key from imdbpy is the best way to get MPAA movie rating
+            #rating_match = re.search(r"Rated (?P<rating>[a-zA-Z0-9-]+)", movie['mpaa'])
+            #if rating_match:
+            #    rating = rating_match.group('rating')
+            #    return rating
+            return movie['mpaa']
+            
+        if movie.has_key('certificates'):
+            #IMDB lists all the certifications a movie has gotten the world over.
+            #Each movie often has multiple certifications per country since it
+            #will often get re-rated for different releases (theater and
+            #then DVD for example).
+ 
+            #for movies with multiple certificates, we pick the 'lowest' one since
+            #MPAA ratings are more permissive the more recent they were given.
+            #A movie that was rated R in the 70s may be rated PG-13 now but will
+            #probably never be rerated NC-17 .
+            ratings_list_ordered = ['TV-Y', 'G', 'TV-Y7', 'TV-Y7-FV', 'TV-G', 'PG', 'TV-PG', 'PG-13', 'TV-14', 'TV-MA', 'R', 'NC-17', 'Unrated']
+            ratings_list_extinfo = ['All children ages 2-5',
+                                    'General Audiences',
+                                    'Directed to children 7 and older',
+                                    'Directed to children 7 and older with fantasy violence in shows',
+                                    'General audience',
+                                    'Parental Guidance Suggested',
+                                    'Parental guidance suggested',
+                                    'Parents Strongly Cautioned',
+                                    'Parents strongly cautioned/May be unsuitable for children under 14 years of age',
+                                    'Mature audience - unsuitable for audiences under 17',
+                                    'Restricted',
+                                    'No One 17 and under admitted',
+                                    'Not rated']
+                       
+            #Map older rating types to their modern equivalents
+            ratings_mappings = {'M':'NC-17',
+                                'X':'NC-17',
+                                'GP':'PG',
+                                'Approved': 'PG',
+                                'Open': 'PG',
+                                'Not Rated': 'Unrated'
+                                }
+ 
+            certs = movie['certificates']
+            good_ratings = []
+            for cert in certs:
+                if 'usa' in cert.lower():
+                    rating_match = re.match(r"USA:(?P<rating>[ a-zA-Z0-9-]+)", cert)
+                    if rating_match:
+                        rating = rating_match.group('rating')
+                        if rating in ratings_list_ordered:
+                            index = ratings_list_ordered.index(rating)
+                            if index not in good_ratings:
+                                good_ratings.append(index)
+                        elif rating in ratings_mappings:
+                            index = ratings_list_ordered.index(ratings_mappings[rating])
+                            if index not in good_ratings:
+                                good_ratings.append(index)
+
+            if good_ratings:
+                best_rating = ratings_list_ordered[min(good_ratings)]
+                best_rating_extinfo = ratings_list_extinfo[min(good_ratings)]
+                return '%s (%s)' % (best_rating, best_rating_extinfo)
+
+        return 'MPAA or Certification information not available'
+
+
+    def get_runtimes(self, movie, episode=None):
+        """
+        Returns a formatted string listing all runtimes 
+        """
+        runtimes = []
+
+        if episode and episode.has_key('runtimes'):
+            runtimes = episode['runtimes']
+
+        elif movie.has_key('runtimes'):
+            runtimes = movie['runtimes']
+
+        times = []
+        for runtime in runtimes:
+            try:
+                #imdbpy usually returns a runtime with no country or notes, so we'll catch that instance
+                time = int(runtime)
+                times.append('%s min' % time)
+            except ValueError:
+                splitted = [x for x in runtime.split(":") if x != '']
+                val = None
+                notes = None
+                country = None
+                for split in splitted:
+                    try:
+                        time = int(split)
+                        continue
+                    except:
+                        if split[0] == "(" and split[-1] == ")":
+                            notes = split[1:-1]
+                            continue
+                        if re.match("\w+", split):
+                            country = split
+                if country and notes:
+                    val = '%s: %s min (%s)' % (country, time, notes)
+                elif country:
+                    val = '%s: %s min' % (country, time)
+                elif notes:
+                    val = '%s min (%s)' % (time, notes)
+                else:
+                    val = '%s min' % (time)
+
+                times.append(val)
+ 
+        return ', '.join(times)
+
+
+    def get_rating(self, movie, episode=None):
+        """ 
+        Retrieves user ratings for given movie or if available, for individual episodes
+        """
+        if episode and (episode.has_key('rating') and episode.has_key('votes')):
+            return '%s (%s votes)' % (episode['rating'], episode['votes'])
+        elif movie.has_key('rating') and movie.has_key('votes'):
+            return '%s (%s votes)' % (movie['rating'], movie['votes'])
+
+        return 'Awaiting 5 votes'
+
+
+    def get_plot(self, movie, episode=None):
+        """
+        Retrieves the plot or or if not available, plot outline
+        """
+        # need a hack here to check if plot is a list or a string.
+        # this is a buggy implementation of imdbpy as it should always return list.
+        if episode and episode.has_key('plot'):
+            plot = episode['plot']
+        elif movie.has_key('plot'): 
+            plot = movie['plot']
+        elif movie.has_key('plot outline'):
+            plot = movie['plot outline']
+        else: 
+            return ''
+        
+        if isinstance(plot, list):
+            return plot[0].split("::")[0]
+        else:
+            return plot.split("::")[0]
+
 
     def write_discset(self):
         """Write a <disc-set> to a fresh file"""
@@ -713,7 +801,6 @@ class FxdImdb:
 
         file = vfs.open(self.fxdfile + '.fxd', 'w')
 
-
         for line in content.split('\n'):
             if passedvid == True and content.find('<variants>') == -1:
                 #there is no variants tag
@@ -739,8 +826,6 @@ class FxdImdb:
 
         file.close()
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
-
-
 
     def update_discset(self):
         """Updates an existing file, adds extra disc in discset"""
@@ -790,97 +875,7 @@ class FxdImdb:
         util.touch(os.path.join(config.FREEVO_CACHEDIR, 'freevo-rebuild-database'))
 
 
-    def parsesearchdata(self, results, url=None, id=0):
-        """
-        results (imdb html page), imdb_id
-
-        @returns: tuple of (title, info(dict), image_urls)
-        """
-        _debug_('parsesearchdata(results=%r, url=%r, id=%r)' % (results, url, id))
-
-        self.id_list = []
-        m = re.compile('/title/tt(\d+)/')
-        y = re.compile('\((\d+)\) *(.*)')
-        try:
-            if using_html5lib:
-                parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
-                soup = parser.parse(results.read())
-            else:
-                soup = BeautifulSoup(results.read(), convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
-        except HTMLParser.HTMLParseError, why:
-            traceback.print_exc()
-            _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
-            return self.id_list
-        except Exception, why:
-            traceback.print_exc()
-            _debug_('Cannot parse %r: %s' % (url, why), DWARNING)
-            return self.id_list
-        items = soup.findAll('a', href=re.compile('^/title/tt'))
-        ids = set([])
-        for item in items:
-            idm = item.attrMap['href']
-            if not idm:
-                continue
-            m_match = m.match(idm)
-            if not m_match:
-                # skip invalid titles
-                continue
-            id = m_match.group(1)
-            if id in ids:
-                # skip duplicate ids
-                continue
-            name = item.contents[0]
-            if not isinstance(name, NavigableString):
-                # skip empty names
-                continue
-            if isinstance(item.next.next, NavigableString):
-                yrm = item.next.next.strip()
-            ids.add(id)
-            y_match = y.match(yrm)
-            if y_match:
-                year = y_match.group(1)
-                type = y_match.group(2)
-            else:
-                year = '0000'
-                type = ''
-            #print 'url', item['href']
-            #print item.parent.findChildren(text=re.compile('[^ ]'))
-            #print 'id=%s name=%s year=%s type=%s' % (id, name, year, type)
-            self.id_list += [ ( id, name, year, type ) ]
-
-        for item in self.id_list:
-            _debug_('%r' % (item,), 2)
-        return self.id_list
-
-
-    def find_episode(self, results, id, season, episode):
-        """results (imdb html page)
-        Returns a new id for getIMDBid with TV series episode data
-        """
-        try:
-            if using_html5lib:
-                parser = HTMLParser(tree=treebuilders.getTreeBuilder('beautifulsoup'))
-                soup = parser.parse(results.read())
-            else:
-                soup = BeautifulSoup(results.read(), convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
-        except UnicodeDecodeError:
-            print "Unicode error; check that /usr/lib/python2.x/site.py has the correct default encoding"
-            pass
-
-        m = re.compile('.*Season %s, Episode %s.*\/tt([0-9]+)' % (season, episode))
-
-        for episode in soup.findAll('h3'):
-            info = m.search(str(episode))
-            if info:
-                episodeid = info.group(1)
-                _debug_('episodeid=%r' % (episodeid,))
-                return episodeid
-
-        _debug_('id=%r' % (id,))
-        return id
-
-
-    def impawardsimages(self, title, year):
+    def impawardsimages(self, title, year, series=None):
         """Generate URLs to the impawards movie posters and add them to the
         global image_urls array."""
 
@@ -896,9 +891,15 @@ class FxdImdb:
         imp_image_name = imp_image_name.replace(u';', u'')
         imp_image_name = imp_image_name.replace(u'.', u'')
 
-        # build up an array with all kind of image urls
         imp_image_urls = [ ]
-        imp_base_url   = 'http://www.impawards.com/%s/posters' % year
+        
+        if series:
+            # build up an array with all kind of image urls
+            imp_base_url    = 'http://www.impawards.com/tv/posters'
+
+        else:
+            # build up an array with all kind of image urls
+            imp_base_url    = 'http://www.impawards.com/%s/posters' % year
 
         # add the normal poster URL to image_urls
         imp_image_url   = '%s/%s.jpg' % (imp_base_url, imp_image_name)
@@ -919,7 +920,7 @@ class FxdImdb:
         # check for valid URLs and add them to self.image_urls
         for imp_image_url in imp_image_urls:
 
-            #print "IMPAWARDS: Checking image URL %s" % imp_image_url
+            _debug_('IMPAWARDS: Checking image URL %s' % imp_image_url)
             try:
                 imp_req = urllib2.Request(imp_image_url, txdata, txheaders)
 
@@ -928,7 +929,7 @@ class FxdImdb:
                 imp_ctype = imp_r.info()['Content-Type']
                 imp_r.close()
 
-                #print "IMPAWARDS: Found content-type %s for url %s" % (imp_ctype, imp_image_url)
+                _debug_('IMPAWARDS: Found content-type %s for url %s' % (imp_ctype, imp_image_url))
                 if (imp_ctype == 'image/jpeg'):
                     self.image_urls += [ imp_image_url ]
 
@@ -937,8 +938,9 @@ class FxdImdb:
 
 
     def impawards(self, host, path):
-        """parser for posters from www.impawards.com. TODO: check for licences
-        of each poster and add all posters"""
+        """ parser for posters from www.impawards.com. 
+            TODO: check for licences of each poster and add all posters
+        """
 
         path = '%s/posters/%s.jpg' % (path[:path.rfind('/')], path[path.rfind('/')+1:path.rfind('.')])
         return [ 'http://%s%s' % (host, path) ]
@@ -946,6 +948,7 @@ class FxdImdb:
 
     def fetch_image(self):
         """Fetch the best image"""
+        
         _debug_('fetch_image=%s' % (self.image_urls))
 
         image_len = 0
@@ -990,6 +993,8 @@ class FxdImdb:
         self.image = vfs.basename(self.image)
 
         _debug_('Downloaded cover image from %s' % (self.image_url))
+        print "Freevo knows nothing about the copyright of this image, please go to"
+        print "%s to check for more information about private use of this image." % self.image_url
 
 
     def str2XML(self, line):
@@ -1037,7 +1042,7 @@ class FxdImdb:
         if self.info:
             ret = u'    <info>\n'
             for k in self.info.keys():
-                ret += u'      <%s>' % k + Unicode(self.info[k]) + '</%s>\n' % k
+                ret += u'      <%s>' % k + Unicode(self.str2XML(self.info[k])) + '</%s>\n' % k
             ret += u'    </info>\n'
         return ret
 

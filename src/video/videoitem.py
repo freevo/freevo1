@@ -936,6 +936,8 @@ class ShowDetails(ScrollableTextScreen):
                 description +=  _('Year')+u' : '+movie['year'] + u'\n'
             if movie['rating']:
                 description +=  _('Rating')+u' : '+movie['rating'] + u'\n'
+            if movie['mpaa']:
+                description +=  _('MPAA')+u' : '+movie['mpaa'] + u'\n'
 
         # that's all, we can show this to the user
         ScrollableTextScreen.__init__(self, 'tvguideinfo', description)

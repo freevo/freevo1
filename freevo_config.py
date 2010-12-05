@@ -763,7 +763,12 @@ IMDB_REMOVE_FROM_LABEL = ('season[\._ -][0-9]+', 'disc[\._ -][0-9]+',
 IMDB_REMOVE_FROM_NAME = ['^[0-9]+-[0-9]+[ _][0-9]+\.[0-9]+[ _]']
 
 # list of words to ignore when searching based on a filename
-IMDB_REMOVE_FROM_SEARCHSTRING = ('the', 'a')
+IMDB_REMOVE_FROM_SEARCHSTRING = ()
+
+# format of the season/episode in the tv series title
+IMDB_SEASON_EPISODE_FORMAT = "[%01dx%02d]"
+#IMDB_SEASON_EPISODE_FORMAT = "%01dx%02d"
+#IMDB_SEASON_EPISODE_FORMAT = "S%02dE%02d"
 
 # When searching for a movie title in imdb, should the result be
 # autoaccepted if it is only one hit?
