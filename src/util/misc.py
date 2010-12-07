@@ -400,18 +400,10 @@ def htmlenties2txt(string, encoding="latin-1"):
     Resolves all the HTML entities in the input string.
     Returns a Unicode string with the entities resolved.
     """
-    e = copy.deepcopy(htmlentitydefs.entitydefs)
-    e['ndash'] = "-";
-    e['bull'] = "-";
-    e['rsquo'] = "'";
-    e['lsquo'] = "`";
-    e['hellip'] = '...'
-
     try:
         string = string.decode(encoding)
     except:
         pass
-    string = Unicode(string).replace("&#039", "'").replace("&#146;", "'")
 
     i = 0
     while i < len(string):
@@ -423,19 +415,16 @@ def htmlenties2txt(string, encoding="latin-1"):
         semicolon = string.find(";", amp) # find ; as end of entity
         if string[amp + 1] == "#": # numerical entity like "&#039;"
             entity = string[amp:semicolon+1]
-            try:
-                replacement = Unicode(unichr(int(entity[2:-1])))
-            except UnicodeError:
-                replacement = unichr(int(entity[2:-1]))
+            replacement = unichr(int(entity[2:-1]))
         else:
             entity = string[amp:semicolon + 1]
             if semicolon - amp > 7:
                 continue
             try:
-                # the array has mappings like "Uuml" -> "ü"
-                replacement = e[entity[1:-1]]
+                # the array has mappings like "Uuml" -> "ï¿½"
+                replacement = unichr(htmlentitydefs.name2codepoint[entity[1:-1]])
             except KeyError:
-                continue
+                continue        
         string = string.replace(entity, replacement)
     return string
 
@@ -537,7 +526,7 @@ def comingup(scheduledRecordings=None, write=False):
 
 #
 # synchronized objects and methods.
-# By André Bjärby
+# By Andrï¿½ Bjï¿½rby
 # From http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/65202
 #
 from types import *
