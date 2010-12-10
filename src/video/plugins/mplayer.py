@@ -288,6 +288,10 @@ class MPlayer:
         if hasattr(item, 'is_playlist') and item.is_playlist:
             args['playlist'] = '-playlist'
 
+        if args['fxd_args'].find('-playlist') > 0:
+            args['fxd_args'] = args['fxd_args'].replace('-playlist', '')
+            args['playlist'] = '-playlist'
+       
         # correct avi delay based on kaa.metadata settings
         if config.MPLAYER_SET_AUDIO_DELAY and item.info.has_key('delay') and item.info['delay'] > 0:
             args['mc'] = '-mc %s' % str(int(item.info['delay'])+1)
