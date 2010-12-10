@@ -598,7 +598,7 @@ class PluginInterface(plugin.DaemonPlugin):
         # Animaton-Sequence used in audio playback
         # Some displays (like the CrytstalFontz) do display the \ as a /
         if self.version.startswith('0.5'):
-            self.animation_audioplayer_chars = ['-', '\\', '|', '/']
+            self.animation_audioplayer_chars = ['-', '\\\\', '|', '/']
         elif self.version.startswith('0.4'):
             self.animation_audioplayer_chars = ['-', '\\', '|', '/']
         else:
