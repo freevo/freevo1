@@ -40,6 +40,11 @@ import kaa.imlib2 as imlib2
 import osd
 import os
 import util
+try:
+    import cStringIO as StringIO
+except:
+    import StringIO
+
 from kaa.metadata.image import EXIF as exif
 
 import kaa
@@ -88,9 +93,9 @@ def generate_cache_key(settings, item, width, height, force=0):
     return cname
 
 
-def format_image(settings, item, width, height, force=False, anamorphic=False):
-    _debug_('format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r)' % \
-        (settings, item, width, height, force, anamorphic), 2)
+def format_image(settings, item, width, height, force=False, anamorphic=False, flush_large_image=False):
+    _debug_('format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r, flush_large_image=%r)' % \
+        (settings, item, width, height, force, anamorphic, flush_large_image), 2)
 
     cname = generate_cache_key(settings, item, width, height, force)
     cimage = format_imagecache[cname]
@@ -117,46 +122,67 @@ def format_image(settings, item, width, height, force=False, anamorphic=False):
         else:
             if not os.path.exists(str(item.image)):
                 return None, 0, 0
+        
+        image = load_imagecache[item.image]
+        if not image:
+            image = load_imagecache['thumb://%s' % item.image]
 
-        for folder in ('.thumbs', '.images'):
-            image_parts = os.path.split(str(item.image))
-            imagefile = os.path.join(image_parts[0], folder, image_parts[1])
-            if os.path.exists(imagefile):
-                break
+        if not image:
+            for folder in ('.thumbs', '.images'):
+                image_parts = os.path.split(str(item.image))
+                ifile = os.path.join(image_parts[0], folder, image_parts[1])
+                if os.path.exists(ifile):
+                    imagefile = ifile
+                    break
+
+            if imagefile:
+                image = osd.loadbitmap(imagefile)
+                imagefile = 'thumb://%s' % item.image
+                load_imagecache[imagefile] = image
             else:
                 imagefile = item.image
-        _debug_('thumb://%s' % (item.image,))
-        image = load_imagecache['thumb://%s' % item.image]
-        if not image:
-            image = osd.loadbitmap(imagefile)
-            load_imagecache['thumb://%s' % item.image] = image
-
-        # DJW need to skip this code if the image is from .thumbs or .images as
-        # the image has already been rotated in the cache.
-        if not item['rotation']:
-            try:
                 f = open(imagefile, 'rb')
                 tags = exif.process_file(f)
                 f.close()
-                if tags.has_key('Image Orientation'):
-                    orientation = tags['Image Orientation']
-                    _debug_('%s orientation=%s' % (item['name'], tags['Image Orientation']))
-                    if str(orientation) == "Rotated 90 CCW":
-                        item['rotation'] = 270
-                    elif str(orientation) == "Rotated 180":
-                        item['rotation'] = 180
-                    elif str(orientation) == "Rotated 90 CW":
-                        item['rotation'] = 90
-            except Exception, e:
-                _debug_('%s' % (e), DINFO)
+                if 'JPEGThumbnail' in tags:
+                    sio = StringIO.StringIO(tags['JPEGThumbnail'])
+                    image = pygame.image.load(sio)
+                    sio.close()
+                    imagefile = 'thumb://%s' % item.image
+                    load_imagecache[imagefile] = image
+                else:
+                    image = osd.loadbitmap(imagefile)
+                    load_imagecache[imagefile] = image
+                    
 
-        if image and item['rotation']:
-            # pygame reverses the image rotation
-            if config.IMAGEVIEWER_REVERSED_IMAGES:
-                rotation = (360 - item['rotation']) % 360
-            else:
-                rotation = item['rotation']
-            image = pygame.transform.rotate(image, rotation)
+
+            # DJW need to skip this code if the image is from .thumbs or .images as
+            # the image has already been rotated in the cache.
+            if not item['rotation']:
+                try:
+                    f = open(imagefile, 'rb')
+                    tags = exif.process_file(f)
+                    f.close()
+                    if tags.has_key('Image Orientation'):
+                        orientation = tags['Image Orientation']
+                        _debug_('%s orientation=%s' % (item['name'], tags['Image Orientation']))
+                        if str(orientation) == "Rotated 90 CCW":
+                            item['rotation'] = 270
+                        elif str(orientation) == "Rotated 180":
+                            item['rotation'] = 180
+                        elif str(orientation) == "Rotated 90 CW":
+                            item['rotation'] = 90
+                except Exception, e:
+                    _debug_('%s' % (e), DINFO)
+
+            if image and item['rotation']:
+                # pygame reverses the image rotation
+                if config.IMAGEVIEWER_REVERSED_IMAGES:
+                    rotation = (360 - item['rotation']) % 360
+                else:
+                    rotation = item['rotation']
+                image = pygame.transform.rotate(image, rotation)
+                load_imagecache[imagefile] = image
 
     if not image:
         if not force:
@@ -191,10 +217,11 @@ def format_image(settings, item, width, height, force=False, anamorphic=False):
         if not imagefile:
             return None, 0, 0
 
-        image = load_imagecache['thumb://%s' % imagefile]
+        imagefile = 'thumb://%s' % imagefile
+        image = load_imagecache[imagefile]
         if not image:
-            image = osd.loadbitmap('thumb://%s' % imagefile)
-            load_imagecache['thumb://%s' % imagefile] = image
+            image = osd.loadbitmap(imagefile)
+            load_imagecache[imagefile] = image
 
         if not image:
             return None, 0, 0
@@ -229,6 +256,13 @@ def format_image(settings, item, width, height, force=False, anamorphic=False):
         height = int(float(width * i_h) / i_w)
 
     cimage = pygamesurface_imlib2_scale(image, (width, height))
+
+    if flush_large_image:
+        s = i_w * i_h
+        if s > 1000000:
+            del load_imagecache[imagefile]
+            image = None
+
     format_imagecache[cname] = cimage, width, height
     return cimage, width, height
 
@@ -287,8 +321,9 @@ def text_or_icon(settings, string, x, width, font):
 
 
 class AsyncImageFormatter(object):
-    def __init__(self, settings, item, width, height, force, anamorphic, high_priority=False):
-        self.args = (settings, item, width, height, force, anamorphic)
+    def __init__(self, settings, item, width, height, force, anamorphic,
+                    high_priority=False, flush_large_image=False):
+        self.args = (settings, item, width, height, force, anamorphic, flush_large_image)
         self.cancelled = False
         if high_priority:
             pool_info = (thread_pool, 1)
@@ -298,22 +333,27 @@ class AsyncImageFormatter(object):
         self.inprogress.connect(self.__do_callback)
         self.__cb = None
         self.__arg = None
+
     
     @property
     def finished(self):
         return self.inprogress.finished
 
+
     @property
     def result(self):
         return self.inprogress.result
+
 
     def connect(self, cb, arg):
         self.__cb = cb
         self.__arg = arg
 
+
     def __do_callback(self, result):
         if result is not None and self.__cb is not None:
             self.__cb(result, self.__arg)
+
 
     def __do_format(self):
         if self.cancelled:
