@@ -472,7 +472,12 @@ class Listing_Area(Skin_Area):
                     image, i_w, i_h = format_imagecache[image_key]
 
                     if image_key in remove_images:
-                        remove_images.remove(image_key)
+                        # Make sure we remove the selected/unselected version
+                        # from the cancel list.
+                        for v in (s_val, n_val):
+                            i_k = generate_cache_key(settings, choice, v.width, v.height, True)
+                            if i_k in remove_images:
+                                remove_images.remove(i_k)
 
                     addx = 0
                     addy = 0
@@ -506,13 +511,13 @@ class Listing_Area(Skin_Area):
                         if image_key in remove_images:
                             remove_images.remove(image_key)
                         if image_key not in self.loading_images and image_key not in format_imagecache:
-                            hp = v == s_val and choice == menu.selected
+                            hp = choice == menu.selected
                             formatter = AsyncImageFormatter(settings, choice,
                                                             v.width, v.height,
-                                                            True, anamorphic, hp)
+                                                            True, anamorphic, hp, v == n_val)
                             formatter.connect(self.__image_loaded, image_key)
                             self.loading_images[image_key] = formatter
-                    
+
                     self.drawroundbox(x0, y0, val.width, val.height, (0, 1, 0xffffff, 0))
 
 
