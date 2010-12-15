@@ -63,11 +63,15 @@ import gdata.service
 import urllib2, urllib
 import re
 import traceback
+from item import Item
 import menu
 import video
 import config
 import string, os, subprocess, util
 from stat import *
+
+from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+import threading
 
 from skin.widgets import TextEntryScreen
 from video.videoitem import VideoItem
@@ -107,6 +111,8 @@ except ImportError:
         import cElementTree as ElementTree
     except ImportError:
         from elementtree import ElementTree
+
+YOUTUBE_WEB_PORT=0
 
 
 class PluginInterface(plugin.MainMenuPlugin):
@@ -150,6 +156,33 @@ class PluginInterface(plugin.MainMenuPlugin):
         if not os.path.isdir(config.YOUTUBE_DIR):
             os.mkdir(config.YOUTUBE_DIR, S_IMODE(os.stat(config.FREEVO_CACHEDIR)[ST_MODE]))
 
+        self.http_server = HTTPServer(('', 0), YoutubeRequestHandler)
+
+        global YOUTUBE_WEB_PORT
+        YOUTUBE_WEB_PORT = self.http_server.server_address[1]
+
+        self.stop = False
+        thread = threading.Thread(target=self.serve_forever)
+        thread.setDaemon(True)
+        thread.start()
+
+
+
+    def serve_forever(self):
+        """
+        Start HTTP server and wait for connections.
+        """
+        while not self.stop:
+            try:
+                self.http_server.handle_request()
+            except:
+                traceback.print_exc()
+
+
+    def shutdown(self):
+        self.stop = True
+        self.http_server.socket.close()
+
 
     def config(self):
         """returns the config variables used by this plugin"""
@@ -180,11 +213,73 @@ class PluginInterface(plugin.MainMenuPlugin):
 class YoutubeVideoItem(VideoItem):
     """Create a VideoItem for play"""
 
-    def __init__(self, name, url, parent):
-        _debug_('YoutubeVideoItem.__init__(name=%r, url=%r, parent=%r)' % (name, url, parent), 2)
-        VideoItem.__init__(self, url, parent)
-        self.name = name
-        self.type = 'youtube'
+    def __init__(self, video, id, parent):
+        VideoItem.__init__(self, 'http://localhost:%d/%s' % (YOUTUBE_WEB_PORT, id), parent)
+        self.name = video.title.text
+        if video.content.type == "text" and video.content.text:
+            self.description = video.content.text
+        elif video.content.type == "html":
+            text = util.htmlenties2txt(video.content.text)
+            match = re.search('<span>([^\<]*)<', text)
+            if match:
+                self.description = decodeAcute(match.group(1))
+            else:
+                self.description = text
+            match = re.search('src="([^\"]*)"', text)
+            if match:
+                tempimage = match.group(1)
+                file = config.YOUTUBE_DIR + '/' + id.replace('-', '_') + '.jpg'
+                print file
+                if not os.path.exists(file):
+                    aimage = urllib.urlretrieve(tempimage, file)
+                self.image = file
+        else:
+            self.description = ""
+        self.description += '\n' + _('User') + ': ' + video.author[0].name.text
+        date = video.published.text.split('T')
+        self.description += '. ' + date[0]
+        self.plot = self.description
+
+
+class YoutubeVideoMenu(menu.Menu):
+    def __init__(self, service, feed, parent):
+        menu.Menu.__init__(self, _('Videos available'), [])
+        self.service = service
+        self.feed = feed
+        self.parent = parent
+        self.append_items(feed)
+        self.__add_more_items_mi(feed)
+
+
+    def __add_more_items_mi(self, gfeed):
+        nfeed = self.service.GetNext(gfeed)
+        if nfeed:
+            mi = menu.MenuItem(_('More videos...'), self.add_more_items, nfeed)
+            self.choices.append(mi)
+
+
+    def add_more_items(self, arg=None, menuw=None):
+        del self.choices[-1]
+        i = len(self.choices)
+        self.append_items(arg)
+        self.__add_more_items_mi(arg)
+        self.selected = self.choices[i]
+        if menuw:
+            menuw.init_page()
+            menuw.rebuild_page()
+            menuw.refresh()
+
+
+    def append_items(self, gfeed):
+        for video in gfeed.entry:
+            if video.link[1].href.find('watch?v=') >= 0:
+                id = video.link[1].href.split('watch?v=');
+            elif video.link[0].href.find('watch?v=') >= 0:
+                id = video.link[0].href.split('watch?v=');
+            else:
+                continue
+            mi = YoutubeVideoItem(video, id[1], self.parent)
+            self.choices.append(mi)
 
 
 
@@ -201,6 +296,7 @@ class YoutubeVideo(Item):
         self.name = _('Youtube videos')
         self.type = 'youtube'
         self.image = config.IMAGE_DIR + '/youtube.png'
+
 
     def actions(self):
         """Only one action, return user list"""
@@ -230,105 +326,18 @@ class YoutubeVideo(Item):
         video_type = "uploaded"
         if len(arg) > 2 and arg[2]:
             video_type = arg[2]
-        items = self.video_list(_('Retrieving video list'), arg[0], video_type.lower())
-        menuw.pushmenu(menu.Menu(_('Videos available'), items))
+        menuw.pushmenu(self.get_user_menu(arg[0], video_type.lower()))
 
-
-    def watchvideo(self, arg=None, menuw=None):
-        """Watch it"""
-        osd.busyicon.wait(config.OSD_BUSYICON_TIMER[0])
-        stream = None
-        fmt = ''
-        if config.YOUTUBE_FORMAT:
-            fmt = '-f ' +  config.YOUTUBE_FORMAT
-
-        cmd = '%s %s -g "http://www.youtube.com/watch?v=%s"' % (config.YOUTUBE_DL, fmt, arg[1])
-        proceso = Popen(cmd, shell=True, bufsize=1024, stdout=subprocess.PIPE, universal_newlines=1)
-        follow = proceso.stdout
-        while proceso.poll() == None:
-            mess = follow.readline()
-            if mess:
-                stream =  mess.strip()
-        if stream is None:
-            _debug_("Cannot process command '%s'" % (cmd,), DWARNING)
-            return
-        # Create a fake VideoItem
-        osd.busyicon.stop()
-        playvideo2 = YoutubeVideoItem(_('bla'), stream, self)
-        playvideo2.player_rating = 10
-        playvideo2.menuw = menuw
-        playvideo2.play()
-
-
-    def build_list(self, arg, menuw=None):
-        """Build the video list"""
-        _debug_('build_list(self=%r, arg=%r)' % (self, arg), 2)
-        service=arg[0]
-        gfeed=arg[1]
-        items = []
-        box = PopupBox(text=_('Loading video list'))
-        box.show()
-        for video in gfeed.entry:
-            date = video.published.text.split('T')
-            if video.link[1].href.find('watch?v=') >= 0:
-                id = video.link[1].href.split('watch?v=');
-            elif video.link[0].href.find('watch?v=') >= 0:
-                id = video.link[0].href.split('watch?v=');
-            else:
-                continue
-            mi = menu.MenuItem(video.title.text, self.watchvideo, id[1])
-            mi.arg = (video.title.text, id[1])
-            if video.content.type == "text" and video.content.text:
-                mi.description = video.content.text
-            elif video.content.type == "html":
-                text = util.htmlenties2txt(video.content.text)
-                match = re.search('<span>([^\<]*)<', text)
-                if match:
-                    mi.description = decodeAcute(match.group(1))
-                else:
-                    mi.description = text
-                match = re.search('src="([^\"]*)"', text)
-                if match:
-                    tempimage = match.group(1)
-                    file = config.YOUTUBE_DIR + '/' + id[1].replace('-', '_') + '.jpg'
-                    if not os.path.exists(file):
-                        aimage = urllib.urlretrieve(tempimage, file)
-                    mi.image = file
-            else:
-                mi.description = ""
-            mi.description += '\n' + _('User') + ': ' + video.author[0].name.text
-            mi.description += '. ' + date[0]
-            items.append(mi)
-        nfeed = service.GetNext(gfeed)
-        if nfeed:
-            mi = menu.MenuItem(_('More videos...'), self.build_list, (service, nfeed))
-            items.append(mi)
-        box.destroy()
-        if menuw:
-            menuw.pushmenu(menu.Menu(_('Videos available'), items))
-        else:
-            return items
-
-    def get_and_build_list(self, feed):
-        """Get and build the video list"""
-        _debug_('build_list(self=%r, feed=%r)' % (self, feed), 2)
-        service = gdata.service.GDataService(server='gdata.youtube.com')
-        gfeed = service.GetFeed(feed)
-        items=self.build_list((service, gfeed))
-        return items
 
     def search_list(self, menuw, text=''):
         """Get the video list for a specific search"""
         _debug_('search_list(self=%r, menuw=%r, text=%r)' % (self, menuw, text), 2)
         text=text.replace(' ', '/')
         feed = 'http://gdata.youtube.com/feeds/videos/-/' + text
-        items = self.get_and_build_list(feed)
-        menuw.pushmenu(menu.Menu(_('Videos available'), items))
+        menuw.pushmenu(self.get_feed_menu(feed))
 
 
-    def video_list(self, title, user, video_type):
-        """Get the video list for a specific user"""
-        _debug_('video_list(self=%r, title=%r, user=%r)' % (self, title, user), 2)
+    def get_user_menu(self, user, video_type):
         if user in standardfeeds:
             feed  = 'http://gdata.youtube.com/feeds/base/standardfeeds/'
             if config.YOUTUBE_REGION_CODE and user != 'watch_on_mobile':
@@ -342,5 +351,60 @@ class YoutubeVideo(Item):
                 feed += '/favorites'
             else:
                 feed += '/uploads?orderby=updated'
-        items = self.get_and_build_list(feed)
-        return items
+        return self.get_feed_menu(feed)
+
+
+    def get_feed_menu(self, feed):
+        service = gdata.service.GDataService(server='gdata.youtube.com')
+        gfeed = service.GetFeed(feed)
+        box = PopupBox(text=_('Loading video list'))
+        box.show()
+        menu =  YoutubeVideoMenu(service, gfeed, self)
+        box.destroy()
+        return menu
+
+
+#-------------------------------------------------------------------------------
+# HTTP Server
+#-------------------------------------------------------------------------------
+class YoutubeRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        id = self.path[1:]
+        cmd = [config.YOUTUBE_DL, '-o', '-', "http://www.youtube.com/watch?v=%s" % id]
+        if config.YOUTUBE_FORMAT:
+            cmd += ['-f', config.YOUTUBE_FORMAT]
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if process:
+            thread = threading.Thread(target=self.output, args=(process.stderr,))
+            thread.setName('youtube-dl-stderr')
+            thread.start()
+            self.send_response(200)
+            self.send_header('Content-type', 'application/octet-stream')
+            self.end_headers()
+            more_data = True
+            try:
+                while more_data:
+                    data = process.stdout.read(2048)
+                    if data:
+                        self.wfile.write(data)
+                    else:
+                        more_data = False
+            except:
+                os.kill(process.pid, 15)
+        else:
+            self.send_error(500, 'Failed to start youtube-dl')
+
+    def log_message(self, format, *args):
+        _debug_(format % args, 2)
+
+    def output(self, out):
+        buf = 'a'
+        line = ''
+        while buf:
+            buf = out.read(1)
+            if buf =='\n' or buf == '\r':
+                _debug_('DOWNLOAD: %r' % line)
+                line = ''
+            else:
+                line += buf
+
