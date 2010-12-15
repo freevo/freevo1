@@ -229,7 +229,6 @@ class YoutubeVideoItem(VideoItem):
             if match:
                 tempimage = match.group(1)
                 file = config.YOUTUBE_DIR + '/' + id.replace('-', '_') + '.jpg'
-                print file
                 if not os.path.exists(file):
                     aimage = urllib.urlretrieve(tempimage, file)
                 self.image = file
