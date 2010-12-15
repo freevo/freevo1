@@ -93,6 +93,15 @@ class Controller:
         return result
 
 
+    def set_adapter_active(self, mode):
+        """
+        Set adapter active/inactive.
+        """
+        (errcode, errmsg, msg) = self.execute_command('setprop adapter.active %r' % bool(mode), True)
+        if errcode != 0:
+            raise RuntimeError, errmsg
+
+
     def set_current_service(self, service):
         """
         Select the primary service.

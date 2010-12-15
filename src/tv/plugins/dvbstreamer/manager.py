@@ -75,6 +75,11 @@ class DVBStreamerManager:
         """
         _debug_('Disabling output on adapter %s' % adapter)
         self.set_mrl(adapter,  'null://')
+        controller = self.get_controller(adapter)
+        try:
+            controller.set_adapter_active('false')
+        except:
+            pass
 
 
     def select(self, adapter, channel):
@@ -83,6 +88,10 @@ class DVBStreamerManager:
         """
         _debug_('Selecting channel %s on adapter %s'%(channel, adapter))
         controller = self.get_controller(adapter)
+        try:
+            controller.set_adapter_active('true')
+        except:
+            pass
         controller.set_current_service(channel)
 
 

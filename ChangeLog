@@ -41,6 +41,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * Updated recordserver and frontend to display a manual conflict resolution (F#2832618)
  * Updated text entry screen to allow phone style input as well a on screen keyboard (F#2100411)
  * Updated Button bar to add customizable height and button color order (B#3108193)
+ * Updated DVBStreamer plugin to activate/deactivate adapter when selecting a service/stopping an output (F#3115259)
  * Fixed apple trailers plug-in for user agent requirements (B#2994707)
  * Fixed encoding core not to print messages in debug mode (B#2943181)
  * Fixed encoding core when the action is to copy (B#2943184)
