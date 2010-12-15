@@ -46,8 +46,8 @@ class Trailer:
         self.runtime = 0
         self.rating = ''
         self.studio = ''
-        self.release_date = 0
-        self.post_date = 0
+        self.release_date = None
+        self.post_date = None
         self.director = ''
         self.description = ''
         self.preview_url = ''

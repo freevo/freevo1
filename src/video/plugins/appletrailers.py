@@ -112,7 +112,10 @@ class TrailerItem(VideoItem):
         self.image = _fetch_image(trailer.poster)
         self.description = trailer.description
         self.description += _('\n\nGenres: ') + ','.join(trailer.genres)
-        self.description += _('\n\nDate: ') + trailer.release_date.strftime(config.APPLETRAILERS_DATE_FORMAT)
+        if trailer.release_date is None or trailer.release_date == 0:
+            self.description += _('\n\nDate: Unknown')
+        else:
+            self.description += _('\n\nDate: ') + trailer.release_date.strftime(config.APPLETRAILERS_DATE_FORMAT)
         self.description += ('\n\nRating: ') + trailer.rating
         self.description += ('\n\nDirector: ') + trailer.director
         self.description += ('\n\nRuntime: %d minutes') % trailer.runtime
