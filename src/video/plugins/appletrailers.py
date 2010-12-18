@@ -112,10 +112,10 @@ class TrailerItem(VideoItem):
         self.image = _fetch_image(trailer.poster)
         self.description = trailer.description
         self.description += _('\n\nGenres: ') + ','.join(trailer.genres)
-        if trailer.release_date is None or trailer.release_date == 0:
-            self.description += _('\n\nDate: Unknown')
-        else:
+        if trailer.release_date:
             self.description += _('\n\nDate: ') + trailer.release_date.strftime(config.APPLETRAILERS_DATE_FORMAT)
+        else:
+            self.description += _('\n\nDate: Unknown')
         self.description += ('\n\nRating: ') + trailer.rating
         self.description += ('\n\nDirector: ') + trailer.director
         self.description += ('\n\nRuntime: %d minutes') % trailer.runtime
@@ -172,11 +172,22 @@ class BrowseByReleaseDate(BrowseByMenu):
     def make_menu(self, arg=None, menuw=None):
         items = []
         dates = self.hash.keys()
-        dates.sort()
+        def cmp_date(x,y):
+            if x == y:
+                return 0
+            if x == None:
+                return 1
+            if y == None:
+                return -1
+            return cmp(x,y)
+        dates.sort(cmp_date)
         
         for date in dates:
             trailers = self.hash[date]
-            title = date.strftime(config.APPLETRAILERS_DATE_FORMAT)
+            if date is None:
+                title = _('Unknown')
+            else:
+                title = date.strftime(config.APPLETRAILERS_DATE_FORMAT)
             items.append(BrowseByTitle(title, trailers, self))
 
         menuw.pushmenu(menu.Menu(self.name, items))
