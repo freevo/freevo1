@@ -353,7 +353,7 @@ class LivePauseController:
         Eventhandler for livepause control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-        _debug_('Event %s' % event)
+        _debug_('Event %s' % event, 2)
         event_consumed = False
         if self.state == State.PLAYING:
             event_consumed = tv.dialogs.handle_channel_number_input(event)

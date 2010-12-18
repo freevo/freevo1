@@ -43,7 +43,7 @@ _player_ = None
 
 def get():
     global _player_
-    _debug_('get() _player_=%r' % (_player_,))
+    _debug_('get() _player_=%r' % (_player_,), 2)
     return _player_
 
 class PlayerGUI(GUIObject):
