@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<freevo>
+  <skin geometry="800x600">
+    <!-- Items of the main menu -->
+    <main>
+      <item label="reminder" name="Reminders" image="reminder_watermark.png"/>
+    </main>
+
+    <reminder>
+      <screen layout="screen" x="0" y="0" width="800" height="600"/>
+      <title visible="not idlebar" layout="title" x="10" y="10" width="780" height="80"/>
+      <subtitle layout="subtitle" x="15" y="100" width="770" height="50"/>
+      <content layout="reminder" x="10" y="140" width="780" height="450"/>
+    </reminder>
+
+    <layout label="reminder">
+      <background>
+        <image filename="../images/reminder_frame.png"/>
+      </background>
+      <content x="15" y="13" width="MAX-31" height="MAX-28" spacing="10"/>
+    </layout>
+
+  </skin>
+</freevo>
+
+<!--
+vim:autoindent:tabstop=4:softtabstop=4:shiftwidth=4:expandtab:filetype=xml:
+$Id$
+-->

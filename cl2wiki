@@ -1,0 +1,5 @@
+#!/bin/bash
+
+file=${1:?No file specified}
+
+sed -e 's/B#\([0-9][0-9]*\)/[[http:\/\/sourceforge.net\/tracker\/index.php?func=detail\&group_id=46652\&atid=446895\&aid=\1|&]]/g' -e 's/F#\([0-9][0-9]*\)/[[http:\/\/sourceforge.net\/tracker\/index.php?func=detail\&group_id=46652\&atid=446898\&aid=\1|&]]/g' $file
