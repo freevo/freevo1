@@ -578,16 +578,16 @@ def create_thumbnail(filename, thumbnail=None):
     try:
         if image.width > 255 or image.height > 255:
             image.thumbnail((255,255))
+        mode = image.mode
+        if mode == 'P':
+            mode = 'RGB'
+        if mode == 'BGRA':
+            mode = 'RGBA'
 
-        if image.mode == 'P':
-            image.mode = 'RGB'
-        if image.mode == 'BGRA':
-            image.mode = 'RGBA'
-
-        data = (str(image.get_raw_data(format=image.mode)), image.size, image.mode)
+        data = (str(image.get_raw_data(format=mode)), image.size, mode)
 
         f = vfs.open(thumb, 'w')
-        f.write('FRI%s%s%5s' % (chr(image.width), chr(image.height), image.mode))
+        f.write('FRI%s%s%5s' % (chr(image.width), chr(image.height), mode))
         f.write(data[0])
         f.close()
         del image
