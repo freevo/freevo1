@@ -1,7 +1,7 @@
 """
 Freevo Version number
 """
-__version__ = '1.9.2-svn'
+__version__ = '1.9.2-b1'
 
 runtime  = '0.3.1'
 mmpython = '0.4.10'
