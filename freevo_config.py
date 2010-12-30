@@ -871,6 +871,7 @@ plugin.activate('video.appletrailers')
 # Dialog Display Plugins
 # ======================================================================
 plugin.activate('dialog.osd_display')
+plugin.activate('dialog.x11_overlay_display')
 
 # Speak plugin to output menu items via festival
 # plugin.activate('speak')
