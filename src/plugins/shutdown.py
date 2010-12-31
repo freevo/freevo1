@@ -36,6 +36,7 @@ import sys
 
 import config
 
+import skin
 from gui import ConfirmBox
 from item import Item
 from plugin import MainMenuPlugin
@@ -72,6 +73,7 @@ def shutdown(menuw=None, mode=None, exit=False):
         # already.
         sys.exit(0)
 
+    skin.get_singleton().suspend()
     osd.clearscreen(color=osd.COL_BLACK)
     osd.drawstringframed(_('shutting down...'), 0, 0, osd.width, osd.height,
         osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE),
