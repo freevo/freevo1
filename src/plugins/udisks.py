@@ -73,9 +73,10 @@ class Devices(plugin.MainMenuPlugin):
 
     def items(self, parent):
         items = []
-        for drive in self.udisks.get_removable_drives():
-            if drive.get_prop(drive.IS_MOUNTED):
-                items.append(DeviceDirItem(drive, parent))
+        if self.udisks:
+            for drive in self.udisks.get_removable_drives():
+                if drive.get_prop(drive.IS_MOUNTED):
+                    items.append(DeviceDirItem(drive, parent))
         return items
 
 
