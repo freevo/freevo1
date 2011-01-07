@@ -34,7 +34,7 @@
 #  |
 #  |   from distutils.core import setup, Extension
 #  |   import distutils.command.install
-#  |   from freevo.util.distutils import *
+#  |   from freevo.util.plugindistutils import *
 #  |
 #  |   # now start the python magic
 #  |   setup (name = "nice_plugin",

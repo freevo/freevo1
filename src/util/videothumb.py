@@ -88,14 +88,14 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
             image = Image.open(imagefile)
             if image.width > 255 or image.height > 255:
                 image.thumbnail((255,255))
-
-            if image.mode == 'P':
-                image.mode = 'RGB'
+            mode = image.mode
+            if mode == 'P':
+                mode = 'RGB'
 
             if image.width * 3 > image.height * 4:
                 # fix image with blank bars to be 4:3
                 nh = (image.width*3)/4
-                ni = Image.new((image.width, nh), from_format = image.mode)
+                ni = Image.new((image.width, nh), from_format=image.mode)
                 ni.draw_rectangle((0,0), (image.width, nh), (0,0,0,255), True)
                 ni.blend(image, dst_pos=(0,(nh- image.height) / 2))
                 image = ni
@@ -106,13 +106,14 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
 
             # crop some pixels, looks better that way
             image = image.crop((4, 3), (image.width-8, image.height-6))
+            mode = image.mode
             # Pygame can't handle BGRA images
-            if image.mode == 'BGRA':
-                image.mode = 'RGBA'
+            if mode == 'BGRA':
+                mode = 'RGBA'
             if imagefile.endswith('.raw.tmp'):
                 f = vfs.open(imagefile[:-4], 'w')
-                data = (str(image.get_raw_data(format=image.mode)), image.size, image.mode)
-                f.write('FRI%s%s%5s' % (chr(image.width), chr(image.height), image.mode))
+                data = (str(image.get_raw_data(format=mode)), image.size, mode)
+                f.write('FRI%s%s%5s' % (chr(image.width), chr(image.height), mode))
                 f.write(data[0])
                 f.close()
                 os.unlink(imagefile)

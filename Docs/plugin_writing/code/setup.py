@@ -7,7 +7,7 @@ __revision__ = "$Id$"
 
 from distutils.core import setup, Extension
 import distutils.command.install
-import freevo.util.distutils
+import freevo.util.plugindistutils
 
 # now start the python magic
 setup (name = "nice_plugin",
@@ -17,7 +17,7 @@ setup (name = "nice_plugin",
        author_email = "my@mail.address",
        url = "http://i-also-have-a-web.address",
 
-       package_dir = freevo.util.distutils.package_dir,
-       packages = freevo.util.distutils.packages,
-       data_files = freevo.util.distutils.data_files
+       package_dir = freevo.util.plugindistutils.package_dir,
+       packages = freevo.util.plugindistutils.packages,
+       data_files = freevo.util.plugindistutils.data_files
        )
