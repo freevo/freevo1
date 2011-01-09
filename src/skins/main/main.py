@@ -45,6 +45,9 @@ import screen
 from animation import render, Transition
 import pygame
 
+import kaa
+
+from skin import TRANSITION_IN,TRANSITION_OUT,TRANSITION_PAGE,TRANSITION_NONE
 
 # Create the OSD object
 osd = osd.get_singleton()
@@ -76,6 +79,10 @@ class Skin:
         self.screen        = screen.get_singleton()
         self.areas         = {}
         self.suspended     = False
+        self.transitioning = False
+        self.current_screen= None
+        self.next_screen   = None
+        self.timer         = None
 
         # load default areas
         from listing_area   import Listing_Area
@@ -107,6 +114,15 @@ class Skin:
         # load the fxd file
         self.settings = xml_skin.XMLSkin()
         self.set_base_fxd(config.SKIN_XML_FILE)
+
+        if config.SKIN_SCREEN_TRANSITION == 'blend':
+            self.do_transition = self.do_blend_transition
+        elif config.SKIN_SCREEN_TRANSITION == 'slide':
+            self.do_transition = self.do_slide_transition
+        else:
+            print 'WARNING: Unknown screen transition, disabling transitions'
+            config.SKIN_USE_SCREEN_TRANSITIONS = False
+            config.SKIN_USE_PAGE_TRANSITIONS = False
 
 
     def cachename(self, filename):
@@ -469,6 +485,8 @@ class Skin:
         _debug_('Skin.suspend()')
         if not self.suspended:
             self.suspended = True
+            if self.timer:
+                self.timer.stop()
 
 
     def resume(self):
@@ -493,7 +511,7 @@ class Skin:
         self.settings.prepare()
 
 
-    def draw(self, type, object, menu=None, blend=False):
+    def draw(self, type, object, menu=None, transition=TRANSITION_NONE):
         """
         Draw the object.  object may be a menu widget, a table for the tv menu
         or an audio item for the audio player.
@@ -546,10 +564,19 @@ class Skin:
             for a in self.all_areas:
                 a.draw(settings, object, menu, style, type, self.force_redraw)
 
-            if blend:
-                self.do_blending()
+            if self.transitioning:
+                ml = osd.main_layer
+                osd.main_layer = self.next_screen
+                self.screen.show(self.force_redraw)
+                osd.main_layer = ml
             else:
-                osd.update([self.screen.show(self.force_redraw)])
+                if not config.SKIN_USE_PAGE_TRANSITIONS and transition == TRANSITION_PAGE:
+                    transition = TRANSITION_NONE
+
+                if transition and config.SKIN_USE_SCREEN_TRANSITIONS:
+                    self.do_transition(transition)
+                else:
+                    osd.update([self.screen.show(self.force_redraw)])
 
             self.force_redraw = False
         except UnicodeError, e:
@@ -568,18 +595,72 @@ class Skin:
             raise UnicodeError, e
 
 
-    def do_blending(self):
-        screen = osd.main_layer.convert()
-
+    def do_blend_transition(self, transition):
+        self.current_screen = osd.main_layer.convert()
         self.screen.show(True)
+        self.next_screen = osd.main_layer.convert()
 
-        blend = Transition(screen, osd.main_layer, 0, speed=4)
+        self.transitioning = True
+        self.steps = 0
+        self.timer = kaa.Timer(self.do_blend_step, transition)
+        self.do_blend_step(transition)
+        self.timer.start(0.05)
 
-        clock = pygame.time.Clock()
-        blend.start()
+    def do_blend_step(self, transition):
+        self.steps += 1
+        if self.steps == 10:
+            self.timer.stop()
+            self.timer = None
+            self.next_screen.set_alpha(255)
+            osd.main_layer.blit(self.next_screen, (0,0))
+            osd.update()
+            self.transitioning = False
+            return
+        osd.main_layer.blit(self.current_screen, (0,0))
+        self.next_screen.set_alpha((255 * self.steps) / 10)
+        osd.main_layer.blit(self.next_screen, (0,0))
+        osd.update()
 
-        while not blend.finished:
-            render.update()
-            clock.tick(blend.steps)
+    def do_slide_transition(self, transition):
+        if transition == TRANSITION_PAGE:
+            self.do_blend_transition(transition)
+            return
 
-        blend.remove()
+        self.current_screen = osd.main_layer.convert()
+        self.screen.show(True)
+        self.next_screen = osd.main_layer.convert()
+
+        self.transitioning = True
+        self.steps = 0
+        self.timer = kaa.Timer(self.do_slide_step, transition)
+        self.do_slide_step(transition)
+        self.timer.start(0.05)
+
+    def do_slide_step(self, transition):
+        self.steps += 1
+        if self.steps == 10:
+            self.timer.stop()
+            self.timer = None
+            self.next_screen.set_alpha(255)
+            osd.main_layer.blit(self.next_screen, (0,0))
+            osd.update()
+            self.transitioning = False
+            return
+        
+        osd.main_layer.fill(0)
+        if transition == TRANSITION_IN:
+            r = self.current_screen.get_rect()
+            self.current_screen.set_alpha((255 * (10 - self.steps) / 10))
+            osd.main_layer.blit(self.current_screen, (0,0), r)
+            r = self.next_screen.get_rect()            
+            r.width = (r.width * self.steps) / 10
+            osd.main_layer.blit(self.next_screen, (self.next_screen.get_width() - r.width,0), r)
+        else:
+            self.next_screen.set_alpha((255 * self.steps)/10)
+            r = self.next_screen.get_rect()
+            osd.main_layer.blit(self.next_screen, (0,0), r)
+            r = self.current_screen.get_rect()
+            r.width = (r.width * (10 - self.steps)) / 10
+            osd.main_layer.blit(self.current_screen, (self.current_screen.get_width() - r.width,0), r)
+
+        osd.update()

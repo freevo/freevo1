@@ -57,6 +57,10 @@ __skin_functions__ = ( 'Rectange', 'Image', 'Area', 'register', 'delete', 'chang
             'get_font', 'get_image', 'get_icon', 'items_per_page', 'clear', 'redraw',
             'prepare', 'draw' )
 
+TRANSITION_NONE = None
+TRANSITION_IN   = 1
+TRANSITION_OUT  = 2
+TRANSITION_PAGE = 3
 
 
 def get_singleton():

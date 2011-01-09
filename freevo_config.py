@@ -414,7 +414,15 @@ LOCAL_CONF_CHANGES = [
     (5.29,
      """ Added SHUTDOWN_NEW_STYLE_DIALOG to control whether the new shutdown dialog is used or the old
      multi-option menu.
+     """),
+     (5.30,
+     """ change FREEVO_USE_ALPHABLENDING to SKIN_USE_SCREEN_TRANSITIONS and add
+     ability to select the transition style.
+     Added SKIN_USE_PAGE_TRANSITIONS to select whether transitions between pages
+     of menus etc are animated.
+     Added SKIN_SCREEN_TRANSITION to select the style of transition.
      """)
+
 ]
 
 
@@ -844,11 +852,14 @@ plugin.activate('tv.recordings_manager', level=1)
 # TV menu plugin to search for programs
 plugin.activate('tv.search_programs', level=2)
 
+# TV menu plugin to view programs via categories
+plugin.activate('tv.categories', level=3)
+
 # TV menu plugin to view and edit favorites
-plugin.activate('tv.view_favorites', level=3)
+plugin.activate('tv.view_favorites', level=4)
 
 # TV menu plugin to view scheduled recordings
-plugin.activate('tv.scheduled_recordings', level=4)
+plugin.activate('tv.scheduled_recordings', level=5)
 
 # TV menu plugin to allow the use to set reminders for programs they want to
 # watch.
@@ -1323,6 +1334,21 @@ SKIN_FORCE_TEXTVIEW_STYLE = 1
 SKIN_MEDIAMENU_FORCE_TEXTVIEW = 0
 
 
+#
+# Activate animated transitions between different menu screens
+#
+SKIN_USE_SCREEN_TRANSITIONS = False
+
+#
+# Select the style of transition to use.
+# Either slide or blend
+#
+SKIN_SCREEN_TRANSITION = 'slide'
+
+#
+# Whether to animate page transitions.
+#
+SKIN_USE_PAGE_TRANSITIONS = False
 
 # ======================================================================
 # Freevo OSD settings:
@@ -2250,8 +2276,3 @@ DEBUG_DEBUGGER = 0
 
 # Like debug but print to stdout, the console
 DEBUG_CONSOLE = 0
-
-#
-# Activate blending between different menu screens
-#
-FREEVO_USE_ALPHABLENDING = False

@@ -182,7 +182,7 @@ class MenuWidget(GUIObject):
         self.show_callbacks = []
         self.force_page_rebuild = False
 
-        self.first_drawing = False
+        self.screen_transition = skin.TRANSITION_NONE
 
 
     def __str__(self):
@@ -235,13 +235,14 @@ class MenuWidget(GUIObject):
 
             if not isinstance(menu, Menu):
                 return True
-
+            
             if menu.reload_func and allow_reload:
                 reload = menu.reload_func()
                 if reload:
                     self.menustack[-1] = reload
 
             self.init_page()
+            self.screen_transition = skin.TRANSITION_OUT
 
 
     def delete_submenu(self, refresh=True, reload=False, osd_message=''):
@@ -288,7 +289,8 @@ class MenuWidget(GUIObject):
                 self.init_page()
             else:
                 self.init_page()
-
+            
+            self.screen_transition = skin.TRANSITION_OUT
             if arg == 'reload':
                 self.refresh(reload=1)
             else:
@@ -410,10 +412,12 @@ class MenuWidget(GUIObject):
     def pushmenu(self, menu):
         self.menustack.append(menu)
         self.set_event_context()
+        
         if isinstance(menu, Menu):
             menu.page_start = 0
             self.init_page()
             menu.selected = self.all_items[0]
+            self.screen_transition = skin.TRANSITION_IN
             self.refresh()
         else:
             menu.refresh()
@@ -442,11 +446,9 @@ class MenuWidget(GUIObject):
                 self.force_page_rebuild = False
                 self.rebuild_page()
             self.init_page()
-
-        blend = config.FREEVO_USE_ALPHABLENDING and self.first_drawing
-        skin.draw('menu', self, self.menustack[-1], blend)
-
-        self.first_drawing = False
+        
+        skin.draw('menu', self, self.menustack[-1], self.screen_transition)
+        self.screen_transition = skin.TRANSITION_NONE
 
 
     def make_submenu(self, menu_name, actions, item):
@@ -939,7 +941,7 @@ class MenuWidget(GUIObject):
 
     def init_page(self):
 
-        self.first_drawing = True
+        self.screen_transition = skin.TRANSITION_PAGE
 
         menu = self.menustack[-1]
         if not menu:

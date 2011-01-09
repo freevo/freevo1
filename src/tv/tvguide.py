@@ -44,8 +44,7 @@ import tv.epg_xmltv
 from tv.epg_types import TvProgram
 from tv.record_client import RecordClient
 
-skin = skin.get_singleton()
-skin.register('tv', ('screen', 'title', 'subtitle', 'view', 'tvlisting', 'info', 'plugin'))
+skin.get_singleton().register('tv', ('screen', 'title', 'subtitle', 'view', 'tvlisting', 'info', 'plugin'))
 
 CHAN_NO_DATA = _('This channel has no data loaded')
 
@@ -95,8 +94,11 @@ class TVGuide(Item):
         self.update_schedules(force=True)
 
         self.event_context = 'tvmenu'
+        self.transition = skin.TRANSITION_IN
         self.rebuild(start_time, stop_time, guide.chan_list[0].id, selected)
+        
         menuw.pushmenu(self)
+        
 
 
     def update_schedules_cb(self, scheduledRecordings):
@@ -302,7 +304,8 @@ class TVGuide(Item):
             return
         _debug_('tvguide: setting context to %s' % self.event_context, 2)
         self.update(force_update)
-        skin.draw(self.type, self)
+        skin.draw(self.type, self, transition=self.transition)
+        self.transition = skin.TRANSITION_NONE
 
 
     def update(self, force=False):

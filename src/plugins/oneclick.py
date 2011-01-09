@@ -826,7 +826,7 @@ class WeatherDetailHandler:
         self.subtitle = self.getSubtitle(self.skin_num)
 
         # Fire up splashscreen and load the plugins
-        skin.draw('oneclick', self, blend=config.FREEVO_USE_ALPHABLENDING)
+        skin.draw('oneclick', self, transition=skin.TRANSITION_IN)
 
     def prevSkin(self):
         """decrements the skin number round to the last skin"""
@@ -864,17 +864,17 @@ class WeatherDetailHandler:
         elif event == 'MENU_SELECT':
             self.weather.getForecast(force=1)
             skin.clear()
-            skin.draw('oneclick', self, blend=config.FREEVO_USE_ALPHABLENDING)
+            skin.draw('oneclick', self, transition=skin.TRANSITION_IN)
             return True
 
         elif event in ('MENU_DOWN', 'MENU_RIGHT'):
             self.nextSkin()
-            skin.draw('oneclick', self, blend=config.FREEVO_USE_ALPHABLENDING)
+            skin.draw('oneclick', self, transition=skin.TRANSITION_PAGE)
             return True
 
         elif event in ('MENU_UP', 'MENU_LEFT'):
             self.prevSkin()
-            skin.draw('oneclick', self, blend=config.FREEVO_USE_ALPHABLENDING)
+            skin.draw('oneclick', self, transition=skin.TRANSITION_PAGE)
             return True
 
         return False

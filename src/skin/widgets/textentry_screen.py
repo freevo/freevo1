@@ -152,7 +152,9 @@ class TextEntryScreen:
         This places the screen on the top of the menu stack.
         """
         self.menuw = menuw
+        self.blend = 1
         menuw.pushmenu(self)
+        self.blend = False
 
 
     def refresh(self):
@@ -161,7 +163,7 @@ class TextEntryScreen:
         """
         if self.menuw.children:
             return
-        skin_object.draw('textentry', self)
+        skin_object.draw('textentry', self, blend=self.blend)
 
 
     def eventhandler(self, event, menuw=None):
