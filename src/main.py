@@ -212,7 +212,6 @@ class Splashscreen(skin.Area):
         self.bar_border   = skin.Rectange(bgcolor=0xff000000L, size=2)
         self.bar_position = skin.Rectange(bgcolor=0xa0000000L)
         self.text         = text
-        self.first_draw   = True
 
 
     def update_content(self):
@@ -239,9 +238,7 @@ class Splashscreen(skin.Area):
         set the progress position and refresh the screen
         """
         self.pos = pos
-        blend = config.FREEVO_USE_ALPHABLENDING and self.first_draw
-        skin.draw('splashscreen', None, blend=blend)
-        self.first_draw = False
+        skin.draw('splashscreen', None)
 
 
 
