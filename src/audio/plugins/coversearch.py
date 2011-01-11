@@ -58,6 +58,8 @@ from xml.dom import minidom # ParseError used by amazon module
 from gui.PopupBox import PopupBox
 from gui.AlertBox import AlertBox
 
+import dialog
+
 import util
 from util import amazon
 
@@ -65,7 +67,7 @@ try:
     amazon.setLocale(config.AMAZON_LOCALE)
 except AttributeError:
     pass
-query_encoding = config.AMAZON_QUERY_ENCODING
+config.AMAZON_QUERY_ENCODING = config.AMAZON_QUERY_ENCODING
 
 class PluginInterface(plugin.ItemPlugin):
     """
@@ -76,34 +78,27 @@ class PluginInterface(plugin.ItemPlugin):
     'SELECT' on your remote control and then it will search the cover in amazon.com.
 
     Please Notice that this plugin use the Amazon.com web services and you will need
-    an Amazon developer key. You can get your at: http://www.amazon.com/webservices,
-    get that key and put it in a file named ~/.amazonkey or passe it as an argument
-    to this plugin.
+    an Amazon developer key. You can get your at: http://aws.amazon.com/,
 
     To activate this plugin, put the following in your local_conf.py.
 
-    If you have the key in ~/.amazonkey
-    | plugin.activate('audio.coversearch')
-
     Or this one if you want to pass the key to the plugin directly:
-    | plugin.activate('audio.coversearch', args=('YOUR_KEY',))
+    | plugin.activate('audio.coversearch', args=('YOUR_ACCESS_KEY','YOUR_SECRET_KEY'))
     """
 
-    def __init__(self, license=None):
+    def __init__(self, license=None, secret=None):
         if not config.SYS_USE_NETWORK:
             self.reason = 'SYS_USE_NETWORK not enabled'
             return
 
-        if license:
-            amazon.setLicense(license)
-        try:
-            amazon.getLicense()
-        except amazon.NoLicenseKey:
+        if license and secret:
+            amazon.setLicenseKey(license)
+            amazon.setSecretKey(secret)
+        else:
             print String(_('To search for covers you need an Amazon.com Web Services\n' \
                      'license key. You can get yours from:\n'))
-            print 'https://associates.amazon.com/exec/panama/associates/join/'\
-                  'developer/application.html'
-            self.reason = 'no amazon key'
+            print 'http://aws.amazon.com/'
+            self.reason = "No amazon access/secret key"
             return
 
         plugin.ItemPlugin.__init__(self)
@@ -112,7 +107,7 @@ class PluginInterface(plugin.ItemPlugin):
     def config(self):
         return [
             ('AMAZON_LOCALE', 'us', 'The location is one of: de, jp, uk, us'),
-            ('AMAZON_QUERY_ENCODING', 'latin-1', 'The character encoding of web pages'),
+            ('AMAZON_QUERY_ENCODING', 'utf-8', 'The character encoding of web pages'),
         ]
 
 
@@ -218,12 +213,13 @@ class PluginInterface(plugin.ItemPlugin):
         artist = self.item.getattr('artist')
 
         # Maybe the search string need encoding to config.LOCALE
-        search_string = '%s %s' % (artist.encode(query_encoding), album.encode(query_encoding))
+        search_string = '%s %s' % (artist.encode(config.AMAZON_QUERY_ENCODING),
+                                   album.encode(config.AMAZON_QUERY_ENCODING))
         search_string = re.sub('[\(\[].*[\)\]]', '', search_string)
         _debug_('search_string=%r' % search_string)
         try:
-            cover = amazon.searchByKeyword(search_string, product_line='Music', type='Images,ItemAttributes')
-        except amazon.AmazonError, why:
+            cover = amazon.ItemSearch(search_string, SearchIndex='Music', ResponseGroup='Images,ItemAttributes')
+        except amazon.AWSException, why:
             box.destroy()
             title = '\n'.join([artist, album])
             dict_tmp = { 'artist': artist, 'album': album }
@@ -236,7 +232,9 @@ class PluginInterface(plugin.ItemPlugin):
             return
         except Exception, why:
             box.destroy()
-            box = PopupBox(text=_('Unknown error while searching.')+'\n'+why[:40])
+            box = PopupBox(text=_('Unknown error while searching, please check the log file for details.'))
+            import traceback
+            traceback.print_exc()
             box.show()
             time.sleep(2)
             box.destroy()
@@ -246,16 +244,12 @@ class PluginInterface(plugin.ItemPlugin):
 
         # Check if they're valid before presenting the list to the user
         # Grrr I wish Amazon wouldn't return an empty gif (807b)
-        if cover.Items and cover.Items.Item:
+        if cover:
             try:
-                if not isinstance(cover.Items.Item, list) and not isinstance(cover.Items.Item, tuple):
-                    cover.Items.Item = [ cover.Items.Item ]
-
-                for item in cover.Items.Item:
+                for item in cover:
                     title = 'Unknown'
-                    if hasattr(item, 'ItemAttributes'):
-                        if hasattr(item.ItemAttributes, 'Title'):
-                            title = item.ItemAttributes.Title
+                    if hasattr(item, 'Title'):
+                        title = item.Title
                     url = None
                     width = 0
                     height = 0
