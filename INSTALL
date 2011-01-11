@@ -44,19 +44,11 @@ o Gentoo:
 
 
 
-o Debian:
+o Debian / Ubuntu :
 
-  A Debian apt source is available and includes all the dependencies
-  you'll need.
-  You should add this to your /etc/apt/sources.list file:
-
-  deb http://freevo.sourceforge.net/debian unstable main
-  deb http://marillat.free.fr/ unstable main
-
-  (The second source provides mplayer and other multimedia packages)
-
-  Then, simply run apt-get update && apt-get install Freevo to fetch
-  all the dependencies you'll need to run Freevo.
+  Freevo is part of Debian and of Ubuntu; to install it, run
+  # apt-get install freevo
+  as root.
 
 
 
