@@ -384,15 +384,17 @@ class GraphicsDisplay(Display):
 
     def __set_current_dialog(self, dialog, duration, prepared):
         _debug_('Setting current dialog to %s' % dialog.__class__.__name__)
+        
+        if self.current_dialog != dialog:
+            if not prepared:
+                dialog.prepare()
+
+            if hasattr(dialog, 'event_context'):
+                rc.add_app(dialog)
+
         self.current_dialog = dialog
         self.current_time_details = (time.time(), duration)
 
-        if not prepared:
-            dialog.prepare()
-
-        if hasattr(dialog, 'event_context'):
-            rc.add_app(dialog)
-            
         try:
             self.show_image(dialog.render(), dialog.skin.position)
         except:
