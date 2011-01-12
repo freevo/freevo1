@@ -45,14 +45,13 @@ import osd
 import tv.epg_xmltv
 
 from gui import sounds
-from gui.PopupBox import PopupBox
-from gui.AlertBox import AlertBox
 from item import Item
 
 from menu import MenuItem, Menu
 from tv.programitem import ProgramItem
 from skin.widgets import TextEntryScreen
 
+import dialog
 from dialog.dialogs import ProgressDialog
 
 MAX_RESULTS = 500
