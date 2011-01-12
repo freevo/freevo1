@@ -63,10 +63,10 @@ class View_Area(Skin_Area):
             
         return Unicode(image) != Unicode(self.image) or self.image_loaded
 
-    def __loaded(self, result, image):
-        if self.image == image:
+    def __loaded(self, result, image_request):
+        if self.image == image_request[0]:
             self.loading_image = None
-            self._image = result
+            self._image = result + image_request[1:]
             self.image_loaded = True
             
             skin.redraw()
@@ -121,13 +121,19 @@ class View_Area(Skin_Area):
 
         addx = content.x + content.spacing
         addy = content.y + content.spacing
+
         if self._image:
-            image, i_w, i_h = self._image
+            print 'Required dimensions %dx%d current dimensions %dx%d' % (width, height, self._image[3],self._image[4])
+            if width != self._image[3] or height != self._image[4]:
+                self._image = None
+
+        if self._image:
+            image, i_w, i_h, r_w, r_h = self._image
         else:
             if self.loading_image:
                 self.loading_image.cancelled = True
             self.loading_image = AsyncImageFormatter(self.settings, item, width, height, 0, self.xml_settings.anamorphic)
-            self.loading_image.connect(self.__loaded, self.image)
+            self.loading_image.connect(self.__loaded, (self.image, width, height))
             image = None
 
         if not image:
