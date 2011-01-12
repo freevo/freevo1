@@ -57,9 +57,9 @@ class ScrollableTextScreen:
         @param menuw: The menu widget to push this screen onto.
         """
         self.menuw = menuw
-        self.blend = 1
+        self.transition = skin.TRANSITION_IN
         menuw.pushmenu(self)
-        self.blend = False
+        self.transition = False
         if hasattr(self, 'event_context'):
             _debug_('scrollabletext_screen: setting context to %s' % self.event_context, 2)
             rc.set_context(self.event_context)
@@ -70,7 +70,7 @@ class ScrollableTextScreen:
         """
         if self.menuw.children:
             return
-        skin_object.draw(self.layout, self, blend=self.blend)
+        skin_object.draw(self.layout, self, transition=self.transition)
 
     def eventhandler(self, event, menuw=None):
         """
