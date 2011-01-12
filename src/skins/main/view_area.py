@@ -123,7 +123,6 @@ class View_Area(Skin_Area):
         addy = content.y + content.spacing
 
         if self._image:
-            print 'Required dimensions %dx%d current dimensions %dx%d' % (width, height, self._image[3],self._image[4])
             if width != self._image[3] or height != self._image[4]:
                 self._image = None
 
