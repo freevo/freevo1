@@ -431,5 +431,6 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('ICECAST_MIN_BITRATE', 0, _("Minimum bitrate of stations to display - 0 to disable") ),
             ('ICECAST_MAX_BITRATE', 0, _("Maximum bitrate of stations to display - 0 to disable") ),
             ('ICECAST_YPS', [ 'http://dir.xiph.org/yp.xml' ], _("Icecast yellowpages xml urls") ),
-            ('ICECAST_AUDIOTYPES', [ 'MP3', 'OGG', 'AAC', 'AAC+' ], _("a list of the types to display - full list [ 'MP3', 'OGG', 'AAC', 'AAC+', 'NUPPEL', 'OGG Theora', 'DATA' ]") )
+            ('ICECAST_AUDIOTYPES', [ 'MP3', 'OGG', 'AAC', 'AAC+' ], _("a list of the types to display - full list [ 'MP3', 'OGG', 'AAC', 'AAC+', 'NUPPEL', 'OGG Theora', 'DATA' ]") ),
+            ('ICECAST_GENRE_MAP', None, '')
        ]

@@ -178,7 +178,6 @@ class ShoutcastAudioMenuItem(Item):
                 genrelist =  [ menu.MenuItem( _('Error retrieving genres'), action = menuw.goto_prev_page, arg = None) ]
 
         genremenu = menu.Menu( _("Genres"), genrelist, item_types = 'audio' )
-        rc.app(None)
         menuw.pushmenu(genremenu)
         menuw.refresh()
         pop.destroy()
@@ -227,7 +226,6 @@ class ShoutcastAudioMenuItem(Item):
                 stationlist = [ menu.MenuItem( _('Error retrieving stationlist'), action = menuw.goto_prev_page, arg = None) ]
 
             stationmenu = menu.Menu( arg, stationlist, item_types = 'audio' )
-            rc.app(None)
             menuw.pushmenu(stationmenu)
             menuw.refresh()
             pop.destroy()

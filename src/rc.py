@@ -85,20 +85,19 @@ def app(application=0):
     set or get the current app/eventhandler
     """
     _debug_('rc.app(application=%r)' % (application,), 4)
-    if not application == 0:
+    if application != 0 and application != None:
         context = 'menu'
         if hasattr(application, 'app_mode'):
             context = application.app_mode
         # XXX Hmm this will make life difficult converting to kaa EventHandler
         if hasattr(application, 'eventhandler'):
             application = application.eventhandler
-        get_singleton().set_app(application, context)
+        add_app(application, context)
 
     return get_singleton().get_app()
 
 
 def add_app(app):
-    print 'app=%r context=%r' % (app, get_singleton().context,) #DJW
     context = 'menu'
     if hasattr(app, 'event_context'):
         context = app.event_context
@@ -124,7 +123,6 @@ def set_context(context):
     set the context (map with button->event transformation
     """
     _debug_('rc.set_context(context=%r)' % (context,), 2)
-    print('rc.set_context(context=%r)' % (context,))
     return get_singleton().set_context(context)
 
 
@@ -604,6 +602,7 @@ class EventHandler:
         if app == self.app:
             self.apps.pop()
             self.app,self.context = self.apps[-1]
+            _debug_('Focused App=%r context=%r' % (self.app,self.context))
         else:
             for i in xrange(len(self.apps)):
                 if self.apps[i][0] == app:
@@ -614,6 +613,7 @@ class EventHandler:
         if app == self.app:
             self.context = context
             self.apps[-1][1] = context
+            _debug_('Focus App Context changed to %r' % context)
         else:
             for i in xrange(len(self.apps)):
                 if self.apps[i][0] == app:
