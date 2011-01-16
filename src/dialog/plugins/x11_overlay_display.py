@@ -89,9 +89,9 @@ if not reason:
         def __init__(self):
             super(X11GraphicsDisplay, self).__init__()
             if config.OSD_SINGLE_WINDOW:
-                self.window = X11Window(size=(1,1), parent=osd.get_singleton().display_window)
+                self.window = X11Window(size=(1,1), parent=osd.get_singleton().display_window, mouse_events=False, key_events=False)
             else:
-                self.window = X11Window(size=(1,1), title='Freevo OSD')
+                self.window = X11Window(size=(1,1), title='Freevo OSD', mouse_events=False, key_events=False)
             self.window.set_decorated(False)
             self.window.signals['expose_event'].connect(self.__redraw)
             self.image = None

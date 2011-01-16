@@ -342,6 +342,31 @@ class BusyIcon(threading.Thread):
                 _debug_('main_layer icon removed', 2)
 
 
+class VideoWindow:
+    def __init__(self, parent, size):
+        self.proxy_window = kaa.display.X11Window(parent=parent, size=size)
+        self.video_window = kaa.display.X11Window(parent=self.proxy_window,
+                                                  size=size,
+                                                  mouse_events=False,
+                                                  key_events=False)
+        self.input_window = kaa.display.X11Window(parent=parent, size=size, input_only=True, proxy_for=parent)
+        self.id = self.video_window.id
+
+    def show(self):
+        self.proxy_window.show()
+        self.video_window.show()
+        self.input_window.show()
+
+    def hide(self):
+        self.input_window.hide()
+        self.video_window.hide()
+        self.proxy_window.hide()
+
+    def set_geometry(self, pos, size):
+        self.video_window.set_geometry(pos, size)
+        self.proxy_window.set_geometry(pos, size)
+
+
 class OSD:
     """
     On-screen display class
@@ -443,9 +468,12 @@ class OSD:
             if 'window' in wm_info:
                 try:
                     import kaa.display
-                    self.display_window = kaa.display.X11Window(window=int(wm_info['window']))
-                    self.video_window = kaa.display.X11Window(parent=self.display_window,
-                                                              size=(self.width, self.height))
+                    self.display_window = kaa.display.X11Window(window=int(wm_info['window']),
+                                                                window_events=False,
+                                                                mouse_events=False,
+                                                                key_events=False)
+                    self.video_window = VideoWindow(self.display_window, (self.width, self.height))
+
                 except:
                     print 'OSD_SINGLE_WINDOW disabled!'
 
