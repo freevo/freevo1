@@ -120,39 +120,44 @@ def format_image(settings, item, width, height, force=False, anamorphic=False, f
         if isinstance(item.image, imlib2.Image):
             image = osd.loadbitmap(item.image)
         else:
-            if not os.path.exists(str(item.image)):
-                return None, 0, 0
+            if not (item.image.startswith('http://') or item.image.startswith('https://')):
+                if not os.path.exists(str(item.image)):
+                    return None, 0, 0
         
         image = load_imagecache[item.image]
         if not image:
             image = load_imagecache['thumb://%s' % item.image]
 
         if not image:
-            for folder in ('.thumbs', '.images'):
-                image_parts = os.path.split(str(item.image))
-                ifile = os.path.join(image_parts[0], folder, image_parts[1])
-                if os.path.exists(ifile):
-                    imagefile = ifile
-                    break
-
-            if imagefile:
-                image = osd.loadbitmap(imagefile)
-                imagefile = 'thumb://%s' % item.image
+            if item.image.startswith('http://') or item.image.startswith('https://'):
+                image = osd.loadbitmap(item.image)
                 load_imagecache[imagefile] = image
             else:
-                imagefile = item.image
-                f = open(imagefile, 'rb')
-                tags = exif.process_file(f)
-                f.close()
-                if 'JPEGThumbnail' in tags:
-                    sio = StringIO.StringIO(tags['JPEGThumbnail'])
-                    image = pygame.image.load(sio)
-                    sio.close()
+                for folder in ('.thumbs', '.images'):
+                    image_parts = os.path.split(str(item.image))
+                    ifile = os.path.join(image_parts[0], folder, image_parts[1])
+                    if os.path.exists(ifile):
+                        imagefile = ifile
+                        break
+
+                if imagefile:
+                    image = osd.loadbitmap(imagefile)
                     imagefile = 'thumb://%s' % item.image
                     load_imagecache[imagefile] = image
                 else:
-                    image = osd.loadbitmap(imagefile)
-                    load_imagecache[imagefile] = image
+                    imagefile = item.image
+                    f = open(imagefile, 'rb')
+                    tags = exif.process_file(f)
+                    f.close()
+                    if 'JPEGThumbnail' in tags:
+                        sio = StringIO.StringIO(tags['JPEGThumbnail'])
+                        image = pygame.image.load(sio)
+                        sio.close()
+                        imagefile = 'thumb://%s' % item.image
+                        load_imagecache[imagefile] = image
+                    else:
+                        image = osd.loadbitmap(imagefile)
+                        load_imagecache[imagefile] = image
                     
 
 

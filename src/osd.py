@@ -46,6 +46,7 @@ import cStringIO
 import config
 import rc
 import util
+import util.webcache
 import dialog
 
 
@@ -871,6 +872,23 @@ class OSD:
 
         return image
 
+    def _load_image_web(self, url):
+        wc = util.webcache.get_default_cache()
+        image = None
+        try:
+            fp = wc.get(url)
+            try:
+                image = pygame.image.load(fp)
+            except IOError, why:
+                _debug_('SDL image load problem: %s' % (why,), DERROR)
+            fp.close()
+
+        except Exception, why:
+            _debug_('Problem while loading image %r: %r' % (url, why), DWARNING)
+            if config.DEBUG:
+                traceback.print_exc()
+        return image
+
 
     def loadbitmap(self, url, cache=False):
         """
@@ -897,7 +915,12 @@ class OSD:
                 s = cache[url]
                 if s:
                     return s
-            image = self._load_image_filename(url)
+
+            if url.startswith('http://') or url.startswith('https://'):
+                image = self._load_image_web(url)
+            else:
+                image = self._load_image_filename(url)
+
             if image:
                 if cache:
                     cache[url] = image
