@@ -110,15 +110,11 @@ class PluginInterface(plugin.MainMenuPlugin):
                 traceback.print_exc()
         
     def config(self):
-        """
-        Returns config variables for this plugin.
-        @return: A List of config variables for this plugin.
-        """
         return  [('IPLAYER_TYPES', ['bbc tv'],
                         'A list of types of content to show for. Options are: bbc tv, bbc radio, bbc podcast'),
                  ('IPLAYER_DOWNLOAD_DIR', '.', 'Directory to store the downloads in.'),
-                 ('IPLAYER_DOWNLOAD_MODE_VIDEO', 'flashhd1,flashhd2,flashhigh1,flashhigh2,flashstd1,flashstd2',
-                    'Try to download content in the specified type order. (see get_iplayer --vmode parameter for details)'),
+                 ('IPLAYER_DOWNLOAD_MODE_VIDEO', '',
+                    'Try to download content in the specified type order. (see get_iplayer --tvmode parameter for details)'),
                  ('IPLAYER_GET_IPLAYER', '',
                     'The get_iplayer application path. Set this to None (or not defined in your local_conf.py) to allow automatic downloading and update.'),
                  ('IPLAYER_RTMPDUMP_PATH', '/usr/local/bin/rtmpdump', 'Path to rtmpdump utility for downloading flash content')]
@@ -269,8 +265,8 @@ class IPlayerServiceItem(Item):
 
 
 RE_LIST = re.compile('^(.*) \(([0-9]+)\)$') # For Channels or Categories
-RE_ITEM = re.compile('^([0-9]+)\|\|(.+?)\|\|(.+?)\|\|(.+?)\|\|(.+)$')
-ITEM_FORMAT = '<index>||<pid>||<name>||<episode>||<desc>'
+RE_ITEM = re.compile('^([0-9]+)\|\|(.+?)\|\|(.+?)\|\|(.+?)\|\|(.+?)\|\|(.+)$')
+ITEM_FORMAT = '<index>||<pid>||<name>||<episode>||<desc>||<thumbnail>'
 
 LIST_TYPE_TO_FILTER = {
     'channel' : '--channel "^%s$"',
@@ -375,7 +371,9 @@ class IPlayerProgramListItem(Item):
         if mobj:
             if self.prog_count:
                 self.progress.set_indeterminate(False)
-            items.append(IPlayerProgramItem(self, self.gip_type, mobj.group(1), mobj.group(2), mobj.group(3), mobj.group(4), mobj.group(5)))
+            items.append(IPlayerProgramItem(self, self.gip_type, mobj.group(1),
+                                            mobj.group(2), mobj.group(3), mobj.group(4),
+                                            mobj.group(5),mobj.group(6)))
             items_len = len(items)
             if self.prog_count:
                 self.progress.update_progress('%d/%d' % (items_len, self.prog_count), float(items_len) / float(self.prog_count))
@@ -415,46 +413,7 @@ class IPlayerProgramListItem(Item):
         self.menuw = menuw
         self.items = items
 
-        thread = threading.Thread(target=self.update_item_details)
-        thread.start()
 
-
-    def update_item_details(self):
-        """
-        Calls get_details() on all items, prioritising the selected item first
-        then those in view and then all other items.
-        """
-        items_to_update = copy.copy(self.items)
-
-        while items_to_update:
-            if self.menu not in self.menuw.menustack:
-                # The menu is no longer in the menu stack don't bother retrieving
-                # any more details.
-                break
-
-            item_to_update = None
-            # Try and update the currently displayed menu items first
-            if self.menu.selected in items_to_update:
-                item_to_update = self.menu.selected
-                items_to_update.remove(item_to_update)
-                
-            if item_to_update is None:
-                for item in self.menuw.menu_items:
-                    if item in items_to_update:
-                        item_to_update = item
-                        items_to_update.remove(item)
-                        break
-
-            if item_to_update is None and items_to_update:
-                item_to_update = items_to_update.pop()
-
-            item_to_update.get_details()
-            if item_to_update == self.menu.selected:
-                skin.redraw()
-                
-            while isinstance(rc.focused_app(), MenuWidget):
-                time.sleep(0.5)
-            
 class IPlayerSeriesItem(Item):
     """
     Class representing a list of programs with the same name.
@@ -516,7 +475,7 @@ class IPlayerProgramItem(VideoItem):
     """
     Class representing an downloadable program.
     """
-    def __init__(self, parent, gip_type, index, pid, name, episode, desc):
+    def __init__(self, parent, gip_type, index, pid, name, episode, desc, thumbnail):
         """
         Create a new program instance.
         @param parent: Parent item.
@@ -526,6 +485,7 @@ class IPlayerProgramItem(VideoItem):
         @param name: Name of the program.
         @param epsiode: Name of the episode.
         @param desc: Description of the program.
+        @param thumbnail: URL for the thumbnail.
         """
         VideoItem.__init__(self, 'http://127.0.0.1:%d/%s/%s/video.mov' % (IPLAYER_WEB_PORT, gip_type, pid), parent)
         self.gip_type = gip_type
@@ -535,10 +495,8 @@ class IPlayerProgramItem(VideoItem):
         self.info['title'] = self.name
         self.info['tagline'] = episode
         self.info['plot'] = desc
-        thumbnail_file = get_item_basename(pid, name, episode ) + '.jpg'
-        self.thumbnail = os.path.join(config.IPLAYER_DOWNLOAD_DIR, thumbnail_file)
-        if os.path.exists(self.thumbnail):
-            self.image = self.thumbnail
+        self.image = thumbnail
+
 
     def actions(self):
         """
@@ -596,28 +554,17 @@ class IPlayerProgramItem(VideoItem):
         dq = get_download_queue()
         dq.remove(self.gip_type, self.pid)
     
-    def get_details(self):
-        """
-        Retrieve details of the program using get_iplayer and attempt to download
-        the thumbnail.
-        """
-        details = {}
-        query_get_iplayer('-i %s' % self.index, self.gip_type, self.__getiplayer_line_cb, details)
-        if 'thumbnail' in details:
-            if not os.path.exists(self.thumbnail):
-                try:
-                    urllib.urlretrieve( details['thumbnail'], self.thumbnail)
-                    self.image = self.thumbnail
-                except:
-                    import traceback
-                    traceback.print_exc()
-        if 'duration' in details:
-            self.info['length'] = details['duration']
+    def show_details(self, arg=None, menuw=None):
+        query_get_iplayer('-i %s' % self.index, self.gip_type, self.__getiplayer_line_cb, None)
+        VideoItem.show_details(self, arg, menuw)
+
     
     def __getiplayer_line_cb(self, details, line):
-        for prefix in ('Desc', 'Duration', 'Episode', 'Index', 'Name', 'Thumbnail', 'Pid'):
-            if line.startswith(prefix + ':'):
-                details[prefix.lower()] = line[len(prefix) + 1:].strip()
+        if line.startswith('desc:'):
+            self.info['plot'] = line[5:].strip()
+        if line.startswith('duration:'):
+            self.info['length'] = int(line[9:])
+
 
     def id(self):
         return self.gip_type+self.pid
@@ -895,7 +842,7 @@ class DownloadQueue:
                 '--fxd', fxd_file]
 
         if config.IPLAYER_DOWNLOAD_MODE_VIDEO:
-            cmd += ['--vmode', config.IPLAYER_DOWNLOAD_MODE_VIDEO]
+            cmd += ['--tvmode', config.IPLAYER_DOWNLOAD_MODE_VIDEO]
         if config.IPLAYER_RTMPDUMP_PATH:
             cmd += ['--flvstreamer', config.IPLAYER_RTMPDUMP_PATH]
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, preexec_fn=self.setupprocess)
@@ -956,21 +903,27 @@ def get_download_queue():
 #-------------------------------------------------------------------------------
 # Helper functions
 #-------------------------------------------------------------------------------
-def query_get_iplayer(cmd, gip_type, line_cb, arg):
-    update_get_iplayer()
-    process = subprocess.Popen('%s %s --type %s' % (GET_IPLAYER, cmd, gip_type),
-                                stdin=subprocess.PIPE, 
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT,
-                                shell=True)
-    # Read version, GPL and blank line
-    for i in xrange(5):
-        line = process.stdout.readline()
-    process.stdin.write('n\n') # In case we get asked about wanting to delete recordings
-    for line in process.stdout:
-        line_cb(arg, line[:-1])
+gpl_line_count = 0
 
-    return process.wait()
+def query_get_iplayer(cmd, gip_type, line_cb, arg):
+    global gpl_line_count
+    update_get_iplayer()
+    gpl_line_count = 0
+    
+    def line_callback(line):
+        global gpl_line_count
+        #print gpl_line_count,line
+        if gpl_line_count < 5:
+            gpl_line_count += 1
+        else:
+            line_cb(arg, line[:-1])
+
+    process = kaa.Process('%s %s --type %s' % (GET_IPLAYER, cmd, gip_type))
+    process.signals['readline'].connect(line_callback)
+    ip = process.start()
+    process.stdin.write('n\n')
+    ip.wait()
+    return process.exitcode
 
 def get_item_basename(pid, name, episode):
     item_basename = '%s - %s-%s' % (name, episode, pid)
