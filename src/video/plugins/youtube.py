@@ -227,11 +227,7 @@ class YoutubeVideoItem(VideoItem):
                 self.description = text
             match = re.search('src="([^\"]*)"', text)
             if match:
-                tempimage = match.group(1)
-                file = config.YOUTUBE_DIR + '/' + id.replace('-', '_') + '.jpg'
-                if not os.path.exists(file):
-                    aimage = urllib.urlretrieve(tempimage, file)
-                self.image = file
+                self.image = match.group(1)
         else:
             self.description = ""
         self.description += '\n' + _('User') + ': ' + video.author[0].name.text
