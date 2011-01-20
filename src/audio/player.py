@@ -139,6 +139,7 @@ class PlayerGUI(GUIObject):
         self.running = False
         if self.visible:
             rc.remove_app(self.player)
+            skin.draw('player', self.item, transition=skin.TRANSITION_OUT)
 
         if self.menuw and not self.menuw.visible and restore_menu:
             self.menuw.show()
@@ -180,6 +181,8 @@ class PlayerGUI(GUIObject):
         if self.first_drawing:
             transition = skin.TRANSITION_IN
             self.first_drawing = False
+        else:
+            transition = skin.TRANSITION_NONE
         skin.draw('player', self.item, transition=transition)
 
 
