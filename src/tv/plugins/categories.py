@@ -242,14 +242,20 @@ class CategoryItem(Item):
 class ProgamShowings(Item):
     def __init__(self, parent, name, programs):
         Item.__init__(self, parent, skin_type='tv')
-        self.name = name
+        self.name = name + _(' (%d showings)') % len(programs)
         self.items = []
+        self.description = ''
         for program in programs:
             if hasattr(program, 'sub_title') and program.sub_title:
                 program.name = program.sub_title
                 del program.sub_title
             else:
                 program.name = program.start
+            if self.description:
+                self.description += ', ' + program.name
+            else:
+                self.description = program.name
+
         self.items = programs
 
     # ======================================================================
