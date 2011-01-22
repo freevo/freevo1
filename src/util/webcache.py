@@ -89,21 +89,20 @@ class WebCache:
             e = self.in_progress[url]
             self.lock.release()
             e.wait()
-            print threading.currentThread().name, 'Waited'
             self.lock.acquire()
 
 
         entry = self.__get_entry(url)
         if entry:
+            filename = os.path.join(self.cache_dir, entry[2])
             if time.time() < entry[1]:
-                print threading.currentThread().name, 'From Cache!'
-                filename = os.path.join(self.cache_dir, entry[2])
                 fp = open(filename, 'rb')
                 self.lock.release()
                 return fp
+            else:
+                os.unlink(filename)
 
         e = threading.Event()
-        print threading.currentThread().name,'Downloading'
         self.in_progress[url] = e
         self.lock.release()
         
@@ -295,7 +294,16 @@ def get_default_cache():
     if __default_cache is None:
         import config
         import version
+        import kaa
         __default_cache = WebCache(os.path.join(config.FREEVO_CACHEDIR, 'web'), 'Freevo/'+version.__version__)
+
+        # Remove expired items from the cache.
+        __default_cache.clean()
+        
+        # Set a timer for every 30 minutes to clean the cache.
+        t = kaa.Timer(__default_cache.clean)
+        t.start(1800)
+
     return __default_cache
 
 def test():
@@ -310,3 +318,6 @@ def test():
 
     for t in threads:
         t.start()
+
+if __name__ == '__main__':
+    test()
