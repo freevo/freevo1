@@ -412,8 +412,9 @@ class MenuModel(WidgetModel):
         """
         item.parent = self
         self.items.append(item)
-        self.__update_page()
-        self.redraw()
+        if self.items_per_page:
+            self.__update_page()
+            self.redraw()
 
     def remove(self, item):
         """
@@ -427,8 +428,9 @@ class MenuModel(WidgetModel):
         if idx <= self.active_item:
             self.active_item -= 1
         self.items.remove(item)
-        self.__update_page()
-        self.redraw()
+        if self.items_per_page:
+            self.__update_page()
+            self.redraw()
 
     def remove_all(self):
         """
@@ -439,8 +441,9 @@ class MenuModel(WidgetModel):
         self.items = []
         self.offset = 0
         self.active_item = 0
-        self.__update_page()
-        self.redraw()
+        if self.items_per_page:
+            self.__update_page()
+            self.redraw()
 
     def layout(self, items_per_page, position, size):
         """
