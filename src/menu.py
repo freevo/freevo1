@@ -793,6 +793,10 @@ class MenuWidget(GUIObject):
         if not isinstance(menu, Menu) and menu.eventhandler(event):
             return True
 
+        if event == 'MENU_RELOAD':
+            self.refresh(True)
+            return True
+
         if event == 'MENU_REFRESH':
             self.refresh()
             return True

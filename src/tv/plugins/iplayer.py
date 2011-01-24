@@ -525,7 +525,7 @@ class IPlayerProgramItem(VideoItem):
         """
         confirm_dialog = dialog.dialogs.ButtonDialog(((_('Yes'), self.start_download),
                                               (_('No'), None)),
-                                              _('Do you want to download %s - %s?') %(self.name, self.info['tagline']))
+                                              _('Do you want to download %s - %s?') %(self.info['title'], self.info['tagline']))
         confirm_dialog.show()
 
     def cancel_download(self, arg=None, menuw=None):
@@ -534,7 +534,7 @@ class IPlayerProgramItem(VideoItem):
         """
         confirm_dialog = dialog.dialogs.ButtonDialog(((_('Yes'), self.stop_download),
                                               (_('No'), None)),
-                                              _('Do you want to cancel downloading of %s - %s?') % (self.name, self.info['tagline']))
+                                              _('Do you want to cancel downloading of %s - %s?') % (self.info['title'], self.info['tagline']))
         confirm_dialog.show()
 
     def start_download(self):
@@ -678,7 +678,7 @@ class IPlayerDownloadQueueItem(Item):
     def __download_finished(self, download, status):
         import event
         if self.menuw.menustack[-1] == self.menu:
-            event.MENU_RELOAD.post()
+            event.Event('MENU_RELOAD').post()
         else:
             dq = get_download_queue()
             dq.set_finished_callback(None)
@@ -729,15 +729,9 @@ class IPlayerRequestHandler(BaseHTTPRequestHandler):
         _debug_(format % args, 2)
 
     def output(self, out):
-        buf = 'a'
-        line = ''
-        while buf:
-            buf = out.read(1)
-            if buf =='\n' or buf == '\r':
-                print 'DOWNLOAD: %r' % line
-                line = ''
-            else:
-                line += buf
+        line = 'a'
+        while line:
+            line = out.readline()
 
 #-------------------------------------------------------------------------------
 # Download Queue
@@ -836,23 +830,32 @@ class DownloadQueue:
         fxd_file = fxd_file.replace('/', '_')
         cmd = [config.CONF.get_iplayer,
                 '--type', self.current_download[0],
+                '-i',
                 '--pid', self.current_download[1],
                 '-o', config.IPLAYER_DOWNLOAD_DIR,
                 '--file-prefix', basename,
-                '--fxd', fxd_file]
+                '--force']
 
         if config.IPLAYER_DOWNLOAD_MODE_VIDEO:
-            cmd += ['--tvmode', config.IPLAYER_DOWNLOAD_MODE_VIDEO]
+            cmd += ['--mode', config.IPLAYER_DOWNLOAD_MODE_VIDEO]
         if config.IPLAYER_RTMPDUMP_PATH:
             cmd += ['--flvstreamer', config.IPLAYER_RTMPDUMP_PATH]
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE, preexec_fn=self.setupprocess)
 
+        process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                        stderr=subprocess.STDOUT,
+                                        preexec_fn=self.setupprocess,
+                                        universal_newlines=True)
 
         if process:
             self.status = ''
+            self.desc = ''
+            self.episode = ''
+            self.filename = ''
+            self.title = ''
             thread = threading.Thread(target=self.parse_output, args=(process.stdout,))
             thread.setName('IPlayer-DwnldSO')
             thread.start()
+
             while process.poll() is None:
                 time.sleep(0.5)
                 if self.cancel_download and \
@@ -862,35 +865,73 @@ class DownloadQueue:
                     self.status = 'cancelled'
             if not self.status:
                 self.status = 'success'
+                if self.filename:
+                    self.create_fxd()
+                if self.thumbnail:
+                    self.get_thumbnail()
 
         else:
             self.status = 'process failed'
 
         return self.status
 
-    def setupprocess(self):
-        print 'Setting pgrp'
-        os.setpgrp()
-        print 'Done'
+    def create_fxd(self):
+        from util.fxdimdb import FxdImdb, makeVideo
+        fxd = FxdImdb()
 
-    def parse_output(self, out):
-        line = ''
+        (filebase, fileext) = os.path.splitext(self.filename)
+        fxd.setFxdFile(filebase, overwrite=True)
+
+        desc = self.desc.replace('\n','&#10;')
+        video = makeVideo('file', 'f1', os.path.basename(self.filename))
+        fxd.setVideo(video)
+        fxd.info['tagline'] = fxd.str2XML(self.episode)
+        fxd.info['plot'] = fxd.str2XML(self.desc)
+        fxd.title = self.title
+        fxd.writeFxd()
+
+    def get_thumbnail(self):
+        import util.webcache
+        (filebase, fileext) = os.path.splitext(self.filename)
+        outfp = open(filebase + '.jpg', 'wb')
+        wc = util.webcache.get_default_cache()
+        infp = wc.get(self.thumbnail)
         buf = 'a'
         while buf:
-            buf = out.read(1)
-            if buf in ('\n','\r'):
+            buf = infp.read(4096)
+            if buf:
+                outfp.write(buf)
+        infp.close()
+        outfp.close()
 
-                _debug_('%r' % line, 2)
-                if line == 'INFO: skipping this programme':
-                    self.status = 'failed'
-                    _debug_('Download FAILED')
-                if line == 'ERROR: aborting get_iplayer':
-                    self.status = 'failed'
-                    _debug_('Download FAILED')
-                print 'DOWNLOAD: %r' % line
-                line = ''
-            else:
-                line += buf
+
+    def setupprocess(self):
+        os.setpgrp()
+
+    def parse_output(self, out):
+        line = 'a'
+        while line:
+            line = out.readline()
+            _debug_('%r' % line, 2)
+            if line == 'INFO: skipping this programme':
+                self.status = 'failed'
+                _debug_('Download FAILED')
+            elif line == 'ERROR: aborting get_iplayer' or \
+                 line.startswith('ERROR: Failed to record '):
+                self.status = 'failed'
+                _debug_('Download FAILED')
+            elif line.startswith('INFO: Recorded '):
+                self.filename = line[len('INFO: Recorded '):].strip()
+            elif line.startswith('name:'):
+                self.title = line[5:].strip()
+            elif line.startswith('desc:'):
+                self.desc = line[5:].strip()
+            elif line.startswith('episode:'):
+                self.episode = line[8:].strip()
+            elif line.startswith('thumbnail:'):
+                self.thumbnail = line[10:].strip()
+
+            _debug_( 'DOWNLOAD: %r' % line)
 
 download_queue = None
 
