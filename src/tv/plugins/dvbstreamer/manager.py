@@ -103,6 +103,14 @@ class DVBStreamerManager:
         controller.set_servicefilter_mrl(comms.PRIMARY_SERVICE_FILTER, mrl)
 
 
+    def execute(self, adapter, cmd):
+        """
+        Execute a command on the specified adapter.
+        """
+        controller = self.get_controller(adapter)
+        controller.execute_command(cmd, True)
+
+
     def get_controller(self, adapter):
         """
         Get a Controller for the specified adapter, caching the controller if one doesn't already exist.
