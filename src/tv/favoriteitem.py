@@ -55,18 +55,14 @@ class FavoriteItem(Item):
         self.name  = self.origname = fav.name
         self.title = fav.title
         self.fav_action = fav_action
-        # twisted needs FALSE and TRUE, it does not know False and True
-        if hasattr(fav, 'allowDuplicates') and not fav.allowDuplicates:
-            self.allowDuplicates = fav.allowDuplicates = FALSE
-        else:
-            self.allowDuplicates = fav.allowDuplicates = TRUE
-        # twisted needs FALSE and TRUE, it does not know False and True
-        if hasattr(fav, 'onlyNew') and fav.onlyNew:
-            self.onlyNew = fav.onlyNew = TRUE
-        else:
-            self.onlyNew = fav.onlyNew = FALSE
+        if hasattr(fav, 'allowDuplicates'):
+            self.allowDuplicates = int(fav.allowDuplicates)
 
-        self.week_days = (_('Mon'), _('Tue'), _('Wed'), _('Thu'), _('Fri'), _('Sat'), _('Sun'))
+        if hasattr(self.fav, 'onlyNew'):
+            self.onlyNew = int(fav.onlyNew)
+
+        self.week_days = (_('Monday'), _('Tuesday'), _('Wednesday'), _('Thursday'), _('Friday'), _('Saturday'), _('Sunday'))
+
 
         if fav.channel == 'ANY':
             self.channel = _('ANY CHANNEL')
@@ -105,25 +101,29 @@ class FavoriteItem(Item):
         ### create menu items for editing the favorites attributes
         items = []
 
-        items.append(menu.MenuItem(_('Modify name'), action=self.mod_name))
-        items.append(menu.MenuItem(_('Modify channel'), action=self.mod_channel))
-        items.append(menu.MenuItem(_('Modify day of week'), action=self.mod_day))
-        items.append(menu.MenuItem(_('Modify time of day'), action=self.mod_time))
+        items.append(menu.MenuItem(_('Name') + u'\t' + _(self.name), action=self.mod_name))
+        items.append(menu.MenuItem(_('Channel') + u'\t' + _(self.channel), action=self.mod_channel))
+        items.append(menu.MenuItem(_('Day of the Week') + u'\t' + _(self.dow), action=self.mod_day))
+        items.append(menu.MenuItem(_('Time of Day') + u'\t' + _(self.mod), action=self.mod_time))
 
         if config.TV_RECORD_DUPLICATE_DETECTION:
             if self.allowDuplicates:
-                items.append(menu.MenuItem(_('Prevent Recording of Duplicates'), \
-                    action=self.alter_prop, arg=('dup', 'False')))
+                value = _('Allow duplicates')
             else:
-                items.append(menu.MenuItem(_('Allow Recording of Duplicates'),
-                    action=self.alter_prop, arg=('dup', 'True')))
+                value = _('Prevent duplicates')
+            items.append(menu.MenuItem(_('Duplicate Recordings') + u'\t' + _(value),
+                                        action=self.alter_prop,
+                                        arg=('dup', not self.allowDuplicates)))
 
 
         if config.TV_RECORD_ONLY_NEW_DETECTION:
             if self.onlyNew:
-                items.append(menu.MenuItem(_('Record All Episodes'), action=self.alter_prop, arg=('new', 'False')))
+                value = _('Only new episodes')
             else:
-                items.append(menu.MenuItem(_('Record Only New Episodes'), action=self.alter_prop, arg=('new', 'True')))
+                value = _('All episodes')
+            items.append(menu.MenuItem(_('Episode Filter') + u'\t' + _(value),
+                                        action=self.alter_prop,
+                                        arg=('new', not self.onlyNew)))
 
         # XXX: priorities aren't quite supported yet
         if 0:
@@ -133,16 +133,17 @@ class FavoriteItem(Item):
 
 
         ### save favorite
-        items.append(menu.MenuItem(_('Save changes'), action=self.save_changes))
+        items.append(menu.MenuItem(_('Save changes') + u'\t', action=self.save_changes))
 
         ### remove this program from favorites
         if not self.fav_action == 'add':
-            items.append(menu.MenuItem(_('Remove favorite'), action=self.rem_favorite))
+            items.append(menu.MenuItem(_('Remove favorite') + u'\t', action=self.rem_favorite))
 
         ### put the whole menu together
         favorite_menu = menu.Menu(_('Favorite Menu'), items, item_types='tv favorite menu')
         favorite_menu.infoitem = self
         favorite_menu.is_submenu = True
+        favorite_menu.table = (50, 50)
         menuw.pushmenu(favorite_menu)
         menuw.refresh()
 
@@ -167,6 +168,8 @@ class FavoriteItem(Item):
         _debug_('alter_name(name=%r)' % (name,), 2)
         if name:
             self.name = self.fav.name = name.strip()
+        menustack = self.menuw.menustack[-1]
+        menustack.selected.dirty = True
         self.menuw.refresh()
 
 
@@ -233,6 +236,9 @@ class FavoriteItem(Item):
         """
         _debug_('alter_prop(arg=%r, menuw=%r)' % (arg, menuw), 2)
         (prop, val) = arg
+        new_text = None
+        new_arg = None
+        back = True
 
         if prop == 'channel':
             if val == 'ANY':
@@ -241,8 +247,7 @@ class FavoriteItem(Item):
             else:
                 self.channel = val
                 self.fav.channel = val
-            if menuw:
-                menuw.back_one_menu(arg='reload')
+            new_text = _('Channel') + u'\t' + _(self.channel)
 
         elif prop == 'dow':
             if val == 'ANY':
@@ -251,8 +256,7 @@ class FavoriteItem(Item):
             else:
                 self.dow = self.week_days[val]
                 self.fav.dow = val
-            if menuw:
-                menuw.back_one_menu(arg='reload')
+            new_text = _('Day of the Week') + u'\t' + _(self.dow)
 
         elif prop == 'mod':
             if val == 'ANY':
@@ -262,52 +266,39 @@ class FavoriteItem(Item):
                 # self.mod = tv_util.minToTOD(val)
                 self.mod = time.strftime(config.TV_TIME_FORMAT, time.gmtime(float(val * 60)))
                 self.fav.mod = val
-            if menuw:
-                menuw.back_one_menu(arg='reload')
+            new_text = _('Time of Day') + u'\t' + _(self.mod)
 
         elif prop == 'dup':
-            if val == 'True':
-                # twisted needs FALSE and TRUE, it does not know False and True
-                self.allowDuplicates=TRUE
-                self.fav.allowDuplicates=TRUE
-                newname = _('Prevent Recording of Duplicates')
-                val = 'False'
+            self.allowDuplicates= self.fav.allowDuplicates= val
+            if val:
+                value = _('Allow Duplicates')
             else:
-                # twisted needs FALSE and TRUE, it does not know False and True
-                self.allowDuplicates=FALSE
-                self.fav.allowDuplicates=FALSE
-                newname = _('Allow Recordings of Duplicates')
-                val = 'True'
-            if menuw:
-                menustack = menuw.menustack[-1]
-                pos = menustack.choices.index(menustack.selected)
-                new = menu.MenuItem(newname, action=self.alter_prop, arg=('dup', val))
-                menustack.choices[pos] = new
-                menustack.selected = menustack.choices[pos]
-                menuw.init_page()
-                menuw.refresh()
+                value = _('Prevent Duplicates')
+
+            new_text =  _('Duplicate Recordings') + u'\t' + value
+            new_arg = ('dup', not val)
+            back = False
 
         elif prop == 'new':
-            # twisted needs FALSE and TRUE, it does not know False and True
-            if val == 'True':
-                self.onlyNew=TRUE
-                self.fav.onlyNew=TRUE
-                newname = _('Record All Episodes')
-                val = 'False'
+            self.onlyNew= self.fav.onlyNew = val
+            if val:
+                value = _('Only New Episodes')
             else:
-                self.onlyNew=FALSE
-                self.fav.onlyNew=FALSE
-                newname = _('Record Only New Episodes')
-                val = 'True'
-            if menuw:
-                menustack = menuw.menustack[-1]
-                pos = menustack.choices.index(menustack.selected)
-                new = menu.MenuItem(newname, action=self.alter_prop, arg=('new', val))
-                menustack.choices[pos] = new
-                menustack.selected = menustack.choices[pos]
-                menuw.init_page()
-                menuw.refresh()
+                value = _('All New Episodes')
+            new_text = _('Episode Filter') + u'\t' + value
+            new_arg = ('new', not val)
+            back = False
 
+        if menuw and new_text:
+            menu = menuw.menustack[back and -2 or -1]
+            menu.selected.name = new_text
+            if new_arg:
+                menu.selected.arg = new_arg
+            menu.selected.dirty = True
+            if back:
+                menuw.back_one_menu(arg='reload')
+            else:
+                menuw.refresh()
 
     def save_changes(self, arg=None, menuw=None):
         """
