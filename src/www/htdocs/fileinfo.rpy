@@ -144,6 +144,8 @@ class FileInfoResource(FreevoResource):
                u"doc.getElementById('file-info').innerHTML = '%s';\n"\
                u"doc.getElementById('file-play-button').onclick = %s;\n"\
                u"doc.getElementById('file-play-using-vlc').onclick = %s;\n"\
+               u"doc.getElementById('file-play-using-html5').onclick = %s;\n"\
+               u"doc.getElementById('file-play-using-flash').onclick = %s;\n"\
                u"doc.getElementById('program-waiting').style.display = 'none';\n" \
                u"doc.getElementById('program-info').style.visibility = 'visible';\n" \
                u"</script>\n" \
@@ -151,7 +153,9 @@ class FileInfoResource(FreevoResource):
             ) % ( Unicode(title.replace("'", "\\'")),
                   Unicode(info.replace("'", "\\'")),
                   "function() { window.open(\"%s\"); }" % (urllib.quote(file_link)),
-                  "function() { window.open(\"vlcwin.rpy?dir=%s\"); }" % (urllib.quote(file_link))
+                  "function() { window.open(\"vlcwin.rpy?dir=%s\"); }" % (urllib.quote(file_link)),
+                  "function() { window.open(\"html5win.rpy?dir=%s\"); }" % (urllib.quote(file_link)),
+                  "function() { window.open(\"flashwin.rpy?dir=%s\"); }" % (urllib.quote(file_link))
             )
 
         elif img:

@@ -602,6 +602,14 @@ class LibraryResource(FreevoResource):
             u"                        "+_('Play file using VLC')+u"\n"\
             u"                        "+''+u"\n"\
             u"                        </td>\n"\
+	    u"                        <td id=\"file-play-using-html5\">\n"\
+	    u"                        "+_('Play file using html5')+u"\n"\
+	    u"                        "+''+u"\n"\
+	    u"                        </td>\n"\
+            u"                        <td id=\"file-play-using-flash\">\n"\
+            u"                        "+_('Play file using flash')+u"\n"\
+            u"                        "+''+u"\n"\
+            u"                        </td>\n"\
             u"                        <td id=\"program-favorites-button\">\n"\
             #u"                        "+_('Play file on Freevo')+u"\n"\
             u"                        "+''+u"\n"\
