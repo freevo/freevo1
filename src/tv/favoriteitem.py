@@ -37,6 +37,7 @@ from item import Item
 from gui.InputBox import InputBox
 
 import dialog
+import event
 
 from tv.record_types import Favorite, ScheduledRecordings
 from tv.epg_types import TvProgram
@@ -86,7 +87,9 @@ class FavoriteItem(Item):
 
     def actions(self):
         _debug_('actions()', 2)
-        return [( self.display_submenu, _('Edit favorite')), \
+        return [( self.display_submenu, _('Edit favorite')), 
+                ( self.priority_up, _('Increase priority')), 
+                ( self.priority_down, _('Decrease priority')),
                 ( self.rem_favorite, _('Remove favorite'))]
 
 
@@ -355,3 +358,31 @@ class FavoriteItem(Item):
             # if all fails then we should show an error
             msgtext = _('Remove failed')+(':\n%s' % msg)
             dialog.show_alert(msgtext)
+
+
+    def priority_mod(self, adjust, menuw=None):
+        """
+        Move current item in the priority list and refresh menu to
+        show new position
+        """
+        name = self.origname
+        result = self.recordclient.adjustPriorityNow(name, adjust)
+        if result:
+            # if this is successfull
+            if menuw:
+                menuw.delete_submenu()
+                menuw.refresh(reload=1)
+            else:
+                event.Event('MENU_RELOAD').post()
+        else:
+            # if all fails then we should show an error
+            msgtext = _('Priority adjustment failed')+(':\n%s' % msg)
+            dialog.show_message(msgtext)
+
+
+    def priority_up(self, arg=None, menuw=None):
+        self.priority_mod(-1, menuw)
+
+
+    def priority_down(self, arg=None, menuw=None):
+        self.priority_mod(1, menuw)

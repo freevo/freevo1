@@ -200,6 +200,10 @@ class ScheduledRecordings:
             favorites_fh = open(config.TV_RECORD_FAVORITES, 'rb')
             self.favorites = pickle.load(favorites_fh)
             favorites_fh.close()
+
+            if self.__normaliseFavoritePriorities()[0]:
+                self.saveFavorites()
+            
         except IOError, why:
             _debug_('%s' % (why,), DWARNING)
             return {}
@@ -249,6 +253,7 @@ class ScheduledRecordings:
         if self.favorites is None:
             self.favorites = {}
         self.favorites[fav.name] = fav
+        self.__normaliseFavoritePriorities()
         self.saveFavorites()
 
 
@@ -260,14 +265,15 @@ class ScheduledRecordings:
             return
         _debug_('removed favorite: %s' % String(name), 2)
         del self.favorites[name]
+        self.__normaliseFavoritePriorities()
         self.saveFavorites()
 
 
     def updateFavorite(self, oldname, fav):
         """ Remove old favourite if exists and add new favourite """
         _debug_('updateFavorite(oldname=%r, fav=%r)' % (oldname, fav), 2)
-        if oldname:
-            self.removeFavorite(name)
+        if oldname and self.favorites.has_key(oldname):
+            del self.favorites[oldname]
         self.addFavourite(fav)
 
 
@@ -281,6 +287,7 @@ class ScheduledRecordings:
         """ Set the favorites dictonary """
         _debug_('setFavorites(favs=%r)' % (favs,), 2)
         self.favorites = favs
+        self.__normaliseFavoritePriorities()
 
 
     def setFavoritesList(self, favs):
@@ -297,7 +304,49 @@ class ScheduledRecordings:
         """ Delete all favorites from the favorites dictonary """
         _debug_('clearFavorites()', 2)
         self.favorites = {}
-
+    
+    def adjustFavoritePriority(self, fav, mod):
+        """ Adjust the priority of the specified favorite by mod degrees """
+        prio_list = self.__normaliseFavoritePriorities()[1]
+        
+        pos = prio_list.index(fav)
+        new_pos = pos + mod
+        if new_pos < 0:
+            new_pos = 0
+            
+        if new_pos > len(prio_list):
+            new_pos = len(prio_list)
+        # Nothing to do
+        if pos == new_pos:
+            return False
+        
+        del prio_list[pos]
+        
+        
+        prio_list.insert(new_pos, fav)
+        
+        # Update the priorities
+        for i, fav in enumerate(prio_list):
+            fav.priority = i
+        return True
+        
+    
+    def __normaliseFavoritePriorities(self):
+        """ Normalise favorite priorities so they run from 0 to len(favs)-1 """
+        def fav_priority_cmp(a,b):
+            if int(a.priority) == int(b.priority):
+                return cmp(a.name, b.name)
+            return cmp(int(a.priority), int(b.priority))
+            
+        prio_list = self.favorites.values()
+        prio_list.sort(fav_priority_cmp)
+        save = False
+        for i, fav in enumerate(prio_list):
+            if fav.priority != i:
+                save = True
+                fav.priority = i
+        
+        return (save, prio_list)   
 
     def markFavoriteProgAsDeleted(self, prog, key=None):
         """ Mark a favorite program as not to be schedule when next scheduling favorites"""

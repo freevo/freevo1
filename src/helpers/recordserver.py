@@ -1232,45 +1232,23 @@ class RecordServer:
     @kaa.rpc.expose('adjustPriority')
     def adjustPriority(self, favname, mod=0):
         _debug_('adjustPriority(favname=%r, mod=%r)' % (favname, mod), 2)
-        save = []
         mod = int(mod)
+        if mod == 0:
+            return (False, _('nothing to do'))
+            
         (status, me) = self.getFavorite(favname)
-        oldprio = int(me.priority)
-        newprio = oldprio + mod
-
+        if not status:
+            return (status, me)
+            
         _debug_('ap: mod=%s' % mod, DINFO)
 
         schedule = self.getScheduledRecordings()
-        favs = schedule.getFavorites().values()
-
-        _debug_('adjusting prio of %r' % (favname,), DINFO)
-        for fav in favs:
-            fav.priority = int(fav.priority)
-
-            if fav.name == me.name:
-                _debug_('MATCH', DINFO)
-                fav.priority = newprio
-                _debug_('moved prio of %s: %s => %s' % (fav.name, oldprio, newprio), DINFO)
-                continue
-            if mod < 0:
-                if fav.priority < newprio or fav.priority > oldprio:
-                    _debug_('fp: %s, old: %s, new: %s' % (fav.priority, oldprio, newprio), DINFO)
-                    _debug_('skipping: %s' % fav.name, DINFO)
-                    continue
-                fav.priority = fav.priority + 1
-                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority-1, fav.priority), DINFO)
-
-            if mod > 0:
-                if fav.priority > newprio or fav.priority < oldprio:
-                    _debug_('skipping: %s' % fav.name, DINFO)
-                    continue
-                fav.priority = fav.priority - 1
-                _debug_('moved prio of %s: %s => %s' % (fav.name, fav.priority+1, fav.priority), DINFO)
-
-        schedule.setFavoritesList(favs)
-        self.saveScheduledRecordings(schedule)
-
-        return (True, _('priority adjusted'))
+        status = schedule.adjustFavoritePriority(me, mod)
+        if status:
+            self.saveScheduledRecordings(schedule)
+            return (True, _('priority changed'))
+        return (False, _('priority not changed'))
+            
 
 
     @kaa.rpc.expose('getFavoriteObject')
