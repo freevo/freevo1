@@ -75,7 +75,13 @@ def shutdown(menuw=None, mode=None, exit=False):
 
     skin.get_singleton().suspend()
     osd.clearscreen(color=osd.COL_BLACK)
-    osd.drawstringframed(_('shutting down...'), 0, 0, osd.width, osd.height,
+    if mode == ShutdownModes.SYSTEM_SHUTDOWN:
+        msg = _('Shutting down...')
+    elif mode == ShutdownModes.SYSTEM_RESTART:
+        msg = _('Restarting...')
+    else:
+        msg = _('Exiting...')
+    osd.drawstringframed(msg, 0, 0, osd.width, osd.height,
         osd.getfont(config.OSD_DEFAULT_FONTNAME, config.OSD_DEFAULT_FONTSIZE),
         fgcolor=osd.COL_ORANGE, align_h='center', align_v='center')
     osd.update()
@@ -251,16 +257,23 @@ class ShutdownItem(Item):
 
 class ShutdownDialog(WidgetDialog):
     def __init__(self):
-        self.exit_model = ButtonModel(_('Exit'))
+        self.exit_model = ButtonModel(_('Exit Freevo'))
         self.exit_model.signals['activated'].connect(self.button_activated)
         self.exit_model.signals['pressed'].connect(self.button_pressed)
-        self.reboot_model = ButtonModel(_('Reboot'))
+        self.reboot_model = ButtonModel(_('Restart System'))
         self.reboot_model.signals['activated'].connect(self.button_activated)
         self.reboot_model.signals['pressed'].connect(self.button_pressed)
-        self.shutdown_model = ButtonModel(_('Shutdown'))
+        self.shutdown_model = ButtonModel(_('Shutdown System'))
         self.shutdown_model.signals['activated'].connect(self.button_activated)
         self.shutdown_model.signals['pressed'].connect(self.button_pressed)
-        super(ShutdownDialog, self).__init__('shutdown', { 'exit':self.exit_model, 'reboot':self.reboot_model,'shutdown':self.shutdown_model}, {})
+        self.cancel_model = ButtonModel(_('Cancel'))
+        self.cancel_model.signals['activated'].connect(self.button_activated)
+        self.cancel_model.signals['pressed'].connect(self.button_pressed)
+        buttons = { 'exit'    : self.exit_model,
+                    'reboot'  : self.reboot_model,
+                    'shutdown': self.shutdown_model,
+                    'cancel'  : self.cancel_model}
+        super(ShutdownDialog, self).__init__('shutdown', buttons, {})
         if config.SYS_SHUTDOWN_ENABLE:
             self.shutdown_model.set_active(True)
         else:

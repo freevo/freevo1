@@ -135,15 +135,16 @@
       <image name="Background" x="0" y="0" width="750" height="40" expression="True" scale="both" align="left" valign="top" src="message_bg.png"/>
       <text name="Message" x="5" y="0" width="740" height="40" expression="message" font="message" align="left" valign="center"/>
     </osd>
-    <osd name="shutdown" x="150" y="200" width="500" height="250">
-      <image name="background" x="0" y="0" width="500" height="250" expression="True" scale="noscale" align="left" valign="top" src="dialog_bg.png"/>
+    <osd name="shutdown" x="150" y="200" width="500" height="300">
+      <image name="background" x="0" y="0" width="500" height="300" expression="True" scale="vertical" align="left" valign="top" src="dialog_bg.png"/>
       <text name="text" x="20" y="20" width="460" height="50" expression="message" font="message" align="center" valign="center"/>
-      <widget name="exit" x="30" y="86" width="128" height="128" style="shutdown_button" left="shutdown" right="reboot" up="" down=""/>
-      <widget name="reboot" x="186" y="86" width="128" height="128" style="shutdown_button" left="exit" right="shutdown" up="" down=""/>
-      <widget name="shutdown" x="342" y="86" width="128" height="128" style="shutdown_button" left="reboot" right="exit" up="" down=""/>
+      <widget name="exit" x="30" y="86" width="128" height="128" style="shutdown_button" left="cancel" right="reboot" up="cancel" down="cancel"/>
+      <widget name="reboot" x="186" y="86" width="128" height="128" style="shutdown_button" left="exit" right="shutdown" up="cancel" down="cancel"/>
+      <widget name="shutdown" x="342" y="86" width="128" height="128" style="shutdown_button" left="reboot" right="cancel" up="cancel" down="cancel"/>
       <image name="exit" x="30" y="86" width="128" height="128" expression="True" scale="noscale" align="left" valign="top" src="application-exit"/>
       <image name="reboot" x="186" y="86" width="128" height="128" expression="True" scale="noscale" align="left" valign="top" src="system-reboot"/>
       <image name="shutdown" x="342" y="86" width="128" height="128" expression="True" scale="noscale" align="left" valign="top" src="system-shutdown"/>
+      <widget name="cancel" x="150" y="225" width="200" height="50" style="button" left="exit" right="shutdown" up="reboot" down="reboot"/>
     </osd>
     <widgetstyle name="shutdown_button">
       <widgetstate state="normal"/>
