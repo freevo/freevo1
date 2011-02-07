@@ -384,7 +384,8 @@ class TVListing_Area(Skin_Area):
                 start_time < now_time and now_time <= stop_time:
             tx = x_contents + int(float(now_time-start_time) * prop_1sec)
             ty = content.y + 1
-            self.drawroundbox(tx, ty, 2, y0 - ty, (current_val.font.color,0,0,0))
+            w = prop_1sec * 60
+            self.drawroundbox(tx, ty, w, y0 - ty, (current_val.font.color,0,0,0))
 
         # print arrow:
         if menuw.display_up_arrow and area.images['uparrow']:

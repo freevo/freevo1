@@ -52,7 +52,7 @@ from skin import TRANSITION_IN,TRANSITION_OUT,TRANSITION_PAGE,TRANSITION_NONE
 # Create the OSD object
 osd = osd.get_singleton()
 render = render.get_singleton()
-
+TRANSITION_STEPS=20
 ###############################################################################
 # Skin main functions
 ###############################################################################
@@ -604,11 +604,11 @@ class Skin:
         self.steps = 0
         self.timer = kaa.Timer(self.do_blend_step, transition)
         self.do_blend_step(transition)
-        self.timer.start(0.05)
+        self.timer.start(0.01)
 
     def do_blend_step(self, transition):
         self.steps += 1
-        if self.steps == 10:
+        if self.steps == TRANSITION_STEPS:
             self.timer.stop()
             self.timer = None
             self.next_screen.set_alpha(255)
@@ -617,7 +617,7 @@ class Skin:
             self.transitioning = False
             return
         osd.main_layer.blit(self.current_screen, (0,0))
-        self.next_screen.set_alpha((255 * self.steps) / 10)
+        self.next_screen.set_alpha((255 * self.steps) / TRANSITION_STEPS)
         osd.main_layer.blit(self.next_screen, (0,0))
         osd.update()
 
@@ -634,11 +634,11 @@ class Skin:
         self.steps = 0
         self.timer = kaa.Timer(self.do_slide_step, transition)
         self.do_slide_step(transition)
-        self.timer.start(0.05)
+        self.timer.start(0.01)
 
     def do_slide_step(self, transition):
         self.steps += 1
-        if self.steps == 10:
+        if self.steps == TRANSITION_STEPS:
             self.timer.stop()
             self.timer = None
             self.next_screen.set_alpha(255)
@@ -650,17 +650,17 @@ class Skin:
         osd.main_layer.fill(0)
         if transition == TRANSITION_IN:
             r = self.current_screen.get_rect()
-            self.current_screen.set_alpha((255 * (10 - self.steps) / 10))
+            self.current_screen.set_alpha((255 * (TRANSITION_STEPS - self.steps) / TRANSITION_STEPS))
             osd.main_layer.blit(self.current_screen, (0,0), r)
             r = self.next_screen.get_rect()            
-            r.width = (r.width * self.steps) / 10
+            r.width = (r.width * self.steps) / TRANSITION_STEPS
             osd.main_layer.blit(self.next_screen, (self.next_screen.get_width() - r.width,0), r)
         else:
-            self.next_screen.set_alpha((255 * self.steps)/10)
+            self.next_screen.set_alpha((255 * self.steps)/TRANSITION_STEPS)
             r = self.next_screen.get_rect()
             osd.main_layer.blit(self.next_screen, (0,0), r)
             r = self.current_screen.get_rect()
-            r.width = (r.width * (10 - self.steps)) / 10
+            r.width = (r.width * (TRANSITION_STEPS - self.steps)) / TRANSITION_STEPS
             osd.main_layer.blit(self.current_screen, (self.current_screen.get_width() - r.width,0), r)
 
         osd.update()
