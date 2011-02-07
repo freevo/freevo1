@@ -11,9 +11,9 @@ X is the category and #nnnnnnn is the tracker number.
 (B)ugs             http://sourceforge.net/tracker/?group_id=46652&atid=446895
 (F)eature requests http://sourceforge.net/tracker/?group_id=46652&atid=446898
 
-== Release 1.9.1 (2010-??-??) ==
+== Release 1.9.2 (2011-??-??) ==
 --------------------------------
-svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
+svn co svn://svn.freevo.org/freevo/tags/REL-1_9_2/freevo freevo-1.9.2
  
  * Add key modifiers to key map (F#2871423)
  * New blurr OSD theme (F#2826636)
@@ -30,6 +30,7 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_1/freevo freevo-1.9.1
  * New Russian translation (F#3000021)
  * New udisks plugin that uses dbus to find removable storage.
  * New Tv Reminder plugin (F#1567969)
+ * Add line to TV Guide to show current time/progress though a program.
  * Updated the imdb plugin and helper to use imdbpy (B#3116902) 
  * Updated autoshutdown plug-in with improved configuration and bug fixes (B#2808009)
  * Updated autoshutdown plug-in with AUTOSHUTDOWN_PROCESS_CHECK (F#2942579)

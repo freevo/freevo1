@@ -1350,6 +1350,12 @@ SKIN_SCREEN_TRANSITION = 'slide'
 #
 SKIN_USE_PAGE_TRANSITIONS = False
 
+#
+# Whether to show a line in the TV guide to represent the current time/progress
+# through a program.
+#
+SKIN_GUIDE_SHOW_NOW_LINE = True
+
 # ======================================================================
 # Freevo OSD settings:
 # ======================================================================
