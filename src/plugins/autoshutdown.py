@@ -451,8 +451,7 @@ class autoshutdowntimer(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'autoshutdowntimer'
         self.event_listener = True
-        # poll interval in 1/100 second
-        self.poll_interval = 2000
+        self.poll_interval = 20
         self.reset()
         self.resume()
         _debug_('autoshutdown timer initialized')

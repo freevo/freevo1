@@ -63,7 +63,7 @@ class PluginInterface(plugin.DaemonPlugin):
         init the autocolor plugin
         """
         plugin.DaemonPlugin.__init__(self)
-        self.poll_interval   = 200
+        self.poll_interval   = 20
         self.plugins = None
         plugin.register(self, 'autocolor')
         self.before = before

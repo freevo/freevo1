@@ -90,7 +90,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         _debug_('Using joystick %s (%s) (sensitivity %s)' % (config.JOY_DEV, self.device_name, config.JOY_SENS), DINFO)
 
-        self.poll_interval  = 1
+        self.poll_interval  = 0.1
         self.poll_menu_only = False
         self.enabled = True
 

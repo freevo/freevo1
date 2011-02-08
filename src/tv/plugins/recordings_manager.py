@@ -861,7 +861,7 @@ class DiskManager(plugin.DaemonPlugin):
     """
     def __init__(self, required_space):
         plugin.DaemonPlugin.__init__(self)
-        self.poll_interval = 5 # half a second
+        self.poll_interval = 0.5 # half a second
         self.poll_menu_only = False
         self.required_space = required_space
         self.last_time = 0;

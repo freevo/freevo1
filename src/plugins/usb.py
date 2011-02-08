@@ -59,7 +59,7 @@ class PluginInterface(plugin.DaemonPlugin):
     def __init__(self):
         plugin.DaemonPlugin.__init__(self)
         self.devices = util.list_usb_devices()
-        self.poll_interval = 100 # 1 second
+        self.poll_interval = 1 # 1 second
 
 
     def config(self):

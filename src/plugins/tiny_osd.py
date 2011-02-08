@@ -61,7 +61,7 @@ class PluginInterface(plugin.DaemonPlugin):
         init the osd
         """
         plugin.DaemonPlugin.__init__(self)
-        self.poll_interval   = 200
+        self.poll_interval = 2
         self.plugins = None
         plugin.register(self, 'osd')
         self.visible = True

@@ -83,7 +83,7 @@ class PluginInterface(IdleBarPlugin):
         self.leftclamp_x = 0
         self.rightclamp_x = 0
 
-        self.poll_interval = 0.1 # 1 sec should be same as most frequent
+        self.poll_interval = 1 # 1 sec should be same as most frequent
         self.draw_interval = 5.0 # 5 secs
         self.last_interval = self.poll_interval
         self.lastdraw  = 0

@@ -100,7 +100,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         plugin.DaemonPlugin.__init__(self)
 
-        self.poll_interval = 20         # timer resolution is 200ms
+        self.poll_interval = 4
         self.poll_menu_only = 0         # lcd even if player is on
         self.event_listener = 1         # listening to events
 

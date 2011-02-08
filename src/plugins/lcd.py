@@ -578,7 +578,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lcd.getinfo()
             _debug_('', 2)
 
-        self.poll_interval = 10
+        self.poll_interval = 1
         self.poll_menu_only = 0
         self.disable = 0
         self.height = height or self.lcd.d_height

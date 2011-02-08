@@ -553,7 +553,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.set_mixer(0)
         self.icons()
 
-        self.poll_interval = 10
+        self.poll_interval = 1
         self.poll_menu_only = 0
         self.height = 1
         self.width  = 20

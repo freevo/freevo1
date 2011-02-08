@@ -86,7 +86,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.vitem = None
         self.pl = None
         self.menuw = None
-        self.poll_interval = 10 * config.SSAVER_POLL
+        self.poll_interval = config.SSAVER_POLL
         self.saver_delay = config.SSAVER_DELAY
         self.saver_type = sstype
         self.arg1 = ssarg1

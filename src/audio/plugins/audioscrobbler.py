@@ -84,7 +84,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.plugin_name = 'audioscrobbler'
 
         # DeamonPlugin internal settings.
-        self.poll_interval = 3000
+        self.poll_interval = 30
         self.poll_menu_only = False
         self.event_listener = 1
 

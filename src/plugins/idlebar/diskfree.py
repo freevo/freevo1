@@ -59,7 +59,7 @@ class PluginInterface(IdleBarPlugin):
             return
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.diskfree'
-        self.poll_interval = 50 # about 15 secs
+        self.poll_interval = 15 # about 15 secs
         self.poll_menu_only = True
         self.time = 0
         self.diskfree = 0

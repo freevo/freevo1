@@ -37,7 +37,7 @@ import copy
 from event import Event
 import rc
 
-
+import kaa
 
 #
 # Some basic plugins known to Freevo.
@@ -164,7 +164,7 @@ class DaemonPlugin(Plugin):
         import skin
         if self.poll_menu_only and not skin.active():
             return
-        self.real_poll()
+        self.poll()
 
 
 
@@ -623,9 +623,10 @@ def __load_plugin__(name, type, level, args, number):
                     if p.poll_menu_only:
                         # replace poll with the poll wrapper to handle
                         # poll_menu_only
-                        p.real_poll = p.poll
-                        p.poll      = p.poll_wrapper
-                    rc.register(p.poll, True, p.poll_interval)
+                        p.timer = kaa.Timer(p.poll_wrapper)
+                    else:
+                        p.timer = kaa.Timer(p.poll)
+                    #p.timer.start(p.poll_interval)
 
             if isinstance(p, MainMenuPlugin):
                 __add_to_ptl__('mainmenu%s' % special, p)

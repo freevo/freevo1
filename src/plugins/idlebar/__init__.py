@@ -61,7 +61,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         _debug_('PluginInterface.__init__()', 2)
         plugin.DaemonPlugin.__init__(self)
-        self.poll_interval  = 3000
+        self.poll_interval  = 30
         self.poll_menu_only = False
         self.plugins = None
         plugin.register(self, 'idlebar')

@@ -1021,7 +1021,7 @@ class Dirwatcher(plugin.DaemonPlugin):
         self.dir           = None
         self.files         = None
         self.media         = None
-        self.poll_interval = 100 # 1 sec
+        self.poll_interval = 1 # 1 sec
 
         plugin.register(self, 'Dirwatcher')
 

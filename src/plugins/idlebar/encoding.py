@@ -52,7 +52,7 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_('encoding.PluginInterface.__init__(self)', 2)
         plugin.DaemonPlugin.__init__(self)
         #IdleBarPlugin.__init__(self)
-        self.poll_interval = 82 # 82*1/120th seconds (~1sec)
+        self.poll_interval = 1
         self.draw_interval = self.poll_interval
         self.last_interval = self.poll_interval
         self.lastdraw  = 0
