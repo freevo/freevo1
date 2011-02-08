@@ -945,6 +945,15 @@ class DiskManager(plugin.DaemonPlugin):
 
         # Copy all the items into the new array, excluding deleted items.
         for rpitem in all_recordings:
+            fxd_basename,ext = os.path.splitext(rpitem.files.fxd_file)
+            for filename in added_files:
+                nf_basename,ext = os.path.splitext(filename)
+                if ext == '.png' and fxd_basename == nf_basename:
+                    rpitem.files.image = filename
+                    rpitem.image = filename
+                    added_files.remove(filename)
+                    break
+
             deleted = False
             for filename in deleted_files:
                 if filename in rpitem.files.files or \
