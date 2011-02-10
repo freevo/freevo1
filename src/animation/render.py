@@ -37,13 +37,16 @@
 
 
 # freevo modules
-import osd, config, util, rc
+import osd
+import config
+import util
 
 # pygame modules
 import pygame.time
+import kaa
 
 # python modules
-from time      import sleep, time
+from time import sleep, time
 import copy
 
 _singleton = None
@@ -83,6 +86,7 @@ class Render:
     def __init__(self):
         # set the update handler to wait for osd
         self.update = self.update_wait
+        self.timer = None
 
 
     def update_wait(self):
@@ -94,9 +98,11 @@ class Render:
 
         if self.osd == None:
             self.osd    = osd.get_singleton()
-            rc.unregister(self.update)
+            if self.timer:
+                self.timer.stop()
             self.update = self.update_enabled
-            rc.register(self.update, True, 0)
+            self.timer = kaa.Timer(self.update)
+            self.timer.start(0.01)
 
 
     def update_enabled(self):
@@ -117,7 +123,8 @@ class Render:
                 self.animations.remove(a)
                 if len(self.animations) == 0:
                     # no more animations, unregister ourself to the main loop:
-                    rc.unregister(self.update)
+                    if self.timer:
+                        self.timer.stop()
                 continue
 
             if a.active:
@@ -160,9 +167,9 @@ class Render:
             self.animations[i].remove()
         except:
             pass
-        if len(self.animations) == 0:
+        if len(self.animations) == 0 and self.timer:
             # no more animations, unregister ourself to the main loop:
-            rc.unregister(self.update)
+            self.timer.stop()
 
 
     def killall(self):
@@ -171,7 +178,8 @@ class Render:
         """
         for a in self.animations:
             a.remove()
-        rc.unregister(self.update)
+        if self.timer:
+            self.timer.stop()
 
 
     def suspendall(self):
@@ -201,4 +209,6 @@ class Render:
         self.animations.append(anim_object)
         if len(self.animations) == 1:
             # first animation, register ourself to the main loop:
-            rc.register(self.update, True, 0)
+            self.timer = kaa.Timer(self.update)
+            self.timer.start(0.01)
+

@@ -38,6 +38,7 @@ import kaa.metadata as mmpython
 
 import config
 import util
+import rc
 
 class FileOutdatedException(Exception):
     pass
@@ -824,5 +825,6 @@ if __freevo_app__ == 'main':
         print
         print
 
-    import rc
-    rc.register(check_cache_status, True, 100)
+    import kaa
+    timer = kaa.Timer(check_cache_status)
+    timer.start(1.0)

@@ -54,6 +54,8 @@ import os, childapp, kaa, re
 from event import *
 from animation import render, BaseAnimation
 
+import kaa
+
 mmap_file = '/tmp/mpav.%s' % os.getpid()
 skin = skin.get_singleton()
 osd  = osd.get_singleton()
@@ -970,9 +972,11 @@ class MPlayerVideoApp(childapp.ChildApp):
         self.exit_type = None
 
         self.RE_EXIT   = re.compile("^Exiting\.\.\. \((.*)\)$").match
-
-        rc.register(self.poll, True, 10)
-        kaa.Timer(self.rewind_player).start(5)
+        self.poll_timer = kaa.Timer(self.poll)
+        self.poll_timer.start(0.1)
+        self.rewind_timer = kaa.Timer(self.rewind_player)
+        self.rewind_timer.start(5)
+        
         childapp.ChildApp.__init__(self, command)
 
     def rewind_player(self):
@@ -990,8 +994,8 @@ class MPlayerVideoApp(childapp.ChildApp):
 
 
     def stop(self):
-        kaa.Timer(self.rewind_player).stop()
-        rc.unregister(self.poll)
+        self.rewind_timer.stop()
+        self.poll_timer.stop()
 
         ev = Event('MPLAYERVIS_FULL_MPLAYER_END')
 

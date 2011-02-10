@@ -586,10 +586,10 @@ MENU_ARROW_NAVIGATION = False
 SYS_USE_KEYBOARD = True
 
 #
-# Process keyboard events from SDL. You want this unless you use only lirc
+# Process joystick events from SDL. You want this unless you use only lirc
 # or event devices below.
 #
-SYS_USE_JOYSTICK = True
+SYS_USE_JOYSTICK = False
 
 #
 # Process mouse events from SDL/Pygame. You want this to control Freevo
@@ -1510,6 +1510,13 @@ OSD_SINGLE_WINDOW=True
 # script.
 #
 LIRCRC = '/etc/freevo/lircrc'
+
+#
+# Set the key repeat times. The first value is the time before the first repeat 
+# will be sent. The second value is the time after which subsequent repeats will
+# be sent.
+#
+LIRC_KEY_REPEAT = (0.4, 0.2)
 
 #
 # Set the Joy device to 0 to disable, 1 for js0, 2 for js1, etc...

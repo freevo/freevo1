@@ -43,6 +43,7 @@ import time
 import datetime
 from animation import render, Transition
 import pygame
+import kaa
 
 # Module variable that contains an initialized ImageViewer() object
 _singleton = None
@@ -80,7 +81,7 @@ class ImageViewer(GUIObject):
         self.osd_height  = self.osd.height
         self.osd_width   = self.osd.width * float(config.OSD_PIXEL_ASPECT)
 
-        self.signal_registered = False
+        self.timer = None
 
         self.free_cache()
 
@@ -297,9 +298,9 @@ class ImageViewer(GUIObject):
         self.osd.update()
 
         # start timer
-        if self.duration and self.slideshow and not self.signal_registered:
-            rc.register(self.signalhandler, False, self.duration*100)
-            self.signal_registered = True
+        if self.duration and self.slideshow and not self.timer:
+            self.timer = kaa.OneShotTimer(self.signalhandler)
+            self.timer.start(self.duration)
 
         self.last_image  = (item, (image, x, y, scale, bbx, bby, bbw, bbh, self.rotation))
 
@@ -347,7 +348,7 @@ class ImageViewer(GUIObject):
 
     def signalhandler(self):
         _debug_('signalhandler()', 2)
-        self.signal_registered = False
+        self.timer = None
         self.eventhandler(PLAY_END)
 
 
@@ -359,21 +360,23 @@ class ImageViewer(GUIObject):
                 rc.post_event(Event(OSD_MESSAGE, arg=_('pause')))
                 rc.post_event(Event('IMAGE_PAUSE_INFO', arg=''))
                 self.slideshow = False
-                rc.unregister(self.signalhandler)
-                self.signal_registered = False
+                if self.timer:
+                    self.timer.stop()
+                    self.timer = None
             else:
                 rc.post_event(Event(OSD_MESSAGE, arg=_('play')+(' %ss'%self.duration)))
                 rc.post_event(Event('IMAGE_PLAY_INFO', arg='%s' % self.duration))
                 self.slideshow = True
-                rc.register(self.signalhandler, False, 100)
-                self.signal_registered = True
+                self.timer = kaa.OneShotTimer(self.signalhandler)
+                self.timer.start(0.1)
             return True
 
         elif event == STOP:
-            self.last_image  = None, None
-            self.signal_registered = False
+            self.last_image  = None, None           
             self.slideshow = config.IMAGEVIEWER_AUTOPLAY
-            rc.unregister(self.signalhandler)
+            if self.timer:
+                self.timer.stop()
+                self.timer = None
             rc.remove_app(self)
             self.fileitem.eventhandler(event)
             return True
@@ -381,8 +384,9 @@ class ImageViewer(GUIObject):
         # up and down will stop the slideshow and pass the
         # event to the playlist
         elif event == PLAYLIST_NEXT or event == PLAYLIST_PREV:
-            self.signal_registered = False
-            rc.unregister(self.signalhandler)
+            if self.timer:
+                self.timer.stop()
+                self.timer = None
             self.fileitem.eventhandler(event)
             return True
 

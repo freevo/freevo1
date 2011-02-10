@@ -108,9 +108,12 @@ except ImportError:
     print
     sys.exit(0)
 
+import osd     # The OSD class, used to communicate with the OSD daemon
+# Create the OSD object
+osd = osd.get_singleton()
+
 import rc      # The RemoteControl class.
 import util    # Various utilities
-import osd     # The OSD class, used to communicate with the OSD daemon
 import menu    # The menu widget class
 import dialog  # Message/Volume/Dialog display function (must be imported after config)
 try:
@@ -122,8 +125,7 @@ from item import Item
 from event import *
 from plugins.shutdown import shutdown
 
-# Create the OSD object
-osd = osd.get_singleton()
+
 
 
 class SkinSelectItem(Item):
@@ -358,6 +360,17 @@ def signal_handler():
     shutdown(exit=True)
     _debug_('SystemExit raised')
     raise SystemExit
+    
+def exception_handler(*args):
+    """
+    Exception handler for the main loop.
+    """
+    if args[0] == SystemExit:
+        return
+    
+    print 'Exception caught in main loop'
+    traceback.print_exception(*args)
+    
 
 
 frames = {}
@@ -502,6 +515,7 @@ try:
     signal.signal(signal.SIGTERM, unix_signal_handler)
     signal.signal(signal.SIGINT, unix_signal_handler)
     kaa.main.signals['shutdown'].connect(signal_handler)
+    kaa.main.signals['exception'].connect(exception_handler)
 
     # load the fxditem to make sure it's the first in the
     # mimetypes list

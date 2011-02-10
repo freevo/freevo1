@@ -526,6 +526,8 @@ class OSD:
         self.render = animation.render.get_singleton()
 
         pygame.time.delay(10)   # pygame.time.get_ticks don't seem to work otherwise
+        
+        rc.get_pygame_handler().start()
 
 
     def focused_app(self):
@@ -550,14 +552,6 @@ class OSD:
             _debug_('app is %s' % self.focused_app(), 2)
             _debug_('osd: Setting context to %s' % self.focused_app().get_event_context(), 2)
             rc.set_context(self.focused_app().get_event_context())
-
-    def __find_current_widget__(self, widget):
-        _debug_('__find_current_widget__(widget=%r)' % (widget,), 2)
-        if not widget:
-            return None
-        if not hasattr(widget, 'menustack'):
-            return self.__find_current_widget__(widget.parent)
-        return widget
 
 
     def _cb(self, map=True):
@@ -742,6 +736,7 @@ class OSD:
             # backup the screen
             self.__stop_screen__ = pygame.Surface((self.width, self.height))
             self.__stop_screen__.blit(self.screen, (0, 0))
+            rc.get_pygame_handler().stop()
             pygame.display.quit()
         finally:
             self.mutex.release()
@@ -772,6 +767,7 @@ class OSD:
 
             # restart all animations
             self.render.restartall()
+            rc.get_pygame_handler().start()
         finally:
             self.mutex.release()
 

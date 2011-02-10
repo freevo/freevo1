@@ -40,6 +40,7 @@ import signal
 import copy
 from subprocess import Popen, PIPE
 
+import kaa
 import config
 import osd
 import rc
@@ -295,7 +296,8 @@ class ChildApp2(ChildApp):
         """
         _debug_('ChildApp2.__init__(app=%r, debugname=%r, doeslogging=%r, stop_osd=%r)' % \
             (app, debugname, doeslogging, stop_osd), 1)
-        rc.register(self.poll, True, 10)
+        self.timer = kaa.Timer(self.poll)
+        self.timer.start(0.1)
         rc.register(self.stop, True, rc.SHUTDOWN)
 
         self.is_video = 0                       # Be more explicit
@@ -331,7 +333,7 @@ class ChildApp2(ChildApp):
         stop the child
         """
         _debug_('ChildApp2.stop(cmd=%r)' % (cmd), 2)
-        rc.unregister(self.poll)
+        self.timer.stop()
         rc.unregister(self.stop)
 
         if cmd and self.isAlive():
@@ -437,6 +439,6 @@ class Read_Thread(threading.Thread):
                         self.logger.write(line+'\n')
                         self.logger.flush()
                     if self.callback_use_rc:
-                        rc.register(self.callback, False, 0, line)
+                        kaa.MainThreadCallable(self.callback, line)()
                     else:
                         self.callback(line)

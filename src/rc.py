@@ -43,6 +43,8 @@ import config
 import evdev
 
 import pygame
+import pygame.locals
+
 from event import Event, BUTTON
 
 
@@ -178,7 +180,7 @@ class Lirc:
     """
     Class to handle lirc events
     """
-    def __init__(self):
+    def __init__(self, rc):
         _debug_('Lirc.__init__()', 2)
         try:
             global pylirc
@@ -186,6 +188,9 @@ class Lirc:
         except ImportError:
             _debug_('PyLirc not found, lirc remote control disabled!', DWARNING)
             raise
+        
+        import kaa.input.lirc
+        
         try:
             if os.path.isfile(config.LIRCRC):
                 self.resume()
@@ -198,18 +203,31 @@ class Lirc:
             _debug_('%r not found!' % (config.LIRCRC), DWARNING)
             raise
 
-        self.nextcode = pylirc.nextcode
-
-        self.previous_code            = None
-        self.repeat_count             = 0
-        self.firstkeystroke           = 0.0
-        self.lastkeystroke            = 0.0
-        self.lastkeycode              = ''
-        self.default_keystroke_delay1 = 0.25  # Config
-        self.default_keystroke_delay2 = 0.25  # Config
+        kaa.signals['lirc'].connect(self.__process_key)
 
         global PYLIRC
         PYLIRC = True
+        self.last_code = [None, 0, False]
+
+
+    def __process_key(self, code):
+        now = time.time()
+
+        if self.last_code[0] == code:
+            diff = now - self.last_code[1]
+
+            if diff > config.LIRC_KEY_REPEAT[0] and self.last_code[2]:
+                self.rc.post_key(code)
+                self.last_code = [code, now, False]
+                return
+
+            if diff > config.LIRC_KEY_REPEAT[1] and not self.last_code[2]:
+                self.rc.post_key(code)
+                self.last_code = [code, now, False]
+                return
+        else:
+            self.rc.post_key(code)
+            self.last_code = [code, now, True]
 
 
     def resume(self):
@@ -217,8 +235,7 @@ class Lirc:
         (re-)initialize pylirc, e.g. after calling close()
         """
         _debug_('Lirc.resume()', 2)
-        pylirc.init('freevo', config.LIRCRC)
-        pylirc.blocking(0)
+        kaa.input.lirc.init('freevo', config.LIRCRC)
 
 
     def suspend(self):
@@ -226,81 +243,7 @@ class Lirc:
         cleanup pylirc, close devices
         """
         _debug_('Lirc.suspend()', 2)
-        pylirc.exit()
-
-
-    def get_last_code(self):
-        """
-        read the lirc interface
-        """
-        _debug_('Lirc.get_last_code()', 5)
-        result = None
-
-        if self.previous_code != None:
-            # Let's empty the buffer and return the most recent code
-            while 1:
-                list = self.nextcode();
-                if list != []:
-                    break
-        else:
-            list = self.nextcode()
-
-        if list == []:
-            list = None
-
-        if list != None:
-            result = list
-
-        self.previous_code = result
-        return result
-
-
-    def poll(self, rc):
-        """
-        return next event
-        """
-        _debug_('Lirc.poll(rc=%r)' % (rc,), 5)
-        list = self.get_last_code()
-
-        if list is None:
-            nowtime = 0.0
-            nowtime = time.time()
-            if (self.lastkeystroke + self.default_keystroke_delay2 < nowtime) and (self.firstkeystroke != 0.0):
-                self.firstkeystroke = 0.0
-                self.lastkeystroke = 0.0
-                self.repeat_count = 0
-
-        else:
-            nowtime = time.time()
-
-            if list:
-                for code in list:
-                    if self.lastkeycode != code:
-                        self.lastkeycode = code
-                        self.lastkeystroke = nowtime
-                        self.firstkeystoke = nowtime
-
-            if self.firstkeystroke == 0.0 :
-                self.firstkeystroke = time.time()
-            else:
-                if (self.firstkeystroke + self.default_keystroke_delay1 > nowtime):
-                    list = []
-                else:
-                    if (self.lastkeystroke + self.default_keystroke_delay2 < nowtime):
-                        self.firstkeystroke = nowtime
-
-            self.lastkeystroke = nowtime
-            self.repeat_count += 1
-
-            try:
-                for code in list:
-                    ev = pygame.event.Event(pygame.USEREVENT, {'type':'lirc', 'code':code})
-                    pygame.event.post(ev)
-            except Exception, why:
-                print why
-            # don't quite understand this; looks like nonsense
-            for code in list:
-                return code
+        kaa.input.lirc.stop()
 
 
 # --------------------------------------------------------------------------------
@@ -309,22 +252,184 @@ class Keyboard:
     """
     Class to handle keyboard input
     """
-    def __init__(self):
+    def __init__(self, rc):
         """
         init the keyboard event handler
         """
+        self.rc = rc
         _debug_('Keyboard.__init__()', 2)
-        import osd
-        self.callback = osd.get_singleton()._cb
+        get_pygame_handler().register_handler(pygame.locals.KEYDOWN, self.__process_key_event)
 
 
-    def poll(self, rc):
+    def __convert_modifier(self, modifier):
         """
-        return next event
+        Converts pygame modifiers to config's modifier
         """
-        _debug_('Keyboard.poll(rc=%r)' % (rc,), 5)
-        return self.callback(rc.context != 'input')
+        result = 0
+        if modifier & pygame.locals.KMOD_ALT:
+            result = result | config.M_ALT
+        if modifier & pygame.locals.KMOD_CTRL:
+            result = result | config.M_CTRL
+        if modifier & pygame.locals.KMOD_SHIFT:
+            result = result | config.M_SHIFT
+        return result
+    
+    
+    def __process_key_event(self, event):
+        """ Process pygame key down events """
+        if self.rc.context == 'input' and event.key > 30:
+            try:
+                if event.unicode != u'':
+                    self.rc.post_key(event.unicode)
+                    return 
+            except:
+                pass
+        
+        key = event.key
+        if not key:
+            key = event.scancode
+            key = key | config.M_SCAN
+        key = key | self.__convert_modifier(event.mod)
 
+        if key in config.KEYMAP.keys():
+            self.rc.post_key(config.KEYMAP[key])
+            return
+        
+        # don't know what this is, post it as it is
+        try:
+            if event.unicode != u'':
+                self.rc.post_key(event.unicode)
+        except:
+            pass
+
+
+class Mouse:
+    """
+    Class to handle mouse input
+    """
+    def __init__(self, rc):
+        """
+        Init the mouse event handler
+        """
+        global dialog
+        import dialog        
+        self.rc = rc
+        pgh = get_pygame_handler()
+        pgh.register_handler(pygame.locals.MOUSEMOTION, self.__process_mouse_motion)
+        pgh.register_handler(pygame.locals.MOUSEBUTTONDOWN, self.__process_mouse_btn_down)
+        pgh.register_handler(pygame.locals.MOUSEBUTTONUP, self.__process_mouse_btn_up)
+        self.hide_mouse_timer = kaa.OneShotTimer(self.__hide_mouse)
+
+
+    def __hide_mouse(self):
+        self.hide_mouse_timer.stop()
+        pygame.mouse.set_visible(0)
+
+
+    def __show_mouse(self):
+        # Check if mouse should be visible or hidden
+        mouserel = pygame.mouse.get_rel()
+        mousedist = (mouserel[0]**2 + mouserel[1]**2) ** 0.5
+
+        if mousedist > 4.0:
+            pygame.mouse.set_visible(1)
+            self.hide_mouse_timer.start(2)
+
+    
+    def __process_mouse_motion(self, event):
+        """
+        Process mouse motion events.
+        """
+        self.__show_mouse()
+        if dialog.is_dialog_showing():
+            dialog.handle_mouse_event(event)
+            return
+
+        app = self.rc.get_app()
+        # Menu
+        if app and hasattr(app, 'menustack'):
+            menu = app.menustack[-1]
+            if menu and hasattr(menu, 'choices'):
+                for menuitem in menu.choices:
+                    if menuitem.rect.collidepoint(event.pos):
+                        app.highlight_menuitem(menuitem)
+        # Box with 2 buttons
+        elif app and hasattr(app, 'b0') and hasattr(app, 'b1'):
+            if app.b0.rect.collidepoint(event.pos):
+                if not app.b0.selected:
+                    app.b0.toggle_selected()
+                    app.b1.toggle_selected()
+                    app.draw()
+            elif app.b1.rect.collidepoint(event.pos):
+                if not app.b1.selected:
+                    app.b0.toggle_selected()
+                    app.b1.toggle_selected()
+                    app.draw()
+
+
+    def __process_mouse_btn_down(self, event):
+        """
+        Process mouse button down events.
+        """
+        self.__show_mouse()
+        if dialog.is_dialog_showing():
+            dialog.handle_mouse_event(event)
+            return
+            
+        app = self.rc.get_app()
+        # Menu
+        if app and hasattr(app, 'back_one_menu'):
+            # Left click = Enter
+            if event.button == 1:
+                menu = app.menustack[-1]
+                if menu and hasattr(menu, 'choices'):
+                    for menuitem in menu.choices:
+                        if menuitem.rect.collidepoint(event.pos):
+                            app.highlight_menuitem(menuitem)
+                            app.select_menuitem(menuitem)
+            # Middle click
+            elif event.button == 2:
+                app.submenu_menuitem()
+            # Right click = Esc
+            elif event.button == 3:
+                app.back_one_menu()
+            # Wheel up
+            elif event.button == 4:
+                app.up_menuitem()
+            # Wheel down
+            elif event.button == 5:
+                app.down_menuitem()
+
+        # Box
+        elif app and hasattr(app, 'destroy'):
+            # Left click = Enter
+            if event.button == 1:
+                # Box with 2 buttons
+                if app and hasattr(app, 'b0') and hasattr(app, 'b1'):
+                    if app.b0.rect.collidepoint(event.pos):
+                        if not app.b0.selected:
+                            app.b0.toggle_selected()
+                            app.b1.toggle_selected()
+                            app.draw()
+                        app.send_enter_event()
+                    elif app.b1.rect.collidepoint(event.pos):
+                        if not app.b1.selected:
+                            app.b0.toggle_selected()
+                            app.b1.toggle_selected()
+                            app.draw()
+                        app.send_enter_event()
+            # Right click = Esc
+            elif event.button == 3:
+                app.destroy()
+
+    
+    def __process_mouse_btn_up(self, event):
+        """
+        Process mouse button up events.
+        """
+        self.__show_mouse()
+        if dialog.is_dialog_showing():
+            dialog.handle_mouse_event(event)    
 
 # --------------------------------------------------------------------------------
 
@@ -332,8 +437,9 @@ class Joystick:
     """
     Class to handle joystick input
     """
-    def __init__(self):
+    def __init__(self, rc):
         _debug_('Joystick.__init__()', 2)
+        self.rc = rc
         pygame.joystick.init()
         if pygame.joystick.get_count() < 1:
             pygame.joystick.quit()
@@ -346,13 +452,27 @@ class Joystick:
         print self.joystick.get_numbuttons()
         print self.joystick.get_numhats()
         print self.joystick.get_numballs()
+        pgh = get_pygame_handler()
+        pgh.register_handler(pygame.locals.JOYBUTTONDOWN, self.__process_btn)
+        pgh.register_handler(pygame.locals.JOYAXISMOTION, self.__process_axis)
+        pgh.register_handler(pygame.locals.JOYBALLMOTION, self.__process_ball)
+        pgh.register_handler(pygame.locals.JOYHATMOTION, self.__process_hat)
+        
+
+    def __process_hat(self, evt):
+        print evt
 
 
-    def poll(self, rc):
-        """
-        return next event
-        """
-        _debug_('Joystick.poll(rc=%r)' % (rc,), 5)
+    def __process_ball(self, evt):
+        print evt
+
+
+    def __process_axis(self, evt):
+        print evt
+
+
+    def __process_btn(self, evt):
+        print evt
 
 
 # --------------------------------------------------------------------------------
@@ -361,11 +481,12 @@ class Evdev:
     """
     Class to handle evdev events
     """
-    def __init__(self):
+    def __init__(self, rc):
         """
         init all specified devices
         """
         _debug_('Evdev.__init__()', 2)
+        self.rc = rc
         self._devs = []
 
         for dev in config.EVENT_DEVS:
@@ -399,43 +520,43 @@ class Evdev:
 
             if e is not None:
                 _debug_("Added input device '%s': %s" % (dev, e.get_name()), DINFO)
-                self._devs.append(e)
+                m = kaa.IOMonitor(self.__handle_event, e)
+                m.register(e._fd)
+                self._devs.append(m)
 
         self._movements = {}
 
 
-    def poll(self, rc):
+    def __handle_event(self, dev):
         """
-        return next event
+        Handle evdev events
         """
-        _debug_('Evdev.poll(rc=%r)' % (rc,), 5)
-        for dev in self._devs:
-            event = dev.read()
-            if event is None:
-                continue
+        event = dev.read()
+        if event is None:
+            return
 
-            time, type, code, value = event
+        time, type, code, value = event
 
-            if type == 'EV_KEY':
-                self._movements = {}
+        if type == 'EV_KEY':
+            self._movements = {}
 
-                if config.EVENTMAP.has_key(code):
-                    # 0 = release, 1 = press, 2 = repeat
-                    if value > 0:
-                        return config.EVENTMAP[code]
-            elif type == 'EV_REL':
-                if config.EVENTMAP.has_key(code):
-                    if self._movements.has_key(code):
-                        self._movements[code] += value
-                    else:
-                        self._movements[code] = value
+            if config.EVENTMAP.has_key(code):
+                # 0 = release, 1 = press, 2 = repeat
+                if value > 0:
+                    self.rc.post_key(config.EVENTMAP[code])
+        elif type == 'EV_REL':
+            if config.EVENTMAP.has_key(code):
+                if self._movements.has_key(code):
+                    self._movements[code] += value
+                else:
+                    self._movements[code] = value
 
-                    if self._movements[code] < -10:
-                        self._movements = {}
-                        return config.EVENTMAP[code][0]
-                    elif self._movements[code] > 10:
-                        self._movements = {}
-                        return config.EVENTMAP[code][1]
+                if self._movements[code] < -10:
+                    self._movements = {}
+                    self.rc.post_key(config.EVENTMAP[code][0])
+                elif self._movements[code] > 10:
+                    self._movements = {}
+                    self.rc.post_key(config.EVENTMAP[code][1])
 
 
 # --------------------------------------------------------------------------------
@@ -444,92 +565,52 @@ class TCPNetwork:
     """
     Class to handle network control via TCP connection instead of UDP.
     """
-    import socket
-    MAX_MESSAGE_SIZE = 255 # the maximum size of a message
-    def __init__(self):
+    def __init__(self, rc):
         """
         init the network event handler
         """
         _debug_('TCPNetwork.__init__()', 1)
-        self.host = config.REMOTE_CONTROL_TCP_HOST
-        self.host = '' # Don't specify a host to connect by alias names
-        self.port = config.REMOTE_CONTROL_TCP_PORT
-        self.sock = self.socket.socket(self.socket.AF_INET, self.socket.SOCK_STREAM)
-        self.sock.setsockopt(self.socket.SOL_SOCKET, self.socket.SO_REUSEADDR, 1)
-        self.sock.setblocking(0)
-        self.sock.bind((self.host, self.port))
-        self.sock.listen(1)
-        self.connections = []
-
-
-    def poll(self, rc):
+        self.rc = rc
+        self.socket = kaa.Socket()
+        self.socket.signals['new-client'].connect(self.__accept)
+        self.socket.listen((config.REMOTE_CONTROL_TCP_HOST, config.REMOTE_CONTROL_TCP_PORT))
+    
+    def __accept(self, socket):
         """
-        return next event
+        Accept a new TCP connection
         """
-        _debug_('TCPNetwork.poll(rc=%r)' % (rc,), 5)
-        self._getNewConnections()
+        socket.signals['readline'].connect(self.__recv)
 
-        throwout = []
-        for conn in self.connections:
-            try:
-                buffer = conn.recv(self.MAX_MESSAGE_SIZE)
-                if len(buffer) == 0:
-                    throwout.append(self.connections.index(conn))
-                else:
-                    return buffer.strip()
-            except self.socket.error, oErr:
-                # if the error is not of typ 11 there is a problem with
-                # the connection, remove it from the list.
-                if oErr[0] != 11:
-                    throwout.append(self.connections.index(conn))
-
-        throwout.reverse()
-        for index in throwout:
-            self.connections.pop(index)
-
-
-    def _getNewConnections(self):
+    def __recv(self, data):
         """
-        accept new connections from the socket
+        Handle received data
         """
-        _debug_('TCPNetwork._getNewConnections()', 2)
-        try:
-            conn, addr = self.sock.accept()
-            conn.setblocking(0)
-            self.connections.append(conn)
-        except:
-            # do nothing
-            pass
-
+        self.rc.post_key(data.strip())
 
 
 class UDPNetwork:
     """
     Class to handle network control
     """
-    def __init__(self):
+    def __init__(self, rc):
         """
         init the network event handler
         """
         _debug_('UDPNetwork.__init__()', 2)
+        self.rc = rc
         import socket
         self.port = config.REMOTE_CONTROL_PORT
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.sock.setblocking(0)
         self.sock.bind(('', self.port))
-
-
-    def poll(self, rc):
+        self.channel = kaa.IOChannel(self.sock)
+        self.channel.signals['read'].connect(self.__recv)
+        
+    def __recv(self, data):
         """
-        return next event
+        Handle received data
         """
-        _debug_('UDPNetwork.poll(rc=%r)' % (rc,), 5)
-        try:
-            return self.sock.recv(100)
-        except:
-            # No data available
-            return None
+        self.rc.post_key(data)
 
 
 # --------------------------------------------------------------------------------
@@ -549,46 +630,48 @@ class EventHandler:
         if not config.HELPER:
             if use_pylirc:
                 try:
-                    self.inputs.append(Lirc())
+                    self.inputs.append(Lirc(self))
                 except:
-                    pass
+                    traceback.print_exc()
 
             if config.SYS_USE_KEYBOARD:
                 try:
-                    self.inputs.append(Keyboard())
+                    self.inputs.append(Keyboard(self))
                 except:
-                    pass
+                    traceback.print_exc()
+            
+            if config.SYS_USE_MOUSE:
+                try:
+                    self.inputs.append(Mouse(self))
+                except:
+                    traceback.print_exc()
 
             if config.SYS_USE_JOYSTICK:
                 try:
-                    self.inputs.append(Joystick())
+                    self.inputs.append(Joystick(self))
                 except:
-                    pass
+                    traceback.print_exc()
 
             if config.EVENT_DEVS:
                 try:
-                    self.inputs.append(Evdev())
+                    self.inputs.append(Evdev(self))
                 except:
-                    pass
+                    traceback.print_exc()
 
             if use_netremote and config.ENABLE_NETWORK_REMOTE and config.REMOTE_CONTROL_PORT:
-                self.inputs.append(UDPNetwork())
+                self.inputs.append(UDPNetwork(self))
 
-            if use_netremote and config.ENABLE_TCP_NETWORK_REMOTE and \
-                    config.REMOTE_CONTROL_TCP_HOST and config.REMOTE_CONTROL_TCP_PORT:
-                self.inputs.append(TCPNetwork())
+            if use_netremote and config.ENABLE_TCP_NETWORK_REMOTE and config.REMOTE_CONTROL_TCP_PORT:
+                self.inputs.append(TCPNetwork(self))
 
         self.app                = None
         self.context            = 'menu'
         self.apps               = []
-        self.callbacks          = []
         self.shutdown_callbacks = []
-        self.poll_objects       = []
         # lock all critical parts
         self.lock               = threading.RLock()
-        # last time we stopped sleeping
-        self.sleep_timer        = 0
-        kaa.Timer(self.poll).start(config.POLL_TIME)
+
+        #kaa.Timer(self.poll).start(config.POLL_TIME)
         _debug_('EventHandler.self.inputs=%r' % (self.inputs,), 1)
 
 
@@ -656,6 +739,14 @@ class EventHandler:
         event.post()
 
 
+    def post_key(self, key):
+        """
+        Map the specified key to event based on the current context and add it 
+        to the queue.
+        """
+        self.key_event_mapper(key).post()
+
+
     def key_event_mapper(self, key):
         """
         map key to event based on current context
@@ -691,12 +782,7 @@ class EventHandler:
                 _debug_('register shutdown callback: %s' % function, 2)
                 self.shutdown_callbacks.append([ function, arg ])
             else:
-                if repeat:
-                    _debug_('register callback: %s' % function, 2)
-                # the default timer is 0.01 secs if this is not the default
-                # then the timer needs adjusting otherwise it will poll incorrectly
-                timer = int((timer * 0.01 / config.POLL_TIME) + 1 - 0.01)
-                self.callbacks.append([ function, repeat, timer, 0, arg ])
+                print 'Deprecated use of register, use kaa.Timer/OneShotTimer instead of this function!'
         finally:
             self.lock.release()
 
@@ -708,10 +794,6 @@ class EventHandler:
         _debug_('EventHandler.unregister(function=%r)' % (function,), 2)
         self.lock.acquire()
         try:
-            for c in copy.copy(self.callbacks):
-                if c[0] == function:
-                    _debug_('unregister callback: %s' % function, 2)
-                    self.callbacks.remove(c)
             for c in copy.copy(self.shutdown_callbacks):
                 if c[0] == function:
                     _debug_('unregister shutdown callback: %s' % function, 2)
@@ -744,42 +826,104 @@ class EventHandler:
             c[0](*c[1])
 
 
-    def poll(self):
-        """
-        poll all registered functions
-        """
-        _debug_('EventHandler.poll()', 5)
-        # search all input objects for new events
-        for i in self.inputs:
-            e = i.poll(self)
-            if e:
-                self.post_event(self.key_event_mapper(e))
+__pygame_handler = None
 
-        # run all registered callbacks
-        for c in copy.copy(self.callbacks):
-            #0         1       2        3      4
-            (function, repeat, counter, count, arg) = c
-            if count >= counter:
-                # time is up, call it:
-                if not repeat:
-                    # remove if it is no repeat callback:
-                    self.lock.acquire()
-                    try:
-                        if c in self.callbacks:
-                            self.callbacks.remove(c)
-                    finally:
-                        self.lock.release()
-                else:
-                    # reset counter for next run
-                    c[3] = 0
-                function(*arg)
-            else:
-                c[3] += 1
+def get_pygame_handler():
+    """ Returns the pyGame event handler object """
+    global __pygame_handler
+    if __pygame_handler is None:
+        __pygame_handler = PYGameEventHandler()
+    return __pygame_handler
 
 
-    def subscribe(self, event_callback=None):
+class PYGameEventHandler:
+    """ Event handling thread for pygame events.
+    
+    Clients should use register_handler to receive the events they are 
+    interested in. If a client no longer wants to receive events then use 
+    unregister_handler to stop being called with the specified event type.
+    
+    Registered handlers will be called the event that caused them to be called.
+    
+    def handler(event):
+        pass
+        
+    """
+    def __init__(self):
+        self.handlers = {}
+        self.thread = None
+
+    
+    def start(self):
         """
-        subscribe to 'post_event'
+        Start handling pygame events 
+        
+        Called by the OSD module after the display is created.
         """
-        _debug_('EventHandler.subscribe(event_callback=%r)' % (event_callback,), 2)
-        raise Exception("subscribe doesn't work")
+        if self.thread is None:
+            self.thread = threading.Thread(target=self.process_events)
+            self.thread.setDaemon(True)
+            self.thread.start()
+
+    
+    def stop(self):
+        """ 
+        Stop handling pygame events.
+        
+        Called by the OSD module before the display is destroyed.
+        """
+        if self.thread:
+            pygame.event.post(pygame.event.Event(pygame.locals.USEREVENT, 
+                                {'action': 'quit'}))
+            print 'Waiting for event thread'
+            self.thread.join()
+            self.thread = None
+
+    
+    def register_handler(self, event_type, handler):
+        """ 
+        Register a callable to be called when a specific type of event is 
+        received. 
+        """
+        self.handlers[event_type] = handler
+        if self.thread:
+            pygame.event.post(pygame.event.Event(pygame.locals.USEREVENT, 
+                                {'action': 'enable_event', 'event_type': event_type}))
+
+
+    def unregister_handler(self, event_type, handler):
+        """ Unregister to stop recieving events of the specified type """
+        if event_type in self.handlers and self.handlers[event_type] == handler:
+            del self.handlers[event_type]
+            if self.thread:
+                pygame.event.post(pygame.event.Event(pygame.locals.USEREVENT, 
+                                {'action': 'disable_event', 'event_type': event_type}))
+
+
+    def process_events(self):
+        """ Internal function to process the pygame events"""
+        # Disable all events initially
+        pygame.event.set_allowed(None)
+        
+        # Now enable only those we want
+        pygame.event.set_allowed(pygame.locals.USEREVENT)
+        pygame.event.set_allowed(self.handlers.keys())
+        
+        while True:
+            evt = pygame.event.wait()
+            
+            if evt.type == pygame.locals.USEREVENT:
+                if evt.action == 'quit':
+                    break
+                
+                elif evt.action == 'enable_event':
+                    pygame.event.set_allowed(evt.event_type)
+
+                elif evt.action == 'disable_event':
+                    pygame.event.set_blocked(evt.event_type)
+
+            elif evt.type in self.handlers:
+                try:
+                    self.handlers[evt.type](evt)
+                except:
+                    traceback.print_exc()
