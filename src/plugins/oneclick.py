@@ -66,7 +66,7 @@ if __name__ == '__main__':
     GUI = False
 
 #get the singletons so we get skin info and access the osd
-skin = skin.get_singleton()
+#skin = skin.get_singleton()
 osd = osd.get_singleton()
 
 #check every 1 hour
