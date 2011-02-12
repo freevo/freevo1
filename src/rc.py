@@ -182,6 +182,7 @@ class Lirc:
     """
     def __init__(self, rc):
         _debug_('Lirc.__init__()', 2)
+        self.rc = rc
         try:
             global pylirc
             import pylirc
