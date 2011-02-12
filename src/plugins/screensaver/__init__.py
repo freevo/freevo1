@@ -74,14 +74,13 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_('PluginInterface.__init__()', 2)
         plugin.DaemonPlugin.__init__(self)
         self.event_listener = True
-        self.poll_menu_only = True
-
         self.last_event = time.time()
         self.screensaver_showing = False
         self.menuw = None
         self.start_delay = config.SCREENSAVER_DELAY
         self.cycle_time = config.SCREENSAVER_CYCLE_TIME
         self.plugins = None
+        self.start_timer = kaa.OneShotTimer(self.start_saver)
         self.timer = None
         _debug_('Screensaver install (delay = %d)' % self.start_delay)
 
@@ -91,6 +90,7 @@ class PluginInterface(plugin.DaemonPlugin):
         return [
             ('SCREENSAVER_DELAY', 300, '# of seconds to wait to start saver.'),
             ('SCREENSAVER_CYCLE_TIME', 60, '# of seconds to run a screensaver before starting another saver.')
+            ('SCREENSAVER_SCREEN_OFF_DELAY', 3600, '# of seconds screensaver has been active before using DPMS to turn the display off' )
         ]
 
 
@@ -103,30 +103,14 @@ class PluginInterface(plugin.DaemonPlugin):
         if menuw:
             self.menuw = menuw
 
-        if event.name == 'SCREENSAVER_START':
-            if not self.screensaver_showing:
-                self.start_saver()
-            return True
-
-        if event.name == 'SCREENSAVER_STOP' and self.screensaver_showing :
-            self.stop_saver()
-            return True
-
         if plugin.isevent(event) != 'IDENTIFY_MEDIA':
-            self.last_event = time.time()
+            self.start_timer.start(self.start_delay)
 
         if self.screensaver_showing:
             self.stop_saver()
             return True
 
         return False
-
-
-    def poll(self):
-        _debug_('poll()', 2)
-        time_diff = time.time() - self.last_event
-        if not self.screensaver_showing and  time_diff > self.start_delay :
-            rc.post_event(Event('SCREENSAVER_START'))
 
 
     def shutdown(self):
@@ -136,6 +120,8 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def start_saver(self):
         _debug_('start_saver()', 2)
+        if self.screensaver_showing or not skin.active():
+            return
         self.screensaver_showing = True
         if self.plugins is None:
             self.plugins = plugin.get('screensaver')
