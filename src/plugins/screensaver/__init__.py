@@ -49,7 +49,7 @@ import kaa
 
 
 osd = osd.get_singleton()
-skin = skin.get_singleton()
+#skin = skin.get_singleton()
 
 class PluginInterface(plugin.DaemonPlugin):
     """
@@ -81,6 +81,8 @@ class PluginInterface(plugin.DaemonPlugin):
         self.cycle_time = config.SCREENSAVER_CYCLE_TIME
         self.plugins = None
         self.start_timer = kaa.OneShotTimer(self.start_saver)
+        self.dpms_timer = kaa.OneShotTimer(self.enable_dpms)
+        self.dpms_enabled = False
         self.timer = None
         _debug_('Screensaver install (delay = %d)' % self.start_delay)
 
@@ -89,8 +91,8 @@ class PluginInterface(plugin.DaemonPlugin):
         _debug_('config()', 2)
         return [
             ('SCREENSAVER_DELAY', 300, '# of seconds to wait to start saver.'),
-            ('SCREENSAVER_CYCLE_TIME', 60, '# of seconds to run a screensaver before starting another saver.')
-            ('SCREENSAVER_SCREEN_OFF_DELAY', 3600, '# of seconds screensaver has been active before using DPMS to turn the display off' )
+            ('SCREENSAVER_CYCLE_TIME', 60, '# of seconds to run a screensaver before starting another saver.'),
+            ('SCREENSAVER_SCREEN_OFF_DELAY', 3600, '# of seconds screensaver has been active before using DPMS to turn the display off, set to 0 to disable' )
         ]
 
 
@@ -129,26 +131,41 @@ class PluginInterface(plugin.DaemonPlugin):
 
         osd.screensaver_running = True
         skin.clear()
-        skin.suspend()
-
         self.current_saver = None
         self.index = 0
         plugins_count = len(self.plugins)
         _debug_('found %s screensaver(s)' % plugins_count)
+        if config.SCREENSAVER_SCREEN_OFF_DELAY:
+            _debug_('Enabling DPMS timer')
+            self.dpms_timer.start(config.SCREENSAVER_SCREEN_OFF_DELAY)
         self.__next()
 
 
     def stop_saver(self):
         _debug_('stop_saver()', 2)
         if self.timer is not None:
+            self.disable_dpms()
+            self.dpms_timer.stop()
             self.timer.stop()
             self.screensaver_showing = False
-            skin.resume()
-            skin.force_redraw = True
             skin.redraw()
             osd.screensaver_running = False
             osd.update()
             _debug_('Screensaver thread stopped')
+
+
+    def enable_dpms(self):
+        self.dpms_enabled = True
+        self.timer.stop()
+        osd.clearscreen(osd.COL_BLACK)
+        osd.update()
+        _debug_('Forced DPMS OFF')
+        os.system('xset dpms force off')
+    
+    def disable_dpms(self):
+        self.dpms_enabled = False
+        _debug_('Forced DPMS ON')
+        os.system('xset dpms force on')
 
     def __next(self):
         plugins_count = len(self.plugins)
