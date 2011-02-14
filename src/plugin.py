@@ -626,7 +626,7 @@ def __load_plugin__(name, type, level, args, number):
                         p.timer = kaa.Timer(p.poll_wrapper)
                     else:
                         p.timer = kaa.Timer(p.poll)
-                    #p.timer.start(p.poll_interval)
+                    p.timer.start(p.poll_interval)
 
             if isinstance(p, MainMenuPlugin):
                 __add_to_ptl__('mainmenu%s' % special, p)
