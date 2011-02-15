@@ -82,7 +82,7 @@ class ImageViewer(GUIObject):
         self.osd_width   = self.osd.width * float(config.OSD_PIXEL_ASPECT)
 
         self.timer = None
-
+        self.__added_app = False
         self.free_cache()
 
 
@@ -123,7 +123,9 @@ class ImageViewer(GUIObject):
             # Using Container-Image
             image, w, h = item.loadimage()
 
-        rc.add_app(self)
+        if not self.__added_app:
+            rc.add_app(self)
+            self.__added_app = True
 
         if not image:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
@@ -368,7 +370,7 @@ class ImageViewer(GUIObject):
                 rc.post_event(Event('IMAGE_PLAY_INFO', arg='%s' % self.duration))
                 self.slideshow = True
                 self.timer = kaa.OneShotTimer(self.signalhandler)
-                self.timer.start(0.1)
+                self.timer.start(self.duration)
             return True
 
         elif event == STOP:
@@ -378,6 +380,7 @@ class ImageViewer(GUIObject):
                 self.timer.stop()
                 self.timer = None
             rc.remove_app(self)
+            self.__added_app = False
             self.fileitem.eventhandler(event)
             return True
 
@@ -398,6 +401,8 @@ class ImageViewer(GUIObject):
                 self.rotation = (self.rotation + 90) % 360
             self.fileitem['rotation'] = self.rotation
             self.view(self.fileitem, zoom=self.zoom, rotation=self.rotation)
+            if self.timer:
+                self.timer.start(self.duration)
             return True
 
         # print image information
@@ -411,6 +416,9 @@ class ImageViewer(GUIObject):
         # 1 is upper left, 9 is lower right, 0 zoom off
         elif str(event) in self.zoom_btns:
             self.zoom = self.zoom_btns[str(event)]
+            if self.timer:
+                self.timer.stop()
+                self.slideshow = False
 
             if self.zoom:
                 # Zoom one third of the image, don't load the next
