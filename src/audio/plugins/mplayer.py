@@ -186,7 +186,7 @@ class MPlayer:
 
         for p in self.plugins:
             command = p.stop()
-
+        
 
     def is_playing(self):
         return self.app.isAlive()
@@ -212,6 +212,9 @@ class MPlayer:
             traceback.print_exc()
             return True
 
+        if event == PLAY_END:
+            self.app = None
+            
         if event == AUDIO_SEND_MPLAYER_CMD:
             self.app.write('%s\n' % event.arg)
             return True
@@ -226,7 +229,7 @@ class MPlayer:
             return self.item.eventhandler(event)
 
         if event in (PLAY_END, USER_END):
-            #self.playerGUI.stop()
+            self.playerGUI.stop()
             return self.item.eventhandler(event)
 
         elif event == PAUSE or event == PLAY:
