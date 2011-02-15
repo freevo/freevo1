@@ -47,6 +47,7 @@ import util.mediainfo as mediainfo
 
 import config
 import util
+import util.inotify
 
 
 import plugin
@@ -861,7 +862,7 @@ class DiskManager(plugin.DaemonPlugin):
     """
     def __init__(self, required_space):
         plugin.DaemonPlugin.__init__(self)
-        self.poll_interval = 0.5 # half a second
+        self.poll_interval = 1.0 # 1 second
         self.poll_menu_only = False
         self.required_space = required_space
         self.last_time = 0;
@@ -871,6 +872,7 @@ class DiskManager(plugin.DaemonPlugin):
         self.files = []
         self.recordings_dir_item = DirItem(config.TV_RECORD_DIR, None)
         self.update_recordings()
+        util.inotify.watch(config.TV_RECORD_DIR).connect(self.check_recordings)
 
 
     def poll(self):
@@ -879,8 +881,6 @@ class DiskManager(plugin.DaemonPlugin):
         """
         # Check space first so that any removals are picked up straight away.
         self.check_space()
-
-        self.check_recordings()
 
 
     def set_update_menu(self, obj, menu, menuw):
@@ -895,7 +895,7 @@ class DiskManager(plugin.DaemonPlugin):
         self.menu = menu
 
 
-    def check_recordings(self):
+    def check_recordings(self, mask, filename, target=None):
         """
         Check the TV recordings directory to determine if the contents have changed,
         and if they have update the list of recordings and the currently registered
