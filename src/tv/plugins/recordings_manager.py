@@ -48,6 +48,7 @@ import util.mediainfo as mediainfo
 import config
 import util
 import util.inotify
+import util.fileops
 
 
 import plugin
@@ -872,7 +873,16 @@ class DiskManager(plugin.DaemonPlugin):
         self.files = []
         self.recordings_dir_item = DirItem(config.TV_RECORD_DIR, None)
         self.update_recordings()
-        util.inotify.watch(config.TV_RECORD_DIR).connect(self.check_recordings)
+        
+        # If the recordings dir is on a network mount inotify won't work
+        # so resort to using a timer.
+        if util.fileops.is_net_mount(config.TV_RECORD_DIR):
+            _debug_('DiskManager using timer as recordings dir is on a network mount')
+            self.check_timer = kaa.Timer(self.check_recordings)
+            self.check_timer.start(0.5)
+        else:
+            _debug_('DiskManager using inotify')
+            util.inotify.watch(config.TV_RECORD_DIR).connect(self.check_recordings)
 
 
     def poll(self):
@@ -895,7 +905,7 @@ class DiskManager(plugin.DaemonPlugin):
         self.menu = menu
 
 
-    def check_recordings(self, mask, filename, target=None):
+    def check_recordings(self, mask=None, filename=None, target=None):
         """
         Check the TV recordings directory to determine if the contents have changed,
         and if they have update the list of recordings and the currently registered

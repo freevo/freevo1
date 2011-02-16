@@ -494,6 +494,43 @@ def check_media(media_id):
     return None
 
 
+def is_net_mount(path):
+    """
+    Return true if it thinks the path specified is a on network mount point.
+    """
+    info = get_mount_point(path)
+    return info[2] in ('nfs', 'smbfs', 'cifs')
+
+
+def get_mount_point(path):
+    """
+    Find the mount point for the specified path and return information on the
+    mount point.
+    A list of device, path, options, dump, pass.
+    """
+    mounts = {}
+    f = open('/proc/mounts')
+    for l in f:
+        mount = l.split(' ')
+        mounts[mount[1]] = mount
+    f.close()
+    path = os.path.abspath(path)
+    mnt_point = ''
+    while path:
+        if os.path.ismount(path):
+            mnt_point = path
+            break
+        if os.path.islink(path):
+            path = os.readlink(path)
+            continue
+        parent = os.path.dirname(path)
+        if parent == path:
+            path = ''
+            mnt_point = parent
+        else:
+            path = parent
+    
+    return mounts[mnt_point]
 
 #
 #
