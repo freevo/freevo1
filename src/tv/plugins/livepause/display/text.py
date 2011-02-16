@@ -51,3 +51,6 @@ class TextOSD(OSD):
 
     def display_channel_number(self, channel):
         dialog.show_message(_('Channel #: %s') % channel)
+
+    def hide(self):
+        pass # Nothing to do
