@@ -13,6 +13,7 @@ import sys
 sys.path.append('./src')
 import version
 from distutils import core
+from distutils.command import install
 from util.distribution import setup, Extension, check_libs, docbook_finder
 #try:
 #    from setuptools import setup
@@ -34,10 +35,25 @@ libs_to_check = [
     #('Numeric', 'http://numeric.scipy.org/'),
 ]
 
+files_to_remove = [
+    'freevo/util/distutils.py',
+    'freevo/util/distutils.pyc',
+    'freevo/helpers/imdb.py',
+    'freevo/helpers/imdb.pyc',
+]
+
 if sys.hexversion < 0x2050000:
     libs_to_check.append(('elementtree', 'http://effbot.org/zone/elementtree.htm'))
 
 check_libs(libs_to_check)
+
+class CustomInstall(install.install):
+    def run(self):
+        for filename in files_to_remove:
+            path = os.path.join(self.install_lib,filename)
+            if os.path.exists(path):
+                os.remove(path)
+        install.install.run(self)
 
 
 class Runtime(core.Command):
@@ -175,15 +191,16 @@ setup (
     long_description = "Freevo Multimedia System",
     author           = "Krister Lagerstrom, et al.",
     author_email     = "freevo-devel@lists.sourceforge.net",
-    maintainer       = "Duncan Webb",
-    maintainer_email = "duncan@freevo.org",
+    maintainer       = "Adam Charrett",
+    maintainer_email = "adam@dvbstreamer.org",
     url              = "http://www.freevo.org",
     license          = "GPL",
     download_url     = "https://sourceforge.net/project/showfiles.php?group_id=46652&package_id=39526",
     i18n             = 'freevo',
     scripts          = scripts,
     data_files       = data_files,
-    cmdclass         = { 'runtime': Runtime },
+    cmdclass         = { 'runtime': Runtime,
+                         'install': CustomInstall},
     classifiers      = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: End Users/Desktop",
