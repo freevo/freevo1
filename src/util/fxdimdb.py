@@ -255,8 +255,7 @@ class FxdImdb:
                 _debug_('It seems that there\'s no movie with MovieId "%s"' % arg[0], DWARNING)
                 raise FxdImdb_Error('No movie with MovieId "%s"' % arg[0])
 
-            if season and episode:
-                self.ctitle = tuple([movie['title'], season, episode])
+            self.ctitle = tuple([movie['title'], season, episode])
 
             # check if we have a series episode
             if self.ctitle[2] and (movie['kind'] == 'tv series' or movie['kind'] == 'tv mini series'):
