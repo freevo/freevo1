@@ -145,4 +145,9 @@ class PopupBox(Window):
         if event == INPUT_EXIT:
             self.destroy()
             return True
+        
+        elif event == MOUSE_BTN_PRESS and event.button == 3:
+            self.destroy()
+            return True
+
         return False

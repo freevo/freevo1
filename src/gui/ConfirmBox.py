@@ -82,14 +82,35 @@ class ConfirmBox(PopupBox):
         select = 'self.b%s.toggle_selected()' % default_choice
         eval(select)
 
+
     def send_enter_event(self):
         self.eventhandler(INPUT_ENTER)
 
+
+    def __toggle_selected(self):
+        self.b0.toggle_selected()
+        self.b1.toggle_selected()
+        self.draw()
+
+
+    def __b0_selected(self):
+        if self.handler and self.handler_message:
+            self.content.children = []
+            self.label = Label(self.handler_message, self, Align.CENTER,
+                               Align.CENTER, text_prop=self.text_prop)
+            self.draw()
+        else:
+            self.destroy()
+
+        if self.handler:
+            self.handler()
+            if self.handler_message:
+                self.destroy()
+
+
     def eventhandler(self, event):
         if event in (INPUT_LEFT, INPUT_RIGHT, INPUT_UP, INPUT_DOWN):
-            self.b0.toggle_selected()
-            self.b1.toggle_selected()
-            self.draw()
+            self.__toggle_selected()
             return True
 
         elif event == INPUT_EXIT:
@@ -98,20 +119,33 @@ class ConfirmBox(PopupBox):
 
         elif event == INPUT_ENTER:
             if self.b0.selected:
-                if self.handler and self.handler_message:
-                    self.content.children = []
-                    self.label = Label(self.handler_message, self, Align.CENTER,
-                                       Align.CENTER, text_prop=self.text_prop)
-                    self.draw()
-                else:
-                    self.destroy()
-
-                if self.handler:
-                    self.handler()
-                    if self.handler_message:
-                        self.destroy()
+                self.__b0_selected()
             else:
                 self.destroy()
             return True
+        
+        elif event == MOUSE_MOTION:
+            if self.b0.rect.collidepoint(event.pos):
+                if not self.b0.selected:
+                    self.__toggle_selected()
+                return True
+            elif self.b1.rect.collidepoint(event.pos):
+                if not app.b1.selected:
+                    self.__toggle_selected()
+                return True
+
+        elif event == MOUSE_BTN_PRESS:
+            if event.button == 1:
+                if self.b0.rect.collidepoint(event.pos):
+                    self.__b0_selected()
+                    return True
+
+                if self.b1.rect.collidepoint(event.pos):
+                    self.destroy()
+                    return True
+            
+            elif event.button == 3:
+                self.destroy()
+                return True
 
         return False

@@ -49,7 +49,7 @@ There are 2 types of display:
 """
 import skins.osd.xml
 import config
-
+from event import MOUSE_MOTION,MOUSE_BTN_PRESS,MOUSE_BTN_RELEASE
 
 _osd_display = None
 _overlay_display = None
@@ -271,6 +271,23 @@ def show_play_state(state, item, get_time_info=None):
         _display.show_play_state(state, item, get_time_info)
 
 
+def show_busy_indicator(delay=0.0):
+    """
+    Helper function to show the busy indicator (after an optional delay).
+
+    @param delay: (Optional) Number of seconds to wait before showing the indicator.
+    """
+    pass
+
+
+def hide_busy_indicator():
+    """
+    Helper function to hide the busy indicator.
+    If the indicator is not showing but due to show after a delay then timer
+    handling the delay is canceled and the indicator will not be shown.
+    """
+    pass
+
 def handle_event(event):
     """
     Passed the supplied event to the active display for processing.
@@ -279,7 +296,11 @@ def handle_event(event):
     @return: True if processed, False otherwise
     """
     if _display:
-        return _display.handle_event(event)
+        if event in (MOUSE_MOTION, MOUSE_BTN_PRESS, MOUSE_BTN_RELEASE):
+            if hasattr(_display, 'handle_mouse_event'):
+                return _display.handle_mouse_event(event)
+        else:
+            return _display.handle_event(event)
     return False
 
 def handle_mouse_event(event):

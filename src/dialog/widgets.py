@@ -36,7 +36,7 @@ A widget is something that the user can navigate to and can have one of the foll
  - invisible = The widget is not drawn.
 """
 import kaa
-from pygame.locals import *
+from event import *
 
 class WidgetModel(object):
     """
@@ -142,10 +142,10 @@ class ButtonModel(WidgetModel):
         return super(ButtonModel, self).handle_event(event)
 
     def handle_mouse_event(self, event):
-        if event.type == MOUSEBUTTONDOWN:
+        if event == MOUSE_BTN_PRESS:
             self.press(False)
 
-        elif event.type == MOUSEBUTTONUP:
+        elif event == MOUSE_BTN_RELEASE:
             self.__unpress()
 
 
@@ -367,7 +367,7 @@ class MenuModel(WidgetModel):
         return super(MenuModel, self).handle_event(event)
 
     def handle_mouse_event(self, event):
-        if event.type == MOUSEMOTION:
+        if event == MOUSE_MOTION:
             y = event.pos[1] - self.position[1]
             size_per_item = self.size[1] / self.items_per_page
             scroll_height = size_per_item / 4
@@ -387,7 +387,7 @@ class MenuModel(WidgetModel):
                 self.active_item =  len(self.items) - 1
             self.items[self.active_item].active = True
             self.redraw()
-        if event.type == MOUSEBUTTONDOWN or event.type == MOUSEBUTTONUP:
+        if event in (MOUSE_BTN_PRESS, MOUSE_BTN_RELEASE):
             self.items[self.active_item].handle_mouse_event(event)
 
 

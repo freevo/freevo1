@@ -237,6 +237,17 @@ class Lirc:
         """
         _debug_('Lirc.resume()', 2)
         kaa.input.lirc.init('freevo', config.LIRCRC)
+        fd = kaa.input.lirc._dispatcher._id
+        kaa.input.lirc._dispatcher.unregister()
+        
+        kaa.input.lirc._dispatcher = kaa.IOMonitor(self._handle_lirc_input)
+        kaa.input.lirc._dispatcher.register(fd)
+
+    def _handle_lirc_input(self):
+        codes = pylirc.nextcode()
+        if codes:
+            for code in codes:
+                self.__process_key(code)
 
 
     def suspend(self):
@@ -342,30 +353,9 @@ class Mouse:
         Process mouse motion events.
         """
         self.__show_mouse()
-        if dialog.is_dialog_showing():
-            dialog.handle_mouse_event(event)
-            return
-
-        app = self.rc.get_app()
-        # Menu
-        if app and hasattr(app, 'menustack'):
-            menu = app.menustack[-1]
-            if menu and hasattr(menu, 'choices'):
-                for menuitem in menu.choices:
-                    if menuitem.rect.collidepoint(event.pos):
-                        app.highlight_menuitem(menuitem)
-        # Box with 2 buttons
-        elif app and hasattr(app, 'b0') and hasattr(app, 'b1'):
-            if app.b0.rect.collidepoint(event.pos):
-                if not app.b0.selected:
-                    app.b0.toggle_selected()
-                    app.b1.toggle_selected()
-                    app.draw()
-            elif app.b1.rect.collidepoint(event.pos):
-                if not app.b1.selected:
-                    app.b0.toggle_selected()
-                    app.b1.toggle_selected()
-                    app.draw()
+        mouse_evt = Event('MOUSE_MOTION')
+        mouse_evt.pos = event.pos
+        self.rc.post_event(mouse_evt)
 
 
     def __process_mouse_btn_down(self, event):
@@ -373,55 +363,10 @@ class Mouse:
         Process mouse button down events.
         """
         self.__show_mouse()
-        if dialog.is_dialog_showing():
-            dialog.handle_mouse_event(event)
-            return
-            
-        app = self.rc.get_app()
-        # Menu
-        if app and hasattr(app, 'back_one_menu'):
-            # Left click = Enter
-            if event.button == 1:
-                menu = app.menustack[-1]
-                if menu and hasattr(menu, 'choices'):
-                    for menuitem in menu.choices:
-                        if menuitem.rect.collidepoint(event.pos):
-                            app.highlight_menuitem(menuitem)
-                            app.select_menuitem(menuitem)
-            # Middle click
-            elif event.button == 2:
-                app.submenu_menuitem()
-            # Right click = Esc
-            elif event.button == 3:
-                app.back_one_menu()
-            # Wheel up
-            elif event.button == 4:
-                app.up_menuitem()
-            # Wheel down
-            elif event.button == 5:
-                app.down_menuitem()
-
-        # Box
-        elif app and hasattr(app, 'destroy'):
-            # Left click = Enter
-            if event.button == 1:
-                # Box with 2 buttons
-                if app and hasattr(app, 'b0') and hasattr(app, 'b1'):
-                    if app.b0.rect.collidepoint(event.pos):
-                        if not app.b0.selected:
-                            app.b0.toggle_selected()
-                            app.b1.toggle_selected()
-                            app.draw()
-                        app.send_enter_event()
-                    elif app.b1.rect.collidepoint(event.pos):
-                        if not app.b1.selected:
-                            app.b0.toggle_selected()
-                            app.b1.toggle_selected()
-                            app.draw()
-                        app.send_enter_event()
-            # Right click = Esc
-            elif event.button == 3:
-                app.destroy()
+        mouse_evt = Event('MOUSE_BTN_PRESS')
+        mouse_evt.pos = event.pos
+        mouse_evt.button = event.button
+        self.rc.post_event(mouse_evt)
 
     
     def __process_mouse_btn_up(self, event):
@@ -429,8 +374,10 @@ class Mouse:
         Process mouse button up events.
         """
         self.__show_mouse()
-        if dialog.is_dialog_showing():
-            dialog.handle_mouse_event(event)    
+        mouse_evt = Event('MOUSE_BTN_RELEASE')
+        mouse_evt.pos = event.pos
+        mouse_evt.button = event.button
+        self.rc.post_event(mouse_evt)
 
 # --------------------------------------------------------------------------------
 

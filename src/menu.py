@@ -730,6 +730,11 @@ class MenuWidget(GUIObject):
         _debug_('action %s not found' % event.arg)
 
 
+    def __call_action(self, action, arg):
+        result = action(arg=arg, menuw=self)
+        if isinstance(result, kaa.InProgress):
+            result.wait()
+
     def eventhandler(self, event):
         menu = self.menustack[-1]
 
@@ -785,7 +790,8 @@ class MenuWidget(GUIObject):
             self.goto_media_menu("shutdown")
             return True
 
-        if event == MENU_BACK_ONE_MENU:
+        if event == MENU_BACK_ONE_MENU or \
+            (event == MOUSE_BTN_PRESS and event.button == 3):
             sounds.play_sound(sounds.MENU_BACK_ONE)
             self.back_one_menu()
             return True
@@ -877,6 +883,30 @@ class MenuWidget(GUIObject):
                 self.refresh()
             return True
 
+        if event == MOUSE_MOTION:
+            for menuitem in menu.choices:
+                if menuitem.rect.collidepoint(event.pos):
+                    self.highlight_menuitem(menuitem)
+            return True
+
+        if event == MOUSE_BTN_PRESS:
+            # Left click
+            if event.button == 1:
+                for menuitem in menu.choices:
+                    if menuitem.rect.collidepoint(event.pos):
+                        self.highlight_menuitem(menuitem)
+                        self.select_menuitem(menuitem)
+            # Middle click
+            elif event.button == 2:
+                self.submenu_menuitem()
+            # Wheel up
+            elif event.button == 4:
+                self.up_menuitem()
+            # Wheel down
+            elif event.button == 5:
+                self.down_menuitem()
+            return True
+        
         if hasattr(menu.selected, 'eventhandler') and menu.selected.eventhandler:
             if menu.selected.eventhandler(event=event, menuw=self):
                 return True

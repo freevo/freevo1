@@ -62,16 +62,22 @@ class AlertBox(PopupBox):
         PopupBox.__init__(self, text, handler, x, y, width, height,
                           icon, vertical_expansion, text_prop, parent)
 
-        b1 = Button(_('OK'))
-        b1.toggle_selected()
+        self.b1 = Button(_('OK'))
+        self.b1.toggle_selected()
 
-        self.add_child(b1)
+        self.add_child(self.b1)
 
 
     def eventhandler(self, event):
-        if event in (INPUT_ENTER, INPUT_EXIT):
+        if event in (INPUT_ENTER, INPUT_EXIT) or \
+            (event == MOUSE_BTN_PRESS and self.b1.rect.collidepoint(event.pos)):
             self.destroy()
             if self.handler:
                 self.handler()
             return True
+
+        elif event == MOUSE_BTN_PRESS and event.button == 3:
+            self.destroy()
+            return True
+
         return False

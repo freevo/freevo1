@@ -239,6 +239,8 @@ class GraphicsDisplay(Display):
     def handle_mouse_event(self, evt):
         if self.current_dialog and hasattr(self.current_dialog, 'handle_mouse_event'):
             self.current_dialog.handle_mouse_event(evt)
+            return True
+        return False
 
     @kaa.threaded(kaa.MAINTHREAD)
     def show_volume(self, level, muted, channel=None):

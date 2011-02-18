@@ -39,8 +39,7 @@ The priority levels in ascending order are:
  - high
 """
 import time
-import pygame.event
-from pygame.locals import *
+from event import *
 import rc
 import event
 import dialog
@@ -555,17 +554,10 @@ class WidgetDialog(InputDialog):
 
         if widget is None:
             return
-        new_pos = (evt.pos[0] - self.skin.position[0], evt.pos[1] - self.skin.position[1])
-        evt_dict = {'pos':new_pos}
-        if evt.type == MOUSEMOTION:
-            evt_dict['rel'] = evt.rel
-            evt_dict['buttons'] = evt.buttons
-        if evt.type in (MOUSEBUTTONDOWN , MOUSEBUTTONUP):
-            evt_dict['button'] = evt.button
-        evt = pygame.event.Event(evt.type, evt_dict)
+        evt.pos = (evt.pos[0] - self.skin.position[0], evt.pos[1] - self.skin.position[1])
         if widget in self.widgets:
             widget_model = self.widgets[widget]
-            if evt.type == MOUSEMOTION:
+            if evt == MOUSE_MOTION:
                 widget_model.set_active(True)
             if hasattr(widget_model, 'handle_mouse_event'):
                 widget_model.handle_mouse_event(evt)
