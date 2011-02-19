@@ -100,6 +100,7 @@ o rtve.es plug-in
 
 Henne Vogelsang <hvogel at hennevogel.de>
 o Updates to headlines
+o Blurr OSD theme
 
 Fabrizio Regondi <fabrintosh at gmail.com>
 o TV streaming plug-in for wwitv.com
@@ -165,6 +166,7 @@ o Various fixes
 
 James Trietsch <kerosel at yahoo.com>
 o Various webserver and recording fixes
+o Favorites editing
 
 Sylvain Fabre <centraladmin at lahiette.com>
 o French DVD trailer grabber
@@ -315,7 +317,11 @@ Rob Vandermeulen (rdc at kokosnoot.com)
 o fxdimdb class + rewrite of the plugin & helper
 o the df plugin
 
+Anders Eriksson
+o HTML5 and Flash players for web server
 
+Maciej Urbaniak
+o Rewrite of IMDB code to use pyIMDB
 
 Special Copyright Notice:
 -------------------------
