@@ -752,9 +752,7 @@ class ProgressDialog(Dialog):
     Contains a message, percent progress display and progress text.
     """
 
-    INDETERMINATE_UPDATE = 0.03
-    INDETERMINATE_SIZE = 0.25
-    INDETERMINATE_INC = 0.05
+    INDETERMINATE_UPDATE = 0.25
 
     def __init__(self, message, progress_text=u'', progress_percent=0.0, indeterminate=False):
         super(ProgressDialog, self).__init__('progress', 0)
@@ -764,8 +762,7 @@ class ProgressDialog(Dialog):
         self.indeterminate = False
         self.last_update = 0
         self.indeterminate_pos = 0.0
-        self.indeterminate_dir = ProgressDialog.INDETERMINATE_INC
-        self.indeterminate_size = ProgressDialog.INDETERMINATE_SIZE
+        self.counter = 0
         if indeterminate:
             self.set_indeterminate(True)
 
@@ -775,8 +772,7 @@ class ProgressDialog(Dialog):
 
             if indeterminate:
                 self.last_update = 0
-                self.indeterminate_pos = 0.00
-                self.indeterminate_dir = ProgressDialog.INDETERMINATE_INC
+                self.counter = 0
                 self.update_interval = ProgressDialog.INDETERMINATE_UPDATE
             else:
                 self.update_interval = 0.0
@@ -796,19 +792,15 @@ class ProgressDialog(Dialog):
         if self.indeterminate:
             now = time.time()
             if now - self.last_update >= ProgressDialog.INDETERMINATE_UPDATE:
-                self.indeterminate_pos += self.indeterminate_dir
-                if self.indeterminate_pos >= (1.0 - self.indeterminate_size):
-                    self.indeterminate_dir = -ProgressDialog.INDETERMINATE_INC
-                    self.indeterminate_pos = (1.0 - self.indeterminate_size)
-
-                if self.indeterminate_pos < 0.0:
-                    self.indeterminate_dir = ProgressDialog.INDETERMINATE_INC
-                    self.indeterminate_pos = 0.0
-
+                self.counter += 1
                 self.last_update = now
-            dict['progress_percent'] = (self.indeterminate_pos, self.indeterminate_size)
+            dict['progress_percent'] = 0.0
+            dict['counter'] = self.counter
+            dict['indeterminate'] = True
         else:
             dict['progress_percent'] = self.progress_percent
+            dict['indeterminate'] = False
+            dict['counter'] = 0
         return dict
 
 class DialogUpdater(object):
