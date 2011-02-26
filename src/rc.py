@@ -580,31 +580,31 @@ class EventHandler:
                 try:
                     self.inputs.append(Lirc(self))
                 except:
-                    traceback.print_exc()
+                    pass
 
             if config.SYS_USE_KEYBOARD:
                 try:
                     self.inputs.append(Keyboard(self))
                 except:
-                    traceback.print_exc()
+                    pass
             
             if config.SYS_USE_MOUSE:
                 try:
                     self.inputs.append(Mouse(self))
                 except:
-                    traceback.print_exc()
+                    pass
 
             if config.SYS_USE_JOYSTICK:
                 try:
                     self.inputs.append(Joystick(self))
                 except:
-                    traceback.print_exc()
+                    pass
 
             if config.EVENT_DEVS:
                 try:
                     self.inputs.append(Evdev(self))
                 except:
-                    traceback.print_exc()
+                    pass
 
             if use_netremote and config.ENABLE_NETWORK_REMOTE and config.REMOTE_CONTROL_PORT:
                 self.inputs.append(UDPNetwork(self))
