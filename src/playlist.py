@@ -516,7 +516,11 @@ class Playlist(Item):
         # give the event to the next eventhandler in the list
         return Item.eventhandler(self, event, menuw)
 
-
+    def rename_possible(self):
+        """
+        Returns True if the video item can be renamed.
+        """
+        return self.files and not self.files.read_only
 
 
 

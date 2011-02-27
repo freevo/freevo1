@@ -806,6 +806,8 @@ if CONF.fbxine:
 plugin.activate('audio.detach', level=20)
 plugin.activate('audio.detachbar')
 
+plugin.activate('audio.playlists')
+
 # Amazon seems to request the covers in one locale and get the data
 # in another encoding. Locale must be one of: de, jp, uk, us
 #
