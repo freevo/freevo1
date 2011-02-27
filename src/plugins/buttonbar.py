@@ -387,8 +387,9 @@ class PluginInterface(plugin.DaemonPlugin):
                 elif len(a) == 2 or a[2] != 'MENU_SUBMENU':
                     actions.append(a[:2])
 
-        for index in range(1, min(len(actions),4)):
+        for index in range(1, min(len(actions),5)):
             result[index-1] = actions[index]
+            print actions[index]
 
 
         # Special case for when there are more than 5 possible actions the last button will 'Enter' the submenu
