@@ -389,7 +389,6 @@ class PluginInterface(plugin.DaemonPlugin):
 
         for index in range(1, min(len(actions),5)):
             result[index-1] = actions[index]
-            print actions[index]
 
 
         # Special case for when there are more than 5 possible actions the last button will 'Enter' the submenu
