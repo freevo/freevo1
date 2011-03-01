@@ -828,7 +828,7 @@ class DownloadQueue:
         basename = get_item_basename(*self.current_download[1:])
         fxd_file = basename + '.fxd'
         fxd_file = fxd_file.replace('/', '_')
-        cmd = [config.CONF.get_iplayer,
+        cmd = [GET_IPLAYER,
                 '--type', self.current_download[0],
                 '-i',
                 '--pid', self.current_download[1],
