@@ -109,16 +109,19 @@ class TrailerItem(VideoItem):
 
         self.mode = ''
         self.files = ''
-        self.image = _fetch_image(trailer.poster)
+        self.image = trailer.poster
         self.description = trailer.description
         self.description += _('\n\nGenres: ') + ','.join(trailer.genres)
         if trailer.release_date:
             self.description += _('\n\nDate: ') + trailer.release_date.strftime(config.APPLETRAILERS_DATE_FORMAT)
         else:
             self.description += _('\n\nDate: Unknown')
-        self.description += ('\n\nRating: ') + trailer.rating
-        self.description += ('\n\nDirector: ') + trailer.director
-        self.description += ('\n\nRuntime: %d minutes') % trailer.runtime
+        if trailer.rating:
+            self.description += ('\n\nRating: ') + trailer.rating
+        if trailer.director:
+            self.description += ('\n\nDirector: ') + trailer.director
+        if trailer.runtime:
+            self.description += ('\n\nRuntime: %d minutes') % trailer.runtime
         self.plot = self.description
 
 
@@ -136,13 +139,7 @@ class BrowseByTitle(Item):
         entries = []
         for trailer in self.items:
             entries.append(TrailerItem(trailer, self))
-        thread = threading.Thread(target=self.download_posters)
-        thread.start()
         menuw.pushmenu(menu.Menu(self.title, entries))
-
-    def download_posters(self):
-        for trailer in self.items:
-            _fetch_image(trailer.poster, True)
 
 
 class BrowseByMenu(Item):
@@ -206,23 +203,10 @@ class BrowseMainMenu(Item):
         pfile = os.path.join(cachedir, 'trailers.pickle')
         if os.path.isfile(pfile):
             self.trailers = util.fileops.read_pickle(pfile)
-            old_posters = []
-            for trailer in self.trailers.trailers:
-                old_posters.append(_fetch_image(trailer.poster))
-            old_posters = set(old_posters)
-
             s = os.stat(pfile)
-
             if self.trailers.resolution == config.APPLETRAILERS_RESOLUTION or  \
               (time.time() - s.st_mtime) > (60*60): # Over an hour ago
-                if self.trailers.update_feed():
-                    new_posters = []
-                    for trailer in self.trailers.trailers:
-                        new_posters.append(_fetch_image(trailer.poster))
-                    new_posters = set(new_posters)
-                else:
-                    new_posters = old_posters
-        
+                self.trailers.update_feed()        
             else:
                 self.trailers = None
         else:
@@ -232,17 +216,6 @@ class BrowseMainMenu(Item):
         if self.trailers is None:
             self.trailers = applelib.Trailers(config.APPLETRAILERS_RESOLUTION)
             util.fileops.save_pickle(self.trailers, pfile)
-            new_posters = []
-            for trailer in self.trailers.trailers:
-                new_posters.append(_fetch_image(trailer.poster))
-            new_posters = set(new_posters)
-        
-        # Remove any posters that are no longer required
-        for poster_file in old_posters - set(new_posters):
-            try:
-                os.unlink(poster_file)
-            except:
-                pass
 
 
     def actions(self):
