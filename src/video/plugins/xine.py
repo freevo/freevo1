@@ -252,7 +252,8 @@ class Xine:
                     command.append(item.url)
 
         self.stdout_plugins = []
-        self.paused    = False
+        self.paused = False
+        self.item_length = -1
         rc.add_app(self)
 
         self.app = XineApp(command, self)
@@ -454,17 +455,20 @@ class Xine:
     def get_time_info(self):
         handle = None
         result = None
-        try:
-            handle = telnetlib.Telnet('127.0.0.1', 6789)
-            out = handle.read_until('\n', 0.1)
-            if out[-1] == '\n':
-                position = self.item.elapsed
-                if position == -1:
-                    position = self._get_time(handle, 'position')
-                length = self._get_time(handle, 'length')
-                result = (position, length)
-        except:
-            _debug_('Failed to retrieve time info from xine')
+        position = self.item.elapsed
+        if position == -1 or self.item_length == -1:
+            try:
+                handle = telnetlib.Telnet('127.0.0.1', 6789)
+                out = handle.read_until('\n', 0.1)
+                if out[-1] == '\n':
+                    if position == -1:
+                        position = self._get_time(handle, 'position')
+                    self.item_length = self._get_time(handle, 'length')
+                    result = (position, self.item_length)
+            except:
+                _debug_('Failed to retrieve time info from xine')
+        else:
+            result = (position, self.item_length)
 
         if handle:
             handle.close()
