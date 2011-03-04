@@ -98,6 +98,9 @@ class TextEntryScreen:
             self.alphabet_button_group = ButtonGroup(6, columns)
             keys = _('ABCDEFGHIJKLMNOPQRSTUVWXYZ ')
             self.__init_keyboard_buttons(keys,  self.alphabet_button_group)
+            self.lower_alphabet_button_group = ButtonGroup(6, columns)
+            keys = _('abcdefghijklmnopqrstuvwxyz ')
+            self.__init_keyboard_buttons(keys,  self.lower_alphabet_button_group)
 
         if numeric:
             self.numbers_button_group = ButtonGroup(6, columns)
@@ -113,28 +116,41 @@ class TextEntryScreen:
         # between them.
         if (alpha and numeric) or (alpha and symbol) or (numeric and symbol):
             if alpha:
+                lowercase_button = Button(_('abc'),  self.change_button_group,
+                                                           self.lower_alphabet_button_group)
+                self.alphabet_button_group.set_button(1, 5, lowercase_button)
+
                 characters_button = Button(_('ABC'),  self.change_button_group,
                                                            self.alphabet_button_group)
+                                                           
+                self.lower_alphabet_button_group.set_button(0, 5, characters_button)
                 if numeric:
                     self.numbers_button_group.set_button(0, 5, characters_button)
+                    self.numbers_button_group.set_button(1, 5, lowercase_button)
+
                 if symbol:
                     self.symbols_button_group.set_button(0, 5, characters_button)
+                    self.symbols_button_group.set_button(1, 5, lowercase_button)
 
             if numeric:
                 numbers_button = Button(_('123'),  self.change_button_group,
                                                         self.numbers_button_group)
                 if alpha:
-                    self.alphabet_button_group.set_button(1, 5, numbers_button)
+                    self.alphabet_button_group.set_button(2, 5, numbers_button)
+                    self.lower_alphabet_button_group.set_button(2, 5, numbers_button)
+
                 if symbol:
-                    self.symbols_button_group.set_button(1, 5, numbers_button)
+                    self.symbols_button_group.set_button(2, 5, numbers_button)
 
             if symbol:
                 symbols_button = Button(_('Symbls'),  self.change_button_group,
                                                            self.symbols_button_group)
                 if alpha:
-                    self.alphabet_button_group.set_button(2, 5, symbols_button)
+                    self.alphabet_button_group.set_button(3, 5, symbols_button)
+                    self.lower_alphabet_button_group.set_button(3, 5, symbols_button)
+                    
                 if numeric:
-                    self.numbers_button_group.set_button(2, 5, symbols_button)
+                    self.numbers_button_group.set_button(3, 5, symbols_button)
 
         if alpha:
             self.button_group = self.alphabet_button_group
@@ -209,8 +225,12 @@ class TextEntryScreen:
                         (now - self.last_key_press) < key_press_timeout:
                         self.modify_char()
                     else:
+                        new_ch = number_chars[n][0]
                         # New key press
-                        self.insert_char(number_chars[n][0])
+                        if self.button_group == self.lower_alphabet_button_group:
+                            new_ch = new_ch.lower()
+                        self.set_selected_button(new_ch)
+                        self.insert_char(new_ch)
 
                     self.last_key = event.arg
                     self.last_key_press = now
@@ -229,6 +249,7 @@ class TextEntryScreen:
         self.text_entry.insert_char_at_caret(arg)
         self.refresh()
 
+
     def modify_char(self):
         """
         Modify the current character to be the next character in the number_char
@@ -246,6 +267,9 @@ class TextEntryScreen:
                 break
 
         if new_ch is not None:
+            if self.button_group == self.lower_alphabet_button_group:
+                new_ch = new_ch.lower()
+            self.set_selected_button(new_ch)
             self.text_entry.replace_char_at_caret(new_ch)
             self.refresh()
         
@@ -315,3 +339,16 @@ class TextEntryScreen:
         Used by the skin to retrieve named details about this object.
         """
         return getattr(self, attr, u'')
+
+
+    def set_selected_button(self, char):
+        """
+        Set the selected button based on the specified character.
+        """
+        for row in self.button_group.buttons:
+            for btn in row:
+
+                if btn and btn.text == char:
+                    self.button_group.set_selected(btn)
+                    break
+
