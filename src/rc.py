@@ -34,13 +34,11 @@ import os
 import copy
 import time
 import threading
-import types
 import traceback
 
 import kaa
 
 import config
-import evdev
 
 import pygame
 import pygame.locals
@@ -175,88 +173,61 @@ def resume():
 # --------------------------------------------------------------------------------
 # internal classes of this module
 # --------------------------------------------------------------------------------
-
-class Lirc:
+class InputHelper:
     """
-    Class to handle lirc events
+    Class to handle input from the input helper app, which is used to process
+    lirc and evdev events.
     """
     def __init__(self, rc):
-        _debug_('Lirc.__init__()', 2)
         self.rc = rc
-        try:
-            global pylirc
-            import pylirc
-        except ImportError:
-            _debug_('PyLirc not found, lirc remote control disabled!', DWARNING)
-            raise
-        
-        import kaa.input.lirc
-        
-        try:
-            if os.path.isfile(config.LIRCRC):
-                self.resume()
-            else:
-                raise IOError
-        except RuntimeError:
-            _debug_('Could not initialize PyLirc!', DWARNING)
-            raise
-        except IOError:
-            _debug_('%r not found!' % (config.LIRCRC), DWARNING)
-            raise
 
-        kaa.signals['lirc'].connect(self.__process_key)
+        import struct
+        import subprocess
+        import sys
 
-        global PYLIRC
-        PYLIRC = True
-        self.last_code = [None, 0, False]
+        self.wire_format = struct.Struct('d30p')
+
+        self.input = subprocess.Popen([sys.executable, os.path.join(os.environ['FREEVO_HELPERS'],'inputhelper.py')],
+                                stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        self.monitor = kaa.IOMonitor(self._handle_input)
+        self.monitor.register(self.input.stderr)
 
 
-    def __process_key(self, code):
-        now = time.time()
+    def _handle_input(self):
+        """
+        Handle input events from input helper over stderr
+        """
+        data = self.input.stderr.read(self.wire_format.size)
+        t, key = self.wire_format.unpack(data)
+        if time.time() - t < 0.5:
+            self.rc.post_key(key)
 
-        if self.last_code[0] == code:
-            diff = now - self.last_code[1]
+    def __send_cmd(self, cmd):
+        """
+        Send a command to the input helper
+        """
+        self.input.stdin.write(cmd + '\n')
 
-            if diff > config.LIRC_KEY_REPEAT[0] and self.last_code[2]:
-                self.rc.post_key(code)
-                self.last_code = [code, now, False]
-                return
-
-            if diff > config.LIRC_KEY_REPEAT[1] and not self.last_code[2]:
-                self.rc.post_key(code)
-                self.last_code = [code, now, False]
-                return
-        else:
-            self.rc.post_key(code)
-            self.last_code = [code, now, True]
+    def suspend(self):
+        """
+        Suspend handling of input
+        """
+        self.__send_cmd('suspend')
 
 
     def resume(self):
         """
-        (re-)initialize pylirc, e.g. after calling close()
+        Resume handling of input.
         """
-        _debug_('Lirc.resume()', 2)
-        kaa.input.lirc.init('freevo', config.LIRCRC)
-        fd = kaa.input.lirc._dispatcher._id
-        kaa.input.lirc._dispatcher.unregister()
-        
-        kaa.input.lirc._dispatcher = kaa.IOMonitor(self._handle_lirc_input)
-        kaa.input.lirc._dispatcher.register(fd)
-
-    def _handle_lirc_input(self):
-        codes = pylirc.nextcode()
-        if codes:
-            for code in codes:
-                self.__process_key(code)
+        self.__send_cmd('resume')
 
 
-    def suspend(self):
+    def shutdown(self):
         """
-        cleanup pylirc, close devices
+        Shutdown the helper
         """
-        _debug_('Lirc.suspend()', 2)
-        kaa.input.lirc.stop()
-
+        self.__send_cmd('quit')
 
 # --------------------------------------------------------------------------------
 
@@ -425,90 +396,6 @@ class Joystick:
 
 # --------------------------------------------------------------------------------
 
-class Evdev:
-    """
-    Class to handle evdev events
-    """
-    def __init__(self, rc):
-        """
-        init all specified devices
-        """
-        _debug_('Evdev.__init__()', 2)
-        self.rc = rc
-        self._devs = []
-
-        for dev in config.EVENT_DEVS:
-            e = None
-
-            if os.path.exists(dev):
-                try:
-                    e = evdev.evdev(dev)
-                except:
-                    print "Problem opening event device '%s'" % dev
-            else:
-                names = []
-                name = dev
-                for dev in os.listdir('/dev/input'):
-                    if not dev.startswith('event'):
-                        continue
-
-                    try:
-                        dev = '/dev/input/' + dev
-                        e = evdev.evdev(dev)
-                    except:
-                        continue
-
-                    names.append(e.get_name())
-                    if e.get_name() == name:
-                        break
-                else:
-                    e = None
-                    _debug_("Could not find device named '%s', possible are:\n  - %s" % \
-                        (name, '\n  - '.join(names)), DWARNING)
-
-            if e is not None:
-                _debug_("Added input device '%s': %s" % (dev, e.get_name()), DINFO)
-                m = kaa.IOMonitor(self.__handle_event, e)
-                m.register(e._fd)
-                self._devs.append(m)
-
-        self._movements = {}
-
-
-    def __handle_event(self, dev):
-        """
-        Handle evdev events
-        """
-        event = dev.read()
-        if event is None:
-            return
-
-        time, type, code, value = event
-
-        if type == 'EV_KEY':
-            self._movements = {}
-
-            if config.EVENTMAP.has_key(code):
-                # 0 = release, 1 = press, 2 = repeat
-                if value > 0:
-                    self.rc.post_key(config.EVENTMAP[code])
-        elif type == 'EV_REL':
-            if config.EVENTMAP.has_key(code):
-                if self._movements.has_key(code):
-                    self._movements[code] += value
-                else:
-                    self._movements[code] = value
-
-                if self._movements[code] < -10:
-                    self._movements = {}
-                    self.rc.post_key(config.EVENTMAP[code][0])
-                elif self._movements[code] > 10:
-                    self._movements = {}
-                    self.rc.post_key(config.EVENTMAP[code][1])
-
-
-# --------------------------------------------------------------------------------
-
 class TCPNetwork:
     """
     Class to handle network control via TCP connection instead of UDP.
@@ -576,11 +463,12 @@ class EventHandler:
 
         self.inputs = []
         if not config.HELPER:
-            if use_pylirc:
-                try:
-                    self.inputs.append(Lirc(self))
-                except:
-                    pass
+            self.inputs.append(InputHelper(self))
+            #if use_pylirc:
+            #    try:
+            #        self.inputs.append(Lirc(self))
+            #    except:
+            #        pass
 
             if config.SYS_USE_KEYBOARD:
                 try:
@@ -600,11 +488,11 @@ class EventHandler:
                 except:
                     pass
 
-            if config.EVENT_DEVS:
-                try:
-                    self.inputs.append(Evdev(self))
-                except:
-                    pass
+            #if config.EVENT_DEVS:
+            #    try:
+            #        self.inputs.append(Evdev(self))
+            #    except:
+            #        pass
 
             if use_netremote and config.ENABLE_NETWORK_REMOTE and config.REMOTE_CONTROL_PORT:
                 self.inputs.append(UDPNetwork(self))
@@ -772,6 +660,10 @@ class EventHandler:
         for c in copy.copy(self.shutdown_callbacks):
             _debug_('shutting down %s' % c[0], 2)
             c[0](*c[1])
+        
+        for i in self.inputs:
+            if hasattr(i, 'shutdown'):
+                i.shutdown()
 
 
 __pygame_handler = None
