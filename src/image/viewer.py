@@ -82,6 +82,7 @@ class ImageViewer(GUIObject):
         self.osd_width   = self.osd.width * float(config.OSD_PIXEL_ASPECT)
 
         self.timer = None
+        self.blend = None
         self.__added_app = False
         self.free_cache()
 
@@ -101,6 +102,12 @@ class ImageViewer(GUIObject):
         view an image
         """
         _debug_('view(item, zoom=%s, rotation=%s)' % (zoom, rotation), 2)
+
+        if self.blend:
+            self.blend.stop()
+            self.blend.remove()
+            self.blend = None
+            
         if zoom:
             self.event_context    = 'image_zoom'
         else:
@@ -243,7 +250,7 @@ class ImageViewer(GUIObject):
         x = (self.osd_width - new_w) / 2
         y = (self.osd_height - new_h) / 2
 
-        last_image = self.last_image[1]
+        last_item,last_image = self.last_image
 
 
         if not isinstance(zoom, int):
@@ -269,7 +276,19 @@ class ImageViewer(GUIObject):
             bbx += zoom[1]
             bby += zoom[2]
 
-        if (last_image and self.last_image[0] != item and config.IMAGEVIEWER_BLEND_MODE != None):
+        # save zoom, but revert the rotation mix up
+        if not isinstance(zoom, int) and self.rotation:
+            if self.rotation == 90:
+                zoom = zoom[0], zoom[2], -zoom[1]
+            if self.rotation == 180:
+                zoom = zoom[0], -zoom[1], -zoom[2]
+            if self.rotation == 270:
+                zoom = zoom[0], -zoom[2], zoom[1]
+        self.zoom = zoom
+
+        self.last_image  = (item, (image, x, y, scale, bbx, bby, bbw, bbh, self.rotation))
+
+        if (last_image and last_item != item and config.IMAGEVIEWER_BLEND_MODE != None):
             screen = self.osd.screen.convert()
             screen.fill((0,0,0,0))
             screen.blit(self.osd.zoomsurface(image, scale, bbx, bby, bbw, bbh,
@@ -277,13 +296,9 @@ class ImageViewer(GUIObject):
             # update the OSD
             self.drawosd(layer=screen)
 
-            blend = Transition(self.osd.screen, screen, config.IMAGEVIEWER_BLEND_MODE)
-            clock = pygame.time.Clock()
-            blend.start()
-            while not blend.finished:
-                self.render.update()
-                #blend.poll(pygame.time.get_ticks())
-            blend.remove()
+            self.blend = Transition(self.osd.screen, screen, config.IMAGEVIEWER_BLEND_MODE)
+            self.blend.start()
+            self.blend.inprogress.connect(self.__blend_done, item)
 
         else:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
@@ -291,7 +306,9 @@ class ImageViewer(GUIObject):
 
             # update the OSD
             self.drawosd()
+            self.__drawn(item)
 
+    def __drawn(self, item):
 
         if plugin.getbyname('osd'):
             plugin.getbyname('osd').draw(('osd', None), self.osd)
@@ -304,7 +321,6 @@ class ImageViewer(GUIObject):
             self.timer = kaa.OneShotTimer(self.signalhandler)
             self.timer.start(self.duration)
 
-        self.last_image  = (item, (image, x, y, scale, bbx, bby, bbw, bbh, self.rotation))
 
         # stop slideshow at the end if configured
         try:
@@ -325,16 +341,12 @@ class ImageViewer(GUIObject):
             item.parent.menu.selected = item
             item.menuw.force_page_rebuild = True
 
-        # save zoom, but revert the rotation mix up
-        if not isinstance(zoom, int) and self.rotation:
-            if self.rotation == 90:
-                zoom = zoom[0], zoom[2], -zoom[1]
-            if self.rotation == 180:
-                zoom = zoom[0], -zoom[1], -zoom[2]
-            if self.rotation == 270:
-                zoom = zoom[0], -zoom[2], zoom[1]
-        self.zoom = zoom
         return None
+
+    def __blend_done(self, result, item):
+        self.blend.remove()
+        self.blend = None
+        self.__drawn(item)
 
 
     def redraw(self):
@@ -379,6 +391,10 @@ class ImageViewer(GUIObject):
             if self.timer:
                 self.timer.stop()
                 self.timer = None
+            if self.blend:
+                self.blend.stop()
+                self.blend.remove()
+                self.blend = None
             rc.remove_app(self)
             self.__added_app = False
             self.fileitem.eventhandler(event)

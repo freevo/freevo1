@@ -33,6 +33,7 @@ import config
 from base import BaseAnimation
 
 import pygame, random
+import kaa
 
 class Transition(BaseAnimation):
     """
@@ -75,6 +76,7 @@ class Transition(BaseAnimation):
 
         self.surf_blend1 = surf1.convert()
         self.surf_blend2 = surf2.convert()
+        self.inprogress = kaa.InProgress()
         self.prepare()
 
 
@@ -129,6 +131,9 @@ class Transition(BaseAnimation):
 
         getattr(self, self.drawfuncs[self.mode])()
 
+    def __finished(self):
+        self.finished = True
+        self.inprogress.finish(True)
 
     def draw_blend_alpha(self):
         _debug_('draw_blend_alpha()', 2)
@@ -142,7 +147,7 @@ class Transition(BaseAnimation):
         self.index_alpha += self.speed
 
         if self.index_alpha > len(self.blend_alphas) - 1:
-            self.finished = True
+            self.__finished()
 
 
     def draw_wipe(self):
@@ -152,11 +157,11 @@ class Transition(BaseAnimation):
         _debug_('draw_wipe()', 2)
         if self.offset_x > self.rect.width:
             self.offset_x = self.rect.width
-            self.finished = True
+            self.__finished()
 
         if self.offset_y > self.rect.height:
             self.offset_y = self.rect.height
-            self.finished = True
+            self.__finished()
 
 
         x = self.offset_x
@@ -183,7 +188,7 @@ class Transition(BaseAnimation):
         """
         _debug_('draw_wipe_alpha()', 2)
         if self.line > self.size[0] - 1:
-            self.finished = True
+            self.__finished()
 
         for i in range(0, (self.line + self.fade_rows)):
             # array with alphavals
