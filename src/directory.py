@@ -778,7 +778,7 @@ class DirItem(Playlist):
                         self.menu.selected = items[pos]
                     else:
                         self.menu.selected = None
-            if self.menuw:
+            if self.menuw and self.menuw.menustack[-1] == self.menu:
                 if self.menu.selected and selected_pos != -1:
                     self.menuw.rebuild_page()
                 else:
