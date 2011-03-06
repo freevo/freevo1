@@ -99,18 +99,18 @@ class PluginInterface(plugin.DaemonPlugin):
         try:
             self.line_mixer = alsaaudio.Mixer(config.ALSA_LINEMIXER_NAME, 0, config.ALSA_LINE_CARDID)
         except alsaaudio.ALSAAudioError:
-            self.init_failed('Couldn\'t open mixer "%s"' % config.ALSA_LINEMIXER_NAME)
-            return
+            print 'Couldn\'t open Line-In mixer "%s"' % config.ALSA_LINEMIXER_NAME
+            
         try:
             self.mic_mixer = alsaaudio.Mixer(config.ALSA_MICMIXER_NAME, 0, config.ALSA_CARDID)
         except alsaaudio.ALSAAudioError:
-            self.init_failed('Couldn\'t open mixer "%s"' % config.ALSA_MICMIXER_NAME)
-            return
+            print 'Couldn\'t open Mic mixer "%s"' % config.ALSA_MICMIXER_NAME
+            
 
         try:
             self.sync_mixer = alsaaudio.Mixer(config.ALSA_SYNCMIXER_NAME, 0, config.ALSA_CARDID)
         except alsaaudio.ALSAAudioError:
-            print 'Couldn\'t open mixer "%s"' % config.ALSA_SYNCMIXER_NAME
+            print 'Couldn\'t open sync mixer "%s"' % config.ALSA_SYNCMIXER_NAME
 
 
         # init here
@@ -156,7 +156,7 @@ class PluginInterface(plugin.DaemonPlugin):
             ('ALSA_LINEMIXER_NAME', 'Line', 'Alsa Line Mixer Name'),
             ('ALSA_MICMIXER_NAME', 'Mic', 'Alsa Mic Mixer Name'),
             ('ALSA_SYNCMIXER_NAME', 'Master Surround', 'Alsa Sync Mixer Name'),
-            ('ALSA_SYNCMIXER', '0', 'Alsa Sync Mixer Name'),
+            ('ALSA_SYNCMIXER', False, 'Whether to control the Alsa Sync Mixer'),
         ]
 
 
@@ -181,7 +181,7 @@ class PluginInterface(plugin.DaemonPlugin):
             dialog.show_volume(self.getVolume(), False)
             rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
 
-            if config.ALSA_SYNCMIXER == 1:
+            if config.ALSA_SYNCMIXER:
                 self.setSyncVolume(self.getVolume())
             return True
 
@@ -195,7 +195,7 @@ class PluginInterface(plugin.DaemonPlugin):
             dialog.show_volume(self.getVolume(), False)
             rc.post_event(Event('MIXER_VOLUME_INFO', arg='%s' % self.getVolume()))
 
-            if config.ALSA_SYNCMIXER == 1:
+            if config.ALSA_SYNCMIXER:
                 self.setSyncVolume(self.getVolume())
             return True
 
@@ -289,7 +289,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self._setVolume(self.pcm_mixer, self.pcmVolume)
 
     def setLineinVolume(self, volume):
-        if config.MIXER_CONTROL_ALL:
+        if config.MIXER_CONTROL_ALL and self.line_mixer:
             self.lineinVolume = volume
             self._setVolume(self.line_mixer, volume)
 
@@ -297,7 +297,7 @@ class PluginInterface(plugin.DaemonPlugin):
         return self.lineinVolume
 
     def setMicVolume(self, volume):
-        if config.MIXER_CONTROL_ALL:
+        if config.MIXER_CONTROL_ALL and self.mic_mixer:
             self.micVolume = volume
             self._setVolume(self.mic_mixer, volume)
 

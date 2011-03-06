@@ -97,7 +97,7 @@ class Game:
 
         _debug_('Game.play(): Starting thread, cmd=%s' % self.command)
 
-        self.app=GameApp(self.command, stop_osd=1)
+        self.app=GameApp(self.command)
         rc.suspend()
         rc.add_app(self)
 
