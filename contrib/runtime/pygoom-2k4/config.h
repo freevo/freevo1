@@ -1,0 +1,35 @@
+// config.h for 32 bit systems
+// Use fast memcpy
+#define USE_FASTMEMCPY
+// Use runtime CPU detction
+//#define RUNTIME_CPUDETECT
+
+// The machine architecture
+//#define ARCH_ALPHA
+//#define ARCH_ARMV4L
+//#define ARCH_IA64
+//#define ARCH_PA_RISC
+//#define ARCH_POWERPC
+//#define ARCH_S390
+//#define ARCH_S390X
+//#define ARCH_SGI_MIPS
+//#define ARCH_SPARC
+//#define ARCH_VAX
+#define ARCH_X86
+//#define ARCH_X86_64
+
+//#define HAVE_3DNOW
+//#define HAVE_3DNOWEX
+//#define HAVE_ALTIVEC 0
+#define HAVE_MMX
+#define HAVE_MMX2
+//#define HAVE_SSE
+//#define HAVE_SSE2
+
+// Verbose options keep these disabled
+//#define STATISTICS
+//#define VERBOSE
+
+// Some settings in aclib (Advanced C library)
+//#define BLOCK_SIZE 4096
+//#define CONFUSION_FACTOR 0

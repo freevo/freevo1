@@ -1,0 +1,23 @@
+http://www.freevohelp.com/xmonline/index.html
+
+XMonline is a plugin for Freevo that allows the user to listen to live streaming
+XM content with a valid xmonline account.
+
+Feel free to use the forum or you can also reach me via e-mail, look at main page.
+
+Place the following files into src/audio/plugins/
+xmradio.py
+xmradioplayer.py
+
+Add the following variables into your local_conf.py
+plugin.activate('audio.xmradio')
+plugin.activate('audio.xmradioplayer')
+XM_CMD='mplayer'
+XM_USER='your xmonline user id (usually an e-mail address)'
+XM_PASS='your xmonline password'
+XM_RATE='high'
+XM_STATIONS = [
+  ('High Voltage', '202'),
+  ('Home Ice', '204'),
+  ('Music Lab', '51')
+]

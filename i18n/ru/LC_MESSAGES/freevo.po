@@ -1,0 +1,5838 @@
+# translation of freevo.po to Русский
+# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+# Serge Sireskin <sire@mail.ru>, 2006.
+# Gleb Javorsky <javorsky.gleb@gmail.com> 2010
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: freevo-1.9.1"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-16 19:38+0200\n"
+"PO-Revision-Date: 2006-07-21 23:28+0400\n"
+"Last-Translator: Serge Sireskin <sire@mail.ru>\n"
+"Language-Team: Русский <ru@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.10.2\n"
+
+#: ../freevo_config.py:1269 ../freevo_config.py:1274 www/htdocs/record.rpy:104
+#: www/htdocs/manualrecord.rpy:228 www/htdocs/search.rpy:86
+#: tv/edit_favorite.py:112 share/skins/main/basic.fxd:728
+#: share/skins/main/info.fxd:391
+msgid "Title"
+msgstr "Название"
+
+#: ../freevo_config.py:1270 plugins/lcd.py:98 plugins/lcd.py:104
+#: plugins/lcd.py:209 plugins/vfd.py:108 plugins/vfd.py:110
+msgid "Description"
+msgstr "Описание"
+
+#: ../freevo_config.py:1271
+msgid "Author"
+msgstr "Автор"
+
+#: ../freevo_config.py:1275 plugins/lcd.py:97 plugins/vfd.py:107
+#: share/skins/main/crystal.fxd:270 share/skins/main/dark.fxd:591
+#: share/skins/main/dark.fxd:665 share/skins/main/dark.fxd:686
+#: share/skins/main/Tux'n Tosh TV.fxd:768 TV.fxd:842 TV.fxd:863
+#: share/skins/main/bluestar.fxd:290 share/skins/main/rain.fxd:275
+#: share/skins/main/noia.fxd:93 share/skins/main/info.fxd:332
+msgid "Date"
+msgstr "Дата"
+
+#: ../freevo_config.py:1278
+msgid "Model"
+msgstr "Модель"
+
+#: ../freevo_config.py:1279
+msgid "Software"
+msgstr "ПО"
+
+#: ../freevo_config.py:2131 www/htdocs/index.rpy:50
+msgid "Home"
+msgstr "Домой"
+
+#: ../freevo_config.py:2132 www/htdocs/guide.rpy:147
+#: www/htdocs/guidechannel.rpy:200 tv/tvmenu.py:99
+msgid "TV Guide"
+msgstr "Программа передач"
+
+#: ../freevo_config.py:2132
+msgid "View TV Listings"
+msgstr "Программа передач"
+
+#: ../freevo_config.py:2133 www/htdocs/record.rpy:59 www/htdocs/record.rpy:95
+#: tv/plugins/scheduled_recordings.py:44 tv/plugins/scheduled_recordings.py:63
+msgid "Scheduled Recordings"
+msgstr "Запланированные записи"
+
+#: ../freevo_config.py:2133
+msgid "View Scheduled Recordings"
+msgstr "Показать запланированные записи"
+
+#: ../freevo_config.py:2134 www/htdocs/favorites.rpy:55
+#: www/htdocs/favorites.rpy:100
+msgid "Favorites"
+msgstr "Избранное"
+
+#: ../freevo_config.py:2134 tv/plugins/view_favorites.py:45
+#: tv/plugins/view_favorites.py:52 tv/plugins/view_favorites.py:66
+msgid "View Favorites"
+msgstr "Избранное"
+
+#: ../freevo_config.py:2135 www/htdocs/library.rpy:243
+#: www/htdocs/library.rpy:244
+msgid "Media Library"
+msgstr "Медиатека"
+
+#: ../freevo_config.py:2135
+msgid "View Media Library"
+msgstr "Посмотреть Медиатеку"
+
+#: ../freevo_config.py:2136 www/htdocs/manualrecord.rpy:208
+#: tv/plugins/livepause/record.py:110
+msgid "Manual Recording"
+msgstr ""
+
+#: ../freevo_config.py:2136
+msgid "Schedule a Manual Recording"
+msgstr ""
+
+#: ../freevo_config.py:2137 www/htdocs/search.rpy:53 www/htdocs/search.rpy:71
+#: www/web_types.py:386 www/web_types.py:401 video/plugins/youtube.py:205
+#: tv/plugins/search_programs.py:86
+msgid "Search"
+msgstr "Поиск"
+
+#: ../freevo_config.py:2137
+msgid "Advanced Search Page"
+msgstr "Расширенный поиск"
+
+#: ../freevo_config.py:2138
+msgid "Help"
+msgstr "Помощь"
+
+#: ../freevo_config.py:2138
+msgid "View Online Help and Documentation"
+msgstr "Показать он-лайн помощь и документацию"
+
+#: gui/ConfirmBox.py:75 gui/AlertBox.py:65 plugins/cd_burn.py:94
+#: plugins/command.py:160
+msgid "OK"
+msgstr ""
+
+#: gui/ConfirmBox.py:79 tv/edit_favorite.py:188
+msgid "CANCEL"
+msgstr "Отмена"
+
+#: util/mediainfo.py:748
+msgid "Reloading cache files, be patient..."
+msgstr "Чтение диска, подождите..."
+
+#: util/misc.py:425 util/misc.py:480
+msgid "No recordings are scheduled"
+msgstr "Нет запланированных записей"
+
+#: util/misc.py:449
+msgid "Today"
+msgstr "Сегодня"
+
+#: util/misc.py:456 util/misc.py:467 util/misc.py:477 plugins/oneclick.py:709
+#: plugins/oneclick.py:974
+msgid "at"
+msgstr "и"
+
+#: util/misc.py:460
+msgid "Tomorrow"
+msgstr "Завтра"
+
+#: util/misc.py:471
+msgid "This Week"
+msgstr "Текущая неделя"
+
+#: util/misc.py:521
+msgid "Widescreen"
+msgstr "Широкий экран"
+
+#: www/htdocs/edit_favorite.rpy:54 www/htdocs/edit_favorite.rpy:107
+#: tv/edit_favorite.py:93
+msgid "Edit Favorite"
+msgstr "Редактировать избранное"
+
+#: www/htdocs/edit_favorite.rpy:55 www/htdocs/edit_favorite.rpy:81
+#: www/htdocs/edit_favorite.rpy:100 www/htdocs/record.rpy:60
+#: www/htdocs/record.rpy:81 www/htdocs/library.rpy:210
+#: www/htdocs/library.rpy:232 www/htdocs/library.rpy:235
+#: www/htdocs/manualrecord.rpy:66 www/htdocs/genre.rpy:69
+#: www/htdocs/genre.rpy:95 www/htdocs/library1.rpy:173
+#: www/htdocs/library1.rpy:195 www/htdocs/library1.rpy:198
+#: www/htdocs/guide.rpy:151 www/htdocs/wap_rec.rpy:102
+#: www/htdocs/favorites.rpy:56 www/htdocs/guidechannel.rpy:206
+#: www/htdocs/help/howto.rpy:84 www/htdocs/help/doc.rpy:61
+#: www/htdocs/search.rpy:54 skins/main/info_area.py:133 config.py:466
+#: audio/plugins/xine.py:55 plugins/lcd.py:52 plugins/vfd.py:52
+#: plugins/freevused.py:141 plugins/speak.py:34
+#: tv/plugins/dvbstreamer/live_pause.py:88
+#: tv/plugins/dvbstreamer/live_pause.py:112
+#: tv/plugins/dvbstreamer/vlc_live_pause.py:89
+msgid "ERROR"
+msgstr "ОШИБКА"
+
+#: www/htdocs/edit_favorite.rpy:55 www/htdocs/guide.rpy:151
+#: www/htdocs/index.rpy:60 www/htdocs/guidechannel.rpy:206
+msgid "Recording server is not available"
+msgstr "Сервер записи недоступен."
+
+#: www/htdocs/edit_favorite.rpy:82 www/htdocs/record.rpy:82
+#, python-format
+#, fuzzy
+msgid "No program found on %(chan)s at %(start)s."
+msgstr "Программа на канале %(chan)s в %(start)s не найдена."
+
+#: www/htdocs/edit_favorite.rpy:100
+#, python-format
+msgid "Favorite %s doesn't exists."
+msgstr "Избранная запись %s не существует"
+
+#: www/htdocs/edit_favorite.rpy:121
+msgid "Name of favorite"
+msgstr "Имя избранной записи"
+
+#: www/htdocs/edit_favorite.rpy:122 www/htdocs/favorites.rpy:105
+#: plugins/lcd.py:207 plugins/lcd.py:374 share/skins/main/basic.fxd:657
+msgid "Program"
+msgstr "Программа"
+
+#: www/htdocs/edit_favorite.rpy:123 www/htdocs/record.rpy:103
+#: www/htdocs/manualrecord.rpy:225 www/htdocs/favorites.rpy:106
+#: www/htdocs/search.rpy:85 plugins/lcd.py:206 plugins/lcd.py:373
+#: tv/edit_favorite.py:114 share/skins/main/basic.fxd:601
+#: share/skins/main/basic.fxd:632 share/skins/main/basic.fxd:663
+msgid "Channel"
+msgstr "Канал"
+
+#: www/htdocs/edit_favorite.rpy:124 www/htdocs/favorites.rpy:107
+msgid "Day of week"
+msgstr "День недели"
+
+#: www/htdocs/edit_favorite.rpy:125 www/htdocs/favorites.rpy:108
+msgid "Time of day"
+msgstr "Время"
+
+#: www/htdocs/edit_favorite.rpy:127 www/htdocs/favorites.rpy:110
+msgid "Duplicates"
+msgstr "Дубликаты"
+
+#: www/htdocs/edit_favorite.rpy:129 www/htdocs/favorites.rpy:112
+msgid "Episodes"
+msgstr "Эпизоды"
+
+#: www/htdocs/edit_favorite.rpy:130
+msgid "Action"
+msgstr "Действие"
+
+#: www/htdocs/edit_favorite.rpy:145 tv/favoriteitem.py:72
+msgid "ANY CHANNEL"
+msgstr "ЛЮБОЙ КАНАЛ"
+
+#: www/htdocs/edit_favorite.rpy:159 tv/edit_favorite.py:140
+#: tv/favoriteitem.py:76 tv/favoriteitem.py:199
+msgid "ANY DAY"
+msgstr "ЛЮБОЙ ДЕНЬ"
+
+#: www/htdocs/edit_favorite.rpy:160 tv/edit_favorite.py:144
+#: tv/favoriteitem.py:69 tv/record_types.py:341
+msgid "Mon"
+msgstr "Пн"
+
+#: www/htdocs/edit_favorite.rpy:161 tv/edit_favorite.py:144
+#: tv/favoriteitem.py:69 tv/record_types.py:341
+msgid "Tue"
+msgstr "Вт"
+
+#: www/htdocs/edit_favorite.rpy:162 tv/edit_favorite.py:144
+#: tv/favoriteitem.py:69 tv/record_types.py:341
+msgid "Wed"
+msgstr "Ср"
+
+#: www/htdocs/edit_favorite.rpy:163 tv/edit_favorite.py:144
+#: tv/favoriteitem.py:69 tv/record_types.py:341
+msgid "Thu"
+msgstr "Чт"
+
+#: www/htdocs/edit_favorite.rpy:164 tv/edit_favorite.py:144
+#: tv/favoriteitem.py:69 tv/record_types.py:341
+msgid "Fri"
+msgstr "Пт"
+
+#: www/htdocs/edit_favorite.rpy:165 tv/edit_favorite.py:144
+#: tv/favoriteitem.py:69 tv/record_types.py:341
+msgid "Sat"
+msgstr "Сб"
+
+#: www/htdocs/edit_favorite.rpy:166 tv/edit_favorite.py:144
+#: tv/favoriteitem.py:69 tv/record_types.py:341
+msgid "Sun"
+msgstr "Вс"
+
+#: www/htdocs/edit_favorite.rpy:172 tv/edit_favorite.py:159
+#: tv/favoriteitem.py:80 tv/favoriteitem.py:218
+msgid "ANY TIME"
+msgstr "ЛЮБОЕ ВРЕМЯ"
+
+#: www/htdocs/edit_favorite.rpy:232
+msgid "ALLOW"
+msgstr "РАЗРЕШИТЬ"
+
+#: www/htdocs/edit_favorite.rpy:233
+msgid "PREVENT"
+msgstr ""
+
+#: www/htdocs/edit_favorite.rpy:242
+msgid "ALL"
+msgstr "ВСЕ"
+
+#: www/htdocs/edit_favorite.rpy:243
+msgid "ONLY NEW"
+msgstr "ТОЛЬКО НОВОЕ"
+
+#: www/htdocs/edit_favorite.rpy:256 tv/edit_favorite.py:181
+#: tv/plugins/manual_record.py:134
+msgid "Save"
+msgstr "Сохранить"
+
+#: www/htdocs/record.rpy:101 www/htdocs/manualrecord.rpy:226
+#: www/htdocs/search.rpy:83
+msgid "Start Time"
+msgstr "Время запуска"
+
+#: www/htdocs/record.rpy:102 www/htdocs/manualrecord.rpy:227
+#: www/htdocs/search.rpy:84
+msgid "Stop Time"
+msgstr "Время остановки"
+
+#: www/htdocs/record.rpy:105 www/htdocs/search.rpy:87
+#: share/skins/main/info.fxd:264
+msgid "Episode"
+msgstr "Эпизод"
+
+#: www/htdocs/record.rpy:106 www/htdocs/manualrecord.rpy:229
+#: www/htdocs/search.rpy:88
+msgid "Program Description"
+msgstr "Описание программы"
+
+#: www/htdocs/record.rpy:107 www/htdocs/favorites.rpy:113
+#: www/htdocs/search.rpy:89
+msgid "Actions"
+msgstr "Действия"
+
+#: www/htdocs/record.rpy:129
+msgid "UNKNOWN"
+msgstr "НЕИЗВЕСТНЫЙ"
+
+#: www/htdocs/record.rpy:141 www/htdocs/proginfo.rpy:65
+#: www/htdocs/search.rpy:124
+#, python-format
+msgid "Sorry, the program description for %s is unavailable."
+msgstr "Нет описания программы %s."
+
+#: www/htdocs/record.rpy:146 www/htdocs/favorites.rpy:173
+#: www/htdocs/search.rpy:130 tv/edit_favorite.py:184
+msgid "Remove"
+msgstr "Удалить"
+
+#: www/htdocs/library.rpy:199 www/htdocs/library1.rpy:162
+#, python-format
+msgid "%s already exists! File not renamed."
+msgstr "%s уже существует! Файл не был переименован."
+
+#: www/htdocs/library.rpy:203 www/htdocs/library1.rpy:166
+msgid "Rename %(src)s to %(dst)s."
+msgstr "Переименовать %(src)s в %(dst)s."
+
+#: www/htdocs/library.rpy:207 www/htdocs/library1.rpy:170
+msgid "Rename %(src)s to %(dst)s, failed."
+msgstr "Переименование %(src)s в %(dst)s, неудачно."
+
+#: www/htdocs/library.rpy:210 www/htdocs/library1.rpy:173
+msgid "No new file specified."
+msgstr "Не указан новый файл."
+
+#: www/htdocs/library.rpy:216 www/htdocs/library.rpy:220
+#: www/htdocs/library1.rpy:179 www/htdocs/library1.rpy:183
+#, python-format
+msgid "Delete %s."
+msgstr "Удалить %s."
+
+#: www/htdocs/library.rpy:223 www/htdocs/library1.rpy:186
+#, python-format
+msgid "Delete %s, failed."
+msgstr "Удаление %s, неудачно."
+
+#: www/htdocs/library.rpy:232
+#, python-format
+msgid "%s does not exist. No action taken."
+msgstr "%s не существует. Действие не было выполнено."
+
+#: www/htdocs/library.rpy:236
+#, python-format
+msgid "I do not process names (%s) with slashes for security reasons."
+msgstr "Названия (%s) со слешами не обрабатываются в целях безопасности."
+
+#: www/htdocs/library.rpy:275 www/htdocs/library1.rpy:228 www/web_types.py:414
+msgid "Messages"
+msgstr "Сообщения"
+
+#: www/htdocs/library.rpy:287 www/htdocs/library1.rpy:241
+#: share/skins/main/crystal.fxd:9 share/skins/main/dark.fxd:18
+#: share/skins/main/atlantice.fxd:720 share/skins/main/Tux'n Tosh TV.fxd:18
+#: TV.fxd:595 share/skins/main/bluestar.fxd:9 share/skins/main/rain.fxd:9
+#: share/skins/main/basic.fxd:21
+msgid "Movies"
+msgstr "Фильмы"
+
+#: www/htdocs/library.rpy:291 www/htdocs/library1.rpy:245
+msgid "Recorded TV"
+msgstr "Записанные передачи ТВ"
+
+#: www/htdocs/library.rpy:295 www/htdocs/library1.rpy:249 plugins/lcd.py:168
+#: plugins/lcd.py:347 share/skins/main/crystal.fxd:10
+#: share/skins/main/dark.fxd:19 share/skins/main/atlantice.fxd:721
+#: share/skins/main/Tux'n Tosh TV.fxd:19 share/skins/main/bluestar.fxd:10
+#: share/skins/main/rain.fxd:10 share/skins/main/basic.fxd:22
+msgid "Music"
+msgstr "Музыка"
+
+#: www/htdocs/library.rpy:299 www/htdocs/library1.rpy:253
+#: share/skins/main/crystal.fxd:12 share/skins/main/dark.fxd:20
+#: share/skins/main/atlantice.fxd:722 share/skins/main/Tux'n Tosh TV.fxd:20
+#: share/skins/main/rain.fxd:12 share/skins/main/basic.fxd:23
+msgid "Images"
+msgstr "Изображения"
+
+#: www/htdocs/library.rpy:316 www/htdocs/library.rpy:389
+#: www/htdocs/library.rpy:391 www/htdocs/library.rpy:395
+#: www/htdocs/library1.rpy:268 www/htdocs/library1.rpy:339
+#: www/htdocs/library1.rpy:341 www/htdocs/library1.rpy:345
+msgid "Back"
+msgstr "Назад"
+
+#: www/htdocs/library.rpy:555 www/htdocs/library1.rpy:387
+msgid "Download"
+msgstr "Загрузить"
+
+#: www/htdocs/library.rpy:556 www/htdocs/library1.rpy:388
+#: skin/widgets/textentry_screen.py:62 plugins/file_ops.py:72
+msgid "Delete"
+msgstr "Удалить"
+
+#: www/htdocs/library.rpy:558 www/htdocs/library1.rpy:389
+msgid "Rename"
+msgstr "Переименовать"
+
+#: www/htdocs/library.rpy:599
+msgid "Play file"
+msgstr "Игры"
+
+#: www/htdocs/library.rpy:602
+msgid "Play file using VLC"
+msgstr "Воспроизвести файл с помощью VLC"
+
+#: www/htdocs/library.rpy:610 www/htdocs/genre.rpy:225
+#: www/htdocs/guide.rpy:292 www/htdocs/guidechannel.rpy:152
+#: www/htdocs/guidechannel.rpy:275
+msgid "Close Window"
+msgstr "Закрыть окно"
+
+#: www/htdocs/config.rpy:787
+#, fuzzy
+msgid "Config"
+msgstr "Настроить"
+
+#: www/htdocs/manualrecord.rpy:65 www/htdocs/manualrecord.rpy:208
+#: tv/plugins/manual_record.py:56
+msgid "Manual Record"
+msgstr "Запись вручную"
+
+#: www/htdocs/manualrecord.rpy:117
+msgid "Manual Recorded"
+msgstr "Записанные вручную"
+
+#: www/htdocs/manualrecord.rpy:126 tv/plugins/manual_record.py:382
+msgid "start time is not before stop time."
+msgstr "время начала должно быть раньше времени окончания."
+
+#: www/htdocs/manualrecord.rpy:129 tv/plugins/manual_record.py:373
+#, python-format
+msgid "Program would record for more than %d days!"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:131 tv/plugins/manual_record.py:377
+msgid "Program would record for more than 1 day!"
+msgstr ""
+
+#: www/htdocs/manualrecord.rpy:146 tv/plugins/manual_record.py:69
+msgid "Jan"
+msgstr "Янв"
+
+#: www/htdocs/manualrecord.rpy:146 tv/plugins/manual_record.py:69
+msgid "Feb"
+msgstr "Фев"
+
+#: www/htdocs/manualrecord.rpy:146 tv/plugins/manual_record.py:69
+msgid "Mar"
+msgstr "Мар"
+
+#: www/htdocs/manualrecord.rpy:146 tv/plugins/manual_record.py:69
+msgid "Apr"
+msgstr "Апр"
+
+#: www/htdocs/manualrecord.rpy:146 tv/plugins/manual_record.py:69
+msgid "May"
+msgstr "Май"
+
+#: www/htdocs/manualrecord.rpy:146 tv/plugins/manual_record.py:69
+msgid "Jun"
+msgstr "Июн"
+
+#: www/htdocs/manualrecord.rpy:147 tv/plugins/manual_record.py:70
+msgid "Jul"
+msgstr "Июл"
+
+#: www/htdocs/manualrecord.rpy:147 tv/plugins/manual_record.py:70
+msgid "Aug"
+msgstr "Авг"
+
+#: www/htdocs/manualrecord.rpy:147 tv/plugins/manual_record.py:70
+msgid "Sep"
+msgstr "Сен"
+
+#: www/htdocs/manualrecord.rpy:147 tv/plugins/manual_record.py:70
+msgid "Oct"
+msgstr "Окт"
+
+#: www/htdocs/manualrecord.rpy:147 tv/plugins/manual_record.py:70
+msgid "Nov"
+msgstr "Ноя"
+
+#: www/htdocs/manualrecord.rpy:147 tv/plugins/manual_record.py:70
+msgid "Dec"
+msgstr "Дек"
+
+#: www/htdocs/manualrecord.rpy:214
+msgid "Error Message"
+msgstr "Сообщение об ошибке"
+
+#: www/htdocs/manualrecord.rpy:242
+msgid "Add to Recording Schedule"
+msgstr "Добавить в расписание записи"
+
+#: www/htdocs/youtube.rpy:296
+msgid "YouTube"
+msgstr "YouTube"
+
+#: www/htdocs/genre.rpy:67
+#, python-format
+msgid "TV Genre for %s"
+msgstr "Жанр для %s"
+
+#: www/htdocs/genre.rpy:95
+#, fuzzy
+msgid "No program schedule"
+msgstr "Нет программ в расписании записи."
+
+#: www/htdocs/genre.rpy:125 www/htdocs/guide.rpy:161
+msgid "Show"
+msgstr "Передача"
+
+#: www/htdocs/genre.rpy:125 www/htdocs/guide.rpy:161
+msgid "Category"
+msgstr "Категория"
+
+#: www/htdocs/genre.rpy:126 www/htdocs/guide.rpy:161
+msgid "Change"
+msgstr "Изменить"
+
+#: www/htdocs/genre.rpy:181
+msgid "NO SHOWS MATCHING CATEGORY"
+msgstr "НЕТ ПЕРЕДАЧ СООТВЕТСТВУЮЩЕЙ КАТЕГОРИИ"
+
+#: www/htdocs/genre.rpy:206 www/htdocs/guide.rpy:273
+#: www/htdocs/guidechannel.rpy:139 www/htdocs/guidechannel.rpy:256
+#: plugins/torrent.py:35 share/skins/main/basic.fxd:607
+#: share/skins/main/basic.fxd:669
+msgid "Start"
+msgstr "Начало"
+
+#: www/htdocs/genre.rpy:207 www/htdocs/guide.rpy:274
+#: www/htdocs/guidechannel.rpy:140 www/htdocs/guidechannel.rpy:257
+#: plugins/torrent.py:33 share/skins/main/basic.fxd:613
+#: share/skins/main/basic.fxd:675
+msgid "Stop"
+msgstr "Окончание"
+
+#: www/htdocs/genre.rpy:208 www/htdocs/guide.rpy:275
+#: www/htdocs/guidechannel.rpy:141 www/htdocs/guidechannel.rpy:258
+#: share/skins/main/dark.fxd:465 share/skins/main/Tux'n Tosh TV.fxd:642
+#: share/skins/main/info.fxd:278 share/skins/main/info.fxd:303
+#: share/skins/main/info.fxd:482
+msgid "Runtime"
+msgstr ""
+
+#: www/htdocs/genre.rpy:219 www/htdocs/guide.rpy:286
+#: www/htdocs/guidechannel.rpy:269 www/htdocs/search.rpy:133
+#: www/htdocs/search.rpy:136 plugins/buttonbar.py:121
+msgid "Record"
+msgstr "Запись"
+
+#: www/htdocs/genre.rpy:222 www/htdocs/guide.rpy:289
+#: www/htdocs/guidechannel.rpy:272
+msgid "Add to Favorites"
+msgstr "Добавить в избранное"
+
+#: www/htdocs/viewlogfile.rpy:130
+#, fuzzy
+msgid "viewlog"
+msgstr "посмотреть лог"
+
+#: www/htdocs/viewlogfile.rpy:130
+#, fuzzy
+msgid "View Logs"
+msgstr "Просмотреть лог-файлы"
+
+#: www/htdocs/library1.rpy:196
+msgid "%(file)s does not exist. No action taken."
+msgstr "%(file)s не существует. Действие не было выполнено."
+
+#: www/htdocs/library1.rpy:199
+msgid "I do not process names (%(file)s) with slashes for security reasons."
+msgstr "Названия (%(file)s) со слешами не обрабатываются в целях безопасности."
+
+#: www/htdocs/library1.rpy:207
+msgid "Media Library 1"
+msgstr "Медиатека 1"
+
+#: www/htdocs/library1.rpy:265
+msgid "Choose a Directory"
+msgstr "Выберите каталог"
+
+#: www/htdocs/guide.rpy:157 plugins/lcd.py:208
+#: share/skins/main/crystal.fxd:273 share/skins/main/bluestar.fxd:293
+#: share/skins/main/rain.fxd:278 share/skins/main/basic.fxd:644
+#: share/skins/main/noia.fxd:96
+msgid "Time"
+msgstr "Время"
+
+#: www/htdocs/guide.rpy:158
+msgid "View"
+msgstr "Просмотр"
+
+#: www/htdocs/guide.rpy:203 skins/main/tvlisting_area.py:337 tv/tvguide.py:52
+msgid "This channel has no data loaded"
+msgstr "Нет данных для этого канала"
+
+#: www/htdocs/index.rpy:50
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+#: www/htdocs/index.rpy:53
+#, python-format
+msgid "Freevo Web Status as of %s"
+msgstr ""
+
+#: www/htdocs/index.rpy:60 www/htdocs/index.rpy:66 www/htdocs/index.rpy:68
+msgid "Notice"
+msgstr "Заметка"
+
+#: www/htdocs/index.rpy:62
+msgid "Recording server is up and running"
+msgstr "Сервер записи запущен."
+
+#: www/htdocs/index.rpy:66
+msgid "Your listings expire in 1 hour"
+msgstr ""
+
+#: www/htdocs/index.rpy:68
+#, python-format
+msgid "Your listings expire in %s hours"
+msgstr ""
+
+#: www/htdocs/index.rpy:71
+msgid "Your listings are up to date"
+msgstr ""
+
+#: www/htdocs/index.rpy:80
+#, python-format
+msgid "Now Recording %s."
+msgstr "Идёт запись %s."
+
+#: www/htdocs/index.rpy:86
+msgid "One program scheduled to record."
+msgstr "В расписании записи одна программа."
+
+#: www/htdocs/index.rpy:88
+#, python-format
+msgid "%i programs scheduled to record."
+msgstr "%i программ в расписании записи."
+
+#: www/htdocs/index.rpy:90 www/htdocs/index.rpy:92
+msgid "No programs scheduled to record."
+msgstr "Нет программ в расписании записи."
+
+#: www/htdocs/index.rpy:94
+msgid "%(free)i of %(total)i Mb free in %(dir)s"
+msgstr "%(free)i из %(total)i Мб свободно в %(dir)s"
+
+#: www/htdocs/favorites.rpy:91
+msgid "Monday"
+msgstr "Понедельник"
+
+#: www/htdocs/favorites.rpy:92
+msgid "Tuesday"
+msgstr "Вторник"
+
+#: www/htdocs/favorites.rpy:93
+msgid "Wednesday"
+msgstr "Среда"
+
+#: www/htdocs/favorites.rpy:94
+msgid "Thursday"
+msgstr "Четверг"
+
+#: www/htdocs/favorites.rpy:95
+msgid "Friday"
+msgstr "Пятница"
+
+#: www/htdocs/favorites.rpy:96
+msgid "Saturday"
+msgstr "Суббота"
+
+#: www/htdocs/favorites.rpy:97
+msgid "Sunday"
+msgstr "Воскресенье"
+
+#: www/htdocs/favorites.rpy:104
+msgid "Favorite Name"
+msgstr "Имя избранной записи"
+
+#: www/htdocs/favorites.rpy:114
+msgid "Priority"
+msgstr "Приоритет"
+
+#: www/htdocs/favorites.rpy:129 www/htdocs/favorites.rpy:141
+#: www/htdocs/favorites.rpy:147 tv/edit_favorite.py:118
+msgid "ANY"
+msgstr "ЛЮБОЙ"
+
+#: www/htdocs/favorites.rpy:172
+msgid "Edit"
+msgstr "Редактировать"
+
+#: www/htdocs/favorites.rpy:180
+#, fuzzy
+msgid "Higher"
+msgstr "Высший"
+
+#: www/htdocs/favorites.rpy:187
+#, fuzzy
+msgid "Lower"
+msgstr "Низший"
+
+#: www/htdocs/pluginconfig.rpy:359
+msgid "Config Plugins"
+msgstr "Настройки плагинов"
+
+#: www/htdocs/help/howto.rpy:45 www/htdocs/help/howto.rpy:46
+msgid "Freevo Installation HOWTO"
+msgstr "Руководство по установке Freevo"
+
+#: www/htdocs/help/howto.rpy:46
+#, fuzzy
+msgid "Build your own media box with Freevo and Linux"
+msgstr "Сделайте свой собственный медиацентр с Freevo и Linux"
+
+#: www/htdocs/help/howto.rpy:48 www/htdocs/help/howto.rpy:49
+msgid "Freevo Plugin Writing HOWTO"
+msgstr "Руководство по написанию плагинов для Freevo"
+
+#: www/htdocs/help/howto.rpy:49
+msgid "Writing your own plugins for Freevo"
+msgstr "Создание своих собственных плагинов для Freevo"
+
+#: www/htdocs/help/howto.rpy:84
+msgid "unable to load html files"
+msgstr "невозможно загрузить html файлы"
+
+#: www/htdocs/help/howto.rpy:85 www/htdocs/help/doc.rpy:62
+msgid "If you use a svn version of Freevo, run <b>autogen.sh</b>."
+msgstr "Если вы используете svn версию Freevo, запустите <b>autogen.sh</b>."
+
+#: www/htdocs/help/howto.rpy:86
+msgid "The files are searched in the following locations:"
+msgstr "Поиск файлов был выполнен в следующих местах:"
+
+#: www/htdocs/help/plugins.rpy:60 www/htdocs/help/plugins.rpy:79
+msgid "Freevo Plugin List"
+msgstr "Список плагинов Freevo"
+
+#: www/htdocs/help/plugins.rpy:89 www/htdocs/help/plugins.rpy:97
+#, fuzzy
+msgid "top"
+msgstr "наверх"
+
+#: www/htdocs/help/plugins.rpy:90 www/htdocs/help/plugins.rpy:98
+msgid "index"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:38
+msgid "Freevo Help"
+msgstr "Помощь Freevo"
+
+#: www/htdocs/help/index.rpy:41
+msgid ""
+"This is the internal Freevo documentation. The documents         are in an "
+"early stage of development, if you like to help, please         contact the "
+"developers. You find more information like         the <a href=\"http://"
+"freevo.sourceforge.net/cgi-bin/moin.cgi/FrontPage\">        WiKi (online "
+"manual)</a> and mailing lists on the         <a href=\"http://www.freevo.org"
+"\">Freevo Homepage</a>.        Everyone can edit the WiKi (and we can revert "
+"them if someone deletes         information), feel free to add information "
+"there."
+msgstr ""
+
+#: www/htdocs/help/index.rpy:50
+msgid "Index"
+msgstr ""
+
+#: www/htdocs/help/index.rpy:52
+msgid "Freevo Installation Howto"
+msgstr "Руководство по установке Freevo"
+
+#: www/htdocs/help/index.rpy:53
+msgid "Frequently Asked Questions"
+msgstr "Часто задаваемые вопросы"
+
+#: www/htdocs/help/index.rpy:54
+#, fuzzy
+msgid "Recording Information"
+msgstr "Информация по записям"
+
+#: www/htdocs/help/index.rpy:55
+msgid "Plugin List"
+msgstr "Список плагинов"
+
+#: www/htdocs/help/index.rpy:56
+msgid "FXD files"
+msgstr "Файлы FXD"
+
+#: www/htdocs/help/index.rpy:57
+#, fuzzy
+msgid "Skinning Information"
+msgstr "Информация по скинам"
+
+#: www/htdocs/help/index.rpy:58
+msgid "Plugin Writing Howto"
+msgstr "Руководство по написанию плагинов"
+
+#: www/htdocs/help/doc.rpy:59 www/htdocs/help/doc.rpy:70
+msgid "Freevo Documentation"
+msgstr "Документация Freevo"
+
+#: www/htdocs/help/doc.rpy:61
+#, python-format
+msgid "unable to load %s.html"
+msgstr "невозможно загрузить %s.html"
+
+#: www/htdocs/encoding_web.rpy:211 video/plugins/reencode.py:367
+#, fuzzy
+msgid "Unknown Profile"
+msgstr "Неизвестный исполнитель"
+
+#: www/htdocs/encoding_web.rpy:357
+msgid "Web Encoder"
+msgstr ""
+
+#: www/htdocs/search.rpy:53 tv/programitem.py:299
+#: tv/plugins/recordings_manager.py:1106 tv/plugins/search_programs.py:111
+msgid "Search Results"
+msgstr "Результаты поиска"
+
+#: www/htdocs/search.rpy:78
+msgid "No matches"
+msgstr "Совпадений нет"
+
+#: www/htdocs/search.rpy:139
+msgid "New favorite"
+msgstr "Новая избранная запись"
+
+#: www/web_types.py:243
+msgid "Icecast List"
+msgstr ""
+
+#: www/web_types.py:243
+msgid "Change Icecast List"
+msgstr ""
+
+#: www/web_types.py:402
+msgid "Movies only"
+msgstr "Только фильмы"
+
+#: www/web_types.py:403
+msgid "Go!"
+msgstr "Вперед!"
+
+#: skins/osd/designer.py:325 skins/osd/designer.py:340
+#: skins/osd/designer.py:344 skins/osd/designer.py:349
+#, fuzzy
+msgid "Hello"
+msgstr "Здравствуйте"
+
+#: skins/osd/designer.py:329 dialog/plugins/tiny_xosd_display.py:85
+#: dialog/dialogs.py:234
+#, fuzzy
+msgid "Volume"
+msgstr "Громкость"
+
+#: skins/osd/designer.py:351
+#, fuzzy
+msgid "Menu Title"
+msgstr "Название меню"
+
+#: skins/main/info_area.py:133
+#, fuzzy
+msgid "missing 'src' attribute in skin tag!"
+msgstr "пропущен атрибут 'src' в тэге скина"
+
+#: skins/main/listing_area.py:214
+msgid "This directory is empty"
+msgstr "Каталог пуст"
+
+#: skins/main/default_areas.py:121
+msgid "TV GUIDE"
+msgstr "ПРОГРАММА ПЕРЕДАЧ"
+
+#: fxditem.py:201 tv/plugins/genre.py:67 tv/plugins/genre.py:107
+msgid "Browse list"
+msgstr "Просмотр списка"
+
+#: dialog/display.py:118 plugins/freevused.py:299 plugins/freevused.py:302
+msgid "Playing"
+msgstr "Список воспроизведения"
+
+#: dialog/display.py:120
+msgid "Paused"
+msgstr "Пауза"
+
+#: dialog/display.py:122
+#, fuzzy
+msgid "Rewind"
+msgstr "Отмотать"
+
+#: dialog/display.py:124
+msgid "Fast forward"
+msgstr "Быстрая перемотка"
+
+#: dialog/display.py:126
+msgid "Seeking back"
+msgstr "Перемотка назад"
+
+#: dialog/display.py:128
+msgid "Seeking forward"
+msgstr "Перемотка вперед"
+
+#: dialog/display.py:130
+msgid "Slow"
+msgstr "Медленно"
+
+#: dialog/display.py:132
+msgid "Fast"
+msgstr "Быстро"
+
+#: dialog/display.py:202
+msgid "%s: Muted"
+msgstr "%s: Звук выключен"
+
+#: dialog/plugins/tiny_xosd_display.py:88
+#, fuzzy
+msgid "Muted"
+msgstr "Звук выключен"
+
+#: dialog/dialogs.py:228
+msgid "Center"
+msgstr "Центр"
+
+#: dialog/dialogs.py:230
+#, fuzzy
+msgid "Surround"
+msgstr "Громкость"
+
+#: dialog/dialogs.py:232
+msgid "LFE"
+msgstr ""
+
+#: config.py:463
+msgid "CRITICAL"
+msgstr ""
+
+#: config.py:469
+msgid "WARNING"
+msgstr "ПРЕДУПРЕЖДЕНИЕ"
+
+#: config.py:472
+msgid "INFO"
+msgstr "ИНФО"
+
+#: config.py:475
+msgid "DEBUG"
+msgstr "ОТЛАДКА"
+
+#: audio/plugins/playlists.py:82
+msgid "Playlists"
+msgstr "Списки воспроизведения"
+
+#: audio/plugins/playlists.py:98
+msgid "Enqueue this Music in Playlist"
+msgstr "Поставить эту музыку в очередь списка воспроизведения"
+
+#: audio/plugins/playlists.py:100
+msgid "Make a new Audio Playlist"
+msgstr "Создать новый список воспроизведения"
+
+#: audio/plugins/playlists.py:117
+msgid "Queued Directory"
+msgstr ""
+
+#: audio/plugins/playlists.py:119
+msgid "Queued Track"
+msgstr ""
+
+#: audio/plugins/playlists.py:127
+msgid "Added New Playlist"
+msgstr "Добавлен новый список воспроизведения"
+
+#: audio/plugins/musicip.py:85
+#, fuzzy
+msgid "MusicIP Mix"
+msgstr "Музыка"
+
+#: audio/plugins/musicip.py:87
+msgid "Songs From Same Album"
+msgstr "Песни из того же альбома"
+
+#: audio/plugins/musicip.py:88
+msgid "Songs From Same Artist"
+msgstr "Песни того же артиста"
+
+#: audio/plugins/fxmms.py:163 audio/plugins/mplayer.py:116
+#, python-format
+msgid ""
+"%s\n"
+"not found!"
+msgstr ""
+
+#: audio/plugins/apodcast.py:98
+msgid "Buffering podcast..."
+msgstr "Буферизация подкаста..."
+
+#: audio/plugins/apodcast.py:112
+msgid "Listen Audio Podcast"
+msgstr "Слушать аудио подкаст"
+
+#: audio/plugins/apodcast.py:152
+#, fuzzy
+msgid "Audio Podcast"
+msgstr "Аудио Подкаст"
+
+#: audio/plugins/apodcast.py:163
+msgid "Fetching podcasts..."
+msgstr "Загрузка подкастов..."
+
+#: audio/plugins/apodcast.py:192 video/plugins/vpodcast.py:247
+#, fuzzy
+msgid "No Podcast locations found"
+msgstr "Радиостанции не найдены"
+
+#: audio/plugins/apodcast.py:193 audio/plugins/apodcast.py:221
+msgid "AUDIO PODCAST"
+msgstr "АУДИО ПОДКАСТ"
+
+#: audio/plugins/apodcast.py:200
+msgid "Fetching podcast..."
+msgstr "Загрузка подкастов..."
+
+#: audio/plugins/apodcast.py:216
+#, fuzzy
+msgid "Set APODCAST_DIR in local_conf.py"
+msgstr "Установите APODCAST_DIR в файле local_conf.py"
+
+#: audio/plugins/xmradio.py:62
+#, fuzzy
+msgid "Listen to XM Station"
+msgstr "Слушать Станцию XM"
+
+#: audio/plugins/xmradio.py:96
+msgid "XM Radio"
+msgstr "Радио"
+
+#: audio/plugins/xmradio.py:137
+msgid "No XM channels found"
+msgstr "Нет новостей"
+
+#: audio/plugins/xmradio.py:138
+msgid "XM channels"
+msgstr "Каналы"
+
+#: audio/plugins/xine.py:56
+msgid "'fbxine' not found, 'xine' audio plugin deactivated"
+msgstr "'fbxine' не найден, аудио плагин 'xine' выключен"
+
+#: audio/plugins/cdbackup.py:187
+msgid "Show CD ripping status"
+msgstr "Показывать состояние копирования CD"
+
+#: audio/plugins/cdbackup.py:188
+msgid "Stop CD ripping"
+msgstr "Остановить копирование CD"
+
+#: audio/plugins/cdbackup.py:192
+msgid "Rip the CD to the hard drive"
+msgstr "Скопировать CD на жёсткий диск"
+
+#: audio/plugins/cdbackup.py:194
+msgid "Item is not an Audio CD"
+msgstr "Не Audio CD"
+
+#: audio/plugins/cdbackup.py:208
+msgid ""
+"Ripping in progress\n"
+"Track %(current)d of %(total)d"
+msgstr "Копирование<br> Дорожка %(current)d из %(total)d"
+
+#: audio/plugins/cdbackup.py:229
+msgid "Backup CD to hard drive in mp3 format"
+msgstr "Скопировать в формате MP3"
+
+#: audio/plugins/cdbackup.py:231
+msgid "Backup CD to hard drive in Ogg format"
+msgstr "Скопировать в формате OGG"
+
+#: audio/plugins/cdbackup.py:233
+msgid "Backup CD to hard drive in FLAC format"
+msgstr "Скопировать в формате FLAC"
+
+#: audio/plugins/cdbackup.py:234
+msgid "Backup CD to hard drive in wav format"
+msgstr "Скопировать в формате WAV"
+
+#: audio/plugins/cdbackup.py:236
+msgid "CD Backup"
+msgstr "Копирование CD на жёсткий диск"
+
+#: audio/plugins/cdbackup.py:249
+msgid "Ripping started"
+msgstr "Копирование начато"
+
+#: audio/plugins/cdbackup.py:339
+#, python-format
+msgid "Directory %s already exists"
+msgstr "Каталог \"%s\" уже существует"
+
+#: audio/plugins/cdbackup.py:342
+#, fuzzy, python-format
+msgid "Cannot rip to \"%(file)s\"! (%(why)s)"
+msgstr "Невозможно скопировать в \"%(file)s\"! (%(why)s)"
+
+#: audio/plugins/cdbackup.py:359 audio/plugins/cdbackup.py:424
+#: audio/plugins/cdbackup.py:483
+msgid "Ripping aborted"
+msgstr "Копирование прервано"
+
+#: audio/plugins/cdbackup.py:496
+msgid "Ripping complete"
+msgstr "Копирование завершено"
+
+#: audio/plugins/cdbackup.py:504
+#, fuzzy
+msgid "No CD medadata available"
+msgstr "Нет данных"
+
+#: audio/plugins/cdbackup.py:505
+#, fuzzy
+msgid "CD info not found!"
+msgstr "Информация о CD не найдена!"
+
+#: audio/plugins/cdbackup.py:510
+msgid "Unknown Artist"
+msgstr "Неизвестный исполнитель"
+
+#: audio/plugins/cdbackup.py:510 audio/plugins/cdbackup.py:511
+msgid "RENAME"
+msgstr "ПЕРЕИМЕНОВАТЬ"
+
+#: audio/plugins/cdbackup.py:511 audio/audiodiskitem.py:54
+msgid "Unknown CD Album"
+msgstr "Неизвестный альбом CD"
+
+#: audio/plugins/cdbackup.py:512
+msgid "Other"
+msgstr "Другое"
+
+#: audio/plugins/cdbackup.py:519
+msgid "No CDDB data available to mmpython"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:520
+msgid ""
+"CD info not found!\n"
+"Must manually rename files\n"
+"when finished ripping"
+msgstr ""
+
+#: audio/plugins/cdbackup.py:583
+#, fuzzy
+msgid "Problem trying to call:"
+msgstr "Проблема в вызове:"
+
+#: audio/plugins/vux.py:84
+msgid "[VUX] Start playing"
+msgstr ""
+
+#: audio/plugins/vux.py:85
+msgid "[VUX] Stop playing"
+msgstr ""
+
+#: audio/plugins/vux.py:86
+msgid "[VUX] Next (rating down)"
+msgstr ""
+
+#: audio/plugins/vux.py:87
+msgid "[VUX] Next (rating intact)"
+msgstr ""
+
+#: audio/plugins/vux.py:88
+msgid "[VUX] Next (rating up)"
+msgstr ""
+
+#: audio/plugins/vux.py:89
+msgid "[VUX] Playing item rating up"
+msgstr ""
+
+#: audio/plugins/vux.py:90
+msgid "[VUX] Playing item rating down"
+msgstr ""
+
+#: audio/plugins/vux.py:91
+msgid "[VUX] a dir item do not select"
+msgstr ""
+
+#: audio/plugins/vux.py:92
+msgid "[VUX] an audio item, do not select"
+msgstr ""
+
+#: audio/plugins/album_tree.py:257 audio/plugins/album_tree.py:295
+#, fuzzy
+msgid "Album Tree 2"
+msgstr "Альбом"
+
+#: audio/plugins/album_tree.py:268
+#, fuzzy
+msgid "Album Tree Items"
+msgstr "Альбом"
+
+#: audio/plugins/album_tree.py:317
+#, fuzzy
+msgid "Album Tree Item"
+msgstr "Альбом"
+
+#: audio/plugins/album_tree.py:340
+msgid "No Objects found"
+msgstr "Нет новостей"
+
+#: audio/plugins/album_tree.py:361
+msgid "Generating playlist..."
+msgstr "Генерация списка воспроизведения..."
+
+#: audio/plugins/icecast.py:150 audio/plugins/shoutcast.py:91
+msgid "SYS_USE_NETWORK not enabled"
+msgstr "Не включено SYS_USE_NETWORK"
+
+#: audio/plugins/icecast.py:154
+msgid "Icecast Radio"
+msgstr ""
+
+#: audio/plugins/icecast.py:177 audio/plugins/icecast.py:187
+msgid "Filter By"
+msgstr "Фильтр по"
+
+#: audio/plugins/icecast.py:227
+msgid "Fetching Feed %s"
+msgstr "Загрузка новостной ленты %s"
+
+#: audio/plugins/icecast.py:262
+msgid "Parsing Feed %s"
+msgstr "Обработка новостной ленты %s"
+
+#: audio/plugins/icecast.py:274
+#, fuzzy
+msgid "Building Station List"
+msgstr "Радиостанции"
+
+#: audio/plugins/icecast.py:333 plugins/lcd.py:189 plugins/freevused.py:477
+#: video/videoitem.py:844 share/skins/main/dark.fxd:453
+#: share/skins/main/dark.fxd:754 share/skins/main/Tux'n Tosh TV.fxd:630
+#: share/skins/main/basic.fxd:395 share/skins/main/blurr.fxd:708
+#: share/skins/main/info.fxd:465 share/skins/main/mediaportal.fxd:692
+msgid "Genre"
+msgstr "Жанр"
+
+#: audio/plugins/icecast.py:344
+#, fuzzy
+msgid "Format"
+msgstr "Формат"
+
+#: audio/plugins/icecast.py:356 plugins/freevused.py:488
+#: share/skins/main/dark.fxd:768 share/skins/main/basic.fxd:411
+#: share/skins/main/blurr.fxd:714 share/skins/main/info.fxd:225
+#: share/skins/main/mediaportal.fxd:708
+msgid "Bitrate"
+msgstr "Качество звука"
+
+#: audio/plugins/icecast.py:430
+msgid "Use the cache, TTL default is 1 minute, set to 0 to disable"
+msgstr "Использовать кэш, TTL по умолчанию 1 минута, установите в 0 чтобы выключить"
+
+#: audio/plugins/icecast.py:431 audio/plugins/shoutcast.py:269
+msgid "Minimum bitrate of stations to display - 0 to disable"
+msgstr ""
+
+#: audio/plugins/icecast.py:432 audio/plugins/shoutcast.py:270
+msgid "Maximum bitrate of stations to display - 0 to disable"
+msgstr ""
+
+#: audio/plugins/icecast.py:433
+msgid "Icecast yellowpages xml urls"
+msgstr ""
+
+#: audio/plugins/icecast.py:434
+msgid ""
+"a list of the types to display - full list [ 'MP3', 'OGG', 'AAC', 'AAC+', "
+"'NUPPEL', 'OGG Theora', 'DATA' ]"
+msgstr ""
+
+#: audio/plugins/coversearch.py:102
+msgid ""
+"To search for covers you need an Amazon.com Web Services\n"
+"license key. You can get yours from:\n"
+msgstr ""
+
+#: audio/plugins/coversearch.py:185
+msgid "Find a cover for this music"
+msgstr "Найти обложку для этой музыки"
+
+#: audio/plugins/coversearch.py:188
+#, python-format
+msgid ""
+"'coversearch' was disabled for this item! 'coversearch' needs an item with "
+"Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) to be "
+"able to search. So you need a file with a ID3 tag (mp3) or an Ogg Info. "
+"Maybe you must fix this file (%s) tag?"
+msgstr ""
+
+#: audio/plugins/coversearch.py:195
+#, python-format
+msgid ""
+"Plugin 'coversearch' was disabled for this item! 'coversearch' needs an item "
+"with Artist and Album (if it's a mp3 or ogg) or Title (if it's a cd track) "
+"to be able to search. So you need a file with a ID3 tag (mp3) or an Ogg "
+"Info. Maybe you must fix this file (%s) tag?"
+msgstr ""
+
+#: audio/plugins/coversearch.py:202
+msgid "Unknown CD, cover searching is disabled"
+msgstr "Неизвестный CD, поиск обложки отключен"
+
+#: audio/plugins/coversearch.py:211
+msgid "searching Amazon..."
+msgstr "поиск на Amazon..."
+
+#: audio/plugins/coversearch.py:239
+msgid "Unknown error while searching."
+msgstr "Неизвестная ошибка при поиске"
+
+#: audio/plugins/coversearch.py:304
+msgid "Cover Search Results"
+msgstr "Результаты поиска обложек"
+
+#: audio/plugins/coversearch.py:310
+msgid "No covers available from Amazon"
+msgstr "Нет доступных обложек на Amazon"
+
+#: audio/plugins/coversearch.py:323 video/plugins/imdb.py:217
+msgid "getting data..."
+msgstr "получение данных..."
+
+#: audio/plugins/shoutcast.py:95
+msgid "Shoutcast Radio"
+msgstr ""
+
+#: audio/plugins/shoutcast.py:109 audio/plugins/shoutcast.py:180
+msgid "Genres"
+msgstr "Жанры"
+
+#: audio/plugins/shoutcast.py:162
+#, fuzzy
+msgid "Fetching Shoutcast Genres"
+msgstr "Загрузка новостей..."
+
+#: audio/plugins/shoutcast.py:168 audio/plugins/shoutcast.py:178
+msgid "Error retrieving genres"
+msgstr ""
+
+#: audio/plugins/shoutcast.py:196
+#, fuzzy, python-format
+msgid "Fetching station list for %s"
+msgstr "Получение прогноза для %s..."
+
+#: audio/plugins/shoutcast.py:202
+msgid "Error retrieving stations"
+msgstr "Ошибка при получении станций"
+
+#: audio/plugins/shoutcast.py:227
+msgid "Error retrieving stationlist"
+msgstr ""
+
+#: audio/plugins/shoutcast.py:268
+msgid "Use the cache, TTL default is 10 mins, set to 0 to disable"
+msgstr ""
+
+#: audio/plugins/lastfm.py:147 audio/plugins/lastfm.py:167
+msgid "Last FM"
+msgstr "Last FM"
+
+#: audio/plugins/lastfm.py:166
+msgid "Invalid LastFM Session!"
+msgstr ""
+
+#: audio/plugins/lastfm.py:210
+#, fuzzy
+msgid "Listen to LastFM Station"
+msgstr "Музыка"
+
+#: audio/plugins/radio.py:109 tv/plugins/upsoon.py:150
+msgid "Radio"
+msgstr "Радио"
+
+#: audio/plugins/radio.py:134
+msgid "No Radio Stations found"
+msgstr "Радиостанции не найдены"
+
+#: audio/plugins/radio.py:135
+msgid "Radio Stations"
+msgstr "Радиостанции"
+
+#: audio/plugins/radio.py:159
+msgid "Listen to Radio Station"
+msgstr ""
+
+#: audio/plugins/radio.py:178
+#, fuzzy
+msgid "Cannot play - recording in progress"
+msgstr "Невозможно воспроизвести - запись в процессе"
+
+#: audio/plugins/detach.py:53
+msgid "Show player"
+msgstr ""
+
+#: audio/plugins/lyrics.py:62
+#, fuzzy
+msgid "Show lyrics"
+msgstr "Показать текст песни"
+
+#: audio/plugins/lyrics.py:67
+#, fuzzy
+msgid "Searching lyrics..."
+msgstr "Поиск текста песни..."
+
+#: audio/plugins/lyrics.py:94 audio/plugins/lyrics.py:123
+#: audio/plugins/lyrics.py:150
+msgid "Lyrics not found, sorry..."
+msgstr "Текст песни не найден."
+
+#: audio/plugins/lyrics.py:114
+#, fuzzy
+msgid "No exact match. "
+msgstr "Совпадений нет"
+
+#: audio/plugins/lyrics.py:115
+msgid "Here are some sugestions."
+msgstr ""
+
+#: audio/plugins/lyrics.py:120
+#, fuzzy
+msgid "Choices"
+msgstr "Фильмы"
+
+#: audio/plugins/mplayervis.py:651 audio/plugins/mplayervis.py:661
+#, python-format
+msgid "FXMODE is %s"
+msgstr ""
+
+#: audio/audiodiskitem.py:73
+msgid "Browse disc"
+msgstr "Просмотр диска"
+
+#: audio/audiodiskitem.py:112 directory.py:733
+msgid "Random playlist"
+msgstr "В случайном порядке"
+
+#: audio/audiodiskitem.py:120
+msgid "Data files on disc"
+msgstr "Файлы данных на диске"
+
+#: image/viewer.py:129
+#, fuzzy, python-format
+msgid ""
+"Can't Open Image\n"
+"\"%s\""
+msgstr "Невозможно открыть файл \"%s\""
+
+#: image/viewer.py:359
+msgid "pause"
+msgstr "пауза"
+
+#: image/viewer.py:365
+msgid "play"
+msgstr "воспроизведение"
+
+#: image/viewer.py:486
+msgid "No information available"
+msgstr "Нет данных"
+
+#: image/plugins/flickr.py:143 image/plugins/flickr.py:144
+#, fuzzy
+msgid "Flickr pictures"
+msgstr "Изображения с Flickr"
+
+#: image/plugins/flickr.py:161 video/plugins/youtube.py:200
+msgid "Choose please"
+msgstr "Выберите пожалуйста"
+
+#: image/plugins/flickr.py:167
+msgid "Retrieving image list"
+msgstr "Получение списка изображений"
+
+#: image/plugins/flickr.py:168
+#, fuzzy
+msgid "Images available"
+msgstr "Изображения доступны"
+
+#: image/plugins/flickr.py:176
+msgid "Downloading picture \""
+msgstr "Загрузка изображения \""
+
+#: image/plugins/flickr.py:207
+msgid "Downloading thumbnail for picture \""
+msgstr ""
+
+#: image/plugins/gphoto.py:102 image/imageitem.py:102
+msgid "View Image"
+msgstr "Просмотреть изображение"
+
+#: image/plugins/gphoto.py:129 directory.py:452
+#: tv/plugins/recordings_manager.py:182
+msgid "Browse directory"
+msgstr "Просмотр каталога"
+
+#: image/plugins/apod.py:50 image/plugins/apod.py:51
+msgid "APOD"
+msgstr ""
+
+#: image/plugins/apod.py:61
+msgid "Current Picture"
+msgstr "Текущее изображение"
+
+#: image/plugins/apod.py:62
+msgid "Previous Pictures"
+msgstr "Предыдущее изображение"
+
+#: image/plugins/apod.py:63 image/plugins/apod.py:78
+msgid "Apod Pictures"
+msgstr ""
+
+#: image/plugins/apod.py:76
+msgid "No Images found"
+msgstr "Изображения не найдены"
+
+#: image/plugins/apod.py:96 image/plugins/apod.py:109
+msgid "Unable to open URL"
+msgstr "Невозможно открыть URL"
+
+#: image/plugins/apod.py:123
+msgid "Need a directory to store APOD pictures."
+msgstr ""
+
+#: image/plugins/apod.py:127
+#, python-format
+msgid "directory %s does not exist."
+msgstr "каталог \"%s\" не существует."
+
+#: image/plugins/apod.py:131
+#, python-format
+msgid ""
+"directory %s must be able to be read, written to and executed by the user "
+"running freevo."
+msgstr ""
+
+#: osd.py:425
+msgid "z = Toggle Fullscreen"
+msgstr "z = Полноэкранный режим"
+
+#: osd.py:426
+msgid "Arrow Keys = Move"
+msgstr "Курсорные клавиши = Перемещение"
+
+#: osd.py:427
+msgid "Spacebar = Select"
+msgstr "Пробел = Выбор"
+
+#: osd.py:428
+msgid "Escape = Stop/Prev. Menu"
+msgstr "Esc = Стоп/Назад. Меню"
+
+#: osd.py:429
+msgid "h = Help"
+msgstr "h = Помощь"
+
+#: games/game.py:83
+#, python-format
+msgid "File \"%s\" not found!"
+msgstr "Файл \"%s\" не найден!"
+
+#: games/mame_cache.py:298
+msgid "Generating MAME cache, please wait."
+msgstr ""
+
+#: games/__init__.py:77
+msgid "please update GAMES_ITEMS in local_conf.py"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:60
+#, fuzzy
+msgid "Left"
+msgstr "Влево"
+
+#: skin/widgets/textentry_screen.py:61
+msgid "Right"
+msgstr "Вправо"
+
+#: skin/widgets/textentry_screen.py:83
+msgid "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:88
+msgid "1234567890"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:93
+msgid "!\"#$%^&*();:'@~?,.<>-=+\\[]{}"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:100
+msgid "ABC"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:108
+msgid "123"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:116
+msgid "Symbls"
+msgstr ""
+
+#: skin/widgets/textentry_screen.py:229
+#, fuzzy
+msgid "Space"
+msgstr "Пробел"
+
+#: plugins/mpd.py:99
+msgid "not sure what to do with this"
+msgstr "не уверен что с этим сделать"
+
+#: plugins/mpd.py:110
+msgid "MPD"
+msgstr "MPD"
+
+#: plugins/mpd.py:117 plugins/oneclick.py:766 plugins/oneclick.py:802
+msgid "Locations"
+msgstr "Города"
+
+#: plugins/mpd.py:153
+msgid "mpd"
+msgstr "mpd"
+
+#: plugins/mpd.py:214
+msgid "Song - "
+msgstr "Песня - "
+
+#: plugins/mpd.py:225
+msgid "Artist - "
+msgstr "Исполнитель - "
+
+#: plugins/mpd.py:232
+msgid "Album - "
+msgstr "Альбом - "
+
+#: plugins/mpd.py:240
+msgid "Status - "
+msgstr "Статус - "
+
+#: plugins/rom_drives.py:272
+#, python-format
+msgid "Drive %s (no disc)"
+msgstr "Устройство %s (нет диска)"
+
+#: plugins/rom_drives.py:522
+#, python-format
+msgid "Ejecting disc in drive %s"
+msgstr "Извлечение диска из устройства %s"
+
+#: plugins/rom_drives.py:530
+#, python-format
+msgid "Reading disc in drive %s"
+msgstr "Чтение диска в устройстве %s"
+
+#: plugins/buttonbar.py:125
+#, fuzzy
+msgid "More options"
+msgstr "Еще опции"
+
+#: plugins/buttonbar.py:131 tv/programitem.py:103
+#, fuzzy
+msgid "Full Description"
+msgstr "Полное Описание"
+
+#: plugins/buttonbar.py:134 tv/plugins/livepause/display/graphics.py:151
+msgid "Now"
+msgstr "Сейчас"
+
+#: plugins/buttonbar.py:143
+#, fuzzy
+msgid "WARNING: "
+msgstr "ПРЕДУПРЕЖДЕНИЕ: "
+
+#: plugins/buttonbar.py:144
+#, python-format
+msgid "\"%s\" is not a valid argument for the button bar. "
+msgstr ""
+
+#: plugins/buttonbar.py:388
+msgid "More Options"
+msgstr "Еще опции"
+
+#: plugins/idlebar/transcode.py:139 plugins/idlebar/encoding.py:116
+#, fuzzy
+msgid "encoding server not running"
+msgstr "Сервер записи включен."
+
+#: plugins/idlebar/transcode.py:146 plugins/idlebar/encoding.py:122
+#, fuzzy
+msgid "encoding server has no jobs"
+msgstr "сервер записи недоступен"
+
+#: plugins/idlebar/diskfree.py:108
+#, python-format
+msgid "%iGB"
+msgstr ""
+
+#: plugins/idlebar/system.py:126
+#, python-format
+msgid "%iM"
+msgstr "%iМб"
+
+#: plugins/idlebar/system.py:149
+#, python-format
+msgid "%s%%"
+msgstr ""
+
+#: plugins/idlebar/system.py:566
+msgid "Sensors must have three or four values:"
+msgstr ""
+
+#: plugins/idlebar/system.py:569
+#, fuzzy
+msgid "Sensor"
+msgstr "Передача"
+
+#: plugins/idlebar/system.py:569
+#, fuzzy
+msgid "does not exist"
+msgstr "каталог \"%s\" не существует."
+
+#: plugins/idlebar/system.py:573
+#, python-format
+msgid "%s "
+msgstr ""
+
+#: plugins/idlebar/system.py:573
+msgid "is not a valid meminfo entry"
+msgstr ""
+
+#: plugins/torrent.py:39
+#, fuzzy
+msgid "Erase"
+msgstr "Стереть"
+
+#: plugins/torrent.py:43 plugins/shutdown.py:184 plugins/shutdown.py:196
+#: plugins/shutdown.py:208
+#, fuzzy
+msgid "Cancel"
+msgstr "Отмена"
+
+#: plugins/torrent.py:116
+msgid "Torrent browser"
+msgstr ""
+
+#: plugins/torrent.py:199 plugins/torrent.py:206 plugins/torrent.py:257
+msgid "Torrents"
+msgstr "Торренты"
+
+#: plugins/torrent.py:211
+msgid "What do you want to do with this torrent?"
+msgstr "Что вы хотите сделать с этим торрентом?"
+
+#: plugins/torrent.py:229
+msgid "Settings"
+msgstr "Настройки"
+
+#: plugins/torrent.py:255
+msgid "Add a new torrent"
+msgstr "Добавить новый торрент"
+
+#: plugins/icecast.py:160
+msgid "Set as icecast playlist"
+msgstr ""
+
+#: plugins/shoppingcart.py:63
+msgid "Moving files..."
+msgstr "Перемещение файлов..."
+
+#: plugins/shoppingcart.py:79
+msgid "Copying files..."
+msgstr "Копирование файлов..."
+
+#: plugins/shoppingcart.py:104
+msgid "Added to Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:117
+#, fuzzy
+msgid "Removed from Cart"
+msgstr "Удалить из избранного"
+
+#: plugins/shoppingcart.py:125
+msgid "Removed Item from Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:128
+msgid "Added Item to Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:151
+msgid "Cart: Move Files Here"
+msgstr ""
+
+#: plugins/shoppingcart.py:152
+msgid "Cart: Copy Files Here"
+msgstr ""
+
+#: plugins/shoppingcart.py:156
+msgid "Add Directory to Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:158
+msgid "Remove Directory from Cart"
+msgstr ""
+
+#: plugins/shoppingcart.py:162
+#, fuzzy
+msgid "Add to Cart"
+msgstr "Добавить в избранное"
+
+#: plugins/shoppingcart.py:164
+#, fuzzy
+msgid "Remove from Cart"
+msgstr "Удалить из избранного"
+
+#: plugins/shoppingcart.py:167
+msgid "Delete Cart"
+msgstr ""
+
+#: plugins/home_automation.py:57
+msgid "Room Items"
+msgstr "Объект(ов)"
+
+#: plugins/home_automation.py:67
+msgid "Home Automation Devices"
+msgstr ""
+
+#: plugins/home_automation.py:82 plugins/home_automation.py:98
+msgid "Device Options"
+msgstr "Описание"
+
+#: plugins/home_automation.py:113 plugins/command.py:257
+msgid "Run Command"
+msgstr "Выполнить команду"
+
+#: plugins/home_automation.py:127 plugins/home_automation.py:134
+#: plugins/home_automation.py:146
+msgid "Home Automation"
+msgstr ""
+
+#: plugins/home_automation.py:145
+msgid "No Home Automation items found"
+msgstr ""
+
+#: plugins/lcd2.py:44
+msgid "You need pylcd to run \"lcd2x16\" plugin."
+msgstr ""
+
+#: plugins/lcd2.py:116
+msgid ""
+"LCD plugin will not load! Maybe you don't have LCDd (lcdproc daemon) running?"
+msgstr ""
+
+#: plugins/lcd2.py:142
+msgid "LCD not supported yet!"
+msgstr ""
+
+#: plugins/file_ops.py:66
+msgid "Delete info"
+msgstr ""
+
+#: plugins/file_ops.py:68
+msgid "Delete edl"
+msgstr "Удалить"
+
+#: plugins/file_ops.py:70
+msgid "Delete image"
+msgstr "Удалить изображение"
+
+#: plugins/file_ops.py:78
+#, python-format
+msgid ""
+"Do you wish to delete\n"
+" '%s'?"
+msgstr "Вы хотите удалить<br> \"'%s\"?"
+
+#: plugins/file_ops.py:80 tv/plugins/recordings_manager.py:665
+msgid "Deleting..."
+msgstr "Удаление..."
+
+#: plugins/file_ops.py:84
+#, python-format
+msgid ""
+"Delete info about\n"
+" '%s'?"
+msgstr ""
+
+#: plugins/file_ops.py:89
+#, python-format
+msgid ""
+"Delete edl about\n"
+" '%s'?"
+msgstr "Удалить %s."
+
+#: plugins/file_ops.py:94
+#, python-format
+msgid ""
+"Delete image about\n"
+" '%s'?"
+msgstr ""
+
+#: plugins/cd_burn.py:172
+msgid "Not Yet implemented :)"
+msgstr "Пока не имплементировано :)"
+
+#: plugins/cd_burn.py:184
+#, fuzzy, python-format
+msgid "Cannot find %(program_name)s (%(program)s). "
+msgstr "нет программы"
+
+#: plugins/cd_burn.py:203
+#, python-format
+msgid "Start burning %s audio files?"
+msgstr "Начать запись %s аудио файлов?"
+
+#: plugins/cd_burn.py:235
+msgid "Insert media then click OK"
+msgstr "Вставьте диск, затем нажмите ОК"
+
+#: plugins/cd_burn.py:262
+#, python-format
+msgid "Start burning %s ?"
+msgstr "Начать прожиг %s ?"
+
+#: plugins/cd_burn.py:272
+#, python-format
+msgid "Start burning %(num)s entries? ( %(size)d Mb )"
+msgstr ""
+
+#: plugins/cd_burn.py:556
+#, python-format
+msgid "Burning status: %s"
+msgstr "Статус прожига: %s"
+
+#: plugins/cd_burn.py:702
+#, python-format
+msgid "Error : Could not convert %s"
+msgstr ""
+
+#: plugins/cd_burn.py:804
+msgid "Interrupting burning process..."
+msgstr ""
+
+#: plugins/cd_burn.py:814
+msgid "Backup interrupted"
+msgstr ""
+
+#: plugins/cd_burn.py:822
+#, python-format
+msgid "Item type is %s"
+msgstr ""
+
+#: plugins/cd_burn.py:830
+#, python-format
+msgid "Should show the menu? %i"
+msgstr ""
+
+#: plugins/cd_burn.py:833
+msgid "Burn CD"
+msgstr "Прожечь диск"
+
+#: plugins/cd_burn.py:847
+msgid "CD Burn Menu"
+msgstr ""
+
+#: plugins/cd_burn.py:874
+msgid "Copy dir to CD"
+msgstr "Скопировать каталог на CD"
+
+#: plugins/cd_burn.py:876
+msgid "Burn audio files (MP3, Wav and Ogg) as Audio CD"
+msgstr ""
+
+#: plugins/cd_burn.py:888
+#, python-format
+msgid "Burn audio playlist to CD, %d files"
+msgstr ""
+
+#: plugins/cd_burn.py:900
+msgid "Copy this file to CD"
+msgstr "Скопировать этот файл на CD"
+
+#: plugins/cd_burn.py:908
+#, python-format
+msgid "Copy %s to CD"
+msgstr "Копировать %s на CD"
+
+#: plugins/cd_burn.py:922
+#, python-format
+msgid "Copy %s, and related, to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:936
+#, python-format
+msgid "Copy %s, and related, file to CD"
+msgstr ""
+
+#: plugins/cd_burn.py:950
+msgid "Burn as DVD-VIDEO disc"
+msgstr "Прожечь как VIDEO-DVD диск"
+
+#: plugins/itv.py:133 plugins/headlines.py:118
+msgid "Show Sites Headlines"
+msgstr "Показать новости сайтов"
+
+#: plugins/itv.py:163 plugins/headlines.py:138
+msgid "Fetching headlines..."
+msgstr "Загрузка новостей..."
+
+#: plugins/itv.py:238 plugins/headlines.py:196
+msgid "No Headlines found"
+msgstr "Нет новостей"
+
+#: plugins/itv.py:240 plugins/headlines.py:198 plugins/headlines.py:211
+#: share/skins/main/crystal.fxd:15 share/skins/main/dark.fxd:22
+#: share/skins/main/atlantice.fxd:723 share/skins/main/Tux'n Tosh TV.fxd:22
+#: share/skins/main/bluestar.fxd:15 share/skins/main/rain.fxd:15
+#: share/skins/main/geexbox.fxd:544
+msgid "Headlines"
+msgstr "Новости"
+
+#: plugins/itv.py:253
+msgid "Internet TV"
+msgstr "Интернет TV"
+
+#: plugins/itv.py:259 plugins/itv.py:273 plugins/headlines.py:217
+#: plugins/headlines.py:231
+msgid "Headlines Sites"
+msgstr "Сайты новостей"
+
+#: plugins/itv.py:272 plugins/headlines.py:229
+msgid "No Headlines Sites found"
+msgstr "Сайты новостей не найдены"
+
+#: plugins/shutdown.py:75 main.py:329
+msgid "shutting down..."
+msgstr "Выключение..."
+
+#: plugins/shutdown.py:164 plugins/shutdown.py:168
+msgid "Shutdown Freevo"
+msgstr "Выключить Freevo"
+
+#: plugins/shutdown.py:165 plugins/shutdown.py:169 plugins/autoshutdown.py:186
+msgid "Shutdown system"
+msgstr "Выключить систему"
+
+#: plugins/shutdown.py:166 plugins/shutdown.py:170 plugins/autoshutdown.py:185
+msgid "Restart system"
+msgstr "Перезапустить систему"
+
+#: plugins/shutdown.py:183
+msgid "Do you really want to shut down Freevo?"
+msgstr "Вы действительно хотите выключить Freevo?"
+
+#: plugins/shutdown.py:184 plugins/shutdown.py:196 main.py:330
+#: share/skins/main/crystal.fxd:17 share/skins/main/dark.fxd:25
+#: share/skins/main/atlantice.fxd:725 share/skins/main/Tux'n Tosh TV.fxd:25
+#: share/skins/main/bluestar.fxd:16 share/skins/main/Panorama.fxd:440
+#: share/skins/main/rain.fxd:17 share/skins/main/basic.fxd:25
+#: share/skins/main/mediaportal.fxd:447
+msgid "Shutdown"
+msgstr "Выключить"
+
+#: plugins/shutdown.py:195
+msgid "Do you really want to shut down the system?"
+msgstr "Вы действительно хотите выключить систему?"
+
+#: plugins/shutdown.py:207
+msgid "Do you really want to restart the system?"
+msgstr "Вы действительно хотите перезапустить систему?"
+
+#: plugins/shutdown.py:208
+#, fuzzy
+msgid "Restart"
+msgstr "Перезагрузка"
+
+#: plugins/lcd.py:52
+msgid "You need pylcd to run \"lcd\" plugin."
+msgstr "Вам нужен pylcd чтобы запустить плагин \"lcd\""
+
+#: plugins/lcd.py:73 plugins/lcd.py:85 plugins/vfd.py:91 plugins/vfd.py:99
+#: plugins/freevused.py:491 plugins/freevused.py:507 video/videoitem.py:846
+#: share/skins/main/dark.fxd:537 share/skins/main/dark.fxd:774
+#: share/skins/main/atlantice.fxd:310 share/skins/main/atlantice.fxd:944
+#: share/skins/main/Tux'n Tosh TV.fxd:714 TV.fxd:934
+#: share/skins/main/basic.fxd:420 share/skins/main/blurr.fxd:724
+#: share/skins/main/info.fxd:219 share/skins/main/geexbox.fxd:777
+#: share/skins/main/mediaportal.fxd:716
+msgid "Length"
+msgstr "Длительность"
+
+#: plugins/lcd.py:74 plugins/lcd.py:80 plugins/lcd.py:170 plugins/vfd.py:92
+#: plugins/vfd.py:96 plugins/freevused.py:474 share/skins/main/dark.fxd:521
+#: share/skins/main/dark.fxd:734 share/skins/main/Tux'n Tosh TV.fxd:698
+#: TV.fxd:914 share/skins/main/info.fxd:202 share/skins/main/info.fxd:357
+#: share/skins/main/info.fxd:397
+msgid "Artist"
+msgstr "Исполнитель"
+
+#: plugins/lcd.py:75 plugins/lcd.py:81 plugins/lcd.py:169 plugins/vfd.py:93
+#: plugins/vfd.py:97 plugins/freevused.py:471 share/skins/main/dark.fxd:527
+#: share/skins/main/dark.fxd:739 share/skins/main/atlantice.fxd:918
+#: share/skins/main/Tux'n Tosh TV.fxd:704 TV.fxd:919
+#: share/skins/main/basic.fxd:378 share/skins/main/blurr.fxd:680
+#: share/skins/main/info.fxd:208 share/skins/main/info.fxd:362
+#: share/skins/main/geexbox.fxd:754 share/skins/main/mediaportal.fxd:674
+msgid "Album"
+msgstr "Альбом"
+
+#: plugins/lcd.py:76 plugins/lcd.py:82 plugins/vfd.py:94 plugins/vfd.py:98
+#: video/videoitem.py:848 share/skins/main/dark.fxd:447
+#: share/skins/main/atlantice.fxd:305 share/skins/main/atlantice.fxd:925
+#: share/skins/main/Tux'n Tosh TV.fxd:624 share/skins/main/blurr.fxd:686
+#: share/skins/main/info.fxd:459 share/skins/main/geexbox.fxd:760
+#: share/skins/main/mediaportal.fxd:680
+msgid "Year"
+msgstr "Год"
+
+#: plugins/lcd.py:79 plugins/vfd.py:95 share/skins/main/atlantice.fxd:611
+#: share/skins/main/Panorama.fxd:336 share/skins/main/blurr.fxd:339
+#: share/skins/main/info.fxd:402 share/skins/main/geexbox.fxd:413
+#: share/skins/main/mediaportal.fxd:331
+msgid "Tracks"
+msgstr "Дорожки"
+
+#: plugins/lcd.py:86 plugins/vfd.py:100 share/skins/main/dark.fxd:477
+#: share/skins/main/Tux'n Tosh TV.fxd:654 share/skins/main/basic.fxd:746
+#: share/skins/main/info.fxd:288 share/skins/main/info.fxd:494
+msgid "Resolution"
+msgstr "Разрешение"
+
+#: plugins/lcd.py:87 plugins/vfd.py:101
+msgid "Aspect"
+msgstr ""
+
+#: plugins/lcd.py:88 plugins/lcd.py:93 plugins/lcd.py:188 plugins/vfd.py:102
+#: plugins/vfd.py:105
+msgid "Tagline"
+msgstr ""
+
+#: plugins/lcd.py:89 plugins/lcd.py:92 plugins/vfd.py:103 plugins/vfd.py:104
+msgid "Plot"
+msgstr ""
+
+#: plugins/lcd.py:96 plugins/vfd.py:106 plugins/freevused.py:499
+#: share/skins/main/dark.fxd:582 share/skins/main/Tux'n Tosh TV.fxd:759
+msgid "Geometry"
+msgstr "Геометрия"
+
+#: plugins/lcd.py:101 plugins/vfd.py:109
+#, python-format
+msgid "%s items"
+msgstr "%s объект(ов)"
+
+#: plugins/lcd.py:149 plugins/lcd.py:225 plugins/lcd.py:282 plugins/vfd.py:164
+#, python-format
+msgid "Today is %s."
+msgstr "Сегодня %s."
+
+#: plugins/lcd.py:155 plugins/lcd.py:339
+msgid "Menu"
+msgstr "Меню"
+
+#: plugins/lcd.py:156 plugins/lcd.py:340
+msgid "Item"
+msgstr "Объект"
+
+#: plugins/lcd.py:157 share/skins/main/dark.fxd:471
+#: share/skins/main/atlantice.fxd:293 share/skins/main/Tux'n Tosh TV.fxd:648
+#: share/skins/main/info.fxd:283 share/skins/main/info.fxd:488
+msgid "Type"
+msgstr "Тип"
+
+#: plugins/lcd.py:158
+msgid "Information"
+msgstr "Информация"
+
+#: plugins/lcd.py:187 plugins/lcd.py:360
+msgid "Video"
+msgstr "Видео"
+
+#: plugins/vfd.py:52
+msgid "You need pyusb (http://pyusb.berlios.de/) to run \"vfd\" plugin."
+msgstr "Вам нужен pyusb (http://pyusb.berlios.de/) чтобы запустить плагин \"vfd\""
+
+#: plugins/remind.py:104
+msgid "Show Reminders"
+msgstr "Показать напоминания"
+
+#: plugins/remind.py:116
+msgid "No Reminders Found"
+msgstr "Напоминания не найдены"
+
+#: plugins/remind.py:118 plugins/remind.py:169
+msgid "Reminders"
+msgstr "Напоминания"
+
+#: plugins/remind.py:181
+#, fuzzy
+msgid "Reminders types"
+msgstr "Типы напоминаний"
+
+#: plugins/remind.py:195
+msgid "Remind type"
+msgstr "Тип напоминания"
+
+#: plugins/autoshutdown.py:153
+msgid "A recording is in progress."
+msgstr "Запись в процессе."
+
+#: plugins/autoshutdown.py:156
+#, python-format
+msgid "Would wakeup again within %d minutes."
+msgstr ""
+
+#: plugins/autoshutdown.py:160
+#, fuzzy
+msgid "There are important processes running."
+msgstr "Сейчас запущены выжные процессы."
+
+#: plugins/autoshutdown.py:166
+msgid "No wakeup scheduled."
+msgstr "Расписание пусто."
+
+#: plugins/autoshutdown.py:170
+msgid "The next wakeup is scheduled at"
+msgstr ""
+
+#: plugins/autoshutdown.py:179 plugins/autoshutdown.py:264
+msgid "Resume automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:181 plugins/autoshutdown.py:261
+msgid "Pause automatic shutdown"
+msgstr ""
+
+#: plugins/autoshutdown.py:183
+msgid "Shutdown and wakeup"
+msgstr ""
+
+#: plugins/autoshutdown.py:187
+msgid "Shutdown freevo"
+msgstr "Выключить Freevo"
+
+#: plugins/autoshutdown.py:195 plugins/autoshutdown.py:226
+msgid "SHUTDOWN SYSTEM?"
+msgstr "ВЫКЛЮЧИТЬ СИСТЕМУ?"
+
+#: plugins/autoshutdown.py:211
+msgid "RESTART SYSTEM?"
+msgstr "ПЕРЕЗАГРУЗИТЬ СИСТЕМУ?"
+
+#: plugins/autoshutdown.py:217 plugins/autoshutdown.py:232
+#: plugins/autoshutdown.py:247
+msgid "(wakeup disabled)"
+msgstr ""
+
+#: plugins/autoshutdown.py:241
+msgid "SHUTDOWN FREEVO?"
+msgstr "ВЫКЛЮЧИТЬ FREEVO?"
+
+#: plugins/oneclick.py:390
+#, python-format
+msgid "Fetching Weather for %s..."
+msgstr "Получение прогноза для %s..."
+
+#: plugins/oneclick.py:439 plugins/oneclick.py:454
+#, python-format
+msgid "Fetching Radar Map for %s..."
+msgstr "Получение прогноза для %s..."
+
+#: plugins/oneclick.py:513
+msgid "Show Weather Details"
+msgstr ""
+
+#: plugins/oneclick.py:579
+msgid "and"
+msgstr ","
+
+#: plugins/oneclick.py:594
+msgid "Variable"
+msgstr ""
+
+#: plugins/oneclick.py:594 plugins/oneclick.py:595
+msgid "at a rate of"
+msgstr ""
+
+#: plugins/oneclick.py:794 tv/plugins/freeboxtv.py:114
+msgid "No locations specified"
+msgstr "Города не заданы"
+
+#: plugins/oneclick.py:822
+msgid "Current Conditions"
+msgstr "Погода сейчас"
+
+#: plugins/oneclick.py:822
+msgid "Today's Forecast"
+msgstr "Прогноз на сегодня"
+
+#: plugins/oneclick.py:823
+msgid "Extended Forecast"
+msgstr ""
+
+#: plugins/oneclick.py:823
+msgid "Radar Map"
+msgstr ""
+
+#: plugins/oneclick.py:854
+msgid "for"
+msgstr ""
+
+#: plugins/oneclick.py:931 plugins/oneclick.py:978
+msgid "Humidity"
+msgstr "Влажность"
+
+#: plugins/oneclick.py:933 plugins/oneclick.py:980
+msgid "Pressure"
+msgstr "Давление"
+
+#: plugins/oneclick.py:935
+msgid "Wind"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:937
+msgid "Wind Chill"
+msgstr "Ощущаемая T"
+
+#: plugins/oneclick.py:939 plugins/oneclick.py:979
+msgid "Visibility"
+msgstr "Видимость"
+
+#: plugins/oneclick.py:941
+msgid "UV Index"
+msgstr "Индекс UV"
+
+#: plugins/oneclick.py:973
+msgid "As of"
+msgstr ""
+
+#: plugins/oneclick.py:976
+msgid "Temperature"
+msgstr "Температура"
+
+#: plugins/oneclick.py:977
+msgid "Dew Point"
+msgstr ""
+
+#: plugins/oneclick.py:981
+#, fuzzy
+msgid "Winds"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:982
+#, fuzzy
+msgid "Tonight"
+msgstr "Ночью"
+
+#: plugins/oneclick.py:983
+#, fuzzy
+msgid "Sunset"
+msgstr "Вс"
+
+#: plugins/oneclick.py:984
+msgid "Moon Phase"
+msgstr "Фаза луны"
+
+#: plugins/oneclick.py:1036
+msgid "LO"
+msgstr "МИН"
+
+#: plugins/oneclick.py:1042
+msgid "HI"
+msgstr "МАКС"
+
+#: plugins/oneclick.py:1059
+msgid "Error encountered while trying to download weather map"
+msgstr ""
+
+#: plugins/oneclick.py:1079
+#, fuzzy
+msgid "Mostly Cloudy"
+msgstr "Облачно"
+
+#: plugins/oneclick.py:1080
+#, fuzzy
+msgid "Partly Cloudy"
+msgstr "Частичная облачность"
+
+#: plugins/oneclick.py:1081
+#, fuzzy
+msgid "Light Rain"
+msgstr "Небольшой Дождь"
+
+#: plugins/oneclick.py:1082
+msgid "Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1083
+msgid "Rain"
+msgstr "Дождь"
+
+#: plugins/oneclick.py:1084
+msgid "Fog"
+msgstr "Туман"
+
+#: plugins/oneclick.py:1085
+#, fuzzy
+msgid "Few Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1086
+msgid "Mostly Sunny"
+msgstr ""
+
+#: plugins/oneclick.py:1087
+msgid "Sunny"
+msgstr "Солнечно"
+
+#: plugins/oneclick.py:1088
+#, fuzzy
+msgid "Scattered Flurries"
+msgstr "Изображения"
+
+#: plugins/oneclick.py:1089
+msgid "Isolated T-Storms"
+msgstr ""
+
+#: plugins/oneclick.py:1090
+#, fuzzy
+msgid "Scattered Thunderstorms"
+msgstr "Вт"
+
+#: plugins/oneclick.py:1091
+#, fuzzy
+msgid "Snow Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1092
+#, fuzzy
+msgid "Few Snow Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1093
+#, fuzzy
+msgid "Flurries"
+msgstr "Изображения"
+
+#: plugins/oneclick.py:1094
+#, fuzzy
+msgid "Thunder"
+msgstr "Вт"
+
+#: plugins/oneclick.py:1095
+#, fuzzy
+msgid "Heavy Snow"
+msgstr "Сильный Снег"
+
+#: plugins/oneclick.py:1096
+msgid "Drizzle"
+msgstr ""
+
+#: plugins/oneclick.py:1097
+#, fuzzy
+msgid "Sct Flurries"
+msgstr "Изображения"
+
+#: plugins/oneclick.py:1098
+#, fuzzy
+msgid "Sct Strong Storms"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1099
+#, fuzzy
+msgid "Thunderstorms"
+msgstr "Вт"
+
+#: plugins/oneclick.py:1100
+msgid "Iso T-Storms"
+msgstr ""
+
+#: plugins/oneclick.py:1101
+msgid "Sct T-Storms"
+msgstr ""
+
+#: plugins/oneclick.py:1102
+#, fuzzy
+msgid "Sct Snow Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1103
+#, fuzzy
+msgid "to"
+msgstr "Окончание"
+
+#: plugins/oneclick.py:1104
+msgid "Ice"
+msgstr ""
+
+#: plugins/oneclick.py:1105
+msgid "Light Snow"
+msgstr "Легкий Снег"
+
+#: plugins/oneclick.py:1106
+msgid "Wintry Mix"
+msgstr ""
+
+#: plugins/oneclick.py:1107
+#, fuzzy
+msgid "Hvy Rain"
+msgstr "Сильный дождь"
+
+#: plugins/oneclick.py:1108
+msgid "Freezing Rain"
+msgstr ""
+
+#: plugins/oneclick.py:1109
+#, fuzzy
+msgid "T-Storms"
+msgstr "Окончание"
+
+#: plugins/oneclick.py:1110
+msgid "Heavy Rain"
+msgstr "Сильный дождь"
+
+#: plugins/oneclick.py:1111
+#, fuzzy
+msgid "Light Wintry Mix"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1112
+#, fuzzy
+msgid "Snow Shower"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1113
+msgid "Strong Storms"
+msgstr ""
+
+#: plugins/oneclick.py:1114
+#, fuzzy
+msgid "Light Rain Shower"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1115
+#, fuzzy
+msgid "Light Rain with Thunder"
+msgstr "Вт"
+
+#: plugins/oneclick.py:1116
+msgid "Light Drizzle"
+msgstr ""
+
+#: plugins/oneclick.py:1117
+msgid "Mist"
+msgstr "Исполнитель"
+
+#: plugins/oneclick.py:1118
+msgid "Smoke"
+msgstr ""
+
+#: plugins/oneclick.py:1119
+msgid "Haze"
+msgstr ""
+
+#: plugins/oneclick.py:1120
+#, fuzzy
+msgid "Light Snow Shower"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1121
+msgid "Clear"
+msgstr "Ясно"
+
+#: plugins/oneclick.py:1122
+msgid "A Few Clouds"
+msgstr ""
+
+#: plugins/oneclick.py:1123
+msgid "Fair"
+msgstr ""
+
+#: plugins/oneclick.py:1124
+#, python-format
+msgid "Last updated: %s"
+msgstr "Время последнего обновления: %s"
+
+#: plugins/oneclick.py:1125
+msgid "Unlimited"
+msgstr ""
+
+#: plugins/oneclick.py:1126
+#, python-format
+msgid "%s (day: %s)"
+msgstr ""
+
+#: plugins/oneclick.py:1127
+#, python-format
+msgid "%s (type: %s)"
+msgstr ""
+
+#: plugins/oneclick.py:1128
+#, fuzzy, python-format
+msgid "Today, a high of %s degrees"
+msgstr "Сегодня максимум %s"
+
+#: plugins/oneclick.py:1129
+#, fuzzy, python-format
+msgid "and a low of %s degrees."
+msgstr "и минимум %s"
+
+#: plugins/oneclick.py:1130
+#, fuzzy
+msgid "Currently, there is a humidity of"
+msgstr "В настоящее время влажность составляет"
+
+#: plugins/oneclick.py:1131
+#, fuzzy
+msgid "the winds are calm"
+msgstr "скорость ветра"
+
+#: plugins/oneclick.py:1132
+msgid "Visibility will be unlimited today"
+msgstr "Видимость будет не ограничена"
+
+#: plugins/oneclick.py:1133
+msgid "There will be a visibility of"
+msgstr "Видимость"
+
+#: plugins/oneclick.py:1134
+msgid "Error encountered while trying to download Radar map"
+msgstr ""
+
+#: plugins/oneclick.py:1135
+msgid "Display program"
+msgstr "Показать программу"
+
+#: plugins/oneclick.py:1136
+msgid "Scheduling Failed"
+msgstr "Планирование не удалось"
+
+#: plugins/oneclick.py:1137
+#, fuzzy, python-format
+msgid "getFavorites failed: %s"
+msgstr "Ошибка получения избранного"
+
+#: plugins/oneclick.py:1138
+msgid "Display favorite"
+msgstr "Показать избранное"
+
+#: plugins/oneclick.py:1139
+msgid "Modify duplicate flag"
+msgstr "Изменить канал"
+
+#: plugins/oneclick.py:1140
+msgid "Modify episodes flag"
+msgstr "Изменить время дня"
+
+#: plugins/oneclick.py:1141
+msgid "Modify Duplicate Flag"
+msgstr "Изменить канал"
+
+#: plugins/oneclick.py:1142
+msgid "Save Failed, favorite was lost"
+msgstr "Ошибка сохранения, избранное утеряно"
+
+#: plugins/oneclick.py:1143
+msgid "Save Failed"
+msgstr "Ошибка сохранения"
+
+#: plugins/oneclick.py:1144
+#, fuzzy
+msgid "Currently recording"
+msgstr "Погода сейчас"
+
+#: plugins/oneclick.py:1145
+msgid "Next recordings"
+msgstr "Следующие записи"
+
+#: plugins/oneclick.py:1146
+#, fuzzy
+msgid "Recordserver not found"
+msgstr "Сервер записи не найден."
+
+#: plugins/oneclick.py:1147
+#, fuzzy
+msgid "Clear / Wind"
+msgstr "Закрыть окно"
+
+#: plugins/oneclick.py:1148
+msgid "Clouds Early / Clearing Late"
+msgstr ""
+
+#: plugins/oneclick.py:1149
+#, fuzzy
+msgid "Cloudy"
+msgstr "Облачно"
+
+#: plugins/oneclick.py:1150
+#, fuzzy
+msgid "Cloudy / Wind"
+msgstr "Закрыть окно"
+
+#: plugins/oneclick.py:1151
+#, fuzzy
+msgid "Cloudy and Windy"
+msgstr "Закрыть окно"
+
+#: plugins/oneclick.py:1152
+msgid "Drifting Snow"
+msgstr ""
+
+#: plugins/oneclick.py:1153
+msgid "Drizzle / Fog"
+msgstr ""
+
+#: plugins/oneclick.py:1154
+msgid "Drizzle Late"
+msgstr ""
+
+#: plugins/oneclick.py:1155
+msgid "E"
+msgstr ""
+
+#: plugins/oneclick.py:1156
+msgid "ENE"
+msgstr ""
+
+#: plugins/oneclick.py:1157
+#, fuzzy
+msgid "ENE_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1158
+msgid "ESE"
+msgstr ""
+
+#: plugins/oneclick.py:1159
+#, fuzzy
+msgid "ESE_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1160
+#, fuzzy
+msgid "E_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1161
+msgid "Extreme"
+msgstr ""
+
+#: plugins/oneclick.py:1162
+#, fuzzy
+msgid "Few Showers / Wind"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1163
+#, fuzzy
+msgid "Few Snow"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1164
+#, fuzzy
+msgid "Few Snow Showers / Wind"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1165
+#, fuzzy
+msgid "First Quarter"
+msgstr "Время последнего обновления: %s"
+
+#: plugins/oneclick.py:1166
+msgid "Fog Early / Clouds Late"
+msgstr ""
+
+#: plugins/oneclick.py:1167
+#, fuzzy
+msgid "Fog Late"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1168
+msgid "Foggy"
+msgstr ""
+
+#: plugins/oneclick.py:1169
+msgid "Freezing Drizzle"
+msgstr ""
+
+#: plugins/oneclick.py:1170
+msgid "Full"
+msgstr ""
+
+#: plugins/oneclick.py:1171
+msgid "Heavy Rain / Wind"
+msgstr "Сильный дождь / Ветер"
+
+#: plugins/oneclick.py:1172
+msgid "High"
+msgstr ""
+
+#: plugins/oneclick.py:1173
+msgid "Isolated T-Storms / Wind"
+msgstr ""
+
+#: plugins/oneclick.py:1174
+#, fuzzy
+msgid "Last Quarter"
+msgstr "Время последнего обновления"
+
+#: plugins/oneclick.py:1175
+msgid "Lawn and Garden Weather"
+msgstr ""
+
+#: plugins/oneclick.py:1176
+#, fuzzy
+msgid "Light Freezing Rain"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1177
+#, fuzzy
+msgid "Light Rain / Fog"
+msgstr "Небольшой дождь / Туман"
+
+#: plugins/oneclick.py:1178
+msgid "Light Rain / Wind"
+msgstr "Небольшой дождь / Ветер"
+
+#: plugins/oneclick.py:1179
+#, fuzzy
+msgid "Light Rain / Wind Late"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1180
+#, fuzzy
+msgid "Light Rain Early"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1181
+#, fuzzy
+msgid "Light Rain Late"
+msgstr "Рейтинг"
+
+#: plugins/oneclick.py:1182
+#, fuzzy
+msgid "Light Rain and Freezing Rain"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1183
+#, fuzzy
+msgid "Light Rain and Shower"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1184
+#, fuzzy
+msgid "Light Rain and Windy"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1185
+#, fuzzy
+msgid "Light Snow / Fog"
+msgstr "Небольшой снег / Туман"
+
+#: plugins/oneclick.py:1186
+#, fuzzy
+msgid "Light Snow / Wind"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1187
+#, fuzzy
+msgid "Light Snow Early"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1188
+#, fuzzy
+msgid "Light Snow Late"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1189
+#, fuzzy
+msgid "Low"
+msgstr "Нет"
+
+#: plugins/oneclick.py:1190
+msgid "Mostly Clear"
+msgstr "Восновном ясно"
+
+#: plugins/oneclick.py:1191
+#, fuzzy
+msgid "Mostly Cloudy / Wind"
+msgstr "Закрыть окно"
+
+#: plugins/oneclick.py:1192
+#, fuzzy
+msgid "Mostly Cloudy and Windy"
+msgstr "Закрыть окно"
+
+#: plugins/oneclick.py:1193
+#, fuzzy
+msgid "N"
+msgstr "Нет"
+
+#: plugins/oneclick.py:1194
+msgid "N/A"
+msgstr ""
+
+#: plugins/oneclick.py:1195
+#, fuzzy
+msgid "NE"
+msgstr "Нет"
+
+#: plugins/oneclick.py:1196
+#, fuzzy
+msgid "NE_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1197
+#, fuzzy
+msgid "NNE"
+msgstr "НЕИЗВЕСТНЫЙ"
+
+#: plugins/oneclick.py:1198
+#, fuzzy
+msgid "NNE_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1199
+#, fuzzy
+msgid "NNW"
+msgstr "НЕИЗВЕСТНЫЙ"
+
+#: plugins/oneclick.py:1200
+#, fuzzy
+msgid "NNW_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1201
+#, fuzzy
+msgid "NW"
+msgstr "НЕИЗВЕСТНЫЙ"
+
+#: plugins/oneclick.py:1202
+#, fuzzy
+msgid "NW_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1203
+#, fuzzy
+msgid "N_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1204
+msgid "New"
+msgstr "Новый"
+
+#: plugins/oneclick.py:1205
+msgid "Overcast"
+msgstr ""
+
+#: plugins/oneclick.py:1206
+msgid "PM Fog"
+msgstr ""
+
+#: plugins/oneclick.py:1207
+#, fuzzy
+msgid "PM Light Rain"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1208
+#, fuzzy
+msgid "PM Light Rain / Wind"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1209
+#, fuzzy
+msgid "PM Light Snow"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1210
+msgid "PM Rain"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1211
+#, fuzzy
+msgid "PM Rain / Snow"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1212
+#, fuzzy
+msgid "PM Rain / Wind"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1213
+#, fuzzy
+msgid "PM Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1214
+#, fuzzy
+msgid "PM Showers / Wind"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1215
+#, fuzzy
+msgid "PM Snow Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1216
+#, fuzzy
+msgid "PM T-Storms"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1217
+#, fuzzy
+msgid "Partly Cloudy / Wind"
+msgstr "Закрыть окно"
+
+#: plugins/oneclick.py:1218
+#, fuzzy
+msgid "Partly Cloudy and Windy"
+msgstr "Закрыть окно"
+
+#: plugins/oneclick.py:1219
+msgid "Rain / Freezing Rain"
+msgstr ""
+
+#: plugins/oneclick.py:1220
+#, fuzzy
+msgid "Rain / Snow"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1221
+#, fuzzy
+msgid "Rain / Snow / Wind"
+msgstr "Дождь / Снег / Ветер"
+
+#: plugins/oneclick.py:1222
+#, fuzzy
+msgid "Rain / Snow Early"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1223
+#, fuzzy
+msgid "Rain / Snow Late"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1224
+#, fuzzy
+msgid "Rain / Snow Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1225
+#, fuzzy
+msgid "Rain / Snow Showers / Wind"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1226
+#, fuzzy
+msgid "Rain / Snow Showers Late"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1227
+#, fuzzy
+msgid "Rain / Thunder"
+msgstr "Вт"
+
+#: plugins/oneclick.py:1228
+msgid "Rain / Wind"
+msgstr "Дождь / Ветер"
+
+#: plugins/oneclick.py:1229
+#, fuzzy
+msgid "Rain / Wind Early"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1230
+#, fuzzy
+msgid "Rain Early"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1231
+#, fuzzy
+msgid "Rain Late"
+msgstr "Рейтинг"
+
+#: plugins/oneclick.py:1232
+#, fuzzy
+msgid "Rain Shower"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1233
+#, fuzzy
+msgid "Rain Shower and Windy"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1234
+#, fuzzy
+msgid "Rain and Snow"
+msgstr "Радио"
+
+#: plugins/oneclick.py:1235
+#, fuzzy
+msgid "Rain to Wintry Mix"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1236
+#, fuzzy
+msgid "Rain to Wintry Mix / Wind"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1237
+msgid "S"
+msgstr ""
+
+#: plugins/oneclick.py:1238
+msgid "SE"
+msgstr ""
+
+#: plugins/oneclick.py:1239
+#, fuzzy
+msgid "SE_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1240
+msgid "SSE"
+msgstr ""
+
+#: plugins/oneclick.py:1241
+#, fuzzy
+msgid "SSE_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1242
+msgid "SSW"
+msgstr ""
+
+#: plugins/oneclick.py:1243
+#, fuzzy
+msgid "SSW_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1244
+msgid "SW"
+msgstr ""
+
+#: plugins/oneclick.py:1245
+#, fuzzy
+msgid "SW_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1246
+#, fuzzy
+msgid "S_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1247
+#, fuzzy
+msgid "Scattered Showers"
+msgstr "Записанные передачи"
+
+#: plugins/oneclick.py:1248
+#, fuzzy
+msgid "Scattered Snow"
+msgstr "Записанные передачи"
+
+#: plugins/oneclick.py:1249
+#, fuzzy
+msgid "Scattered Snow Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1250
+#, fuzzy
+msgid "Scattered T-Storms"
+msgstr "Записанные передачи"
+
+#: plugins/oneclick.py:1251
+#, fuzzy
+msgid "Showers / Wind"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1252
+#, fuzzy
+msgid "Showers / Wind Early"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1253
+#, fuzzy
+msgid "Showers Early"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1254
+#, fuzzy
+msgid "Showers Late"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1255
+msgid "Showers in the Vicinity"
+msgstr ""
+
+#: plugins/oneclick.py:1256
+msgid "Snow"
+msgstr "Снег"
+
+#: plugins/oneclick.py:1257
+msgid "Snow / Wind"
+msgstr "Снег / Ветер"
+
+#: plugins/oneclick.py:1258
+#, fuzzy
+msgid "Snow Shower / Wind"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1259
+#, fuzzy
+msgid "Snow Showers / Wind Early"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1260
+#, fuzzy
+msgid "Snow Showers Early"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1261
+#, fuzzy
+msgid "Snow Showers Late"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1262
+msgid "Snow and Freezing Rain"
+msgstr ""
+
+#: plugins/oneclick.py:1263
+#, fuzzy
+msgid "Snow to Rain"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1264
+#, fuzzy
+msgid "Snow to Wintry Mix"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1265
+#, fuzzy
+msgid "Snow to Wintry Mix / Wind"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1266
+#, fuzzy
+msgid "Storm"
+msgstr "Окончание"
+
+#: plugins/oneclick.py:1267
+#, fuzzy
+msgid "Sunny / Wind"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1268
+#, fuzzy
+msgid "T-Showers"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1269
+#, fuzzy
+msgid "T-Storms Early"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1270
+msgid "Very High"
+msgstr ""
+
+#: plugins/oneclick.py:1271
+msgid "W"
+msgstr ""
+
+#: plugins/oneclick.py:1272
+#, fuzzy
+msgid "WNW"
+msgstr "НЕИЗВЕСТНЫЙ"
+
+#: plugins/oneclick.py:1273
+#, fuzzy
+msgid "WNW_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1274
+msgid "WSW"
+msgstr ""
+
+#: plugins/oneclick.py:1275
+#, fuzzy
+msgid "WSW_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1276
+#, fuzzy
+msgid "W_short"
+msgstr "Передача"
+
+#: plugins/oneclick.py:1277
+msgid "Waning Crescent"
+msgstr ""
+
+#: plugins/oneclick.py:1278
+msgid "Waning Gibbous"
+msgstr ""
+
+#: plugins/oneclick.py:1279
+msgid "Waxing Crescent"
+msgstr ""
+
+#: plugins/oneclick.py:1280
+msgid "Waxing Gibbous"
+msgstr ""
+
+#: plugins/oneclick.py:1281
+#, fuzzy
+msgid "Wintry Mix / Wind"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1282
+#, fuzzy
+msgid "Wintry Mix / Wind Early"
+msgstr "Ветер"
+
+#: plugins/oneclick.py:1283
+msgid "Wintry Mix to Snow"
+msgstr ""
+
+#: plugins/oneclick.py:1284
+msgid "rising"
+msgstr ""
+
+#: plugins/oneclick.py:1285
+msgid "steady"
+msgstr ""
+
+#: plugins/freevused.py:141
+msgid ""
+"You need pybluetooth (http://org.csail.mit.edu/pybluetooth/) to run "
+"\"freevused\" plugin."
+msgstr ""
+
+#: plugins/freevused.py:399
+#, python-format
+msgid "BT event %s"
+msgstr "Текст: %s"
+
+#: plugins/freevused.py:468 tv/edit_favorite.py:106
+#: tv/plugins/recordings_manager.py:80 share/skins/main/dark.fxd:749
+#: share/skins/main/basic.fxd:389 share/skins/main/basic.fxd:626
+#: share/skins/main/blurr.fxd:702 share/skins/main/info.fxd:270
+#: share/skins/main/mediaportal.fxd:686
+msgid "Name"
+msgstr ""
+
+#: plugins/freevused.py:480 share/skins/main/dark.fxd:759
+#: share/skins/main/atlantice.fxd:360 share/skins/main/atlantice.fxd:581
+#: share/skins/main/atlantice.fxd:932 share/skins/main/Tux'n Tosh TV.fxd:929
+#: share/skins/main/Panorama.fxd:188 share/skins/main/Panorama.fxd:308
+#: share/skins/main/Panorama.fxd:702 share/skins/main/basic.fxd:401
+#: share/skins/main/blurr.fxd:202 share/skins/main/blurr.fxd:309
+#: share/skins/main/blurr.fxd:692 share/skins/main/geexbox.fxd:241
+#: share/skins/main/geexbox.fxd:383 share/skins/main/geexbox.fxd:766
+#: share/skins/main/mediaportal.fxd:204 share/skins/main/mediaportal.fxd:698
+msgid "Track"
+msgstr "Дорожка"
+
+#: plugins/ejectromdrives.py:66
+msgid "Close drive"
+msgstr "Закрыть диск"
+
+#: plugins/ejectromdrives.py:68
+#, fuzzy
+msgid "Eject drive"
+msgstr "Извлечение диска из устройства"
+
+#: plugins/yac.py:69
+#, python-format
+msgid "Call: %s"
+msgstr ""
+
+#: plugins/yac.py:71
+#, python-format
+msgid "Message: %s"
+msgstr "Сообщение: %s"
+
+#: plugins/mediamenu.py:136
+msgid "Media"
+msgstr "Медиа"
+
+#: plugins/mediamenu.py:141
+msgid "Movie"
+msgstr "Фильм"
+
+#: plugins/mediamenu.py:143
+msgid "Audio"
+msgstr "Аудио"
+
+#: plugins/mediamenu.py:145
+msgid "Image"
+msgstr "Изображение"
+
+#: plugins/mediamenu.py:147 share/skins/main/crystal.fxd:14
+#: share/skins/main/dark.fxd:21 share/skins/main/Tux'n Tosh TV.fxd:21
+#: share/skins/main/bluestar.fxd:14 share/skins/main/rain.fxd:14
+#: share/skins/main/basic.fxd:24 share/skins/main/info.fxd:17
+msgid "Games"
+msgstr "Игры"
+
+#: plugins/mediamenu.py:149
+#, python-format
+msgid "%s Main Menu"
+msgstr "Главное меню %s"
+
+#: plugins/df.py:71
+msgid "Bad Path"
+msgstr "Неверный путь"
+
+#: plugins/df.py:73
+#, fuzzy, python-format
+msgid "%(freespace)i free of %(totalspace)i GB total (%(percentage)i%% free)"
+msgstr "Свободно %i из %i Мб"
+
+#: plugins/df.py:76
+#, fuzzy, python-format
+msgid "%(freespace)i free of %(totalspace)i MB total (%(percentage)i%% free)"
+msgstr "Свободно %i из %i Мб"
+
+#: plugins/command.py:147
+msgid "Command finished"
+msgstr "Команда завершена"
+
+#: plugins/command.py:162
+msgid "Show output"
+msgstr "Показать вывод"
+
+#: plugins/command.py:178
+msgid "Output"
+msgstr "Вывод"
+
+#: plugins/command.py:268
+msgid "Running Command..."
+msgstr "Выполнение команды..."
+
+#: plugins/command.py:298
+msgid "Command Failed"
+msgstr "Команда не выполнена"
+
+#: plugins/command.py:300
+msgid "Command Completed"
+msgstr "Команда выполнена"
+
+#: plugins/command.py:335 plugins/command.py:369
+#: share/skins/main/crystal.fxd:16 share/skins/main/dark.fxd:23
+#: share/skins/main/Tux'n Tosh TV.fxd:23 share/skins/main/rain.fxd:16
+msgid "Commands"
+msgstr "Команды"
+
+#: plugins/speak.py:34
+msgid "You need PyFest"
+msgstr "Вам нужен PyFest"
+
+#: plugins/speak.py:34
+msgid "to run the speak plugin."
+msgstr "чтобы запустить плагин speak"
+
+#: plugins/speak.py:82
+msgid "Welcome to Freevo!"
+msgstr "Добро пожаловать в Freevo!"
+
+#: plugins/speak.py:86
+msgid "Good bye!"
+msgstr "До свидания!"
+
+#: plugins/speak.py:117
+#, fuzzy
+msgid "channel"
+msgstr "Канал"
+
+#: plugins/speak.py:117
+#, fuzzy
+msgid "program"
+msgstr "Программа"
+
+#: setup_freevo.py:231
+#, python-format
+msgid "checking for %-13s"
+msgstr ""
+
+#: setup_freevo.py:244
+#, python-format
+msgid "ERROR: can't find %s"
+msgstr "Ошибка: невозможно найти %s"
+
+#: setup_freevo.py:245
+msgid "Please install the application respectively put it in your path."
+msgstr ""
+
+#: setup_freevo.py:246
+msgid "Freevo won't work without it."
+msgstr "Freevo не будет работать без этого."
+
+#: setup_freevo.py:252
+msgid "not found (deactivated)"
+msgstr ""
+
+#: setup_freevo.py:284
+#, python-format
+msgid "System path first=%s"
+msgstr ""
+
+#: setup_freevo.py:284
+msgid "No"
+msgstr "Нет"
+
+#: setup_freevo.py:284
+msgid "Yes"
+msgstr "Да"
+
+#: setup_freevo.py:298
+msgid "Settings:"
+msgstr "Настройки:"
+
+#: helpers/recordserver.py:305
+#, fuzzy
+msgid "scheduled recordings saved"
+msgstr "Расписание записей сохранено"
+
+#: helpers/recordserver.py:691 helpers/recordserver.py:743
+msgid "program is not set"
+msgstr "пограмма не задана"
+
+#: helpers/recordserver.py:695
+msgid "program cannot record as it is over"
+msgstr ""
+
+#: helpers/recordserver.py:736
+#, fuzzy
+msgid "program scheduled to record"
+msgstr "В расписании записи одна программа."
+
+#: helpers/recordserver.py:766
+#, fuzzy
+msgid "program removed from record schedule"
+msgstr "Удалить из расписания"
+
+#: helpers/recordserver.py:776
+msgid "scheduled programs is empty"
+msgstr ""
+
+#: helpers/recordserver.py:779
+#, fuzzy
+msgid "program list is empty"
+msgstr "Список воспроизведения пуст!"
+
+#: helpers/recordserver.py:783
+msgid "program is scheduled"
+msgstr ""
+
+#: helpers/recordserver.py:784
+#, fuzzy
+msgid "program is not scheduled"
+msgstr "%i программ в расписании записи."
+
+#: helpers/recordserver.py:820
+msgid "nothing to find"
+msgstr ""
+
+#: helpers/recordserver.py:848
+#, fuzzy
+msgid "no programs match"
+msgstr "нет программы"
+
+#: helpers/recordserver.py:1057
+#, fuzzy
+msgid "no favorite name"
+msgstr "Нет избранного."
+
+#: helpers/recordserver.py:1068 helpers/recordserver.py:1090
+#, fuzzy
+msgid "favorite added"
+msgstr "избранное добавлено"
+
+#: helpers/recordserver.py:1097
+msgid "name is not set"
+msgstr "имя не задано"
+
+#: helpers/recordserver.py:1105
+#, fuzzy
+msgid "favorite removed"
+msgstr "избранное удалено"
+
+#: helpers/recordserver.py:1115
+#, fuzzy
+msgid "favorites cleared"
+msgstr "Ошибка получения избранного"
+
+#: helpers/recordserver.py:1133 helpers/recordserver.py:1196
+#: helpers/recordserver.py:1223
+#, fuzzy
+msgid "not a favorite"
+msgstr "Нет избранного."
+
+#: helpers/recordserver.py:1177
+msgid "priority adjusted"
+msgstr ""
+
+#: helpers/recordserver.py:1207
+#, fuzzy
+msgid "no favorites"
+msgstr "Нет избранного."
+
+#: helpers/recordserver.py:1270
+#, fuzzy
+msgid "favorite removed from schedule"
+msgstr "Удалить из расписания"
+
+#: helpers/recordserver.py:1289
+#, fuzzy
+msgid "favorite added to schedule"
+msgstr "Расписание пусто."
+
+#: helpers/schedulefavorites.py:41 helpers/tv_grab.py:118
+#, fuzzy
+msgid "Updated recording schedule"
+msgstr "Добавить в расписание записи"
+
+#: helpers/schedulefavorites.py:43 helpers/tv_grab.py:120
+#, fuzzy
+msgid "Not updated recording schedule"
+msgstr "Нет запланированных записей"
+
+#: helpers/schedulefavorites.py:53
+#, fuzzy
+msgid "Updating recording schedule"
+msgstr "Добавить в расписание записи"
+
+#: helpers/mkimagemrss.py:114
+msgid "This feed enables cooliris http://www.cooliris.com/ in your web browser"
+msgstr ""
+
+#: video/encodingclient.py:83
+#, fuzzy
+msgid "Encoding server is not available"
+msgstr "Сервер записи недоступен."
+
+#: video/configure.py:81 video/configure.py:119
+#, python-format
+msgid "Stream %s"
+msgstr "Поток %s"
+
+#: video/configure.py:87
+#, fuzzy
+msgid "Unknown"
+msgstr "Неизвестный исполнитель"
+
+#: video/configure.py:92
+msgid "Audio Menu"
+msgstr "Меню звука"
+
+#: video/configure.py:110
+msgid "no subtitles"
+msgstr "нет субтитров"
+
+#: video/configure.py:132
+msgid "Subtitle Menu"
+msgstr "Меню субтитров"
+
+#: video/configure.py:152 video/configure.py:195
+#, python-format
+msgid "Play chapter %s"
+msgstr "Воспроизвести главу %s"
+
+#: video/configure.py:173 video/configure.py:197
+msgid "Chapter Menu"
+msgstr ""
+
+#: video/configure.py:220
+#, fuzzy, python-format
+msgid "Play with \"%s\""
+msgstr "Игры %s"
+
+#: video/configure.py:222
+#, fuzzy
+msgid "Player Menu"
+msgstr "Меню программы"
+
+#: video/configure.py:253
+#, python-format
+msgid "Turn off %s"
+msgstr "Выключить %s"
+
+#: video/configure.py:254
+#, python-format
+msgid "Turn on %s"
+msgstr "Включить %s"
+
+#: video/configure.py:286
+msgid "Activate TOP field first"
+msgstr ""
+
+#: video/configure.py:288 video/configure.py:328
+msgid "Activate BOTTOM field first"
+msgstr ""
+
+#: video/configure.py:290
+msgid "Activate AUTO field first"
+msgstr ""
+
+#: video/configure.py:303
+msgid "Play with alternate player"
+msgstr ""
+
+#: video/configure.py:307
+msgid "Audio selection"
+msgstr ""
+
+#: video/configure.py:309
+msgid "Subtitle selection"
+msgstr ""
+
+#: video/configure.py:311 video/configure.py:315
+msgid "Chapter selection"
+msgstr ""
+
+#: video/configure.py:322
+msgid "de-interlacing"
+msgstr ""
+
+#: video/configure.py:325
+msgid "X-Video Motion Compensation (xvmc)"
+msgstr ""
+
+#: video/configure.py:338 video/videoitem.py:465 video/videoitem.py:468
+#: playlist.py:306 tv/programitem.py:97
+msgid "Play"
+msgstr ""
+
+#: video/configure.py:339
+msgid "Config Menu"
+msgstr ""
+
+#: video/plugins/dvdcopy.py:88
+msgid "Cancel DVD copy"
+msgstr "Отменить копирование DVD"
+
+#: video/plugins/dvdcopy.py:94
+msgid "Copy this title to HDD"
+msgstr ""
+
+#: video/plugins/dvdcopy.py:97
+msgid "Copy the entire disc to HDD"
+msgstr "Скопировать весь диск на жесткий диск"
+
+#: video/plugins/dvdcopy.py:98
+msgid "Copy the feature to HDD"
+msgstr ""
+
+#: video/plugins/dvdcopy.py:124
+msgid "Copy started"
+msgstr "Копирование начато"
+
+#: video/plugins/reencode-old.py:73
+msgid "Re-encode this program..."
+msgstr "Искать ещё эту программу"
+
+#: video/plugins/reencode-old.py:89 video/plugins/dvdbackup.py:112
+#: video/plugins/reencode.py:165
+msgid "Choose your encoding profile"
+msgstr ""
+
+#: video/plugins/reencode-old.py:100 video/plugins/dvdbackup.py:129
+#: video/plugins/reencode.py:420
+msgid "Please wait, analyzing video..."
+msgstr "Пожалуйста подождите, видео анализируется..."
+
+#: video/plugins/reencode-old.py:187 video/plugins/dvdbackup.py:191
+#: video/plugins/reencode.py:493
+msgid "Encoding started"
+msgstr "Копирование начато"
+
+#: video/plugins/wwitv.py:136 video/plugins/wwitv.py:144
+#, fuzzy
+msgid "Downloading stream links"
+msgstr "Загрузить"
+
+#: video/plugins/wwitv.py:162
+#, fuzzy
+msgid "Failed to download channel list"
+msgstr "Невозможно установить частоту канала %s."
+
+#: video/plugins/wwitv.py:224
+msgid "Failed to download categories list"
+msgstr ""
+
+#: video/plugins/wwitv.py:314
+#, fuzzy
+msgid "Browse by Nations"
+msgstr "Просмотр диска"
+
+#: video/plugins/wwitv.py:315
+#, fuzzy
+msgid "Nations"
+msgstr "Города"
+
+#: video/plugins/wwitv.py:331
+#, fuzzy
+msgid "Choose a Nation"
+msgstr "Выберите каталог"
+
+#: video/plugins/wwitv.py:336 video/plugins/appletrailers.py:228
+#, fuzzy
+msgid "Browse by Category"
+msgstr "Просмотр каталога"
+
+#: video/plugins/wwitv.py:337
+#, fuzzy
+msgid "Categories"
+msgstr "Категория"
+
+#: video/plugins/wwitv.py:348
+#, fuzzy
+msgid "Choose a Category"
+msgstr "Выберите каталог"
+
+#: video/plugins/filmaffinity.py:100
+msgid "Remove matching of this regexps from item name"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:101
+msgid "Remove matching of this regexps from search string"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:102
+msgid "Accept search automatically if it has only one result"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:151 video/plugins/filmaffinity.py:215
+#, fuzzy
+msgid "Connection error: "
+msgstr "ошибка соединения"
+
+#: video/plugins/filmaffinity.py:283
+msgid "Search in FilmAffinity"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:290 video/plugins/filmaffinity.py:297
+#, python-format
+msgid "Search in FilmAffinity [%s]"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:306
+#, fuzzy
+msgid "Searching in FilmAffinity..."
+msgstr "поиск в IMDB..."
+
+#: video/plugins/filmaffinity.py:330
+msgid "Connection error: Probably connection timeout, try again"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:343
+msgid "FILMAFFINITY Query"
+msgstr ""
+
+#: video/plugins/filmaffinity.py:347
+#, fuzzy
+msgid "No info available"
+msgstr "Нет данных"
+
+#: video/plugins/filmaffinity.py:384
+#, fuzzy
+msgid "Fetching movie information"
+msgstr "Информация"
+
+#: video/plugins/vpodcast.py:141
+#, fuzzy
+msgid "Video Podcast"
+msgstr "Меню звука"
+
+#: video/plugins/vpodcast.py:168 video/plugins/vpodcast.py:251
+#, fuzzy
+msgid "Video Podcasts"
+msgstr "Меню звука"
+
+#: video/plugins/vpodcast.py:179
+#, fuzzy
+msgid "Fetching podcast items..."
+msgstr "Загрузка новостей..."
+
+#: video/plugins/vpodcast.py:495
+msgid "Fetching \"%s\"..."
+msgstr "Загрузка \"%s\"..."
+
+#: video/plugins/vpodcast.py:511
+#, python-format
+msgid ""
+"Fetching \"%s\" failed\n"
+"No data"
+msgstr ""
+
+#: video/plugins/vpodcast.py:514
+msgid ""
+"Fetching \"%(filename)s\" failed:\n"
+"%(why)s"
+msgstr ""
+
+#: video/plugins/xine.py:73
+msgid ""
+"'XINE_COMMAND' not defined, 'xine' video plugin deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+
+#: video/plugins/xine.py:122
+msgid "!WARNING! created a xine passwd file with ALL:ALLOW"
+msgstr ""
+
+#: video/plugins/linkbrowser.py:68
+msgid "Browse links (autoplay)"
+msgstr ""
+
+#: video/plugins/linkbrowser.py:69
+msgid "Browse links (autoplay, maximum caching)"
+msgstr ""
+
+#: video/plugins/linkbrowser.py:70
+msgid "Browse links"
+msgstr ""
+
+#: video/plugins/linkbrowser.py:139
+msgid "Downloading link list..."
+msgstr ""
+
+#: video/plugins/linkbrowser.py:146
+#, python-format
+msgid "Failed to download %s"
+msgstr ""
+
+#: video/plugins/appletrailers.py:97 video/plugins/appletrailers.py:106
+#, fuzzy
+msgid "Scanning Apple for trailers..."
+msgstr "Чтение каталога..."
+
+#: video/plugins/appletrailers.py:174
+#, fuzzy
+msgid "Browse by Title"
+msgstr "Просмотр списка"
+
+#: video/plugins/appletrailers.py:175
+#, fuzzy
+msgid "Trailers"
+msgstr "Название"
+
+#: video/plugins/appletrailers.py:214 tv/plugins/genre.py:103
+#, fuzzy
+msgid "Browse by Genre"
+msgstr "Просмотр диска"
+
+#: video/plugins/appletrailers.py:223
+msgid "Choose a genre"
+msgstr "Выберите жанр"
+
+#: video/plugins/appletrailers.py:237
+#, fuzzy
+msgid "Choose a category"
+msgstr "Выберите каталог"
+
+#: video/plugins/appletrailers.py:242
+#, fuzzy
+msgid "Browse by Studio"
+msgstr "Просмотр диска"
+
+#: video/plugins/appletrailers.py:251
+#, fuzzy
+msgid "Choose a studio"
+msgstr "Выберите каталог"
+
+#: video/plugins/moviecovers.py:288
+msgid "Search Moviecovers.com for this file"
+msgstr "Искать этот файл на Moviecovers.com"
+
+#: video/plugins/moviecovers.py:295 video/plugins/moviecovers.py:302
+msgid "Search Moviecovers.com for [%s]"
+msgstr "Искать [%s] на Moviecovers.com"
+
+#: video/plugins/moviecovers.py:311
+msgid "Searching Moviecovers.com..."
+msgstr "поиск на Moviecovers.com..."
+
+#: video/plugins/moviecovers.py:335
+msgid "Connection error : Probably connection timeout, try again"
+msgstr ""
+
+#: video/plugins/moviecovers.py:348
+msgid "MOVIECOVERS Query"
+msgstr ""
+
+#: video/plugins/moviecovers.py:352
+#, fuzzy
+msgid "No information available from Moviecovers.com"
+msgstr "Нет данных"
+
+#: video/plugins/moviecovers.py:389
+msgid "Getting data, it can be long as we download a ZIP file"
+msgstr ""
+
+#: video/plugins/dvdbackup.py:87
+msgid "Backup this dvd title..."
+msgstr ""
+
+#: video/plugins/fillscreen.py:149
+msgid "Fill screen"
+msgstr ""
+
+#: video/plugins/fillscreen.py:169
+msgid "pixels cropped up and down"
+msgstr ""
+
+#: video/plugins/fillscreen.py:171
+msgid "pixels cropped left and right"
+msgstr ""
+
+#: video/plugins/fillscreen.py:173
+msgid "no loss"
+msgstr ""
+
+#: video/plugins/fillscreen.py:179
+msgid "widens"
+msgstr ""
+
+#: video/plugins/fillscreen.py:181
+msgid "narrows"
+msgstr ""
+
+#: video/plugins/fillscreen.py:183
+msgid "ratio unchanged"
+msgstr ""
+
+#: video/plugins/fillscreen.py:187
+msgid "Fill at"
+msgstr ""
+
+#: video/plugins/fillscreen.py:190
+msgid "Dont't fill (keep original ratio)"
+msgstr ""
+
+#: video/plugins/fillscreen.py:192
+#, fuzzy
+msgid "Fill Screen Menu"
+msgstr "Главное меню Freevo"
+
+#: video/plugins/bookmarker.py:65
+msgid "Resume playback"
+msgstr "Возобновить воспроизведение"
+
+#: video/plugins/bookmarker.py:71
+msgid "Bookmarks"
+msgstr "Закладки"
+
+#: video/plugins/bookmarker.py:136
+#, python-format
+msgid "Jump to %s"
+msgstr "Перейти к %s"
+
+#: video/plugins/mover.py:99
+#, python-format
+msgid "Move to [%s]"
+msgstr ""
+
+#: video/plugins/dvdimage.py:79
+msgid "Play image as DVD"
+msgstr ""
+
+#: video/plugins/dvdimage.py:104
+msgid "Choose title to play. <1-9>"
+msgstr ""
+
+#: video/plugins/dvdimage.py:128
+#, python-format
+msgid "Choose disc (%i discs available)."
+msgstr ""
+
+#: video/plugins/wikisubtitles.py:94
+#, fuzzy
+msgid "Downloading subtitle, please wait.."
+msgstr "Загрузка субтитров, пожалуйста подождите..."
+
+#: video/plugins/wikisubtitles.py:98
+#, fuzzy
+msgid "Subtitle downloaded"
+msgstr "Субтитры загружены"
+
+#: video/plugins/wikisubtitles.py:106
+msgid "Getting versions of subtitle..."
+msgstr ""
+
+#: video/plugins/wikisubtitles.py:114 video/plugins/wikisubtitles.py:192
+#: video/plugins/wikisubtitles.py:230
+msgid "Unknown error while connecting to "
+msgstr ""
+
+#: video/plugins/wikisubtitles.py:136
+#, fuzzy
+msgid "Versions found"
+msgstr "Нет новостей"
+
+#: video/plugins/wikisubtitles.py:150
+msgid "Search Subtitle for this file"
+msgstr "Найти субтитры для этого файла"
+
+#: video/plugins/wikisubtitles.py:161
+#, fuzzy
+msgid "searching Subtitle..."
+msgstr "поиск в IMDB..."
+
+#: video/plugins/wikisubtitles.py:212
+msgid "Subtitles found"
+msgstr "Субтитры найдены"
+
+#: video/plugins/wikisubtitles.py:219
+msgid "No found subtitle"
+msgstr "Субтитры не найдены"
+
+#: video/plugins/rtve.py:106 video/plugins/rtve.py:115
+msgid "Escaneando la web de RTVE..."
+msgstr ""
+
+#: video/plugins/rtve.py:133 video/plugins/rtve.py:169
+msgid "Reproducir a pantalla completa (16:9)"
+msgstr ""
+
+#: video/plugins/rtve.py:168
+msgid "Reproducir"
+msgstr ""
+
+#: video/plugins/rtve.py:195
+msgid "Elegir por Nombre del Programa"
+msgstr ""
+
+#: video/plugins/rtve.py:196
+#, fuzzy
+msgid "Programas"
+msgstr "Программа"
+
+#: video/plugins/rtve.py:227
+msgid "Elegir por Canal"
+msgstr ""
+
+#: video/plugins/rtve.py:237
+msgid "Elige un canal"
+msgstr ""
+
+#: video/plugins/imdb.py:98
+msgid "Search IMDB for this file"
+msgstr "Искать этот файл в IMDB"
+
+#: video/plugins/imdb.py:105 video/plugins/imdb.py:112
+#, python-format
+msgid "Search IMDB for [%s]"
+msgstr "Искать [%s] в IMDB"
+
+#: video/plugins/imdb.py:123
+msgid "searching IMDB..."
+msgstr "поиск в IMDB..."
+
+#: video/plugins/imdb.py:156
+msgid "Connecting to IMDB failed:"
+msgstr "Сбой в подключении к IMDB: "
+
+#: video/plugins/imdb.py:174
+msgid "IMDB Query"
+msgstr "Запрос IMDB"
+
+#: video/plugins/imdb.py:178
+msgid "No information available from IMDB"
+msgstr ""
+
+#: video/plugins/reencode.py:113
+msgid "Transcode this program..."
+msgstr "Искать ещё эту программу"
+
+#: video/plugins/reencode.py:152
+msgid "Start Encoding"
+msgstr ""
+
+#: video/plugins/reencode.py:153
+msgid "Select Encoding Profile"
+msgstr ""
+
+#: video/plugins/reencode.py:154 video/plugins/reencode.py:228
+msgid "Modify Container"
+msgstr "Изменить название"
+
+#: video/plugins/reencode.py:155
+#, fuzzy
+msgid "Modify Start Time"
+msgstr "Изменить время начала"
+
+#: video/plugins/reencode.py:156
+#, fuzzy
+msgid "Modify End Time"
+msgstr "Изменить время конца"
+
+#: video/plugins/reencode.py:157 video/plugins/reencode.py:239
+msgid "Modify Resolution"
+msgstr "Разрешение"
+
+#: video/plugins/reencode.py:158 video/plugins/reencode.py:250
+#: video/plugins/reencode.py:272
+msgid "Modify Video Codec"
+msgstr "Изменить видео кодек"
+
+#: video/plugins/reencode.py:159
+#, fuzzy
+msgid "Modify Video Bit Rate"
+msgstr "Изменить время дня"
+
+#: video/plugins/reencode.py:160
+msgid "Modify Audio Codec"
+msgstr "Изменить аудио кодек"
+
+#: video/plugins/reencode.py:161
+#, fuzzy
+msgid "Modify Audio Bit Rate"
+msgstr "Изменить приоритет"
+
+#: video/plugins/reencode.py:162
+msgid "Modify Number of passes"
+msgstr "Изменить колличество проходов"
+
+#: video/plugins/reencode.py:163
+#, fuzzy
+msgid "Modify Number of Encoder Threads"
+msgstr "Изменить время дня"
+
+#: video/plugins/reencode.py:164
+msgid "Modify Video Filter (not implemented)"
+msgstr ""
+
+#: video/plugins/reencode.py:174
+msgid "Xvid Low Quality"
+msgstr ""
+
+#: video/plugins/reencode.py:175
+msgid "Xvid High Quality"
+msgstr ""
+
+#: video/plugins/reencode.py:176
+msgid "iPod"
+msgstr ""
+
+#: video/plugins/reencode.py:177
+msgid "DVD"
+msgstr "DVD"
+
+#: video/plugins/reencode.py:178
+msgid "Select Profile"
+msgstr "Выбрать профиль"
+
+#: video/plugins/reencode.py:199
+msgid "No bookmarks are set for this video"
+msgstr ""
+
+#: video/plugins/reencode.py:202
+msgid "Do not set"
+msgstr ""
+
+#: video/plugins/reencode.py:209
+#, fuzzy
+msgid "Select Time"
+msgstr "Время остановки"
+
+#: video/plugins/reencode.py:261
+msgid "Modify Video Bitrate"
+msgstr "Изменить время дня"
+
+#: video/plugins/reencode.py:283
+msgid "Modify Audio Bitrate"
+msgstr "Изменить приоритет"
+
+#: video/plugins/reencode.py:294
+msgid "Modify Number of Passes"
+msgstr "Изменить время дня"
+
+#: video/plugins/reencode.py:305
+#, fuzzy
+msgid "Modify Number of Encoding threads"
+msgstr "Изменить время дня"
+
+#: video/plugins/reencode.py:316
+msgid "Modify Video Filter"
+msgstr "Изменить приоритет"
+
+#: video/plugins/reencode.py:400
+msgid "Unknown Property"
+msgstr "Неизвестное свойство"
+
+#: video/plugins/reencode.py:427
+#, fuzzy
+msgid "Failed to analyze video."
+msgstr "Пожалуйста подождите..."
+
+#: video/plugins/bilingual.py:83
+msgid "Bilingual language selection"
+msgstr ""
+
+#: video/plugins/bilingual.py:90
+msgid "Play Both Channels"
+msgstr ""
+
+#: video/plugins/bilingual.py:91
+msgid "Play Left Channel"
+msgstr ""
+
+#: video/plugins/bilingual.py:92
+msgid "Play Right Channel"
+msgstr ""
+
+#: video/plugins/bilingual.py:93
+msgid "Language Menu"
+msgstr "Язык"
+
+#: video/plugins/youtube.py:183
+msgid "Youtube videos"
+msgstr ""
+
+#: video/plugins/youtube.py:212
+msgid "Retrieving video list"
+msgstr ""
+
+#: video/plugins/youtube.py:213 video/plugins/youtube.py:266
+#: video/plugins/youtube.py:284
+#, fuzzy
+msgid "Videos available"
+msgstr "Видео"
+
+#: video/plugins/youtube.py:226
+msgid "bla"
+msgstr ""
+
+#: video/plugins/youtube.py:238
+msgid "Loading video list"
+msgstr ""
+
+#: video/plugins/youtube.py:252
+msgid "User"
+msgstr "Пользователь"
+
+#: video/plugins/youtube.py:262
+#, fuzzy
+msgid "More videos..."
+msgstr "Перемещение файлов..."
+
+#: video/plugins/fxdarchive.py:93
+msgid "Archive FXD files"
+msgstr ""
+
+#: video/plugins/fxdarchive.py:103
+#, fuzzy
+msgid "Finding and copying FXD files..."
+msgstr "Копирование файлов..."
+
+#: video/plugins/fxdarchive.py:122
+msgid "There was a error while trying to write the fxd file"
+msgstr ""
+
+#: video/plugins/fxdarchive.py:132
+msgid "But I couldn't copy a cover image file."
+msgstr ""
+
+#: video/plugins/fxdarchive.py:135
+#, python-format
+msgid "%(nfiles)d fxd files archived. %(msg)s"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:66
+msgid "Voir les bandes annonces de film"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:74
+msgid "Bandes annonces disponibles"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:83
+msgid "Voir les sorties DVD"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:91
+msgid "Bandes annonces DVD disponibles"
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:114
+msgid ""
+"\n"
+"Semaine du "
+msgstr ""
+
+#: video/plugins/cinemovies_trailers.py:132
+msgid "Recuperation des types de bande annonces disponibles"
+msgstr ""
+
+#: video/plugins/details.py:66
+msgid "Show details for this item"
+msgstr ""
+
+#: video/plugins/details.py:96
+msgid "Details"
+msgstr "Подробности"
+
+#: video/plugins/mplayer.py:501
+msgid "Seeking not possible"
+msgstr ""
+
+#: video/__init__.py:172
+msgid "Directory Autobuild Thumbnails "
+msgstr ""
+
+#: video/__init__.py:173
+msgid "Build video thumbnails for all items (may take a while when entering)."
+msgstr ""
+
+#: video/videoitem.py:430
+msgid "Play DVD"
+msgstr "Воспроизвести DVD"
+
+#: video/videoitem.py:431 video/videoitem.py:436
+msgid "DVD title list"
+msgstr ""
+
+#: video/videoitem.py:437 video/videoitem.py:450
+msgid "Play default track"
+msgstr ""
+
+#: video/videoitem.py:444
+msgid "Play VCD"
+msgstr ""
+
+#: video/videoitem.py:445 video/videoitem.py:449
+msgid "VCD title list"
+msgstr ""
+
+#: video/videoitem.py:470
+msgid "Full description"
+msgstr "Полное описание"
+
+#: video/videoitem.py:473
+msgid "Play with maximum cache"
+msgstr ""
+
+#: video/videoitem.py:478
+msgid "Show variants"
+msgstr ""
+
+#: video/videoitem.py:481
+msgid "Create Thumbnail"
+msgstr ""
+
+#: video/videoitem.py:509
+msgid "Please wait...."
+msgstr "Пожалуйста подождите..."
+
+#: video/videoitem.py:584
+msgid "No player for this item found"
+msgstr ""
+
+#: video/videoitem.py:636
+#, python-format
+msgid ""
+"No media found for \"%(name)s\".\n"
+"Please insert the media \"%(media_id)s\"."
+msgstr ""
+
+#: video/videoitem.py:649
+#, python-format
+msgid ""
+"No media found for \"%(file)s\".\n"
+"Please insert the media \"%(media_id)s\"."
+msgstr ""
+
+#: video/videoitem.py:663
+#, python-format
+msgid ""
+"No media found for \"%(media_id)s\".\n"
+"Please insert the media \"%(url)s\"."
+msgstr ""
+
+#: video/videoitem.py:743
+#, fuzzy, python-format
+msgid "Play Title %d"
+msgstr "Воспроизвести %d"
+
+#: video/videoitem.py:828 tv/programitem.py:332
+msgid "No Information Available"
+msgstr "Нет данных"
+
+#: video/videoitem.py:850 tv/programitem.py:358 share/skins/main/dark.fxd:459
+#: share/skins/main/Tux'n Tosh TV.fxd:636 share/skins/main/info.fxd:471
+msgid "Rating"
+msgstr "Рейтинг"
+
+#: menu.py:652
+msgid "No action defined for this choice!"
+msgstr "Действие не определено для этого выбора"
+
+#: directory.py:62
+msgid "Directory Sort By Date"
+msgstr ""
+
+#: directory.py:63
+msgid "Sort directory by date and not by name."
+msgstr ""
+
+#: directory.py:65
+msgid "Directory Autoplay Single Item"
+msgstr ""
+
+#: directory.py:66
+msgid "Don't show directory if only one item exists and auto-select the item."
+msgstr ""
+
+#: directory.py:68
+msgid "Force Skin Layout"
+msgstr ""
+
+#: directory.py:69
+msgid ""
+"Force skin to a specific layout. This option doesn't work with all skins and "
+"the result may differ based on the skin."
+msgstr ""
+
+#: directory.py:72
+msgid "Directory Smart Sort"
+msgstr ""
+
+#: directory.py:73
+msgid "Use a smarter way to sort the items."
+msgstr ""
+
+#: directory.py:75
+msgid "Directory Smart Names"
+msgstr "Каталог \"%s\" уже существует"
+
+#: directory.py:76
+msgid "Use a smarter way to abbreviate the name of the items."
+msgstr ""
+
+#: directory.py:78
+msgid "Use MediaID Tag Names"
+msgstr ""
+
+#: directory.py:79
+msgid "Use the names from the media files tags as display name."
+msgstr ""
+
+#: directory.py:81
+msgid "Directory Reverse Sort"
+msgstr ""
+
+#: directory.py:82
+msgid "Show the items in the list in reverse order."
+msgstr ""
+
+#: directory.py:86
+msgid "Directory Create Playlist"
+msgstr ""
+
+#: directory.py:87
+msgid ""
+"Handle the directory as playlist. After one file is played, the next one "
+"will be started."
+msgstr ""
+
+#: directory.py:89
+msgid "Directory Add Playlist Files"
+msgstr ""
+
+#: directory.py:90
+msgid "Add playlist files to the list of items"
+msgstr ""
+
+#: directory.py:92
+msgid "Directory Add Random Playlist"
+msgstr ""
+
+#: directory.py:93
+msgid "Add an item for a random playlist"
+msgstr ""
+
+#: directory.py:95
+msgid "Directory Autoplay Items"
+msgstr ""
+
+#: directory.py:96
+msgid ""
+"Autoplay the whole directory (as playlist) when it contains only files and "
+"no directories"
+msgstr ""
+
+#: directory.py:321
+#, python-format
+msgid "Directory on disc [%s]"
+msgstr ""
+
+#: directory.py:322
+msgid "Directory"
+msgstr "Каталог"
+
+#: directory.py:455
+msgid "Play all files in directory"
+msgstr "Воспроизвести все файлы в каталоге"
+
+#: directory.py:461 playlist.py:314
+msgid "Random play all items"
+msgstr ""
+
+#: directory.py:464
+msgid "Recursive random play all items"
+msgstr ""
+
+#: directory.py:465
+msgid "Recursive play all items"
+msgstr ""
+
+#: directory.py:467 tv/plugins/recordings_manager.py:172
+msgid "Configure directory"
+msgstr ""
+
+#: directory.py:541
+msgid "Error reading password file:"
+msgstr "Ошибка при чтении файла password:"
+
+#: directory.py:552
+msgid "Enter Password"
+msgstr "Введите пароль"
+
+#: directory.py:570
+msgid "Password incorrect"
+msgstr "Неправильный пароль"
+
+#: directory.py:611
+msgid "Directory %r does not exist"
+msgstr "Каталог \"%r\" не существует"
+
+#: directory.py:640
+msgid "Scanning disc, be patient..."
+msgstr "Чтение диска..."
+
+#: directory.py:642
+msgid "Scanning directory, be patient..."
+msgstr "Чтение каталога..."
+
+#: directory.py:824 directory.py:915 directory.py:949
+#: tv/plugins/recordings_manager.py:284
+msgid "on"
+msgstr "вкл"
+
+#: directory.py:826 directory.py:829 directory.py:919 directory.py:947
+#: tv/plugins/recordings_manager.py:286
+msgid "off"
+msgstr "выкл"
+
+#: directory.py:831
+msgid "auto"
+msgstr "авто"
+
+#: directory.py:951
+msgid "Show all kinds of items"
+msgstr ""
+
+#: directory.py:952
+msgid "Show video, audio and image items in this directory"
+msgstr ""
+
+#: directory.py:955 tv/plugins/recordings_manager.py:306
+msgid "Configure"
+msgstr "Настроить"
+
+#: playlist.py:142 playlist.py:190
+#, python-format
+msgid "Cannot open file \"%s\""
+msgstr "Невозможно открыть файл \"%s\""
+
+#: playlist.py:304
+msgid "Browse Playlist"
+msgstr "Просмтор списка воспроизведения"
+
+#: playlist.py:470
+msgid "playlist repeat on"
+msgstr "повтор списка воспроизведения включен"
+
+#: playlist.py:472
+msgid "playlist repeat off"
+msgstr "повтор списка воспроизведения выключен"
+
+#: playlist.py:488
+msgid "no next item in playlist"
+msgstr "в списке воспроизведения нет следующего объекта"
+
+#: playlist.py:515
+msgid "no previous item in playlist"
+msgstr "в списке воспроизведения нет предыдущего объекта"
+
+#: tv/edit_favorite.py:136
+msgid "Day of Week"
+msgstr ""
+
+#: tv/edit_favorite.py:156
+msgid "Time of Day"
+msgstr "Время"
+
+#: tv/edit_favorite.py:209
+#, fuzzy
+msgid "Remove favorite failed"
+msgstr "Удалить из избранного"
+
+#: tv/edit_favorite.py:313 tv/edit_favorite.py:324
+msgid "Add favorite failed"
+msgstr "Сбой при добавлении избранного"
+
+#: tv/edit_favorite.py:322
+#, python-format
+msgid "Favorite %s has been saved"
+msgstr ""
+
+#: tv/edit_favorite.py:344
+#, python-format
+msgid "Do you want to remove %s?"
+msgstr "Вы хотите удалить %s?"
+
+#: tv/programitem.py:113
+msgid "Remove from schedule"
+msgstr "Удалить из расписания"
+
+#: tv/programitem.py:115
+msgid "Schedule for recording"
+msgstr "Запланировать запись"
+
+#: tv/programitem.py:121 tv/favoriteitem.py:90 tv/favoriteitem.py:96
+msgid "Edit favorite"
+msgstr "Редактировать избранное"
+
+#: tv/programitem.py:123 tv/plugins/recordings_manager.py:433
+#: tv/plugins/recordings_manager.py:598
+msgid "Add to favorites"
+msgstr "Добавить в избранное"
+
+#: tv/programitem.py:127 tv/plugins/recordings_manager.py:432
+#: tv/plugins/recordings_manager.py:597
+msgid "Search for more of this program"
+msgstr "Искать ещё эту программу"
+
+#: tv/programitem.py:148
+msgid "Do you want to remove the Program from the record schedule?"
+msgstr ""
+
+#: tv/programitem.py:150
+msgid "This Program is in the future. Do you want to record it?"
+msgstr ""
+
+#: tv/programitem.py:165
+msgid "Sorry, you cannot watch TV while recording. "
+msgstr "Просмотр ТВ невозможен во время записи."
+
+#: tv/programitem.py:166
+msgid "If this is not true then remove "
+msgstr ""
+
+#: tv/programitem.py:205
+#, python-format
+msgid "\"%s\" has been scheduled for recording"
+msgstr "\"%s\" добавлено в расписание записи"
+
+#: tv/programitem.py:209
+#, fuzzy
+msgid "Scheduling failed"
+msgstr "Планирование не удалось"
+
+#: tv/programitem.py:224
+#, python-format
+msgid "\"%s\" has been removed from schedule"
+msgstr "Удалить из расписания"
+
+#: tv/programitem.py:228 tv/favoriteitem.py:368
+msgid "Remove failed"
+msgstr "Удаление не удалось"
+
+#: tv/programitem.py:262
+msgid "Cannot edit favorite %s"
+msgstr "Невозможно редактировать избранное \"%s\""
+
+#: tv/programitem.py:274 tv/plugins/recordings_manager.py:1080
+#: tv/plugins/search_programs.py:91
+msgid "Searching, please wait..."
+msgstr "Идёт поиск..."
+
+#: tv/programitem.py:289 tv/plugins/recordings_manager.py:1096
+#: tv/plugins/search_programs.py:106
+#, python-format
+msgid "No matches found for %s"
+msgstr "Ничего не найдено для %s"
+
+#: tv/programitem.py:294 tv/plugins/recordings_manager.py:1101
+msgid "Search failed"
+msgstr "Поиск не удался"
+
+#: tv/programitem.py:315
+msgid "Program Menu"
+msgstr "Меню программы"
+
+#: tv/programitem.py:348
+#, fuzzy
+msgid "Category : "
+msgstr "Категория : "
+
+#: tv/programitem.py:353
+msgid "Advisory : "
+msgstr ""
+
+#: tv/record_client.py:66
+#, fuzzy
+msgid "TV record server is not available"
+msgstr "Сервер записи недоступен."
+
+#: tv/favoriteitem.py:91 tv/favoriteitem.py:142
+msgid "Remove favorite"
+msgstr "Удалить из избранного"
+
+#: tv/favoriteitem.py:110 tv/plugins/manual_record.py:126
+msgid "Modify name"
+msgstr "Изменить название"
+
+#: tv/favoriteitem.py:111 tv/plugins/manual_record.py:127
+msgid "Modify channel"
+msgstr "Изменить канал"
+
+#: tv/favoriteitem.py:112
+msgid "Modify day of week"
+msgstr "Изменить день недели"
+
+#: tv/favoriteitem.py:113
+msgid "Modify time of day"
+msgstr "Изменить время дня"
+
+#: tv/favoriteitem.py:117 tv/favoriteitem.py:275
+msgid "Prevent Recording of Duplicates"
+msgstr ""
+
+#: tv/favoriteitem.py:120
+#, fuzzy
+msgid "Allow Recording of Duplicates"
+msgstr "Идёт запись %s."
+
+#: tv/favoriteitem.py:126 tv/favoriteitem.py:297
+#, fuzzy
+msgid "Record All Episodes"
+msgstr "Удалить"
+
+#: tv/favoriteitem.py:128 tv/favoriteitem.py:302
+msgid "Record Only New Episodes"
+msgstr ""
+
+#: tv/favoriteitem.py:134
+msgid "Modify priority"
+msgstr "Изменить приоритет"
+
+#: tv/favoriteitem.py:138
+msgid "Save changes"
+msgstr "Сохранить изменения"
+
+#: tv/favoriteitem.py:145
+msgid "Favorite Menu"
+msgstr "Меню избранного"
+
+#: tv/favoriteitem.py:163 tv/plugins/manual_record.py:145
+msgid "Alter Name"
+msgstr "Изменить название"
+
+#: tv/favoriteitem.py:185 tv/plugins/manual_record.py:156
+msgid "Modify Channel"
+msgstr "Изменить канал"
+
+#: tv/favoriteitem.py:204 tv/plugins/manual_record.py:174
+#: tv/plugins/manual_record.py:197 tv/plugins/manual_record.py:237
+#: tv/plugins/manual_record.py:260
+msgid "Modify Day"
+msgstr "Изменить день"
+
+#: tv/favoriteitem.py:225 tv/plugins/manual_record.py:219
+#: tv/plugins/manual_record.py:282
+msgid "Modify Time"
+msgstr "Изменить время"
+
+#: tv/favoriteitem.py:281
+msgid "Allow Recordings of Duplicates"
+msgstr ""
+
+#: tv/favoriteitem.py:320
+msgid "Saving the changes to this favorite."
+msgstr ""
+
+#: tv/favoriteitem.py:320
+msgid "This may take some time."
+msgstr ""
+
+#: tv/favoriteitem.py:347
+#, fuzzy
+msgid "Save failed, favorite was lost"
+msgstr "Ошибка сохранения, избранное утеряно"
+
+#: tv/favoriteitem.py:364
+#, python-format
+msgid "\"%s\" has been removed from favorites"
+msgstr "Удалить из избранного"
+
+#: tv/plugins/ivtv_xine_tv.py:383
+#, fuzzy, python-format
+msgid "Recording: %s"
+msgstr "Идёт запись %s."
+
+#: tv/plugins/ivtv_xine_tv.py:390
+msgid "Recording ended"
+msgstr "Запись завершена"
+
+#: tv/plugins/ivtv_xine_tv.py:468
+#, fuzzy
+msgid "Live Recording active, please repeat to stop"
+msgstr "повтор списка воспроизведения включен"
+
+#: tv/plugins/ivtv_xine_tv.py:475
+#, fuzzy
+msgid "Recording in progress!"
+msgstr "Сервер записи выключен."
+
+#: tv/plugins/ivtv_xine_tv.py:500
+#, fuzzy
+msgid "Live Recording is not enabled"
+msgstr "Сервер записи недоступен."
+
+#: tv/plugins/ivtv_xine_tv.py:504
+#, fuzzy
+msgid "Please repeat to stop"
+msgstr "повтор списка воспроизведения включен"
+
+#: tv/plugins/ivtv_xine_tv.py:773
+msgid "This plugin only supports the ivtv video group!"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:77
+msgid "Date then Name"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:78
+msgid "Status then Name"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:79
+msgid "Status, Date then Name"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:167
+#, fuzzy
+msgid "Manage Recordings"
+msgstr "Запись вручную"
+
+#: tv/plugins/recordings_manager.py:191
+#, fuzzy
+msgid "Recordings Directory does not exist"
+msgstr "каталог не существует."
+
+#: tv/plugins/recordings_manager.py:295
+msgid "Sort by"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:297
+msgid "Reverse sort"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:299
+msgid "Sort series by"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:301
+msgid "Reverse series sort"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:303
+msgid "Status order"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:430
+msgid "Unmark to Keep"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:430
+msgid "Mark to Keep"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:431
+msgid "Unmark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:431
+msgid "Mark as Watched"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:501
+msgid "(Unnamed)"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:593
+#, fuzzy
+msgid "Browse episodes"
+msgstr "Просмотр диска"
+
+#: tv/plugins/recordings_manager.py:594
+msgid "Play all episodes"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:595
+msgid "Keep all episodes"
+msgstr ""
+
+#: tv/plugins/recordings_manager.py:596
+msgid "Delete all episodes"
+msgstr "Удалить все серии"
+
+#: tv/plugins/recordings_manager.py:663
+#, fuzzy, python-format
+msgid ""
+"Do you wish to delete the series\n"
+" '%s'?"
+msgstr ""
+"Вы хотите удалить\n"
+" \"%s\"?"
+
+#: tv/plugins/recordings_manager.py:755
+msgid "episodes"
+msgstr "эпизоды"
+
+#: tv/plugins/dvbstreamer/live_pause.py:89
+msgid ""
+"'XINE_COMMAND' not defined, plugin 'DVBStreamer' deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+
+#: tv/plugins/dvbstreamer/live_pause.py:113
+msgid "'xine-ui' version too old, plugin 'xine' deactivated"
+msgstr ""
+
+#: tv/plugins/dvbstreamer/live_pause.py:114
+#, python-format
+msgid "You need software %s"
+msgstr ""
+
+#: tv/plugins/dvbstreamer/live_pause.py:553
+#: tv/plugins/dvbstreamer/vlc_live_pause.py:577
+#: tv/plugins/livepause/__init__.py:637
+#, fuzzy, python-format
+msgid "Tuning to %s"
+msgstr "Включить %s"
+
+#: tv/plugins/dvbstreamer/live_pause.py:556
+#: tv/plugins/dvbstreamer/vlc_live_pause.py:580
+#: tv/plugins/livepause/__init__.py:640
+#, python-format
+msgid "Buffering %s"
+msgstr ""
+
+#: tv/plugins/dvbstreamer/live_pause.py:560
+#: tv/plugins/dvbstreamer/vlc_live_pause.py:584
+#: tv/plugins/livepause/__init__.py:643
+msgid "Playing %s"
+msgstr "Воспроизведение %s"
+
+#: tv/plugins/dvbstreamer/vlc_live_pause.py:90
+msgid ""
+"'VLC_COMMAND' not defined, plugin 'DVBStreamer' deactivated.\n"
+"please check the vlc section in freevo_config.py"
+msgstr ""
+
+#: tv/plugins/freeboxtv.py:73
+msgid "Freebox TV"
+msgstr ""
+
+#: tv/plugins/freeboxtv.py:80
+msgid "Freebox TV :: Les chaines"
+msgstr ""
+
+#: tv/plugins/freeboxtv.py:118
+msgid "Freebox TV :: Les chaines Multiposte"
+msgstr ""
+
+#: tv/plugins/xine.py:83
+msgid ""
+"'XINE_COMMAND' not defined, 'xine' tv plugin deactivated.\n"
+"please check the xine section in freevo_config.py"
+msgstr ""
+
+#: tv/plugins/genre.py:77 tv/plugins/genre.py:117
+#, fuzzy
+msgid "TVServer not running"
+msgstr "Сервер записи включен."
+
+#: tv/plugins/categories.py:76
+#, fuzzy
+msgid "Browse Categories"
+msgstr "Просмотр каталога"
+
+#: tv/plugins/categories.py:94 tv/plugins/categories.py:174 tv/tvguide.py:68
+msgid "Preparing the program guide"
+msgstr "Загрузка программы передач"
+
+#: tv/plugins/view_line_in.py:51
+msgid "View VCR Input"
+msgstr ""
+
+#: tv/plugins/view_recordings.py:48
+msgid "Recorded Shows"
+msgstr "Записанные передачи"
+
+#: tv/plugins/livepause/players.py:286
+msgid "Enabled"
+msgstr "Включено"
+
+#: tv/plugins/livepause/display/graphics.py:148
+msgid "Current"
+msgstr "Текущий"
+
+#: tv/plugins/livepause/display/text.py:53
+msgid "Channel #: %s"
+msgstr "Канал №: %s"
+
+#: tv/plugins/livepause/__init__.py:445
+#, fuzzy
+msgid "Recording started"
+msgstr "Копирование начато"
+
+#: tv/plugins/livepause/__init__.py:449
+msgid "Recording stopped"
+msgstr "Запись остановлена"
+
+#: tv/plugins/livepause/__init__.py:455
+msgid "Out of buffer space"
+msgstr ""
+
+#: tv/plugins/livepause/__init__.py:482
+msgid "Disabled"
+msgstr "Выключено"
+
+#: tv/plugins/livepause/__init__.py:485
+msgid "Subtitles: %s"
+msgstr "Субтитры: %s"
+
+#: tv/plugins/livepause/__init__.py:487
+msgid "Subtitles not supported"
+msgstr "Субтитры не поддерживаются"
+
+#: tv/plugins/livepause/__init__.py:505
+msgid "Default"
+msgstr "По умолчанию"
+
+#: tv/plugins/livepause/__init__.py:509
+#, fuzzy, python-format
+msgid "Audio language: %s"
+msgstr "Язык аудио: %s"
+
+#: tv/plugins/livepause/__init__.py:511
+msgid "Audio language selection not supported"
+msgstr ""
+
+#: tv/plugins/manual_record.py:113
+msgid "Display record item"
+msgstr ""
+
+#: tv/plugins/manual_record.py:128
+msgid "Modify start month"
+msgstr "Изменить месяц начала"
+
+#: tv/plugins/manual_record.py:129
+msgid "Modify start day"
+msgstr "Изменить день начала"
+
+#: tv/plugins/manual_record.py:130
+msgid "Modify start time"
+msgstr "Изменить время начала"
+
+#: tv/plugins/manual_record.py:131
+msgid "Modify stop month"
+msgstr "Изменить месяц окончания"
+
+#: tv/plugins/manual_record.py:132
+msgid "Modify stop day"
+msgstr "Изменить день окончания"
+
+#: tv/plugins/manual_record.py:133
+msgid "Modify stop time"
+msgstr "Изменить время окончания"
+
+#: tv/plugins/manual_record.py:136
+msgid "Record Item Menu"
+msgstr ""
+
+#: tv/plugins/manual_record.py:342 tv/plugins/manual_record.py:374
+#: tv/plugins/manual_record.py:378 tv/plugins/manual_record.py:383
+#: tv/plugins/manual_record.py:387
+msgid "Save Failed, recording was lost"
+msgstr ""
+
+#: tv/plugins/manual_record.py:386
+msgid ""
+"Sorry, the stop time does not give enough time for scheduler to pickup the "
+"change.  Please set it to record for a few minutes longer."
+msgstr ""
+
+#: tv/plugins/scheduled_recordings.py:50
+msgid "Display Scheduled Recordings"
+msgstr "Показать расписание записи"
+
+#: tv/plugins/scheduled_recordings.py:60
+msgid "Nothing scheduled."
+msgstr "Расписание пусто."
+
+#: tv/plugins/scheduled_recordings.py:106
+#, fuzzy
+msgid "Get scheduled recordings failed"
+msgstr "Расписание записи"
+
+#: tv/plugins/view_favorites.py:63
+msgid "No favorites."
+msgstr "Нет избранного."
+
+#: tv/plugins/upsoon.py:126 tv/plugins/upsoon.py:146 tv/plugins/upsoon.py:216
+msgid "A recording will start in a few minutes"
+msgstr "Сервер записи выключен."
+
+#: tv/plugins/upsoon.py:130 share/skins/main/basic.fxd:20
+msgid "TV"
+msgstr "ТВ"
+
+#: tv/plugins/upsoon.py:254
+#, python-format
+msgid "%s stopped, a recording is about to start!"
+msgstr ""
+
+#: tv/plugins/search_programs.py:78
+#, fuzzy
+msgid "Search Programs"
+msgstr "Программа"
+
+#: tv/plugins/search_programs.py:109
+msgid "Cannot find program: %s"
+msgstr "Невозможно найти программу: %s"
+
+#: tv/tvmenu.py:65 tv/tvmenu.py:72
+#, python-format
+msgid "Could not find TV channel %s"
+msgstr "ТВ канал %s не найден"
+
+#: tv/tvmenu.py:80
+msgid "Cannot get TV plug-in"
+msgstr ""
+
+#: tv/tvmenu.py:105
+msgid "TV Main Menu"
+msgstr "Главное меню ТВ"
+
+#: tv/tvmenu.py:126
+msgid "The list of TV channels is invalid!\n"
+msgstr ""
+
+#: tv/tvmenu.py:127
+msgid "Please check the config file."
+msgstr ""
+
+#: tv/tvguide.py:73
+msgid "TV Guide is corrupt!"
+msgstr "Программа передач повреждена"
+
+#: tv/epg_xmltv.py:124
+msgid "Couldn't load the TV Guide, got an exception!"
+msgstr ""
+
+#: tv/epg_xmltv.py:209
+#, python-format
+msgid "REPLACE WITH TUNERID FOR %s"
+msgstr ""
+
+#: tv/dialogs.py:173
+#, fuzzy
+msgid "Watching"
+msgstr "Рейтинг"
+
+#: tv/dialogs.py:175
+#, fuzzy
+msgid "On Now"
+msgstr "Нет"
+
+#: tv/dialogs.py:250
+#, fuzzy
+msgid "No channel"
+msgstr "Канал"
+
+#: main.py:180
+msgid "Freevo Main Menu"
+msgstr "Главное меню Freevo"
+
+#: main.py:196
+msgid "Skin Selector"
+msgstr "Выбор темы"
+
+#: main.py:319
+#, python-format
+msgid ""
+"Event '%s' crashed\n"
+"\n"
+msgstr ""
+
+#: main.py:332
+msgid "Continue"
+msgstr "Продолжить"
+
+#: main.py:517
+#, fuzzy, python-format
+msgid "Starting Freevo-%s, please wait ..."
+msgstr "Запуск Freevo-%s, пожалуйста подождите..."
+
+#: main.py:527
+msgid "Reading cache, please wait ..."
+msgstr ""
+
+#: main.py:583
+msgid "Freevo crashed!"
+msgstr "Freevo рухнул!"
+
+#: main.py:584
+#, python-format
+msgid "Filename: %s"
+msgstr "Имя файла: %s"
+
+#: main.py:585
+#, python-format
+msgid "Lineno: %s"
+msgstr "Номер строки: %s"
+
+#: main.py:586
+#, python-format
+msgid "Function: %s"
+msgstr "Функция: %s"
+
+#: main.py:587
+#, python-format
+msgid "Text: %s"
+msgstr "Текст: %s"
+
+#: main.py:589
+msgid "Please see the logfiles for more info"
+msgstr ""
+
+#: main.py:590
+#, python-format
+msgid "Exit in %s seconds"
+msgstr "Выход через %s секунд"
+
+#: share/skins/main/dark.fxd:496 share/skins/main/Tux'n Tosh TV.fxd:673
+msgid "Just one movie in this playlist."
+msgstr "объектов в этом списке воспроизведения"
+
+#: share/skins/main/dark.fxd:770 share/skins/main/basic.fxd:414
+#: share/skins/main/blurr.fxd:717 share/skins/main/info.fxd:228
+#: share/skins/main/mediaportal.fxd:711
+msgid "kb/s"
+msgstr "кб/c"
+
+#: share/skins/main/dark.fxd:565 share/skins/main/Tux'n Tosh TV.fxd:742
+msgid "One song in playlist"
+msgstr "в списке воспроизведения нет следующего объекта"
+
+#: share/skins/main/dark.fxd:779 share/skins/main/atlantice.fxd:951
+#: share/skins/main/Tux'n Tosh TV.fxd:939 share/skins/main/basic.fxd:426
+#: share/skins/main/blurr.fxd:730 share/skins/main/geexbox.fxd:783
+#: share/skins/main/mediaportal.fxd:722
+msgid "Elapsed"
+msgstr "Время"
+
+#: share/skins/main/basic.fxd:758
+msgid "Video Rate"
+msgstr "Видео"
+
+#: share/skins/main/atlantice.fxd:281
+msgid "By"
+msgstr ""
+
+#: share/skins/main/atlantice.fxd:376 share/skins/main/Panorama.fxd:204
+#: share/skins/main/blurr.fxd:218 share/skins/main/info.fxd:314
+#: share/skins/main/geexbox.fxd:257 share/skins/main/mediaportal.fxd:220
+msgid "Subtitles"
+msgstr "Субтитры"
+
+#: share/skins/main/basic.fxd:734
+msgid "File name"
+msgstr "Имя файла: %s"
+
+#: share/skins/main/dark.fxd:501 share/skins/main/atlantice.fxd:353
+#: share/skins/main/Tux'n Tosh TV.fxd:678 share/skins/main/Panorama.fxd:182
+#: share/skins/main/blurr.fxd:195 share/skins/main/info.fxd:428
+#: share/skins/main/info.fxd:551 share/skins/main/geexbox.fxd:234
+#: share/skins/main/mediaportal.fxd:197
+msgid "This playlist is empty!"
+msgstr "Список воспроизведения пуст!"
+
+#: share/skins/main/dark.fxd:618 share/skins/main/Tux'n Tosh TV.fxd:795
+msgid "pictures in this slideshow."
+msgstr "объектов в этом списке воспроизведения"
+
+#: share/skins/main/Panorama.fxd:437 share/skins/main/blurr.fxd:451
+#: share/skins/main/info.fxd:16 share/skins/main/geexbox.fxd:543
+#: share/skins/main/mediaportal.fxd:444
+msgid "Look at Pictures"
+msgstr "Изображения"
+
+#: share/skins/main/atlantice.fxd:381 share/skins/main/Panorama.fxd:209
+#: share/skins/main/blurr.fxd:223 share/skins/main/info.fxd:318
+#: share/skins/main/geexbox.fxd:262 share/skins/main/mediaportal.fxd:225
+msgid "Chapters"
+msgstr "Главы"
+
+#: share/skins/main/dark.fxd:561 share/skins/main/Tux'n Tosh TV.fxd:738
+msgid "songs in playlist"
+msgstr "в списке воспроизведения нет следующего объекта"
+
+#: share/skins/main/basic.fxd:764
+msgid "Audio Codec"
+msgstr "Меню звука"
+
+#: share/skins/main/dark.fxd:653 share/skins/main/dark.fxd:674
+#: share/skins/main/Tux'n Tosh TV.fxd:830 TV.fxd:851
+msgid "Subject"
+msgstr ""
+
+#: share/skins/main/atlantice.fxd:345 share/skins/main/Panorama.fxd:174
+#: share/skins/main/blurr.fxd:187 share/skins/main/info.fxd:543
+#: share/skins/main/geexbox.fxd:226 share/skins/main/mediaportal.fxd:189
+msgid "Playlist"
+msgstr "Список воспроизведения"
+
+#: share/skins/main/dark.fxd:659 share/skins/main/dark.fxd:680
+#: share/skins/main/Tux'n Tosh TV.fxd:836 TV.fxd:857
+msgid "From"
+msgstr ""
+
+#: share/skins/main/crystal.fxd:318 share/skins/main/bluestar.fxd:338
+#: share/skins/main/rain.fxd:322
+msgid "Unread messages"
+msgstr "Непрочитанные сообщения"
+
+#: share/skins/main/crystal.fxd:369 share/skins/main/bluestar.fxd:389
+#: share/skins/main/rain.fxd:373
+msgid "Message has not been read"
+msgstr ""
+
+#: share/skins/main/atlantice.fxd:699 share/skins/main/Panorama.fxd:416
+#: share/skins/main/blurr.fxd:428 share/skins/main/geexbox.fxd:520
+#: share/skins/main/mediaportal.fxd:420
+msgid "Location"
+msgstr "Расположение"
+
+#: share/skins/main/crystal.fxd:11 share/skins/main/dark.fxd:24
+#: share/skins/main/Tux'n Tosh TV.fxd:24 share/skins/main/bluestar.fxd:11
+#: share/skins/main/rain.fxd:11
+msgid "Email"
+msgstr "Почта"
+
+#: share/skins/main/Panorama.fxd:734
+msgid "Hz"
+msgstr "Гц"
+
+#: share/skins/main/info.fxd:232
+msgid "Link"
+msgstr "Ссылка"
+
+#: share/skins/main/dark.fxd:623 share/skins/main/Tux'n Tosh TV.fxd:800
+msgid "Just one picture in this slideshow."
+msgstr "В этом слайдшоу только одно изображение."
+
+#: share/skins/main/basic.fxd:776
+msgid "Num Passes"
+msgstr ""
+
+#: share/skins/main/dark.fxd:646 share/skins/main/Tux'n Tosh TV.fxd:823
+msgid "Total mails"
+msgstr "Всего писем"
+
+#: share/skins/main/dark.fxd:628 share/skins/main/Tux'n Tosh TV.fxd:805
+msgid "This slideshow is empty!"
+msgstr "Список воспроизведения пуст!"
+
+#: share/skins/main/atlantice.fxd:242 share/skins/main/atlantice.fxd:339
+#: share/skins/main/atlantice.fxd:506 share/skins/main/atlantice.fxd:553
+#: share/skins/main/atlantice.fxd:673 share/skins/main/atlantice.fxd:681
+#: share/skins/main/Panorama.fxd:168 share/skins/main/Panorama.fxd:285
+#: share/skins/main/Panorama.fxd:393 share/skins/main/Panorama.fxd:400
+#: share/skins/main/blurr.fxd:181 share/skins/main/blurr.fxd:285
+#: share/skins/main/blurr.fxd:402 share/skins/main/blurr.fxd:410
+#: share/skins/main/geexbox.fxd:220 share/skins/main/geexbox.fxd:355
+#: share/skins/main/geexbox.fxd:494 share/skins/main/geexbox.fxd:502
+#: share/skins/main/mediaportal.fxd:183 share/skins/main/mediaportal.fxd:287
+#: share/skins/main/mediaportal.fxd:394 share/skins/main/mediaportal.fxd:402
+msgid "Items"
+msgstr "Объект(ов)"
+
+#: share/skins/main/info.fxd:406
+msgid "Disc ID"
+msgstr "Идентифиикатор диска"
+
+#: share/skins/main/info.fxd:350 share/skins/main/info.fxd:537
+msgid "MB free"
+msgstr "Мб свободно"
+
+#: share/skins/main/Panorama.fxd:434 share/skins/main/blurr.fxd:448
+#: share/skins/main/info.fxd:13 share/skins/main/geexbox.fxd:540
+#: share/skins/main/mediaportal.fxd:441
+msgid "Watch TV"
+msgstr "Телевидение"
+
+#: share/skins/main/atlantice.fxd:584 share/skins/main/Panorama.fxd:311
+#: share/skins/main/blurr.fxd:312 share/skins/main/info.fxd:348
+#: share/skins/main/info.fxd:535 share/skins/main/geexbox.fxd:386
+msgid "of"
+msgstr ""
+
+#: share/skins/main/dark.fxd:722 share/skins/main/Tux'n Tosh TV.fxd:902
+msgid "Now playing"
+msgstr ""
+
+#: share/skins/main/Panorama.fxd:724
+#, fuzzy
+msgid "kbps"
+msgstr "кб/c"
+
+#: share/skins/main/info.fxd:506
+msgid "Copyright"
+msgstr "Копирайт"
+
+#: share/skins/main/bluestar.fxd:12
+msgid "Pictures"
+msgstr "Изображения"
+
+#: share/skins/main/crystal.fxd:13 share/skins/main/atlantice.fxd:724
+#: share/skins/main/Panorama.fxd:439 share/skins/main/rain.fxd:13
+#: share/skins/main/blurr.fxd:453 share/skins/main/geexbox.fxd:545
+#: share/skins/main/mediaportal.fxd:446
+msgid "Weather Forecast"
+msgstr "Прогноз погоды"
+
+#: share/skins/main/dark.fxd:671 share/skins/main/Tux'n Tosh TV.fxd:848
+#, fuzzy
+msgid "New mail"
+msgstr "Новое письмо"
+
+#: share/skins/main/atlantice.fxd:349 share/skins/main/Panorama.fxd:178
+#: share/skins/main/blurr.fxd:191 share/skins/main/info.fxd:419
+#: share/skins/main/info.fxd:424 share/skins/main/info.fxd:547
+#: share/skins/main/geexbox.fxd:230 share/skins/main/mediaportal.fxd:193
+msgid "items in this playlist"
+msgstr "объектов в этом списке воспроизведения"
+
+#: share/skins/main/info.fxd:238
+msgid "Language"
+msgstr "Язык"
+
+#: share/skins/main/basic.fxd:783
+msgid "Filter"
+msgstr "Фильтр"
+
+#: share/skins/main/basic.fxd:752
+msgid "Video Codec"
+msgstr "Видео кодек"
+
+#: share/skins/main/basic.fxd:638
+msgid "Day"
+msgstr "День"
+
+#: share/skins/main/mediaportal.fxd:440
+msgid "Read Headlines"
+msgstr "Новости"
+
+#: share/skins/main/info.fxd:324
+msgid "Size"
+msgstr "Размер"
+
+#: share/skins/main/atlantice.fxd:371 share/skins/main/Panorama.fxd:199
+#: share/skins/main/blurr.fxd:213 share/skins/main/info.fxd:310
+#: share/skins/main/geexbox.fxd:252 share/skins/main/mediaportal.fxd:215
+msgid "Audio tracks"
+msgstr "Звуковые дорожки"
+
+#: share/skins/main/dark.fxd:640 share/skins/main/Tux'n Tosh TV.fxd:817
+msgid "New mails"
+msgstr "Новая почта"
+
+#: share/skins/main/basic.fxd:740
+msgid "Container"
+msgstr "Настроить"
+
+#: share/skins/main/basic.fxd:770
+msgid "Audio Rate"
+msgstr "Меню звука"
+
+#: share/skins/main/Panorama.fxd:127 share/skins/main/Panorama.fxd:129
+msgid "&quot;"
+msgstr ""
+
+#: share/skins/main/Panorama.fxd:438 share/skins/main/blurr.fxd:452
+#: share/skins/main/mediaportal.fxd:445
+msgid "Play a Game"
+msgstr "Игры"
+
+#: share/skins/main/Panorama.fxd:436 share/skins/main/blurr.fxd:450
+#: share/skins/main/info.fxd:15 share/skins/main/geexbox.fxd:542
+#: share/skins/main/mediaportal.fxd:443
+msgid "Listen to Music"
+msgstr "Музыка"
+
+#: share/skins/main/crystal.fxd:324 share/skins/main/bluestar.fxd:344
+#: share/skins/main/rain.fxd:328
+msgid "Total messages"
+msgstr "Сообщения"
+
+#: share/skins/main/Panorama.fxd:435 share/skins/main/blurr.fxd:449
+#: share/skins/main/info.fxd:14 share/skins/main/geexbox.fxd:541
+#: share/skins/main/mediaportal.fxd:442
+msgid "Watch a Movie"
+msgstr "Фильмы"
+
+#: share/skins/main/atlantice.fxd:287
+msgid "With"
+msgstr ""
+
+#: share/skins/main/dark.fxd:492 share/skins/main/Tux'n Tosh TV.fxd:669
+msgid "movies in this playlist."
+msgstr "объектов в этом списке воспроизведения"
+
+#: share/skins/main/crystal.fxd:8 share/skins/main/dark.fxd:17
+#: share/skins/main/atlantice.fxd:719 share/skins/main/Tux'n Tosh TV.fxd:17
+#: share/skins/main/bluestar.fxd:8 share/skins/main/rain.fxd:8
+msgid "Television"
+msgstr "Телевидение"
+
+#: share/skins/main/info.fxd:306
+msgid "min."
+msgstr "мин"
+
+#: share/skins/main/atlantice.fxd:299
+msgid "Country"
+msgstr "Страна"
+
+#: share/skins/main/dark.fxd:569 share/skins/main/Tux'n Tosh TV.fxd:746
+msgid "No songs in playlist"
+msgstr "В списке воспроизведения нет следующего объекта"
+
+#: share/skins/main/bluestar.fxd:13
+msgid "Weather"
+msgstr "Погода"
+
+#~ msgid "Rename %s to %s."
+#~ msgstr "Переименовать %s в %s."
+
+#~ msgid "Rename %s to %s, failed."
+#~ msgstr "Переименовать %s в %s."
+
+#, fuzzy
+#~ msgid "Listen Last FM"
+#~ msgstr "Музыка"
+
+#, fuzzy
+#~ msgid "Tuning radio station, please wait..."
+#~ msgstr "Пожалуйста Freevo-%s подождите..."
+
+#~ msgid "empty playlist"
+#~ msgstr "пустой список воспроизведения"
+
+#, fuzzy
+#~ msgid "Cache fill"
+#~ msgstr "Планирование не удалось"
+
+#~ msgid "Volume: %s%%"
+#~ msgstr "Громкость: %s%%"
+
+#, fuzzy
+#~ msgid "Humidity:"
+#~ msgstr "Влажность"
+
+#, fuzzy
+#~ msgid "Visibility:"
+#~ msgstr "Видимость"
+
+#, fuzzy
+#~ msgid "Pressure:"
+#~ msgstr "Давление"
+
+#, fuzzy
+#~ msgid "Recording started\n"
+#~ msgstr "Копирование начато"
+
+#, fuzzy
+#~ msgid "Volume: %d%%"
+#~ msgstr "Громкость: %s%%"
+
+#, fuzzy
+#~ msgid "Downloading video"
+#~ msgstr "Загрузить"
+
+#~ msgid "recording server is unavailable"
+#~ msgstr "сервер записи недоступен"
+
+#, fuzzy
+#~ msgid "findMatches failed"
+#~ msgstr "поиск %s не удался"
+
+#~ msgid "Recording server is unavailable."
+#~ msgstr "Сервер записи недоступен."
+
+#~ msgid "The recording server is down."
+#~ msgstr "Сервер записи выключен."
+
+#, fuzzy
+#~ msgid "Sorry, you cannot watch this program now. "
+#~ msgstr "Просмотр ТВ невозможен во время записи."
+
+#, fuzzy
+#~ msgid "Sorry, you cannot watch this progam now. "
+#~ msgstr "Просмотр ТВ невозможен во время записи."
+
+#, fuzzy
+#~ msgid "This program is already over."
+#~ msgstr "%i программ в расписании записи."
+
+#, fuzzy
+#~ msgid "getFavorites failed"
+#~ msgstr "Ошибка получения избранного"
+
+#~ msgid "The recordserver is down"
+#~ msgstr "Сервер записи выключен"
+
+#~ msgid "Get CDs available for ripping"
+#~ msgstr "Получить список CD пригодных для копирования"
+
+#~ msgid "AM Rain"
+#~ msgstr "Радио"
+
+#~ msgid "coming in at"
+#~ msgstr " "
+
+#~ msgid "from the"
+#~ msgstr ", направление"
+
+#~ msgid "Unable to get channel list for %s."
+#~ msgstr "Невозможно получить список каналов для %s."
+
+#, fuzzy
+#~ msgid "View Details"
+#~ msgstr "Подробности"
+
+#~ msgid "Program Search"
+#~ msgstr "Поиск программы"
+
+#, fuzzy
+#~ msgid "Testing on %s"
+#~ msgstr "Включить %s"
+
+#, fuzzy
+#~ msgid "Working on %s"
+#~ msgstr "Включить %s"
+
+#, fuzzy
+#~ msgid "Scanning recordings, be patient..."
+#~ msgstr "Чтение диска..."
+
+#~ msgid "No Xm Radio Stations found"
+#~ msgstr "Радиостанции не найдены"
+
+#~ msgid "Chapter"
+#~ msgstr "Глава"
+
+#~ msgid " free of %s GB total (%s%% free)"
+#~ msgstr "Свободно %i из %i Мб"
+
+#~ msgid "Unable to get frequency for channel %s."
+#~ msgstr "Невозможно получить частоту канала %s."

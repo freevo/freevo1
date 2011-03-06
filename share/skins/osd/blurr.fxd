@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<freevo>
+  <osds geometry="800x600" icontheme="blurr" include="base">
+    <name>Blurr</name>
+    <author email="hvogel@hennevogel.de">Henne Vogelsang</author>
+    <description>The OSD theme for Blurr, the default freevo theme</description>
+    <version>1.0</version>
+    <osd name="volume" x="0" y="0" width="800" height="600">
+      <image name="volume_bar_bg" x="0" y="555" width="800" height="45" expression="True" scale="both" align="left" valign="top" src="percent_bar_bg.png"/>
+      <percent name="volume_bar" x="150" y="555" width="500" height="45" expression="float(volume)/100.0" src="percent_bar.png" vertical="False"/>
+      <image name="volume_icon" x="5" y="565" width="30" height="30" expression="True" scale="both" align="left" valign="top" src="volume.png"/>
+      <image name="volume_icon_muted" x="5" y="565" width="30" height="30" expression="muted" scale="both" align="left" valign="top" src="volume_mute.png"/>
+      <text name="percentage" x="10" y="563" width="780" height="30" expression="'%d%%' % volume" font="menu" align="right" valign="top"/>
+    </osd>
+    <osd name="play_state" x="0" y="0" width="800" height="600">
+      <image name="idlebar" x="0" y="0" width="800" height="45" expression="True" scale="noscale" align="center" valign="top" src="idlebar.png"/>
+      <image name="play_pause_seek" x="5" y="7" width="30" height="30" expression="True" scale="both" align="left" valign="top" srcexpr="'%s.png' % state"/>
+      <image name="info_frame" x="0" y="0" width="800" height="600" expression="state == 'info'" scale="both" align="left" valign="top" src="frame.png"/>
+      <text name="info_time" x="10" y="7" width="780" height="30" expression="time" font="clock" align="right" valign="top"/>
+      <text name="info_title" x="105" y="130" width="800" height="30" expression="state == 'info' and title" font="clock" align="left" valign="top"/>
+      <text name="info_tagline" x="105" y="165" width="320" height="90" expression="state == 'info' and tagline" font="menu" align="left" valign="top"/>
+      <text name="info_year" x="132" y="295" width="293" height="30" expression="state == 'info' and year" font="menu" align="left" valign="top"/>
+      <text name="info_genre" x="121" y="315" width="304" height="30" expression="state == 'info' and genre" font="menu" align="left" valign="top"/>
+      <text name="info_rating" x="117" y="335" width="308" height="30" expression="state == 'info' and rating" font="menu" align="left" valign="top"/>
+      <text name="info_runtime" x="105" y="355" width="320" height="60" expression="state == 'info' and runtime" font="menu" align="left" valign="top"/>
+      <image name="info_cover" x="0" y="45" width="800" height="510" expression="state == 'info' and image" scale="aspect" align="right" valign="center" srcexpr="'%s' % image"/>
+      <image name="seek_bar_bg" x="0" y="555" width="800" height="45" expression="True" scale="noscale" align="center" valign="top" src="percent_bar_bg.png"/>
+      <percent name="seek_bar" x="150" y="555" width="500" height="45" expression="percent" src="percent_bar.png" vertical="False"/>
+      <text name="current_time" x="10" y="563" width="780" height="30" expression="current_time_str" font="menu" align="left" valign="top"/>
+      <text name="total_time" x="10" y="563" width="780" height="30" expression="total_time_str" font="menu" align="right" valign="top"/>
+    </osd>
+    <osd name="message" x="10" y="62" width="780" height="40">
+      <image name="Background" x="0" y="0" width="780" height="40" expression="True" scale="both" align="left" valign="top" src="message_bg.png"/>
+      <text name="Message" x="5" y="0" width="770" height="40" expression="message" font="message" align="left" valign="center" fgcolor="white"/>
+    </osd>
+    <osd name="1button" x="150" y="200" width="500" height="250">
+      <image name="Image4" x="0" y="0" width="500" height="250" expression="True" scale="noscale" align="left" valign="top" src="dialog_bg.png"/>
+      <text name="Text4" x="5" y="5" width="490" height="180" expression="message" font="message" align="center" valign="center"/>
+      <widget name="button" x="160" y="160" width="180" height="45" style="button" left="" right="" up="" down=""/>
+    </osd>
+    <osd name="2button" x="150" y="200" width="500" height="250">
+      <image name="Image5" x="0" y="0" width="500" height="250" expression="True" scale="noscale" align="left" valign="top" src="dialog_bg.png"/>
+      <text name="Text5" x="5" y="5" width="490" height="180" expression="message" font="message" align="center" valign="center"/>
+      <widget name="button1" x="30" y="160" width="180" height="45" style="button" left="button2" right="button2" up="" down=""/>
+      <widget name="button2" x="290" y="160" width="180" height="45" style="button" left="button1" right="button1" up="" down=""/>
+    </osd>
+    <osd name="3button" x="150" y="200" width="500" height="250">
+      <image name="Image6" x="0" y="0" width="500" height="250" expression="True" scale="noscale" align="left" valign="top" src="dialog_bg.png"/>
+      <text name="Text6" x="5" y="5" width="490" height="180" expression="message" font="message" align="center" valign="center"/>
+      <widget name="button1" x="30" y="160" width="140" height="45" style="button" left="button3" right="button2" up="" down=""/>
+      <widget name="button2" x="180" y="160" width="140" height="45" style="button" left="button1" right="button3" up="" down=""/>
+      <widget name="button3" x="330" y="160" width="140" height="45" style="button" left="button2" right="button1" up="" down=""/>
+    </osd>
+    <osd name="menu" x="275" y="135" width="250" height="345">
+      <image name="Image7" x="0" y="0" width="250" height="345" expression="True" scale="noscale" align="left" valign="top" src="menu_bg.png"/>
+      <text name="Text7" x="10" y="15" width="230" height="40" expression="title" font="DejaVuSans/14" align="left" valign="top"/>
+      <menu name="menu" x="10" y="65" width="230" height="260" style="menu" left="" right="" up="" down="" itemsperpage="6"/>
+    </osd>
+    <osd name="bboptionsmenu" x="584" y="265" width="216" height="275">
+      <image name="Image8" x="0" y="0" width="216" height="275" expression="True" scale="noscale" align="left" valign="top" src="bboptionsmenubg.png"/>
+      <image name="Image9" x="168" y="246" width="22" height="25" expression="menu.more_down" scale="noscale" align="left" valign="top" src="menu_down.png"/>
+      <image name="Image10" x="191" y="246" width="22" height="25" expression="menu.more_up" scale="noscale" align="left" valign="top" src="menu_up.png"/>
+      <menu name="menu" x="4" y="20" width="204" height="222" style="menu" left="" right="" up="" down="" itemsperpage="6"/>
+    </osd>
+    <widgetstyle name="button">
+      <widgetstate state="normal">
+        <image name="Image12" x="0" y="0" width="width" height="height" expression="True" scale="both" align="left" valign="top" src="button_normal_bg.png"/>
+        <image name="Image13" x="5" y="((height - 30) / 2)" width="20" height="20" expression="model.icon" scale="aspect" align="left" valign="top" srcexpr="model.icon"/>
+        <text name="Text9" x="model.icon and 30 or 5" y="5" width="model.icon and (width - 30) or (width-10)" height="height-10" expression="model.text" font="button" align="center" valign="center"/>
+      </widgetstate>
+      <widgetstate state="active">
+        <image name="Image14" x="0" y="0" width="width" height="height" expression="True" scale="both" align="left" valign="top" src="button_active_bg.png"/>
+        <image name="Image15" x="5" y="((height - 30) / 2)" width="20" height="20" expression="model.icon" scale="aspect" align="left" valign="top" srcexpr="model.icon"/>
+        <text name="Text10" x="model.icon and 30 or 5" y="5" width="model.icon and (width - 30) or (width-10)" height="height-10" expression="model.text" font="button_selected" align="center" valign="center"/>
+      </widgetstate>
+      <widgetstate state="pressed">
+        <image name="Image16" x="0" y="0" width="width" height="height" expression="True" scale="both" align="left" valign="top" src="button_pressed_bg.png"/>
+        <image name="Image17" x="5" y="((height - 30) / 2)" width="20" height="20" expression="model.icon" scale="aspect" align="left" valign="top" srcexpr="model.icon"/>
+        <text name="Text11" x="model.icon and 30 or 5" y="5" width="model.icon and (width - 30) or (width-10)" height="height-10" expression="model.text" font="button_pressed" align="center" valign="center"/>
+      </widgetstate>
+    </widgetstyle>
+    <widgetstyle name="radiobutton">
+      <widgetstate state="normal_unselected">
+        <image name="Image18" x="5" y="((height - 22) / 2)" width="22" height="22" expression="True" scale="aspect" align="left" valign="top" src="radio_unselected.png"/>
+        <text name="Text12" x="33" y="5" width="width - 33" height="height-10" expression="model.text" font="button" align="left" valign="center"/>
+      </widgetstate>
+      <widgetstate state="normal_selected">
+        <image name="Image19" x="5" y="((height - 22) / 2)" width="22" height="22" expression="True" scale="aspect" align="left" valign="top" src="radio_selected.png"/>
+        <text name="Text13" x="33" y="5" width="width - 33" height="height-10" expression="model.text" font="button" align="left" valign="center"/>
+      </widgetstate>
+      <widgetstate state="active_selected">
+        <image name="Image20" x="0" y="0" width="width" height="height" expression="True" scale="both" align="left" valign="top" src="radio_active_bg.png"/>
+        <image name="Image21" x="5" y="((height - 22) / 2)" width="22" height="22" expression="True" scale="aspect" align="left" valign="top" src="radio_selected.png"/>
+        <text name="Text14" x="33" y="5" width="width - 33" height="height-10" expression="model.text" font="button" align="left" valign="center"/>
+      </widgetstate>
+      <widgetstate state="active_unselected">
+        <image name="Image22" x="0" y="0" width="width" height="height" expression="True" scale="both" align="left" valign="top" src="radio_active_bg.png"/>
+        <image name="Image23" x="5" y="((height - 22) / 2)" width="22" height="22" expression="True" scale="aspect" align="left" valign="top" src="radio_unselected.png"/>
+        <text name="Text15" x="33" y="5" width="width - 33" height="height-10" expression="model.text" font="button" align="left" valign="center"/>
+      </widgetstate>
+    </widgetstyle>
+    <widgetstyle name="menu">
+      <widgetstate state="normal"/>
+      <widgetstate state="active"/>
+    </widgetstyle>
+    <widgetstyle name="menu_item">
+      <widgetstate state="normal">
+        <text name="Text16" x="2" y="2" width="width - 4" height="height-4" expression="model.text" font="menu" align="left" valign="center"/>
+      </widgetstate>
+      <widgetstate state="active">
+        <image name="Image24" x="0" y="0" width="width" height="height" expression="True" scale="both" align="left" valign="top" src="menu_active.png"/>
+        <text name="Text17" x="2" y="2" width="width - 4" height="height-4" expression="model.text" font="menu_selected" align="left" valign="center" fgcolor="white"/>
+      </widgetstate>
+      <widgetstate state="highlighted">
+        <image name="Image25" x="0" y="0" width="width" height="height" expression="True" scale="both" align="left" valign="top" src="menu_active.png"/>
+        <text name="Text18" x="2" y="2" width="width - 4" height="height-4" expression="model.text" font="menu_selected" align="left" valign="center" fgcolor="white"/>
+      </widgetstate>
+      <widgetstate state="pressed">
+        <image name="Image26" x="0" y="0" width="width" height="height" expression="True" scale="both" align="left" valign="top" src="menu_pressed.png"/>
+        <text name="Text19" x="2" y="2" width="width - 4" height="height-4" expression="model.text" font="menu_pressed" align="left" valign="center"/>
+      </widgetstate>
+    </widgetstyle>
+    <font label="clock" name="DejaVuSans-Bold" size="16" color="white"/>
+    <font label="message" name="DejaVuSans" size="24" color="white"/>
+    <font label="button" name="DejaVuSans" size="12" color="black"/>
+    <font label="button_selected" name="DejaVuSans-Bold" size="14" color="white"/>
+    <font label="button_pressed" name="DejaVuSans-Bold" size="14" color="black"/>
+    <font label="menu" name="DejaVuSans-Bold" size="12" color="white"/>
+    <font label="menu_selected" name="DejaVuSans-Bold" size="12" color="white"/>
+    <font label="menu_pressed" name="DejaVuSans-Bold" size="12" color="black"/>
+    <color label="white" value="255,255,255,255"/>
+    <color label="gray" value="96,96,96,255"/>
+    <color label="black" value="0,0,0,255"/>
+    <color label="transparent" value="0,0,0,0"/>
+    <osd name="channel_banner" x="0" y="0" width="800" height="100">
+      <image name="Background" x="0" y="0" width="800" height="100" expression="True" scale="both" align="left" valign="top" src="details_bg.png"/>
+      <image name="Channel Logo" x="10" y="12" width="100" height="75" expression="True" scale="aspect" align="left" valign="top" srcexpr="channel_logo"/>
+      <text name="Channel Number" x="130" y="30" width="60" height="40" expression="channel_number" font="message" align="right" valign="center"/>
+      <text name="Channel Name" x="200" y="30" width="330" height="40" expression="channel_name" font="message" align="left" valign="center"/>
+      <text name="Time" x="540" y="10" width="250" height="80" expression="strftime('%x\n%H:%M', time)" font="message" align="right" valign="center"/>
+    </osd>
+    <osd name="progress" x="150" y="200" width="500" height="250">
+      <image name="Image4" x="0" y="0" width="500" height="250" expression="True" scale="noscale" align="left" valign="top" src="dialog_bg.png"/>
+      <text name="Text4" x="5" y="5" width="490" height="80" expression="message" font="message" align="center" valign="center"/>
+      <percent name="progress" x="10" y="99" width="480" height="25" expression="progress_percent" src="percent_bar.png" vertical="False"/>
+      <text name="Text1" x="10" y="100" width="480" height="25" expression="progress_text" font="message" align="center" valign="center" fgcolor="white"/>
+      <image name="Image2" x="200" y="140" width="100" height="100" expression="indeterminate" scale="aspect" align="left" valign="top" srcexpr="'misc/osd_busy%02d' % (counter % 12)"/>
+    </osd>
+    <osd name="status" x="25" y="490" width="750" height="40">
+      <image name="Background" x="0" y="0" width="750" height="40" expression="True" scale="both" align="left" valign="top" src="message_bg.png"/>
+      <text name="Message" x="5" y="0" width="740" height="40" expression="message" font="message" align="left" valign="center"/>
+    </osd>
+    <osd name="shutdown" x="150" y="200" width="500" height="300">
+      <image name="background" x="0" y="0" width="500" height="300" expression="True" scale="both" align="left" valign="top" src="dialog_bg.png"/>
+      <text name="text" x="20" y="20" width="460" height="50" expression="message" font="message" align="center" valign="center"/>
+      <widget name="exit" x="30" y="86" width="128" height="128" style="shutdown_button" left="cancel" right="reboot" up="cancel" down="cancel"/>
+      <widget name="reboot" x="186" y="86" width="128" height="128" style="shutdown_button" left="exit" right="shutdown" up="cancel" down="cancel"/>
+      <widget name="shutdown" x="342" y="86" width="128" height="128" style="shutdown_button" left="reboot" right="cancel" up="cancel" down="cancel"/>
+      <image name="exit" x="30" y="86" width="128" height="128" expression="True" scale="noscale" align="left" valign="top" src="application-exit"/>
+      <image name="reboot" x="186" y="86" width="128" height="128" expression="True" scale="noscale" align="left" valign="top" src="system-reboot"/>
+      <image name="shutdown" x="342" y="86" width="128" height="128" expression="True" scale="noscale" align="left" valign="top" src="system-shutdown"/>
+      <widget name="cancel" x="150" y="225" width="200" height="50" style="button" left="exit" right="shutdown" up="reboot" down="reboot"/>
+    </osd>
+    <widgetstyle name="shutdown_button">
+      <widgetstate state="normal"/>
+      <widgetstate state="active">
+        <image name="Image1" x="0" y="0" width="width" height="height" expression="True" scale="noscale" align="left" valign="top" src="selected-128x128.png"/>
+      </widgetstate>
+      <widgetstate state="disabled"/>
+      <widgetstate state="pressed"/>
+    </widgetstyle>
+  </osds>
+</freevo>
