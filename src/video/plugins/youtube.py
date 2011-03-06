@@ -376,6 +376,7 @@ class YoutubeRequestHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'application/octet-stream')
             self.end_headers()
+            self.request.settimeout(None)
             more_data = True
             try:
                 while more_data:
