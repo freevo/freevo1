@@ -201,8 +201,6 @@ class RecordingsDirectory(Item):
             dialog.show_alert(_('Recordings Directory does not exist'))
             return
 
-        disk_manager.update_recordings()
-        
         items = segregated_recordings
         items.sort(lambda l, o: cmp(o.sort(sorting).upper(), l.sort(sorting).upper()))
         map(lambda x: x.update_info(), items)
@@ -647,8 +645,6 @@ class Series(Item):
         """
         Browse the recorded programs in a series.
         """
-        disk_manager.update_recordings()
-
         if arg == 'update':
             # series has been deleted!
             if not self.items:
@@ -989,21 +985,21 @@ class DiskManager(plugin.DaemonPlugin):
                 # promoted to the top level list. If we don't do this the item
                 # keeps the episode title not the series title.
                 rpitem.name = rpitem.video_item.name
-                try:
-                    if hasattr(rpitem, 'mtime') and  vfs.mtime(rpitem.files.fxd_file) > rpitem.mtime:
+                rpitems.append(rpitem)
+                if hasattr(rpitem, 'mtime'):
+                    if vfs.mtime(rpitem.files.fxd_file) > rpitem.mtime:
                         new_rpitem = fxditem.mimetype.get(self.recordings_dir_item, [rpitem.files.fxd_file])[0]
-                        rpitem.update_item(new_rpitem.name, new_rpitem)
-                        rpitem.mtime = vfs.mtime(new_rpitem.files.fxd_file)
-                        rpitem.dirty = True
-                    rpitems.append(rpitem)
-                except:
-                    pass
-        
+                        if rpitem in rpitems:
+                            loc = rpitems.index(rpitem)
+                            rpitems[loc].update_item(new_rpitem.name, new_rpitem)
+                            rpitems[loc].mtime = vfs.mtime(new_rpitem.files.fxd_file)
+                            rpitems[loc].dirty = True
+
         # Parse only the added files.
         parse_time = time.time()
         added_recordings = fxditem.mimetype.get(self.recordings_dir_item, added_files)
         parse_time = time.time() - parse_time
-        
+
         rpitem_time = time.time()
 
         # Add the new recordings

@@ -34,8 +34,6 @@ import config
 import plugin
 import util
 
-from kaa import ThreadCallable
-
 import dialog
 from dialog.dialogs import ProgressDialog
 from skin.widgets import TextEntryScreen
@@ -107,36 +105,26 @@ class PluginInterface(plugin.ItemPlugin):
                    self.delete_image, proceed_text=_('Delete image'))
 
 
-    def safe_unlink(self, *filenames):
-        for filename in filenames:
-            try:
-                os.unlink(filename)
-            except Exception, why:
-                print 'can\'t delete %r: %s' % (filename, why)
+    def safe_unlink(self, filename):
+        try:
+            os.unlink(filename)
+        except Exception, why:
+            print 'can\'t delete %r: %s' % (filename, why)
 
 
     def delete_file(self):
         dialog = ProgressDialog(_('Deleting...'), indeterminate=True)
         dialog.show()
-        dir_name = os.path.dirname(self.item.files.fxd_file)
-        ThreadCallable(self.item.files.delete)().wait()
+        self.item.files.delete()
         dialog.hide()
-        # Touch the directory to ensure we pick up all the files being deleted.
-        print self.item.files.fxd_file
-        os.utime(dir_name, None)
         if self.menuw:
             self.menuw.delete_submenu(True, True)
 
 
     def delete_info(self):
-        dialog = ProgressDialog(_('Deleting info...'), indeterminate=True)
-        dialog.show()
-        ThreadCallable(self.safe_unlink)(self.item.files.image,
-                                         self.item.files.edl_file,
-                                         self.item.files.fxd_file).wait()
-        dialog.hide()
-        # Touch the directory to ensure we pick up all the files being deleted.
-        os.utime(os.path.dirname(self.item.files.fxd_file), None)
+        self.safe_unlink(self.item.files.image)
+        self.safe_unlink(self.item.files.edl_file)
+        self.safe_unlink(self.item.files.fxd_file)
         if self.menuw:
             self.menuw.delete_submenu(True, True)
 
