@@ -42,16 +42,12 @@ import config
 
 wire_format = struct.Struct('d30p')
 
-# Put stdout in non-blocking mode
-flag = fcntl.fcntl(sys.__stderr__, fcntl.F_GETFL)
-fcntl.fcntl(sys.__stderr__, fcntl.F_SETFL, flag | os.O_NDELAY)
 
 def post_key(key):
     """
     Send key to main process.
     """
-    sys.__stderr__.write(wire_format.pack(time.time(), key))
-    sys.__stderr__.flush()
+    os.write(fd, wire_format.pack(time.time(), key))
 
 
 class Lirc:
@@ -231,6 +227,18 @@ def handle_stdin():
 
     elif cmd == 'quit':
         sys.exit(0)
+
+
+if len(sys.argv) < 2:
+    self.stderr.write('No fd specified!')
+    sys.exit(1)
+
+fd = int(sys.argv[1])
+_debug_('Using pipe fd %d' % fd)
+
+# Put fd in non-blocking mode
+flag = fcntl.fcntl(fd, fcntl.F_GETFL)
+fcntl.fcntl(fd, fcntl.F_SETFL, flag | os.O_NDELAY)
 
 
 inputs = [Lirc()]

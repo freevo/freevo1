@@ -184,21 +184,22 @@ class InputHelper:
         import struct
         import subprocess
         import sys
-
+        self.pipe = os.pipe()
         self.wire_format = struct.Struct('d30p')
 
-        self.input = subprocess.Popen([sys.executable, os.path.join(os.environ['FREEVO_HELPERS'],'inputhelper.py')],
-                                stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+        self.input = subprocess.Popen([sys.executable, os.path.join(os.environ['FREEVO_HELPERS'],'inputhelper.py'),
+                                       str(self.pipe[1])],
+                                        stdin=subprocess.PIPE)
 
         self.monitor = kaa.IOMonitor(self._handle_input)
-        self.monitor.register(self.input.stderr)
+        self.monitor.register(self.pipe[0])
 
 
     def _handle_input(self):
         """
         Handle input events from input helper over stderr
         """
-        data = self.input.stderr.read(self.wire_format.size)
+        data = os.read(self.pipe[0], self.wire_format.size)
         t, key = self.wire_format.unpack(data)
         if time.time() - t < 0.5:
             self.rc.post_key(key)
