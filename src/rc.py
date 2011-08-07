@@ -208,7 +208,10 @@ class InputHelper:
         """
         Send a command to the input helper
         """
-        self.input.stdin.write(cmd + '\n')
+        try:
+            self.input.stdin.write(cmd + '\n')
+        except:
+            pass
 
     def suspend(self):
         """
@@ -229,6 +232,7 @@ class InputHelper:
         Shutdown the helper
         """
         self.__send_cmd('quit')
+        self.input.wait()
 
 # --------------------------------------------------------------------------------
 
