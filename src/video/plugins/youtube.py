@@ -215,11 +215,11 @@ class YoutubeVideoItem(VideoItem):
 
     def __init__(self, video, id, parent):
         VideoItem.__init__(self, 'http://localhost:%d/%s' % (YOUTUBE_WEB_PORT, id), parent)
-        self.name = video.title.text
+        self.name = unicode(video.title.text)
         if video.content.type == "text" and video.content.text:
-            self.description = video.content.text
+            self.description = unicode(video.content.text)
         elif video.content.type == "html":
-            text = util.htmlenties2txt(video.content.text)
+            text = util.htmlenties2txt(unicode(video.content.text), 'unicode')
             match = re.search('<span>([^\<]*)<', text)
             if match:
                 self.description = decodeAcute(match.group(1))
