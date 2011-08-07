@@ -495,7 +495,6 @@ class DirItem(Playlist):
         browse directory
         """
         _debug_('cwd(arg=%r, menuw=%r)' % (arg, menuw), 2)
-        print('cwd(arg=%r, menuw=%r)' % (arg, menuw))
         self.check_password_and_build(arg=None, menuw=menuw)
 
 
