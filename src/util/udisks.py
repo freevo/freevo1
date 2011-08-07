@@ -51,7 +51,6 @@ class DBusDisksProxy(object):
         """
         optical = []
         for device_path in self.disks_iface.EnumerateDevices():
-            device_proxy = bus.get_object(self.BUS, device_path)
             device = self.DEVICE_CLASS(device_path)
             if device.is_optical():
                 optical.append(device)
@@ -64,7 +63,6 @@ class DBusDisksProxy(object):
         """
         removable = []
         for device_path in self.disks_iface.EnumerateDevices():
-            device_proxy = bus.get_object(self.BUS, device_path)
             device = self.DEVICE_CLASS(device_path)
             if device.is_removable() and not device.is_optical():
                 removable.append(device)
