@@ -37,6 +37,8 @@ Todo:
     3. Better (and more) LCD screens.
 """
 
+import string
+
 from menu import MenuItem
 import copy
 import time
@@ -45,6 +47,12 @@ from event import *
 import config
 import util
 from util.tv_util import get_chan_displayname
+
+if config.LCD_REMAP_TO_ASCII:
+    try:
+        from unidecode import unidecode
+    except:
+        _debug_(String(_('ERROR')+': '+_('You need unidecode to run "lcd" plugin.')), 2)
 
 try:
     import pylcd
@@ -423,33 +431,33 @@ layouts = {
                 'title'      : ('title', '1 1 Freevo', None)
             },
             'menu'           : {
-                'title_v'    : ('scroller', '1 1 %d 1 m 8 "%s%s"',
-                    '(self.width, menu.heading, self.get_sepstrmscroll(menu.heading))'),
-                'item_v'     : ('scroller', '1 2 %d 2 m 8 "%s%s"',
-                    '(self.width, title, self.get_sepstrmscroll(title))')
+                'title_v'    : ('scroller', '1 1 %d 1 m 2 "%s%s"',
+                    '(self.width, remap(menu.heading), self.get_sepstrmscroll(menu.heading))'),
+                'item_v'     : ('scroller', '1 2 %d 2 m 2 "%s%s"',
+                    '(self.width, remap(title), self.get_sepstrmscroll(title))')
             },
             'audio_player'   : {
-                'music_v'    : ('scroller', '1 1 %d 1 m 8 "%s%s"',
-                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'music_v'    : ('scroller', '1 1 %d 1 m 2 "%s%s"',
+                    '(self.width, remap(title), self.get_sepstrmscroll(title))'),
                 'time_v1'    : ('string', '2 2 "% 2d:%02d/"', '(int(player.length / 60), int(player.length % 60))'),
                 'time_v2'    : ('string', '8 2 "% 2d:%02d"', '(int(player.elapsed / 60), int(player.elapsed % 60))'),
                 'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
             },
             'video_player'   : {
-                'video_v'    : ('scroller', '1 1 %d 1 m 8 "%s%s"',
-                    '(self.width, title, self.get_sepstrmscroll(title))'),
+                'video_v'    : ('scroller', '1 1 %d 1 m 2 "%s%s"',
+                    '(self.width, remap(title), self.get_sepstrmscroll(title))'),
                 'time_v2'    : ('string', '2 2 "%s"', '(elapsed)'),
                 'time_v3'    : ('string', '11 2 "(%2d%%)"', '(int(percentage * 100))'),
                 'animation_v': ('string', '1 2 "%s"',
                     'self.animation_audioplayer_chars[player.elapsed % len(self.animation_audioplayer_chars)]')
             },
             'tv'             : {
-                'chan_v'     : ('scroller', '1 1 %d 1 m 8 "%s%s"',
-                    '(self.width, get_chan_displayname(tv.channel_id), '+
+                'chan_v'     : ('scroller', '1 1 %d 1 m 2 "%s%s"',
+                    '(self.width, remap(get_chan_displayname(tv.channel_id)), '+
                     'self.get_sepstrmscroll(get_chan_displayname(tv.channel_id)))'),
-                'prog_v'     : ('scroller', '1 2 %d 2 m 8 "%s%s"',
-                    '(self.width, tv.title, self.get_sepstrmscroll(tv.title))')
+                'prog_v'     : ('scroller', '1 2 %d 2 m 2 "%s%s"',
+                    '(self.width, remap(tv.title), self.get_sepstrmscroll(tv.title))')
             }
         }, # 2 lines, 16 chars per line
 
@@ -501,6 +509,23 @@ poll_widgets = {
     },
 }
 
+def remap(data):
+    _debug_('remap(data=%r)' % (data), 2)
+    
+    try:
+        # first we remap all non-ASCII chars to ASCII
+        if config.LCD_REMAP_TO_ASCII:
+            data = unidecode(data)    
+        
+        # now we replace double quotes with single ones, 
+        # double quotes confuse LCDd
+        data = data.replace('\"', '\'').strip()
+
+    except UnicodeDecodeError, error:
+        _debug_('%s' % error, DWARNING)
+
+    return data
+  
 
 def get_lengthsecs(slen):
     _debug_('get_lengthsecs(slen=%r)' % (slen,), 2)

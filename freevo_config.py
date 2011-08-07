@@ -1359,6 +1359,23 @@ SKIN_USE_PAGE_TRANSITIONS = False
 SKIN_GUIDE_SHOW_NOW_LINE = True
 
 # ======================================================================
+# Freevo LCD Plugin settings:
+# ======================================================================
+#
+# This will remap all non-ASCII chars to plain ASCII. Some international, non-ASCII
+# characters confuse some VFDs and LCDs, notably 16x2 iMON VFD will crash.
+# Some attemt to remap such chars is done badly in pylcd, but it does so only with 
+# some western chars, like nordic or german umlauts.
+# you will neen unidecode python package. Download it from:
+# http://pypi.python.org/pypi/Unidecode/0.04.1 (get latest version)
+# 
+# Another thing that this will do is to remap double quotes to single ones.
+# These too seem to confuse iMON VFD.
+#
+LCD_REMAP_TO_ASCII = False
+
+
+# ======================================================================
 # Freevo OSD settings:
 # ======================================================================
 
