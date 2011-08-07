@@ -35,6 +35,7 @@ except:
 import time
 import datetime
 import urllib
+import config
 
 class Trailer:
     def __init__(self, element):
@@ -85,12 +86,36 @@ class Trailer:
 
             elif ch.tag == 'releasedate':
                 if ch.text is not None:
-                    t = time.strptime(ch.text, '%Y-%m-%d')
+
+                    t = None
+                    date = config.APPLETRAILERS_DATE_FORMAT
+                    try:
+                        t = time.strptime(ch.text, date)
+                    except ValueError:
+                        date = config.APPLETRAILERS_ALT_DATE_FORMAT
+                    try:
+                        t = time.strptime(ch.text, date)
+                    except ValueError:
+                        traceback.print_exc()
+                        return
+
                     self.release_date = datetime.date(t.tm_year, t.tm_mon, t.tm_mday)
 
             elif ch.tag == 'postdate':
                 if ch.text is not None:
-                    t = time.strptime(ch.text, '%Y-%m-%d')
+
+                    t = None
+                    date = config.APPLETRAILERS_DATE_FORMAT
+                    try:
+                        t = time.strptime(ch.text, date)
+                    except ValueError:
+                        date = config.APPLETRAILERS_ALT_DATE_FORMAT
+                    try:
+                        t = time.strptime(ch.text, date)
+                    except ValueError:
+                        traceback.print_exc()
+                        return
+
                     self.post_date = datetime.date(t.tm_year, t.tm_mon, t.tm_mday)
 
     def __parse_cast(self, element):
@@ -195,7 +220,7 @@ class Trailers:
         return False
 
 if __name__ == '__main__':
-    a = Trailers('720p')
+    a = Trailers(config.APPLETRAILERS_RESOLUTION)
     for studio,trailers in a.studios.items():
         print '[Studio] %s' % studio
         for t in trailers:
@@ -225,3 +250,4 @@ if __name__ == '__main__':
         print '[Date] %s' % date.isoformat()
         for t in trailers:
             print '\t%s' % t.title
+            

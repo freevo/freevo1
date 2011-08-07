@@ -91,8 +91,11 @@ class PluginInterface(plugin.MainMenuPlugin):
                  '',
                  'Selects the resolution of the trailers, options are \'\'(Default) for 640p, \'480p\' and \'720p\'' ),
                  ('APPLETRAILERS_DATE_FORMAT',
+                 '%Y-%m-%d',
+                 'How to format the release date of a film'),
+                 ('APPLETRAILERS_ALT_DATE_FORMAT',
                  '%y-%m-%d',
-                 'How to format the release date of a film')]
+                 'Alternate date format, some trailes have this format date')]
 
     def items(self, parent):
         return [ BrowseMainMenu(parent) ]
@@ -201,19 +204,23 @@ class BrowseMainMenu(Item):
 
     def download_trailers(self):
         pfile = os.path.join(cachedir, 'trailers.pickle')
+
         if os.path.isfile(pfile):
             self.trailers = util.fileops.read_pickle(pfile)
+            _debug_('Cache file present %s' % pfile, 2)
             s = os.stat(pfile)
             if self.trailers.resolution == config.APPLETRAILERS_RESOLUTION or  \
               (time.time() - s.st_mtime) > (60*60): # Over an hour ago
+                _debug_('Resolution changed or cache expired, updating feed ...', 2)
                 self.trailers.update_feed()        
             else:
+                _debug_('Cache invalid, updating ...', 2)
                 self.trailers = None
         else:
             old_posters = set()
 
-
         if self.trailers is None:
+            _debug_('Downloading trailers ...', 2)
             self.trailers = applelib.Trailers(config.APPLETRAILERS_RESOLUTION)
             util.fileops.save_pickle(self.trailers, pfile)
 
