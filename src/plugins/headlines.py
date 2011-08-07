@@ -185,7 +185,7 @@ class HeadlinesSiteItem(Item):
             description = description.replace('<p>', '\n').replace('<br/>', '\n')
             description = description + '\n \n \nLink: ' + link
             description = unicode(BeautifulStoneSoup(description, convertEntities=BeautifulStoneSoup.HTML_ENTITIES))
-            description = util.htmlenties2txt(description)
+            description = util.htmlenties2txt(description, 'unicode')
 
             mi.description = re.sub('<.*?>', '', description)
 
