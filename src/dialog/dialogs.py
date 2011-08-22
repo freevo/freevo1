@@ -232,6 +232,7 @@ class InputDialog(Dialog):
         self.event_context = 'input'
 
     def eventhandler(self, event):
+        print event
         if event in ('STOP', 'INPUT_EXIT'):
             self.hide()
             return True
@@ -305,7 +306,7 @@ class VolumeDialog(Dialog):
                 'channel_name': self.channel_name
                 }
 
-class PlayStateDialog(Dialog):
+class PlayStateDialog(InputDialog):
     """
     Low priority dialog to display play state and time information.
     """
@@ -328,7 +329,7 @@ class PlayStateDialog(Dialog):
         will return a tuple of elapsed time, total time and percent through the file.
         Both total time and percent position are optional.
         """
-	super(PlayStateDialog, self).__init__('play_state', 3.0)
+	super(PlayStateDialog, self).__init__('play_state', 60.0)
         self.priority = Dialog.LOW_PRIORITY
         self.state = state
         self.item = item

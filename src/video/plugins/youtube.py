@@ -72,6 +72,7 @@ from stat import *
 
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import threading
+import util.httpserver
 
 from skin.widgets import TextEntryScreen
 from video.videoitem import VideoItem
@@ -81,6 +82,7 @@ from gui.PopupBox import PopupBox
 import osd
 
 osd  = osd.get_singleton()
+local_server = util.httpserver.get_local_server()
 
 standardfeeds = [
     'top_rated', 'top_favorites', 'most_viewed', 'most_popular',
@@ -112,7 +114,7 @@ except ImportError:
     except ImportError:
         from elementtree import ElementTree
 
-YOUTUBE_WEB_PORT=0
+RE_VIDEO_ID=re.compile('.+watch\?v=([^&]+)')
 
 
 class PluginInterface(plugin.MainMenuPlugin):
@@ -156,33 +158,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         if not os.path.isdir(config.YOUTUBE_DIR):
             os.mkdir(config.YOUTUBE_DIR, S_IMODE(os.stat(config.FREEVO_CACHEDIR)[ST_MODE]))
 
-        self.http_server = HTTPServer(('', 0), YoutubeRequestHandler)
-
-        global YOUTUBE_WEB_PORT
-        YOUTUBE_WEB_PORT = self.http_server.server_address[1]
-
-        self.stop = False
-        thread = threading.Thread(target=self.serve_forever)
-        thread.setDaemon(True)
-        thread.start()
-
-
-
-    def serve_forever(self):
-        """
-        Start HTTP server and wait for connections.
-        """
-        while not self.stop:
-            try:
-                self.http_server.handle_request()
-            except:
-                traceback.print_exc()
-
-
-    def shutdown(self):
-        self.stop = True
-        self.http_server.socket.close()
-
+        local_server.register_handler(r'/youtube/(.+)$', get_youtube_handler)
 
     def config(self):
         """returns the config variables used by this plugin"""
@@ -214,7 +190,7 @@ class YoutubeVideoItem(VideoItem):
     """Create a VideoItem for play"""
 
     def __init__(self, video, id, parent):
-        VideoItem.__init__(self, 'http://localhost:%d/%s' % (YOUTUBE_WEB_PORT, id), parent)
+        VideoItem.__init__(self, local_server.get_url('/youtube/%s' % id), parent)
         self.name = unicode(video.title.text)
         if video.content.type == "text" and video.content.text:
             self.description = unicode(video.content.text)
@@ -267,13 +243,15 @@ class YoutubeVideoMenu(menu.Menu):
 
     def append_items(self, gfeed):
         for video in gfeed.entry:
-            if video.link[1].href.find('watch?v=') >= 0:
-                id = video.link[1].href.split('watch?v=');
-            elif video.link[0].href.find('watch?v=') >= 0:
-                id = video.link[0].href.split('watch?v=');
-            else:
+            id = None
+            for link in (video.link[1], video.link[0]):
+                m = RE_VIDEO_ID.match(link.href)
+                if  m is not None:
+                    id = m.group(1)
+
+            if id is None:
                 continue
-            mi = YoutubeVideoItem(video, id[1], self.parent)
+            mi = YoutubeVideoItem(video, id, self.parent)
             self.choices.append(mi)
 
 
@@ -362,45 +340,42 @@ class YoutubeVideo(Item):
 #-------------------------------------------------------------------------------
 # HTTP Server
 #-------------------------------------------------------------------------------
-class YoutubeRequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        id = self.path[1:]
-        cmd = [config.YOUTUBE_DL, '-o', '-', "http://www.youtube.com/watch?v=%s" % id]
-        if config.YOUTUBE_FORMAT:
-            cmd += ['-f', config.YOUTUBE_FORMAT]
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        if process:
-            thread = threading.Thread(target=self.output, args=(process.stderr,))
-            thread.setName('youtube-dl-stderr')
-            thread.start()
-            self.send_response(200)
-            self.send_header('Content-type', 'application/octet-stream')
-            self.end_headers()
-            self.request.settimeout(None)
-            more_data = True
-            try:
-                while more_data:
-                    data = process.stdout.read(2048)
-                    if data:
-                        self.wfile.write(data)
-                    else:
-                        more_data = False
-            except:
-                os.kill(process.pid, 15)
-        else:
-            self.send_error(500, 'Failed to start youtube-dl')
+def get_youtube_handler(request, ytid):
+    cmd = [config.YOUTUBE_DL, '-o', '-', "http://www.youtube.com/watch?v=%s" % ytid]
+    if config.YOUTUBE_FORMAT:
+        cmd += ['-f', config.YOUTUBE_FORMAT]
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if process:
+        def output(out):
+            buf = 'a'
+            line = ''
+            while buf:
+                buf = out.read(1)
+                if buf =='\n' or buf == '\r':
+                    _debug_('DOWNLOAD: %r' % line)
+                    line = ''
+                else:
+                    line += buf
 
-    def log_message(self, format, *args):
-        _debug_(format % args, 2)
+        thread = threading.Thread(target=output, args=(process.stderr,))
+        thread.setName('youtube-dl-stderr')
+        thread.start()
+        request.send_response(200)
+        request.send_header('Content-type', 'application/octet-stream')
+        request.end_headers()
+        request.request.settimeout(None)
+        more_data = True
+        try:
+            while more_data:
+                data = process.stdout.read(2048)
+                if data:
+                    request.wfile.write(data)
+                else:
+                    more_data = False
+        except:
+            os.kill(process.pid, 15)
+    else:
+        request.send_error(500, 'Failed to start youtube-dl')
 
-    def output(self, out):
-        buf = 'a'
-        line = ''
-        while buf:
-            buf = out.read(1)
-            if buf =='\n' or buf == '\r':
-                _debug_('DOWNLOAD: %r' % line)
-                line = ''
-            else:
-                line += buf
+
 
