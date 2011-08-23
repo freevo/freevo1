@@ -306,7 +306,7 @@ class VolumeDialog(Dialog):
                 'channel_name': self.channel_name
                 }
 
-class PlayStateDialog(InputDialog):
+class PlayStateDialog(Dialog):
     """
     Low priority dialog to display play state and time information.
     """
@@ -329,7 +329,7 @@ class PlayStateDialog(InputDialog):
         will return a tuple of elapsed time, total time and percent through the file.
         Both total time and percent position are optional.
         """
-	super(PlayStateDialog, self).__init__('play_state', 60.0)
+        super(PlayStateDialog, self).__init__('play_state', 10.0)
         self.priority = Dialog.LOW_PRIORITY
         self.state = state
         self.item = item
@@ -396,12 +396,12 @@ class PlayStateDialog(InputDialog):
                 attr['tagline'] = None
 
             attr['image'] = self.item.image
-	    # Skip thumbnails
-	    if attr['image'] and attr['image'].endswith('.raw'):
-		attr['image'] = None
+            # Skip thumbnails
+            if attr['image'] and attr['image'].endswith('.raw'):
+                attr['image'] = None
             if not attr['image']:
-		attr['image'] = self.item.parent.image
-	    if not attr['image']:	
+                attr['image'] = self.item.parent.image
+            if not attr['image']:
                 attr['image'] = "nocover.png" 
             _debug_('Cover image for %s is %s' % (self.item.filename, attr['image']))
 
