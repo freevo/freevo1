@@ -225,12 +225,12 @@ def handle_stdin():
             if hasattr(i, 'resume'):
                 i.resume()
 
-    elif cmd == 'quit':
+    elif cmd == 'quit' or cmd == '':
         sys.exit(0)
 
 
 if len(sys.argv) < 2:
-    self.stderr.write('No fd specified!')
+    sys.stderr.write('No fd specified!')
     sys.exit(1)
 
 fd = int(sys.argv[1])
