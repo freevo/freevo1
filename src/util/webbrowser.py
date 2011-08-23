@@ -32,6 +32,7 @@ import config
 
 import json
 import threading
+import os.path
 
 from kaa.process import Process
 
@@ -41,54 +42,7 @@ from util.httpserver import get_local_server, LongPollHandler
 JSON_MIMETYPE= 'application/json'
 JS_MIMETYPE = 'application/javascript'
 
-INITIAL_HTML="""
-<html>
-<head>
-<title>Freevo</title>
-<script type="text/javascript">
-window.resizeTo(%d, %d);
-window.moveTo(%d,%d);
-</script>
-</head>
-<body style="background-color: black;">
-<script type="text/javascript">
-window.location = "%s";
-</script>
-</body>
-</html>
-"""
-
-
-IPC_JS = """
-      function sendEvent(event, data){
-          send('event', {'event':event, 'data':data});
-      }
-
-      function send(cmd, data){
-          var args = { 'cmd': cmd, 'data': data};
-          var xhr = new XMLHttpRequest();
-          xhr.open('POST', '/freevo/ipc', true);
-          xhr.send(JSON.stringify(args));
-      }
-
-      function poll(){
-          var xhr = new XMLHttpRequest();
-          xhr.open('GET', '/freevo/ipc', true);
-          xhr.timeout = 50000;
-          xhr.onreadystatechange = function () {
-              if ((this.readyState == 3 || this.readyState == 4) && this.status == 200) {
-                  var args = JSON.parse(this.responseText);
-                  var r = eval(args['cmd']);
-                  send('return', r);
-                  poll();
-              }
-          };
-          xhr.ontimeout = poll;
-          xhr.send();
-      }
-
-      window.onload = poll;
-"""
+HTML_DIR = os.path.join(config.SHARE_DIR, 'html')
 
 _initial_url = None
 
@@ -132,7 +86,9 @@ class WebIPC(object):
         request.send_response(200)
         request.send_header('content-type', JS_MIMETYPE)
         request.end_headers()
-        request.wfile.write(IPC_JS)
+        f = open(os.path.join(HTML_DIR, 'ipc.js'))
+        request.wfile.write(f.read())
+        f.close()
 
 
     def __send_handler(self, request):
@@ -167,7 +123,8 @@ class WebIPC(object):
     def __calljs(self, js):
         self.return_pending = True
         self.lphandler.append(json.dumps({'cmd':js}))
-        self.return_event.wait()
+        self.return_event.wait(10.0)
+        self.return_event.clear()
         return self.return_result
 
 
@@ -196,7 +153,10 @@ class JSObject(object):
 
 
 def _get_initial_HTML(request):
-    html =  INITIAL_HTML % (config.CONF.width, config.CONF.height, config.CONF.x, config.CONF.y, _initial_url)
+    f = open(os.path.join(HTML_DIR, 'wbinitial.html'))
+    initial_html = f.read()
+    f.close()
+    html =  initial_html % (config.CONF.width, config.CONF.height, config.CONF.x, config.CONF.y, _initial_url)
     request.send_response(200)
     request.send_header('content-type', 'text/html')
     request.send_header('content-length', str(len(html)))

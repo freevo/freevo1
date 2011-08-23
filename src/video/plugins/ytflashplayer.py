@@ -83,9 +83,6 @@ class YTFlashPlayer:
         self.local_server = util.httpserver.get_local_server()
         self.local_server.register_handler('^(http://www.youtube.com/watch\?v=.+)$', self.__html_handler)
         print 'PROXY:', self.local_server.get_url('/')
-        f = open(os.path.join(config.SHARE_DIR, 'ytflashplayer.html'))
-        self.ytplayer_html = f.read()
-        f.close()
 
 
     def rate(self, item):
@@ -196,7 +193,7 @@ class YTFlashPlayer:
         embed = re.sub('width="[0-9]+"', 'width="%d"' % (config.CONF.width-2), embed)
         embed = re.sub('height="[0-9]+"', 'height="%d"' % (config.CONF.height-2), embed)
 
-        f = open(os.path.join(config.SHARE_DIR, 'ytflashplayer.html'))
+        f = open(os.path.join(webbrowser.HTML_DIR, 'ytflashplayer.html'))
         html = f.read()
         f.close()
 
