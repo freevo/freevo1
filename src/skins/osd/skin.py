@@ -40,7 +40,7 @@ import config
 from time import strftime
 
 from kaa import imlib2
-from util import vfs, objectcache
+from util import vfs, objectcache, webcache
 
 widget_styles = {}
 definitions = {}
@@ -638,7 +638,12 @@ def get_image(filename, scale, size):
 
     # Finally load the image and scale it as required.
     if not image:
-        image = imlib2.open(filename)
+        if filename.startswith('http://') or filename.startswith('https://'):
+            fp = webcache.get_default_cache().get(filename)
+            image = imlib2.open_from_memory(fp.read())
+            fp.close()
+        else:
+            image = imlib2.open(filename)
         w = image.width
         h = image.height
         src_size = (image.width, image.height)
@@ -690,6 +695,10 @@ def get_image(filename, scale, size):
 
 def find_image(filename):
     _debug_('Looking for %s (icontheme %s)' % (filename, icontheme), 2)
+
+    if filename.startswith('http://') or filename.startswith('https://'):
+        return filename
+
     if icontheme:
         dirs = [os.path.join(config.IMAGE_DIR, 'osd', icontheme),
                 os.path.join(config.ICON_DIR, 'osd', icontheme)]
