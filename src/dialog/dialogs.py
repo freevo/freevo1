@@ -357,14 +357,14 @@ class PlayStateDialog(Dialog):
             time_info = self.get_time_info()
 
         if time_info:
-            current_time = time_info[0]
+            current_time = int(time_info[0])
             current_time_hours = current_time / (60 * 60)
             current_time_minutes = (current_time / 60) - (current_time_hours * 60)
             current_time_seconds = current_time - (((current_time_hours * 60) + current_time_minutes) * 60)
             current_time_str = '%02d:%02d:%02d' % (current_time_hours, current_time_minutes, current_time_seconds)
 
             if len(time_info) > 1:
-                total_time = time_info[1]
+                total_time = int(time_info[1])
                 total_time_hours = total_time / (60 * 60)
                 total_time_minutes = (total_time / 60) - (total_time_hours * 60)
                 total_time_seconds = total_time - (((total_time_hours * 60) + total_time_minutes) * 60)
