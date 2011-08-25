@@ -152,12 +152,18 @@ class YTFlashPlayer:
             self.stop()
             return self.item.eventhandler(event)
 
+        if event == TOGGLE_OSD:
+            dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_time_info)
+            return True
+        
         if event == PAUSE or event == PLAY:
             self.paused = not self.paused
 
             if self.paused:
+                dialog.show_play_state(dialog.PLAY_STATE_PAUSE, self.item, self.get_time_info)
                 webbrowser.ipc.pauseVideo()
             else:
+                dialog.show_play_state(dialog.PLAY_STATE_PLAY, self.item, self.get_time_info)
                 webbrowser.ipc.playVideo()
             return True
 
@@ -165,6 +171,16 @@ class YTFlashPlayer:
             self.paused = False
             webbrowser.ipc.seekVideo(event.arg)
             return True
+
+        if event == 'WEB_IPC':
+            if event.arg['event'] == 'error':
+                self.stop()
+                return True
+            if event.arg['event'] == 'state':
+                if event.arg['data'] == 0:
+                    self.stop()
+                    return True
+                return True
 
         # nothing found? Try the eventhandler of the object who called us
         return self.item.eventhandler(event)
@@ -185,11 +201,6 @@ class YTFlashPlayer:
             f.close()
         embed = str(embed)
 
-        meta = ''
-        for tag in soup.findAll('meta'):
-             meta += str(tag)
-
-
         embed = re.sub('width="[0-9]+"', 'width="%d"' % (config.CONF.width-2), embed)
         embed = re.sub('height="[0-9]+"', 'height="%d"' % (config.CONF.height-2), embed)
 
@@ -197,7 +208,7 @@ class YTFlashPlayer:
         html = f.read()
         f.close()
 
-        return html.replace('$EMBED$', embed).replace('$META$', meta)
+        return html.replace('$EMBED$', embed)
 
 
 
@@ -209,10 +220,11 @@ class YTFlashPlayer:
         request.send_header('content-length', '%d' % len(html))
         request.end_headers()
 
-
         request.wfile.write(html)
         request.wfile.flush()
 
 
+    def get_time_info(self):
+        return webbrowser.ipc.getTimes()
 
 

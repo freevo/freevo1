@@ -35,16 +35,9 @@
         }
       }
 
-      function getCurrentTime() {
+      function getTimes() {
         if (ytplayer) {
-          return ytplayer.getCurrentTime()
-        }
-        return 0;
-      }
-
-      function getDuration() {
-        if (ytplayer) {
-          return ytplayer.getDuration()
+          return [ytplayer.getCurrentTime(), ytplayer.getDuration()]
         }
         return 0;
       }
