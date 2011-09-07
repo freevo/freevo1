@@ -135,7 +135,7 @@ class XmRadioMainMenuItem(Item):
             radio_item = XmRadioItem(url,self,str(rchannel[0]))
             channel_items += [ radio_item ]
         if (len(channel_items) == 0):
-            channel_items += [menu.MenuItem( _( 'No XM channels found' ), menwu.goto_prev_page, 0)]
+            channel_items += [menu.MenuItem( _( 'No XM channels found' ), menwu.back_one_menu, 0)]
         channel_menu = menu.Menu( _( 'XM channels' ), channel_items)
         menuw.pushmenu(channel_menu)
         menuw.refresh()

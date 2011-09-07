@@ -368,6 +368,9 @@ class PluginInterface(plugin.DaemonPlugin):
         if hasattr(menu, 'is_submenu') or (not hasattr(menu, 'selected')):
             return result
 
+        if menu.selected is None:
+            return None
+
         # Determine the available actions
         actions = menu.selected.actions()
         if not actions:

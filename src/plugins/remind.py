@@ -113,7 +113,7 @@ class RemindItem(Item):
             lines.append(mi)
 
         if (len(lines) == 0):
-            lines += [menu.MenuItem(_('No Reminders Found'), menuw.goto_prev_page, 0)]
+            lines += [menu.MenuItem(_('No Reminders Found'), menuw.back_one_menu, 0)]
 
         lines_menu = menu.Menu(_('Reminders'), lines)
         menuw.pushmenu(lines_menu)

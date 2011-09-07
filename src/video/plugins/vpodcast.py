@@ -75,7 +75,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     |     ('CNN - Now in the news', 'http://rss.cnn.com/services/podcasting/nitn/rss.xml'),
     |     ('CNN - The Larry King', 'http://rss.cnn.com/services/podcasting/lkl/rss?format=xml'),
     |     ('Discovery Channel', 'http://www.discovery.com/radio/xml/discovery_video.xml')
-    |     (u'TV MarkÃ­za - Spravodajstvo', 'http://www.markiza.sk/xml/video/feed.rss?section=spravodajstvo', 'mrss'),
+    |     (u'TV Markíza - Spravodajstvo', 'http://www.markiza.sk/xml/video/feed.rss?section=spravodajstvo', 'mrss'),
     | ]
     |
     | VPODCAST_DIR = '/path/to/vpodcasts'
@@ -243,7 +243,7 @@ class VPodcastMainMenuItem(MenuItem):
                 except PodcastException:
                     pass
             if not podcast_items:
-                podcast_items += [menu.MenuItem(_('No Podcast locations found'), menuw.goto_prev_page, 0)]
+                podcast_items += [menu.MenuItem(_('No Podcast locations found'), menuw.back_one_menu, 0)]
         finally:
             popup.destroy()
 

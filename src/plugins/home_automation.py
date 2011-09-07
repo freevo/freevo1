@@ -142,7 +142,7 @@ class HomeAutomationMainMenu(Item):
             automation_item.room_items = room[1]
             automation_items += [ automation_item ]
         if (len(automation_items) == 0):
-            automation_items += [menu.MenuItem(_('No Home Automation items found'), menuw.goto_prev_page, 0)]
+            automation_items += [menu.MenuItem(_('No Home Automation items found'), menuw.back_one_menu, 0)]
         automation_items_menu = menu.Menu(_('Home Automation'), automation_items)
         menuw.pushmenu(automation_items_menu)
         menuw.refresh()

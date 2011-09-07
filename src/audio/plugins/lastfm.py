@@ -888,7 +888,7 @@ class LastFMMainMenuItem(MenuItem):
             name, station = lfm_location
             lfm_stations += [ LastFMStation(self, name, station) ]
         if not lfm_stations:
-            lfm_stations += [MenuItem(_('No LastFM Stations'), menuw.goto_prev_page, 0)]
+            lfm_stations += [MenuItem(_('No LastFM Stations'), menuw.back_one_menu, 0)]
         lfm_menu = Menu(_('Last FM'), lfm_stations)
         menuw.pushmenu(lfm_menu)
         menuw.refresh()

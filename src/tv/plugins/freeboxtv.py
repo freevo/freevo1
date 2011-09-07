@@ -111,7 +111,7 @@ class FreeboxTVItem(Item):
 
         # if no locations were found, add a menu entry indicating that
         if not chaines_items:
-            nolocation = menu.MenuItem(_('No locations specified'), menuw.goto_prev_page, 0)
+            nolocation = menu.MenuItem(_('No locations specified'), menuw.back_one_menu, 0)
             chaines_items.append( nolocation )
 
         # create menu

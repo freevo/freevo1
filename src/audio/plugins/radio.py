@@ -131,7 +131,7 @@ class RadioMainMenuItem(MenuItem):
             radio_item.info = {'album':'', 'artist':'', 'trackno': '', 'title':''}
             station_items += [ radio_item ]
         if (len(station_items) == 0):
-            station_items += [menu.MenuItem(_('No Radio Stations found'), menwu.goto_prev_page, 0)]
+            station_items += [menu.MenuItem(_('No Radio Stations found'), menwu.back_one_menu, 0)]
         station_menu = menu.Menu(_('Radio Stations'), station_items)
         menuw.pushmenu(station_menu)
         menuw.refresh()

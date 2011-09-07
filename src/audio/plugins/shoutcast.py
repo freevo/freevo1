@@ -165,7 +165,7 @@ class ShoutcastAudioMenuItem(Item):
         xmlfile = self.retrievexml()
         pop.tick()
         if xmlfile == None:
-            genrelist =  [ menu.MenuItem( _('Error retrieving genres'), action = menuw.goto_prev_page, arg = None) ]
+            genrelist =  [ menu.MenuItem( _('Error retrieving genres'), action = menuw.back_one_menu, arg = None) ]
         else:
             parser = make_parser()
             parseGenreXML = GenreParser()
@@ -175,7 +175,7 @@ class ShoutcastAudioMenuItem(Item):
                 for genre in parseGenreXML.genrelist:
                     genrelist.append( menu.MenuItem(genre, action = self.generate_station_list, arg = genre ) )
             except:
-                genrelist =  [ menu.MenuItem( _('Error retrieving genres'), action = menuw.goto_prev_page, arg = None) ]
+                genrelist =  [ menu.MenuItem( _('Error retrieving genres'), action = menuw.back_one_menu, arg = None) ]
 
         genremenu = menu.Menu( _("Genres"), genrelist, item_types = 'audio' )
         menuw.pushmenu(genremenu)
@@ -198,7 +198,7 @@ class ShoutcastAudioMenuItem(Item):
         pop.tick()
 
         if xmlfile == None:
-            stationlist = [ menu.MenuItem( _('Error retrieving stations'), action = menuw.goto_prev_page, arg = None) ]
+            stationlist = [ menu.MenuItem( _('Error retrieving stations'), action = menuw.back_one_menu, arg = None) ]
         else:
             try:
                 parser = make_parser()
@@ -223,7 +223,7 @@ class ShoutcastAudioMenuItem(Item):
                         stationlist.append(stationitem)
                     stationlist.sort(key = self.stationsortkey)
             except:
-                stationlist = [ menu.MenuItem( _('Error retrieving stationlist'), action = menuw.goto_prev_page, arg = None) ]
+                stationlist = [ menu.MenuItem( _('Error retrieving stationlist'), action = menuw.back_one_menu, arg = None) ]
 
             stationmenu = menu.Menu( arg, stationlist, item_types = 'audio' )
             menuw.pushmenu(stationmenu)

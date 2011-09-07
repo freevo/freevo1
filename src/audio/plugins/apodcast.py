@@ -189,7 +189,7 @@ class ApodcastMainMenuItem(MenuItem):
 
         popup.destroy()
         if (len(podcast_items) == 0):
-            podcast_items += [ menu.MenuItem(_('No Podcast locations found'), menwu.goto_prev_page, 0) ]
+            podcast_items += [ menu.MenuItem(_('No Podcast locations found'), menwu.back_one_menu, 0) ]
         podcast_sub_menu = menu.Menu(_('AUDIO PODCAST'), podcast_items)
         menuw.pushmenu(podcast_sub_menu)
         menuw.refresh()
@@ -212,7 +212,7 @@ class ApodcastMainMenuItem(MenuItem):
                 self.download(image_url, image_path)
 
             if (len(config.APODCAST_DIR) == 0):
-                podcast_items += [ menu.MenuItem(_('Set APODCAST_DIR in local_conf.py'), menwu.goto_prev_page, 0) ]
+                podcast_items += [ menu.MenuItem(_('Set APODCAST_DIR in local_conf.py'), menwu.back_one_menu, 0) ]
             podcast_menu_items += [ menu.MenuItem(_(location[0]), action=self.create_podcast_submenu, arg=location,
                 image=image_path) ]
 

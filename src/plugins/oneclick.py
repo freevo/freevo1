@@ -791,7 +791,7 @@ class WeatherMainMenu(Item):
 
         # if no locations were found, add a menu entry indicating that
         if not locations:
-            nolocation = menu.MenuItem(_('No locations specified'), menuw.goto_prev_page, 0)
+            nolocation = menu.MenuItem(_('No locations specified'), menuw.back_one_menu, 0)
             locations.append(nolocation)
 
         # if only 1 valid menu entry present, autoselect it
