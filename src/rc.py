@@ -200,18 +200,24 @@ class InputHelper:
         Handle input events from input helper over stderr
         """
         data = os.read(self.pipe[0], self.wire_format.size)
-        t, key = self.wire_format.unpack(data)
-        if time.time() - t < 0.5:
-            self.rc.post_key(key)
+        if data:
+            t, key = self.wire_format.unpack(data)
+            if time.time() - t < 0.5:
+                self.rc.post_key(key)
+        else:
+            self.input = None
+
 
     def __send_cmd(self, cmd):
         """
         Send a command to the input helper
         """
         try:
-            self.input.stdin.write(cmd + '\n')
+            if self.input:
+                self.input.stdin.write(cmd + '\n')
         except:
             pass
+
 
     def suspend(self):
         """
