@@ -60,7 +60,7 @@ from skin.widgets import TextEntryScreen
 import kaa
 
 GIP_MAPPINGS = {
-    'bbc tv': ('tv', _('BBC IPlayer')),
+    'bbc tv': ('tv', _('BBC IPlayer  ')),
     'bbc radio': ('radio', _('BBC Radio listen again')),
     'bbc podcast': ('podcast', _('BBC Podcasts')),
     }
@@ -696,7 +696,7 @@ class IPlayerRequestHandler(BaseHTTPRequestHandler):
         gip_type = elements[0]
         pid = elements[1]
         
-        cmd = (config.CONF.get_iplayer,
+        cmd = (GET_IPLAYER,
                 '--pid', pid,
                 '--type', gip_type,
                 '--file-prefix', 'tmp_stream',
@@ -960,7 +960,8 @@ def query_get_iplayer(cmd, gip_type, line_cb, arg):
         else:
             line_cb(arg, line[:-1])
 
-    process = kaa.Process('%s %s --type %s' % (GET_IPLAYER, cmd, gip_type))
+    print 'CMD: %r' % cmd
+    process = kaa.Process('%s %s --type %s' % (GET_IPLAYER, cmd.encode('utf-8', 'ignore'), gip_type))
     process.signals['readline'].connect(line_callback)
     ip = process.start()
     process.stdin.write('n\n')
