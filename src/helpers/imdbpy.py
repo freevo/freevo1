@@ -39,9 +39,10 @@ import sys
 import os
 from optparse import OptionParser
 import util
+import logging
 
 try:
-    import imdbpy
+    import imdb
 except ImportError:
     print 'It seems that you do not have imdbpy installed!'
     print 'Check out http://imdbpy.sourceforge.net/?page=download for imdbpy package for your distribution'

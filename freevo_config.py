@@ -784,6 +784,9 @@ IMDB_SEASON_EPISODE_FORMAT = "[%01dx%02d]"
 # 1 = autoaccept
 IMDB_AUTOACCEPT_SINGLE_HIT = True
 
+# Use the local file lenght or runtime value from IMDB?
+IMDB_USE_IMDB_RUNTIME = False
+
 # delete file in menu
 plugin.activate('file_ops', level=20)
 

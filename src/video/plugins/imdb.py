@@ -220,7 +220,7 @@ class PluginInterface(plugin.ItemPlugin):
         box.show()
 
         try:
-            self.fxd.retrieveImdbData(arg[0])
+            self.fxd.retrieveImdbData(arg[0], self.fxd.ctitle[1], self.fxd.ctitle[2])
 
         except FxdImdb_Error, error:
             _debug_('%s' % (error,), DWARNING)

@@ -217,7 +217,7 @@ class FxdImdb:
             # We try to reduce the search result by filtering initial result for tv (mini) series only.
             
             results = self.imdb.search_movie(title)
-            print 'Found %s items' % len(results)
+            _debug_('Searched IMDB for %s, found %s items' % (title, len(results)))
             
             # if series we remove all non series objects to narrow down the search results
             if season and episode:
@@ -486,9 +486,10 @@ class FxdImdb:
         self.info['year'] = self.get_year(movie, episode)
         self.info['rating'] = self.get_rating(movie, episode)
         self.info['plot'] = self.get_plot(movie, episode)
-        self.info['runtime'] = self.get_runtimes(movie, episode)
         self.info['mpaa'] = self.get_mpaa(movie)
-        #self.info['runtime'] = self.item['length:min']
+
+        if config.IMDB_USE_IMDB_RUNTIME:
+            self.info['runtime'] = self.get_runtimes(movie, episode)
 
         # try to retrieve movie poster urls, first from impawards.com, then from IMDB
         self.impawardsimages(movie['title'], self.info['year'], episode)
