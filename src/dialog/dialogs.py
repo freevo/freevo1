@@ -232,7 +232,6 @@ class InputDialog(Dialog):
         self.event_context = 'input'
 
     def eventhandler(self, event):
-        print event
         if event in ('STOP', 'INPUT_EXIT'):
             self.hide()
             return True
