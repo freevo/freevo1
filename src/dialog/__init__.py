@@ -268,7 +268,7 @@ def show_play_state(state, item, get_time_info=None):
     Both total time and percent position are optional.
     """
     if _display:
-        _display.show_play_state(state, item, get_time_info)
+        return _display.show_play_state(state, item, get_time_info)
 
 
 def show_busy_indicator(delay=0.0):

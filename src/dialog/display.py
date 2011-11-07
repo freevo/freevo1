@@ -242,22 +242,20 @@ class GraphicsDisplay(Display):
             return True
         return False
 
-    @kaa.threaded(kaa.MAINTHREAD)
     def show_volume(self, level, muted, channel=None):
         if self.volume_dialog is None:
             self.volume_dialog = dialogs.VolumeDialog()
         self.volume_dialog.set_details(level, muted, channel)
         self.volume_dialog.show()
 
-    @kaa.threaded(kaa.MAINTHREAD)
     def show_message(self, message):
         dialog = dialogs.MessageDialog(message)
         dialog.show()
 
-    @kaa.threaded(kaa.MAINTHREAD)
     def show_play_state(self, state, item, get_time_info=None):
         dialog = dialogs.PlayStateDialog(state, item, get_time_info)
         dialog.show()
+        return dialog
 
     @kaa.threaded(kaa.MAINTHREAD)
     def show_dialog(self, dialog, duration):

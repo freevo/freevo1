@@ -393,6 +393,7 @@ class MPlayer:
         rc.add_app(self)
         self.app = MPlayerApp(command, self)
         dialog.enable_overlay_display(AppTextDisplay(self.show_message))
+        self.play_state_dialog = None
         return None
 
 
@@ -413,6 +414,7 @@ class MPlayer:
         rc.remove_app(self)
         dialog.disable_overlay_display()
         self.app = None
+        self.play_state_dialog = None
 
 
     def eventhandler(self, event, menuw=None):
@@ -476,10 +478,14 @@ class MPlayer:
 
         if event == TOGGLE_OSD:
             if dialog.is_dialog_supported():
-                if self.paused:
-                    dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_stored_time_info)
+                if self.play_state_dialog is None:
+                    if self.paused:
+                        self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_stored_time_info)
+                    else:
+                        self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_time_info)
                 else:
-                    dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_time_info)
+                    self.play_state_dialog.hide()
+                    self.play_state_dialog = None
             else:
                 self.paused = False
                 self.app.write('osd\n')
@@ -491,11 +497,11 @@ class MPlayer:
             # otherwise the act of requesting the current position resumes playback!
             if self.paused:
                 self.stored_time_info = self.get_time_info()
-                dialog.show_play_state(dialog.PLAY_STATE_PAUSE, self.item, self.get_stored_time_info)
+                self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_PAUSE, self.item, self.get_stored_time_info)
                 self.app.write('pause\n')
             else:
                 self.app.write('speed_set 1.0\n')
-                dialog.show_play_state(dialog.PLAY_STATE_PLAY, self.item, self.get_time_info)
+                self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_PLAY, self.item, self.get_time_info)
 
             return True
 
@@ -530,9 +536,9 @@ class MPlayer:
             self.paused = False
             self.app.write('seek %s\n' % event.arg)
             if event.arg > 0:
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.item, self.get_time_info)
+                self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.item, self.get_time_info)
             else:
-                dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.item, self.get_time_info)
+                self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.item, self.get_time_info)
             return True
 
         if event == VIDEO_AVSYNC:

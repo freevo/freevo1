@@ -257,6 +257,7 @@ class Xine:
         rc.add_app(self)
 
         self.app = XineApp(command, self)
+        self.play_state_dialog = None
         dialog.enable_overlay_display(AppTextDisplay(self.ShowMessage))
         return None
 
@@ -298,6 +299,7 @@ class Xine:
         rc.remove_app(self)
         dialog.disable_overlay_display()
         self.app = None
+        self.play_state_dialog = None
 
 
     def eventhandler(self, event, menuw=None):
@@ -316,7 +318,8 @@ class Xine:
         if event == PAUSE or event == PLAY:
             self.paused = not self.paused
             if config.XINE_USE_FREEVO_OSD:
-                dialog.show_play_state(self.paused and dialog.PLAY_STATE_PAUSE or dialog.PLAY_STATE_PLAY, self.item, self.get_time_info)
+                self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_PAUSE if self.paused else dialog.PLAY_STATE_PLAY,
+                                                                self.item, self.get_time_info)
             self.app.write('pause\n')
             return True
 
@@ -330,11 +333,11 @@ class Xine:
                 action='SeekRelative-'
                 pos = 0 - pos
                 if config.XINE_USE_FREEVO_OSD and dialog.is_dialog_supported():
-                    dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.item, self.get_time_info)
+                    self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_SEEK_BACK, self.item, self.get_time_info)
             else:
                 action='SeekRelative+'
                 if config.XINE_USE_FREEVO_OSD and dialog.is_dialog_supported():
-                    dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.item, self.get_time_info)
+                    self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_SEEK_FORWARD, self.item, self.get_time_info)
             if pos <= 15:
                 pos = 15
             elif pos <= 30:
@@ -346,7 +349,11 @@ class Xine:
 
         if event == TOGGLE_OSD:
             if config.XINE_USE_FREEVO_OSD and dialog.is_dialog_supported():
-                dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_time_info)
+                if self.play_state_dialog is None:
+                    self.play_state_dialog = dialog.show_play_state(dialog.PLAY_STATE_INFO, self.item, self.get_time_info)
+                else:
+                    self.play_state_dialog.hide()
+                    self.play_state_dialog = None
             else:
                 self.app.write('OSDStreamInfos\n')
             return True
@@ -456,19 +463,17 @@ class Xine:
         handle = None
         result = None
         position = self.item.elapsed
-        if position == -1 or self.item_length == -1:
-            try:
-                handle = telnetlib.Telnet('127.0.0.1', 6789)
-                out = handle.read_until('\n', 0.1)
-                if out[-1] == '\n':
-                    if position == -1:
-                        position = self._get_time(handle, 'position')
-                    self.item_length = self._get_time(handle, 'length')
-                    result = (position, self.item_length)
-            except:
-                _debug_('Failed to retrieve time info from xine')
-        else:
-            result = (position, self.item_length)
+
+        try:
+            handle = telnetlib.Telnet('127.0.0.1', 6789)
+            out = handle.read_until('\n', 0.1)
+            if out[-1] == '\n':
+                if position == -1:
+                    position = self._get_time(handle, 'position')
+                self.item_length = self._get_time(handle, 'length')
+                result = (position, self.item_length)
+        except:
+            _debug_('Failed to retrieve time info from xine')
 
         if handle:
             handle.close()
