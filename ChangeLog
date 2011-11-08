@@ -86,6 +86,10 @@ svn co svn://svn.freevo.org/freevo/tags/REL-1_9_2/freevo freevo-1.9.2
  * Fixed convert_favorites_txt failing when program title contained an appostrophe (B#2951250)
  * Fixed dvbstreamer spaces in services (B#2943178)
  * Fixed escaping of backslash in lcd plugin (B#3131266)
+ * Bug fixes and features for lcd2 plugin (B#3430755)
+ * Fixed autoshutdown configuration not propagate in local_conf.py (B#3431982)
+ * Fixed iPlayer plugin can't search/start get_iplayer (B#3430721)
+ * Fixed imdb plugin does not retrieve series episode info (B#3389197)
 
 == Release 1.9.0 (2009-05-26) ==
 --------------------------------
