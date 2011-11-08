@@ -100,7 +100,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         plugin.DaemonPlugin.__init__(self)
 
-        self.poll_interval = 4
+        self.poll_interval = 20         # timer resolution is 200ms
         self.poll_menu_only = 0         # lcd even if player is on
         self.event_listener = 1         # listening to events
 
@@ -147,6 +147,14 @@ class PluginInterface(plugin.DaemonPlugin):
         # register this pluing
         plugin.register(self, 'lcd2')
 
+    def shutdown(self):
+        """
+        to be called before the plugin exists.
+        It terminates the connection with the server
+        """
+        self.menu_clear()
+        self.lcd_head.draw('Goodbye')        
+        _debug_('close()', 2)
 
     def menu_clear(self):
         """
@@ -171,7 +179,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 head = 'Freevo'
             elif object.menustack[0].selected.arg[0] == 'audio':
                 if level == 1:
-                    head = 'Musik'
+                    head = 'Music'
                 elif object.menustack[1].selected.info.disc:
                     head = 'Audio-CD'
                 elif object.menustack[1].selected.name.split()[0] == 'USB':
@@ -203,7 +211,7 @@ class PluginInterface(plugin.DaemonPlugin):
             except: self.lcd_head.draw('NONE')
 
             # prepare index position and update selected menu item
-            items = len(object.menu_items)
+            items = len(object.menustack[-1].choices)
             if items:
                 selection = object.menustack[-1].selected
                 index = object.menustack[-1].choices.index(selection) + 1
@@ -232,16 +240,21 @@ class PluginInterface(plugin.DaemonPlugin):
             player = object
             if player.type == 'audio':
                 # prepare player info
-                title = player.name
+                title  = player.getattr('title')
+                if not title:
+                    title = String(player.getattr('name'))                
                 trackno = player.getattr('trackno')
+                artist = player.getattr('artist')
                 time = player.elapsed
                 length = player.length
-
                 if length:
                     # audio like MP3 and CD-ROM
                     if (self.lcd_title == self.lcd_player): # if lines are shared
-                        if (time < 3) or ((time % 10) < 2):
-                            self.lcd_title.draw('%s %s' % (trackno, title))
+                        phase = (time % 10)
+                        if (phase < 3):
+                            self.lcd_title.draw('%s' % (title))
+                        elif (phase < 6):
+                            self.lcd_title.draw('%s' % (artist))	
                         else:
                             self.lcd_player.draw_right('%d:%02d/%d:%02d' % (time//60, time%60, length//60, length%60))
                     else:
@@ -271,13 +284,12 @@ class PluginInterface(plugin.DaemonPlugin):
         TODO define events in event.py
         """
         # show player info while playing
-        if event == VIDEO_START:
+        if event == 'VIDEO_START':
             self.menu_clear()
             self.lcd_head.draw('DVD/SVCD')
         elif event == 'VIDEO_PLAY_INFO':
             (elapsed, length) = event.arg
             self.lcd_player.draw_right('%d:%02d/%d:%02d' % (elapsed//60, elapsed%60, length//60, length%60))
-
         # show volume in info area, grab it afer MIXER message from the OSD message
         if event == 'MIXER_VOLUME_INFO':
             self.lcd_info.draw('VOL%3s%%' % event.arg, 5, 12)
