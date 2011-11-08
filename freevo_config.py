@@ -751,6 +751,8 @@ for t in ('video', 'audio', 'image', 'games'):
 # Use udisks to find removable storage
 plugin.activate('udisks')
 
+AUTOSHUTDOWN_PROCESS_LIST = ['mencoder','transcode','cdrecord','emerge','tvgids.sh','tv_grab','sshd:']
+
 # Set to true to allow destination to be clobbered
 SHOPPINGCART_CLOBBER = False
 

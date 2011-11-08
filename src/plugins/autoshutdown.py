@@ -246,7 +246,6 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
 
     def config(self):
-        PLIST = ['mencoder','transcode','cdrecord','emerge','tvgids.sh','tv_grab','sshd:']
         return [
             ('SYS_SHUTDOWN_ENABLE', 1, 'enable system shutdown'),
             ('SYS_SHUTDOWN_CMD', 'sudo shutdown -h now', 'shutdown command'),
@@ -259,7 +258,7 @@ class PluginInterface(plugin.MainMenuPlugin):
             ('AUTOSHUTDOWN_WAKEUP_TIME_PAD', 180, 'seconds to start ahead of time set'),
             ('AUTOSHUTDOWN_ALLOWED_IDLE_TIME', 45, 'minutes of idle time allowed'),
             ('AUTOSHUTDOWN_WHILE_USER_LOGGED', True, 'shutdown even when someone is logged in'),
-            ('AUTOSHUTDOWN_PROCESS_LIST', PLIST, 'list of processes that prevent a shutdown'),
+            ('AUTOSHUTDOWN_PROCESS_LIST', [], 'list of processes that prevent a shutdown'),
             ('AUTOSHUTDOWN_PROCESS_CHECK', '/home/user/bin/freevoshutdown_check',
                 'command to check external processes before shutdown'),
             ('AUTOSHUTDOWN_METHOD', None, 'acpi or nvram (or None to disable)'),
