@@ -2305,6 +2305,9 @@ LOGGING_RECORDSERVER = logging.INFO
 LOGGING_ENCODINGSERVER = logging.INFO
 LOGGING_RSSSERVER = logging.INFO
 
+# Used to specify the logging at a more granular level than the global logging level.
+LOGGERS = {}
+
 # When logging is DEBUG or NOTSET then DEBUG level logs messages
 DEBUG = 0
 

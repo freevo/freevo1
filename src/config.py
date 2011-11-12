@@ -33,6 +33,8 @@ Try to find the freevo_config.py config file in the following places:
     2. /etc/freevo/freevo_config.py     Systemwide config
     3. ./freevo_config.py               Defaults from the freevo dist
 """
+import logging
+logger = logging.getLogger("freevo.config")
 
 import sys, os, time, re, string, pwd
 from threading import RLock
@@ -90,26 +92,11 @@ class Logger:
     Class to create a logger object which will send messages to stdout and log them
     into a logfile
     """
-    def __init__(self, logtype='(unknown)'):
+    def __init__(self, logger, logtype='(unknown)'):
         self.lineno = 1
         self.logtype = logtype
-        appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-        if not appname:
-            appname = 'prompt'
-        try:
-            self.logfile = os.path.join(FREEVO_LOGDIR, '%s-%s.log' % (appname, os.getuid()))
-            self.fp = open(self.logfile, 'a')
-            logging.basicConfig(level=LOGGING, \
-                #datefmt='%a, %H:%M:%S',
-                format='%(asctime)s %(levelname)-8s %(message)s', \
-                filename=self.logfile, filemode='a')
-        except IOError, e:
-            print '%s' % e
-            self.logfile = '/dev/null'
-            self.fp = open(self.logfile, 'a')
-            logging.basicConfig(level=LOGGING, \
-                format='%(asctime)s %(levelname)-8s %(message)s', \
-                filename=self.logfile, filemode='a')
+        self.logger = logger
+        self.buffer = ''
 
 
     def write(self, msg):
@@ -121,17 +108,25 @@ class Logger:
                 msg = msg.encode(LOCALE, 'replace')
             sys.__stdout__.write(msg)
             sys.__stdout__.flush()
-            self.fp.write(msg)
-            self.fp.flush()
+            self.buffer += msg
+            pos = self.buffer.find('\n')
+            start_pos = 0
+            while pos != -1:
+                self.logger.info('%s', self.buffer[start_pos:pos])
+                sys.__stdout__.flush()
+
+                start_pos = pos + 1
+                pos = self.buffer.find('\n', start_pos)
+            if start_pos:
+                self.buffer = self.buffer[start_pos:]
         finally:
             if lock:
                 lock.release()
         return
 
     def log(self, msg):
-        self.fp.write('%s\n' % msg)
-        self.fp.flush()
-        return
+        self.write(msg + '\n')
+
 
     def flush(self):
         pass
@@ -410,14 +405,29 @@ OS_CACHEDIR, FREEVO_CACHEDIR = make_freevodir('CACHEDIR', '/var/cache', '/var/db
 lock = RLock()
 #if not HELPER:
 if not IS_PROMPT:
+    try:
+        appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+        if not appname:
+            appname = 'prompt'
+        logfile = os.path.join(FREEVO_LOGDIR, '%s-%s.log' % (appname, os.getuid()))
+        fp = open(logfile, 'a')
+        fp.close()
+    except IOError, e:
+        print '%s' % e
+        logfile = '/dev/null'
+
+    logging.basicConfig(level=LOGGING, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                        filename=logfile, filemode='a')
+
     old_stdout = sys.stdout
     old_stderr = sys.stderr
-    sys.stdout = Logger(sys.argv[0] + ':stdout')
-    sys.stderr = Logger(sys.argv[0] + ':stderr')
+    sys.stdout = Logger(logging.getLogger('stdout'), sys.argv[0] + ':stdout')
+    sys.stderr = Logger(logging.getLogger('stderr'), sys.argv[0] + ':stderr')
     ts = time.asctime(time.localtime(time.time()))
     sys.stdout.log('=' * 80)
     sys.stdout.log('Freevo %s r%s started at %s' % (version.__version__, revision.__revision__, ts))
     sys.stdout.log('-' * 80)
+
 
 def shutdown():
     sys.stdout.log('-' * 80)
@@ -427,7 +437,7 @@ def shutdown():
     sys.stderr.close()
     sys.stdout = old_stdout
     sys.stderr = old_stderr
-    return
+
 
 def _stack_function_(message='', limit=None):
     import traceback
@@ -522,11 +532,11 @@ IMAGE_DIR = os.path.join(SHARE_DIR, 'images')
 FONT_DIR  = os.path.join(SHARE_DIR, 'fonts')
 
 RUNAPP = os.environ['RUNAPP']
-_debug_('RUNAPP: %s' % (RUNAPP))
+logger.debug('RUNAPP: %s', RUNAPP)
 
-_debug_('LOGDIR: %s %s' % (OS_LOGDIR, FREEVO_LOGDIR), DINFO)
-_debug_('STATICDIR: %s %s' % (OS_STATICDIR, FREEVO_STATICDIR), DINFO)
-_debug_('CACHEDIR: %s %s' % (OS_CACHEDIR, FREEVO_CACHEDIR), DINFO)
+logger.info('LOGDIR: %s %s', OS_LOGDIR, FREEVO_LOGDIR)
+logger.info('STATICDIR: %s %s', OS_STATICDIR, FREEVO_STATICDIR)
+logger.info('CACHEDIR: %s %s', OS_CACHEDIR, FREEVO_CACHEDIR)
 
 #
 # Check that freevo_config.py is not found in the config file dirs
@@ -542,9 +552,9 @@ for dirname in cfgfilepath[1:]:
 #
 for dirname in cfgfilepath:
     freevoconf = os.path.join(dirname, 'freevo.conf')
-    _debug_('Trying freevo configuration file "%s"...' % freevoconf)
+    logger.debug('Trying freevo configuration file "%s"...', freevoconf)
     if os.path.isfile(freevoconf):
-        _debug_('Loading freevo configuration file "%s"' % freevoconf, DINFO)
+        logger.info('Loading freevo configuration file "%s"', freevoconf)
 
         commentpat = re.compile('([^#]*)( *#.*)')
         c = open(freevoconf)
@@ -555,7 +565,7 @@ for dirname in cfgfilepath:
             if len(line) == 0:
                 continue
             vals = line.split()
-            _debug_('Cfg file data: "%s"' % line)
+            logger.debug('Cfg file data: "%s"', line)
             try:
                 name, val = vals[0].strip(), vals[2].strip()
             except:
@@ -617,14 +627,14 @@ elif CONF.display == 'dxr3':
 # Load freevo_config.py:
 #
 if os.path.isfile(os.environ['FREEVO_CONFIG']):
-    _debug_('Loading cfg: %s' % os.environ['FREEVO_CONFIG'])
-    _debug_('Loading freevo configuration file: "%s"' % os.environ['FREEVO_CONFIG'], DINFO)
+    logger.debug('Loading cfg: %s', os.environ['FREEVO_CONFIG'])
+    logger.info('Loading freevo configuration file: "%s"', os.environ['FREEVO_CONFIG'])
     try:
         execfile(os.environ['FREEVO_CONFIG'], globals(), locals())
     except Exception, why:
         traceback.print_exc()
         raise SystemExit
-    _debug_('Loaded freevo configuration file: "%s"' % os.environ['FREEVO_CONFIG'], DINFO)
+    logger.info('Loaded freevo configuration file: "%s"', os.environ['FREEVO_CONFIG'])
 else:
     print
     print "Error: %s: no such file" % os.environ['FREEVO_CONFIG']
@@ -637,9 +647,9 @@ else:
 #
 for dirname in cfgfilepath:
     overridefile = os.path.join(dirname, 'local_conf.py')
-    _debug_('Trying local configuration file "%s"...' % overridefile)
+    logger.debug('Trying local configuration file "%s"...', overridefile)
     if os.path.isfile(overridefile):
-        _debug_('Loading local configuration file: "%s"' % overridefile, DINFO)
+        logger.info('Loading local configuration file: "%s"', overridefile)
         our_locals = {}
         try:
             execfile(overridefile, globals(), our_locals)
@@ -647,7 +657,7 @@ for dirname in cfgfilepath:
             traceback.print_exc()
             raise SystemExit
         locals().update(our_locals)
-        _debug_('Loaded local configuration file: "%s"' % overridefile, DINFO)
+        logger.info('Loaded local configuration file: "%s"', overridefile)
 
         try:
             CONFIG_VERSION
@@ -691,6 +701,8 @@ os.umask(UMASK)
 
 #if not HELPER:
 logging.getLogger('').setLevel(LOGGING)
+for module, level in LOGGERS.items():
+    logging.getLogger(module).setLevel(level)
 
 #
 # force fullscreen when freevo is it's own windowmanager
@@ -822,28 +834,28 @@ if ROM_DRIVES == None:
             mntdir = devname = dispname = ''
             if match_cd or match_bymountcd:
                 m = match_cd or match_bymountcd
-                _debug_('match_cd or match_bymountcd=%r' % (m.groups(),))
+                logger.debug('match_cd or match_bymountcd=%r', m.groups())
                 mntdir = m.group(2)
                 devname = m.group(1)
                 dispname = 'CD-%s' % (len(ROM_DRIVES)+1)
             elif match_cdrec:
-                _debug_('match_cdrec=%r' % (match_cdrec.groups(),))
+                logger.debug('match_cdrec=%r', match_cdrec.groups())
                 mntdir = match_cdrec.group(2)
                 devname = match_cdrec.group(1)
                 dispname = 'CDREC-%s' % (len(ROM_DRIVES)+1)
             elif match_dvd or match_bymountdvd:
                 m = match_dvd or match_bymountdvd
-                _debug_('match_dvd or match_bymountdvd=%r' % (m.groups(),))
+                logger.debug('match_dvd or match_bymountdvd=%r', m.groups())
                 mntdir = m.group(2)
                 devname = m.group(1)
                 dispname = 'DVD-%s' % (len(ROM_DRIVES)+1)
             elif match_iso:
-                _debug_('match_iso=%r' % (match_iso.groups(),))
+                logger.debug('match_iso=%r', match_iso.groups())
                 mntdir = match_iso.group(2)
                 devname = match_iso.group(1)
                 dispname = 'CD-%s' % (len(ROM_DRIVES)+1)
             elif match_automount:
-                _debug_('match_automount=%r' % (match_automount.groups(),))
+                logger.debug('match_automount=%r', match_automount.groups())
                 mntdir = match_automount.group(1)
                 devname = match_automount.group(2)
                 # Must check that the supermount device is cd or dvd
@@ -852,19 +864,19 @@ if ROM_DRIVES == None:
                 elif devname.lower().find('dvd') != -1:
                     dispname = 'DVD-%s' % (len(ROM_DRIVES)+1)
                 elif devname.lower().find('hd') != -1:
-                    _debug_('Trying to autodetect type of %r' % (devname,), DINFO)
+                    logger.info('Trying to autodetect type of %r', devname)
                     if os.path.exists('/proc/ide/' + re.sub(r'^(/dev/)', '', devname) + '/media'):
                         if open('/proc/ide/' + re.sub(r'^(/dev/)', '', devname) + \
                             '/media', 'r').read().lower().find('cdrom') != 1:
                             dispname = 'CD-%s' % (len(ROM_DRIVES)+1)
-                            _debug_('%r is a cdrom drive' % (devname,), DINFO)
+                            logger.info('%r is a cdrom drive', devname)
                     else:
-                        _debug_("%r doesn't seems to be a cdrom drive" % (devname,), DINFO)
+                        logger.info("%r doesn't seems to be a cdrom drive", devname)
                         mntdir = devname = dispname = ''
                 else:
                     mntdir = devname = dispname = ''
             if mntdir:
-                _debug_('line=%r, mntdir=%r, devname=%r, dispname=%r' % (line, mntdir, devname, dispname), DINFO)
+                logger.info('line=%r, mntdir=%r, devname=%r, dispname=%r', line, mntdir, devname, dispname)
 
             if os.uname()[0] == 'FreeBSD':
                 # FreeBSD-STABLE mount point is often device name + "c",
@@ -1049,7 +1061,7 @@ if not os.path.isdir(OVERLAY_DIR):
 # concat is much faster
 if OVERLAY_DIR and OVERLAY_DIR.endswith('/'):
     OVERLAY_DIR = OVERLAY_DIR[:-1]
-_debug_('overlaydir: %s' % (OVERLAY_DIR), DINFO)
+logger.info('overlaydir: %s', OVERLAY_DIR)
 
 if not os.path.isdir(OVERLAY_DIR + '/disc'):
     os.makedirs(OVERLAY_DIR + '/disc')
@@ -1083,10 +1095,10 @@ if not encoding:
     encoding = LOCALE
 
 if not HELPER:
-    _debug_("Using '%s' encoding" % encoding)
+    logger.debug("Using '%s' encoding", encoding)
 
 for k, v in CONF.__dict__.items():
-    _debug_('%r: %r' % (k, v))
+    logger.debug('%r: %r', k, v)
 
 # make sure USER and HOME are set
 os.environ['USER'] = pwd.getpwuid(os.getuid())[0]
