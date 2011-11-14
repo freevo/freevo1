@@ -37,6 +37,8 @@ and when no longer required stop the refilling of the buffer.
 
 DVBStreamerController - Controls local or remote DVBStreamer instances.
 """
+import logging
+logger = logging.getLogger("freevo.tv.plugins.livepause.controllers")
 import socket
 import os
 import traceback

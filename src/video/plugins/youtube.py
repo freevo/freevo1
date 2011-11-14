@@ -50,6 +50,8 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+import logging
+logger = logging.getLogger("freevo.video.plugins.youtube")
 
 __author__           = 'Alberto Gonz�lez Rodr�guez'
 __author_email__     = 'alberto@pesadilla.org'

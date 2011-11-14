@@ -31,6 +31,8 @@ To activate, put the following line in local_conf.py::
 
     plugin.activate('lcd2')
 """
+import logging
+logger = logging.getLogger("freevo.plugins.lcd2")
 
 import config
 import plugin

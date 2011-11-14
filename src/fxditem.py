@@ -42,6 +42,8 @@ real movie files, please do:
     1. add the fxd file as 'fxd_file' member variable to the new item
     2. add the files as list _fxd_covered_ to the item
 """
+import logging
+logger = logging.getLogger("freevo.fxditem")
 
 import copy
 import traceback

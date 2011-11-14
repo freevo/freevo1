@@ -31,6 +31,8 @@
 """
 Interface between mediamenu and audio
 """
+import logging
+logger = logging.getLogger("freevo.audio")
 
 import os
 import re

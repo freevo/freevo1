@@ -26,6 +26,8 @@
 """
 Interface to Commercial Detection Server
 """
+import logging
+logger = logging.getLogger("freevo.commdetectcore")
 
 #Import statements
 import threading

@@ -40,6 +40,8 @@ following in your local_conf.py::
         ('Magic 106', '106.7')
     ]
 """
+import logging
+logger = logging.getLogger("freevo.audio.plugins.radio")
 
 #python modules
 import os, popen2, fcntl, select, time

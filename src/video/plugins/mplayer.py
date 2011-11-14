@@ -27,6 +27,8 @@
 """
 Freevo video module for MPlayer
 """
+import logging
+logger = logging.getLogger("freevo.video.plugins.mplayer")
 
 import os, re
 import threading

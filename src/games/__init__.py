@@ -27,6 +27,8 @@
 """
 Interface between media menu and games
 """
+import logging
+logger = logging.getLogger("freevo.games")
 
 import config
 import util

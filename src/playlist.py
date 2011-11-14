@@ -27,6 +27,8 @@
 """
 This is the Freevo play list reading module.
 """
+import logging
+logger = logging.getLogger("freevo.playlist")
 
 import random
 import os

@@ -27,6 +27,8 @@
 """
 Some File Operation Utilities
 """
+import logging
+logger = logging.getLogger("freevo.util.fileops")
 
 import os
 import sys

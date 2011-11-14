@@ -32,6 +32,8 @@
 """
 Plugin for PyOSDd which facilitates controling Freevo
 """
+import logging
+logger = logging.getLogger("freevo.plugins.tiny_xosd")
 
 import time, re, string, pyosd, config
 

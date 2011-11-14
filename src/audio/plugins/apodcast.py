@@ -5,6 +5,8 @@
 # $id: apodcast.py 2007-10-04 $
 #  -Krasimir Atanasov-
 #
+import logging
+logger = logging.getLogger("freevo.audio.plugins.apodcast")
 
 import urllib2, os, threading
 import config, menu, rc, plugin, util, time, os.path, re

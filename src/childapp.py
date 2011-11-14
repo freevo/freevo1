@@ -31,6 +31,8 @@
 """
 Runs an application in a child process
 """
+import logging
+logger = logging.getLogger("freevo.childapp")
 
 import sys
 import time

@@ -34,6 +34,8 @@ Programs not in a series are placed at the top level, while programs that
 are a member of a series are placed in a series menu and the menu placed
 at the top level.
 """
+import logging
+logger = logging.getLogger("freevo.tv.plugins.recordings_manager")
 
 import os
 import os.path

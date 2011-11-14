@@ -31,6 +31,8 @@
 """
 Handle FXD (Freevo Extended Data) files.
 """
+import logging
+logger = logging.getLogger("freevo.video.fxdhandler")
 
 from videoitem import VideoItem
 from item import FileInformation

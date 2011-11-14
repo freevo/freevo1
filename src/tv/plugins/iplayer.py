@@ -33,6 +33,8 @@ the get_iplayer script.
 See http://www.infradead.org/get_iplayer/html/get_iplayer.html for details of
 get_iplayer.
 """
+import logging
+logger = logging.getLogger("freevo.tv.plugins.iplayer")
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
 import copy

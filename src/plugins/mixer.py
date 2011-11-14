@@ -32,6 +32,8 @@
 """
 For manipulating the mixer.
 """
+import logging
+logger = logging.getLogger("freevo.plugins.mixer")
 
 import fcntl
 import struct

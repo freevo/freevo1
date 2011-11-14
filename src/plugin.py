@@ -27,6 +27,8 @@
 """
 Plug-in interface
 """
+import logging
+logger = logging.getLogger("freevo.plugin")
 
 import os, sys
 import traceback

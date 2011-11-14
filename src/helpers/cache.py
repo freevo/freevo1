@@ -27,6 +27,8 @@
 """
 Delete old cache files and update the cache
 """
+import logging
+logger = logging.getLogger("freevo.helpers.cache")
 
 import sys
 import os

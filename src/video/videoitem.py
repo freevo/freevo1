@@ -33,6 +33,8 @@
 """
 Item for video objects.
 """
+import logging
+logger = logging.getLogger("freevo.video.videoitem")
 
 import os
 import re

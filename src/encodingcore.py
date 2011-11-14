@@ -31,6 +31,8 @@
 """
 Interface to the encoding server, to re-encode video to a different format.
 """
+import logging
+logger = logging.getLogger("freevo.encodingcore")
 
 #Import statements
 from threading import Thread, Lock

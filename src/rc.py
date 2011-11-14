@@ -29,6 +29,8 @@ Remote control / Event and Callback handling
 
 This module is thread safe
 """
+import logging
+logger = logging.getLogger("freevo.rc")
 
 import os
 import copy

@@ -25,6 +25,8 @@
 # with this program; if not, write to the Free Software Foundation
 #
 # -----------------------------------------------------------------------
+import logging
+logger = logging.getLogger("freevo.helpers.encodingserver")
 
 import sys, string, random, time, os, re, pwd, stat, tempfile
 

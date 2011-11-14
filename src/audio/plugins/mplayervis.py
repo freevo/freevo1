@@ -31,6 +31,8 @@
 """
 Native Freevo MPlayer Audio Visualization Plugin
 """
+import logging
+logger = logging.getLogger("freevo.audio.plugins.mplayervis")
 
 __author__ = 'Viggo Fredriksen <viggo@katatonic.org>'
 

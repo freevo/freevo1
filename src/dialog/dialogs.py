@@ -38,6 +38,8 @@ The priority levels in ascending order are:
  - normal
  - high
 """
+import logging
+logger = logging.getLogger("freevo.dialog.dialogs")
 import time
 from event import *
 import rc

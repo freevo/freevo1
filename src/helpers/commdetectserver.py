@@ -22,6 +22,8 @@
 # with this program; if not, write to the Free Software Foundation
 #
 # -----------------------------------------------------------------------
+import logging
+logger = logging.getLogger("freevo.helpers.commdetectserver")
 
 import sys, string, random, time, os, re, pwd, stat
 import config

@@ -31,6 +31,8 @@
 """
 Some utils for the skin
 """
+import logging
+logger = logging.getLogger("freevo.skins.main.skin_utils")
 
 import config
 import pygame

@@ -29,6 +29,8 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # ----------------------------------------------------------------------- */
+import logging
+logger = logging.getLogger("freevo.tv.plugins.livepause.backend")
 import socket
 import sys
 import threading

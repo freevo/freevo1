@@ -30,6 +30,8 @@
 # -----------------------------------------------------------------------
 #
 # Edit Date - Oct 2, 2007 6:31am
+import logging
+logger = logging.getLogger("freevo.www.htdocs.youtube.")
 
 import sys
 import time

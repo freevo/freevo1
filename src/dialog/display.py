@@ -41,6 +41,8 @@ to be displayed over lower priority ones. The lower priority dialogs will be que
 the higher priority dialog closes.
 
 """
+import logging
+logger = logging.getLogger("freevo.dialog.display")
 
 import time
 import traceback

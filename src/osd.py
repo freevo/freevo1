@@ -29,6 +29,8 @@ Low level OSD (On Screen Display) graphics routines
 
 B{NOTE} Do not use the OSD object inside a thread.
 """
+import logging
+logger = logging.getLogger("freevo.osd")
 
 # Python modules
 import time

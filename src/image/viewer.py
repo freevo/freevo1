@@ -27,6 +27,8 @@
 """
 Freevo image viewer
 """
+import logging
+logger = logging.getLogger("freevo.image.viewer")
 
 import os
 

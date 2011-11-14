@@ -27,6 +27,8 @@
 """
 Radio player plugin for radio
 """
+import logging
+logger = logging.getLogger("freevo.audio.plugins.radioplayer")
 
 import time, os
 import string

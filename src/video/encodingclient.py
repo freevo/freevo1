@@ -28,6 +28,8 @@
 """
 A client interface to the Freevo encoding server.
 """
+import logging
+logger = logging.getLogger("freevo.video.encodingclient")
 
 import sys
 

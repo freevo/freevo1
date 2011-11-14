@@ -27,6 +27,8 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+import logging
+logger = logging.getLogger("freevo.plugins.zoneminder")
 
 __author__           = "Christophe 'CSCMEU' Nowicki"
 __author_email__     = 'cscm@csquad.org'

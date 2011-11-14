@@ -27,6 +27,8 @@
 """
 Interface between media menu and video items.
 """
+import logging
+logger = logging.getLogger("freevo.video")
 
 import os
 import copy

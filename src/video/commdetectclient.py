@@ -34,6 +34,8 @@
 """
 A client interface to the commercial detecting server.
 """
+import logging
+logger = logging.getLogger("freevo.video.commdetectclient")
 
 import xmlrpclib, sys
 from util.marmalade import jellyToXML, unjellyFromXML

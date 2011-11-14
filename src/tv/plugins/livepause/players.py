@@ -38,6 +38,8 @@ Xine    - Controls Xine via its stdctrl interface. (Supports OSD Text)
 MPlayer - Controls MPlayer via its rc interface. (Supports OSD Text)
 Vlc     - Controls Vlc via its rc interface. (Supports OSD Text)
 """
+import logging
+logger = logging.getLogger("freevo.tv.plugins.livepause.players")
 
 import re
 import threading

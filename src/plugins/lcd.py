@@ -36,6 +36,8 @@ Todo:
     2. Have Movie Player, TV Player and Image viewer to use LCD
     3. Better (and more) LCD screens.
 """
+import logging
+logger = logging.getLogger("freevo.plugins.lcd")
 
 import string
 

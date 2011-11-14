@@ -24,6 +24,8 @@
 # with this program; if not, write to the Free Software Foundation
 #
 # -----------------------------------------------------------------------
+import logging
+logger = logging.getLogger("freevo.video.plugins.dvdbackup")
 
 #Import statements
 from os.path import join, split

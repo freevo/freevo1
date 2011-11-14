@@ -36,6 +36,8 @@ parent object is passed on creation Border will raise an exception.
 
 All suggestions on improvement are welcome
 """
+import logging
+logger = logging.getLogger("freevo.gui.Border")
 
 __date__    = "$Date$"
 __version__ = "$Revision$"

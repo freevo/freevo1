@@ -27,6 +27,8 @@
 """
 RSS feed module feed grabber
 """
+import logging
+logger = logging.getLogger("freevo.rssperiodic")
 
 import re, os, sys, glob, urllib, datetime, time, shutil
 from subprocess import Popen

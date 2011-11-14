@@ -39,6 +39,8 @@ Available plugins:
     - idlebar.weather
     - idlebar.holidays
 """
+import logging
+logger = logging.getLogger("freevo.plugins.idlebar")
 # python modules
 import time
 import os

@@ -31,6 +31,8 @@
 """
 Directory handling
 """
+import logging
+logger = logging.getLogger("freevo.directory")
 
 import os
 import traceback

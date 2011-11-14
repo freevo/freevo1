@@ -27,6 +27,8 @@
 """
 Freevo default skin
 """
+import logging
+logger = logging.getLogger("freevo.skins.main.main")
 
 import os, copy
 import stat

@@ -27,6 +27,8 @@
 """
 Freevo menu handling system
 """
+import logging
+logger = logging.getLogger("freevo.menu")
 
 import string
 import copy

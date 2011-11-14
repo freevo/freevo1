@@ -3,6 +3,8 @@
 # -----------------------------------------------------------------------
 # $Id$
 # -----------------------------------------------------------------------
+import logging
+logger = logging.getLogger("freevo.audio.plugins.mpdclient2")
 
 # py-libmpdclient2 is written by Nick Welch <mack@incise.org>, 2005.
 #

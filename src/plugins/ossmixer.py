@@ -43,6 +43,8 @@
 
 """For manipulating the mixer.
 """
+import logging
+logger = logging.getLogger("freevo.plugins.ossmixer")
 
 import struct
 import os

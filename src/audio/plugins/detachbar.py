@@ -30,6 +30,8 @@ Audio DetachBar plug-in
 
 Author: Viggo Fredriksen <viggo@katatonic.org>
 """
+import logging
+logger = logging.getLogger("freevo.audio.plugins.detachbar")
 
 # python specific
 import time

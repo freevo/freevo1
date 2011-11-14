@@ -41,6 +41,8 @@ influenced by other GUI toolkits, such as Java JDK and QT.
 Currently not many classes are in place, but hopefully we will add more
 in time.
 """
+import logging
+logger = logging.getLogger("freevo.gui.GUIObject")
 __date__    = "$Date$"
 __version__ = "$Revision$".split()[1]
 __author__  = "Thomas Malt <thomas@malt.no>"

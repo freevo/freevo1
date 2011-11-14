@@ -32,6 +32,8 @@
 # 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # -----------------------------------------------------------------------
+import logging
+logger = logging.getLogger("freevo.plugins.autocolor")
 
 
 import os

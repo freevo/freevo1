@@ -28,6 +28,8 @@
 '''
 Module for controlling a simple undecorated web browser.
 '''
+import logging
+logger = logging.getLogger("freevo.util.webbrowser")
 import config
 
 import json

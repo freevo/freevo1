@@ -34,6 +34,8 @@
 # local_conf.py  CONFIG_REALTIME_UPDATE = True , try to setting the var, if kinda sketchy on this one.
 #
 #  Todo: FIX CONFIG file name STUFF.
+import logging
+logger = logging.getLogger("freevo.www.htdocs.configedit.")
 
 
 

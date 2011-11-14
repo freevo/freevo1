@@ -31,6 +31,8 @@
 """
 Represents audio items as different views
 """
+import logging
+logger = logging.getLogger("freevo.audio.plugins.album_tree")
 from pprint import pprint
 
 import config

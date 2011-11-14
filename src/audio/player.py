@@ -27,6 +27,8 @@
 """
 Freevo audio player GUI
 """
+import logging
+logger = logging.getLogger("freevo.audio.player")
 
 from gui.GUIObject import GUIObject
 

@@ -39,6 +39,8 @@ The path to the skin implementation is also added to the system path.
 get_singleton() returns an initialized skin object which is kept unique and
 consistent throughout.
 """
+import logging
+logger = logging.getLogger("freevo.skin")
 
 import plugin
 import config

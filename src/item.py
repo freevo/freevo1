@@ -31,6 +31,8 @@
 """
 Base class of a media item
 """
+import logging
+logger = logging.getLogger("freevo.item")
 
 import os
 import gettext
