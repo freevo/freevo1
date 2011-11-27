@@ -52,13 +52,13 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def __init__(self):
-        _debug_('reencode-old.PluginInterface.__init__(self)')
+        logger.debug('reencode-old.PluginInterface.__init__(self)')
         plugin.ItemPlugin.__init__(self)
         self.server = EncodingClientActions()
 
 
     def actions(self, item):
-        _debug_('actions(self, item)')
+        logger.debug('actions(self, item)')
 
         if item.type == 'video' and item.mode == 'file':
             # TODO: use a config variable
@@ -76,7 +76,7 @@ class PluginInterface(plugin.ItemPlugin):
         return []
 
     def encoding_profile_menu(self, menuw=None, arg=None):
-        _debug_('encoding_profile_menu(self, menuw=None, arg=None)')
+        logger.debug('encoding_profile_menu(self, menuw=None, arg=None)')
         #create a menu with a few encoding options (1cd, 2cd, xvid, mpeg4)
         #args : tuple, (videocodec, size, multipass
         menu_items = [ menu.MenuItem("XviD, 800bps", self.create_job, (0,0,1,None,700,False,800)) ]
@@ -92,7 +92,7 @@ class PluginInterface(plugin.ItemPlugin):
         menuw.pushmenu(encoding_menu)
 
     def create_job(self, menuw=None, arg=None):
-        _debug_('create_job(self, menuw=None, arg=None)')
+        logger.debug('create_job(self, menuw=None, arg=None)')
         print 'arg:', arg
         #unwrap settings tupple
         (contnr, audionr, vcodecnr, vfilter, tgtsize, mpass, vbitrate) = arg
@@ -194,11 +194,11 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def error(self, text=""):
-        _debug_('error(self, text="")')
+        logger.debug('error(self, text="")')
         AlertBox(width=400, height=200, text="ERROR: %s" % text).show()
 
 
     def mopup(self):
-        _debug_('mopup(self)')
+        logger.debug('mopup(self)')
         self.menuw.delete_menu()
         self.menuw.back_one_menu()

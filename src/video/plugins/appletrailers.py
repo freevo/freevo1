@@ -209,20 +209,20 @@ class BrowseMainMenu(Item):
 
         if os.path.isfile(pfile):
             self.trailers = util.fileops.read_pickle(pfile)
-            _debug_('Cache file present %s' % pfile, 2)
+            logger.log( 9, 'Cache file present %s', pfile)
             s = os.stat(pfile)
             if self.trailers.resolution == config.APPLETRAILERS_RESOLUTION or  \
               (time.time() - s.st_mtime) > (60*60): # Over an hour ago
-                _debug_('Resolution changed or cache expired, updating feed ...', 2)
+                logger.log( 9, 'Resolution changed or cache expired, updating feed ...')
                 self.trailers.update_feed()        
             else:
-                _debug_('Cache invalid, updating ...', 2)
+                logger.log( 9, 'Cache invalid, updating ...')
                 self.trailers = None
         else:
             old_posters = set()
 
         if self.trailers is None:
-            _debug_('Downloading trailers ...', 2)
+            logger.log( 9, 'Downloading trailers ...')
             self.trailers = applelib.Trailers(config.APPLETRAILERS_RESOLUTION)
             util.fileops.save_pickle(self.trailers, pfile)
 

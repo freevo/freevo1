@@ -121,7 +121,7 @@ class PluginInterface(plugin.ItemPlugin):
                 not item.subitems and item.elapsed:
                 item.store_info('autobookmark_resume', item.elapsed)
             else:
-                _debug_('auto-bookmark not supported for this item')
+                logger.debug('auto-bookmark not supported for this item')
 
         if event == PLAY_END:
             item.delete_info('autobookmark_resume')

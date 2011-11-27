@@ -65,7 +65,7 @@ class ViewRemindersItem(Item):
     Menu showing all programs that have reminders set.
     """
     def __init__(self, parent, reminders):
-        _debug_('ViewRemindersItem.__init__(parent=%r)' % (parent,), 2)
+        logger.log( 9, 'ViewRemindersItem.__init__(parent=%r)', parent)
         Item.__init__(self, parent, skin_type='tv')
         self.name = _('View Reminders')
         self.menuw = None
@@ -73,12 +73,12 @@ class ViewRemindersItem(Item):
 
 
     def actions(self):
-        _debug_('actions()', 2)
+        logger.log( 9, 'actions()')
         return [ ( self.view_reminders , _('View Reminders') ) ]
 
 
     def view_reminders(self, arg=None, menuw=None):
-        _debug_('view_reminders(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'view_reminders(arg=%r, menuw=%r)', arg, menuw)
 
         items = self.get_items()
         if not len(items):
@@ -93,7 +93,7 @@ class ViewRemindersItem(Item):
 
     
     def reload(self):
-        _debug_('reload()', 2)
+        logger.log( 9, 'reload()')
         menuw = self.menuw
 
         menu = menuw.menustack[-1]
@@ -112,7 +112,7 @@ class ViewRemindersItem(Item):
 
 
     def get_items(self):
-        _debug_('get_items()', 2)
+        logger.log( 9, 'get_items()')
         items = []
         for prog in self.reminders.get_reminders():
             items.append(ReminderItem(self, prog))
@@ -130,7 +130,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         plugin.MainMenuPlugin.__init__(self)
         self.reminders = Reminders()
         plugin.register(self.reminders, "TVReminders")
@@ -141,7 +141,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         return [('REMIND_MINUTES_BEFORE', 3, 'Number of minutes before a program to remind the user')]
     
     def items(self, parent):
-        _debug_('items(parent=%r)' % (parent,), 2)
+        logger.log( 9, 'items(parent=%r)', parent)
         return [ ViewRemindersItem(parent, self.reminders) ]
 
 

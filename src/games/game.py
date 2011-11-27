@@ -55,7 +55,7 @@ osd        = osd.get_singleton()
 _singleton = None
 
 def get_singleton():
-    _debug_('get_singleton()', 2)
+    logger.log( 9, 'get_singleton()')
     global _singleton
 
     # One-time init
@@ -67,12 +67,12 @@ def get_singleton():
 class Game:
 
     def __init__(self):
-        _debug_('Game.__init__()', 2)
+        logger.log( 9, 'Game.__init__()')
         self.mode = None
         self.event_context = 'games'
 
     def play(self, item, menuw):
-        _debug_('play(item=%r, menuw=%r)' % (item, menuw), 2)
+        logger.log( 9, 'play(item=%r, menuw=%r)', item, menuw)
 
         self.item = item
         self.filename = item.filename
@@ -95,9 +95,9 @@ class Game:
             try:
                 plugin.getbyname('JOY').disable()
             except Exception, why:
-                _debug_('getbyname("JOY"): %s' % why, DWARNING)
+                logger.warning('getbyname("JOY"): %s', why)
 
-        _debug_('Game.play(): Starting thread, cmd=%s' % self.command)
+        logger.debug('Game.play(): Starting thread, cmd=%s', self.command)
 
         self.app=GameApp(self.command)
         rc.suspend()
@@ -105,7 +105,7 @@ class Game:
 
 
     def stop(self):
-        _debug_('stop()', 2)
+        logger.log( 9, 'stop()')
         self.app.stop()
         rc.remove_app(self)
         rc.resume()
@@ -113,16 +113,16 @@ class Game:
             try:
                 plugin.getbyname('JOY').enable()
             except Exception, why:
-                _debug_('getbyname("JOY"): %s' % why, DWARNING)
+                logger.warning('getbyname("JOY"): %s', why)
 
 
     def eventhandler(self, event, menuw=None):
-        _debug_('eventhandler(event%r, menuw=%r)' % (event, menuw), 2)
+        logger.log( 9, 'eventhandler(event%r, menuw=%r)', event, menuw)
         return self.item.eventhandler(event, self.menuw)
 
 
 # ======================================================================
 class GameApp(childapp.ChildApp2):
     def stop_event(self):
-        _debug_('stop_event()', 2)
+        logger.log( 9, 'stop_event()')
         return em.STOP

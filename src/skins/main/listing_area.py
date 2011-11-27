@@ -412,7 +412,7 @@ class Listing_Area(Skin_Area):
                         table_text = text.split('\t')
                         
                     if len(table_text) < len(menu.table):
-                        _debug_('Menu item: %r doesn\'t have enough table entries!', DERROR)
+                        logger.error('Menu item: %r doesn\'t have enough table entries!')
                         table_text.extend([''] * (len(menu.table) - len(table_text)))
 
                     for i in range(len(menu.table)):

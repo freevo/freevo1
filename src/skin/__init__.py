@@ -79,7 +79,7 @@ def get_singleton():
         # Loads the skin implementation defined in freevo_config.py
         exec('import skins.' + config.SKIN_MODULE + '.' + config.SKIN_MODULE + ' as skinimpl')
 
-        _debug_('Imported skin %r' % (config.SKIN_MODULE,))
+        logger.debug('Imported skin %r', config.SKIN_MODULE)
 
         _singleton = skinimpl.Skin()
 

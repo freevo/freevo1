@@ -49,7 +49,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     detached = False
 
     def __init__(self):
-        _debug_('detach.PluginInterface.__init__()', 2)
+        logger.log( 9, 'detach.PluginInterface.__init__()')
         plugin.MainMenuPlugin.__init__(self)
         config.EVENTS['audio'][config.DETACH_KEY] = Event(FUNCTION_CALL, arg=self.detach)
         self.show_item = menu.MenuItem(_('Show player'), action=self.show)
@@ -69,17 +69,17 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def detach(self):
-        _debug_('detach()', 1)
+        logger.debug('detach()')
         rc.post_event(plugin.event('DETACH'))
 
 
     def attach(self):
-        _debug_('attach()', 1)
+        logger.debug('attach()')
         rc.post_event(plugin.event('ATTACH'))
 
 
     def _event_handler(self, event):
-        _debug_('_event_handler(event=%s)' % (event,), 2)
+        logger.log( 9, '_event_handler(event=%s)', event)
         gui = audio.player.get()
         if gui:
             p = gui.player
@@ -111,7 +111,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def _detach(self, menuw=None):
-        _debug_('_detach()', 1)
+        logger.debug('_detach()')
         if PluginInterface.detached:
             return
         PluginInterface.detached = True
@@ -128,7 +128,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def _attach(self, menuw=None):
-        _debug_('_attach()', 1)
+        logger.debug('_attach()')
         if not PluginInterface.detached:
             return
         PluginInterface.detached = False
@@ -145,7 +145,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
-        _debug_('items(parent=%r)' % (parent,), 2)
+        logger.log( 9, 'items(parent=%r)', parent)
         gui = audio.player.get()
         if gui and gui.player.is_playing():
             self.show_item.parent = parent
@@ -154,6 +154,6 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def show(self, arg=None, menuw=None):
-        _debug_('show(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        logger.debug('show(arg=%r, menuw=%r)', arg, menuw)
         rc.post_event(plugin.event('ATTACH'))
         self._attach(menuw)

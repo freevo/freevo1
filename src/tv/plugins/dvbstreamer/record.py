@@ -64,7 +64,7 @@ class PluginInterface(plugin.Plugin):
 
     def __init__(self):
         plugin.Plugin.__init__(self)
-        _debug_('dvbstreamer plugin starting')
+        logger.debug('dvbstreamer plugin starting')
 
         # Create DVBStreamer objects
         username = 'dvbstreamer'

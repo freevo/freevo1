@@ -157,7 +157,7 @@ class FileInformation:
                             error_msg='Can\'t copy "%s": %s' % (f, e)
 
                 if error_msg:
-                    _debug_(error_msg, DWARNING)
+                    logger.warning(error_msg)
                     #AlertBox(text=_(Unicode(error_msg))).show()
 
 
@@ -191,7 +191,7 @@ class FileInformation:
                 try:
                     os.unlink(f)
                 except:
-                    _debug_('can\'t delete %r' % (f,), DWARNING)
+                    logger.warning('can\'t delete %r', f)
 
 
 class Item:
@@ -406,8 +406,8 @@ class Item:
                 if val == value:
                     if self.info[key]:
                         if not self.delete_info(key):
-                            _debug_('unable to store \'%s\':\'%s\' info for \'%s\'' % \
-                                (key, value, self.filename), DINFO)
+                            logger.info('unable to store \'%s\':\'%s\' info for \'%s\'', key, value, self.filename)
+
                 else:
                     self.store_info(key, value)
                 return
@@ -418,16 +418,16 @@ class Item:
         """
         store the key/value in metadata
         """
-        _debug_('key=%s value=%s info-class=%s' % (key, value, self.info.__class__), 2)
-        if hasattr(self, 'filename'): _debug_('filename=%s' % (self.filename), 2)
+        logger.log( 9, 'key=%s value=%s info-class=%s', key, value, self.info.__class__)
+        if hasattr(self, 'filename'): logger.log(9, 'filename=%s', self.filename)
 
         if isinstance(self.info, mediainfo.Info):
             if not self.info.store(key, value):
-                _debug_('cannot store \'%s\':\'%s\' for \'%s\'' % \
-                    (key, value, self.filename), DINFO)
+                logger.info('cannot store \'%s\':\'%s\' for \'%s\'', key, value, self.filename)
+
         else:
-            _debug_('cannot store \'%s\':\'%s\' for \'%s\' item, not mediainfo' % \
-                (key, value, self.filename), DINFO)
+            logger.info('cannot store \'%s\':\'%s\' for \'%s\' item, not mediainfo', key, value, self.filename)
+
 
 
     def delete_info(self, key):
@@ -516,7 +516,7 @@ class Item:
         """
         eventhandler for special plug-ins for this item
         """
-        _debug_('plugin_eventhandler(event=%s, menuw=%r)' % (event, menuw), 2)
+        logger.log( 9, 'plugin_eventhandler(event=%s, menuw=%r)', event, menuw)
         if not hasattr(self, '__plugin_eventhandler__'):
             self.__plugin_eventhandler__ = []
             for p in plugin.get('item') + plugin.get('item_%s' % self.type):

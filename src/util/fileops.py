@@ -146,7 +146,7 @@ def freespace(path):
         s = os.statvfs(path)
         return s[F_BAVAIL] * long(s[F_BSIZE])
     except OSError, why:
-        _debug_('"%r: %s' % (path, why), DWARNING)
+        logger.warning('"%r: %s', path, why)
     return 0
 
 
@@ -160,7 +160,7 @@ def totalspace(path):
         s = os.statvfs(path)
         return s[F_BLOCKS] * long(s[F_BSIZE])
     except OSError, why:
-        _debug_('"%r: %s' % (path, why), DWARNING)
+        logger.warning('"%r: %s', path, why)
     return 0
 
 
@@ -204,7 +204,7 @@ def rmrf(top=None):
             try:
                 os.rmdir(d)
             except (IOError, OSError), why:
-                _debug_('rmrf: %s' % why, DWARNING)
+                logger.warning('rmrf: %s', why)
 
 
 #
@@ -236,7 +236,7 @@ def match_files(dirname, suffix_list):
     try:
         files = [ vfs.join(dirname, fname) for fname in os.listdir(dirname) if vfs.isfile(vfs.join(dirname, fname)) ]
     except OSError, why:
-        _debug_('Cannot match files in "%s": %s' % (dirname, why), DWARNING)
+        logger.warning('Cannot match files in "%s": %s', dirname, why)
         return []
 
     matches = [ fname for fname in files if match_suffix(fname, suffix_list) ]
@@ -289,7 +289,7 @@ def match_files_recursively_skip_protected(result, dirname, names):
         dirs.append(os.path.abspath(dirname))
         lastdir = dirname[dirname.rfind('/'):]
         if os.path.exists(os.path.join(dirname, '.password')):
-            _debug_('.password found in "%s"' % dirname)
+            logger.debug('.password found in "%s"', dirname)
             return result
         if len(lastdir) > 1 and lastdir[1] == '.':
             return result
@@ -396,7 +396,7 @@ def is_mounted(dir):
     that this module keeps)
     (according to the internal list "mounted_dirs" that this module keeps)
     """
-    _debug_('is_mounted(dir=%r)' % (dir,), 2)
+    logger.log( 9, 'is_mounted(dir=%r)', dir)
     global mounted_dirs
     return dir in mounted_dirs
 
@@ -407,7 +407,7 @@ def mount(dir, force=False):
     """
     if config.ROM_DRIVES_AUTOFS:
         return
-    _debug_('mount(dir=%r, force=%r)' % (dir, force), 2)
+    logger.log( 9, 'mount(dir=%r, force=%r)', dir, force)
     if not dir:
         return
     global mounted_dirs
@@ -416,7 +416,7 @@ def mount(dir, force=False):
         rc = p.wait()
         so, se = p.communicate()
         if rc in (1,32,):
-            _debug_('mounting %r: %s' % (dir, se), DWARNING)
+            logger.warning('mounting %r: %s', dir, se)
             traceback.print_stack()
         if os.path.ismount(dir) and not dir in mounted_dirs:
             mounted_dirs.append(dir)
@@ -430,7 +430,7 @@ def umount(dir):
     """
     if config.ROM_DRIVES_AUTOFS:
         return
-    _debug_('umount(dir=%r)' % (dir,), 2)
+    logger.log( 9, 'umount(dir=%r)', dir)
     if not dir:
         return
     global mounted_dirs
@@ -439,7 +439,7 @@ def umount(dir):
         rc = p.wait()
         so, se = p.communicate()
         if rc in (1,):
-            _debug_('unmounting %r: %s' % (dir, se), DWARNING)
+            logger.warning('unmounting %r: %s', dir, se)
         if not os.path.ismount(dir) and dir in mounted_dirs:
             mounted_dirs.remove(dir)
 
@@ -452,7 +452,7 @@ def umount_all():
     e.g. when freevo crashes and exits; since it does not take care
     of mount reference counting (see rom_drives.py)
     """
-    _debug_('umount_all()', 2)
+    logger.log( 9, 'umount_all()')
     global mounted_dirs
     for d in copy.copy(mounted_dirs):
         umount(d)
@@ -463,7 +463,7 @@ def resolve_media_mountdir(*arg):
     """
     get the mount point of the media with media_id
     """
-    _debug_('resolve_media_mountdir(arg=%r)' % (arg,), 2)
+    logger.log( 9, 'resolve_media_mountdir(arg=%r)', arg)
     if len(arg) == 1 and isinstance(arg[0], dict):
         media_id = arg[0]['media_id']
         file     = arg[0]['file']
@@ -489,7 +489,7 @@ def check_media(media_id):
     """
     check if media_id is a valid media in one of the drives
     """
-    _debug_('check_media(media_id=%r)' % (media_id,), 2)
+    logger.log( 9, 'check_media(media_id=%r)', media_id)
     for media in config.REMOVABLE_MEDIA:
         if media_id == media.id:
             return media
@@ -564,7 +564,7 @@ def save_pickle(data, file):
         pickle.dump(data, f, PICKLE_PROTOCOL)
         f.close()
     except IOError:
-        _debug_('unable to save to cachefile %r' % (file,), DWARNING)
+        logger.warning('unable to save to cachefile %r', file)
 
 
 #
@@ -588,7 +588,7 @@ def create_thumbnail(filename, thumbnail=None):
     """
     cache image for faster access
     """
-    _debug_('create_thumbnail(filename=%r, thumbnail=%r)' % (filename, thumbnail), 2)
+    logger.log( 9, 'create_thumbnail(filename=%r, thumbnail=%r)', filename, thumbnail)
     thumb = vfs.getoverlay(filename + '.raw')
     image = None
 
@@ -596,7 +596,7 @@ def create_thumbnail(filename, thumbnail=None):
         try:
             image = kaa.imlib2.open_from_memory(thumbnail)
         except Exception, why:
-            _debug_('invalid thumbnail %r: %s' % (filename, why), DINFO)
+            logger.info('invalid thumbnail %r: %s', filename, why)
 
     if not image:
         if __freevo_app__ == 'main':
@@ -605,13 +605,13 @@ def create_thumbnail(filename, thumbnail=None):
                 if tags.has_key('JPEGThumbnail'):
                     image = kaa.imlib2.open_from_memory(tags['JPEGThumbnail'])
             except Exception, why:
-                _debug_('Error loading thumbnail %r: %s' % (filename, why), DWARNING)
+                logger.warning('Error loading thumbnail %r: %s', filename, why)
 
         if not image or image.width < 100 or image.height < 100:
             try:
                 image = kaa.imlib2.open(filename)
             except Exception, why:
-                _debug_('Cannot cache image %r: %s' % (filename, why), DWARNING)
+                logger.warning('Cannot cache image %r: %s', filename, why)
                 return None
 
     try:
@@ -632,7 +632,7 @@ def create_thumbnail(filename, thumbnail=None):
         del image
         return data
     except Exception, why:
-        _debug_('Cannot cache image %r: %s' % (filename, why), DWARNING)
+        logger.warning('Cannot cache image %r: %s', filename, why)
         return None
 
 
@@ -722,7 +722,7 @@ def www_image(filename, subdir, force=False, getsize=False, size=128, verbose=0)
                     print 'Make directory %r' % os.path.dirname(imagename)
                 os.makedirs(os.path.dirname(imagename), mode=04775)
         except (OSError, IOError), why:
-            _debug_('error creating dir %s: %s' % (os.path.dirname(imagename), why), DWARNING)
+            logger.warning('error creating dir %s: %s', os.path.dirname(imagename), why)
             raise
         if force or os.stat(filename)[ST_MTIME] > os.stat(imagename)[ST_MTIME]:
             orientation_str = ''
@@ -755,7 +755,7 @@ def www_image(filename, subdir, force=False, getsize=False, size=128, verbose=0)
             image.save(imagename)
             print 'Made image %r @ %s -> %r%s' % (imagename, size, image.size, orientation_str)
     except IOError, why:
-        _debug_(why, DWARNING)
+        logger.warning(why)
         return (0, 0)
     return image.size
 

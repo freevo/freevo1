@@ -77,7 +77,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Set up the basics, register with Freevo and connect
         """
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         if not config.LASTFM_USER or not config.LASTFM_PASS:
             self.reason = 'LASTFM_USER or LASTFM_PASS have not been set'
             return
@@ -113,7 +113,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def shutdown(self):
-        _debug_('shutdown()', 2)
+        logger.log( 9, 'shutdown()')
         try:
             f = open(self.failedcachefilename, 'w')
             pickle.dump(self.failed, f, 1)
@@ -123,7 +123,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def config(self):
-        _debug_('config()', 2)
+        logger.log( 9, 'config()')
         return [
             ('LASTFM_USER', None, 'User name for last FM'),
             ('LASTFM_PASS', None, 'Password for Last FM'),
@@ -135,7 +135,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Run this code every self.poll_interval seconds
         """
-        _debug_('poll()', 2)
+        logger.log( 9, 'poll()')
         if self.playitem is not None:
             self.draw(('player', self.playitem), None)
 
@@ -145,7 +145,7 @@ class PluginInterface(plugin.DaemonPlugin):
         'draw' is called about once a second when playing audio
         call submit a song if the track has a track number
         """
-        _debug_('draw((ttype=%r, object=%r), osd=%r)' % (ttype, object, osd), 2)
+        logger.log( 9, 'draw((ttype=%r, object=%r), osd=%r)', ttype, object, osd)
         if ttype != 'player':
             return
 
@@ -160,7 +160,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Get events from Freevo
         """
-        _debug_('eventhandler(event=%r:%r, menuw=%r)' % (event.name, event.arg, menuw), 2)
+        logger.log( 9, 'eventhandler(event=%r:%r, menuw=%r)', event.name, event.arg, menuw)
         if event == PLAY_START:
             self.playitem = event.arg
             self.starttime = time.time()
@@ -215,7 +215,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lastfm.submit(artist, track, starttime, 'P', 'L', secs, album, trackno)
         except AudioscrobblerException, why:
             self.failed.append(('AE', artist, track, starttime, 'P', 'L', secs, album, trackno, why))
-            _debug_('%s' % why, DERROR)
+            logger.error('%s', why)
         except IOError, why:
             self.failed.append(('IO', artist, track, starttime, 'P', 'L', secs, album, trackno, why))
-            _debug_('%s' % why, DWARNING)
+            logger.warning('%s', why)

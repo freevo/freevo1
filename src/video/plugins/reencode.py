@@ -55,7 +55,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def __init__(self):
-        _debug_('reencode.PluginInterface.__init__(self)')
+        logger.debug('reencode.PluginInterface.__init__(self)')
         plugin.ItemPlugin.__init__(self)
         self.server = EncodingClientActions()
         self.title = ''
@@ -84,7 +84,7 @@ class PluginInterface(plugin.ItemPlugin):
         '''config is called automatically, for default settings run:
         freevo plugins -i video.reencode
         '''
-        _debug_('config(self)', 2)
+        logger.log( 9, 'config(self)')
         return [
             ('REENCODE_CONTAINER', 'avi', 'Container type'),
             ('REENCODE_RESOLUTION', 'Optimal', 'Resolution'),
@@ -128,7 +128,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def actions(self, item):
-        _debug_('actions(self, item)', 2)
+        logger.log( 9, 'actions(self, item)')
 
         if item.type == 'video' and item.mode == 'file':
             self.item = item
@@ -138,7 +138,7 @@ class PluginInterface(plugin.ItemPlugin):
             #(even when browsing a directory ot TV recordings)
             self.output = '(to be set later)'
             #
-            _debug_('item.__dict__:' % item.__dict__, 3)
+            logger.log( 8, 'item.__dict__:', item.__dict__)
             return [ (self.encoding_profile_menu, _('Transcode this program...')) ]
         return []
 
@@ -147,7 +147,7 @@ class PluginInterface(plugin.ItemPlugin):
         '''callback function from the skin fxd file to get the display format
         of an item, the attr represents the expression in the skin
         '''
-        _debug_('getattr(self, attr=%r)' % (attr), 2)
+        logger.log( 9, 'getattr(self, attr=%r)', attr)
         if attr == 'disp_title':
             return '%s' % (self.title)
         if attr == 'disp_filename':
@@ -180,7 +180,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def encoding_profile_menu(self, menuw=None, arg=None):
-        _debug_('encoding_profile_menu(self, menuw=%r, arg=%r)' % (menuw, arg), 2)
+        logger.log( 9, 'encoding_profile_menu(self, menuw=%r, arg=%r)', menuw, arg)
         menu_items = []
         menu_items += [ menu.MenuItem(_('Start Encoding'), self.create_job, self.profile) ]
         menu_items += [ menu.MenuItem(_('Select Encoding Profile'), action=self.select_profile) ]
@@ -202,7 +202,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def select_profile(self, arg=None, menuw=None):
-        _debug_('select_profile(self, arg=None, menuw=None)', 2)
+        logger.log( 9, 'select_profile(self, arg=None, menuw=None)')
         menu_items = []
         menu_items += [ menu.MenuItem(_('Xvid Low Quality'), action=self.select_encoding_profile, arg='xvid_low') ]
         menu_items += [ menu.MenuItem(_('Xvid High Quality'), action=self.select_encoding_profile, arg='xvid_high') ]
@@ -254,7 +254,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def mod_container(self, arg=None, menuw=None):
-        _debug_('mod_container(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'mod_container(self, arg=%r, menuw=%r)', arg, menuw)
         items = []
         for container in self.server.getContainerCAP()[1]:
             items.append(menu.MenuItem(container, action=self.alter_prop, arg=('container', container)))
@@ -265,7 +265,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def mod_resolution(self, arg=None, menuw=None):
-        _debug_('mod_resolution(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'mod_resolution(self, arg=%r, menuw=%r)', arg, menuw)
         items = []
         for resolution in ('Optimal', '1920:1080', '1280:720', '852:480', '720:576', '720:480', '320:240'):
             items.append(menu.MenuItem(resolution, action=self.alter_prop, arg=('resolution', resolution)))
@@ -276,7 +276,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def mod_videocodec(self, arg=None, menuw=None):
-        _debug_('mod_videocodec(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'mod_videocodec(self, arg=%r, menuw=%r)', arg, menuw)
         items = []
         for videocodec in self.server.getVideoCodecCAP()[1]:
             items.append(menu.MenuItem(videocodec, action=self.alter_prop, arg=('videocodec', videocodec)))
@@ -287,7 +287,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def mod_videobitrate(self, arg=None, menuw=None):
-        _debug_('mod_videobitrate(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'mod_videobitrate(self, arg=%r, menuw=%r)', arg, menuw)
         items = []
         for videobitrate in range(400, 2001, 200):
             items.append(menu.MenuItem(videobitrate, action=self.alter_prop, arg=('videobitrate', videobitrate)))
@@ -298,7 +298,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def mod_audiocodec(self, arg=None, menuw=None):
-        _debug_('mod_audiocodec(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'mod_audiocodec(self, arg=%r, menuw=%r)', arg, menuw)
         items = []
         for audiocodec in self.server.getAudioCodecCAP()[1]:
             items.append(menu.MenuItem(audiocodec, action=self.alter_prop, arg=('audiocodec', audiocodec)))
@@ -309,7 +309,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def mod_audiobitrate(self, arg=None, menuw=None):
-        _debug_('mod_audiobitrate(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'mod_audiobitrate(self, arg=%r, menuw=%r)', arg, menuw)
         items = []
         for audiobitrate in (64, 128, 192, 224):
             items.append(menu.MenuItem(audiobitrate, action=self.alter_prop, arg=('audiobitrate', audiobitrate)))
@@ -320,7 +320,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def mod_numpasses(self, arg=None, menuw=None):
-        _debug_('mod_numpasses(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'mod_numpasses(self, arg=%r, menuw=%r)', arg, menuw)
         items = []
         for numpasses in (1, 2):
             items.append(menu.MenuItem(numpasses, action=self.alter_prop, arg=('numpasses', numpasses)))
@@ -331,7 +331,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def mod_numthreads(self, arg=None, menuw=None):
-        _debug_('mod_numthreads(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'mod_numthreads(self, arg=%r, menuw=%r)', arg, menuw)
         items = []
         for numthreads in (1, 2, 3, 4, 5, 6, 7, 8):
             items.append(menu.MenuItem(numthreads, action=self.alter_prop, arg=('numthreads', numthreads)))
@@ -342,7 +342,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def mod_videofilter(self, arg=None, menuw=None):
-        _debug_('mod_videofilter(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'mod_videofilter(self, arg=%r, menuw=%r)', arg, menuw)
         items = []
         for videofilter in self.server.getVideoFiltersCAP()[1]:
             items.append(menu.MenuItem(videofilter, action=self.alter_prop, arg=('videofilter', videofilter)))
@@ -353,7 +353,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def select_encoding_profile(self, arg=None, menuw=None):
-        _debug_('select_encoding_profile(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'select_encoding_profile(self, arg=%r, menuw=%r)', arg, menuw)
 
         if arg == 'xvid_low':
             self.profile['container'] = 'avi'
@@ -396,7 +396,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.profile['numpasses'] = 1
             self.profile['videofilter'] = 'None'
         else:
-            _debug_('Unknown Profile "%s"' % (arg), DERROR)
+            logger.error('Unknown Profile "%s"', arg)
             self.error(_('Unknown Profile')+(' "%s"' % (arg)))
             return
 
@@ -405,7 +405,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def alter_prop(self, arg=(None, None), menuw=None):
-        _debug_('alter_prop(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'alter_prop(self, arg=%r, menuw=%r)', arg, menuw)
         (prop, val) = arg
 
         if prop == 'container':
@@ -429,7 +429,7 @@ class PluginInterface(plugin.ItemPlugin):
         elif prop == 'videofilter':
             self.profile['videofilter'] = val
         else:
-            _debug_('Unknown property "%s"' % (prop), DERROR)
+            logger.error('Unknown property "%s"', prop)
             self.error(_('Unknown Property')+(' "%s"' % (prop)))
             return
 
@@ -439,12 +439,12 @@ class PluginInterface(plugin.ItemPlugin):
 
     def alter_name(self, name):
         '''alter_name is not used'''
-        _debug_('alter_name(self, name=%r)' % (name), 2)
+        logger.log( 9, 'alter_name(self, name=%r)', name)
         self.menuw.refresh()
 
 
     def create_job(self, menuw=None, arg=None):
-        _debug_('create_job(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'create_job(self, arg=%r, menuw=%r)', arg, menuw)
 
         profile = arg
 
@@ -467,21 +467,21 @@ class PluginInterface(plugin.ItemPlugin):
         box.show()
         (status, resp) = self.server.initEncodingJob(self.source, self.output, self.title)
         idnr = resp
-        _debug_('initEncodingJob:status:%s resp:%s' % (status, resp))
+        logger.debug('initEncodingJob:status:%s resp:%s', status, resp)
         if not status:
             box.destroy()
             self.error(_('Failed to analyze video.'))
             return
 
         (status, resp) = self.server.setTimeslice(idnr, self.timeslice)
-        _debug_('setTimeslice:status:%s resp:%s' % (status, resp))
+        logger.debug('setTimeslice:status:%s resp:%s', status, resp)
         if not status:
             box.destroy()
             self.error(resp)
             return
 
         (status, resp) = self.server.waitCropDetect(idnr)
-        _debug_('WaitCropDetect:status:%s resp:%s' % (status, resp))
+        logger.debug('WaitCropDetect:status:%s resp:%s', status, resp)
         if not status:
             box.destroy()
             self.error(resp)
@@ -493,7 +493,7 @@ class PluginInterface(plugin.ItemPlugin):
             return
 
         (status, resp) = self.server.setContainer(idnr, profile['container'])
-        _debug_('setContainer:status:%s resp:%s' % (status, resp))
+        logger.debug('setContainer:status:%s resp:%s', status, resp)
         if not status:
             self.error(resp)
             return
@@ -501,25 +501,25 @@ class PluginInterface(plugin.ItemPlugin):
         multipass = profile['numpasses'] > 1
         (status, resp) = self.server.setVideoCodec(idnr, profile['videocodec'], 0, multipass,
             profile['videobitrate'], profile['altprofile'])
-        _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
+        logger.debug('setVideoCodec:status:%s resp:%s', status, resp)
         if not status:
             self.error(resp)
             return
 
         (status, resp) = self.server.setAudioCodec(idnr, profile['audiocodec'], profile['audiobitrate'])
-        _debug_('setAudioCodec:status:%s resp:%s' % (status, resp))
+        logger.debug('setAudioCodec:status:%s resp:%s', status, resp)
         if not status:
             self.error(resp)
             return
 
         (status, resp) = self.server.setNumThreads(idnr, profile['numthreads'])
-        _debug_('setNumThreads:status:%s resp:%s' % (status, resp))
+        logger.debug('setNumThreads:status:%s resp:%s', status, resp)
         if not status:
             self.error(resp)
             return
 
         (status, resp) = self.server.setVideoRes(idnr, profile['resolution'])
-        _debug_('setVideoRes:status:%s resp:%s' % (status, resp))
+        logger.debug('setVideoRes:status:%s resp:%s', status, resp)
         if not status:
             self.error(resp)
             return
@@ -529,7 +529,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         #And finally, queue and start the job
         (status, resp) = self.server.queueIt(idnr, True)
-        _debug_('queueIt:status:%s resp:%s' % (status, resp))
+        logger.debug('queueIt:status:%s resp:%s', status, resp)
 
         if not status:
             self.error(resp)
@@ -539,17 +539,17 @@ class PluginInterface(plugin.ItemPlugin):
         AlertBox(width=400, height=200, text=_('Encoding started'), handler=self.mopup).show()
 
         self.resetprofile()
-        _debug_('boe')
+        logger.debug('boe')
         #menuw.delete_menu()
         #menuw.delete_menu()
 
 
     def error(self, text=''):
-        _debug_('error(self, text=%r)' % (text))
+        logger.debug('error(self, text=%r)', text)
         AlertBox(width=400, height=200, text='ERROR: %s' % text).show()
 
 
     def mopup(self):
-        _debug_('mopup(self)')
+        logger.debug('mopup(self)')
         self.menuw.delete_menu()
         self.menuw.back_one_menu()

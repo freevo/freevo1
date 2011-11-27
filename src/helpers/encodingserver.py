@@ -91,17 +91,17 @@ DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or c
 class EncodingServer:
     def __init__(self, debug=False, allowNone=False):
         """ Initialise the EncodingServer class """
-        _debug_('EncodingServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 2)
+        logger.log( 9, 'EncodingServer.__init__(debug=%r, allowNone=%r)', debug, allowNone)
         self.debug = debug
         self.jobs = {}
         self.encodingopts = EncodingOptions()
         self.queue = EncodingQueue()
-        _debug_('EncodingServer started...', DINFO)
+        logger.info('EncodingServer started...')
 
 
     @kaa.rpc.expose('ping')
     def _pingtest(self):
-        _debug_('pingtest()', 2)
+        logger.log( 9, 'pingtest()')
         return True
 
     @kaa.rpc.expose('getContainerCAP')
@@ -147,9 +147,9 @@ class EncodingServer:
         # int's, which is fine, except it makes XMLRPC fail somewhere along the way so we
         # devide or random number by 100 :)
         idnr = int((time.time() / random.random()) / 100)
-        _debug_('idnr=%s' % (idnr), 2)
+        logger.log( 9, 'idnr=%s', idnr)
         self.jobs[idnr] = EncodingJob(source, output, friendlyname, idnr, chapter, rmsource)
-        _debug_('Initialized job %s (idnr: %s)' % (friendlyname, idnr), DINFO)
+        logger.info('Initialized job %s (idnr: %s)', friendlyname, idnr)
         if self.jobs[idnr].failed:
             return (False, 0)
         return (True, idnr)
@@ -162,7 +162,7 @@ class EncodingServer:
         while not self.jobs[idnr].finishedanalyze:
             time.sleep(0.1)
         if self.jobs[idnr].finishedanalyze and self.jobs[idnr].failed:
-            _debug_('Crop detection failed')
+            logger.debug('Crop detection failed')
             return (False, 'Crop detection failed')
         return (True, 'Ended successfully crop detection.')
 
@@ -179,8 +179,8 @@ class EncodingServer:
     @kaa.rpc.expose('setVideoCodec')
     def _setVideoCodec(self, idnr, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """ set the video codec """
-        _debug_('_setVideoCodec(idnr=%r, vcodec=%r, tgtsize=%r, multipass=%r, vbitrate==%r)' % \
-            (idnr, vcodec, tgtsize, multipass, vbitrate), 1)
+        logger.debug('_setVideoCodec(idnr=%r, vcodec=%r, tgtsize=%r, multipass=%r, vbitrate==%r)', idnr, vcodec, tgtsize, multipass, vbitrate)
+
         if not (vcodec or (tgtsize and vbitrate)):
             return (False, 'EncodingServer::setVideoCodec: no codec or target size given')
 
@@ -193,7 +193,7 @@ class EncodingServer:
     @kaa.rpc.expose('setAudioCodec')
     def _setAudioCodec(self, idnr, acodec, abrate):
         """ set the audio codec """
-        _debug_('_setAudioCodec(idnr=%r, acodec=%r, abrate=%r)' % (idnr, acodec, abrate), 2)
+        logger.log( 9, '_setAudioCodec(idnr=%r, acodec=%r, abrate=%r)', idnr, acodec, abrate)
         if not (acodec or abrate):
             return (False, 'EncodingServer::setAudioCodec: no codec or bit rate given')
 
@@ -217,7 +217,7 @@ class EncodingServer:
 
     @kaa.rpc.expose('setTimeslice')
     def _setTimeslice(self,idnr,timeslice):
-        _debug_('_setTimeslice(self, %s, %s)' % (idnr, timeslice), 3)
+        logger.log( 8, '_setTimeslice(self, %s, %s)', idnr, timeslice)
         status = self.jobs[idnr].setTimeslice(timeslice)
         if not status:
             return (True, 'EncodingServer::setTimeslice: OK')
@@ -227,7 +227,7 @@ class EncodingServer:
     @kaa.rpc.expose('setVideoRes')
     def _setVideoRes(self, idnr, videores ):
         """ set the video resolution """
-        _debug_('_setAudioCodec(idnr=%r, videores=%r)' % (idnr, videores ), 2)
+        logger.log( 9, '_setAudioCodec(idnr=%r, videores=%r)', idnr, videores)
         if not (videores):
             return (False, 'EncodingServer::setVideoRes: no video resolution given')
 
@@ -240,7 +240,7 @@ class EncodingServer:
     @kaa.rpc.expose('setNumThreads')
     def _setNumThreads(self, idnr, numthreads ):
         """ set the number of threads """
-        _debug_('_setAudioCodec(idnr=%r, numthreads=%r)' % (idnr, numthreads ), 2)
+        logger.log( 9, '_setAudioCodec(idnr=%r, numthreads=%r)', idnr, numthreads)
         #safety checks
         if not (numthreads):
             return (False, 'EncodingServer::setNumThreads: no number given')
@@ -254,7 +254,7 @@ class EncodingServer:
     @kaa.rpc.expose('listJobs')
     def _listJobs(self):
         """ List the current jobs """
-        _debug_('_listJobs()', 2)
+        logger.log( 9, '_listJobs()')
         jlist = self.queue.listJobs()
         return (True, jlist)
 
@@ -262,10 +262,10 @@ class EncodingServer:
     @kaa.rpc.expose('queueIt')
     def _queueIt(self, idnr, now=False):
         """ queue a job to run """
-        _debug_('_queueIt(idnr=%r, now=%r)' % (idnr, now), 2)
+        logger.log( 9, '_queueIt(idnr=%r, now=%r)', idnr, now)
         self.queue.addEncodingJob(self.jobs[idnr])
         del self.jobs[idnr]
-        _debug_('Added job %s to the queue' % idnr, DINFO)
+        logger.info('Added job %s to the queue', idnr)
         if now:
             self.queue.startQueue()
         return (True, 'EncodingServer::queueIt: OK')
@@ -274,7 +274,7 @@ class EncodingServer:
     @kaa.rpc.expose('startQueue')
     def _startQueue(self):
         """ start the job queue """
-        _debug_('_startQueue()', 2)
+        logger.log( 9, '_startQueue()')
         self.queue.startQueue()
         return (True, 'EncodingServer::startqueue: OK')
 
@@ -282,7 +282,7 @@ class EncodingServer:
     @kaa.rpc.expose('getProgress')
     def _getProgress(self):
         """ get the progress status of the current job """
-        _debug_('_getProgress()', 2)
+        logger.log( 9, '_getProgress()')
         prog = self.queue.getProgress()
         if type(prog) is str:
             return (False, 'EncodingServer::getProgress: %s' % prog)
@@ -291,7 +291,7 @@ class EncodingServer:
 
 def main():
     """ The main entry point for the server """
-    _debug_('main()', 2)
+    logger.log( 9, 'main()')
     global DEBUG
     tmppath = tempfile.mkdtemp(prefix = 'encodeserver-')
     os.chdir(tmppath)
@@ -299,10 +299,10 @@ def main():
     if opts.debug:
         import encodingcore
         encodingcore.DEBUG = opts.debug != 0
-    _debug_('main: DEBUG=%s' % DEBUG, DINFO)
+    logger.info('main: DEBUG=%s', DEBUG)
     socket = ('', config.ENCODINGSERVER_PORT)
     secret = config.ENCODINGSERVER_SECRET
-    _debug_('socket=%r, secret=%r' % (socket, secret))
+    logger.debug('socket=%r, secret=%r', socket, secret)
 
     encodingserver = EncodingServer(debug=opts.debug, allowNone=True)
     try:
@@ -312,20 +312,20 @@ def main():
 
     rpc.register(encodingserver)
 
-    _debug_('kaa.main starting')
+    logger.debug('kaa.main starting')
     kaa.main.run()
-    _debug_('kaa.main finished')
+    logger.debug('kaa.main finished')
 
 
 if __name__ == '__main__':
     try:
-        _debug_('main() starting')
+        logger.debug('main() starting')
         main()
-        _debug_('main() finished')
+        logger.debug('main() finished')
     except SystemExit:
-        _debug_('main() stopped')
+        logger.debug('main() stopped')
         pass
     except Exception, why:
         import traceback
         traceback.print_exc()
-        _debug_(why, DWARNING)
+        logger.warning(why)

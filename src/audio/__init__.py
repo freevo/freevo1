@@ -48,7 +48,7 @@ from audiodiskitem import AudioDiskItem
 
 def cover_filter(x):
     result = re.search(config.AUDIO_COVER_REGEXP, x, re.IGNORECASE)
-    if result: _debug_('cover_filter(%s): %r' % (x, result.group()), 2)
+    if result: logger.debug('cover_filter(%s): %r', x, result.group())
     return result
 
 
@@ -58,7 +58,7 @@ class PluginInterface(plugin.MimetypePlugin):
     """
 
     def __init__(self):
-        _debug_('audio.PluginInterface.__init__()')
+        logger.debug('audio.PluginInterface.__init__()')
         plugin.MimetypePlugin.__init__(self)
         self.display_type = [ 'audio' ]
 
@@ -94,7 +94,7 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         set information for a diritem based on the content, etc.
         """
-        _debug_('diritem.dir = "%s"' % (diritem.dir), 2)
+        logger.log( 9, 'diritem.dir = "%s"', diritem.dir)
         if os.path.exists(diritem.dir):
             timestamp = os.stat(diritem.dir)[stat.ST_MTIME]
             if not diritem['coversearch_timestamp'] or \

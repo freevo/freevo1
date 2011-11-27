@@ -114,7 +114,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     def check_dir(self):
         """ Check that the VPODCAST_DIR directories exist, if not create them """
         if not os.path.isdir(config.VPODCAST_DIR):
-            _debug_('%r does not exist, directory created' % (config.VPODCAST_DIR))
+            logger.debug('%r does not exist, directory created', config.VPODCAST_DIR)
             os.makedirs(config.VPODCAST_DIR)
 
         for location in config.VPODCAST_LOCATIONS:
@@ -124,7 +124,7 @@ class PluginInterface(plugin.MainMenuPlugin):
                 name, rss_url = location
                 feed_type = None
             else:
-                _debug_('Invalid VPODCAST_LOCATIONS %r' % (location,), DWARNING)
+                logger.warning('Invalid VPODCAST_LOCATIONS %r', location)
                 continue
 
             podcastdir = str(os.path.join(config.VPODCAST_DIR, _name_to_filename(name)))
@@ -240,8 +240,9 @@ class VPodcastMainMenuItem(MenuItem):
                     if os.path.exists(item_path):
                         if item_updated > os.stat(item_path)[stat.ST_MTIME]:
                             os.remove(item_path)
-                            _debug_('%r removed updated %r > %r' % (item_path, item_updated,
-                                os.stat(item_path)[stat.ST_MTIME]), DINFO)
+                            logger.info('%r removed updated %r > %r', item_path, item_updated, 
+os.stat(item_path)[stat.ST_MTIME])
+
                 except PodcastException:
                     pass
             if not podcast_items:
@@ -301,7 +302,7 @@ class Podcast:
             finally:
                 data.close()
         except Exception, why:
-            _debug_('Cannot parse feed "%s": %s' % (self.rss_url, why), DWARNING)
+            logger.warning('Cannot parse feed "%s": %s', self.rss_url, why)
             raise
             self.rss = None
             return self.rss
@@ -475,8 +476,8 @@ class VPVideoItem(VideoItem):
     """
     def __init__(self, filename, parent, item_url, results):
         """ Initialise the VPVideoItem class """
-        _debug_('VPVideoItem.__init__(filename=%r, parent=%r, item_url=%r, results=%r)' % \
-            (filename, parent, item_url, results), 2)
+        logger.log( 9, 'VPVideoItem.__init__(filename=%r, parent=%r, item_url=%r, results=%r)', filename, parent, item_url, results)
+
         VideoItem.__init__(self, filename, parent)
         self.item_url = item_url
         self.results = results
@@ -582,9 +583,9 @@ class BGDownload(threading.Thread):
             fd.add_info_extractor(self.youtube_ie)
             fd.add_info_extractor(self.other_ie)
             retcode = fd.download([self.url])
-            _debug_('youtube download "%s": %s' % (self.url, retcode), retcode and DWARNING or DINFO)
+            logger.log(retcode and logging.WARNING or logging.INFO, 'youtube download "%s": %s', self.url, retcode)
         except youtube.DownloadError, why:
-            _debug_('Cannot download "%s": %s' % (self.url, why), DWARNING)
+            logger.warning('Cannot download "%s": %s', self.url, why)
 
 
 def _name_to_filename(name):

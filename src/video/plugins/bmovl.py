@@ -205,7 +205,7 @@ class PluginInterface(plugin.Plugin):
         """
         called before playing is started to add some stuff to the command line
         """
-        _debug_('%s.play(command=%r, player=%r)' % (self.__module__, command, player))
+        logger.debug('%s.play(command=%r, player=%r)', self.__module__, command, player)
         self.item        = player.item
         self.player      = player
         self.osd_visible = False
@@ -295,7 +295,7 @@ class PluginInterface(plugin.Plugin):
         """
         bmovl: init bmovl osd and show it
         """
-        _debug_('show osd')
+        logger.debug('show osd')
 
         self.bmovl.screenblit(self.background.screen, self.background.pos)
 
@@ -311,7 +311,7 @@ class PluginInterface(plugin.Plugin):
         """
         bmovl: hide osd
         """
-        _debug_('hide')
+        logger.debug('hide')
         self.player.app.refresh = None
         self.bmovl.clearscreen()
         self.bmovl.hide()

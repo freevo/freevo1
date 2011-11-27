@@ -97,7 +97,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def __init__(self):
         """initialise the DaemonPlugin interface"""
-        _debug_('detachbar.PluginInterface.__init__()', 2)
+        logger.log( 9, 'detachbar.PluginInterface.__init__()')
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'audio.detachbar'
         self.player = None
@@ -111,7 +111,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def _event_handler(self, event):
-        _debug_('_event_handler(event=%s)' % (event,), 2)
+        logger.log( 9, '_event_handler(event=%s)', event)
         if plugin.isevent(event) == 'DETACH':
             PluginInterface.detached = True
             self.update(BAR_SHOW)
@@ -132,7 +132,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def _timer_handler(self):
-        _debug_('_timer_handler()', 2)
+        logger.log( 9, '_timer_handler()')
         self.update()
 
 
@@ -140,7 +140,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         update the bar according to bar state
         """
-        _debug_('update()', 3)
+        logger.log( 8, 'update()')
         if state is not None:
             if state == BAR_SHOW:
                 self.show()
@@ -165,7 +165,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         used when showing for the first time
         """
-        _debug_('show()', 2)
+        logger.log( 9, 'show()')
         self.player = audio.player.get()
         if self.player:
             self.getinfo()
@@ -175,7 +175,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         used when hiding the bar
         """
-        _debug_('hide()', 2)
+        logger.log( 9, 'hide()')
         self.render = []
         self.player = None
         self.time   = None
@@ -186,7 +186,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         stops the player, waiting for timeout
         """
-        _debug_('stop()', 2)
+        logger.log( 9, 'stop()')
         #self.state = BAR_WAIT
         #self.time  = time.time()
 
@@ -196,7 +196,7 @@ class PluginInterface(plugin.DaemonPlugin):
         draws the bar
         called from the skin's redraw method
         """
-        _debug_('draw((type=%r, object=%r), osd=%r)' % (type, object, osd), 3)
+        logger.log( 8, 'draw((type=%r, object=%r), osd=%r)', type, object, osd)
         if self.player is None:
             return
 
@@ -263,7 +263,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         sets an array of things to draw
         """
-        _debug_('getinfo()', 2)
+        logger.log( 9, 'getinfo()')
         self.render = []
         self.calculate = True
         info = self.player.item.info
@@ -292,7 +292,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         sizecalcs is not necessery on every pass
         """
-        _debug_('calculatesizes(osd=%r, font=%r)' % (osd, font), 3)
+        logger.log( 8, 'calculatesizes(osd=%r, font=%r)', osd, font)
         if not hasattr(self, 'idlebar'):
             self.idlebar = plugin.getbyname('idlebar')
             if self.idlebar:
@@ -302,7 +302,7 @@ class PluginInterface(plugin.DaemonPlugin):
                         self.idlebar_max = p.clock_left_position
 
                 if self.idlebar_max - self.idlebar.free_space < 250:
-                    _debug_('free space in idlebar to small, using normal detach', DINFO)
+                    logger.info('free space in idlebar to small, using normal detach')
                     self.idlebar = None
 
 
@@ -344,7 +344,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         returns string formatted as mins:seconds
         """
-        _debug_('formattime(seconds=%r)' % (seconds,), 3)
+        logger.log( 8, 'formattime(seconds=%r)', seconds)
         try:
             mins = 0
             mins = int(seconds) / 60

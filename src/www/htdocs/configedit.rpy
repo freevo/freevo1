@@ -61,7 +61,7 @@ from www.configlib import  *
 def LogTransaction(cmd, lineno, line):
     '''
     '''
-    _debug_('LogTransaction(cmd=%r, lineno=%r, line=%r)' % ( cmd, lineno, line ), 2)
+    logger.log( 9, 'LogTransaction(cmd=%r, lineno=%r, line=%r)', cmd, lineno, line)
     if config.__dict__.has_key('FREEVO_LOGDIR'):
         logfile_directory = config.FREEVO_LOGDIR
     else:
@@ -80,7 +80,7 @@ def LogTransaction(cmd, lineno, line):
 def WriteConfigFile(filename, conf):
     '''
     '''
-    _debug_('WriteConfigFile(filename=%r, conf=%r)' % ( filename, conf ), 2)
+    logger.log( 9, 'WriteConfigFile(filename=%r, conf=%r)', filename, conf)
     cfile = open(filename, 'w')
     for ln in conf:
         cfile.write(ln)
@@ -90,7 +90,7 @@ def WriteConfigFile(filename, conf):
 def cmdCreateFXDFile(fxd_file, fxd_title, fxd_url):
     '''
     '''
-    _debug_('cmdCreateFXDFile(xfd_file=%r, fxd_title=%r, fxd_url=%r)' % ( fxd_file, fxd_title, fxd_url ), 2)
+    logger.log( 9, 'cmdCreateFXDFile(xfd_file=%r, fxd_title=%r, fxd_url=%r)', fxd_file, fxd_title, fxd_url)
 
     fxd_file_handle = open(fxd_file, 'w' )
     fxd_file_handle.write('<freevo>')
@@ -111,8 +111,8 @@ def cmdCreateFXDFile(fxd_file, fxd_title, fxd_url):
 def cmdBrowseFiles(browse_dir, browse_area, setting_name, browse_type='F', display_hidden=False):
     '''
     '''
-    _debug_('cmdBrowseFiles(browse_dir=%r, browse_area=%r, setting_name=%r, browse_type=%r, dispay_hidden=%r)' % \
-        ( browse_dir, browse_area, setting_name, browse_type, display_hidden ) , 2)
+    logger.log( 9, 'cmdBrowseFiles(browse_dir=%r, browse_area=%r, setting_name=%r, browse_type=%r, dispay_hidden=%r)', browse_dir, browse_area, setting_name, browse_type, display_hidden)
+
 
     browse_dir = browse_dir.strip("'")
     browse_dir = os.path.dirname(browse_dir)
@@ -182,7 +182,7 @@ def cmdBrowseFiles(browse_dir, browse_area, setting_name, browse_type='F', displ
 def cmdCheckValue(varName, varValue):
     '''
     '''
-    _debug_('cmdCheckValue(varName=%r, varValue=%r)' % (varName, varValue ) , 2)
+    logger.log( 9, 'cmdCheckValue(varName=%r, varValue=%r)', varName, varValue)
 
     retClass = 'checkError'
     status = 'Error'
@@ -213,8 +213,8 @@ def cmdCheckValue(varName, varValue):
 def UpdateSetting(cfile, varName, varValue, varEnable, sline, eline, syntaxcheck):
     '''
     '''
-    _debug_('UpdateSetting(cfile=%r, varName=%r, varValue=%r, varEnable=%r, sline=%r, eline=%r, syntaxcheck=%r)' % \
-            (cfile, varName, varValue, varEnable, sline, eline, syntaxcheck), 2)
+    logger.log( 9, 'UpdateSetting(cfile=%r, varName=%r, varValue=%r, varEnable=%r, sline=%r, eline=%r, syntaxcheck=%r)', cfile, varName, varValue, varEnable, sline, eline, syntaxcheck)
+
 
     llog ='Running Update on Name: %s On Lines : %i - %i' % (varName, sline, eline)
     LogTransaction(llog, 0, '')
@@ -264,7 +264,7 @@ def UpdateSetting(cfile, varName, varValue, varEnable, sline, eline, syntaxcheck
 def DeleteLines(cfile, startline, endline):
     '''
     '''
-    _debug_('DeleteLines(cfile=%r, startline=%r, endline=%r)' % (cfile, startline, endline), 2)
+    logger.log( 9, 'DeleteLines(cfile=%r, startline=%r, endline=%r)', cfile, startline, endline)
 
     rconf = ReadConfig(cfile)
     dellines = '<ul>'

@@ -207,7 +207,7 @@ class Xawtv:
         elif mixer and config.MIXER_MAJOR_CTRL == 'PCM':
             mixer.setPcmVolume(mixer_vol)
 
-        _debug_('%s: started %s app' % (time.time(), self.mode))
+        logger.debug('%s: started %s app', time.time(), self.mode)
 
 
     def Stop(self, channel_change=0):
@@ -221,7 +221,7 @@ class Xawtv:
         rc.remove_app(self)
 
     def eventhandler(self, event, menuw=None):
-        _debug_('%s: %s app got %s event' % (time.time(), self.mode, event))
+        logger.debug('%s: %s app got %s event', time.time(), self.mode, event)
         if event == em.STOP or event == em.PLAY_END:
             self.app.sendcmd('quit')
             time.sleep(1)

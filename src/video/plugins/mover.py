@@ -115,11 +115,11 @@ class PluginInterface(plugin.ItemPlugin):
                 if self.makedirs:
                     os.makedirs(local_to_dir)
                 else:
-                    _debug_("Path doesn't exist, and makedirs=%s" % self.makedirs)
+                    logger.debug("Path doesn't exist, and makedirs=%s", self.makedirs)
                     menuw.delete_menu(menuw=menuw)
                     return
         elif not os.path.isdir(local_to_dir):
-            _debug_("%s is not a dir" % local_to_dir)
+            logger.debug("%s is not a dir", local_to_dir)
             return
 
         if self.item.files:

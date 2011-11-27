@@ -73,7 +73,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         init the upsoon plugin
         """
-        _debug_('upsoon.PluginInterface.__init__()', 2)
+        logger.log( 9, 'upsoon.PluginInterface.__init__()')
         plugin.DaemonPlugin.__init__(self)
         plugin.register(self, 'upsoon')
         self.standalone = standalone
@@ -98,7 +98,7 @@ class PluginInterface(plugin.DaemonPlugin):
         self.stopped = None     # flag that tells upsoon what stopped
         if os.path.exists(self.pending_lockfile):
             os.remove(self.pending_lockfile)
-            _debug_('%r lockfile removed' % (self.pending_lockfile))
+            logger.debug('%r lockfile removed', self.pending_lockfile)
 
 
     def config(self):
@@ -110,13 +110,13 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def getVideoForChannel(self, channel_id):
         """ get the video device given a channel id """
-        _debug_('getVideoForChannel(channel_id=%r)' % (channel_id), 2)
+        logger.log( 9, 'getVideoForChannel(channel_id=%r)', channel_id)
         return self.fc.getVideoGroup(channel_id, False, CHANNEL_ID).vdev
 
 
     def stopVideoInUse(self, vdev):
         """ stop the video device if being used """
-        _debug_('stopVideoInUse(vdev=%r)' % (vdev), 2)
+        logger.log( 9, 'stopVideoInUse(vdev=%r)', vdev)
         if vdev:
             try:
                 dev_fh = os.open(vdev, os.O_TRUNC)
@@ -132,12 +132,12 @@ class PluginInterface(plugin.DaemonPlugin):
                         self.stopped = _('TV')
                 os.close(dev_fh)
             except Exception, why:
-                _debug_('cannot check video device %r: %s' % (vdev, why), DWARNING)
+                logger.warning('cannot check video device %r: %s', vdev, why)
 
 
     def stopRadioInUse(self, rdev):
         """ stop the radio device if being used """
-        _debug_('stopRadioInUse(rdev=%r)' % (rdev), 2)
+        logger.log( 9, 'stopRadioInUse(rdev=%r)', rdev)
         if rdev:
             try:
                 dev_fh = os.open(rdev, os.O_TRUNC)
@@ -152,7 +152,7 @@ class PluginInterface(plugin.DaemonPlugin):
                         self.stopped = _('Radio')
                 os.close(dev_fh)
             except:
-                _debug_('cannot check radio device \"%s\"' % (rdev), DINFO)
+                logger.info('cannot check radio device \"%s\"', rdev)
 
 
     def close(self):
@@ -160,28 +160,28 @@ class PluginInterface(plugin.DaemonPlugin):
         to be called before the plugin exists.
         It terminates the connection with the server
         """
-        _debug_('close()', 2)
+        logger.log( 9, 'close()')
 
 
     def shutdown(self):
         """ Showdown handler """
-        _debug_('shutdown()', 2)
+        logger.log( 9, 'shutdown()')
         self.running = False
 
 
     def findNextProgramHandler(self, result):
         """ Handles the result from the findNextProgram call """
-        _debug_('findNextProgramHandler(result=%r)' % (result,), 2)
+        logger.log( 9, 'findNextProgramHandler(result=%r)', result)
         (status, self.next_program) = result
 
         if not status:
             return
 
         now = time.time()
-        _debug_('now=%s next=%s ' % (time.strftime('%T', time.localtime(now)), self.next_program), 2)
+        logger.log( 9, 'now=%s next=%s ', time.strftime('%T', time.localtime(now)), self.next_program)
 
         self.seconds_to_next = self.next_program.start - config.TV_RECORD_PADDING_PRE - int(now + 0.5)
-        _debug_('next recording in %s secs' % (self.seconds_to_next), 2)
+        logger.log( 9, 'next recording in %s secs', self.seconds_to_next)
 
         self.vdev = self.getVideoForChannel(self.next_program.channel_id)
         self.tv_lockfile = os.path.join(config.FREEVO_CACHEDIR, 'record.'+self.vdev.split('/')[-1])
@@ -193,30 +193,30 @@ class PluginInterface(plugin.DaemonPlugin):
             self.announced = False
             if os.path.exists(self.tv_lockfile):
                 os.remove(self.pending_lockfile)
-                _debug_('%r lockfile removed tv lock detected' % (self.pending_lockfile), 1)
+                logger.debug('%r lockfile removed tv lock detected', self.pending_lockfile)
             elif self.seconds_to_next < -self.seconds_before_start:
                 os.remove(self.pending_lockfile)
-                _debug_('%r lockfile removed recording in-progress' % (self.pending_lockfile), 1)
+                logger.debug('%r lockfile removed recording in-progress', self.pending_lockfile)
         else:
             if os.path.exists(self.tv_lockfile):
-                _debug_('%r not creating tv lock detected' % (self.pending_lockfile,), 1)
+                logger.debug('%r not creating tv lock detected', self.pending_lockfile)
                 return
             if self.seconds_to_next < 0:
-                _debug_('%r not creating recording in-progress' % (self.pending_lockfile,), 1)
+                logger.debug('%r not creating recording in-progress', self.pending_lockfile)
                 return
             # announce 120 seconds before recording is due to start
             # stop the player 60 seconds before recording is due to start
             if self.seconds_to_next <= self.seconds_before_start:
                 open(self.pending_lockfile, 'w').close()
-                _debug_('%r lockfile created' % (self.pending_lockfile), 1)
+                logger.debug('%r lockfile created', self.pending_lockfile)
 
                 self.stopVideoInUse(self.vdev)
                 self.stopRadioInUse(self.rdev)
-                _debug_('stopped video or radio player')
+                logger.debug('stopped video or radio player')
             elif self.seconds_to_next <= self.seconds_before_announce:
                 if not self.announced:
                     rc.post_event(Event(OSD_MESSAGE, arg=_('A recording will start in a few minutes')))
-                    _debug_('announced', 1)
+                    logger.debug('announced')
                     self.announced = True
 
 
@@ -226,11 +226,11 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         if not self.running:
             return self.running
-        _debug_('timer_handler()', 2)
+        logger.log( 9, 'timer_handler()')
         try:
             self.recordclient.findNextProgram(self.findNextProgramHandler, isrecording=True)
         except Exception, why:
-            _debug_('findNextProgram: %s' % (why), DERROR)
+            logger.error('findNextProgram: %s', why)
 
         return self.running
 
@@ -240,10 +240,10 @@ class PluginInterface(plugin.DaemonPlugin):
         Processes events, detect the video start and stop events so that the
         alert box will work correctly
         """
-        _debug_('event_handler(event=%r)' % (event.name), 2)
+        logger.log( 9, 'event_handler(event=%r)', event.name)
         try:
-            _debug_('event_handler(%s) name=%s arg=%s context=%s handler=%s' % \
-                (event, event.name, event.arg, event.context, event.handler), 2)
+            logger.log( 9, 'event_handler(%s) name=%s arg=%s context=%s handler=%s', event, event.name, event.arg, event.context, event.handler)
+
         finally:
             pass
 

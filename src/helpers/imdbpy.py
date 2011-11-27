@@ -125,8 +125,8 @@ if __name__ == "__main__":
     (opts, args) = parse_options({})
     if args[0] == 'imdbpy':
         args.pop(0)
-    _debug_('opts=%r' % (opts,))
-    _debug_('args=%r' % (args,))
+    logger.debug('opts=%r', opts)
+    logger.debug('args=%r', args)
 
     # check the aruments
     if opts.search and opts.guess:

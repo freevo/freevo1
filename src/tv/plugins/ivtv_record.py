@@ -57,7 +57,7 @@ class PluginInterface(plugin.Plugin):
     """
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         plugin.Plugin.__init__(self)
         plugin.register(Recorder(), plugin.RECORD)
 
@@ -65,12 +65,12 @@ class PluginInterface(plugin.Plugin):
 class Recorder:
 
     def __init__(self):
-        _debug_('Recorder.__init__()', 2)
+        logger.log( 9, 'Recorder.__init__()')
         # Disable this plugin if not loaded by record_server.
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
 
-        _debug_('ACTIVATING IVTV RECORD PLUGIN', DINFO)
+        logger.info('ACTIVATING IVTV RECORD PLUGIN')
 
         self.thread = Record_Thread()
         self.thread.setDaemon(1)
@@ -79,18 +79,18 @@ class Recorder:
 
 
     def Record(self, rec_prog):
-        _debug_('Record(rec_prog=%r)' % (rec_prog), 2)
+        logger.log( 9, 'Record(rec_prog=%r)', rec_prog)
         # It is safe to ignore config.TV_RECORD_FILE_SUFFIX here.
         rec_prog.filename = os.path.splitext(tv_util.getProgFilename(rec_prog))[0] + '.mpeg'
 
         self.thread.mode = 'record'
         self.thread.prog = rec_prog
         self.thread.mode_flag.set()
-        _debug_('Recorder::Record: %s' % rec_prog, DINFO)
+        logger.info('Recorder::Record: %s', rec_prog)
 
 
     def Stop(self):
-        _debug_('Stop()', 2)
+        logger.log( 9, 'Stop()')
         self.thread.mode = 'stop'
         self.thread.mode_flag.set()
 
@@ -99,7 +99,7 @@ class Recorder:
 class Record_Thread(threading.Thread):
 
     def __init__(self):
-        _debug_('Record_Thread.__init__()', 2)
+        logger.log( 9, 'Record_Thread.__init__()')
         threading.Thread.__init__(self)
 
         self.mode = 'idle'
@@ -109,41 +109,41 @@ class Record_Thread(threading.Thread):
 
 
     def run(self):
-        _debug_('Record_Thread.run()', 2)
+        logger.log( 9, 'Record_Thread.run()')
         while 1:
-            _debug_('Record_Thread::run: mode=%s' % self.mode)
+            logger.debug('Record_Thread::run: mode=%s', self.mode)
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
 
             elif self.mode == 'record':
                 try:
-                    _debug_('Record_Thread::run: started recording', DINFO)
+                    logger.info('Record_Thread::run: started recording')
 
                     fc = FreevoChannels()
-                    _debug_('Channel: %s' % (fc.getChannel()))
+                    logger.debug('Channel: %s', fc.getChannel())
 
                     vg = fc.getVideoGroup(self.prog.tunerid, False)
 
-                    _debug_('Opening device %r' % (vg.vdev))
+                    logger.debug('Opening device %r', vg.vdev)
                     v = tv.ivtv.IVTV(vg.vdev)
 
                     v.init_settings()
 
-                    _debug_('Setting input to %r' % (vg.input_type))
+                    logger.debug('Setting input to %r', vg.input_type)
                     v.setinputbyname(vg.input_type)
 
                     cur_std = v.getstd()
                     try:
                         new_std = V4L2.NORMS.get(vg.tuner_norm)
                         if cur_std != new_std:
-                            _debug_('Setting standard to %s' % (new_std))
+                            logger.debug('Setting standard to %s', new_std)
                             v.setstd(new_std)
                     except:
-                        _debug_("Videogroup norm value '%s' not from NORMS: %s" % \
-                            (vg.tuner_norm, V4L2.NORMS.keys()), DERROR)
+                        logger.error("Videogroup norm value '%s' not from NORMS: %s", vg.tuner_norm, V4L2.NORMS.keys())
 
-                    _debug_('Setting channel to %r' % self.prog.tunerid)
+
+                    logger.debug('Setting channel to %r', self.prog.tunerid)
                     fc.chanSet(str(self.prog.tunerid), False)
 
                     # Setting the input sound level on the PVR card
@@ -158,13 +158,13 @@ class Record_Thread(threading.Thread):
                     except ValueError:
                         pass
 
-                    _debug_('SetAudioByChannel: Channel: %r TV_CHANNEL pos(%d)' % (channel, channel_index))
+                    logger.debug('SetAudioByChannel: Channel: %r TV_CHANNEL pos(%d)', channel, channel_index)
                     try:
                         ivtv_avol = vg.avol
                     except AttributeError:
                         ivtv_avol = 0
                     if ivtv_avol <= 0:
-                        _debug_('SetAudioByChannel: The tv_video group for %r doesn\'t set the volume' % channel)
+                        logger.debug('SetAudioByChannel: The tv_video group for %r doesn\'t set the volume', channel)
                     else:
                         # Is there a specific volume level in TV_CHANNELS_VOLUME
                         avol_percent = 100
@@ -187,15 +187,15 @@ class Record_Thread(threading.Thread):
                             avol = 65535
                         if avol < 0:
                             avol = 0
-                        _debug_('SetAudioByChannel: Current PVR Sound level is : %s' % v.getctrl(0x00980905))
-                        _debug_('SetAudioByChannel: Set the PVR Sound Level to : %s (%s * %s)' % (avol, ivtv_avol, avol_percent))
+                        logger.debug('SetAudioByChannel: Current PVR Sound level is : %s', v.getctrl(0x00980905))
+                        logger.debug('SetAudioByChannel: Set the PVR Sound Level to : %s (%s * %s)', avol, ivtv_avol, avol_percent)
                         v.setctrl(0x00980905, avol)
-                        _debug_('SetAudioByChannel: New PVR Sound level is : %s' % v.getctrl(0x00980905))
+                        logger.debug('SetAudioByChannel: New PVR Sound level is : %s', v.getctrl(0x00980905))
 
                     if vg.cmd != None:
-                        _debug_("Running command %r" % vg.cmd)
+                        logger.debug("Running command %r", vg.cmd)
                         retcode = os.system(vg.cmd)
-                        _debug_("exit code: %g" % retcode)
+                        logger.debug("exit code: %g", retcode)
 
                     now = time.time()
                     stop = now + self.prog.rec_duration
@@ -206,12 +206,12 @@ class Record_Thread(threading.Thread):
                     v_in  = open(vg.vdev, 'r')
                     v_out = open(self.prog.filename, 'w')
 
-                    _debug_('Recording from %r to %r in %s byte chunks' % (vg.vdev, self.prog.filename, CHUNKSIZE))
+                    logger.debug('Recording from %r to %r in %s byte chunks', vg.vdev, self.prog.filename, CHUNKSIZE)
                     while time.time() < stop:
                         buf = v_in.read(CHUNKSIZE)
                         v_out.write(buf)
                         if self.mode == 'stop':
-                            _debug_('Recording stopped', DINFO)
+                            logger.info('Recording stopped')
                             break
 
                     v_in.close()
@@ -222,9 +222,9 @@ class Record_Thread(threading.Thread):
                     self.mode = 'idle'
 
                     rc.post_event(Event('RECORD_STOP', arg=self.prog))
-                    _debug_('Record_Thread::run: finished recording', DINFO)
+                    logger.info('Record_Thread::run: finished recording')
                 except Exception, why:
-                    _debug_('%s' % (why), DCRITICAL)
+                    logger.critical('%s', why)
                     return
 
             else:

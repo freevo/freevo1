@@ -161,7 +161,7 @@ class FlowLayout(LayoutManager):
                         child.set_position(child.left + x_offset, child.top)
                     else:
                         child.set_position(x_offset, child.top)
-                    _debug_('            moved right by %s' % x_offset, 2)
+                    logger.log( 9, '            moved right by %s', x_offset)
 
                 if child.h_align == Align.LEFT:
                     pass

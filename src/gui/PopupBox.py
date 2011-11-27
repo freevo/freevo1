@@ -142,7 +142,7 @@ class PopupBox(Window):
 
 
     def eventhandler(self, event):
-        _debug_('PopupBox: event = %s' % event, 2)
+        logger.log( 9, 'PopupBox: event = %s', event)
 
         if event == INPUT_EXIT:
             self.destroy()

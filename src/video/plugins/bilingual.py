@@ -50,7 +50,7 @@ class PluginInterface(plugin.ItemPlugin):
     """
 
     def __init__(self):
-        _debug_('bilingual.PluginInterface.__init__(self)', 2)
+        logger.log( 9, 'bilingual.PluginInterface.__init__(self)')
         plugin.ItemPlugin.__init__(self)
         self.item = None
 
@@ -60,7 +60,7 @@ class PluginInterface(plugin.ItemPlugin):
         config is called automatically,
         freevo plugins -i video.bilingual returns the info
         """
-        _debug_('config(self)', 2)
+        logger.log( 9, 'config(self)')
         return [
         ]
 
@@ -74,12 +74,12 @@ class PluginInterface(plugin.ItemPlugin):
         left, right or both channels and this information is passed to the player
         as part of the item, i.e. item.language_selection.
         """
-        _debug_('actions(self, item)', 2)
+        logger.log( 9, 'actions(self, item)')
         if item.type == 'video' and item.mode == 'file':
             if hasattr(item, 'audio'):
-                _debug_('len(item.info[\'audio\'])=%d' % (len(item.info['audio'])))
+                logger.debug('len(item.info[\'audio\'])=%d', len(item.info['audio']))
             if len(item.info['audio']) == 1:
-                _debug_('item[\'audio\'][0][\'codec\']=%r' % (item['audio'][0]['codec']))
+                logger.debug('item[\'audio\'][0][\'codec\']=%r', item['audio'][0]['codec'])
                 if item['audio'][0]['codec'] == 'MP2A':
                     self.item = item
                     return [ (self.language_selection_menu, _('Bilingual language selection')) ]
@@ -87,7 +87,7 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def language_selection_menu(self, menuw=None, arg=None):
-        _debug_('language_selection_menu(self, menuw=%r, arg=%r)' % (menuw, arg), 2)
+        logger.log( 9, 'language_selection_menu(self, menuw=%r, arg=%r)', menuw, arg)
         menu_items = []
         menu_items += [ menu.MenuItem(_('Play Both Channels'), self.language_selection, (self.item, 'both'))  ]
         menu_items += [ menu.MenuItem(_('Play Left Channel'),  self.language_selection, (self.item, 'left'))  ]
@@ -97,6 +97,6 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def language_selection(self, menuw=None, arg=None):
-        _debug_('language_selection(self, menuw=%r, arg=%r)' % (menuw, arg), 2)
+        logger.log( 9, 'language_selection(self, menuw=%r, arg=%r)', menuw, arg)
         arg[0].selected_language = arg[1]
         menuw.back_one_menu()

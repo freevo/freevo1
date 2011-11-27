@@ -76,7 +76,7 @@ def progname2favname(progname):
         + 'dnooooo/ouuuuypy'
 
     favname = string.translate(progname,translation_table)
-    _debug_('progname2favname(progname=%r) favname=%r' % (progname, favname), 2)
+    logger.log( 9, 'progname2favname(progname=%r) favname=%r', progname, favname)
     return favname
 
 

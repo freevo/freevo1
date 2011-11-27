@@ -105,11 +105,11 @@ class WebIPC(object):
                     self.return_result = args.get('data')
                     self.return_event.set()
                 else:
-                    _debug_('Unexpected return!')
+                    logger.debug('Unexpected return!')
             elif args['cmd'] == 'event':
                 event.Event('WEB_IPC', args['data']).post()
             else:
-                _debug_('Unexpected ')
+                logger.debug('Unexpected ')
 
             if result is None:
                 result = {}

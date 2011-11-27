@@ -102,7 +102,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     | FLICKR_LIMIT = 20
     """
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         if not config.SYS_USE_NETWORK:
             self.reason = 'SYS_USE_NETWORK not enabled'
             return
@@ -121,7 +121,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def config(self):
         """returns the config variables used by this plugin"""
-        _debug_('config()', 2)
+        logger.log( 9, 'config()')
         return [
             ('FLICKR_PICTURES', None, 'id and description to get pictures'),
             ('FLICKR_KEY', None, 'Your flickr key api to access www.flickr.com'),
@@ -131,7 +131,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
-        _debug_('items(parent=%r)' % (parent), 2)
+        logger.log( 9, 'items(parent=%r)', parent)
         return [ FlickImage(parent) ]
 
 
@@ -140,7 +140,7 @@ class FlickImage(Item):
     """Main Class"""
 
     def __init__(self, parent):
-        _debug_('FlickImage.__init__(parent=%r)' % (parent), 2)
+        logger.log( 9, 'FlickImage.__init__(parent=%r)', parent)
         Item.__init__(self, parent, skin_type='image')
         self.name = _('Flickr pictures')
         self.title = _('Flickr pictures')
@@ -150,13 +150,13 @@ class FlickImage(Item):
 
     def actions(self):
         """Only one action, return user list"""
-        _debug_('actions()', 2)
+        logger.log( 9, 'actions()')
         return [ (self.userlist, 'Flickr pictures') ]
 
 
     def userlist(self, arg=None, menuw=None):
         """Menu for choose user"""
-        _debug_('userlist(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'userlist(arg=%r, menuw=%r)', arg, menuw)
         users = []
         for id,description in config.FLICKR_PICTURES:
             users.append(menu.MenuItem(description, self.imagelist, (id, description)))
@@ -165,14 +165,14 @@ class FlickImage(Item):
 
     def imagelist(self, arg=None, menuw=None):
         """Menu for choose image"""
-        _debug_('imagelist(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'imagelist(arg=%r, menuw=%r)', arg, menuw)
         items = image_list(self, _("Retrieving image list"), arg[0])
         menuw.pushmenu(menu.Menu(_('Images available'), items))
 
 
     def showimage(self, arg=None, menuw=None):
         """Save in file and watch it"""
-        _debug_('showimage(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'showimage(arg=%r, menuw=%r)', arg, menuw)
         file = config.FLICKR_DIR + "/" + arg[2].replace("-","_") + ".jpg"
         if not os.path.exists(file):
             box = PopupBox(_("Downloading picture \"") + arg[0] + '"', width=600)
@@ -188,7 +188,7 @@ class FlickImage(Item):
 
 def image_list(parent, title, user):
     """Get the image list for a specific user"""
-    _debug_('image_list(parent=%r, title=%r, user=%r)' % (parent, title, user), 2)
+    logger.log( 9, 'image_list(parent=%r, title=%r, user=%r)', parent, title, user)
     items = []
     web = 'http://www.flickr.com/services/rest/?method=flickr.people.getPublicPhotos&user_id=' + user + \
         '&format=json&api_key=' + config.FLICKR_KEY + '&per_page=' + str(config.FLICKR_LIMIT) + \

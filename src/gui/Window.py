@@ -137,7 +137,7 @@ class Window(GUIObject):
         The actual internal draw function.
 
         """
-        _debug_('Window::_draw %s' % self, 2)
+        logger.log( 9, 'Window::_draw %s', self)
 
         if not self.width or not self.height:
             raise TypeError, 'Not all needed variables set.'

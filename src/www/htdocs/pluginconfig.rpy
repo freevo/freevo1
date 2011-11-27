@@ -54,7 +54,7 @@ FALSE = 0
 def ParsePluginName(line):
     """
     """
-    _debug_('ParsePluginName(line=%r)' % (line), 2)
+    logger.log( 9, 'ParsePluginName(line=%r)', line)
     sline = line.replace('"', "'")
     sline = sline.split("'")
     if len(sline) > 2:
@@ -66,7 +66,7 @@ def ParsePluginName(line):
 def ReadConfigPlugins(cfile):
     """
     """
-    _debug_('ReadConfigPlugins(cfile=%r)' % (cfile), 2)
+    logger.log( 9, 'ReadConfigPlugins(cfile=%r)', cfile)
     rconf = ReadConfig(cfile)
     pluginlines = []
     cnt = 0
@@ -94,7 +94,7 @@ def ReadConfigPlugins(cfile):
 def GetPlugConfig(plugin):
     """
     """
-    _debug_('GetPlugConfig(plugin=%r)' % (plugin), 2)
+    logger.log( 9, 'GetPlugConfig(plugin=%r)', plugin)
 
     config_list = []
     if plugin[5].find('config') > 0:
@@ -107,7 +107,7 @@ def GetPlugConfig(plugin):
 def get_config_setting(lconf, plugin_name):
     """
     """
-    _debug_('get_config_setting(lconf=%r, plugin_name=%r)' % (lconf, plugin_name), 2)
+    logger.log( 9, 'get_config_setting(lconf=%r, plugin_name=%r)', lconf, plugin_name)
     conf_line = 'None'
     confentry = False
     linenumber = -1
@@ -122,7 +122,7 @@ def get_config_setting(lconf, plugin_name):
 def plugin_level_control(lconf_line, plugin):
     """
     """
-    _debug_('plugin_level_control(lconf_line=%r, plugin=%r)' % (lconf_line, plugin), 2)
+    logger.log( 9, 'plugin_level_control(lconf_line=%r, plugin=%r)', lconf_line, plugin)
 
     # check to see if the plugin supports levels.
     lconf_line = lconf_line.replace(' ', '')
@@ -150,7 +150,7 @@ def plugin_level_control(lconf_line, plugin):
 def get_plugin_args(config_line):
     """
     """
-    _debug_('get_plugin_args(config_line=%r)' % (config_line), 2)
+    logger.log( 9, 'get_plugin_args(config_line=%r)', config_line)
 
     plugin_args = ''
     if config_line.find("args=") <> -1:
@@ -162,7 +162,7 @@ def get_plugin_args(config_line):
 def PluginHelpLink(plugin_group, plugin_name):
     """
     """
-    _debug_('PluginHelpLink(plugin_group=%r, plugin_name=%r)' % (plugin_group, plugin_name ), 2)
+    logger.log( 9, 'PluginHelpLink(plugin_group=%r, plugin_name=%r)', plugin_group, plugin_name)
 
     href = 'help/plugins.rpy?type=%s#%s' % ( plugin_group.lower(),  plugin_name.lower()  )
     plugin_help = '<a href="%s" class="Help_Link">' % href
@@ -184,7 +184,7 @@ class PluginHTMLControl(object):
     def status(self):
         """
         """
-        _debug_('get_plugin_status(self=%r)' % (self), 2)
+        logger.log( 9, 'get_plugin_status(self=%r)', self)
         status = 'Deactive'
 
         if is_active(self.plugin_name):
@@ -202,8 +202,8 @@ class PluginHTMLControl(object):
 def displayplugin(cfile, plugin, lconf, expAll , plugin_group):
     """
     """
-    _debug_('displayplugin(cfile=%r, plugin=%r, lconf=%r, expAll=%r, plugin_group=%r)' %  \
-           (cfile, plugin, lconf, expAll, plugin_group), 2)
+    logger.log( 9, 'displayplugin(cfile=%r, plugin=%r, lconf=%r, expAll=%r, plugin_group=%r)', cfile, plugin, lconf, expAll, plugin_group)
+
 
     ctrlopts = ['Active', 'Deactive', 'Removed']
     html = ''
@@ -259,7 +259,7 @@ def displayplugin(cfile, plugin, lconf, expAll , plugin_group):
 def Display_Vars(plugin, cfile):
     """
     """
-    _debug_('Display_Vars(plugin=%r, cfile=%r)' % (plugin, cfile), 2)
+    logger.log( 9, 'Display_Vars(plugin=%r, cfile=%r)', plugin, cfile)
 
     try:
         clist = GetPlugConfig(plugin)
@@ -307,8 +307,8 @@ class ConfigurePluginsResource(FreevoResource):
     def display_group(self,  splugins,  lcplugins):
         """
         """
-        _debug_('display_group(dsp_group=%r, splugins=%r, lcplugins=%r)' % \
-            (self, splugins,  lcplugins), 2)
+        logger.log( 9, 'display_group(dsp_group=%r, splugins=%r, lcplugins=%r)', self, splugins, lcplugins)
+
 
         grouplist = ''
         grouplist += '<ul id="plugin_group">\n'
@@ -337,7 +337,7 @@ class ConfigurePluginsResource(FreevoResource):
     def SortPlugins(self):
         """
         """
-        _debug_('SortPlugins(self=%r)' % (self), 2)
+        logger.log( 9, 'SortPlugins(self=%r)', self)
         sorted = []
         for plugin in self.all_plugins:
             pgrp = plugin[0].split('.')[0]
@@ -350,7 +350,7 @@ class ConfigurePluginsResource(FreevoResource):
     def _render(self, request):
         """
         """
-        _debug_('_render(request)', 2)
+        logger.log( 9, '_render(request)')
 
         fv = HTMLResource()
         form = request.args

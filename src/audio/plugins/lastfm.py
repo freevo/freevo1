@@ -179,9 +179,9 @@ class LastFMFetcher(Thread):
         Execute a download operation. Stop when finished downloading or
         requested to stop.
         """
-        _debug_('%s.run(%s)' % (self.__class__, self.name))
+        logger.debug('%s.run(%s)', self.__class__, self.name)
         if not self.url:
-            _debug_('%s _not_ downloaded' % (self.filename,))
+            logger.debug('%s _not_ downloaded', self.filename)
             return
         request = urllib2.Request(self.url, headers=self.headers)
         opener = urllib2.build_opener(SmartRedirectHandler())
@@ -196,31 +196,31 @@ class LastFMFetcher(Thread):
                     break
                 self.size += len(reply)
             else:
-                _debug_('%s download aborted' % (self.filename,))
+                logger.debug('%s download aborted', self.filename)
                 os.remove(self.filename)
             fd.close()
             f.close()
         except urllib2.HTTPError, why:
             if why.code not in (404,):
                 self.reason = '%r: %s' % (self.filename, why)
-            _debug_('%s: %s' % (self.url, why))
+            logger.debug('%s: %s', self.url, why)
             print('%s: %s' % (self.url, why))
             print('%r: %s/%s' % (self.filename, why.code, why.message))
         except ValueError, why:
             self.reason = '%r: %s' % (self.filename, why)
             traceback.print_exc()
-            _debug_('%s: %s' % (self.url, why))
+            logger.debug('%s: %s', self.url, why)
         except Exception, why:
             self.reason = '%r: %s' % (self.filename, why)
             traceback.print_exc()
-        _debug_('%s.run(%s) finished' % (self.__class__, self.name))
+        logger.debug('%s.run(%s) finished', self.__class__, self.name)
 
 
     def stop(self):
         """
         Stop the download thead running
         """
-        _debug_('%s.stop()' % (self.__class__,))
+        logger.debug('%s.stop()', self.__class__)
         self.running = False
 
 
@@ -242,7 +242,7 @@ class LastFMWebServices:
     }
 
     def __init__(self):
-        _debug_('%s.__init__()' % (self.__class__,))
+        logger.debug('%s.__init__()', self.__class__)
         self.logincachefilename = os.path.join(config.FREEVO_CACHEDIR, 'lastfm.session')
         try:
             self.cachefd = open(self.logincachefilename, 'r')
@@ -287,10 +287,10 @@ class LastFMWebServices:
                 #print('len(reply)=%r' % (len(reply),))
             return reply
         except urllib2.HTTPError, why:
-            _debug_('%s: %s' % (url, why))
+            logger.debug('%s: %s', url, why)
             raise LastFMError(why, url, why.code)
         except Exception, why:
-            _debug_('%s: %s' % (url, why))
+            logger.debug('%s: %s', url, why)
             raise LastFMError(why, url)
 
 
@@ -342,7 +342,7 @@ class LastFMWebServices:
 
     def adjust_station(self, station_url):
         """Change Last FM Station"""
-        _debug_('%s.adjust_station(station_url=%r)' % (self.__class__, station_url))
+        logger.debug('%s.adjust_station(station_url=%r)', self.__class__, station_url)
         if GUI:
             osd.busyicon.wait(config.OSD_BUSYICON_TIMER[0])
         try:
@@ -395,7 +395,7 @@ class LastFMWebServices:
         @param headers: http request headers
         @param entry: metadata for the entry
         """
-        _debug_('%s.fetch(url=%r, filename=%r, headers=%r, entry=%r)' % (self.__class__, url, filename, headers, entry))
+        logger.debug('%s.fetch(url=%r, filename=%r, headers=%r, entry=%r)', self.__class__, url, filename, headers, entry)
         if filename is None:
             self.reason = 'No file name'
             return None
@@ -411,7 +411,7 @@ class LastFMWebServices:
 
     def skip(self):
         """Skip song"""
-        _debug_('%s.skip()' % (self.__class__,))
+        logger.debug('%s.skip()', self.__class__)
         if not self.session:
             self._login
         skip_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=skip&debug=0' % \
@@ -421,7 +421,7 @@ class LastFMWebServices:
 
     def love(self):
         """Send "Love" message to audioscrobbler"""
-        _debug_('%s.love()' % (self.__class__,))
+        logger.debug('%s.love()', self.__class__)
         if not self.session:
             self._login
         love_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=love&debug=0' % \
@@ -431,7 +431,7 @@ class LastFMWebServices:
 
     def ban(self):
         """Send "Ban" message to audioscrobbler"""
-        _debug_('%s.ban()' % (self.__class__,))
+        logger.debug('%s.ban()', self.__class__)
         if not self.session:
             self._login
         ban_url = 'http://ws.audioscrobbler.com/radio/control.php?session=%s&command=ban&debug=0' % \
@@ -476,7 +476,7 @@ class LastFMAudioItem(AudioItem):
     and for displaying stdout and stderr of last command run.
     """
     def __init__(self, parent, entry, track, image):
-        _debug_('%s.__init__(parent=%r, entry=%s, track=%r, image=%r)' % (self.__class__, parent, entry, track, image))
+        logger.debug('%s.__init__(parent=%r, entry=%s, track=%r, image=%r)', self.__class__, parent, entry, track, image)
         AudioItem.__init__(self, track, parent, entry.title, scan=False)
         metadata = {
             'artist': entry.artist,
@@ -507,7 +507,7 @@ class LastFMAudioItem(AudioItem):
         """
         Event handler for play events and commands
         """
-        _debug_('%s.eventhandler(event=%s, menuw=%r)' % (self.__class__, event, menuw))
+        logger.debug('%s.eventhandler(event=%s, menuw=%r)', self.__class__, event, menuw)
         if event == PLAY_END:
             self.add_metadata()
             self.parent.playnext(menuw=self.menuw)
@@ -516,7 +516,7 @@ class LastFMAudioItem(AudioItem):
 
 
     def play(self, arg=None, menuw=None):
-        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__class__, arg, menuw))
+        logger.debug('%s.play(arg=%r, menuw=%r)', self.__class__, arg, menuw)
         self.elapsed = 0
 
         if not self.menuw:
@@ -534,7 +534,7 @@ class LastFMAudioItem(AudioItem):
         """
         Stop the current playing
         """
-        _debug_('%s.stop(arg=%r, menuw=%r)' % (self.__class__, arg, menuw))
+        logger.debug('%s.stop(arg=%r, menuw=%r)', self.__class__, arg, menuw)
         self.player.stop()
         self.parent.stop()
 
@@ -543,12 +543,12 @@ class LastFMAudioItem(AudioItem):
         """
         Add metadata to the current item
         """
-        _debug_('%s.add_metadata()' % (self.__class__,))
+        logger.debug('%s.add_metadata()', self.__class__)
         #print('%s.__dict__=%s' % (self.__class__, pformat(self.__dict__)))
         if self.filename and os.path.exists(self.filename):
             from kaa.metadata.audio import eyeD3
             try:
-                _debug_('artist=%r album=%r title=%r' % (self.artist, self.album, self.title))
+                logger.debug('artist=%r album=%r title=%r', self.artist, self.album, self.title)
                 tag = eyeD3.Tag()
                 tag.link(self.filename)
                 tag.header.setVersion(eyeD3.ID3_V2_4)
@@ -562,7 +562,7 @@ class LastFMAudioItem(AudioItem):
                 tag.update()
             except Exception, why:
                 traceback.print_exc()
-        _debug_('%s.add_metadata() finished' % (self.__class__,))
+        logger.debug('%s.add_metadata() finished', self.__class__)
 
 
 
@@ -632,16 +632,16 @@ class LastFMTuner(Thread):
             if image_fetcher:
                 print('image_fetcher.result=%r, track_fetcher.result=%r' % (image_fetcher.result, track_fetcher.result))
                 if image_fetcher.reason is None:
-                    _debug_('image %r downloaded' % (os.path.basename(imagepath),))
+                    logger.debug('image %r downloaded', os.path.basename(imagepath))
                 elif imagepath and os.path.exists(imagepath):
-                    _debug_('image %r removed' % (os.path.basename(imagepath),))
+                    logger.debug('image %r removed', os.path.basename(imagepath))
                     os.remove(imagepath)
 
             if track_fetcher:
                 if track_fetcher.reason is None:
-                    _debug_('track %r downloaded' % (os.path.basename(trackpath),))
+                    logger.debug('track %r downloaded', os.path.basename(trackpath))
                 elif trackpath and os.path.exists(trackpath):
-                    _debug_('track %r removed' % (os.path.basename(trackpath),))
+                    logger.debug('track %r removed', os.path.basename(trackpath))
                     os.remove(trackpath)
                 #print('%s.playlist=%s' % (self.__class__, pformat(list(self.playlist))))
         except LastFMError, why:
@@ -665,11 +665,11 @@ class LastFMTuner(Thread):
         Fetch the XSPF play list
         Retrieve each entry in the XSPF play list
         """
-        _debug_('%s.run(%s)' % (self.__class__, self.name))
+        logger.debug('%s.run(%s)', self.__class__, self.name)
         counter = 0
         if self.webservices.adjust_station(self.station_url) is None:
             self.reason = '%s' % (self.webservices.reason,)
-            _debug_('cannot tune station %r: %s' % (self.station, self.reason), DWARNING)
+            logger.warning('cannot tune station %r: %s', self.station, self.reason)
             return
 
         while self.running:
@@ -695,16 +695,16 @@ class LastFMTuner(Thread):
                 self.reason = '%s: %s' % (self.station, why)
                 traceback.print_exc()
                 break
-            _debug_('counter=%r' % (counter,))
+            logger.debug('counter=%r', counter)
         self.running = False
-        _debug_('%s.run(%s) finished' % (self.__class__, self.name))
+        logger.debug('%s.run(%s) finished', self.__class__, self.name)
 
 
     def stop(self):
         """
         Stop the tuner
         """
-        _debug_('%s.stop()' % (self.__class__,))
+        logger.debug('%s.stop()', self.__class__)
         self.running = False
 
 
@@ -723,7 +723,7 @@ class LastFMTuner(Thread):
             return None
 
     def current(self):
-        _debug_('%s.current()' % (self.__class__,))
+        logger.debug('%s.current()', self.__class__)
         pass
 
     def skip(self):
@@ -773,13 +773,13 @@ class LastFMStation(Item):
         """
         Play the station
         """
-        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__class__, arg, menuw))
+        logger.debug('%s.play(arg=%r, menuw=%r)', self.__class__, arg, menuw)
         #print('%s.play=%s' % (self.__class__, pformat(self.__dict__),))
         #print('%s.play.info=%s' % (self.__class__, pformat(self.info.__dict__),))
 
         if not self.menuw:
             self.menuw = menuw
-            _debug_('self.menuw=%r' % (self.menuw,))
+            logger.debug('self.menuw=%r', self.menuw)
 
         self.lastfm_tuner = LastFMTuner(self.station, self.station_url, self, self.menuw)
         self.lastfm_tuner.setDaemon(1)
@@ -798,7 +798,7 @@ class LastFMStation(Item):
         """
         Play the next item
         """
-        _debug_('%s.playnext(arg=%r, menuw=%r)' % (self.__class__, arg, menuw))
+        logger.debug('%s.playnext(arg=%r, menuw=%r)', self.__class__, arg, menuw)
         #print('%s.playlist=%s' % (self.__class__, pformat(list(self.lastfm_tuner.playlist))))
         if self.nowplaying is not None:
             played = self.lastfm_tuner.played()
@@ -831,7 +831,7 @@ class LastFMStation(Item):
         """
         Stop the current playing
         """
-        _debug_('%s.stop()' % (self.__class__,))
+        logger.debug('%s.stop()', self.__class__)
         self.lastfm_tuner.stop()
 
 
@@ -839,7 +839,7 @@ class LastFMStation(Item):
         """
         Event handler for play events and commands
         """
-        _debug_('%s.eventhandler(event=%s, menuw=%r)' % (self.__class__, event, menuw))
+        logger.debug('%s.eventhandler(event=%s, menuw=%r)', self.__class__, event, menuw)
 
 
 
@@ -857,7 +857,7 @@ class LastFMMainMenuItem(MenuItem):
 
         @param parent: the parent menu
         """
-        _debug_('%s.__init__(parent=%r, arg=%r)' % (self.__class__, parent, arg))
+        logger.debug('%s.__init__(parent=%r, arg=%r)', self.__class__, parent, arg)
         MenuItem.__init__(self, parent=parent, skin_type='lastfm')
         # Here we overwrite the text of the skins menu item so it can be translated
         self.name = _('LastFM Radio')
@@ -870,7 +870,7 @@ class LastFMMainMenuItem(MenuItem):
 
         @returns: list of menu items
         """
-        _debug_('%s.actions()' % (self.__class__,))
+        logger.debug('%s.actions()', self.__class__)
         items = [ (self.create_stations_menu,) ]
         return items
 
@@ -882,7 +882,7 @@ class LastFMMainMenuItem(MenuItem):
         @param arg: will always be None as this is a method
         @param menuw: is a MenuWidget
         """
-        _debug_('%s.create_stations_menu(arg=%r, menuw=%r)' % (self.__class__, arg, menuw))
+        logger.debug('%s.create_stations_menu(arg=%r, menuw=%r)', self.__class__, arg, menuw)
         #print('create_stations_menu=%s' % pformat(self.__dict__))
 
         lfm_stations = []
@@ -911,7 +911,7 @@ class PluginInterface(MainMenuPlugin):
         Construct an instance of the LastFM audio plug-in
         """
         self.name = 'LastFM Radio'
-        _debug_('%s.__init__()' % (self.__class__,))
+        logger.debug('%s.__init__()', self.__class__)
         MainMenuPlugin.__init__(self)
         #print('%s.__dict__=%s' % (self.__class__, self.__dict__,))
         #print('dir(self)=%s' % (dir(self),))
@@ -925,7 +925,7 @@ class PluginInterface(MainMenuPlugin):
         """
         Configuration method for lastfm items
         """
-        _debug_('%s.config()' % (self.__class__,))
+        logger.debug('%s.config()', self.__class__)
         return [
             ('LASTFM_USER', None, 'User name for www.last.fm'),
             ('LASTFM_PASS', None, 'Password for www.last.fm'),
@@ -943,7 +943,7 @@ class PluginInterface(MainMenuPlugin):
 
         @returns: MenuItem
         """
-        _debug_('%s.items(parent=%r)' % (self.__class__, parent))
+        logger.debug('%s.items(parent=%r)', self.__class__, parent)
         return [ LastFMMainMenuItem(parent, self) ]
 
 

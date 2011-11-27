@@ -107,8 +107,9 @@ class DirItem(Playlist):
     class for handling directories
     """
     def __init__(self, directory, parent, name='', display_type=None, add_args=None, create_metainfo=True):
-        _debug_('%s.__init__(directory=%r, parent=%r, name=%r, display_type=%r, add_args=%r, create_metainfo=%r)' % (
-            self.__class__, directory, parent, name, display_type, add_args, create_metainfo), 2)
+        logger.log( 9, '%s.__init__(directory=%r, parent=%r, name=%r, display_type=%r, add_args=%r, create_metainfo=%r)', 
+self.__class__, directory, parent, name, display_type, add_args, create_metainfo)
+
         self.autovars = [ ('num_dir_items', 0), ('show_all_items', False) ]
         Playlist.__init__(self, parent=parent, display_type=display_type)
         self.type = 'dir'
@@ -223,7 +224,7 @@ class DirItem(Playlist):
         """
         Set self.folder_fxd and parse it
         """
-        _debug_('set_fxd_file(file=%r)' % (file,), 2)
+        logger.log( 9, 'set_fxd_file(file=%r)', file)
         self.folder_fxd = file
         if self.folder_fxd and vfs.isfile(self.folder_fxd):
             if self.display_type == 'tv':
@@ -234,11 +235,11 @@ class DirItem(Playlist):
                 parser.set_handler('skin', self.read_folder_fxd)
                 parser.parse()
             except:
-                _debug_('fxd file %r corrupt, removed' % (self.folder_fxd,), DWARNING)
+                logger.warning('fxd file %r corrupt, removed', self.folder_fxd)
                 try:
                     os.remove(self.folder_fxd)
                 except OSError, why:
-                    _debug_('fxd file %r not removed' % (self.folder_fxd,), DINFO)
+                    logger.info('fxd file %r not removed', self.folder_fxd)
                 traceback.print_exc()
 
 
@@ -256,7 +257,7 @@ class DirItem(Playlist):
                 </folder>
             </freevo>
         """
-        _debug_('read_folder_fxd(fxd=%r, node=%r)' % (fxd, node), 2)
+        logger.log( 9, 'read_folder_fxd(fxd=%r, node=%r)', fxd, node)
         if node.name == 'skin':
             self.skin_fxd = self.folder_fxd
             return
@@ -295,7 +296,7 @@ class DirItem(Playlist):
         """
         return if this variable to be saved is a type_list
         """
-        _debug_('__is_type_list_var__(var=%r)' % (var,), 2)
+        logger.log( 9, '__is_type_list_var__(var=%r)', var)
         for v, n, d, type_list in self.all_variables:
             if v == var:
                 return type_list
@@ -306,7 +307,7 @@ class DirItem(Playlist):
         """
         callback to save the modified fxd file
         """
-        _debug_('write_folder_fxd(fxd=%r, node=%r)' % (fxd, node), 2)
+        logger.log( 9, 'write_folder_fxd(fxd=%r, node=%r)', fxd, node)
         # remove old setvar
         for child in copy.copy(node.children):
             if child.name == 'setvar':
@@ -364,7 +365,7 @@ class DirItem(Playlist):
 
 
     def eventhandler(self, event, menuw=None):
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
+        logger.log( 9, 'eventhandler(event=%r, menuw=%r)', event, menuw)
         if event == DIRECTORY_CHANGE_DISPLAY_TYPE and menuw.menustack[-1] == self.menu:
             possible_display_types = [ ]
 
@@ -424,7 +425,7 @@ class DirItem(Playlist):
         num_timestamp = self.info['num_%s_timestamp' % name]
 
         if not num_timestamp or num_timestamp < timestamp:
-            _debug_('create metainfo for %s', self.dir)
+            logger.debug('create metainfo for %s', self.dir)
             if self.media:
                 self.media.mount()
 
@@ -458,7 +459,7 @@ class DirItem(Playlist):
         """
         return a list of actions for this item
         """
-        _debug_('actions()', 2)
+        logger.log( 9, 'actions()')
         if self.media:
             self.media.mount()
 
@@ -496,7 +497,7 @@ class DirItem(Playlist):
         """
         browse directory
         """
-        _debug_('cwd(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'cwd(arg=%r, menuw=%r)', arg, menuw)
         self.check_password_and_build(arg=None, menuw=menuw)
 
 
@@ -504,7 +505,7 @@ class DirItem(Playlist):
         """
         play directory
         """
-        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
+        logger.debug('%s.play(arg=%r, menuw=%r)', self.__module__, arg, menuw)
         if arg == 'next':
             Playlist.play(self, arg=arg, menuw=menuw)
         else:
@@ -515,7 +516,7 @@ class DirItem(Playlist):
         """
         play in random order
         """
-        _debug_('play_random(arg=%r, menuw=%r)' % (arg, menuw))
+        logger.debug('play_random(arg=%r, menuw=%r)', arg, menuw)
         self.check_password_and_build(arg='playlist:random', menuw=menuw)
 
 
@@ -523,7 +524,7 @@ class DirItem(Playlist):
         """
         play recursive
         """
-        _debug_('play_recursive(arg=%r, menuw=%r)' % (arg, menuw))
+        logger.debug('play_recursive(arg=%r, menuw=%r)', arg, menuw)
         self.check_password_and_build(arg='playlist:recursive', menuw=menuw)
 
 
@@ -531,7 +532,7 @@ class DirItem(Playlist):
         """
         play recursive in random order
         """
-        _debug_('play_random_recursive(arg=%r, menuw=%r)' % (arg, menuw))
+        logger.debug('play_random_recursive(arg=%r, menuw=%r)', arg, menuw)
         self.check_password_and_build(arg='playlist:random_recursive', menuw=menuw)
 
 
@@ -539,7 +540,7 @@ class DirItem(Playlist):
         """
         password checker
         """
-        _debug_('check_password_and_build(arg=%r, menuw=%r)' % (arg, menuw))
+        logger.debug('check_password_and_build(arg=%r, menuw=%r)', arg, menuw)
         if not self.menuw:
             self.menuw = menuw
 
@@ -547,13 +548,13 @@ class DirItem(Playlist):
             self.media.mount()
 
         if vfs.isfile(os.path.join(self.dir, '.password')):
-            _debug_('password protected dir', DINFO)
+            logger.info('password protected dir')
             try:
                 pwfile = vfs.open(os.path.join(self.dir, '.password'))
                 line = pwfile.readline()
                 pwfile.close()
             except IOError, e:
-                _debug_( 'error reading password file for %s : %s' % (self.dir,str(e)), DWARNING )
+                logger.warning('error reading password file for %s : %s', self.dir, str(e))
                 dialog.show_alert(_('Error reading password file:') + str(e))
                 if self.media:
                     self.media.umount()
@@ -577,7 +578,7 @@ class DirItem(Playlist):
         read the contents of self.dir/.passwd and compare to word
         callback for check_password_and_build
         """
-        _debug_('pass_cmp_cb(word=%r)' % (word,), 2)
+        logger.log( 9, 'pass_cmp_cb(word=%r)', word)
         (arg,password) = self.arg
         if word == password:
             self.build(arg, self.menuw)
@@ -598,7 +599,7 @@ class DirItem(Playlist):
         """
         build the items for the directory
         """
-        _debug_('build(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'build(arg=%r, menuw=%r)', arg, menuw)
         print('build(arg=%r, menuw=%r)' % (arg, menuw))
         self.menuw      = menuw
         self.playlist   = []
@@ -830,7 +831,7 @@ class DirItem(Playlist):
         """
         return name for the configure menu
         """
-        _debug_('configure_set_name(name=%r)' % (name,), 2)
+        logger.log( 9, 'configure_set_name(name=%r)', name)
         if name in self.modified_vars:
             if name == 'FORCE_SKIN_LAYOUT':
                 return 'ICON_RIGHT_%s_%s' % (str(getattr(self, arg)),
@@ -851,7 +852,7 @@ class DirItem(Playlist):
         Update the variable in arg and change the menu. This function is used by
         'configure'
         """
-        _debug_('configure_set_var(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'configure_set_var(arg=%r, menuw=%r)', arg, menuw)
 
         # get current value, None == no special settings
         if arg in self.modified_vars:
@@ -923,7 +924,7 @@ class DirItem(Playlist):
         """
         change display type from specific to all
         """
-        _debug_('configure_set_display_type(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'configure_set_display_type(arg=%r, menuw=%r)', arg, menuw)
         if self.display_type:
             self['show_all_items'] = True
             self.display_type = None
@@ -947,7 +948,7 @@ class DirItem(Playlist):
         """
         show the configure dialog for folder specific settings in folder.fxd
         """
-        _debug_('configure(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'configure(arg=%r, menuw=%r)', arg, menuw)
         items = []
         for i, name, descr, type_list in self.all_variables:
             if name == '':
@@ -1014,7 +1015,7 @@ class Dirwatcher(plugin.DaemonPlugin):
     Directory handling
     """
     def __init__(self):
-        _debug_('Dirwatcher.__init__()', 2)
+        logger.log( 9, 'Dirwatcher.__init__()')
         plugin.DaemonPlugin.__init__(self)
         self.item          = None
         self.menuw         = None
@@ -1032,7 +1033,7 @@ class Dirwatcher(plugin.DaemonPlugin):
         Get listing of overlay dir for change checking.
         Do not count *.cache, directories and *.raw (except videofiles.raw)
         """
-        _debug_('listoverlay()', 2)
+        logger.log( 9, 'listoverlay()')
         if not os.path.isdir(vfs.getoverlay(self.dir)):
             # dir does not exist. Strange, there should be at least an
             # kaa.metadata cache file in there
@@ -1049,7 +1050,7 @@ class Dirwatcher(plugin.DaemonPlugin):
 
 
     def cwd(self, menuw, item, item_menu, dir, media=None):
-        _debug_('cwd(menuw=%r, item=%r, item_menu=%r, dir=%r, media=%r)' % (menuw, item, item_menu, dir, media), 2)
+        logger.log( 9, 'cwd(menuw=%r, item=%r, item_menu=%r, dir=%r, media=%r)', menuw, item, item_menu, dir, media)
         self.menuw     = menuw
         self.item      = item
         self.item_menu = item_menu
@@ -1077,7 +1078,7 @@ class Dirwatcher(plugin.DaemonPlugin):
                 return True
         except (OSError, IOError):
             # the directory is gone
-            _debug_('Dirwatcher: unable to read directory %s' % self.dir)
+            logger.debug('Dirwatcher: unable to read directory %s', self.dir)
 
             # send EXIT to go one menu up:
             rc.post_event(MENU_BACK_ONE_MENU)
@@ -1087,7 +1088,7 @@ class Dirwatcher(plugin.DaemonPlugin):
         changed = False
         if os.stat(self.dir)[stat.ST_MTIME] <= self.last_time:
             # changes are in overlay dir, just check for new/deleted files,
-            _debug_('overlay change')
+            logger.debug('overlay change')
             new_files = self.listoverlay()
             for f in self.files:
                 if not f in new_files:
@@ -1102,7 +1103,7 @@ class Dirwatcher(plugin.DaemonPlugin):
             changed = True
 
         if changed:
-            _debug_('directory has changed')
+            logger.debug('directory has changed')
             self.item.build(menuw=self.menuw, arg='update')
         self.last_time = vfs.mtime(self.dir)
         self.item.__dirwatcher_last_time__  = self.last_time

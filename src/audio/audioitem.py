@@ -83,7 +83,7 @@ class AudioItem(Item):
 
             def cover_filter(x):
                 result = re.search(config.AUDIO_COVER_REGEXP, x, re.IGNORECASE)
-                if result: _debug_('cover_filter(%s): %r' % (x, result.group()), 2)
+                if result: logger.debug('cover_filter(%s): %r', x, result.group())
                 return result
 
             # Pick an image if it is the only image in this dir, or it matches
@@ -191,7 +191,7 @@ class AudioItem(Item):
         """
         Start playing the item
         """
-        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
+        logger.debug('%s.play(arg=%r, menuw=%r)', self.__module__, arg, menuw)
         self.parent.current_item = self
         self.elapsed = 0
 

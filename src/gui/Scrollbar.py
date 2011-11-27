@@ -96,7 +96,7 @@ class Scrollbar(GUIObject):
     def get_handle_rect(self):
         (a, b, c) = self.parent.get_view_percent(self.orientation)
 
-        _debug_('SB: a,b,c = %s,%s,%s' % (a, b, c), 2)
+        logger.log( 9, 'SB: a,b,c = %s,%s,%s', a, b, c)
 
         if a == 100 or b == 100 or c == 100:
             return self.get_rect()
@@ -116,7 +116,7 @@ class Scrollbar(GUIObject):
             # fg_y = self.top
             fg_y = 0
 
-        _debug_('SB: handle_rect = %s,%s,%s,%s' % (fg_x, fg_y, fg_width, fg_height), 2)
+        logger.log( 9, 'SB: handle_rect = %s,%s,%s,%s', fg_x, fg_y, fg_width, fg_height)
         return (fg_x, fg_y, fg_width, fg_height)
 
 
@@ -182,7 +182,7 @@ class Scrollbar(GUIObject):
         self.surface.set_alpha(bg_a)
 
         fg_c = self.fg_color.get_color_sdl()
-        _debug_('SB: fg_c = %s,%s,%s,%s' % fg_c, 2)
+        logger.log( 9, 'SB: fg_c = %s,%s,%s,%s', fg_c)
         fg_a = self.fg_color.get_alpha()
 
         fg_box = self.osd.Surface(self.get_handle_size(), 0, 32)
@@ -193,5 +193,5 @@ class Scrollbar(GUIObject):
         if self.border:
             self.border.draw()
 
-        _debug_('SB::_draw: pos=%s,%s' % (self.left, self.top), 2)
+        logger.log( 9, 'SB::_draw: pos=%s,%s', self.left, self.top)
         self.blit_parent()

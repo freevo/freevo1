@@ -79,7 +79,7 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 self.devices.remove(d)
             except ValueError:
-                _debug_('new device %s' % (d))
+                logger.debug('new device %s', d)
                 for device, message, action in config.USB_HOTPLUG:
                     if d == device:
                         pop = dialog.show_working_indicator(message)
@@ -91,7 +91,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         for d in self.devices:
             changes = True
-            _debug_('removed device %s' % (d))
+            logger.debug('removed device %s', d)
 
         if changes:
             rc.post_event(plugin.event('USB'))

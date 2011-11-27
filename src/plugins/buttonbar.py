@@ -155,7 +155,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 else:
                     msgtext = _('WARNING: ')
                     msgtext+= _('"%s" is not a valid argument for the button bar. ') % actionstr
-                    _debug_(msgtext, DERROR)
+                    logger.error(msgtext)
 
 
 

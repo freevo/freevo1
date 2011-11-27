@@ -158,14 +158,14 @@ def shutdown():
     """
     shut down the Identify_Thread
     """
-    _debug_('rom_drives.shutdown()')
+    logger.debug('rom_drives.shutdown()')
     global im_thread
     if im_thread.isAlive():
-        _debug_('stopping Identify_Thread')
+        logger.debug('stopping Identify_Thread')
         im_thread.stop = True
         while im_thread.isAlive():
             time.sleep(0.1)
-        _debug_('stopped Identify_Thread')
+        logger.debug('stopped Identify_Thread')
 
 
 class autostart(plugin.DaemonPlugin):
@@ -302,8 +302,8 @@ class RemovableMedia:
     """
     def __init__(self, mountdir='', devicename='', drivename=''):
         # This is read-only stuff for the drive itself
-        _debug_('RemovableMedia.__init__(mountdir=%r, devicename=%r, drivename=%r)' % \
-            (mountdir, devicename, drivename),2)
+        logger.log( 9, 'RemovableMedia.__init__(mountdir=%r, devicename=%r, drivename=%r)', mountdir, devicename, drivename)
+
         self.mountdir = mountdir
         self.devicename = devicename
         self.drivename = drivename
@@ -368,12 +368,12 @@ class RemovableMedia:
     def log_capabilities(self, cdc):
         """ Write the drive capabilities to the debug log """
         for capability in self.capabilities_text(cdc):
-            _debug_('%r %s' % (self.devicename, capability), DINFO)
+            logger.info('%r %s', self.devicename, capability)
 
 
     def get_capabilities(self):
         """ Open the CD/DVD drive and read its capabilities """
-        _debug_('Getting capabilities for %s (%s)' % (self.drivename, self.devicename), DINFO)
+        logger.info('Getting capabilities for %s (%s)', self.drivename, self.devicename)
         cdc = 0
         try:
             fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
@@ -387,19 +387,19 @@ class RemovableMedia:
 
                     if cdc & CDC_CLOSE_TRAY:
                         self.can_close = True
-                        _debug_('%s can close' % self.drivename, DINFO)
+                        logger.info('%s can close', self.drivename)
 
                     if cdc & CDC_OPEN_TRAY:
                         self.can_eject = True
-                        _debug_('%s can open' % self.drivename, DINFO)
+                        logger.info('%s can open', self.drivename)
 
                     if cdc & CDC_SELECT_SPEED:
                         self.can_select_speed = True
-                        _debug_('%s can select speed' % self.drivename, DINFO)
+                        logger.info('%s can select speed', self.drivename)
             finally:
                 os.close(fd)
         except Exception, e:
-            _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
+            logger.warning('opening %r failed: %s"', self.devicename, e)
         self.cdc = cdc
         return cdc
 
@@ -428,12 +428,12 @@ class RemovableMedia:
 
     def log_disc_status(self, status):
         """ Log the disc status """
-        _debug_('%r %s' % (self.devicename, self.disc_status_text(status)), DINFO)
+        logger.info('%r %s', self.devicename, self.disc_status_text(status))
 
 
     def log_drive_status(self, status):
         """ Log the drive status """
-        _debug_('%r %s' % (self.devicename, self.drive_status_text(status)), DINFO)
+        logger.info('%r %s', self.devicename, self.drive_status_text(status))
 
 
     def get_drive_status(self):
@@ -459,13 +459,13 @@ class RemovableMedia:
                             if cds == CDS_DISC_OK:
                                 cis = ioctl(fd, CDROM_DISC_STATUS)
                     except Exception, e:
-                        _debug_('getting drive status for %r failed: %s' % (self.devicename, e), DWARNING)
-                _debug_('drive status for %s (%r:%s) is %s' % \
-                    (self.drivename, self.devicename, fd, self.drive_status_text(cds)), 3)
+                        logger.warning('getting drive status for %r failed: %s', self.devicename, e)
+                logger.log( 8, 'drive status for %s (%r:%s) is %s', self.drivename, self.devicename, fd, self.drive_status_text(cds))
+
             finally:
                 os.close(fd)
         except Exception, e:
-            _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
+            logger.warning('opening %r failed: %s"', self.devicename, e)
         self.cds_changed = self.cds != cds
         self.cds = cds
         self.cis = cis
@@ -479,7 +479,7 @@ class RemovableMedia:
 
     def open_tray(self):
         """ Open the drive tray """
-        _debug_('Ejecting disc in drive %s' % self.drivename)
+        logger.debug('Ejecting disc in drive %s', self.drivename)
 
         try:
             fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
@@ -492,12 +492,12 @@ class RemovableMedia:
             finally:
                 os.close(fd)
         except Exception, e:
-            _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
+            logger.warning('opening %r failed: %s"', self.devicename, e)
 
 
     def close_tray(self):
         """ Close the drive tray """
-        _debug_('Inserting disc in drive %s' % self.drivename)
+        logger.debug('Inserting disc in drive %s', self.drivename)
 
         try:
             fd = os.open(self.devicename, os.O_RDONLY | os.O_NONBLOCK)
@@ -510,7 +510,7 @@ class RemovableMedia:
             finally:
                 os.close(fd)
         except Exception, e:
-            _debug_('opening %r failed: %s"' % (self.devicename, e), DWARNING)
+            logger.warning('opening %r failed: %s"', self.devicename, e)
 
 
     def move_tray(self, direction='toggle'):
@@ -541,7 +541,7 @@ class RemovableMedia:
 
     def mount(self):
         """ Mount the media """
-        _debug_('Mounting disc in drive %s' % self.drivename, 2)
+        logger.log( 9, 'Mounting disc in drive %s', self.drivename)
         if self.mount_ref_count == 0:
             util.mount(self.mountdir, force=True)
         self.mount_ref_count += 1
@@ -550,7 +550,7 @@ class RemovableMedia:
 
     def umount(self):
         """ Mount the media """
-        _debug_('Unmounting disc in drive %s' % self.drivename, 2)
+        logger.log( 9, 'Unmounting disc in drive %s', self.drivename)
         self.mount_ref_count -= 1
         if self.mount_ref_count == 0:
             util.umount(self.mountdir)
@@ -562,13 +562,13 @@ class RemovableMedia:
         r = util.is_mounted(self.mountdir)
         o = os.path.ismount(self.mountdir)
         if not o and self.mount_ref_count > 0:
-            _debug_('Drive was unmounted out of rom_drives.py: ' + self.mountdir, DWARNING)
+            logger.warning('Drive was unmounted out of rom_drives.py: ' + self.mountdir)
             self.mount_ref_count = 0
         if o and self.mount_ref_count == 0:
-            _debug_('Drive was mounted out of rom_drives.py: ' + self.mountdir, DWARNING)
+            logger.warning('Drive was mounted out of rom_drives.py: ' + self.mountdir)
             self.mount_ref_count = 1
         if (o and not r) or (not o and r):
-            _debug_('Inconsistency regarding the mount status of: ' + self.mountdir, DWARNING)
+            logger.warning('Inconsistency regarding the mount status of: ' + self.mountdir)
         return r
 
 
@@ -593,7 +593,7 @@ class Identify_Thread(threading.Thread):
             #_debug_('status not changed for drive %r' % (media.devicename))
             return
 
-        _debug_('drive_status changed %s -> %s' % (media.drive_status, cds))
+        logger.debug('drive_status changed %s -> %s', media.drive_status, cds)
         media.drive_status = cds
         media.id           = ''
         media.label        = ''
@@ -604,12 +604,12 @@ class Identify_Thread(threading.Thread):
 
         # Is there a disc information?
         if media.drive_status == CDS_NO_INFO:
-            _debug_('cannot get the drive status for drive %r' % (media.devicename))
+            logger.debug('cannot get the drive status for drive %r', media.devicename)
             return
 
         # Is there a disc present?
         if media.drive_status != CDS_DISC_OK:
-            _debug_('disc not ready for drive %r' % (media.devicename))
+            logger.debug('disc not ready for drive %r', media.devicename)
             return
 
         # try to set the speed
@@ -620,28 +620,28 @@ class Identify_Thread(threading.Thread):
                     try:
                         ioctl(fd, CDROM_SELECT_SPEED, config.ROM_SPEED)
                     except Exception, e:
-                        _debug_('setting rom speed for %r failed: %s' % (media.devicename, e))
+                        logger.debug('setting rom speed for %r failed: %s', media.devicename, e)
 
             finally:
                 #_debug_('closing %r drive %r' % (fd, media.devicename))
                 try:
                     os.close(fd)
                 except Exception, e:
-                    _debug_('closing %r failed: %s' % (media.devicename, e))
+                    logger.debug('closing %r failed: %s', media.devicename, e)
         except Exception, e:
-            _debug_('opening %r failed: %s' % (media.devicename, e))
+            logger.debug('opening %r failed: %s', media.devicename, e)
             return
 
         # if there is a disc, the tray can't be open
         media.tray_open = False
         disc_info = util.mediainfo.disc_info(media, force_rebuild)
         if not disc_info:
-            _debug_('no disc information for drive %r' % (media.devicename))
+            logger.debug('no disc information for drive %r', media.devicename)
             return
 
         info = disc_info.discinfo
         if not info:
-            _debug_('no info for drive %r' % (media.devicename))
+            logger.debug('no info for drive %r', media.devicename)
             return
 
         if info['mime'] == 'audio/cd':
@@ -652,7 +652,7 @@ class Identify_Thread(threading.Thread):
             if info['title']:
                 media.item.name = info['title']
             media.item.info = disc_info
-            _debug_('playing audio in drive %r' % (media.devicename))
+            logger.debug('playing audio in drive %r', media.devicename)
             return
 
         image = title = movie_info = more_info = fxd_file = None
@@ -711,7 +711,7 @@ class Identify_Thread(threading.Thread):
             media.type = info['mime'][6:]
 
             media.item.info.mmdata = info
-            _debug_('playing video in drive %r' % (media.devicename))
+            logger.debug('playing video in drive %r', media.devicename)
             return
 
         # Disc is data of some sort. Mount it to get the file info
@@ -720,9 +720,9 @@ class Identify_Thread(threading.Thread):
             if os.path.isdir(os.path.join(media.mountdir, 'VIDEO_TS')) or \
                    os.path.isdir(os.path.join(media.mountdir, 'video_ts')):
                 if force_rebuild:
-                    _debug_('Double check without success')
+                    logger.debug('Double check without success')
                 else:
-                    _debug_('Undetected DVD, checking again')
+                    logger.debug('Undetected DVD, checking again')
                     media.drive_status = CDS_NO_DISC
                     return self.identify(media, True)
 
@@ -733,7 +733,7 @@ class Identify_Thread(threading.Thread):
 
             video_files = util.match_files(media.mountdir, config.VIDEO_SUFFIX)
 
-            _debug_('video_files=%r' % (video_files,))
+            logger.debug('video_files=%r', video_files)
 
             media.item = DirItem(media.mountdir, None, create_metainfo=False)
             media.item.info = disc_info
@@ -878,7 +878,7 @@ class Identify_Thread(threading.Thread):
             for media in config.REMOVABLE_MEDIA:
                 self.identify(media)
                 if media.get_drive_status_changed():
-                    _debug_('posting IDENTIFY_MEDIA event %r' % (media.drive_status_text(media.drive_status)))
+                    logger.debug('posting IDENTIFY_MEDIA event %r', media.drive_status_text(media.drive_status))
                     rc.post_event(plugin.event('IDENTIFY_MEDIA', arg=(media, media.drive_status)))
         finally:
             self.lock.release()
@@ -921,7 +921,7 @@ class Identify_Thread(threading.Thread):
             except SystemExit:
                 break
             except:
-                _debug_('Exception whilst checking removable media!' + traceback.format_exc(), DERROR)
+                logger.error('Exception whilst checking removable media!' + traceback.format_exc())
 
 
 

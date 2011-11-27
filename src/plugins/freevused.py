@@ -306,13 +306,13 @@ class PluginInterface(plugin.DaemonPlugin):
 
                     self.menu_client_waiting = False
             else:
-                _debug_('About to send menu to client')
+                logger.debug('About to send menu to client')
                 self.sendMenu()
                 self.menu_client_waiting = False
             self.menu_isfresh = False
 
     def eventhandler(self, event, menuw=None):
-        _debug_("Saw event %s menuw %s" % (event, menuw) )
+        logger.debug("Saw event %s menuw %s", event, menuw)
 
         if menuw and isinstance(menuw, menu.MenuWidget):
 
@@ -351,12 +351,12 @@ class PluginInterface(plugin.DaemonPlugin):
         str_arg = ''
         command = None
 
-        _debug_("Data received: %s" % str(self.data), 2)
+        logger.log( 9, "Data received: %s", str(self.data))
         str_cmd = self.data[:4]
         if str_cmd in ('VOL-', 'VOL+', 'VOLM', 'MAIN', 'STAT'):
             command = self.cmds.get(str_cmd, '')
             if command:
-                _debug_('Event Translation: "%s" -> "%s"' % (str_cmd, command))
+                logger.debug('Event Translation: "%s" -> "%s"', str_cmd, command)
                 if str_cmd in ('VOL-', 'VOL+'):
                     self.rc.post_event(em.Event(command, arg=config.MIXER_VOLUME_STEP))
                 else:
@@ -367,12 +367,12 @@ class PluginInterface(plugin.DaemonPlugin):
             for letter in str_arg:
                 command = self.rc.key_event_mapper(letter)
                 if command:
-                    _debug_('Event with arg Translation: "%s" -> "%s %s"' % (self.data, command, letter))
+                    logger.debug('Event with arg Translation: "%s" -> "%s %s"', self.data, command, letter)
                     self.rc.post_event(command)
 
         elif str_cmd == 'MSND':
             self.menu_client_waiting = True
-            _debug_('Client asked for menu')
+            logger.debug('Client asked for menu')
 
         elif str_cmd == 'MITM':
             str_arg = self.data[4:]
@@ -385,20 +385,20 @@ class PluginInterface(plugin.DaemonPlugin):
                     menu.selected = menu.choices[pos]
                     self.rc.post_event(em.MENU_SELECT)
                 else:
-                    _debug_('Menu index too high!: %s (max=%s)' % (pos, max-1))
+                    logger.debug('Menu index too high!: %s (max=%s)', pos, max - 1)
 
             except ValueError:
-                _debug_('Menu index sent: %s' % str_arg)
+                logger.debug('Menu index sent: %s', str_arg)
                 pass
 
         else:
             command = self.rc.key_event_mapper(self.cmds.get(self.data, ''))
             if command:
-                _debug_('Event Translation: "%s" -> "%s"' % (self.data, command))
+                logger.debug('Event Translation: "%s" -> "%s"', self.data, command)
                 self.rc.post_event(command)
 
         if command and self.osd_message:
-            _debug_('OSD Event: "%s"' % (command))
+            logger.debug('OSD Event: "%s"', command)
             rc.post_event(em.Event(em.OSD_MESSAGE, arg=_('BT event %s' % command)))
 
         self.data=''
@@ -419,15 +419,15 @@ class PluginInterface(plugin.DaemonPlugin):
             if self.tx and data:
                 bytes = self.tx.send(data)
                 if data == '\0':
-                    _debug_("Data sent: EOS", 2)
+                    logger.log( 9, "Data sent: EOS")
                 else:
-                    _debug_("Data sent: %s" % data, 2)
+                    logger.log( 9, "Data sent: %s", data)
 
-                _debug_("Bytes sent: %s" % bytes, 2)
+                logger.log( 9, "Bytes sent: %s", bytes)
 
         except bluetooth.BluetoothError, e:
             self.disconnect()
-            _debug_("broken tooth (btSend): %s" % str(e))
+            logger.debug("broken tooth (btSend): %s", str(e))
 
 
     def sendMenu(self):
@@ -545,11 +545,11 @@ class PluginInterface(plugin.DaemonPlugin):
                                   service_classes = [ bluetooth.SERIAL_PORT_CLASS ],
                                   profiles = [ bluetooth.SERIAL_PORT_PROFILE ] )
 
-            _debug_("Waiting for connection on RFCOMM channel %d" % self.port)
+            logger.debug("Waiting for connection on RFCOMM channel %d", self.port)
 
             self.tx, self.address = self.server_sock.accept()
 
-            _debug_("Accepted connection")
+            logger.debug("Accepted connection")
 
             self.connected = True
 
@@ -558,7 +558,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         except bluetooth.BluetoothError, e:
             self.connected = False
-            _debug_("broken tooth (try_connect): %s" % str(e))
+            logger.debug("broken tooth (try_connect): %s", str(e))
 
             if self.server_sock:
                 self.server_sock.close()
@@ -572,4 +572,4 @@ class PluginInterface(plugin.DaemonPlugin):
             self.process_data()
         except bluetooth.BluetoothError, e:
             self.disconnect()
-            _debug_("broken tooth (handle_receive): %s" % str(e))
+            logger.debug("broken tooth (handle_receive): %s", str(e))

@@ -137,7 +137,7 @@ class Mimetype(plugin.MimetypePlugin):
                 items += parser.getattr(None, 'items')
 
             except:
-                _debug_('fxd file %r corrupt' % fxd_file, DINFO)
+                logger.info('fxd file %r corrupt', fxd_file)
                 traceback.print_exc()
         return items
 

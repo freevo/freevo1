@@ -57,13 +57,13 @@ class PluginInterface(ScreenSaverPlugin):
     A Flames simulation screensaver
     """
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         ScreenSaverPlugin.__init__(self)
         self.plugin_name = 'screensaver.flames'
         self.fps = config.FLAMES_FPS
 
     def config(self):
-        _debug_('config()', 2)
+        logger.log( 9, 'config()')
         return [
             ('FLAMES_FPS', 20, 'Frames per second'),
             ('FLAMES_RES_DIVIDER', 4, 'Ratio of screen size to the size of the surface used to simulate the flames.'),
@@ -71,7 +71,7 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def start(self, width, height):
-        _debug_('start(width=%r, height=%r)' % (width, height), 2)
+        logger.log( 9, 'start(width=%r, height=%r)', width, height)
         self.width = width
         self.height = height
         self.flame = zeros(array((width, height))/config.FLAMES_RES_DIVIDER + (0,3))

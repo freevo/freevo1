@@ -55,7 +55,7 @@ import traceback
 try:
     import imdb
 except:
-    _debug_('It seems that you do not have imdbpy installed!', DERROR)
+    logger.error('It seems that you do not have imdbpy installed!')
 
 import config
 import util
@@ -130,7 +130,7 @@ class FxdImdb:
         Parse the title
         Return tuple of title, season and episode (if exist)
         """
-        _debug_('parseTitle(filename=%r, label=%r)' % (filename, label))
+        logger.debug('parseTitle(filename=%r, label=%r)', filename, label)
 
         # Special name rule for the encoding server
         m = re.compile('DVD \[([^]]*).*')
@@ -167,20 +167,20 @@ class FxdImdb:
         name = re.sub('([0-9])([a-zA-Z])', point_maker, name.lower())
         name = re.sub(',', ' ', name)
 
-        _debug_('name=%s season=%s episode=%s' % (name, season, episode))
+        logger.debug('name=%s season=%s episode=%s', name, season, episode)
 
         if label:
             for r in config.IMDB_REMOVE_FROM_LABEL:
                 try:
                     name = re.sub(r, '', name)
                 except Exception, exc:
-                    _debug_('%s', (exc,), DWARNING)
+                    logger.warning('Exception', exc_info=True)
         else:
             for r in config.IMDB_REMOVE_FROM_NAME:
                 try:
                     name = re.sub(r, '', name)
                 except Exception, exc:
-                    _debug_('%s', (exc,), DWARNING)
+                    logger.warning('Exception', exc_info=True)
 
         parts = re.split('[\._ -]', name)
         name = ''
@@ -198,7 +198,7 @@ class FxdImdb:
         Guess possible titles from file name
         Return tuple of title, season and episode (if exist)
         """
-        _debug_('guessImdb(filename=%r, label=%r)' % (filename, label))
+        logger.debug('guessImdb(filename=%r, label=%r)', filename, label)
 
         self.ctitle = self.parseTitle(filename, label)
 
@@ -219,7 +219,7 @@ class FxdImdb:
             # We try to reduce the search result by filtering initial result for tv (mini) series only.
             
             results = self.imdb.search_movie(title)
-            _debug_('Searched IMDB for %s, found %s items' % (title, len(results)))
+            logger.debug('Searched IMDB for %s, found %s items', title, len(results))
             
             # if series we remove all non series objects to narrow down the search results
             if season and episode:
@@ -237,7 +237,7 @@ class FxdImdb:
                         results.remove(item)
 
         except imdb.IMDbError, error:
-            _debug_('%s', (error,), DWARNING)
+            logger.warning('Exception', exc_info=True)
             raise FxdImdb_Error(str(error))
 
         return results
@@ -254,7 +254,7 @@ class FxdImdb:
             movie = self.imdb.get_movie(id)
 
             if not movie:
-                _debug_('It seems that there\'s no movie with MovieId "%s"' % arg[0], DWARNING)
+                logger.warning('It seems that there\'s no movie with MovieId "%s"', arg[0])
                 raise FxdImdb_Error('No movie with MovieId "%s"' % arg[0])
 
             self.ctitle = tuple([movie['title'], season, episode])
@@ -274,7 +274,7 @@ class FxdImdb:
                 return movie.movieID
 
         except imdb.IMDbError, error:
-            _debug_('%s', (error,), DWARNING)
+            logger.warning('Exception', exc_info=True)
             raise FxdImdb_Error(str(error))
 
 
@@ -291,11 +291,11 @@ class FxdImdb:
             movie = self.imdb.get_movie(id)
 
             if not movie:
-                _debug_('It seems that there\'s no movie with MovieId "%s"' % id, DWARNING)
+                logger.warning('It seems that there\'s no movie with MovieId "%s"', id)
                 raise FxdImdb_Error('No movie with MovieId "%s"' % id)
 
             if (movie['kind'] != 'tv series' and movie['kind'] != 'tv mini series'):
-                _debug_('It seems that supplied MovieId "%s" is not a TV Series ID. Aborting.' % id, DWARNING)
+                logger.warning('It seems that supplied MovieId "%s" is not a TV Series ID. Aborting.', id)
                 raise FxdImdb_Error('No a TV Series. MovieId "%s"' % id)
                 
             self.imdb.update(movie, 'episodes')
@@ -313,7 +313,7 @@ class FxdImdb:
                     fxd.imdb_retrieve_movie_data(movie, episode)
 
                 except FxdImdb_Error, error:
-                    _debug_('%s', (error,), DWARNING)
+                    logger.warning('Exception', exc_info=True)
                     return
 
                 video = makeVideo('file', 'f1', os.path.basename(item[0]), device=None)
@@ -323,7 +323,7 @@ class FxdImdb:
                 fxds.append(fxd)
 
         except imdb.IMDbError, error:
-            _debug_('%s', (error,), DWARNING)
+            logger.warning('Exception', exc_info=True)
             raise FxdImdb_Error(str(error))
 
         return fxds
@@ -480,7 +480,7 @@ class FxdImdb:
         """
 
         self.id = self.imdb.get_imdbID(movie)
-        _debug_('Retrieved movie data:\n "%s"' % movie.summary(), DINFO)
+        logger.info('Retrieved movie data:\n "%s"', movie.summary())
 
         self.title = self.get_title(movie, episode)
         self.info['genre'] = self.get_genre(movie)
@@ -922,7 +922,7 @@ class FxdImdb:
         # check for valid URLs and add them to self.image_urls
         for imp_image_url in imp_image_urls:
 
-            _debug_('IMPAWARDS: Checking image URL %s' % imp_image_url)
+            logger.debug('IMPAWARDS: Checking image URL %s', imp_image_url)
             try:
                 imp_req = urllib2.Request(imp_image_url, txdata, txheaders)
 
@@ -931,7 +931,7 @@ class FxdImdb:
                 imp_ctype = imp_r.info()['Content-Type']
                 imp_r.close()
 
-                _debug_('IMPAWARDS: Found content-type %s for url %s' % (imp_ctype, imp_image_url))
+                logger.debug('IMPAWARDS: Found content-type %s for url %s', imp_ctype, imp_image_url)
                 if (imp_ctype == 'image/jpeg'):
                     self.image_urls += [ imp_image_url ]
 
@@ -951,7 +951,7 @@ class FxdImdb:
     def fetch_image(self):
         """Fetch the best image"""
         
-        _debug_('fetch_image=%s' % (self.image_urls))
+        logger.debug('fetch_image=%s', self.image_urls)
 
         image_len = 0
         if len(self.image_urls) == 0: # No images
@@ -959,7 +959,7 @@ class FxdImdb:
 
         for image in self.image_urls:
             try:
-                _debug_('image=%s' % (image))
+                logger.debug('image=%s', image)
                 # get sizes of images
                 req = urllib2.Request(image, txdata, txheaders)
                 r = urllib2.urlopen(req)
@@ -994,7 +994,7 @@ class FxdImdb:
 
         self.image = vfs.basename(self.image)
 
-        _debug_('Downloaded cover image from %s' % (self.image_url))
+        logger.debug('Downloaded cover image from %s', self.image_url)
         print "Freevo knows nothing about the copyright of this image, please go to"
         print "%s to check for more information about private use of this image." % self.image_url
 

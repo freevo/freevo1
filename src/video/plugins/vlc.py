@@ -83,21 +83,21 @@ class Vlc:
         if not item.url:
             return 0
         if item.url[:7] == 'rtsp://':
-            _debug_('vlc rating: %r good' % (item.url), 2)
+            logger.log( 9, 'vlc rating: %r good', item.url)
             return 2
         # dvd with menu
         if item.url.startswith('dvd://') and item.url.endswith('/'):
-            _debug_('vlc rating: %r good' % (item.url), 2)
+            logger.log( 9, 'vlc rating: %r good', item.url)
             return 2
         # mimetype list from config (user's wishes)
         if item.mimetype in config.VIDEO_VLC_SUFFIX:
-            _debug_('vlc rating: %r good' % (item.url), 2)
+            logger.log( 9, 'vlc rating: %r good', item.url)
             return 2
         # network stream
         if item.network_play:
-            _debug_('vlc rating: %r possible' % (item.url), 2)
+            logger.log( 9, 'vlc rating: %r possible', item.url)
             return 1
-        _debug_('vlc rating: %r unplayable' % (item.url), 2)
+        logger.log( 9, 'vlc rating: %r unplayable', item.url)
         return 0
 
 
@@ -116,9 +116,9 @@ class Vlc:
         self.item.elapsed = 0
 
         try:
-            _debug_('Vlc.play(): url=%s' % url)
+            logger.debug('Vlc.play(): url=%s', url)
         except UnicodeError:
-            _debug_('Vlc.play(): [non-ASCII data]')
+            logger.debug('Vlc.play(): [non-ASCII data]')
 
         if config.VLC_OPTIONS:
             vlc_options=config.VLC_OPTIONS

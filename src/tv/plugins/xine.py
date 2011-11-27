@@ -121,7 +121,7 @@ class Xine:
         """
         Show a message on the OSD
         """
-        _debug_("XINE: Show OSD Message: '%s'" % msg)
+        logger.debug("XINE: Show OSD Message: '%s'", msg)
         self.app.write("OSDWriteText$     %s\n" % msg)
 
 
@@ -146,7 +146,7 @@ class Xine:
 
         command.append('dvb://' + tuner_channel)
 
-        _debug_('Starting cmd=%s' % command)
+        logger.debug('Starting cmd=%s', command)
 
         rc.add_app(self)
 

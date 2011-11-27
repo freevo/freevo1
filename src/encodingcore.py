@@ -229,8 +229,8 @@ class EncodingJob:
         @param titlenum: titlenum number to re-encode
         @param rmsource: remove the source
         """
-        _debug_('encodingcore.EncodingJob.__init__(%s, %s, %s, %s, %s, %s)' % \
-            (source, output, friendlyname, idnr, titlenum, rmsource), 2)
+        logger.log( 9, 'encodingcore.EncodingJob.__init__(%s, %s, %s, %s, %s, %s)', source, output, friendlyname, idnr, titlenum, rmsource)
+
         #currently only MEncoder can be used, but who knows what will happen in the future :)
         self._generateCL = self._GenerateCLMencoder
         self.encodingopts = EncodingOptions()
@@ -290,11 +290,11 @@ class EncodingJob:
                 if self.info:
                     self._analyze_source()
                 else:
-                    _debug_('Failed to analyse "%s" kaa.metadata.parse()'  % self.source, DERROR)
+                    logger.error('Failed to analyse "%s" kaa.metadata.parse()', self.source)
                     self.failed = True
                     self.finishedanalyze = True
             except Exception, e:
-                _debug_('Failed to analyse "%s": %s' % (self.source, e), DERROR)
+                logger.error('Failed to analyse "%s": %s', self.source, e)
                 self.failed = True
                 self.finishedanalyze = True
 
@@ -332,8 +332,8 @@ class EncodingJob:
 
     def setVideoCodec(self, vcodec, tgtsize, multipass=False, vbitrate=0, altprofile=None):
         """Set video codec and target filesize (in MB) or bit rate (in kbits/sec)"""
-        _debug_('setVideoCodec(self, vcodec=%s, tgtsize=%s, multipass=%s, vbitrate=%s)' % \
-            (vcodec, tgtsize, multipass, vbitrate))
+        logger.debug('setVideoCodec(self, vcodec=%s, tgtsize=%s, multipass=%s, vbitrate=%s)', vcodec, tgtsize, multipass, vbitrate)
+
         if vcodec not in self.encodingopts.getVideoCodecList():
             return 'Unknown video codec %r' % vcodec
 
@@ -379,7 +379,7 @@ class EncodingJob:
     def _CalcVideoBR(self):
         """Calculates the video bit rate"""
 
-        _debug_('_CalcVideoBR: tgtsize=%s vbitrate=%s' % (self.tgtsize, self.vbitrate), 2)
+        logger.log( 9, '_CalcVideoBR: tgtsize=%s vbitrate=%s', self.tgtsize, self.vbitrate)
         if self.vbitrate > 0:
             self.vbrate = self.vbitrate
         else:
@@ -387,7 +387,7 @@ class EncodingJob:
         #we got a very short file, very high bitrates are interpreted as bit/s instead of kbit/s, shitty qual
         if self.vbrate > 12000:
             self.vbrate = 6000
-        _debug_('_CalcVideoBR: vbrate=%s' % (self.vbrate), 2)
+        logger.log( 9, '_CalcVideoBR: vbrate=%s', self.vbrate)
 
 
     def _analyze_source(self):
@@ -396,27 +396,27 @@ class EncodingJob:
         ATM we will blindly assume it's a dvdrom device or a disk dvd image,
         if a title (titlenum) number is given.
         """
-        _debug_('_analyze_source(self)', 2)
+        logger.log( 9, '_analyze_source(self)')
 
         if self.titlenum:
             #check some things, like length
-            _debug_('source=%r" titlenum=%s' % (self.source, self.titlenum))
+            logger.debug('source=%r" titlenum=%s', self.source, self.titlenum)
             dvddata = self.info
             dvdtitle = dvddata.tracks[self.titlenum - 1]
             self.length = dvdtitle['length']
-            _debug_('Video length is %s' % self.length)
+            logger.debug('Video length is %s', self.length)
         else:
             data = self.info
-            _debug_('source=%r' % (self.source))
+            logger.debug('source=%r', self.source)
             if config.DEBUG >= 2:
                 for f in dir(data):
-                    _debug_('%s: %s' % (f, eval('data["%s"]' % f)), 2)
+                    logger.log( 9, '%s: %s', f, eval('data["%s"]'%f))
             if data.has_key('length') and data['length'] is not None:
                 self.length = data['length']
-                _debug_('Video length is %s' % self.length)
+                logger.debug('Video length is %s', self.length)
             else:
                 self.length = 600
-                _debug_('Video length not found, using %s' % (self.length))
+                logger.debug('Video length not found, using %s', self.length)
 
 
     def _identify(self):
@@ -484,34 +484,34 @@ class EncodingJob:
         from util import vfs
         for line in lines:
             if line:
-                _debug_(line)
+                logger.debug(line)
         import glob
         import shutil
         captures = glob.glob('000000??.png')
         if captures:
-            _debug_('%r' % (captures,))
+            logger.debug('%r', captures)
             capture = captures[-1]
             try:
                 vfsdir = os.path.dirname(self.output)
                 if not os.path.isdir(vfsdir):
                     os.makedirs(vfsdir)
-                _debug_('copying %r->%r' % (capture, self.output))
+                logger.debug('copying %r->%r', capture, self.output)
                 shutil.copy(capture, self.output)
             except OSError, why:
-                _debug_('%s' % why, DINFO)
+                logger.info('%s', why)
                 try:
                     shutil.copy(capture, vfs.getoverlay(self.output))
-                    _debug_('copied %r to %r' % (capture, vfs.getoverlay(self.output)))
+                    logger.debug('copied %r to %r', capture, vfs.getoverlay(self.output))
                 except Exception, why:
-                    _debug_('unable to write file %r: %s' % (self.output, why), DWARNING)
+                    logger.warning('unable to write file %r: %s', self.output, why)
         else:
-            _debug_('error creating capture for "%s"' % self.source, DWARNING)
+            logger.warning('error creating capture for "%s"', self.source)
 
         for capture in captures:
             try:
                 os.remove(capture)
             except:
-                _debug_('error removing temporary captures for "%s"' % Unicode(filename), 1)
+                logger.debug('error removing temporary captures for "%s"', Unicode(filename))
 
 
 
@@ -644,7 +644,7 @@ class EncodingJob:
         if not foundrate: # unknown frame rate setting to 29.970
             self.fps = 29.970
 
-        _debug_('All collected crop results: %s' % self.crop_results)
+        logger.debug('All collected crop results: %s', self.crop_results)
 
         #if we didn't find cropping options (seems to happen sometimes on VERY short DVD titles)
         if self.crop_results == {}:
@@ -682,7 +682,7 @@ class EncodingJob:
 
         self.crop = join(adjustedcrop, ':')
 
-        _debug_('Selected crop setting: %s' % self.crop)
+        logger.debug('Selected crop setting: %s', self.crop)
 
         #end analysing
         self.finishedanalyze = True
@@ -759,12 +759,12 @@ class EncodingJob:
                 yscaled -= rounded
                 if rounded > 7.5:
                     yscaled += 16
-                _debug_('Rescaled, corrected for AR res is %sx%s' % (self.cropres[0], int(yscaled)))
+                logger.debug('Rescaled, corrected for AR res is %sx%s', self.cropres[0], int(yscaled))
             else: # no scaling, we have a 4/3
                 yscaled = self.cropres[1]
             #new, calculate ideal res based on BPP
             idealres = self._OptimalRes(self.cropres[0], int(yscaled))
-            _debug_('Rescaled, rounded yres is %sx%s' % (idealres[0], idealres[1]))
+            logger.debug('Rescaled, rounded yres is %sx%s', idealres[0], idealres[1])
             (self.resx, self.resy) = (idealres[0], idealres[1])
         # Check to see if generating a dvd complient mpeg
         elif self.vcodec == 'MPEG 2 (lavc)' and self.resx == '720':
@@ -785,7 +785,7 @@ class EncodingJob:
             vf += [ 'expand=%s:%s'  % (self.resx, self.resy) ]
 
 
-        _debug_('Video filters: %s' % vf)
+        logger.debug('Video filters: %s', vf)
 
         #join vf options
         if len(vf) > 1:
@@ -859,7 +859,7 @@ class EncodingJob:
     def _CalcBPP(self, x, y):
         """Perform a BPP (Bits per Pixel calculation)"""
         bpp = (self.vbrate * 1000) / (x * y * self.fps)
-        _debug_('_CalcBPP() = %s, fps=%s' % (bpp, self.fps))
+        logger.debug('_CalcBPP() = %s, fps=%s', bpp, self.fps)
         return bpp
 
 
@@ -950,7 +950,7 @@ class CommandThread(Thread):
     command executing class - Taken from Quickrip & adapted.
     """
     def __init__(self, parent, command, updatefunc, finalfunc, flushbuffer, data, lock):
-        _debug_('CommandThread.__init__(parent=%r, command=%r, updatefunc=%r, finalfunc=%r, flushbuffer=%r, data=%r, lock=%r)' % (parent, command, updatefunc, finalfunc, flushbuffer, data, lock))
+        logger.debug('CommandThread.__init__(parent=%r, command=%r, updatefunc=%r, finalfunc=%r, flushbuffer=%r, data=%r, lock=%r)', parent, command, updatefunc, finalfunc, flushbuffer, data, lock)
         Thread.__init__(self)
         self.parent = parent
         self.command = command
@@ -963,21 +963,21 @@ class CommandThread(Thread):
 
 
     def run(self):
-        _debug_(' '.join(self.command))
+        logger.debug(' '.join(self.command))
         self.process = Popen(['nice']+self.command, stdout=PIPE, stderr=PIPE, close_fds=True, universal_newlines=True)
-        _debug_('%s thread running with PID %s' % (self.command[0], self.process.pid))
+        logger.debug('%s thread running with PID %s', self.command[0], self.process.pid)
 
         output = self.process.stdout
         totallines = []
         while self.process.poll() is None:
             line = output.readline().strip()
-            _debug_('line=%r' % (line,), 2)
+            logger.log( 9, 'line=%r', line)
             totallines.append(line)
             if self.updateFunc is not None:
                 self.updateFunc(line, self.data)
         self.returncode = self.process.returncode
 
-        _debug_('%s thread finished with %s, %s lines' % (self.command[0], self.process.returncode, len(totallines)))
+        logger.debug('%s thread finished with %s, %s lines', self.command[0], self.process.returncode, len(totallines))
 
         if self.finalFunc is not None:
             self.finalFunc(totallines, self.data)
@@ -1028,7 +1028,7 @@ class EncodingQueue:
         """Start the queue"""
         if not self.running:
             self.running = True
-            _debug_('queue started', DINFO)
+            logger.info('queue started')
             self._runQueue()
 
 
@@ -1062,7 +1062,7 @@ class EncodingQueue:
             self.running = False
             if hasattr(self, 'currentjob'):
                 del self.currentjob
-            _debug_('queue empty, stopping processing...', DINFO)
+            logger.info('queue empty, stopping processing...')
             return
 
         #get the first queued object
@@ -1075,7 +1075,7 @@ class EncodingQueue:
             if hasattr(self.currentjob, 'thread'):
                 print 'self.currentjob.thread.returncode: ' + repr(self.currentjob.thread.returncode)
 
-        _debug_('PID %s' % self.currentjob.pid)
+        logger.debug('PID %s', self.currentjob.pid)
 
         output = self.currentjob.full_output_file_name()
         # check eventually that there is no file by the same name
@@ -1083,7 +1083,7 @@ class EncodingQueue:
 
         if hasattr(self.currentjob,'thread'):
             if self.currentjob.thread.returncode:
-                _debug_('Failed job:'+ ' '.join(self.currentjob.thread.command), DWARNING)
+                logger.warning('Failed job:' + ' '.join(self.currentjob.thread.command))
                 #we are done with this job, remove it
                 del self.qlist[0]
                 del self.qdict[self.currentjob.idnr]
@@ -1092,18 +1092,18 @@ class EncodingQueue:
                 return
 
         if self.currentjob.status == status.vpassfinal:
-            _debug_('Job %s finished' % self.currentjob.idnr, DINFO)
+            logger.info('Job %s finished', self.currentjob.idnr)
             if self.currentjob.rmsource:
-                _debug_('Removing source: %s' % self.currentjob.source)
+                logger.debug('Removing source: %s', self.currentjob.source)
                 try:
                     os.remove(self.currentjob.source)
                 except OSError :
-                    _debug_('Cannot remove file '+self.currentjob.source, DWARNING)
+                    logger.warning('Cannot remove file ' + self.currentjob.source)
             #
             try:
                 os.rename(self.currentjob.temp_output, unique_output)
             except OSError :
-                _debug_('Cannot rename file to remove ~incomplete~ suffix '+self.currentjob.temp_output, DWARNING)
+                logger.warning('Cannot rename file to remove ~incomplete~ suffix ' + self.currentjob.temp_output)
 
             #we are done with this job, remove it
             del self.qlist[0]
@@ -1137,7 +1137,7 @@ class EncodingQueue:
         if self.currentjob.status == status.notset:
             #generate cli's
             self.currentjob._generateCL()
-            _debug_('CLIs: %s' % self.currentjob.cls)
+            logger.debug('CLIs: %s', self.currentjob.cls)
 
             #clean out temporary files
             self._removeTmp()
@@ -1149,8 +1149,8 @@ class EncodingQueue:
             self.currentjob._run(mencoder, self.currentjob.cls[0], self._runQueue, self.currentjob._MencoderParse,
                 1, None)
 
-        _debug_('Started job %s, %s on PID %s' % (self.currentjob.idnr, \
-            status[self.currentjob.status], self.currentjob.pid), DINFO)
+        logger.info('Started job %s, %s on PID %s', self.currentjob.idnr, status[self.currentjob.status], self.currentjob.pid)
+
 
 
 

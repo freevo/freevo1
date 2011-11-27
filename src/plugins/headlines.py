@@ -155,7 +155,7 @@ class HeadlinesSiteItem(Item):
                     except AttributeError:
                         pass
             else:
-                _debug_('Error %s, getting %r' % (doc.status, self.url))
+                logger.debug('Error %s, getting %r', doc.status, self.url)
 
             #write the file
             if len(headlines) > 0:

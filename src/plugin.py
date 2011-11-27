@@ -369,9 +369,9 @@ def shutdown(plugin_name=None):
 
     for p in plugins_to_shutdown:
         plugin_name = p.__module__
-        _debug_('shutting down plugin %r' % (plugin_name,), 1)
+        logger.debug('shutting down plugin %r', plugin_name)
         p.shutdown()
-        _debug_('shut down plugin %r' % (plugin_name,), 2)
+        logger.log( 9, 'shut down plugin %r', plugin_name)
 
 
 def get(type):
@@ -574,7 +574,7 @@ def __load_plugin__(name, type, level, args, number):
 
     try:
         if not isinstance(name, Plugin):
-            _debug_('loading %s as plugin %s' % (module, object))
+            logger.debug('loading %s as plugin %s', module, object)
 
             exec('import %s' % module)
             if not args:

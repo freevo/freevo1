@@ -45,8 +45,8 @@ class AudioDiskItem(Playlist):
     class for handling audio disks
     """
     def __init__(self, disc_id, parent, devicename=None, display_type=None):
-        _debug_('AudioDiskItem.__init__(disc_id=%r, parent=%r, devicename=%r, display_type=%r)' % \
-            (disc_id, parent, devicename, display_type), 2)
+        logger.log( 9, 'AudioDiskItem.__init__(disc_id=%r, parent=%r, devicename=%r, display_type=%r)', disc_id, parent, devicename, display_type)
+
 
         Playlist.__init__(self, parent=parent)
         self.type = 'audiocd'
@@ -70,7 +70,7 @@ class AudioDiskItem(Playlist):
         """
         return a list of actions for this item
         """
-        _debug_('actions()', 2)
+        logger.log( 9, 'actions()')
         self.cwd()
         items = [ ( self.cwd, _('Browse disc') ) ]
         return items
@@ -80,7 +80,7 @@ class AudioDiskItem(Playlist):
         """
         make a menu item for each file in the directory
         """
-        _debug_('cwd(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'cwd(arg=%r, menuw=%r)', arg, menuw)
         play_items = []
         number = len(self.info['tracks'])
         if hasattr(self.info, 'mixed'):

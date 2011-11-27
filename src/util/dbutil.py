@@ -76,7 +76,7 @@ def inti(a):
 try:
     import sqlite
 except:
-    _debug_('Python SQLite not installed!', DINFO)
+    logger.info('Python SQLite not installed!')
 
 
 
@@ -92,7 +92,7 @@ class MetaDatabase:
     def runQuery(self, query, close=False):
         """Execute a sql query on the database"""
         try:
-            _debug_('query=%s' % (query))
+            logger.debug('query=%s', query)
             self.cursor.execute(query)
         except TypeError:
             traceback.print_exc()

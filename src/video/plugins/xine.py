@@ -71,7 +71,7 @@ class PluginInterface(plugin.Plugin):
     default player (mplayer) will be used. You need xine-ui >= 0.9.22 to use this.
     """
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         try:
             config.XINE_COMMAND
         except:
@@ -102,7 +102,7 @@ class Xine:
     """
     def __init__(self, type):
         """ Xine contructor """
-        _debug_('Xine.__init__(type=%r)' % (type,), 2)
+        logger.log( 9, 'Xine.__init__(type=%r)', type)
         self.name      = 'xine'
         self.event_context  = 'video'
         self.xine_type = type
@@ -115,7 +115,7 @@ class Xine:
 
     def ShowMessage(self, msg):
         """ Show a message on the OSD """
-        _debug_('ShowMessage(msg=%r)' % (msg,), 2)
+        logger.log( 9, 'ShowMessage(msg=%r)', msg)
         self.app.write("OSDWriteText$     %s\n" % msg)
 
 
@@ -130,32 +130,32 @@ class Xine:
             return 0
         # dvd with menu
         if item.url.startswith('dvd://'):
-            _debug_('xine rating: %r good' % (item.url), 2)
+            logger.log( 9, 'xine rating: %r good', item.url)
             return 2
         # vcd
         if item.url.startswith('vcd://'):
             if item.url == 'vcd://':
-                _debug_('xine rating: %r good' % (item.url), 2)
+                logger.log( 9, 'xine rating: %r good', item.url)
                 return 2
-            _debug_('xine rating: %r unplayable' % (item.url), 2)
+            logger.log( 9, 'xine rating: %r unplayable', item.url)
             return 0
         # mimetypes from config (user's wishes!)
         if item.mimetype in config.VIDEO_XINE_SUFFIX:
-            _debug_('xine rating: %r good' % (item.url), 2)
+            logger.log( 9, 'xine rating: %r good', item.url)
             return 2
         if item.mode in ('http') and not item.filename and not item.media:
-            _debug_('xine rating: %r unplayable' % (item.url), 2)
+            logger.log( 9, 'xine rating: %r unplayable', item.url)
             return 0
         if item.network_play:
-            _debug_('xine rating: %r possible' % (item.url), 2)
+            logger.log( 9, 'xine rating: %r possible', item.url)
             return 1
-        _debug_('xine rating: %r unplayable' % (item.url), 2)
+        logger.log( 9, 'xine rating: %r unplayable', item.url)
         return 0
 
 
     def play(self, options, item):
         """ play video media with xine """
-        _debug_('play(options=%r, item=%r)' % (options, item), 2)
+        logger.log( 9, 'play(options=%r, item=%r)', options, item)
         self.item = item
         self.options = options
         self.item.elapsed = 0
@@ -266,7 +266,7 @@ class Xine:
 
     def stop(self, event=None):
         """ Stop xine """
-        _debug_('stop(event=%r)' % (event,), 2)
+        logger.log( 9, 'stop(event=%r)', event)
         if not self.app:
             return
 
@@ -288,7 +288,7 @@ class Xine:
                 (cin, cout) = (handle.stdin, handle.stdout)
                 try:
                     position = cout.read();
-                    _debug_("Elapsed = %s" % position)
+                    logger.debug("Elapsed = %s", position)
                     if position:
                         self.item.elapsed = int(position)
                 finally:
@@ -309,7 +309,7 @@ class Xine:
         eventhandler for xine control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event.name, menuw), 2)
+        logger.log( 9, 'eventhandler(event=%r, menuw=%r)', event.name, menuw)
         if not self.app:
             return self.item.eventhandler(event)
 
@@ -475,7 +475,7 @@ class Xine:
                 self.item_length = self._get_time(handle, 'length')
                 result = (position, self.item_length)
         except:
-            _debug_('Failed to retrieve time info from xine')
+            logger.debug('Failed to retrieve time info from xine')
 
         if handle:
             handle.close()
@@ -534,7 +534,7 @@ class XineApp(childapp.ChildApp2):
     class controlling the in and output from the xine process
     """
     def __init__(self, command, player):
-        _debug_('XineApp.__init__(command=%r, player=%r)' % (command, player), 2)
+        logger.log( 9, 'XineApp.__init__(command=%r, player=%r)', command, player)
         self.item = player.item
         self.player = player
         childapp.ChildApp2.__init__(self, command)
@@ -544,7 +544,7 @@ class XineApp(childapp.ChildApp2):
         """
         parse the stdout of the xine process
         """
-        _debug_('stdout_cb(line=%r)' % (line,), 2)
+        logger.log( 9, 'stdout_cb(line=%r)', line)
         if line.startswith('time: '):
             self.item.elapsed = int(line[6:])
         # show connection status for network play
@@ -557,12 +557,12 @@ class XineApp(childapp.ChildApp2):
         """
         parse the stderr of the xine process
         """
-        _debug_('stderr_cb(line=%r)' % (line,), 2)
+        logger.log( 9, 'stderr_cb(line=%r)', line)
         # Has it started?
         if line.find('playing mrl') >= 0:
-            _debug_('playback started')
+            logger.debug('playback started')
         # Has it finished?
         if line.find('playback finished for mrl') >= 0 or line.find('xine_exit: bye!') > 0:
-            _debug_('playback finished')
+            logger.debug('playback finished')
             if self.player:
                 self.player.stop()

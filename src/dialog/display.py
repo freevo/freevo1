@@ -268,7 +268,7 @@ class GraphicsDisplay(Display):
         """
 
         if self.current_dialog and self.current_dialog != dialog:
-            _debug_('Dialog already open, current priority %s new dialog priority %s' % (self.current_dialog.priority, dialog.priority))
+            logger.debug('Dialog already open, current priority %s new dialog priority %s', self.current_dialog.priority, dialog.priority)
             if self.current_dialog.priority < dialog.priority:
                 if self.current_time_details[1] == 0.0:
                     queue_dialog = True
@@ -279,7 +279,7 @@ class GraphicsDisplay(Display):
                     queue_dialog = left > 0.0
 
                 if queue_dialog:
-                    _debug_('Queuing current dialog, time left %f' % left)
+                    logger.debug('Queuing current dialog, time left %f', left)
                     self.waiting[self.current_dialog.priority] = (self.current_dialog, left, True)
                     # We don't finish the dialog as we will be displaying it again when
                     # the higher priority dialog closes.
@@ -287,11 +287,11 @@ class GraphicsDisplay(Display):
                 self.__hide_current_dialog(not queue_dialog)
                 
             elif dialog.priority < self.current_dialog.priority:
-                _debug_('Queuing new dialog')
+                logger.debug('Queuing new dialog')
                 self.waiting[dialog.priority] = (dialog, duration, False)
                 return
             else:
-                _debug_('Dialog is same priority hiding previous dialog')
+                logger.debug('Dialog is same priority hiding previous dialog')
                 self.__hide_current_dialog()
 
         self.__set_current_dialog(dialog, duration, self.current_dialog == dialog)
@@ -309,7 +309,7 @@ class GraphicsDisplay(Display):
             try:
                 self.show_image(dialog.render(), dialog.skin.position)
             except:
-                _debug_('Exception caught while trying to render dialog!\n' + traceback.format_exc(), DERROR)
+                logger.error('Exception caught while trying to render dialog!\n' + traceback.format_exc())
         
     @kaa.threaded(kaa.MAINTHREAD)
     def hide_all_dialogs(self):
@@ -340,10 +340,10 @@ class GraphicsDisplay(Display):
                 priority = self.current_dialog.priority
                 self.__hide_current_dialog()
 
-                _debug_('Closing dialog priority %s' % priority)
+                logger.debug('Closing dialog priority %s', priority)
 
                 for priority in range(priority - 1, dialogs.Dialog.LOW_PRIORITY, -1):
-                    _debug_('Checking priority %s' % priority)
+                    logger.debug('Checking priority %s', priority)
                     waiting = self.waiting[priority]
                     if waiting:
                         self.waiting[priority] = None
@@ -385,7 +385,7 @@ class GraphicsDisplay(Display):
             dialog.finish()
 
     def __set_current_dialog(self, dialog, duration, prepared):
-        _debug_('Setting current dialog to %s' % dialog.__class__.__name__)
+        logger.debug('Setting current dialog to %s', dialog.__class__.__name__)
         
         if self.current_dialog != dialog:
             if not prepared:
@@ -400,7 +400,7 @@ class GraphicsDisplay(Display):
         try:
             self.show_image(dialog.render(), dialog.skin.position)
         except:
-            _debug_('Exception caught while trying to render dialog!\n' + traceback.format_exc(), DERROR)
+            logger.error('Exception caught while trying to render dialog!\n' + traceback.format_exc())
 
         if duration > 0.0:
             #Stop any pending hide timers

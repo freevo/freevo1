@@ -270,10 +270,10 @@ class VideoItem(Item):
         self.player_rating = 0
         # some debug info
         try:
-            _debug_('rating: url=%r' % (self.url), 2)
-            _debug_('rating: mode=%r' % (self.mode), 2)
-            _debug_('rating: mimetype=%r' % (self.mimetype), 2)
-            _debug_('rating: network_play=%r' % (self.network_play), 2)
+            logger.log( 9, 'rating: url=%r', self.url)
+            logger.log( 9, 'rating: mode=%r', self.mode)
+            logger.log( 9, 'rating: mimetype=%r', self.mimetype)
+            logger.log( 9, 'rating: network_play=%r', self.network_play)
         except Exception, e:
             print 'videoitem.py: %s' %e
         for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
@@ -300,7 +300,7 @@ class VideoItem(Item):
         if len(self.possible_players) > 0:
             # choose the best player as default player
             self.player_rating, self.player = self.possible_players[0]
-        _debug_("rating: url=%r possible_players=%r" % (self.url, self.possible_players,), 2)
+        logger.log( 9, "rating: url=%r possible_players=%r", self.url, self.possible_players)
 
 
     def id(self):
@@ -381,7 +381,7 @@ class VideoItem(Item):
                     try:
                         total += length
                     except TypeError:
-                        _debug_('Invalid length: %r' % (length,))
+                        logger.debug('Invalid length: %r', length)
                 total = '%s min' % str(int(total) / 60)
             else:
                 if self.info['length']:
@@ -800,7 +800,7 @@ class VideoItem(Item):
                 self.set_next_available_subitem()
                 # Loop until we find a subitem which plays without error
                 while self.current_subitem:
-                    _debug_('playing next item')
+                    logger.debug('playing next item')
                     error = self.current_subitem.play(menuw=menuw)
                     if error:
                         self.last_error_msg = error

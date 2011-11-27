@@ -97,7 +97,7 @@ class Container(GUIObject):
 
 
     def _draw(self):
-        _debug_('Container::draw %s' % self, 2)
+        logger.log( 9, 'Container::draw %s', self)
 
         for child in self.children:
             if not child == self.border:

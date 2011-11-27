@@ -57,7 +57,7 @@ def get_singleton(**kwargs):
     """
     get the global rc object
     """
-    _debug_('rc.get_singleton(kwargs=%r)' % (kwargs,), 4)
+    logger.log( 7, 'rc.get_singleton(kwargs=%r)', kwargs)
     global _singleton
 
     # One-time init
@@ -71,7 +71,7 @@ def post_event(event):
     """
     add an event to the event queue
     """
-    _debug_('rc.post_event(event=%r)' % (event.name,), 2)
+    logger.log( 9, 'rc.post_event(event=%r)', event.name)
     return get_singleton().post_event(event)
 
 
@@ -86,7 +86,7 @@ def app(application=0):
     """
     set or get the current app/eventhandler
     """
-    _debug_('rc.app(application=%r)' % (application,), 4)
+    logger.log( 7, 'rc.app(application=%r)', application)
     if application != 0 and application != None:
         context = 'menu'
         if hasattr(application, 'app_mode'):
@@ -103,12 +103,12 @@ def add_app(app):
     context = 'menu'
     if hasattr(app, 'event_context'):
         context = app.event_context
-    _debug_('rc.add_app: Setting app %r (context %s)' % (app, context))
+    logger.debug('rc.add_app: Setting app %r (context %s)', app, context)
     get_singleton().add_app(app, context)
 
 
 def remove_app(app):
-    _debug_('rc.remove_app: Removing app %r ' % app)
+    logger.debug('rc.remove_app: Removing app %r ', app)
     get_singleton().remove_app(app)
 
 
@@ -124,7 +124,7 @@ def set_context(context):
     """
     set the context (map with button->event transformation
     """
-    _debug_('rc.set_context(context=%r)' % (context,), 2)
+    logger.log( 9, 'rc.set_context(context=%r)', context)
     return get_singleton().set_context(context)
 
 
@@ -134,7 +134,7 @@ def register(function, repeat, timer, *arg):
     repeat: if true, call the function later again
     timer:  timer * 0.01 seconds when to call the function
     """
-    _debug_('rc.register(function=%r, repeat=%r, timer=%r, arg=%r)' % (function, repeat, timer, arg), 3)
+    logger.log( 8, 'rc.register(function=%r, repeat=%r, timer=%r, arg=%r)', function, repeat, timer, arg)
     return get_singleton().register(function, repeat, timer, *arg)
 
 
@@ -142,7 +142,7 @@ def unregister(object):
     """
     unregister an object from the main loop
     """
-    _debug_('rc.unregister(object=%r)' % (object,), 2)
+    logger.log( 9, 'rc.unregister(object=%r)', object)
     return get_singleton().unregister(object)
 
 
@@ -150,7 +150,7 @@ def shutdown():
     """
     shutdown the rc
     """
-    _debug_('rc.shutdown()', 2)
+    logger.log( 9, 'rc.shutdown()')
     return get_singleton().shutdown()
 
 
@@ -158,7 +158,7 @@ def suspend():
     """
     suspend the rc
     """
-    _debug_('rc.suspend()', 2)
+    logger.log( 9, 'rc.suspend()')
     return get_singleton().suspend()
 
 
@@ -166,7 +166,7 @@ def resume():
     """
     resume the rc
     """
-    _debug_('rc.resume()', 2)
+    logger.log( 9, 'rc.resume()')
     return get_singleton().resume()
 
 
@@ -253,7 +253,7 @@ class Keyboard:
         init the keyboard event handler
         """
         self.rc = rc
-        _debug_('Keyboard.__init__()', 2)
+        logger.log( 9, 'Keyboard.__init__()')
         get_pygame_handler().register_handler(pygame.locals.KEYDOWN, self.__process_key_event)
 
 
@@ -370,7 +370,7 @@ class Joystick:
     Class to handle joystick input
     """
     def __init__(self, rc):
-        _debug_('Joystick.__init__()', 2)
+        logger.log( 9, 'Joystick.__init__()')
         self.rc = rc
         pygame.joystick.init()
         if pygame.joystick.get_count() < 1:
@@ -417,7 +417,7 @@ class TCPNetwork:
         """
         init the network event handler
         """
-        _debug_('TCPNetwork.__init__()', 1)
+        logger.debug('TCPNetwork.__init__()')
         self.rc = rc
         self.socket = kaa.Socket()
         self.socket.signals['new-client'].connect(self.__accept)
@@ -444,7 +444,7 @@ class UDPNetwork:
         """
         init the network event handler
         """
-        _debug_('UDPNetwork.__init__()', 2)
+        logger.log( 9, 'UDPNetwork.__init__()')
         self.rc = rc
         import socket
         self.port = config.REMOTE_CONTROL_PORT
@@ -469,10 +469,10 @@ class EventHandler:
     also handles the complete event queue (post_event)
     """
     def __init__(self, use_pylirc=1, use_netremote=1, is_helper=1):
-        _debug_('EventHandler.__init__(use_pylirc=%r, use_netremote=%r, is_helper=%r)' % \
-            (use_pylirc, use_netremote, is_helper), 1)
+        logger.debug('EventHandler.__init__(use_pylirc=%r, use_netremote=%r, is_helper=%r)', use_pylirc, use_netremote, is_helper)
 
-        _debug_('config.HELPER=%r' % (config.HELPER,))
+
+        logger.debug('config.HELPER=%r', config.HELPER)
 
         self.inputs = []
         if not config.HELPER:
@@ -521,7 +521,7 @@ class EventHandler:
         self.lock               = threading.RLock()
 
         #kaa.Timer(self.poll).start(config.POLL_TIME)
-        _debug_('EventHandler.self.inputs=%r' % (self.inputs,), 1)
+        logger.debug('EventHandler.self.inputs=%r', self.inputs)
 
 
     def add_app(self, app, context):
@@ -534,7 +534,7 @@ class EventHandler:
         if app == self.app:
             self.apps.pop()
             self.app,self.context = self.apps[-1]
-            _debug_('Focused App=%r context=%r' % (self.app,self.context))
+            logger.debug('Focused App=%r context=%r', self.app, self.context)
         else:
             for i in xrange(len(self.apps)):
                 if self.apps[i][0] == app:
@@ -545,7 +545,7 @@ class EventHandler:
         if app == self.app:
             self.context = context
             self.apps[-1][1] = context
-            _debug_('Focus App Context changed to %r' % context)
+            logger.debug('Focus App Context changed to %r', context)
         else:
             for i in xrange(len(self.apps)):
                 if self.apps[i][0] == app:
@@ -556,7 +556,7 @@ class EventHandler:
         """
         set default eventhandler and context
         """
-        _debug_('EventHandler.set_app(app=%r, context=%r)' % (app, context), 2)
+        logger.log( 9, 'EventHandler.set_app(app=%r, context=%r)', app, context)
         self.app     = app
         self.context = context
 
@@ -565,7 +565,7 @@ class EventHandler:
         """
         get current eventhandler (app)
         """
-        _debug_('EventHandler.get_app()', 4)
+        logger.log( 7, 'EventHandler.get_app()')
         return self.app
 
 
@@ -573,7 +573,7 @@ class EventHandler:
         """
         set context for key mapping
         """
-        _debug_('EventHandler.set_context(context=%r)' % (context,), 2)
+        logger.log( 9, 'EventHandler.set_context(context=%r)', context)
         print('EventHandler context=%r' % (context,)) #DJW
         self.context = context
 
@@ -582,7 +582,7 @@ class EventHandler:
         """
         add event to the queue
         """
-        _debug_('EventHandler.post_event(event=%r)' % (event.name,), 2)
+        logger.log( 9, 'EventHandler.post_event(event=%r)', event.name)
         if not isinstance(event, Event):
             event = Event(event, context=self.context)
         event.post()
@@ -600,7 +600,7 @@ class EventHandler:
         """
         map key to event based on current context
         """
-        _debug_('EventHandler.key_event_mapper(key=%r)' % (key,), 2)
+        logger.log( 9, 'EventHandler.key_event_mapper(key=%r)', key)
         if not key:
             return None
 
@@ -613,8 +613,8 @@ class EventHandler:
                 pass
 
         if self.context != 'input':
-            _debug_('no event mapping for key %r in context %r' % (key, self.context), DINFO)
-            _debug_('send button event BUTTON arg=%r' % (key,))
+            logger.info('no event mapping for key %r in context %r', key, self.context)
+            logger.debug('send button event BUTTON arg=%r', key)
         return Event(BUTTON, arg=key)
 
 
@@ -624,11 +624,11 @@ class EventHandler:
         repeat: if true, call the function later again
         timer:  timer * 0.01 seconds when to call the function
         """
-        _debug_('EventHandler.register(function=%r, repeat=%r, timer=%r, arg=%r)' % (function, repeat, timer, arg), 2)
+        logger.log( 9, 'EventHandler.register(function=%r, repeat=%r, timer=%r, arg=%r)', function, repeat, timer, arg)
         self.lock.acquire()
         try:
             if timer == SHUTDOWN:
-                _debug_('register shutdown callback: %s' % function, 2)
+                logger.log( 9, 'register shutdown callback: %s', function)
                 self.shutdown_callbacks.append([ function, arg ])
             else:
                 print 'Deprecated use of register, use kaa.Timer/OneShotTimer instead of this function!'
@@ -640,26 +640,26 @@ class EventHandler:
         """
         unregister an object from the main loop
         """
-        _debug_('EventHandler.unregister(function=%r)' % (function,), 2)
+        logger.log( 9, 'EventHandler.unregister(function=%r)', function)
         self.lock.acquire()
         try:
             for c in copy.copy(self.shutdown_callbacks):
                 if c[0] == function:
-                    _debug_('unregister shutdown callback: %s' % function, 2)
+                    logger.log( 9, 'unregister shutdown callback: %s', function)
                     self.shutdown_callbacks.remove(c)
         finally:
             self.lock.release()
 
 
     def suspend(self):
-        _debug_('EventHandler.suspend()', 2)
+        logger.log( 9, 'EventHandler.suspend()')
         for i in self.inputs:
             if hasattr(i, 'suspend'):
                 i.suspend()
 
 
     def resume(self):
-        _debug_('EventHandler.resume()', 2)
+        logger.log( 9, 'EventHandler.resume()')
         for i in self.inputs:
             if hasattr(i, 'resume'):
                 i.resume()
@@ -669,9 +669,9 @@ class EventHandler:
         """
         shutdown the rc
         """
-        _debug_('EventHandler.shutdown()', 2)
+        logger.log( 9, 'EventHandler.shutdown()')
         for c in copy.copy(self.shutdown_callbacks):
-            _debug_('shutting down %s' % c[0], 2)
+            logger.log( 9, 'shutting down %s', c[0])
             c[0](*c[1])
         
         for i in self.inputs:

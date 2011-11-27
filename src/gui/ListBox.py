@@ -94,7 +94,7 @@ class ListBox(RegionScroller):
 
 
     def scroll(self, direction):
-        _debug_('listbox scroll: direction="%s"' % direction, 2)
+        logger.log( 9, 'listbox scroll: direction="%s"', direction)
 
         if direction in (INPUT_RIGHT, INPUT_LEFT):
             return RegionScroller.scroll(self, direction)
@@ -233,10 +233,10 @@ class ListBox(RegionScroller):
 
 
     def eventhandler(self, event):
-        _debug_('ListBox::eventhandler: event=%s' % event, 2)
+        logger.log( 9, 'ListBox::eventhandler: event=%s', event)
 
         if event in (INPUT_UP, INPUT_DOWN, INPUT_LEFT, INPUT_RIGHT ):
-            _debug_('ListBox::eventhandler: should scroll', 2)
+            logger.log( 9, 'ListBox::eventhandler: should scroll')
             self.scroll(event)
             self.draw(update=True)
             return True

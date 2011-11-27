@@ -161,10 +161,10 @@ class PluginInterface(plugin.MainMenuPlugin):
     __version__ = "album_tree v0.60"
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()')
+        logger.debug('PluginInterface.__init__()')
         plugin.MainMenuPlugin.__init__(self)
         if not config.AUDIO_ALBUM_TREE_SPEC:
-            _debug_('AUDIO_ALBUM_TREE_SPEC is empty; demo-mode, using predefined trees', DWARNING)
+            logger.warning('AUDIO_ALBUM_TREE_SPEC is empty; demo-mode, using predefined trees')
             self.album_tree_list = self.load_demo()
         else:
             self.album_tree_list = self.load_spec(config.AUDIO_ALBUM_TREE_SPEC)
@@ -175,7 +175,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def config(self):
-        _debug_('PluginInterface.config()')
+        logger.debug('PluginInterface.config()')
         return [
             ('AUDIO_ALBUM_TREE_SPEC', [], 'Specification for the album tree queries'),
         ]
@@ -185,7 +185,7 @@ class PluginInterface(plugin.MainMenuPlugin):
         """
         shut down the sqlite database
         """
-        _debug_('PluginInterface.shutdown()')
+        logger.debug('PluginInterface.shutdown()')
         db.close()
 
 
@@ -239,12 +239,12 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
-        _debug_('PluginInterface.items(parent=%r)' % (parent,))
+        logger.debug('PluginInterface.items(parent=%r)', parent)
         return [ AlbumTreeMainMenu(parent, self.album_tree_list) ]
 
 
     def actions(self):
-        _debug_('PluginInterface.actions()')
+        logger.debug('PluginInterface.actions()')
         #todo: add random 10 etc..
         return []
 
@@ -255,7 +255,7 @@ class AlbumTreeMainMenu(MenuItem):
     Create the menu item for Album Tree
     """
     def __init__(self, parent, tree):
-        _debug_('AlbumTreeMainMenu.__init__(parent=%r)' % (parent,))
+        logger.debug('AlbumTreeMainMenu.__init__(parent=%r)', parent)
         MenuItem.__init__(self, name=_('Album Tree 2'), parent=parent, skin_type='album_tree', type='audio')
         self.parent = parent
         self.tree = tree
@@ -266,7 +266,7 @@ class AlbumTreeMainMenu(MenuItem):
         """
         return a list of actions for this item
         """
-        _debug_('AlbumTreeMainMenu.actions()')
+        logger.debug('AlbumTreeMainMenu.actions()')
         items = [ (self.create_album_tree_menu, _('Album Tree Items')) ]
         return items
 
@@ -275,7 +275,7 @@ class AlbumTreeMainMenu(MenuItem):
         """
         call first action in the actions list
         """
-        _debug_('AlbumTreeMainMenu.__call__(arg=%r, menuw=%r)' % (arg, menuw))
+        logger.debug('AlbumTreeMainMenu.__call__(arg=%r, menuw=%r)', arg, menuw)
         if self.actions():
             return self.actions()[0][0](arg=arg, menuw=menuw)
 
@@ -288,7 +288,7 @@ class AlbumTreeMainMenu(MenuItem):
         @param menuw: is a MenuWidget
         @returns: Nothing
         """
-        _debug_('create_album_tree_menu(arg=%r, menuw=%r)' % (arg, menuw))
+        logger.debug('create_album_tree_menu(arg=%r, menuw=%r)', arg, menuw)
         branches = []
         for branch in self.tree:
             #print 'branch=%r' % branch,; pprint(branch.__dict__)
@@ -305,7 +305,7 @@ class AlbumTreeBranchMenu(MenuItem):
     Item for the menu for one query
     """
     def __init__(self, parent, name, arg):
-        _debug_('AlbumTreeBranchMenu.__init__(parent=%r, name=%r, arg=%r)' % (parent, name, arg))
+        logger.debug('AlbumTreeBranchMenu.__init__(parent=%r, name=%r, arg=%r)', parent, name, arg)
         MenuItem.__init__(self, name, parent=parent)
         self.parent = parent
         self.branch = arg[0]
@@ -314,7 +314,7 @@ class AlbumTreeBranchMenu(MenuItem):
 
 
     def actions(self):
-        _debug_('AlbumTreeBranchMenu.actions()')
+        logger.debug('AlbumTreeBranchMenu.actions()')
         return [ (self.branch_node, _('Album Tree Item')) ]
 
 
@@ -322,7 +322,7 @@ class AlbumTreeBranchMenu(MenuItem):
         """
         browse through a tree specification
         """
-        _debug_('branch_node(arg=%r, menuw=%r)' % (arg, menuw))
+        logger.debug('branch_node(arg=%r, menuw=%r)', arg, menuw)
         title = '-'.join(self.data)
 
         mylistofitems =  []
@@ -350,7 +350,7 @@ class AlbumTreeBranchMenu(MenuItem):
         """
         last node in branch generates a playlist.
         """
-        _debug_('leaf_node(branch=%r, data=%r, menuw=%r)' % (branch, data, menuw))
+        logger.debug('leaf_node(branch=%r, data=%r, menuw=%r)', branch, data, menuw)
         title = '-'.join(data)
         #creating of audio items is slow.
         #need a progress-bar.

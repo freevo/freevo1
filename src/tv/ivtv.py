@@ -118,10 +118,10 @@ class IVTV(tv.v4l2.Videodev):
             10 : 3, 11 : 4, 12 : 5, 13 : 3, 14 : 3
         }
         try:
-            _debug_('streamTypeIvtvToV4l2 %s -> %s' % (stream_type, map_ivtv_to_v4l2[stream_type]), 2)
+            logger.log( 9, 'streamTypeIvtvToV4l2 %s -> %s', stream_type, map_ivtv_to_v4l2[stream_type])
             return map_ivtv_to_v4l2[stream_type]
         except:
-            _debug_('streamTypeIvtvToV4l2 %s failed' % (stream_type), DWARNING)
+            logger.warning('streamTypeIvtvToV4l2 %s failed', stream_type)
         return 0
 
 
@@ -130,10 +130,10 @@ class IVTV(tv.v4l2.Videodev):
             0 : 0, 2 : 2, 3 : 10, 4 : 11, 5 : 12,
         }
         try:
-            _debug_('streamTypeV4l2ToIVTV %s -> %s' % (stream_type, map_v4l2_to_ivtv[stream_type]), 2)
+            logger.log( 9, 'streamTypeV4l2ToIVTV %s -> %s', stream_type, map_v4l2_to_ivtv[stream_type])
             return map_v4l2_to_ivtv[stream_type]
         except:
-            _debug_('streamTypeV4l2ToIVTV %s failed' % (stream_type), DWARNING)
+            logger.warning('streamTypeV4l2ToIVTV %s failed', stream_type)
         return 0
 
 
@@ -175,7 +175,7 @@ class IVTV(tv.v4l2.Videodev):
         val = struct.pack( CODEC_ST, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_G_CODEC), val)
         codec_list = struct.unpack(CODEC_ST, r)
-        _debug_("getCodecInfo: val=%r, r=%r, res=%r" % (val, r, struct.unpack(CODEC_ST, r)), 3)
+        logger.log( 8, "getCodecInfo: val=%r, r=%r, res=%r", val, r, struct.unpack(CODEC_ST, r))
         return IVTVCodec(codec_list)
 
 
@@ -311,7 +311,7 @@ class IVTV(tv.v4l2.Videodev):
                            codec.pulldown,     # removed from ivtv driver
                            codec.stream_type)
         r = fcntl.ioctl(self.device, i32(IVTV_IOC_S_CODEC), val)
-        _debug_("setCodecInfo: val=%r, r=%r" % (val, r), 3)
+        logger.log( 8, "setCodecInfo: val=%r, r=%r", val, r)
 
 
     def mspSetMatrix(self, input=None, output=None):
@@ -320,7 +320,7 @@ class IVTV(tv.v4l2.Videodev):
 
         val = struct.pack(MSP_MATRIX_ST, input, output)
         r = fcntl.ioctl(self.device, i32(MSP_SET_MATRIX), val)
-        _debug_("mspSetMatrix: val=%r, r=%r" % (val, r), 3)
+        logger.log( 8, "mspSetMatrix: val=%r, r=%r", val, r)
 
 
     def getvbiembed(self):
@@ -328,11 +328,12 @@ class IVTV(tv.v4l2.Videodev):
             return self.getcontrol('Stream VBI Format')
         try:
             r = fcntl.ioctl(self.device, i32(GETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, 0))
-            _debug_("getvbiembed: val=%r, r=%r, res=%r" % (struct.pack(VBI_EMBED_ST, 0), r,
-                    struct.unpack(VBI_EMBED_ST, r)), 3)
+            logger.log( 8, "getvbiembed: val=%r, r=%r, res=%r", struct.pack(VBI_EMBED_ST, 0), r, 
+struct.unpack(VBI_EMBED_ST, r))
+
             return struct.unpack(VBI_EMBED_ST, r)[0]
         except IOError:
-            _debug_('getvbiembed: failed', DWARNING)
+            logger.warning('getvbiembed: failed')
             return 0
 
 
@@ -342,14 +343,14 @@ class IVTV(tv.v4l2.Videodev):
             return
         try:
             r = fcntl.ioctl(self.device, i32(SETVBI_EMBED_NO), struct.pack(VBI_EMBED_ST, value))
-            _debug_("setvbiembed: val=%r, res=%r" % (struct.pack(VBI_EMBED_ST, value), r), 3)
+            logger.log( 8, "setvbiembed: val=%r, res=%r", struct.pack(VBI_EMBED_ST, value), r)
         except IOError:
-            _debug_('setvbiembed: failed', DWARNING)
+            logger.warning('setvbiembed: failed')
 
 
     def gopend(self, value):
         r = fcntl.ioctl(self.device, i32(GOP_END_NO), struct.pack(GOP_END_ST, value))
-        _debug_("gopend: val=%r, res=%r" % (struct.pack(GOP_END_ST, value), r), 1)
+        logger.debug("gopend: val=%r, res=%r", struct.pack(GOP_END_ST, value), r)
 
 
     def init_settings(self, opts=None):

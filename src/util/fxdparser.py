@@ -215,7 +215,7 @@ class FXD:
         parse the tree and call all the callbacks
         """
         if self.tree.tree.name != 'freevo':
-            _debug_('first node not <freevo>')
+            logger.debug('first node not <freevo>')
             return
         for node in self.tree.tree.children:
             if node.name == 'skin':

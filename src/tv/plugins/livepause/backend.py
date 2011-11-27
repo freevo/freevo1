@@ -142,7 +142,7 @@ class RemoteBackendClient(Backend):
 
     def __init__(self):
         super(RemoteBackendClient, self).__init__()
-        _debug_('RecordClient.__init__()', 2)
+        logger.log( 9, 'RecordClient.__init__()')
         self.socket = (config.LIVE_PAUSE2_BACKEND_SERVER_IP, config.LIVE_PAUSE2_BACKEND_SERVER_PORT)
         self.secret = config.LIVE_PAUSE2_BACKEND_SERVER_SECRET
         self.server = None
@@ -151,28 +151,28 @@ class RemoteBackendClient(Backend):
     def _rpc(self, cmd, *args, **kwargs):
         """ call the record server command using kaa rpc """
         def closed_handler():
-            _debug_('%r has closed' % (self.socket,), DINFO)
+            logger.info('%r has closed', self.socket)
             self.server = None
 
-        _debug_('RemoteBackendClient._rpc(cmd=%r, args=%r, kwargs=%r)' % (cmd, args, kwargs), 2)
+        logger.log( 9, 'RemoteBackendClient._rpc(cmd=%r, args=%r, kwargs=%r)', cmd, args, kwargs)
         try:
             if self.server is None:
                 try:
                     self.server = kaa.rpc.Client(self.socket, self.secret)
                     self.server.connect(self)
                     self.server.signals['closed'].connect(closed_handler)
-                    _debug_('%r is up' % (self.socket,), DINFO)
+                    logger.info('%r is up', self.socket)
                 except kaa.rpc.ConnectError:
-                    _debug_('%r is down' % (self.socket,), DINFO)
+                    logger.info('%r is down', self.socket)
                     self.server = None
                     return None
             return self.server.rpc(cmd, *args, **kwargs)
         except kaa.rpc.ConnectError, e:
-            _debug_('%r is down' % (self.socket,), DINFO)
+            logger.info('%r is down', self.socket)
             self.server = None
             return None
         except IOError, e:
-            _debug_('%r is down' % (self.socket,), DINFO)
+            logger.info('%r is down', self.socket)
             self.server = None
             return None
 
@@ -289,7 +289,7 @@ class LocalBackend(Backend):
             self.device_in_use = None
             self.livepause_app.quit()
             self.livepause_app = None
-            _debug_('Buffering disabled.')
+            logger.debug('Buffering disabled.')
 
 
     def change_channel(self, channel):
@@ -315,7 +315,7 @@ class LocalBackend(Backend):
         vg = self.fc.getVideoGroup(channel, True)
         self.controller = controllers.get_controller(vg.group_type)
         if not self.controller:
-            _debug_('Failed to find controller for device')
+            logger.debug('Failed to find controller for device')
             return
 
         self.fc.chanSet(channel, True)

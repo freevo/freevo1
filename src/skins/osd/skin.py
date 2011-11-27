@@ -159,7 +159,7 @@ class OSDObject(object):
 class OSDText(OSDObject):
     def __init__(self, pos, size, expr, font, fgcolor, bgcolor, valign, halign):
         OSDObject.__init__(self, pos, size)
-        _debug_('OSDText (%s,%s) %sx%s "%s" %s %s' % (pos[0], pos[1], size[0], size[1], expr, valign, halign), 2)
+        logger.log( 9, 'OSDText (%s,%s) %sx%s "%s" %s %s', pos[0], pos[1], size[0], size[1], expr, valign, halign)
         self.expr = expr
         self.font = font
         self.fgcolor = fgcolor
@@ -371,7 +371,7 @@ class OSDText(OSDObject):
                 image.draw_text((x0,y0), l, fgcolor)
 
             except Exception, e:
-                _debug_('Render failed, skipping \'%s\': %s' % (l, e), DERROR)
+                logger.error('Render failed, skipping \'%s\': %s', l, e)
                 if config.DEBUG:
                     traceback.print_exc()
 
@@ -387,7 +387,7 @@ class OSDText(OSDObject):
 class OSDImage(OSDObject):
     def __init__(self, pos, size, image, expr, image_expr=None, scale=None, valign='top', halign='left'):
         OSDObject.__init__(self, pos, size)
-        _debug_('OSDImage (%s,%s) %sx%s "%s" "%s" "%s" "%s"' % (pos[0], pos[1], size[0], size[1], image, expr, image_expr, scale), 2)
+        logger.log( 9, 'OSDImage (%s,%s) %sx%s "%s" "%s" "%s" "%s"', pos[0], pos[1], size[0], size[1], image, expr, image_expr, scale)
         self.image_name = image
         self.image_expr = image_expr
         self.image = None
@@ -444,7 +444,7 @@ class OSDImage(OSDObject):
 class OSDPercent(OSDImage):
     def __init__(self, pos, size, vertical, image, expr):
         OSDImage.__init__(self, pos, size, image, expr, scale='both')
-        _debug_('OSDPercent (%s,%s) %sx%s "%s" "%s" %s' % (pos[0], pos[1], size[0], size[1], image, expr, vertical), 2)
+        logger.log( 9, 'OSDPercent (%s,%s) %sx%s "%s" "%s" %s', pos[0], pos[1], size[0], size[1], image, expr, vertical)
         self.vertical = vertical
 
     def render(self, image, value_dict):
@@ -506,7 +506,7 @@ class OSDPercent(OSDImage):
 class OSDWidget(OSDObject):
     def __init__(self, pos, size, unscaled_size, name, style, navigation=None):
         OSDObject.__init__(self, pos, size)
-        _debug_('OSDWidget (%s,%s) %sx%s "%s" "%s"' % (pos[0], pos[1], size[0], size[1], name, style), 2)
+        logger.log( 9, 'OSDWidget (%s,%s) %sx%s "%s" "%s"', pos[0], pos[1], size[0], size[1], name, style)
         self.name = name
         self.style = style
         self.unscaled_size = unscaled_size
@@ -581,7 +581,7 @@ def eval_or_int(exp, exp_dict):
 class OSDMenu(OSDWidget):
     def __init__(self, pos, size, unscaled_size, name, style, items_per_page):
         super(OSDMenu, self).__init__(pos, size, unscaled_size, name, style)
-        _debug_('OSDMenu (%s,%s) %sx%s "%s" "%s" %d' % (pos[0], pos[1], size[0], size[1], name, style, items_per_page), 2)
+        logger.log( 9, 'OSDMenu (%s,%s) %sx%s "%s" "%s" %d', pos[0], pos[1], size[0], size[1], name, style, items_per_page)
         self.items_per_page = items_per_page
         self.items = []
         item_h = size[1] / items_per_page
@@ -681,7 +681,7 @@ def get_image(filename, scale, size):
             size = (w, h)
             src_size = size
             dst_size = size
-        _debug_('Creating image %s (%dx%d) of size %dx%d using scale %s' % (filename, src_size[0],src_size[1], dst_size[0], dst_size[1], scale), 2)
+        logger.log( 9, 'Creating image %s (%dx%d) of size %dx%d using scale %s', filename, src_size[0], src_size[1], dst_size[0], dst_size[1], scale)
         image = image.scale(dst_size, src_size=src_size)
 
         image_cache[cache_key] = image
@@ -690,13 +690,13 @@ def get_image(filename, scale, size):
             if not vfs.exists(cache_dir):
                 os.makedirs(cache_dir)
             image.save(cache_filename)
-            _debug_('Saved to %s' % cache_filename)
+            logger.debug('Saved to %s', cache_filename)
 
     return image
 
 
 def find_image(filename):
-    _debug_('Looking for %s (icontheme %s)' % (filename, icontheme), 2)
+    logger.log( 9, 'Looking for %s (icontheme %s)', filename, icontheme)
 
     if filename.startswith('http://') or filename.startswith('https://'):
         return filename
@@ -725,13 +725,13 @@ def find_image(filename):
     report_error('Can\'t find image \"%s\"' % filename)
 
     if config.DEBUG:
-        _debug_('image search path is:')
+        logger.debug('image search path is:')
         for dir in dirs:
-            _debug_(dir)
+            logger.debug(dir)
 
     return ''
 
 def _report_error(error):
-    _debug_(error, DWARNING)
+    logger.warning(error)
 
 report_error = _report_error

@@ -86,15 +86,15 @@ class Xine:
         0 = unplayable
         """
         try:
-            _debug_('url=%r' % (item.url), 2)
-            _debug_('mode=%r' % (item.mode), 2)
-            _debug_('mimetype=%r' % (item.mimetype), 2)
+            logger.log( 9, 'url=%r', item.url)
+            logger.log( 9, 'mode=%r', item.mode)
+            logger.log( 9, 'mimetype=%r', item.mimetype)
         except Exception, e:
             pass
         if item.url.startswith('radio://'):
-            _debug_('%r unplayable' % (item.url))
+            logger.debug('%r unplayable', item.url)
             return 0
-        _debug_('%r good' % (item.url))
+        logger.debug('%r good', item.url)
         return 2
 
 
@@ -102,7 +102,7 @@ class Xine:
         """
         play an audio file with xine
         """
-        _debug_('%s.play(item=%r, playerGUI=%r)' % (self.__module__, item, playerGUI))
+        logger.debug('%s.play(item=%r, playerGUI=%r)', self.__module__, item, playerGUI)
 
         self.item      = item
         self.playerGUI = playerGUI

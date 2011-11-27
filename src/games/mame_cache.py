@@ -86,7 +86,7 @@ def getMameRomList():
             print (('MameRomList version number %s is stale (new is %s), must ' +
                     'be reloaded') % (file_ver, mame_types.TYPES_VERSION))
         else:
-            _debug_('Got MameRomList (version %s).' % file_ver)
+            logger.debug('Got MameRomList (version %s).', file_ver)
 
     if mameRomList == None:
         mameRomList = mame_types.MameRomList()
@@ -276,10 +276,10 @@ def updateMameRomList( mame_cmd ) :
     if xmame_semimajor_version( mame_cmd ) == FALSE :
         return FALSE
     if xmame_semimajor_version(mame_cmd) >= 83 :
-        _debug_("updating via listxml")
+        logger.debug("updating via listxml")
         mameRomList = mameRomListFromListxml( mame_cmd )
     else :
-        _debug_("updating via listinfo")
+        logger.debug("updating via listinfo")
         mameRomList = mameRomListFromListinfo( mame_cmd )
     saveMameRomList(mameRomList)
     return TRUE

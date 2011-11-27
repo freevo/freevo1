@@ -65,7 +65,7 @@ class CommDetectServer(xmlrpc.XMLRPC):
 
     def __init__(self, debug=False, allowNone=False):
         """ Initialise the Commercial Detection Server class """
-        _debug_('CommDetectServer.__init__(debug=%r, allowNone=%r)' % (debug, allowNone), 2)
+        logger.log( 9, 'CommDetectServer.__init__(debug=%r, allowNone=%r)', debug, allowNone)
         try:
             xmlrpc.XMLRPC.__init__(self, allowNone)
         except TypeError:
@@ -73,39 +73,39 @@ class CommDetectServer(xmlrpc.XMLRPC):
         self.debug = debug
         self.jobs = {}
         self.queue = CommDetectQueue()
-        _debug_("CommDetectServer started...", DINFO)
+        logger.info("CommDetectServer started...")
 
     def xmlrpc_echotest(self, blah):
-        _debug_("xmlrpc_echotest(self, blah)", 3)
+        logger.log( 8, "xmlrpc_echotest(self, blah)")
         return (True, 'CommDetectServer::echotest: %s' % blah)
 
     def xmlrpc_initCommDetectJob(self, source):
-        _debug_("xmlrpc_initCommDetectJob(self, %s)" % (source))
+        logger.debug("xmlrpc_initCommDetectJob(self, %s)", source)
         #safety checks
         if not (source):
             return (False, 'CommDetectServer::initCommDetectJob:  no source given')
         idnr = int((time.time() / random.random()) / 100)
-        _debug_("idnr=%s" % (idnr), 2)
+        logger.log( 9, "idnr=%s", idnr)
         self.jobs[idnr] = CommDetectJob(source,idnr)
-        _debug_("Initialized job %s (idnr : %s)" % (source,idnr), DINFO)
+        logger.info("Initialized job %s (idnr : %s)", source, idnr)
         return (True, idnr)
 
     def xmlrpc_queueIt(self, idnr, now=False):
-        _debug_("xmlrpc_queueIt(self, idnr, now=False)", 3)
+        logger.log( 8, "xmlrpc_queueIt(self, idnr, now=False)")
         self.queue.addCommDetectJob(self.jobs[idnr])
         del self.jobs[idnr]
-        _debug_("Added job %s to the queue" % idnr, DINFO)
+        logger.info("Added job %s to the queue", idnr)
         if now:
             self.queue.startQueue()
         return (True, "CommDetectServer::queueIt: OK")
 
     def xmlrpc_startQueue(self):
-        _debug_("xmlrpc_startQueue(self)", 3)
+        logger.log( 8, "xmlrpc_startQueue(self)")
         self.queue.startQueue()
         return (True, "CommDetectServer::startqueue: OK")
 
     def xmlrpc_listJobs(self):
-        _debug_("xmlrpc_listJobs(self)", 3)
+        logger.log( 8, "xmlrpc_listJobs(self)")
         jlist = self.queue.listJobs()
         return (True, jam(jlist))
 
@@ -121,7 +121,7 @@ def main(opts, args):
         import commdetectcore
         commdetectcore.DEBUG = opts.debug != 0
 
-    _debug_('DEBUG=%s' % DEBUG, DINFO)
+    logger.info('DEBUG=%s', DEBUG)
     cds = CommDetectServer(debug=opts.debug, allowNone=True)
     reactor.listenTCP(config.COMMDETECTSERVER_PORT, server.Site(cds))
     reactor.run()
@@ -150,13 +150,13 @@ if __name__ == '__main__':
     opts, args = parse_options()
 
     try:
-        _debug_('main() starting')
+        logger.debug('main() starting')
         main(opts, args)
-        _debug_('main() finished')
+        logger.debug('main() finished')
     except SystemExit:
-        _debug_('main() stopped')
+        logger.debug('main() stopped')
         pass
     except Exception, why:
         import traceback
         traceback.print_exc()
-        _debug_(why, DWARNING)
+        logger.warning(why)

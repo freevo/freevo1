@@ -84,14 +84,14 @@ class RadioPlayer:
         0 = unplayable
         """
         try:
-            _debug_('url=%r' % (item.url), 2)
-            _debug_('item.__dict__=%r' % (item.__dict__), 3)
+            logger.log( 9, 'url=%r', item.url)
+            logger.log( 8, 'item.__dict__=%r', item.__dict__)
         except Exception, why:
-            _debug_('%s' % why)
+            logger.debug('%s', why)
         if item.url.startswith('radio://'):
-            _debug_('%r good' % (item.url), 2)
+            logger.log( 9, '%r good', item.url)
             return 2
-        _debug_('%r unplayable' % (item.url), 2)
+        logger.log( 9, '%r unplayable', item.url)
         return 0
 
 
@@ -99,14 +99,14 @@ class RadioPlayer:
         """
         play a radioitem with radio player
         """
-        _debug_('%s.play(item=%r, playerGUI=%r)' % (self.__module__, item, playerGUI))
+        logger.debug('%s.play(item=%r, playerGUI=%r)', self.__module__, item, playerGUI)
         self.playerGUI = playerGUI
         self.item = item
         #self.item.elapsed = 0
         self.starttime = time.time()
 
         try:
-            _debug_('play %r' % self.item.station)
+            logger.debug('play %r', self.item.station)
         except AttributeError:
             return 'Cannot play with RadioPlayer - no station'
 
@@ -118,15 +118,15 @@ class RadioPlayer:
             mixer.setLineinVolume(mixer_vol)
             mixer.setIgainVolume(mixer_vol)
             mixer.setMicVolume(mixer_vol)
-        _debug_('RadioPlayer mixer is %s' % mixer, 1)
+        logger.debug('RadioPlayer mixer is %s', mixer)
 
         if config.RADIO_CMD.find('ivtv-radio') >= 0:
             # IVTV cards
-            _debug_('%s -f %s &' % (config.RADIO_CMD, self.item.station), 1)
+            logger.debug('%s -f %s &', config.RADIO_CMD, self.item.station)
             os.system('%s -f %s &' % (config.RADIO_CMD, self.item.station))
         else:
             # BTTV cards
-            _debug_('%s' % (config.RADIO_CMD_START % self.item.station), 1)
+            logger.debug('%s', config.RADIO_CMD_START%self.item.station)
             os.system('%s' % (config.RADIO_CMD_START % self.item.station))
         #thread.start_new_thread(self.__update_thread, ())
 
@@ -139,7 +139,7 @@ class RadioPlayer:
         """
         Stop mplayer and set thread to idle
         """
-        _debug_('Radio Player Stop', 1)
+        logger.debug('Radio Player Stop')
         self.mode = 'stop'
         mixer = plugin.getbyname('MIXER')
         if mixer:
@@ -147,14 +147,14 @@ class RadioPlayer:
             mixer.setMicVolume(0)
             mixer.setIgainVolume(0) # Input on emu10k cards.
         else:
-            _debug_('Radio Player failed to find a mixer', DWARNING)
+            logger.warning('Radio Player failed to find a mixer')
 
         if config.RADIO_CMD.find('ivtv-radio') >= 0:
             # IVTV cards
             os.system('killall -9 aplay')
         else:
             # BTTV cards
-            _debug_('%s' % (config.RADIO_CMD_STOP))
+            logger.debug('%s', config.RADIO_CMD_STOP)
             os.system('%s' % config.RADIO_CMD_STOP)
 
         rc.post_event(PLAY_END)
@@ -162,12 +162,12 @@ class RadioPlayer:
 
 
     def is_playing(self):
-        _debug_('Radio Player IS PLAYING?', 2)
+        logger.log( 9, 'Radio Player IS PLAYING?')
         return self.mode == 'play'
 
 
     def refresh(self):
-        _debug_('Radio Player refresh', 3)
+        logger.log( 8, 'Radio Player refresh')
         #self.item.elapsed = int(time.time() - self.starttime)
         #self.item.elapsed = ''
         self.playerGUI.refresh()
@@ -178,7 +178,7 @@ class RadioPlayer:
         eventhandler for mplayer control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-        _debug_('Radio Player event handler %s' % event, 1)
+        logger.debug('Radio Player event handler %s', event)
         if event in (STOP, PLAY_END, USER_END):
             self.playerGUI.stop()
             return self.item.eventhandler(event)

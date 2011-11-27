@@ -1185,7 +1185,7 @@ class Designer:
                     self.current_obj.width, self.current_obj.height)
 
         if rect is None:
-            _debug_('get_current_obj_rect() returning None for object of type %s' % self.current_obj.__class__.__name__)
+            logger.debug('get_current_obj_rect() returning None for object of type %s', self.current_obj.__class__.__name__)
         return rect
 
     def set_current_obj_pos(self, x, y):

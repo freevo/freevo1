@@ -113,7 +113,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         w = int(self.item.info['width'])
         h = int(self.item.info['height'])
-        _debug_('original size %sx%s' % (w,h))
+        logger.debug('original size %sx%s', w, h)
 
         new_w = w
         new_h = h
@@ -144,15 +144,15 @@ class PluginInterface(plugin.ItemPlugin):
 
         config.MPLAYER_ARGS_DEF = self.args_def
 
-        _debug_('aspect: "%s"' % item['aspect'])
-        _debug_('mplayer aspect: "%s"' % item['mplayer_aspect'])
+        logger.debug('aspect: "%s"', item['aspect'])
+        logger.debug('mplayer aspect: "%s"', item['mplayer_aspect'])
 
         if item.type == 'video':
             self.item = item
             if hasattr(config,'AUTOFILL_ASPECT') and \
                hasattr(config,'PREFERRED_ASPECT_FOR_AUTOFILL') and \
                item['aspect']==config.AUTOFILL_ASPECT:
-                _debug_('Autofilling to ' + config.PREFERRED_ASPECT_FOR_AUTOFILL)
+                logger.debug('Autofilling to ' + config.PREFERRED_ASPECT_FOR_AUTOFILL)
                 self.fillscreen(['',config.PREFERRED_ASPECT_FOR_AUTOFILL])
             return [ (self.fillscreen_menu, _('Fill screen')) ]
 
@@ -206,11 +206,11 @@ class PluginInterface(plugin.ItemPlugin):
         """ Builds mplayer args """
 
         #_debug_('fillscreen(self, menuw=%r, arg=%r)' % (menuw, arg))
-        _debug_('selected ratio: %r' % arg[1])
+        logger.debug('selected ratio: %r', arg[1])
 
         if arg[1]=='original':
             config.MPLAYER_ARGS_DEF = self.args_def
-            _debug_('Keeping original ratio')
+            logger.debug('Keeping original ratio')
         else:
             (new_w,new_h,offset_w,offset_h) = self.mplayer_args(arg[1])
             if self.keep_aspect:
@@ -220,7 +220,7 @@ class PluginInterface(plugin.ItemPlugin):
 
             config.MPLAYER_ARGS_DEF = self.args_def + \
                 ' -monitoraspect %s -vf crop=%s:%s:%s:%s' % (ratio,new_w,new_h,offset_w,offset_h)
-            _debug_('Setting movie aspect to %s and crop to %s:%s:%s:%s' % (ratio,new_w,new_h,offset_w,offset_h))
+            logger.debug('Setting movie aspect to %s and crop to %s:%s:%s:%s', ratio, new_w, new_h, offset_w, offset_h)
 
         if arg[0]:
             menuw.back_one_menu()

@@ -76,6 +76,6 @@ class PluginInterface(plugin.ItemPlugin):
             ratio = item['mplayer_aspect']
             if ratio:
                 config.MPLAYER_ARGS_DEF = self.args_def + ' -aspect ' + ratio
-                _debug_('Setting movie aspect to: %s' % ratio)
+                logger.debug('Setting movie aspect to: %s', ratio)
 
         return []

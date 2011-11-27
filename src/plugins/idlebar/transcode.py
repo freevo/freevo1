@@ -58,7 +58,7 @@ class PluginInterface(IdleBarPlugin):
 
     def __init__(self):
         """ Initialise the transcode idlebar plug-in """
-        _debug_('transcode.PluginInterface.__init__()', 2)
+        logger.log( 9, 'transcode.PluginInterface.__init__()')
         IdleBarPlugin.__init__(self)
         self.plugin_name = 'idlebar.transcode'
 
@@ -104,11 +104,11 @@ class PluginInterface(IdleBarPlugin):
         self.font      = self.skin.get_font(config.OSD_IDLEBAR_FONT)
         self.timer     = kaa.Timer(self._timerhandler)
         self.timer.start(self.poll_interval)
-        _debug_('transcode.PluginInterface.__init__() done.')
+        logger.debug('transcode.PluginInterface.__init__() done.')
 
 
     def config(self):
-        _debug_('config()', 2)
+        logger.log( 9, 'config()')
         return [
         ]
 
@@ -118,7 +118,7 @@ class PluginInterface(IdleBarPlugin):
         Load the image from the cache when available otherwise load the image and save
         in the cache.
         """
-        _debug_('getimage(image=%r, osd=%r, cache=%s)' % (image, osd, cache), 2)
+        logger.log( 9, 'getimage(image=%r, osd=%r, cache=%s)', image, osd, cache)
         if image.find(config.ICON_DIR) == 0 and image.find(osd.settings.icon_dir) == -1:
             new_image = os.path.join(osd.settings.icon_dir, image[len(config.ICON_DIR)+1:])
             if os.path.isfile(new_image):
@@ -133,7 +133,7 @@ class PluginInterface(IdleBarPlugin):
 
     def set_sprite(self):
         """ set the sprite image name and the drawing interval """
-        _debug_('set_sprite()', 2)
+        logger.log( 9, 'set_sprite()')
         (status, jobs) = self.server.listJobs()
         if not status:
             self.sprite = self.notrunning
@@ -201,7 +201,7 @@ class PluginInterface(IdleBarPlugin):
         all sprites are the same size and the background
         return true when the progress has changed, false otherwise
         """
-        _debug_('calculatesizes(osd, font)', 2)
+        logger.log( 9, 'calculatesizes(osd, font)')
         if self.progress_x == None:
             background = self.getimage(self.background, osd)
             rightclamp = self.getimage(self.rightclamp, osd, True)
@@ -209,30 +209,30 @@ class PluginInterface(IdleBarPlugin):
             self.background_w, self.background_h = background.get_size()
             self.leftclamp_w, self.leftclamp_h = leftclamp.get_size()
             self.rightclamp_w, self.rightclamp_h = rightclamp.get_size()
-            _debug_('background: w=%s, h=%s' % (self.background_w, self.background_h), 2)
-            _debug_('leftclamp: w=%s, h=%s' % (self.leftclamp_w, self.leftclamp_h), 2)
-            _debug_('rightclamp: w=%s, h=%s' % (self.rightclamp_w, self.rightclamp_h), 2)
+            logger.log( 9, 'background: w=%s, h=%s', self.background_w, self.background_h)
+            logger.log( 9, 'leftclamp: w=%s, h=%s', self.leftclamp_w, self.leftclamp_h)
+            logger.log( 9, 'rightclamp: w=%s, h=%s', self.rightclamp_w, self.rightclamp_h)
 
         progress_x = ((self.background_w - (2 * self.leftclamp_w)) * self.progress) / 200
-        _debug_('progress_x=%s, background_w=%s, leftclamp_w=%s, progress=%s' % \
-            (progress_x, self.background_w, self.leftclamp_w, self.progress), 3)
+        logger.log( 8, 'progress_x=%s, background_w=%s, leftclamp_w=%s, progress=%s', progress_x, self.background_w, self.leftclamp_w, self.progress)
+
 
         if self.progress_x != progress_x:
             self.progress_x = progress_x
             self.leftclamp_x = self.progress_x
             self.rightclamp_x = self.background_w - self.rightclamp_w - self.progress_x
-            _debug_('progress_x=%s, leftclamp_x=%s, rightclamp_x=%s' % \
-                (self.progress_x, self.leftclamp_x, self.rightclamp_x), 2)
+            logger.log( 9, 'progress_x=%s, leftclamp_x=%s, rightclamp_x=%s', self.progress_x, self.leftclamp_x, self.rightclamp_x)
+
             return True
         return False
 
 
     def draw(self, (type, object), x, osd):
         """ Build the image by blitting sub images on the background and draw the background """
-        _debug_('draw((type=%r, object=), x=%r, osd=)' % (type, x), 3)
+        logger.log( 8, 'draw((type=%r, object=), x=%r, osd=)', type, x)
         now = time.time()
         duration = now - self.drawtime
-        _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 2)
+        logger.log( 9, "draw=%.2f, interval=%s, state=%s", duration, self.draw_interval, self.state)
         self.drawtime = now
         self.lastdraw = now
 
@@ -253,8 +253,8 @@ class PluginInterface(IdleBarPlugin):
             widthdf = font.stringsize(self.remaining)
             remaining_x = x + ((self.background_w - widthdf) / 2)
             remaining_y = osd.y + self.background_h - font.h + 10
-            _debug_('remaining=%r x=%s y=%s widthdf=%s font.h=%s' % \
-                (self.remaining, remaining_x, remaining_y, widthdf, font.h))
+            logger.debug('remaining=%r x=%s y=%s widthdf=%s font.h=%s', self.remaining, remaining_x, remaining_y, widthdf, font.h)
+
             osd.write_text(self.remaining, font, None, remaining_x, remaining_y, widthdf, font.h, 'center', 'top')
 
         return self.background_w
@@ -266,15 +266,15 @@ class PluginInterface(IdleBarPlugin):
         pollduration = now - self.lastpoll
         drawduration = now - self.lastdraw
         self.lastpoll = now
-        _debug_("_timerhandler(): poll=%.2f, draw=%.2f, interval=%s, state=%s" % \
-            (pollduration, drawduration, self.draw_interval, self.state), 2)
+        logger.log( 9, "_timerhandler(): poll=%.2f, draw=%.2f, interval=%s, state=%s", pollduration, drawduration, self.draw_interval, self.state)
+
         if drawduration >= self.draw_interval:
             if skin.active():
                 skin.redraw()
 
 
     def update(self):
-        _debug_('update()', 2)
+        logger.log( 9, 'update()')
         bar = plugin.getbyname('idlebar')
         if bar:
             bar.poll()

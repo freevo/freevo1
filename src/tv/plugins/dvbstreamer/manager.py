@@ -75,7 +75,7 @@ class DVBStreamerManager:
         """
         Disable output from the specified dvbstreamer instance.
         """
-        _debug_('Disabling output on adapter %s' % adapter)
+        logger.debug('Disabling output on adapter %s', adapter)
         self.set_mrl(adapter,  'null://')
         controller = self.get_controller(adapter)
         try:
@@ -88,7 +88,7 @@ class DVBStreamerManager:
         """
         Select a channel on the specified dvbstreamer instance.
         """
-        _debug_('Selecting channel %s on adapter %s'%(channel, adapter))
+        logger.debug('Selecting channel %s on adapter %s', channel, adapter)
         controller = self.get_controller(adapter)
         try:
             controller.set_adapter_active('true')

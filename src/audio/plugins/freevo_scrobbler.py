@@ -55,7 +55,7 @@ class Scrobbler:
         try:
             resp = urllib2.urlopen(url);
         except Exception,e:
-            _debug_('Server not responding, handshake failed: %s' % (e))
+            logger.debug('Server not responding, handshake failed: %s', e)
             return False
 
         # check response
@@ -63,7 +63,7 @@ class Scrobbler:
         status = lines.pop(0)
 
         if status.startswith('UPDATE'):
-            _debug_('Please update: %s' % (status))
+            logger.debug('Please update: %s', status)
 
         if status == 'UPTODATE' or status.startswith('UPDATE'):
             challenge = lines.pop(0)
@@ -74,7 +74,7 @@ class Scrobbler:
             self.password_hash = hasher.hexdigest()
 
             self.submit_url = lines.pop(0)
-            _debug_('Handshake SUCCESS')
+            logger.debug('Handshake SUCCESS')
 
         try: self.interval_time = int(lines.pop(0).split()[1])
         except: pass
@@ -82,10 +82,10 @@ class Scrobbler:
         if status == 'UPTODATE' or status.startswith('UPDATE'):
             return True
         elif status == 'BADUSER':
-            _debug_('Handshake failed: bad user %r' % (self.username))
+            logger.debug('Handshake failed: bad user %r', self.username)
             return False
         else:
-            _debug_('Handshake failed: %s' % (status))
+            logger.debug('Handshake failed: %s', status)
             return False
 
     def submit_song(self, info):
@@ -94,7 +94,7 @@ class Scrobbler:
             's': self.password_hash
         }
         if info['length'] > 30 and info['title'] and info['artist']:
-            _debug_('Sending song: %r - %r' % (info['artist'], info['title']))
+            logger.debug('Sending song: %r - %r', info['artist'], info['title'])
             i = 0
             stamp = time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())
             data['a[%d]' % i] = info['artist'].encode('utf-8')
@@ -112,7 +112,7 @@ class Scrobbler:
                 resp = urllib2.urlopen(url, data_str)
                 resp_save = resp.read()
             except Exception, e:
-                _debug_('Audioscrobbler server not responding, will try later: %s' % (e))
+                logger.debug('Audioscrobbler server not responding, will try later: %s', e)
                 return False
 
             lines = resp_save.rstrip().split('\n')
@@ -121,25 +121,25 @@ class Scrobbler:
             except:
                 try: status = lines[0]
                 except:
-                    _debug_('Status incorrect')
+                    logger.debug('Status incorrect')
                     return False
             else: self.interval_time = int(interval.split()[1])
 
             if status == 'BADAUTH':
-                _debug_('Authentication failed: invalid username or bad password.')
-                _debug_('url=%r, data=%r' % (url, data))
+                logger.debug('Authentication failed: invalid username or bad password.')
+                logger.debug('url=%r, data=%r', url, data)
 
             elif status == 'OK':
-                _debug_('Submit successful')
+                logger.debug('Submit successful')
                 return True
 
             elif status.startswith('FAILED'):
-                _debug_('FAILED response from server: %s' % status)
-                _debug_('full response:%s' % (resp_save))
+                logger.debug('FAILED response from server: %s', status)
+                logger.debug('full response:%s', resp_save)
             else:
-                _debug_('Unknown response from server: %s' % status)
-                _debug_('Dumping full response:%s' % (resp_save))
+                logger.debug('Unknown response from server: %s', status)
+                logger.debug('Dumping full response:%s', resp_save)
         else:
-            _debug_('Song not accepted!')
+            logger.debug('Song not accepted!')
 
         return False

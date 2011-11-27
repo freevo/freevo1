@@ -51,7 +51,7 @@ import kaa
 _singleton = None
 
 def get_singleton():
-    _debug_('get_singleton()', 2)
+    logger.log( 9, 'get_singleton()')
     global _singleton
 
     # One-time init
@@ -64,7 +64,7 @@ def get_singleton():
 class ImageViewer(GUIObject):
 
     def __init__(self):
-        _debug_('ImageViewer.__init__()', 2)
+        logger.log( 9, 'ImageViewer.__init__()')
         GUIObject.__init__(self)
         self.osd_mode = 0    # Draw file info on the image
         self.zoom = 0   # Image zoom
@@ -93,7 +93,7 @@ class ImageViewer(GUIObject):
         """
         free the current cache to save memory
         """
-        _debug_('free_cache()', 2)
+        logger.log( 9, 'free_cache()')
         self.bitmapcache = util.objectcache.ObjectCache(3, desc='viewer')
         if self.parent and self.free_cache in self.parent.show_callbacks:
             self.parent.show_callbacks.remove(self.free_cache)
@@ -103,7 +103,7 @@ class ImageViewer(GUIObject):
         """
         view an image
         """
-        _debug_('view(item, zoom=%s, rotation=%s)' % (zoom, rotation), 2)
+        logger.log( 9, 'view(item, zoom=%s, rotation=%s)', zoom, rotation)
 
         if self.blend:
             self.blend.stop()
@@ -334,7 +334,7 @@ class ImageViewer(GUIObject):
             # send information event to LCD2
             rc.post_event(Event('IMAGE_VIEW_INFO', arg=(index, length, item.name)))
         except Exception, why:
-            _debug_('Invalid parent item: %s' % (why,), DWARNING)
+            logger.warning('Invalid parent item: %s', why)
 
         # XXX Hack to move the selected item to the current showing image
         # XXX TODO: find a way to add it to directory.py or playlist.py
@@ -352,24 +352,24 @@ class ImageViewer(GUIObject):
 
 
     def redraw(self):
-        _debug_('redraw()', 2)
+        logger.log( 9, 'redraw()')
         self.view(self.fileitem, zoom=self.zoom, rotation=self.rotation)
 
 
     def cache(self, fileitem):
-        _debug_('cache(fileitem.filename=%s)' % (fileitem.filename), 2)
+        logger.log( 9, 'cache(fileitem.filename=%s)', fileitem.filename)
         # cache the next image (most likely we need this)
         self.osd.loadbitmap(fileitem.filename, cache=self.bitmapcache)
 
 
     def signalhandler(self):
-        _debug_('signalhandler()', 2)
+        logger.log( 9, 'signalhandler()')
         self.timer = None
         self.eventhandler(PLAY_END)
 
 
     def eventhandler(self, event, menuw=None):
-        _debug_('eventhandler(event=%s, menuw=%s)' % (event, menuw), 2)
+        logger.log( 9, 'eventhandler(event=%s, menuw=%s)', event, menuw)
         # SELECT also should act as PLAY/PAUSE (-> could be done with event rerouting!?)
         if event == PAUSE or event == PLAY or (event == BUTTON and event.arg == 'SELECT'):
             if self.slideshow:
@@ -496,7 +496,7 @@ class ImageViewer(GUIObject):
 
 
     def drawosd(self, layer=None):
-        _debug_('drawosd(layer=%s)' % (layer), 2)
+        logger.log( 9, 'drawosd(layer=%s)', layer)
 
         if not self.osd_mode:
             return

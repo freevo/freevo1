@@ -79,11 +79,11 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
         if event == VIDEO_START:
-            _debug_('Recieved VIDEO_START event',2)
+            logger.log( 9, 'Recieved VIDEO_START event')
             os.system(self.before)
 
         if event == VIDEO_END:
-            _debug_('Recieved VIDEO_STOP event',2)
+            logger.log( 9, 'Recieved VIDEO_STOP event')
             os.system(self.after)
 
         return False

@@ -126,8 +126,9 @@ class MpvGoom(BaseAnimation):
         """
         Initialise the MPlayer Visualization Goom
         """
-        _debug_('%s.__init__(x=%r y=%r width=%r height=%r coverfilename=%r)' % (
-            self.__class__, x, y, width, height, coverfilename))
+        logger.debug('%s.__init__(x=%r y=%r width=%r height=%r coverfilename=%r)', 
+self.__class__, x, y, width, height, coverfilename)
+
         self.mode = MpvMode(config.MPLAYERVIS_MODE)
         self.coverfilename = coverfilename
         self.showfps = False
@@ -171,10 +172,6 @@ class MpvGoom(BaseAnimation):
         self.message = ''
 
 
-    def __del__(self):
-        _debug_('%s.__del__', (self.__class__,))
-
-
     def to_str(self, s):
         translation_table \
             = '         \t\n  \n  ' \
@@ -204,25 +201,25 @@ class MpvGoom(BaseAnimation):
 
     def set_visual(self, visual):
         """ pass the visualisation effect to goom """
-        _debug_('set_visual(visual=%r)' % (visual,))
+        logger.debug('set_visual(visual=%r)', visual)
         self.goom.fxmode = visual
 
 
     def set_songtitle(self, songtitle):
         """ pass the song title to goom """
-        _debug_('set_songtitle(songtitle=%r)' % (songtitle,))
+        logger.debug('set_songtitle(songtitle=%r)', songtitle)
         self.goom.songtitle = self.to_str(songtitle)
 
 
     def set_message(self, message):
         """ pass a message to goom """
-        _debug_('set_message(message=%r)' % (message,))
+        logger.debug('set_message(message=%r)', message)
         self.goom.message = self.to_str(message)
 
 
     def set_alpha(self, high, low):
         """ Get the alpha level for a count """
-        _debug_('set_alpha(high=%r low=%r)' % (high, low,), 2)
+        logger.log( 9, 'set_alpha(high=%r low=%r)', high, low)
         alpha = self.fader(high, low)
         if alpha < 0:   alpha = 0
         if alpha > 255: alpha = 255
@@ -234,7 +231,7 @@ class MpvGoom(BaseAnimation):
         Set a blend image to toggle between visual and cover
         Updated when resolution is changed
         """
-        _debug_('%s.set_coverimage(coverfilename=%r)' % (self.__class__, coverfilename))
+        logger.debug('%s.set_coverimage(coverfilename=%r)', self.__class__, coverfilename)
         self.coverfilename = coverfilename
         self.set_coverimagesurf(coverfilename)
 
@@ -247,7 +244,7 @@ class MpvGoom(BaseAnimation):
         @param coverfilename: the file name for the cover image
         @returns: a surface
         """
-        _debug_('%s.set_coverimagesurf(coverfilename=%r)' % (self.__class__, coverfilename))
+        logger.debug('%s.set_coverimagesurf(coverfilename=%r)', self.__class__, coverfilename)
         # change the cover if necessary
         coversurf = None
         if coverfilename:
@@ -255,7 +252,7 @@ class MpvGoom(BaseAnimation):
                 coversurf = image.load(coverfilename).convert()
                 #coversurf.set_colorkey(-1) # make top-left pixel transparent
             except Exception, why:
-                _debug_(why, DWARNING)
+                logger.warning(why)
 
         if coversurf is not None:
             # scale and fit to the rect
@@ -280,13 +277,14 @@ class MpvGoom(BaseAnimation):
             self.coversurf = (transform.scale(coversurf, (w, h)), x, y)
         else:
             self.coversurf = coversurf
-        _debug_('self.coversurf=%r coversurf=%r' % (self.coversurf, coversurf))
+        logger.debug('self.coversurf=%r coversurf=%r', self.coversurf, coversurf)
 
 
     def set_resolution(self, x, y, width, height, zoom=1):
         """ Set the resolution of the goom window """
-        _debug_('%s.set_resolution(x=%r, y=%r, width=%r, height=%r, zoom=%r)' % (
-            self.__class__, x, y, width, height, zoom))
+        logger.debug('%s.set_resolution(x=%r, y=%r, width=%r, height=%r, zoom=%r)', 
+self.__class__, x, y, width, height, zoom)
+
         self.width = width
         self.height = height
         r = Rect(x, y, width / zoom, height / zoom)
@@ -297,7 +295,7 @@ class MpvGoom(BaseAnimation):
         # clear info
         self.infodata = None
 
-        _debug_('self.goom.resolution(width=%r, height=%r)' % (width / zoom, height / zoom))
+        logger.debug('self.goom.resolution(width=%r, height=%r)', width / zoom, height / zoom)
         self.goom.resolution(width / zoom, height / zoom)
         self.set_coverimagesurf(self.coverfilename)
         self.c_timer   = time.time()
@@ -305,7 +303,7 @@ class MpvGoom(BaseAnimation):
 
     def set_fullscreen(self):
         """ Set the mode to full screen """
-        _debug_('set_fullscreen()')
+        logger.debug('set_fullscreen()')
         w, h = config.MPLAYERVIS_FULL_GEOMETRY.split('x')
 
         # trying to figure out if it is possible to keep the aspect ratio
@@ -321,14 +319,14 @@ class MpvGoom(BaseAnimation):
         x = int(config.CONF.width - w) / 2
         x = int(float(x) / config.OSD_PIXEL_ASPECT)
         y = int(config.CONF.height - h) / 2
-        _debug_('x=%r y=%r w=%r h=%r' % (x, y, w, h))
+        logger.debug('x=%r y=%r w=%r h=%r', x, y, w, h)
 
         self.set_resolution(x, y, w, h, 2 ** config.MPLAYERVIS_FULL_ZOOM)
 
 
     def set_dock(self):
         """ Set the mode to full screen """
-        _debug_('set_dock()')
+        logger.debug('set_dock()')
         # get the rect from skin
         imgarea = skin.areas['view']
         c = imgarea.calc_geometry(imgarea.layout.content, copy_object=True)
@@ -336,7 +334,7 @@ class MpvGoom(BaseAnimation):
         h = c.height  - 2*c.spacing
         x = c.x + c.spacing
         y = c.y + c.spacing
-        _debug_('c=%r, w=%r, h=%r, x=%r, y=%r' % (c, w, h, x, y))
+        logger.debug('c=%r, w=%r, h=%r, x=%r, y=%r', c, w, h, x, y)
 
         # check if the view-area has a rectangle
         #try:
@@ -358,7 +356,7 @@ class MpvGoom(BaseAnimation):
         @param info: text to draw
         @param timeout: how long to display
         """
-        _debug_('set_info(info=%r, timeout=%r)' % (info, timeout))
+        logger.debug('set_info(info=%r, timeout=%r)', info, timeout)
 
         font = skin.get_font('widget')
         w = font.stringsize(info)
@@ -368,7 +366,7 @@ class MpvGoom(BaseAnimation):
         y = config.OSD_OVERSCAN_TOP+5
 
         s = Surface((w, h), 0, 32)
-        _debug_('s=%r info=%r font=%r x=%r y=%r w=%r h=%r' % (s, info, font, x, y, w, h))
+        logger.debug('s=%r info=%r font=%r x=%r y=%r w=%r h=%r', s, info, font, x, y, w, h)
 
         self.infodata  = (s, info, font, x, y, w, h)
         self.m_timer   = time.time()
@@ -380,7 +378,7 @@ class MpvGoom(BaseAnimation):
         Draw the info
         @param gooms: Goom surface
         """
-        _debug_('draw_info()', 2)
+        logger.log( 9, 'draw_info()')
         if self.infodata is not None:
             (s, info, font, x, y, w, h) = self.infodata
             if time.time() - self.m_timer > self.m_timeout:
@@ -496,9 +494,9 @@ class MpvGoom(BaseAnimation):
                 self.state()
                 if self.alpha > 0:
                     s, x, y = self.coversurf
-                    _debug_('self.alpha=%r' % (self.alpha,), 2)
+                    logger.log( 9, 'self.alpha=%r', self.alpha)
                     s.set_alpha(self.alpha)
-                    _debug_('gooms.blit(s=%r, (x=%r, y=%r))' % (s, x, y), 2)
+                    logger.log( 9, 'gooms.blit(s=%r, (x=%r, y=%r))', s, x, y)
                     gooms.blit(s, (x, y))
 
             if self.mode == MpvMode.FULL:
@@ -510,7 +508,7 @@ class MpvGoom(BaseAnimation):
             return True
         except Exception, why:
             traceback.print_exc()
-            _debug_(why, DWARNING)
+            logger.warning(why)
 
 
     def poll(self, current_time):
@@ -566,7 +564,7 @@ class PluginInterface(plugin.Plugin):
 
     def __init__(self):
         """ Initialist the PluginInterface """
-        _debug_('PluginInterface.__init__()')
+        logger.debug('PluginInterface.__init__()')
         plugin.Plugin.__init__(self)
         self._type    = 'mplayer_audio'
         self.event_context = 'audio'
@@ -607,7 +605,7 @@ class PluginInterface(plugin.Plugin):
         """
         Define the configuration variables
         """
-        _debug_('PluginInterface.config()')
+        logger.debug('PluginInterface.config()')
         return [
             ('MPLAYERVIS_MODE', 0, 'Set the initial mode of the display, 0)DOCK, 1)FULL or 2)NOVI'),
             ('MPLAYERVIS_INIT_COUNTER', 255, 'Counter before the image fades, should be >= 255'),
@@ -628,7 +626,7 @@ class PluginInterface(plugin.Plugin):
         """
         Toggle between view modes
         """
-        _debug_('toggle_view()')
+        logger.debug('toggle_view()')
         self.view += 1
 
         if not self.mpvgoom:
@@ -641,7 +639,7 @@ class PluginInterface(plugin.Plugin):
         """
         eventhandler to simulate hide/show of mpav
         """
-        _debug_('mplayervis1.eventhandler(event=%r, arg=%r)' % (event.name, arg))
+        logger.debug('mplayervis1.eventhandler(event=%r, arg=%r)', event.name, arg)
         print('mplayervis1.eventhandler(event=%r, arg=%r)' % (event.name, arg))
 
         if plugin.isevent(event) == 'DETACH':
@@ -679,13 +677,13 @@ class PluginInterface(plugin.Plugin):
         elif event == 'DISPLAY_FPS':
             if self.mpvgoom is not None:
                 self.mpvgoom.showfps = not self.mpvgoom.showfps
-            _debug_('showfps=%s' % (self.mpvgoom.showfps))
+            logger.debug('showfps=%s', self.mpvgoom.showfps)
             return True
 
         elif event == 'DISPLAY_TITLE':
             if not self.title:
                 self.title = self.item_info('%(t)s')
-            _debug_('title=%s' % (self.title))
+            logger.debug('title=%s', self.title)
             if self.mpvgoom is not None:
                 self.mpvgoom.set_songtitle(self.title)
             return True
@@ -694,7 +692,7 @@ class PluginInterface(plugin.Plugin):
             #self.message = not self.message and self.item_info(self.message_fmt) or ''
             if not self.message:
                 self.message = self.item_info(self.message_fmt)
-            _debug_('message=%r' % (self.message))
+            logger.debug('message=%r', self.message)
             if self.mpvgoom is not None:
                 self.mpvgoom.set_message(self.message)
             return True
@@ -702,7 +700,7 @@ class PluginInterface(plugin.Plugin):
         elif event == 'NEXT_VISUAL':
             PluginInterface.vis_mode += 1
             if PluginInterface.vis_mode > 9: PluginInterface.vis_mode = -1
-            _debug_('vis_mode=%s' % (PluginInterface.vis_mode))
+            logger.debug('vis_mode=%s', PluginInterface.vis_mode)
             if self.mpvgoom is not None:
                 self.mpvgoom.set_visual(PluginInterface.vis_mode)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
@@ -712,7 +710,7 @@ class PluginInterface(plugin.Plugin):
             PluginInterface.vis_mode = event.arg
             if PluginInterface.vis_mode < -1: PluginInterface.vis_mode = -1
             if PluginInterface.vis_mode > 9: PluginInterface.vis_mode = 9
-            _debug_('vis_mode=%s' % (PluginInterface.vis_mode))
+            logger.debug('vis_mode=%s', PluginInterface.vis_mode)
             if self.mpvgoom is not None:
                 self.mpvgoom.set_visual(PluginInterface.vis_mode)
                 rc.post_event(Event(OSD_MESSAGE, arg=_('FXMODE is %s' % PluginInterface.vis_mode)))
@@ -735,7 +733,7 @@ class PluginInterface(plugin.Plugin):
         """
         This is only called if there is only one track to play
         """
-        _debug_('_paused_handler')
+        logger.debug('_paused_handler')
         #rc.post_event does not seem to work
         #rc.post_event(STOP)
         self.stop_visual()
@@ -754,7 +752,7 @@ class PluginInterface(plugin.Plugin):
         @param fmt: message format string
         @returns: info about the current playing song
         """
-        _debug_('item_info(fmt=%r)' % (fmt,))
+        logger.debug('item_info(fmt=%r)', fmt)
 
         if fmt is None:
             return ''
@@ -798,12 +796,12 @@ class PluginInterface(plugin.Plugin):
         #    self.mpvgoom.message_counter = 1
         #    self.mpvgoom.message = message
 
-        _debug_('item_info: message=%r' % (message,))
+        logger.debug('item_info: message=%r', message)
         return message
 
 
     def dock(self):
-        _debug_('dock()')
+        logger.debug('dock()')
         self.mpvgoom.mode = MpvMode.DOCK
 
         if rc.app() != self.player.eventhandler:
@@ -817,7 +815,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def fullscreen(self):
-        _debug_('fullscreen()')
+        logger.debug('fullscreen()')
         self.mpvgoom.mode = MpvMode.FULL
 
         if self.player.playerGUI.visible:
@@ -831,7 +829,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def noview(self):
-        _debug_('noview()')
+        logger.debug('noview()')
 
         self.mpvgoom.mode = MpvMode.NOVI
 
@@ -848,8 +846,9 @@ class PluginInterface(plugin.Plugin):
 
 
     def start_visual(self):
-        _debug_('%s.start_visual() self.view=%r self.succession=%r' % (self.__class__,
-            self.view, self.player.playerGUI.succession))
+        logger.debug('%s.start_visual() self.view=%r self.succession=%r', self.__class__, 
+self.view, self.player.playerGUI.succession)
+
         #if self.player.playerGUI.succession != PlayListSuccession.FIRST:
         #    return
 
@@ -872,7 +871,7 @@ class PluginInterface(plugin.Plugin):
             self.title = None
             self.message = None
 
-            _debug_('self.mpvgoom.running=%r -> True' % (self.mpvgoom.running,))
+            logger.debug('self.mpvgoom.running=%r -> True', self.mpvgoom.running)
             self.mpvgoom.running = True
             self.view_func[self.view]()
             self.mpvgoom.start()
@@ -882,14 +881,16 @@ class PluginInterface(plugin.Plugin):
 
 
     def pause_visual(self):
-        _debug_('%s.pause_visual() self.view=%r self.succession=%r' % (self.__class__,
-            self.view, self.player.playerGUI.succession))
+        logger.debug('%s.pause_visual() self.view=%r self.succession=%r', self.__class__, 
+self.view, self.player.playerGUI.succession)
+
         self.timer.start(5)
 
 
     def resume_visual(self):
-        _debug_('%s.resume_visual() self.view=%r self.succession=%r' % (self.__class__,
-            self.view, self.player.playerGUI.succession))
+        logger.debug('%s.resume_visual() self.view=%r self.succession=%r', self.__class__, 
+self.view, self.player.playerGUI.succession)
+
         self.timer.stop()
         if self.mpvgoom is not None:
             self.title = None
@@ -901,11 +902,12 @@ class PluginInterface(plugin.Plugin):
 
 
     def stop_visual(self):
-        _debug_('%s.stop_visual() self.view=%r self.succession=%r' % (self.__class__,
-            self.view, self.player.playerGUI.succession))
+        logger.debug('%s.stop_visual() self.view=%r self.succession=%r', self.__class__, 
+self.view, self.player.playerGUI.succession)
+
         self.timer.stop()
         if self.mpvgoom is not None:
-            _debug_('self.mpvgoom.running=%r -> False' % (self.mpvgoom.running,))
+            logger.debug('self.mpvgoom.running=%r -> False', self.mpvgoom.running)
             self.mpvgoom.timer.stop()
             self.mpvgoom.running = False
             self.mpvgoom.remove()
@@ -921,7 +923,7 @@ class PluginInterface(plugin.Plugin):
         @param command: mplayer command
         @param player: the player object
         """
-        _debug_('%s.play(command=%r, player=%r)' % (self.__class__, command, player))
+        logger.debug('%s.play(command=%r, player=%r)', self.__class__, command, player)
         self.player = player
         self.item   = player.playerGUI.item
         if self.mpvgoom is not None:
@@ -935,7 +937,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def stop(self):
-        _debug_('%s.stop()' % (self.__class__,))
+        logger.debug('%s.stop()', self.__class__)
 
 
     def stdout(self, line):
@@ -945,7 +947,7 @@ class PluginInterface(plugin.Plugin):
         It should be safe to do call start() from here
         since this is now a callback from main.
         """
-        _debug_('stdout(line=%r)' % (line), 2)
+        logger.log( 9, 'stdout(line=%r)', line)
 
         if PluginInterface.detached:
             return
@@ -953,7 +955,7 @@ class PluginInterface(plugin.Plugin):
         memory_mapped = False
         if line.find('[export] Memory mapped to file: ' + MMAP_FILE) == 0:
             memory_mapped = True
-            _debug_("Detected MPlayer 'export' audio filter! Using MPAV.")
+            logger.debug("Detected MPlayer 'export' audio filter! Using MPAV.")
 
         #if not self.mpvgoom.running:
         #    if memory_mapped and not self.mpvgoom:

@@ -60,7 +60,7 @@ def set_attrs(dict, elem, attrs):
 
     Add any attributes in 'attrs' found in 'elem' to 'dict'
     """
-    _debug_('set_attrs(dict=%r, elem=%r, attrs=%r)' % (dict, elem, attrs), 2)
+    logger.log( 9, 'set_attrs(dict=%r, elem=%r, attrs=%r)', dict, elem, attrs)
     for attr in attrs:
         if attr in elem.keys():
             dict[attr] = elem.get(attr)
@@ -73,7 +73,7 @@ def set_boolean(dict, name, elem):
     If element, 'name' is found in 'elem', set 'dict'['name'] to a boolean
     from the 'yes' or 'no' content of the node
     """
-    _debug_('set_boolean(dict=%r, name=%r, elem=%r)' % (dict, name, elem), 2)
+    logger.log( 9, 'set_boolean(dict=%r, name=%r, elem=%r)', dict, name, elem)
     node = elem.find(name)
     if node is not None:
         if node.text.lower() == 'yes':
@@ -89,7 +89,7 @@ def append_text(dict, name, elem, with_lang=True):
     Append any text nodes with 'name' found in 'elem' to 'dict'['name']. If
     'with_lang' is 'True', a tuple of ('text', 'lang') is appended
     """
-    _debug_('append_text(dict=%r, name=%r, elem=%r, with_lang=%r)' % (dict, name, elem, with_lang), 2)
+    logger.log( 9, 'append_text(dict=%r, name=%r, elem=%r, with_lang=%r)', dict, name, elem, with_lang)
     for node in elem.findall(name):
         if not dict.has_key(name):
             dict[name] = []
@@ -106,7 +106,7 @@ def set_text(dict, name, elem, with_lang=True):
     Set 'dict'['name'] to the text found in 'name', if found under 'elem'. If
     'with_lang' is 'True', a tuple of ('text', 'lang') is set
     """
-    _debug_('set_text(dict=%r, name=%r, elem=%r, with_lang=%r)' % (dict, name, elem, with_lang), 2)
+    logger.log( 9, 'set_text(dict=%r, name=%r, elem=%r, with_lang=%r)', dict, name, elem, with_lang)
     node = elem.find(name)
     if node is not None:
         if with_lang:
@@ -121,7 +121,7 @@ def append_icons(dict, elem):
 
     Append any icons found under 'elem' to 'dict'
     """
-    _debug_('append_icons(dict=%r, elem=%r)' % (dict, elem), 2)
+    logger.log( 9, 'append_icons(dict=%r, elem=%r)', dict, elem)
     for iconnode in elem.findall('icon'):
         if not dict.has_key('icon'):
             dict['icon'] = []
@@ -136,7 +136,7 @@ def elem_to_channel(elem):
 
     Convert channel element to dictionary
     """
-    _debug_('elem_to_channel(elem=%r)' % (elem,), 2)
+    logger.log( 9, 'elem_to_channel(elem=%r)', elem)
     d = {'id': elem.get('id'),
          'display-name': []}
 
@@ -153,7 +153,7 @@ def read_channels(fp=None, tree=None):
     Return a list of channel dictionaries from file object 'fp' or the
     ElementTree 'tree'
     """
-    _debug_('read_channels(fp=%r, tree=%r)' % (fp, tree), 2)
+    logger.log( 9, 'read_channels(fp=%r, tree=%r)', fp, tree)
     if fp:
         et = ElementTree()
         tree = et.parse(fp)
@@ -166,7 +166,7 @@ def elem_to_programme(elem):
 
     Convert programme element to dictionary
     """
-    _debug_('elem_to_programme(elem=%r)' % (elem,), 2)
+    logger.log( 9, 'elem_to_programme(elem=%r)', elem)
     d = {'start': elem.get('start'),
          'channel': elem.get('channel'),
          'title': []}
@@ -271,7 +271,7 @@ def read_programmes(fp=None, tree=None):
     Return a list of programme dictionaries from file object 'fp' or the
     ElementTree 'tree'
     """
-    _debug_('read_programmes(fp=%r, tree=%r)' % (fp, tree), 2)
+    logger.log( 9, 'read_programmes(fp=%r, tree=%r)', fp, tree)
     if fp:
         et = ElementTree()
         tree = et.parse(fp)
@@ -285,7 +285,7 @@ def read_data(fp=None, tree=None):
     Get the source and other info from file object fp or the ElementTree
     'tree'
     """
-    _debug_('read_data(fp=%r, tree=%r)' % (fp, tree), 2)
+    logger.log( 9, 'read_data(fp=%r, tree=%r)', fp, tree)
     if fp:
         et = ElementTree()
         tree = et.parse(fp)
@@ -320,8 +320,8 @@ class Writer:
         @ivar generator_info_name: A human readable description of
           generator_info_url. Optional
         """
-        _debug_('Writer.__init__(encoding=%r, date=%r, source_info_url=%r, source_info_name=%r, generator_info_url=%r, generator_info_name=%r)' % \
-            (encoding, date, source_info_url, source_info_name, generator_info_url, generator_info_name), 2)
+        logger.log( 9, 'Writer.__init__(encoding=%r, date=%r, source_info_url=%r, source_info_name=%r, generator_info_url=%r, generator_info_name=%r)', encoding, date, source_info_url, source_info_name, generator_info_url, generator_info_name)
+
         self.encoding = encoding
         self.data = {'date': date,
                      'source_info_url': source_info_url,
@@ -341,7 +341,7 @@ class Writer:
 
         Set 'attr' in 'node' to 'value'
         """
-        _debug_('setattr(node=%r, attr=%r, value=%r)' % (node, attr, value), 2)
+        logger.log( 9, 'setattr(node=%r, attr=%r, value=%r)', node, attr, value)
         node.set(attr, value.encode(self.encoding))
 
 
@@ -351,7 +351,7 @@ class Writer:
 
         Set 'node's text content to 'text'
         """
-        _debug_('settext(node=%r, text=%r, with_lang=%r)' % (node, text, with_lang), 2)
+        logger.log( 9, 'settext(node=%r, text=%r, with_lang=%r)', node, text, with_lang)
         if with_lang:
             if text[0] == None:
                 node.text = None
@@ -372,7 +372,7 @@ class Writer:
 
         Create 'icons' under 'node'
         """
-        _debug_('seticons(node=%r, icons=%r)' % (node, icons), 2)
+        logger.log( 9, 'seticons(node=%r, icons=%r)', node, icons)
         for icon in icons:
             if not icon.has_key('src'):
                 raise ValueError("'icon' element requires 'src' attribute")
@@ -389,7 +389,7 @@ class Writer:
         Add nodes under p for the element 'element', which occurs zero
         or more times with PCDATA and a 'lang' attribute
         """
-        _debug_('set_zero_ormore(programme=%r, element=%r, p=%r)' % (programme, element, p), 2)
+        logger.log( 9, 'set_zero_ormore(programme=%r, element=%r, p=%r)', programme, element, p)
         if programme.has_key(element):
             for item in programme[element]:
                 e = SubElement(p, element)
@@ -403,7 +403,7 @@ class Writer:
         Add nodes under p for the element 'element', which occurs zero
         times or once with PCDATA and a 'lang' attribute
         """
-        _debug_('set_zero_orone(programme=%r, element=%r, p=%r)' % (programme, element, p), 2)
+        logger.log( 9, 'set_zero_orone(programme=%r, element=%r, p=%r)', programme, element, p)
         if programme.has_key(element):
             e = SubElement(p, element)
             self.settext(e, programme[element])
@@ -415,7 +415,7 @@ class Writer:
 
         @param programme: A dict representing XMLTV data
         """
-        _debug_('addProgramme(programme=%r)' % (programme,), 2)
+        logger.log( 9, 'addProgramme(programme=%r)', programme)
         p = SubElement(self.root, 'programme')
 
         # programme attributes
@@ -564,7 +564,7 @@ class Writer:
 
         @param channel: A dict representing XMLTV data
         """
-        _debug_('addChannel(channel=%r)' % (channel,), 2)
+        logger.log( 9, 'addChannel(channel=%r)', channel)
         c = SubElement(self.root, 'channel')
         self.setattr(c, 'id', channel['id'])
 
@@ -590,7 +590,7 @@ class Writer:
 
         Write XML to filename of file object in 'file'
         """
-        _debug_('write(file=%r)' % (file,), 2)
+        logger.log( 9, 'write(file=%r)', file)
         et = ElementTree(self.root)
         et.write(file)
 

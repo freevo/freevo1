@@ -118,8 +118,8 @@ class Border(GUIObject):
 
         Todo: Implement what to do for other borders than flat.
         """
-        _debug_("  Inside Border.draw...", 2)
-        _debug_("  Border type: %s" % self.style, 2)
+        logger.log( 9, "  Inside Border.draw...")
+        logger.log( 9, "  Border type: %s", self.style)
 
         # XXX Hack to make border draw inside the areas we expect.
         if self.style == self.BORDER_FLAT:

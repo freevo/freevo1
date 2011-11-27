@@ -197,7 +197,7 @@ class Dialog(object):
         """
         if DEBUG_PERFORMANCE:
             self.__hide_time = time.time()
-            _debug_('Dialog %s hidden open for %f seconds rendered %d times' % (self.__class__.__name__, self.__hide_time - self.__first_render_time, self.__render_count))
+            logger.debug('Dialog %s hidden open for %f seconds rendered %d times', self.__class__.__name__, self.__hide_time - self.__first_render_time, self.__render_count)
 
         if self.updater:
             self.updater.pause()
@@ -404,7 +404,7 @@ class PlayStateDialog(Dialog):
                 attr['image'] = self.item.parent.image
             if not attr['image']:
                 attr['image'] = "nocover.png" 
-            _debug_('Cover image for %s is %s' % (self.item.filename, attr['image']))
+            logger.debug('Cover image for %s is %s', self.item.filename, attr['image'])
 
             attributes = ['year', 'genre', 'rating', 'runtime' ]
             for attribute in attributes:

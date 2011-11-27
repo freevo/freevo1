@@ -712,7 +712,7 @@ class MenuWidget(GUIObject):
 
 
     def _handle_call_item_action(self, menu, event):
-        _debug_('calling action %s' % event.arg)
+        logger.debug('calling action %s', event.arg)
 
         for a in menu.selected.actions():
             if not isinstance(a, Item) and len(a) > 2 and a[2] == event.arg:
@@ -729,7 +729,7 @@ class MenuWidget(GUIObject):
                 if not isinstance(a, MenuItem) and len(a) > 2 and a[2] == event.arg:
                     a[0](arg=None, menuw=self)
                     return
-        _debug_('action %s not found' % event.arg)
+        logger.debug('action %s not found', event.arg)
 
 
     def __call_action(self, action, arg):
@@ -835,7 +835,7 @@ class MenuWidget(GUIObject):
                 if p.eventhandler(event=event, menuw=self):
                     return True
 
-            _debug_('no eventhandler for event %s' % event, 2)
+            logger.log( 9, 'no eventhandler for event %s', event)
             return False
 
         if event == MENU_UP:
@@ -917,7 +917,7 @@ class MenuWidget(GUIObject):
             if p.eventhandler(event=event, menuw=self):
                 return True
 
-        _debug_('no eventhandler for event %s' % str(event), 2)
+        logger.log( 9, 'no eventhandler for event %s', str(event))
         return False
 
 
@@ -925,7 +925,7 @@ class MenuWidget(GUIObject):
     def highlight_menuitem(self, clicked_menu):
         i = 0
         menu = self.menustack[-1]
-        _debug_('clicked_menu=%s, self.all_item=%s' % (clicked_menu, self.all_items[0]))
+        logger.debug('clicked_menu=%s, self.all_item=%s', clicked_menu, self.all_items[0])
         for menuitem in self.all_items:
             if clicked_menu == menuitem:
                 sounds.play_sound(sounds.MENU_NAVIGATE)

@@ -43,7 +43,7 @@ import dialog
 
 class ViewFavoritesItem(Item):
     def __init__(self, parent):
-        _debug_('ViewFavoritesItem.__init__(parent=%r)' % (parent,), 2)
+        logger.log( 9, 'ViewFavoritesItem.__init__(parent=%r)', parent)
         Item.__init__(self, parent, skin_type='tv')
         self.name = _('View Favorites')
         self.menuw = None
@@ -51,13 +51,13 @@ class ViewFavoritesItem(Item):
 
 
     def actions(self):
-        _debug_('actions()', 2)
+        logger.log( 9, 'actions()')
         return [ ( self.view_favorites , _('View Favorites') ),
                  ( self.reschedule_favorites, _('Reschedule Favorites'))]
 
 
     def view_favorites(self, arg=None, menuw=None):
-        _debug_('view_favorites(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'view_favorites(arg=%r, menuw=%r)', arg, menuw)
         if not self.recordclient.pingNow():
             dialog.show_alert(self.recordclient.recordserverdown)
             return
@@ -77,7 +77,7 @@ class ViewFavoritesItem(Item):
         """
         Force rescheduling of favorites
         """
-        _debug_('resched_favs(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'resched_favs(arg=%r, menuw=%r)', arg, menuw)
         dialog.show_message(_('Rescheduling Favorites...'))
         self.recordclient.updateFavoritesScheduleCo().connect(self.reschedule_favorites_complete)
         if menuw:
@@ -91,7 +91,7 @@ class ViewFavoritesItem(Item):
 
 
     def reload(self):
-        _debug_('reload()', 2)
+        logger.log( 9, 'reload()')
         menuw = self.menuw
 
         menu = menuw.menustack[-1]
@@ -110,7 +110,7 @@ class ViewFavoritesItem(Item):
 
 
     def get_items(self):
-        _debug_('get_items()', 2)
+        logger.log( 9, 'get_items()')
         items = []
 
         (status, favorites) = self.recordclient.getFavoritesNow()
@@ -133,9 +133,9 @@ class PluginInterface(plugin.MainMenuPlugin):
     """
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         plugin.MainMenuPlugin.__init__(self)
 
     def items(self, parent):
-        _debug_('items(parent=%r)' % (parent,), 2)
+        logger.log( 9, 'items(parent=%r)', parent)
         return [ ViewFavoritesItem(parent) ]

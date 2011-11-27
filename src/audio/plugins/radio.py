@@ -80,7 +80,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     | ]
     """
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         if not config.RADIO_CMD or not config.RADIO_STATIONS:
             self.reason = 'RADIO_CMD or RADIO_STATIONS not set'
             return
@@ -106,7 +106,7 @@ class RadioMainMenuItem(MenuItem):
     of commands in a submenu.
     """
     def __init__(self, parent):
-        _debug_('RadioMainMenuItem.__init__(parent=%r)' % (parent,), 2)
+        logger.log( 9, 'RadioMainMenuItem.__init__(parent=%r)', parent)
         MenuItem.__init__(self, parent, arg='audio', skin_type='radio')
         self.name = _('Radio')
 
@@ -168,7 +168,7 @@ class RadioItem(Item):
 
 
     def play(self, arg=None, menuw=None):
-        _debug_('station=%r station_index=%r name=%r' % (self.station, self.station_index, self.name))
+        logger.debug('station=%r station_index=%r name=%r', self.station, self.station_index, self.name)
         # self.parent.current_item = self
         #self.elapsed = 0
 
@@ -189,7 +189,7 @@ class RadioItem(Item):
 
     def confirm (self, arg=None, menuw=None):
         """ Confirm that the player should be stopped """
-        _debug_('confirm (self, arg=%r, menuw=%r)' % (arg, menuw))
+        logger.debug('confirm (self, arg=%r, menuw=%r)', arg, menuw)
         if menuw:
             menuw.menu_back()
             #menuw.refresh()
@@ -197,7 +197,7 @@ class RadioItem(Item):
 
     def stop(self, arg=None, menuw=None):
         """ Stop the current playing """
-        _debug_('stop')
+        logger.debug('stop')
         self.player.stop()
 
 
@@ -208,7 +208,7 @@ class RadioPlayerGUI(PlayerGUI):
     """
     def __init__(self, item, menuw=None):
         """ Create an instance of a RadioPlayerGUI """
-        _debug_('RadioPlayerGUI.__init__(item=%r, menuw=%r)' % (item, menu), 2)
+        logger.log( 9, 'RadioPlayerGUI.__init__(item=%r, menuw=%r)', item, menu)
         PlayerGUI.__init__(self, item, menuw)
         self.start_time = time.time()
         self.item = item
@@ -219,7 +219,7 @@ class RadioPlayerGUI(PlayerGUI):
 
     def refresh(self):
         """ Give information to the skin """
-        _debug_('refresh()', 2)
+        logger.log( 9, 'refresh()')
         if not self.visible:
             return
         if not self.running:

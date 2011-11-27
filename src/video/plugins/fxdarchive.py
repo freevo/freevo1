@@ -108,7 +108,7 @@ class PluginInterface(plugin.ItemPlugin):
         fxds = util.fileops.match_files_recursively( self.item.dir , [ 'fxd' ])
         msg=''
         for i in fxds:
-            _debug_('file: %r' % i)
+            logger.debug('file: %r', i)
             self.cwd = os.path.dirname(i)
             parser = util.fxdparser.FXD(i)
             parser.set_handler('movie', self.fxdparser)

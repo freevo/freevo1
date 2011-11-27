@@ -87,9 +87,9 @@ class PluginInterface(IdleBarPlugin):
             now = time.time()
 
             if now > self.next_guide_check:
-                _debug_('TV: checking guide')
+                logger.debug('TV: checking guide')
                 self.listings_expire = tv_util.when_listings_expire()
-                _debug_('TV: listings expire in %s hours' % self.listings_expire)
+                logger.debug('TV: listings expire in %s hours', self.listings_expire)
                 # check again in 10 minutes
                 self.next_guide_check = now + 10*60
 

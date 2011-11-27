@@ -147,7 +147,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         Shutdown callback.
         """
-        _debug_('Shutting down livepause')
+        logger.debug('Shutting down livepause')
         self.livepause.shutdown()
 
 
@@ -157,7 +157,7 @@ class PluginInterface(plugin.DaemonPlugin):
         the disk a break.
         """
         if event == PLAY_START and self.livepause.state == State.IDLE:
-            _debug_('Disabling livepause buffering!')
+            logger.debug('Disabling livepause buffering!')
             self.livepause.disable_buffering()
         return False
 
@@ -284,7 +284,7 @@ class LivePauseController:
         if self.last_channel == tuner_channel:
             now = time.time()
             seconds_since_played = now - self.stop_time
-            _debug_('Same channel, seconds since last playing this channel %d' % seconds_since_played)
+            logger.debug('Same channel, seconds since last playing this channel %d', seconds_since_played)
             self.backend.set_events_enabled(True)
             if seconds_since_played > 120.0:
                 # Start at the end of the buffer
@@ -293,7 +293,7 @@ class LivePauseController:
 
             self.__change_state(State.PLAYING)
         else:
-            _debug_('New channel, tuning to %s' % tuner_channel)
+            logger.debug('New channel, tuning to %s', tuner_channel)
             self.backend.set_events_enabled(True)
             self.change_channel(tuner_channel)
 
@@ -304,7 +304,7 @@ class LivePauseController:
         """
         Stop playback and go into idle.
         """
-        _debug_('Stopping play back.')
+        logger.debug('Stopping play back.')
         display.get_osd().hide()
         dialog.disable_overlay_display()
         self.player.stop()
@@ -322,7 +322,7 @@ class LivePauseController:
         self.last_channel = None
         self.disable_buffering_timer.stop()
         self.backend.disable_buffering()
-        _debug_('Buffering disabled.')
+        logger.debug('Buffering disabled.')
 
     def shutdown(self):
         """
@@ -355,7 +355,7 @@ class LivePauseController:
         Eventhandler for livepause control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-        _debug_('Event %s' % event, 2)
+        logger.log( 9, 'Event %s', event)
         event_consumed = False
         if self.state == State.PLAYING:
             event_consumed = tv.dialogs.handle_channel_number_input(event)
@@ -369,7 +369,7 @@ class LivePauseController:
                 event_consumed = True
 
         if not event_consumed:
-            _debug_('Unused event %s in state %s' % (event.name, self.state))
+            logger.debug('Unused event %s in state %s', event.name, self.state)
 
         return event_consumed
 
@@ -464,7 +464,7 @@ class LivePauseController:
             self.player.resume()
             dialog.show_message(_('Out of buffer space, playback resumed'))
         else:
-            _debug_('while playing ~%d seconds left in buffer before overwrite' % event.arg)
+            logger.debug('while playing ~%d seconds left in buffer before overwrite', event.arg)
         return True
     
     def __playing_reader_overtaken(self, event, menuw):
@@ -473,12 +473,12 @@ class LivePauseController:
             dialog.show_message(_('Out of buffer space, playback resumed'))
         else:
             dialog.show_message(_('Out of buffer space'))
-            _debug_('Out of buffer space while playing!')
+            logger.debug('Out of buffer space while playing!')
         return True
 
     def __playing_button_pressed(self, event, menuw):
         consumed = False
-        _debug_('Button %s' % event.arg)
+        logger.debug('Button %s', event.arg)
         if event.arg == 'SUBTITLE':
             self.__playing_toggle_subtitles(event, menuw)
             consumed = True
@@ -580,7 +580,7 @@ class LivePauseController:
             # No change in state nothing todo!
             return
 
-        _debug_('Changing state from %s to %s' % (self.state, new_state))
+        logger.debug('Changing state from %s to %s', self.state, new_state)
         old_state = self.state
         self.state = new_state
         self.current_event_map = self.event_maps[new_state]

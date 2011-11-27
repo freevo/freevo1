@@ -63,7 +63,7 @@ class ScrollableTextScreen:
         menuw.pushmenu(self)
         self.transition = False
         if hasattr(self, 'event_context'):
-            _debug_('scrollabletext_screen: setting context to %s' % self.event_context, 2)
+            logger.log( 9, 'scrollabletext_screen: setting context to %s', self.event_context)
             rc.set_context(self.event_context)
 
     def refresh(self):

@@ -270,11 +270,11 @@ class MainTread:
         event handling function for the main loop
         """
         if event == OS_EVENT_POPEN2:
-            _debug_('popen2 %s' % event.arg[1])
+            logger.debug('popen2 %s', event.arg[1])
             event.arg[0].child = util.popen3.Popen3(event.arg[1])
             return
 
-        _debug_('handling event %s' % str(event), 2)
+        logger.log( 9, 'handling event %s', str(event))
         for p in self.eventlistener_plugins:
             p.eventhandler(event=event)
 
@@ -309,10 +309,10 @@ class MainTread:
                         if p.eventhandler(event=event):
                             break
                     else:
-                        _debug_('no eventhandler for event %s' % event, 2)
+                        logger.log( 9, 'no eventhandler for event %s', event)
 
             except SystemExit:
-                _debug_('SystemExit re-raised')
+                logger.debug('SystemExit re-raised')
                 raise
 
             except:
@@ -339,17 +339,17 @@ class MainTread:
                 else:
                     raise
         else:
-            _debug_('no target for events given')
+            logger.debug('no target for events given')
 
 
 def unix_signal_handler(sig, frame):
     """
     Unix signal handler to shut down freevo
     """
-    _debug_('unix_signal_handler(sig=%r, frame=%r)' % (sig, frame))
-    _debug_('shutdown() called')
+    logger.debug('unix_signal_handler(sig=%r, frame=%r)', sig, frame)
+    logger.debug('shutdown() called')
     shutdown(exit=True)
-    _debug_('SystemExit raised')
+    logger.debug('SystemExit raised')
     raise SystemExit
 
 
@@ -357,10 +357,10 @@ def signal_handler():
     """
     the signal handler to shut down freevo
     """
-    _debug_('signal_handler()')
-    _debug_('shutdown() called')
+    logger.debug('signal_handler()')
+    logger.debug('shutdown() called')
     shutdown(exit=True)
-    _debug_('SystemExit raised')
+    logger.debug('SystemExit raised')
     raise SystemExit
     
 def exception_handler(*args):
@@ -470,10 +470,10 @@ defaults.update(opts.__dict__)
 if opts.force_fs:
     # force fullscreen mode
     # deactivate screen blanking and set osd to fullscreen
-    _debug_('os.system("xset -dpms s off")')
+    logger.debug('os.system("xset -dpms s off")')
     os.system('xset -dpms s off')
     if config.OSD_X11_CURSORS is not None:
-        _debug_('os.system("xsetroot -cursor %s")' % config.OSD_X11_CURSORS)
+        logger.debug('os.system("xsetroot -cursor %s")', config.OSD_X11_CURSORS)
         os.system('xsetroot -cursor %s' % config.OSD_X11_CURSORS)
     config.START_FULLSCREEN_X = 1
 
@@ -567,7 +567,7 @@ try:
     MainMenu().getcmd()
 
     # Kick off the main menu loop
-    _debug_('Main loop starting...')
+    logger.debug('Main loop starting...')
 
     MainTread()
 
@@ -585,7 +585,7 @@ except SystemExit, why:
     print 'Freevo %s exited' % (version.version,)
 
 except Exception, why:
-    _debug_('Crash!: %s' % (why), config.DCRITICAL)
+    logger.fatal('Crash!', exc_info=True)
     try:
         tb = sys.exc_info()[2]
         fname, lineno, funcname, text = traceback.extract_tb(tb)[-1]

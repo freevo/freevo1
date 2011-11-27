@@ -74,7 +74,7 @@ import util
 def ParseConfigFile(rconf):
     """
     """
-    _debug_('ParseConfigFile(rconf=%r)' % (rconf), 2)
+    logger.log( 9, 'ParseConfigFile(rconf=%r)', rconf)
     cnt = 0
     fconfig = []
     while cnt < len(rconf):
@@ -205,7 +205,7 @@ class ConfigControl(object):
 def GetVarGroup(setting_name):
     """
     """
-    _debug_('GetVarGroup(setting_name=%r)' % (setting_name), 2)
+    logger.log( 9, 'GetVarGroup(setting_name=%r)', setting_name)
 
     group = setting_name.split('_')[0].capitalize()
     if setting_name.startswith('KEYMAP'):
@@ -220,7 +220,7 @@ def GetVarGroup(setting_name):
 def GetGroupList(cfgvars):
     """
     """
-    _debug_('GetGroupList(cfgvars=%r)' % (cfgvars), 2)
+    logger.log( 9, 'GetGroupList(cfgvars=%r)', cfgvars)
     grps = ['Other','KeyMap']
     agrps = []
     for vrs in cfgvars:
@@ -242,7 +242,7 @@ def GetGroupList(cfgvars):
 def getCtrlType(cname, cvalue, vtype):
     """
     """
-    _debug_('getCtrlType(cname=%r, cvalue=%r, vtype=%r)' % (cname, cvalue, vtype), 2)
+    logger.log( 9, 'getCtrlType(cname=%r, cvalue=%r, vtype=%r)', cname, cvalue, vtype)
     if cvalue == 'True' or cvalue == 'False':
         return 'boolean'
     if cname == 'TV_CHANNELS':
@@ -263,7 +263,7 @@ def getCtrlType(cname, cvalue, vtype):
 def CreateFileBrowseControl(cname,setting_name):
     """
     """
-    _debug_('CreateFileBrowseControl(cname, setting_name)', 2)
+    logger.log( 9, 'CreateFileBrowseControl(cname, setting_name)')
 
     if DirTypeVar(setting_name) or FileTypeVarArray(setting_name) :
         js_browsefiles = 'onclick=BrowseFiles("%s","%s","D")' % ( cname , setting_name )
@@ -304,7 +304,7 @@ def Display_TV_Logo(channel):
 def CreateTV_Channels_ctrl(cname, cvalue):
     """
     """
-    _debug_('CreateTV_Channels_ctrl(cname, cvalue)', 2)
+    logger.log( 9, 'CreateTV_Channels_ctrl(cname, cvalue)')
     vitems = GetItemsArray(cvalue)
     ctrl = ''
 
@@ -337,7 +337,7 @@ def CreateTV_Channels_ctrl(cname, cvalue):
 def CreateFileItemList(cname, cvalue,setting_name):
     """
     """
-    _debug_('CreateFileItemList(cname, cvalue, cenabled), setting_name)', 2)
+    logger.log( 9, 'CreateFileItemList(cname, cvalue, cenabled), setting_name)')
     vitems = GetItemsArray(cvalue)
     ctrl = ''
 
@@ -401,7 +401,7 @@ def CreateFileItemList(cname, cvalue,setting_name):
 def CreateDictionaryControl(cname, cvalue):
     """
     """
-    _debug_('CreateDictionaryControl(cname=%r, cvalue=%r)' % (cname, cvalue), 2)
+    logger.log( 9, 'CreateDictionaryControl(cname=%r, cvalue=%r)', cname, cvalue)
     ctrl2type = 'textbox'
     if cname.startswith('WWW_USERS'):
         ctrl2type = 'password'
@@ -442,7 +442,7 @@ def CreateDictionaryControl(cname, cvalue):
 def CreateListControl(cname, cvalue):
     """
     """
-    _debug_('CreateListControl(cname=%r, cvalue=%r )' % (cname, cvalue ), 2)
+    logger.log( 9, 'CreateListControl(cname=%r, cvalue=%r )', cname, cvalue)
 
     ctrl = '<ul class="ItemList">\n'
     vitems = GetItemsArray(cvalue)
@@ -498,7 +498,7 @@ def CreateListControl(cname, cvalue):
 def CreateTextArea(cname, cvalue):
     """
     """
-    _debug_('CreateTextArea(cname, cvalue)', 2)
+    logger.log( 9, 'CreateTextArea(cname, cvalue)')
     elemsep = ')'
     rows = cvalue.count(elemsep) + 1
     if rows > 5:
@@ -515,7 +515,7 @@ def CreateTextArea(cname, cvalue):
 def CreateTextBox(cname, setting_name, cvalue, other_opts = None):
     """
     """
-    _debug_('CreateTextBox(cname, cvalue,  plugin_group, cenabled)', 2)
+    logger.log( 9, 'CreateTextBox(cname, cvalue,  plugin_group, cenabled)')
     cvalue = cvalue.strip()
 
     ctrl = ""
@@ -538,7 +538,7 @@ def CreateTextBox(cname, setting_name, cvalue, other_opts = None):
 def KeyMapControl(cname, setting_name, cvalue ):
     """
     """
-    _debug_('KeyMapControl(cname, cvalue,  cenabled)', 2)
+    logger.log( 9, 'KeyMapControl(cname, cvalue,  cenabled)')
     cvalue = cvalue.strip()
     key_name = setting_name.split('[')[1].strip(']')
 
@@ -563,7 +563,7 @@ def DeleteListItem(lineid,updateid):
 
 
 def StartControlLine(nctrl):
-    _debug_('StartControlLine(%r)' % nctrl ,2)
+    logger.log( 9, 'StartControlLine(%r)', nctrl)
     ctrl = ''
     cname = nctrl.control_name
 
@@ -598,7 +598,7 @@ def EnableCheckBox(nctrl):
 def CreateConfigLine(nctrl,  expALL):
     """
     """
-    _debug_('CreateConfigLine(nctrl=%r,  expALL=%r)' % (nctrl, expALL), 2)
+    logger.log( 9, 'CreateConfigLine(nctrl=%r,  expALL=%r)', nctrl, expALL)
     htmlctrl = ''
 
     control_name = nctrl.control_name
@@ -671,7 +671,7 @@ def CreateConfigLine(nctrl,  expALL):
 def DisplayConfigChanges(current_version):
     """
     """
-    _debug_('DisplayConfigChanges(current_version=%r)' % current_version, 2)
+    logger.log( 9, 'DisplayConfigChanges(current_version=%r)', current_version)
 
     if not current_version:
         current_version = 0
@@ -708,7 +708,7 @@ def DisplayConfigChanges(current_version):
 def GetConfigVersion(conf_data):
     """
     """
-    _debug_('GetConfigVersion(conf_data=%r)' % conf_data,2)
+    logger.log( 9, 'GetConfigVersion(conf_data=%r)', conf_data)
     for setting in conf_data:
         if setting.ctrlname == 'CONFIG_VERSION':
             return setting.ctrlvalue
@@ -727,7 +727,7 @@ class ConfigResource(FreevoResource):
     def DisplayGroups(self,fconfig):
         """
         """
-        _debug_('DisplayGroups(fconfig=%r)' % (fconfig), 2)
+        logger.log( 9, 'DisplayGroups(fconfig=%r)', fconfig)
         html =  '<ul class="GroupHeader">'
 
         groups = GetGroupList(fconfig)
@@ -753,7 +753,7 @@ class ConfigResource(FreevoResource):
     def DisplayGroup(self, grp,fconfig):
         """
         """
-        _debug_('DisplayGroups(fconfig=%r)' % (fconfig), 2)
+        logger.log( 9, 'DisplayGroups(fconfig=%r)', fconfig)
 
         groups = GetGroupList(fconfig)
         displayStyle = 'none'
@@ -779,7 +779,7 @@ class ConfigResource(FreevoResource):
     def _render(self, request):
         """
         """
-        _debug_('_render(self, request)', 2)
+        logger.log( 9, '_render(self, request)')
         fv = HTMLResource()
         form = request.args
 

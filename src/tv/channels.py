@@ -76,7 +76,7 @@ TUNER_ID = 2
 class FreevoChannels:
 
     def __init__(self):
-        _debug_('FreevoChannels.__init__()', 2)
+        logger.log( 9, 'FreevoChannels.__init__()')
         self.chan_index = 0
         self.lock = threading.Lock()
 
@@ -109,7 +109,7 @@ class FreevoChannels:
         """
         Gets the VideoGroup object used by this Freevo channel.
         """
-        _debug_('getVideoGroup(chan=%r, isplayer=%r, chan_index=%r)' % (chan, isplayer, chan_index), 1)
+        logger.debug('getVideoGroup(chan=%r, isplayer=%r, chan_index=%r)', chan, isplayer, chan_index)
 
         vg = config.TV_VIDEO_GROUPS[0]
 
@@ -132,7 +132,7 @@ class FreevoChannels:
                         # some simple checks
                         vg = config.TV_VIDEO_GROUPS[int(record_group)]
                     except:
-                        _debug_('TV_VIDEO_GROUPS[%s].record_group=%s is invalid' % (group, record_group), DWARNING)
+                        logger.warning('TV_VIDEO_GROUPS[%s].record_group=%s is invalid', group, record_group)
         finally:
             self.lock.release()
 
@@ -143,7 +143,7 @@ class FreevoChannels:
         """
         Using this method will not support custom frequencies.
         """
-        _debug_('chanUp(isplayer=%r, app=%r, app_cmd=%r)' % (isplayer, app, app_cmd), 2)
+        logger.log( 9, 'chanUp(isplayer=%r, app=%r, app_cmd=%r)', isplayer, app, app_cmd)
         return self.chanSet(self.getNextChannel(), isplayer, app, app_cmd)
 
 
@@ -151,12 +151,12 @@ class FreevoChannels:
         """
         Using this method will not support custom frequencies.
         """
-        _debug_('chanDown(isplayer=%r, app=%r, app_cmd=%r)' % (isplayer, app, app_cmd), 2)
+        logger.log( 9, 'chanDown(isplayer=%r, app=%r, app_cmd=%r)', isplayer, app, app_cmd)
         return self.chanSet(self.getPrevChannel(), isplayer, app, app_cmd)
 
 
     def chanSet(self, chan, isplayer, app=None, app_cmd=None):
-        _debug_('chanSet(char=%r, isplayer=%r, app=%r, app_cmd=%r)' % (chan, isplayer, app, app_cmd), 2)
+        logger.log( 9, 'chanSet(char=%r, isplayer=%r, app=%r, app_cmd=%r)', chan, isplayer, app, app_cmd)
         new_chan = None
 
         dup_dict = dict()
@@ -168,7 +168,7 @@ class FreevoChannels:
                 self.chan_index = pos
 
         if not new_chan:
-            _debug_('Cannot find tuner channel "%s" in the TV channel listing' % chan, DWARNING)
+            logger.warning('Cannot find tuner channel "%s" in the TV channel listing', chan)
             return
 
         # Trying to choose the correct TV_CHANNELS if the channel is in more than one line
@@ -199,8 +199,8 @@ class FreevoChannels:
                         del dup_dict[key]
 
             if len(dup_dict) > 1:
-                _debug_('At current day/time (%s, %s), still %s active TV_Channels for channel %s' % \
-                    (cwday, ctime, len(dup_dict), chan), DWARNING)
+                logger.warning('At current day/time (%s, %s), still %s active TV_Channels for channel %s', cwday, ctime, len(dup_dict), chan)
+
 
             for key in dup_dict.keys():
                 self.chan_index = int(key)
@@ -220,26 +220,26 @@ class FreevoChannels:
 
 
     def tunerSetFreq(self, chan, isplayer, app=None, app_cmd=None):
-        _debug_('tunerSetFreq(chan=%r, isplayer=%r, app=%r, app_cmd=%r' % (chan, isplayer, app, app_cmd), 2)
+        logger.log( 9, 'tunerSetFreq(chan=%r, isplayer=%r, app=%r, app_cmd=%r', chan, isplayer, app, app_cmd)
         chan = str(chan)
         vg = self.getVideoGroup(chan, isplayer)
 
         freq = config.TV_FREQUENCY_TABLE.get(chan)
         if freq:
-            _debug_('Using custom frequency: chan="%s", freq="%s"' % (chan, freq))
+            logger.debug('Using custom frequency: chan="%s", freq="%s"', chan, freq)
         else:
             clist = tv.freq.CHANLIST.get(vg.tuner_chanlist)
             if clist:
                 freq = clist.get(chan)
             else:
                 if vg.group_type != 'dvb':
-                    _debug_('Unable to get channel list for %s.' % vg.tuner_chanlist, DWARNING)
+                    logger.warning('Unable to get channel list for %s.', vg.tuner_chanlist)
                 return 0
             if not freq:
                 if vg.group_type != 'dvb':
-                    _debug_('Unable to get channel list for %s.' % vg.tuner_chanlist, DWARNING)
+                    logger.warning('Unable to get channel list for %s.', vg.tuner_chanlist)
                 return 0
-            _debug_('USING STANDARD FREQUENCY: chan="%s", freq="%s"' % (chan, freq))
+            logger.debug('USING STANDARD FREQUENCY: chan="%s", freq="%s"', chan, freq)
 
         if app:
             if app_cmd:
@@ -263,14 +263,14 @@ class FreevoChannels:
                 try:
                     vd.setinputbyname(vg.input_type)
                 except KeyError:
-                    _debug_('Cannot set input %r for %r, must be one of:\n%r' % \
-                        (vg.input_type, vg.vdev, vd.inputs.keys()), DWARNING)
+                    logger.warning('Cannot set input %r for %r, must be one of:\n%r', vg.input_type, vg.vdev, vd.inputs.keys())
+
 
                 try:
                     vd.setstdbyname(vg.tuner_norm)
                 except KeyError:
-                    _debug_('Cannot set standard %r for %r, must be one of:\n%r' % \
-                        (vg.tuner_norm, vg.vdev, vd.standards.keys()), DWARNING)
+                    logger.warning('Cannot set standard %r for %r, must be one of:\n%r', vg.tuner_norm, vg.vdev, vd.standards.keys())
+
 
                 try:
                     vd.setfreq(freq)
@@ -279,28 +279,28 @@ class FreevoChannels:
 
                 vd.close()
             except Exception, e:
-                _debug_('Cannot set frequency for %s/%s/%s: %s' % (vg.input_type, vg.tuner_norm, chan, e), DWARNING)
+                logger.warning('Cannot set frequency for %s/%s/%s: %s', vg.input_type, vg.tuner_norm, chan, e)
 
             if vg.cmd:
-                _debug_('run cmd: %s' % vg.cmd)
+                logger.debug('run cmd: %s', vg.cmd)
                 retcode = os.system(vg.cmd)
-                _debug_('exit code: %g' % retcode)
+                logger.debug('exit code: %g', retcode)
 
         return 0
 
 
     def getChannel(self):
-        _debug_('getChannel()', 2)
+        logger.log( 9, 'getChannel()')
         return config.TV_CHANNELS[self.chan_index][2]
 
 
     def getChannelNum(self):
-        _debug_('getChannelNum()', 2)
+        logger.log( 9, 'getChannelNum()')
         return (self.chan_index) % len(config.TV_CHANNELS)
 
 
     def getManChannelNum(self, channel=0, tvlike=0):
-        _debug_('getManChannelNum(channel=%r)' % (channel,), 2)
+        logger.log( 9, 'getManChannelNum(channel=%r)', channel)
         if tvlike:
             physchan = '9999'
             key = channel
@@ -317,7 +317,7 @@ class FreevoChannels:
             return (channel-1) % len(config.TV_CHANNELS)
 
     def getNextChannelNum(self):
-        _debug_('getNextChannelNum()', 2)
+        logger.log( 9, 'getNextChannelNum()')
         curnum=self.chan_index
         curchan=config.TV_CHANNELS[curnum][2]
         while config.TV_CHANNELS[curnum][2] == curchan:
@@ -326,7 +326,7 @@ class FreevoChannels:
 
 
     def getPrevChannelNum(self):
-        _debug_('getPrevChannelNum()', 2)
+        logger.log( 9, 'getPrevChannelNum()')
         curnum=self.chan_index
         curchan=config.TV_CHANNELS[curnum][2]
         while config.TV_CHANNELS[curnum][2] == curchan:
@@ -335,27 +335,27 @@ class FreevoChannels:
 
 
     def getManChannel(self, channel=0, tvlike=0):
-        _debug_('getManChannel(channel=%r)' % (channel,), 2)
+        logger.log( 9, 'getManChannel(channel=%r)', channel)
         return config.TV_CHANNELS[self.getManChannelNum(channel, tvlike)][2]
 
 
     def getNextChannel(self):
-        _debug_('getNextChannel()', 2)
+        logger.log( 9, 'getNextChannel()')
         return config.TV_CHANNELS[self.getNextChannelNum()][2]
 
 
     def getPrevChannel(self):
-        _debug_('getPrevChannel()', 2)
+        logger.log( 9, 'getPrevChannel()')
         return config.TV_CHANNELS[self.getPrevChannelNum()][2]
 
 
     def setChanlist(self, chanlist):
-        _debug_('setChanlist(chanlist=%r)' % (chanlist,), 2)
+        logger.log( 9, 'setChanlist(chanlist=%r)', chanlist)
         self.chanlist = freq.CHANLIST[chanlist]
 
 
     def appSend(self, app, app_cmd):
-        _debug_('appSend(app=%r, app_cmd=%r)' % (app, app_cmd), 2)
+        logger.log( 9, 'appSend(app=%r, app_cmd=%r)', app, app_cmd)
         if not app or not app_cmd:
             return
         app.write(app_cmd)
@@ -363,7 +363,7 @@ class FreevoChannels:
 
     def getChannelInfo(self, showtime=True):
         """Get program info for the current channel"""
-        _debug_('getChannelInfo(showtime=%r)' % (showtime,), 2)
+        logger.log( 9, 'getChannelInfo(showtime=%r)', showtime)
 
         tuner_id = self.getChannel()
         chan_name = config.TV_CHANNELS[self.chan_index][1]
@@ -387,7 +387,7 @@ class FreevoChannels:
 
     def getChannelInfoRaw(self):
         """Get program info for the current channel"""
-        _debug_('getChannelInfoRaw()', 2)
+        logger.log( 9, 'getChannelInfoRaw()')
 
         tuner_id = self.getChannel()
         chan_name = config.TV_CHANNELS[self.chan_index][1]

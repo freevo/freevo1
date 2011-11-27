@@ -120,30 +120,30 @@ class FXMMS:
         0 = unplayable
         """
         try:
-            _debug_('url=%r' % (item.url), 2)
-            _debug_('mode=%r' % (item.mode), 2)
-            _debug_('mimetype=%r' % (item.mimetype), 2)
+            logger.log( 9, 'url=%r', item.url)
+            logger.log( 9, 'mode=%r', item.mode)
+            logger.log( 9, 'mimetype=%r', item.mimetype)
         except Exception, e:
             print e
         if item.url and item.url.startswith('radio://'):
-            _debug_('%r unplayable' % (item.url))
+            logger.debug('%r unplayable', item.url)
             return 0
         if item.url and item.url.startswith('mms://'):
-            _debug_('%r unplayable' % (item.url))
+            logger.debug('%r unplayable', item.url)
             return 0
         if item.url and item.url.startswith('rtsp://'):
-            _debug_('%r unplayable' % (item.url))
+            logger.debug('%r unplayable', item.url)
             return 0
         if item.url and not config.FXMMS_NETRADIO and item.url.startswith('https://'):
-            _debug_('%r unplayable' % (item.url))
+            logger.debug('%r unplayable', item.url)
             return 0
         if item.url and not config.FXMMS_NETRADIO and item.url.startswith('http://'):
-            _debug_('%r unplayable' % (item.url))
+            logger.debug('%r unplayable', item.url)
             return 0
         if item.filename and not util.match_suffix(item.filename, config.FXMMS_SUFFIX):
-            _debug_('%r unplayable' % (item.url))
+            logger.debug('%r unplayable', item.url)
             return 0
-        _debug_('%r good' % (item.url))
+        logger.debug('%r good', item.url)
         return 2
 
 
@@ -151,7 +151,7 @@ class FXMMS:
         """
         play an audioitem with xmms
         """
-        _debug_('%s.play(item=%r, playerGUI=%r)' % (self.__module__, item, playerGUI))
+        logger.debug('%s.play(item=%r, playerGUI=%r)', self.__module__, item, playerGUI)
         if item.url:
             filename = item.url
         else:

@@ -144,7 +144,7 @@ class DVBStreamerController(Controller):
             controller = self.manager.get_controller(device)
             controller.execute_command('setprop adapter.active true', True)
         except:
-            _debug_('Not DVBStreamer 2.x?')
+            logger.debug('Not DVBStreamer 2.x?')
 
         try:
             self.manager.enable_udp_output(device,  ip_address, port)
@@ -167,7 +167,7 @@ class DVBStreamerController(Controller):
             controller = self.manager.get_controller(self.last_device)
             controller.execute_command('setprop adapter.active false', True)
         except:
-            _debug_('Not DVBStreamer 2.x?')
+            logger.debug('Not DVBStreamer 2.x?')
 
 
 
@@ -224,28 +224,28 @@ class IVTVController(Controller):
         after tuning to the channel specified.
         If no data is received after timeout seconds send a Data Timed out event.
         """
-        _debug_('Opening device %r' % (videogroup.vdev))
+        logger.debug('Opening device %r', videogroup.vdev)
         v = tv.ivtv.IVTV(videogroup.vdev)
 
         v.init_settings()
 
-        _debug_('Setting input to %r' % (videogroup.input_type))
+        logger.debug('Setting input to %r', videogroup.input_type)
         v.setinputbyname(videogroup.input_type)
 
         cur_std = v.getstd()
         try:
             new_std = V4L2.NORMS.get(videogroup.tuner_norm)
             if cur_std != new_std:
-                _debug_('Setting standard to %s' % (new_std))
+                logger.debug('Setting standard to %s', new_std)
                 v.setstd(new_std)
         except:
-            _debug_("Videogroup norm value '%s' not from NORMS: %s" % \
-                (videogroup.tuner_norm, V4L2.NORMS.keys()), DERROR)
+            logger.error("Videogroup norm value '%s' not from NORMS: %s", videogroup.tuner_norm, V4L2.NORMS.keys())
+
 
         if videogroup.cmd != None:
-            _debug_("Running command %r" % videogroup.cmd)
+            logger.debug("Running command %r", videogroup.cmd)
             retcode = os.system(videogroup.cmd)
-            _debug_("exit code: %g" % retcode)
+            logger.debug("exit code: %g", retcode)
         self.settings = v
         buffer.fill('psfile', videogroup.vdev)
 

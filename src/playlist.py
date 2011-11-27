@@ -289,7 +289,7 @@ class Playlist(Item):
         """
         resort the playlist by random
         """
-        _debug_('randomize playlist')
+        logger.debug('randomize playlist')
         old = self.playlist
         self.playlist = []
         while old:
@@ -361,13 +361,13 @@ class Playlist(Item):
         """
         play the playlist
         """
-        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__class__, arg, menuw))
+        logger.debug('%s.play(arg=%r, menuw=%r)', self.__class__, arg, menuw)
         if not self.menuw:
             self.menuw = menuw
 
         if not self.playlist:
             # XXX PopupBox please
-            _debug_('empty playlist')
+            logger.debug('empty playlist')
             return False
 
         if not arg or arg != 'next':
@@ -506,7 +506,7 @@ class Playlist(Item):
                     try:
                         self.current_item.stop()
                     except OSError:
-                        _debug_('ignore playlist event', 2)
+                        logger.log( 9, 'ignore playlist event')
                         return True
                 pos = (pos-1) % len(self.playlist)
                 self.current_item = self.playlist[pos]

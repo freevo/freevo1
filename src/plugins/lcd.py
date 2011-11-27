@@ -54,12 +54,12 @@ if config.LCD_REMAP_TO_ASCII:
     try:
         from unidecode import unidecode
     except:
-        _debug_(String(_('ERROR')+': '+_('You need unidecode to run "lcd" plugin.')), 2)
+        logger.log( 9, String(_('ERROR') + ': ' + _('You need unidecode to run "lcd" plugin.')))
 
 try:
     import pylcd
 except:
-    _debug_(String(_('ERROR')+': '+_('You need pylcd to run "lcd" plugin.')), 2)
+    logger.log( 9, String(_('ERROR') + ': ' + _('You need pylcd to run "lcd" plugin.')))
 
 
 # Configuration: (Should move to freevo_conf.py?)
@@ -67,7 +67,7 @@ sep_str = ' | ' # use as separator between two strings. Like: 'Length: 123<sep_s
 sep_str_mscroll = '   ' # if string > width of lcd add this
 
 def rjust(s, n):
-    _debug_('rjust(s, n)', 2)
+    logger.log( 9, 'rjust(s, n)')
     return s[: n].rjust(n)
 
 # menu_info: information to be shown when in menu
@@ -512,7 +512,7 @@ poll_widgets = {
 }
 
 def remap(data):
-    _debug_('remap(data=%r)' % (data), 2)
+    logger.log( 9, 'remap(data=%r)', data)
     
     try:
         # first we remap all non-ASCII chars to ASCII
@@ -524,13 +524,13 @@ def remap(data):
         data = data.replace('\"', '\'').strip()
 
     except UnicodeDecodeError, error:
-        _debug_('%s' % error, DWARNING)
+        logger.warning('%s', error)
 
     return data
   
 
 def get_lengthsecs(slen):
-    _debug_('get_lengthsecs(slen=%r)' % (slen,), 2)
+    logger.log( 9, 'get_lengthsecs(slen=%r)', slen)
     splen = slen.rsplit(':')
     m = 1
     ts = 0
@@ -541,7 +541,7 @@ def get_lengthsecs(slen):
 
 
 def get_info(item, list):
-    _debug_('get_info(item=%r, list=%r)' % (item, list), 2)
+    logger.log( 9, 'get_info(item=%r, list=%r)', item, list)
     info = ''
 
     for l in list:
@@ -589,7 +589,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         init the lcd
         """
-        _debug_('PluginInterface.__init__(height=%r, width=%r)' % (height, width), 2)
+        logger.log( 9, 'PluginInterface.__init__(height=%r, width=%r)', height, width)
         plugin.DaemonPlugin.__init__(self)
         try:
             self.lcd = pylcd.client()
@@ -600,10 +600,10 @@ class PluginInterface(plugin.DaemonPlugin):
             return
 
         if config.DEBUG > 0:
-            _debug_('Connecting to LCD: %s' % cm, 2)
-            _debug_('Info as known by the LCD module:', 2)
+            logger.log( 9, 'Connecting to LCD: %s', cm)
+            logger.log( 9, 'Info as known by the LCD module:')
             self.lcd.getinfo()
-            _debug_('', 2)
+            logger.log( 9, '')
 
         self.poll_interval = 1
         self.poll_menu_only = 0
@@ -655,7 +655,7 @@ class PluginInterface(plugin.DaemonPlugin):
         to be called before the plugin exists.
         It terminates the connection with the server
         """
-        _debug_('close()', 2)
+        logger.log( 9, 'close()')
         #self.lcd.send('bye')
 
 
@@ -663,7 +663,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         'Draw' the information on the LCD display.
         """
-        _debug_('draw(type=%r, object=%r, osd=%r)' % (type, object, osd), 2)
+        logger.log( 9, 'draw(type=%r, object=%r, osd=%r)', type, object, osd)
         if self.disable: return
 
         # Check if audio is detached
@@ -812,7 +812,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def generate_screens(self):
-        _debug_('generate_screens()', 2)
+        logger.log( 9, 'generate_screens()')
         screens = None
         l = self.height
         c = self.width
@@ -821,10 +821,10 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 screens = layouts[l]
             except KeyError:
-                _debug_('Could not find screens for %d lines LCD!' % (l), DWARNING)
+                logger.warning('Could not find screens for %d lines LCD!', l)
                 l -= 1
                 if l < 1:
-                    _debug_('No screens found for this LCD (%dx%d)!' % (self.height, self.width), DERROR)
+                    logger.error('No screens found for this LCD (%dx%d)!', self.height, self.width)
                     self.disable = 1
                     return
         # find a display with 'l' line and 'c' columns
@@ -832,10 +832,10 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 screens = layouts[l][c]
             except KeyError:
-                _debug_('Could not find screens for %d lines and %d columns LCD!' % (l, c), DWARNING)
+                logger.warning('Could not find screens for %d lines and %d columns LCD!', l, c)
                 c -= 1
                 if c < 1:
-                    _debug_('No screens found for this LCD (%dx%d)!' % (self.height, self.width), DERROR)
+                    logger.error('No screens found for this LCD (%dx%d)!', self.height, self.width)
                     self.disable = 1
                     return
 
@@ -844,9 +844,9 @@ class PluginInterface(plugin.DaemonPlugin):
         try:
             self.screens = screens = layouts[l][c]
         except KeyError:
-            _debug_('Could not find screens for %d lines and %d columns LCD!' % \
-                (self.height, self.width), DWARNING)
-            _debug_('No screens found for this LCD (%dx%d)!' % (self.height, self.width), DERROR)
+            logger.warning('Could not find screens for %d lines and %d columns LCD!', self.height, self.width)
+
+            logger.error('No screens found for this LCD (%dx%d)!', self.height, self.width)
             self.disable = 1
             return
 
@@ -855,7 +855,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def generate_screen(self, s):
-        _debug_('generate_screen(s=%r)' % (s,), 2)
+        logger.log( 9, 'generate_screen(s=%r)', s)
         if not self.screens.has_key(s):
             s = 'menu'
         self.lcd.screen_add(s)
@@ -864,12 +864,12 @@ class PluginInterface(plugin.DaemonPlugin):
 
         for w in widgets:
             type, param, val = self.screens[s][w]
-            _debug_('widget_add(s=%r, w=%r, type=%r)' % (s, w, type), 2)
+            logger.log( 9, 'widget_add(s=%r, w=%r, type=%r)', s, w, type)
             self.lcd.widget_add(s, w, type)
 
 
     def eventhandler(self, event, menuw=None):
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event.name, menuw), 2)
+        logger.log( 9, 'eventhandler(event=%r, menuw=%r)', event.name, menuw)
         if event == PLAY_START:
             self.playitem = event.arg
         elif event == PLAY_END or event == STOP:

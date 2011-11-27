@@ -61,7 +61,7 @@ class Transition(BaseAnimation):
         @ivar direction: vertical/horizontal
         """
         BaseAnimation.__init__(self, surf1.get_rect(), fps, bg_update=False)
-        _debug_('__init__(surf1=%r, surf2=%r, mode=%r, direction=%r, fps=%r)' % (surf1, surf2, mode, direction, fps), 2)
+        logger.log( 9, '__init__(surf1=%r, surf2=%r, mode=%r, direction=%r, fps=%r)', surf1, surf2, mode, direction, fps)
 
         self.steps     = fps
         self.mode      = mode
@@ -83,7 +83,7 @@ class Transition(BaseAnimation):
 
 
     def prepare(self):
-        _debug_('prepare()', 2)
+        logger.log( 9, 'prepare()')
 
         # random effect
         if self.mode == -1:
@@ -127,7 +127,7 @@ class Transition(BaseAnimation):
 
 
     def draw(self):
-        _debug_('draw()', 2)
+        logger.log( 9, 'draw()')
         if self.finished:
             return
 
@@ -138,7 +138,7 @@ class Transition(BaseAnimation):
         self.inprogress.finish(True)
 
     def draw_blend_alpha(self):
-        _debug_('draw_blend_alpha()', 2)
+        logger.log( 9, 'draw_blend_alpha()')
 
         alpha = self.blend_alphas[self.index_alpha]
 
@@ -156,7 +156,7 @@ class Transition(BaseAnimation):
         """
         Plain wipe
         """
-        _debug_('draw_wipe()', 2)
+        logger.log( 9, 'draw_wipe()')
         if self.offset_x > self.rect.width:
             self.offset_x = self.rect.width
             self.__finished()
@@ -188,7 +188,7 @@ class Transition(BaseAnimation):
 
         XXX not working!
         """
-        _debug_('draw_wipe_alpha()', 2)
+        logger.log( 9, 'draw_wipe_alpha()')
         if self.line > self.size[0] - 1:
             self.__finished()
 

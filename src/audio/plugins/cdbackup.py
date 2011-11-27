@@ -190,10 +190,10 @@ class PluginInterface(plugin.ItemPlugin):
                              (self.stop_ripping, _('Stop CD ripping')) ]
                 else:
                     self.device = self.item.devicename
-                    _debug_('devicename = %s' % self.device)
+                    logger.debug('devicename = %s', self.device)
                     return [ (self.create_backup, _('Rip the CD to the hard drive')) ]
         except:
-            _debug_(_('Item is not an Audio CD'), DERROR)
+            logger.error(_('Item is not an Audio CD'))
         return []
 
 
@@ -338,18 +338,19 @@ class main_backup_thread(threading.Thread):
             os.makedirs(pathname, 0777)
         except OSError, e:
             if e.errno == errno.EEXIST:
-                _debug_(_('Directory %s already exists') % pathname)
+                logger.debug(_('Directory %s already exists'), pathname)
             else:
                 # FIXME: popup
-                _debug_(_('Cannot rip to "%(file)s"! (%(why)s)') % ({
-                    'file': pathname, 'why': e.strerror}))
+                logger.debug(_('Cannot rip to "%(file)s"! (%(why)s)'), {
+'file':pathname, 'why':e.strerror})
+
 
         try:
             mycoverart = '%s/mmpython/disc/%s.jpg' % (config.FREEVO_CACHEDIR, discid)
             if os.path.isfile(mycoverart):
                 shutil.copy(mycoverart, os.path.join(pathname,'cover.jpg'))
         except:
-            _debug_('can not copy over cover art')
+            logger.debug('can not copy over cover art')
 
         self.output_directory = pathname
         cdparanoia_command = []
@@ -418,7 +419,7 @@ class main_backup_thread(threading.Thread):
             cdparanoia_command = str('%s %s %s %s' % (config.CDPAR_CMD, device_opt, config.CD_RIP_CDPAR_OPTS,
                 str(i+1))).split(' ')+[ wav_file ]
 
-            _debug_('cdparanoia:  %s' % cdparanoia_command)
+            logger.debug('cdparanoia:  %s', cdparanoia_command)
 
             # Have the OS execute the CD Paranoia rip command
             popen3.run(cdparanoia_command, self, 9)
@@ -441,7 +442,7 @@ class main_backup_thread(threading.Thread):
                       '--tl', album, '--tn', '%(track)s,%(tracks)s' % user_rip_path_prefs,
                       '--tg', genre, '--ty', year, '--id3v2-only', wav_file, output ]
 
-                _debug_('lame: %s' % cmd)
+                logger.debug('lame: %s', cmd)
                 popen3.run(cmd, self, 9)
 
             # Build the oggenc command to be run if ogg format is selected
@@ -452,7 +453,7 @@ class main_backup_thread(threading.Thread):
                       [ '-a', artist, '-G', genre, '-N', track, '-t', song_names[i],
                         '-l', album, '-d', year, wav_file, '-o', output ]
 
-                _debug_('oggenc_command: %s' % cmd)
+                logger.debug('oggenc_command: %s', cmd)
                 popen3.run(cmd, self, 9)
 
 
@@ -468,8 +469,8 @@ class main_backup_thread(threading.Thread):
                     '--set-tag=DATE="%s" "%s%s.flac"' % (artist, album, song_names[i], track,
                                      len(song_names), year, pathname, path_tail)
 
-                _debug_('flac_command: %s' % (cmd))
-                _debug_('metaflac    : %s' % (metaflac_command))
+                logger.debug('flac_command: %s', cmd)
+                logger.debug('metaflac    : %s', metaflac_command)
                 popen3.run(cmd, self, 9)
 
                 if not self.abort:
@@ -503,7 +504,7 @@ class main_backup_thread(threading.Thread):
     def get_formatted_cd_info(self, device):
         cd_info = mmpython.parse(device)
         if cd_info is None:
-            _debug_(_('No CD medadata available'), DERROR)
+            logger.error(_('No CD medadata available'))
             popup_string=_('CD info not found!')
             AlertBox(text=popup_string).show()
             return [ 'unknown', 'unknown', 'unknown', 'unknown', 'unknown', 'unknown' ]
@@ -518,7 +519,7 @@ class main_backup_thread(threading.Thread):
         # Give some defaults with a timestamp to uniqueify artist and album names.
         # So that subsequent CDs with no CDDB data found don't overwrite each other.
         if cd_info.title is None and cd_info.artist is None:
-            _debug_(_('No CDDB data available to mmpython'), DWARNING)
+            logger.warning(_('No CDDB data available to mmpython'))
             popup_string=_('CD info not found!\nMust manually rename files\nwhen finished ripping')
             AlertBox(text=popup_string).show()
         else:
@@ -582,7 +583,7 @@ class main_backup_thread(threading.Thread):
                 else:
                     (new_string, num) = re.subn(pattern, repl, new_string, count=0)
             except:
-                _debug_(_('Problem trying to call:') + ' re.subn', DERROR)
+                logger.error(_('Problem trying to call:') + ' re.subn')
         return new_string
 
     def fix_case(self, string):

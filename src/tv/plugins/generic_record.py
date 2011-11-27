@@ -53,7 +53,7 @@ class PluginInterface(plugin.Plugin):
     """
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 1)
+        logger.debug('PluginInterface.__init__()')
         plugin.Plugin.__init__(self)
         plugin.register(Recorder(), plugin.RECORD)
 
@@ -61,12 +61,12 @@ class PluginInterface(plugin.Plugin):
 class Recorder:
 
     def __init__(self):
-        _debug_('Recorder.__init__()', 1)
+        logger.debug('Recorder.__init__()')
         # Disable this plugin if not loaded by record_server.
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
 
-        _debug_('ACTIVATING GENERIC RECORD PLUGIN', DINFO)
+        logger.info('ACTIVATING GENERIC RECORD PLUGIN')
 
         self.fc = FreevoChannels()
         self.thread = Record_Thread()
@@ -76,7 +76,7 @@ class Recorder:
 
 
     def Record(self, rec_prog):
-        _debug_('Record(rec_prog=%r)' % (rec_prog,), 1)
+        logger.debug('Record(rec_prog=%r)', rec_prog)
         vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
 
         frequency = self.fc.chanSet(str(rec_prog.tunerid), False, 'record plugin')
@@ -109,11 +109,11 @@ class Recorder:
         self.thread.autokill = float(rec_prog.rec_duration + 10)
         self.thread.mode_flag.set()
 
-        _debug_('Recorder::Record: %s' % self.rec_command)
+        logger.debug('Recorder::Record: %s', self.rec_command)
 
 
     def Stop(self):
-        _debug_('Stop()', 1)
+        logger.debug('Stop()')
         self.thread.mode = 'stop'
         self.thread.mode_flag.set()
 
@@ -121,7 +121,7 @@ class Recorder:
 class RecordApp(childapp.ChildApp):
 
     def __init__(self, app):
-        _debug_('RecordApp.__init__(app=%r)' % (app,), 1)
+        logger.debug('RecordApp.__init__(app=%r)', app)
         self.log_stdout = None
         self.log_stderr = None
         if config.DEBUG:
@@ -131,19 +131,19 @@ class RecordApp(childapp.ChildApp):
                 self.log_stdout = open(fname_out, 'a')
                 self.log_stderr = open(fname_err, 'a')
             except IOError:
-                _debug_('Cannot open "%s" and "%s" for record logging!' % \
-                    (fname_out, fname_err), DERROR)
+                logger.error('Cannot open "%s" and "%s" for record logging!', fname_out, fname_err)
+
                 print
                 print 'Please set DEBUG=0 or start Freevo from a directory that is writeable!'
                 print
             else:
-                _debug_('Record logging to "%s" and "%s"' % (fname_out, fname_err), DINFO)
+                logger.info('Record logging to "%s" and "%s"', fname_out, fname_err)
 
         childapp.ChildApp.__init__(self, app)
 
 
     def kill(self):
-        _debug_('kill()', 1)
+        logger.debug('kill()')
         childapp.ChildApp.kill(self, signal.SIGINT)
 
         if self.log_stdout:
@@ -155,7 +155,7 @@ class RecordApp(childapp.ChildApp):
 class Record_Thread(threading.Thread):
 
     def __init__(self):
-        _debug_('Record_Thread.__init__()', 1)
+        logger.debug('Record_Thread.__init__()')
         threading.Thread.__init__(self)
 
         self.mode = 'idle'
@@ -165,33 +165,33 @@ class Record_Thread(threading.Thread):
         self.app = None
 
     def run(self):
-        _debug_('run()', 1)
+        logger.debug('run()')
         while 1:
-            _debug_('Record_Thread::run: mode=%s' % self.mode)
+            logger.debug('Record_Thread::run: mode=%s', self.mode)
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
 
             elif self.mode == 'record':
                 rc.post_event(Event('RECORD_START', arg=self.prog))
-                _debug_('Record_Thread::run: cmd=%s' % self.command)
+                logger.debug('Record_Thread::run: cmd=%s', self.command)
 
                 self.app = RecordApp(self.command)
-                _debug_('app child pid: %s' % self.app.child.pid)
+                logger.debug('app child pid: %s', self.app.child.pid)
 
                 while self.mode == 'record' and self.app.isAlive():
                     self.autokill -= 0.5
                     time.sleep(0.5)
                     if self.autokill <= 0:
-                        _debug_('autokill timeout, stopping recording')
+                        logger.debug('autokill timeout, stopping recording')
                         self.mode = 'stop'
 
                 if self.app.isAlive():
-                    _debug_('Record_Thread::run: past wait!!')
+                    logger.debug('Record_Thread::run: past wait!!')
                     self.app.kill()
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))
-                _debug_('Record_Thread::run: finished recording')
+                logger.debug('Record_Thread::run: finished recording')
 
                 self.mode = 'idle'
             else:

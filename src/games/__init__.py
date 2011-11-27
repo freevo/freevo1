@@ -52,7 +52,7 @@ class PluginInterface(plugin.MimetypePlugin):
     """
 
     def __init__(self):
-        _debug_('games.PluginInterface.__init__()', 2)
+        logger.log( 9, 'games.PluginInterface.__init__()')
         plugin.MimetypePlugin.__init__(self)
         self.display_type = [ 'games' ]
 
@@ -64,7 +64,7 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         return the list of suffixes this class handles
         """
-        _debug_('suffix()', 2)
+        logger.log( 9, 'suffix()')
         return []
 
 
@@ -72,7 +72,7 @@ class PluginInterface(plugin.MimetypePlugin):
         """
         return a list of items based on the files
         """
-        _debug_('get(parent=%r, files=%r)' % (parent, files), 2)
+        logger.log( 9, 'get(parent=%r, files=%r)', parent, files)
         items = []
 
         if not hasattr(parent, 'add_args') or type(parent.add_args) is not types.TupleType:
@@ -102,12 +102,12 @@ class PluginInterface(plugin.MimetypePlugin):
                     items += [ GenesisItem(file, cmd, args, imgpath, parent) ]
                     files.remove(file)
             elif gtype == 'GENERIC':
-                _debug_('find_matches=%r files=%r suffixlist=%r' % \
-                    (util.find_matches(files, suffixlist), files, suffixlist), 2)
+                logger.log( 9, 'find_matches=%r files=%r suffixlist=%r', util.find_matches(files, suffixlist), files, suffixlist)
+
                 for file in util.find_matches(files, suffixlist):
                     items += [ GenericItem(file, cmd, args, imgpath, parent) ]
                     files.remove(file)
         except UnboundLocalError:
-            _debug_('Zip file \"%s\" may be corrupt' % file, DWARNING)
+            logger.warning('Zip file \"%s\" may be corrupt', file)
 
         return items

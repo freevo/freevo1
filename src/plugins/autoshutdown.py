@@ -275,20 +275,20 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
-        _debug_('items(parent=%r)' % (parent,), 2)
+        logger.log( 9, 'items(parent=%r)', parent)
         return [ ShutdownMenuItem(parent) ]
 
 
 
 class ShutdownMenuItem(Item):
     def __init__(self, parent=None):
-        _debug_('ShutdownMenuItem.__init__(parent=%r)' % (parent,), 2)
+        logger.log( 9, 'ShutdownMenuItem.__init__(parent=%r)', parent)
         Item.__init__(self, parent, skin_type='shutdown')
         self.idletimer = plugin.getbyname('autoshutdowntimer')
 
 
     def message_check(self, wakeup=False):
-        _debug_('message_check(wakeup=%r)' % (wakeup,), 2)
+        logger.log( 9, 'message_check(wakeup=%r)', wakeup)
         try:
             is_shutdown_allowed()
         except ExRecordingInProgress:
@@ -316,7 +316,7 @@ class ShutdownMenuItem(Item):
 
 
     def actions(self):
-        _debug_('actions()', 2)
+        logger.log( 9, 'actions()')
         if self.idletimer.ispaused():
             itemname = _('Resume automatic shutdown')
         else:
@@ -332,7 +332,7 @@ class ShutdownMenuItem(Item):
 
 
     def confirm_shutdown_wakeup(self, arg=None, menuw=None):
-        _debug_('confirm_shutdown_wakeup(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'confirm_shutdown_wakeup(arg=%r, menuw=%r)', arg, menuw)
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('SHUTDOWN SYSTEM?')
             info = self.message_check(wakeup=True)
@@ -343,12 +343,12 @@ class ShutdownMenuItem(Item):
 
 
     def confirm_toggle_timer(self, arg=None, menuw=None):
-        _debug_('confirm_toggle_timer(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'confirm_toggle_timer(arg=%r, menuw=%r)', arg, menuw)
         self.toggle_timer(arg, menuw)
 
 
     def confirm_restart_system(self, arg=None, menuw=None):
-        _debug_('confirm_restart_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'confirm_restart_system(arg=%r, menuw=%r)', arg, menuw)
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('RESTART SYSTEM?')
             info = self.message_check(wakeup=False)
@@ -360,7 +360,7 @@ class ShutdownMenuItem(Item):
 
 
     def confirm_shutdown_system(self, arg=None, menuw=None):
-        _debug_('confirm_shutdown_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'confirm_shutdown_system(arg=%r, menuw=%r)', arg, menuw)
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('SHUTDOWN SYSTEM?')
             info = self.message_check(wakeup=False)
@@ -372,7 +372,7 @@ class ShutdownMenuItem(Item):
 
 
     def confirm_shutdown_freevo(self, arg=None, menuw=None):
-        _debug_('confirm_shutdown_freevo(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'confirm_shutdown_freevo(arg=%r, menuw=%r)', arg, menuw)
         if config.AUTOSHUTDOWN_CONFIRM:
             title = _('SHUTDOWN FREEVO?')
             info = self.message_check(wakeup=False)
@@ -384,12 +384,12 @@ class ShutdownMenuItem(Item):
 
 
     def shutdown_wakeup(self, arg=None, menuw=None):
-        _debug_('shutdown_wakeup(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'shutdown_wakeup(arg=%r, menuw=%r)', arg, menuw)
         shutdown_action(action=Shutdown.SHUTDOWN_WAKEUP)
 
 
     def toggle_timer(self, arg=None, menuw=None):
-        _debug_('toggle_timer(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'toggle_timer(arg=%r, menuw=%r)', arg, menuw)
         if (self.idletimer.ispaused()):
             newname = _('Pause automatic shutdown')
             self.idletimer.resume()
@@ -406,17 +406,17 @@ class ShutdownMenuItem(Item):
 
 
     def restart_system(self, arg=None, menuw=None):
-        _debug_('restart_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'restart_system(arg=%r, menuw=%r)', arg, menuw)
         shutdown_action(action=Shutdown.RESTART_SYSTEM)
 
 
     def shutdown_system(self, arg=None, menuw=None):
-        _debug_('shutdown_system(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'shutdown_system(arg=%r, menuw=%r)', arg, menuw)
         shutdown_action(action=Shutdown.SHUTDOWN_SYSTEM)
 
 
     def shutdown_freevo(self, arg=None, menuw=None):
-        _debug_('shutdown_freevo(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'shutdown_freevo(arg=%r, menuw=%r)', arg, menuw)
         shutdown_action(action=Shutdown.SHUTDOWN_FREEVO)
 
 
@@ -448,52 +448,52 @@ class autoshutdowntimer(plugin.DaemonPlugin):
 
 
     def __init__(self):
-        _debug_('autoshutdowntimer.__init__()', 2)
+        logger.log( 9, 'autoshutdowntimer.__init__()')
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'autoshutdowntimer'
         self.event_listener = True
         self.poll_interval = 20
         self.reset()
         self.resume()
-        _debug_('autoshutdown timer initialized')
+        logger.debug('autoshutdown timer initialized')
 
 
     def ispaused(self):
-        _debug_('ispaused()', 2)
+        logger.log( 9, 'ispaused()')
         return self.lock
 
 
     def pause(self):
-        _debug_('pause()', 2)
+        logger.log( 9, 'pause()')
         self.lock = True
-        _debug_('autoshutdown timer paused')
+        logger.debug('autoshutdown timer paused')
 
 
     def resume(self):
-        _debug_('resume()', 2)
+        logger.log( 9, 'resume()')
         self.lock = False
         self.reset()
-        _debug_('autoshutdown timer resumed')
+        logger.debug('autoshutdown timer resumed')
 
 
     def reset(self):
-        _debug_('reset()', 2)
+        logger.log( 9, 'reset()')
         self.idle_base = time.time()
         self.delay = 0
-        _debug_('autoshutdown timer reset', 2)
+        logger.log( 9, 'autoshutdown timer reset')
 
 
     def eventhandler(self, event=None, menuw=None, arg=None):
-        _debug_('eventhandler(event=%r, menuw=%r, arg=%r)' % (event, menuw, arg), 2)
+        logger.log( 9, 'eventhandler(event=%r, menuw=%r, arg=%r)', event, menuw, arg)
         if not self.lock:
             if plugin.isevent(event) != 'IDENTIFY_MEDIA' and event.name != 'SCREENSAVER_START':
                 self.reset()
-                _debug_('timer reset, received event %s' % event.name, 2)
+                logger.log( 9, 'timer reset, received event %s', event.name)
         return FALSE
 
 
     def poll(self):
-        _debug_('poll()', 2)
+        logger.log( 9, 'poll()')
         if not self.lock:
             # calculate passed and remaining time
             tdif = (time.time() - self.idle_base)
@@ -501,8 +501,8 @@ class autoshutdowntimer(plugin.DaemonPlugin):
 
             if not config.AUTOSHUTDOWN_WHILE_USER_LOGGED:
                 if len(os.popen('/usr/bin/who').read()) > 4:
-                    _debug_('not shuttng down, someone is logged in')
-                    _debug_('retry in 1 minute')
+                    logger.debug('not shuttng down, someone is logged in')
+                    logger.debug('retry in 1 minute')
                     self.delay += 1
                     return
 
@@ -510,21 +510,21 @@ class autoshutdowntimer(plugin.DaemonPlugin):
                 try:
                     is_shutdown_allowed()
                 except ExRecordingInProgress:
-                    _debug_('not shuttng down, a recording is in progress')
-                    _debug_('retry in 5 minutes')
+                    logger.debug('not shuttng down, a recording is in progress')
+                    logger.debug('retry in 5 minutes')
                     self.delay += 5;
                 except ExNextWakeupSoon:
-                    _debug_('not shuttng down, next wakeup is nearby')
+                    logger.debug('not shuttng down, next wakeup is nearby')
                     self.reset();
                 except ExProcessRunning:
-                    _debug_('not shuttng down, an external process is running')
-                    _debug_('retry in 5 minutes')
+                    logger.debug('not shuttng down, an external process is running')
+                    logger.debug('retry in 5 minutes')
                     self.delay += 5;
                 else:
-                    _debug_('Shutdown issued by autoshutdown timer!')
+                    logger.debug('Shutdown issued by autoshutdown timer!')
                     shutdown_action(action=Shutdown.SHUTDOWN_WAKEUP)
             else:
-                _debug_('idle for %d seconds, %d minutes remaining' % (tdif, trem), 2)
+                logger.log( 9, 'idle for %d seconds, %d minutes remaining', tdif, trem)
 
 
 
@@ -546,7 +546,7 @@ def is_shutdown_allowed():
     @raises ExNextWakeupSoon: if the next wakeup is nearby
     @raises ExProcessRunning: if there is an important process
     """
-    _debug_('is_shutdown_allowed()', 2)
+    logger.log( 9, 'is_shutdown_allowed()')
     now = time.time()
     try:
         t = __get_scheduled_recording(0)
@@ -572,7 +572,7 @@ def get_next_wakeup():
     @returns: UTC time of next wakeup
     @raises ExNoWakeupNeeded: if no wakeup needed
     """
-    _debug_('get_next_wakeup()', 2)
+    logger.log( 9, 'get_next_wakeup()')
     scheduled_utc_s = 0
     default_utc_s = 0
     now = time.time()
@@ -582,24 +582,24 @@ def get_next_wakeup():
         try:
             scheduled_utc_s = __get_scheduled_recording(i)
         except ExNoRecordServer:
-            _debug_('Record server is down')
+            logger.debug('Record server is down')
             break
         except ExRecordServerRemote:
-            _debug_('Record server is remote')
+            logger.debug('Record server is remote')
             break
         except ExIndexNotAvailable:
-            _debug_('No more recordings available')
+            logger.debug('No more recordings available')
             break
         i = i + 1
     # find next default wakeup
     try:
         default_utc_s = __get_next_default_wakeup()
     except ExNoDefaultWakeup:
-        _debug_('Default wakeup is disabled')
+        logger.debug('Default wakeup is disabled')
     # test which wakeup time applies
     if (default_utc_s == 0) and (scheduled_utc_s == 0):
         # no default and scheduled wakeups available
-        _debug_('No wakeup time available')
+        logger.debug('No wakeup time available')
         raise ExNoWakeupNeeded
     elif (default_utc_s > 0) and (scheduled_utc_s > 0):
         # default wakeup and scheduled wakeups available
@@ -612,7 +612,7 @@ def get_next_wakeup():
     else: # (default_utc_s > 0) xor (scheduled_utc_s > 0):
         # pick the largest one
         wakeup = max(default_utc_s, scheduled_utc_s)
-        _debug_('Picked wakeup at %s' % time.ctime(wakeup))
+        logger.debug('Picked wakeup at %s', time.ctime(wakeup))
     return wakeup
 
 
@@ -622,7 +622,7 @@ def shutdown_action(action=None):
 
     @param action: (type Shutdown)
     """
-    _debug_('shutdown_action(action=%r)' % (action,), 1)
+    logger.debug('shutdown_action(action=%r)', action)
     if (action == Shutdown.SHUTDOWN_WAKEUP):
         action = __schedule_wakeup_and_shutdown()
 
@@ -652,11 +652,11 @@ def __schedule_wakeup_and_shutdown():
 
     @returns: next action (shutdown or reboot)
     """
-    _debug_('__schedule_wakeup_and_shutdown()', 2)
+    logger.log( 9, '__schedule_wakeup_and_shutdown()')
     try:
         wakeup_utc_s = get_next_wakeup()
     except ExNoWakeupNeeded:
-        _debug_('No wakeup needed, shutting down')
+        logger.debug('No wakeup needed, shutting down')
         next_action = Shutdown.SHUTDOWN_SYSTEM
     else:
         # wake up a little earlier because of the time the booting takes
@@ -665,11 +665,11 @@ def __schedule_wakeup_and_shutdown():
 
         # let's see which methode we should use for wakeup
         if config.AUTOSHUTDOWN_METHOD is None:
-            _debug_('No wakeup method set, just shutting down')
+            logger.debug('No wakeup method set, just shutting down')
             next_action = Shutdown.SHUTDOWN_SYSTEM
         elif config.AUTOSHUTDOWN_METHOD.upper() == 'ACPI':
             cmd = '%s %r' % (config.AUTOSHUTDOWN_ACPI_CMD, time.strftime('%F %H:%M', time.localtime(wakeup_utc_s)))
-            _debug_('Wakeup-command %s' % cmd)
+            logger.debug('Wakeup-command %s', cmd)
             __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
             next_action = Shutdown.SHUTDOWN_SYSTEM
         elif config.AUTOSHUTDOWN_METHOD.upper() == 'NVRAM':
@@ -677,12 +677,12 @@ def __schedule_wakeup_and_shutdown():
                 (config.AUTOSHUTDOWN_NVRAM_CMD, int(wakeup_utc_s))
             ec = __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
             if ec != 256 and ec != 0:
-                _debug_('Wakeup-command command %r failed!' % cmd, DERROR)
+                logger.error('Wakeup-command command %r failed!', cmd)
                 raise ExInternalError
             elif ec == 256 or config.AUTOSHUTDOWN_BIOS_NEEDS_REBOOT:
                 # needs a reboot
                 if config.AUTOSHUTDOWN_BOOT_LOADER is None:
-                    _debug_('No boot loader set, not shutting down')
+                    logger.debug('No boot loader set, not shutting down')
                     next_action = Shutdown.IGNORE
                 elif config.AUTOSHUTDOWN_BOOT_LOADER.upper() == 'GRUB':
                     if config.AUTOSHUTDOWN_REMOUNT_BOOT_CMD:
@@ -690,17 +690,17 @@ def __schedule_wakeup_and_shutdown():
                         __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
                     cmd = config.AUTOSHUTDOWN_GRUB_CMD
                     __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
-                    _debug_('Wakeup set, reboot needed')
+                    logger.debug('Wakeup set, reboot needed')
                     next_action = Shutdown.RESTART_SYSTEM
                 elif config.AUTOSHUTDOWN_BOOT_LOADER.upper() == 'LILO':
                     cmd = config.AUTOSHUTDOWN_LILO_CMD
                     __syscall(cmd, config.AUTOSHUTDOWN_PRETEND)
-                    _debug_('Wakeup set, reboot needed')
+                    logger.debug('Wakeup set, reboot needed')
                     next_action = Shutdown.RESTART_SYSTEM
                 else:
                     raise ExInternalError
             else:
-                _debug_('Wakeup set, shutdown needed')
+                logger.debug('Wakeup set, shutdown needed')
                 next_action =  Shutdown.SHUTDOWN_SYSTEM
         else:
             raise ExInternalError
@@ -714,7 +714,7 @@ def __is_recordserver_remote():
 
     @returns: True/False
     """
-    _debug_('__is_recordserver_remote()', 2)
+    logger.log( 9, '__is_recordserver_remote()')
     if len(glob.glob('/var/run/recordserver*.pid')) > 0:
         return False
     elif len(glob.glob('/tmp/recordserver*.pid')) > 0:
@@ -734,7 +734,7 @@ def __get_scheduled_recording(index):
     @raises ExRecordServerRemote: if the recordserver is on a different machine
     @raises ExIndexNotAvailable:
     """
-    _debug_('__get_scheduled_recording(index=%r)' % (index,), 2)
+    logger.log( 9, '__get_scheduled_recording(index=%r)', index)
     if __is_recordserver_remote():
         raise ExRecordServerRemote
     try:
@@ -757,7 +757,7 @@ def __get_scheduled_recording(index):
                 f = lambda a, b: cmp(a.start, b.start)
                 proglist.sort(f)
                 wakeup = proglist[index].start
-                _debug_('Scheduled recording %d at %s is %s' % (index, time.ctime(wakeup), proglist[index]))
+                logger.debug('Scheduled recording %d at %s is %s', index, time.ctime(wakeup), proglist[index])
         else:
             raise ExIndexNotAvailable
 
@@ -775,7 +775,7 @@ def __get_next_default_wakeup():
     @returns: UTC time of next default wakeup
     @raises ExNoDefaultWakeup: if default wakeup not available
     """
-    _debug_('__get_next_default_wakeup()', 2)
+    logger.log( 9, '__get_next_default_wakeup()')
     if not config.AUTOSHUTDOWN_DEFAULT_WAKEUP_TIME:
         raise ExNoDefaultWakeup
     else:
@@ -802,7 +802,7 @@ def __get_next_default_wakeup():
             )
         # convert next_def to utc seconds
         wakeup = time.mktime(next_def_loc_t)
-        _debug_('Default wakeup at %s' % time.ctime(wakeup))
+        logger.debug('Default wakeup at %s', time.ctime(wakeup))
     return wakeup
 
 
@@ -812,7 +812,7 @@ def __check_processes():
 
     @returns: True/False
     """
-    _debug_('__check_processes()', 2)
+    logger.log( 9, '__check_processes()')
     if not config.AUTOSHUTDOWN_PROCESS_LIST and not config.AUTOSHUTDOWN_PROCESS_CHECK:
         return False
     else:
@@ -821,18 +821,18 @@ def __check_processes():
         cmd = 'ps -eo cmd | egrep -v "grep" | egrep "(/|[[:space:]]|^)(%s)($|[[:space:]])"' % searchstring
         result = __syscall(cmd)
         if result == 0:
-            _debug_('external process(es) running')
+            logger.debug('external process(es) running')
             return True
         else:
-            _debug_('no external process(es) running')
+            logger.debug('no external process(es) running')
 
             if config.AUTOSHUTDOWN_PROCESS_CHECK is not None:
                 result = __syscall(config.AUTOSHUTDOWN_PROCESS_CHECK)
                 if result == 0:
-                    _debug_('AUTOSHUTDOWN_PROCESS_CHECK: external process(es) running')
+                    logger.debug('AUTOSHUTDOWN_PROCESS_CHECK: external process(es) running')
                     return True
                 else:
-                    _debug_('AUTOSHUTDOWN_PROCESS_CHECK: no external process(es) running')
+                    logger.debug('AUTOSHUTDOWN_PROCESS_CHECK: no external process(es) running')
                     return False
 
 
@@ -844,11 +844,11 @@ def __syscall(cmd, pretend=False):
     @param pretend: pretend to run the command
     @returns: result from the system command
     """
-    _debug_('__syscall(cmd=%r, pretend=%r)' % (cmd, pretend), 1)
+    logger.debug('__syscall(cmd=%r, pretend=%r)', cmd, pretend)
     result = 0
     if pretend:
-        _debug_('Pretending syscall: %s' % cmd)
+        logger.debug('Pretending syscall: %s', cmd)
     else:
-        _debug_('Executing syscall: %s' % cmd)
+        logger.debug('Executing syscall: %s', cmd)
         result = os.system(cmd)
     return result

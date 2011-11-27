@@ -297,7 +297,7 @@ class PluginInterface(plugin.DaemonPlugin):
         attempts = 3
         while attempts > 0:
             try:
-                _debug_("Sending data %r attempt=%d" % (data, 4-attempts), 2)
+                logger.log( 9, "Sending data %r attempt=%d", data, 4 - attempts)
                 time.sleep(self.sleepLength)
                 r=self.vfd.controlMsg(0x21,   # Message to Class Interface
                                0x09,
@@ -307,7 +307,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 return
             except Exception,e:
                 attempts -= 1
-                _debug_("%r attempt=%d" % (data, 4-attempts))
+                logger.debug("%r attempt=%d", data, 4 - attempts)
 
         raise e
 
@@ -322,8 +322,8 @@ class PluginInterface(plugin.DaemonPlugin):
         else:
             retval += "".join([type(x) == int and chr(x) or x for x in msgdata])
             retval += "\x00"*(7-len(msgdata))
-        _debug_('retval=%r, msgtype=%s, len(msgdata)=%s, msgdata=%s' % \
-            (retval, msgtype, len(msgdata), msgdata), 2)
+        logger.log( 9, 'retval=%r, msgtype=%s, len(msgdata)=%s, msgdata=%s', retval, msgtype, len(msgdata), msgdata)
+
         return retval
 
     def clear(self):
@@ -342,7 +342,7 @@ class PluginInterface(plugin.DaemonPlugin):
     def split(self, s, length, maxlength):
         """Split a string into chunks, but no longer than maxlength"""
         if len(s) > maxlength:
-            _debug_('Truncating \"%s\" longer than %d characters' % (s,maxlength), 2)
+            logger.log( 9, 'Truncating \"%s\" longer than %d characters', s, maxlength)
             s = s[:maxlength]
         s = s.center(maxlength)
         out = []
@@ -359,18 +359,18 @@ class PluginInterface(plugin.DaemonPlugin):
                 msgstring = Unicode(msgstring).encode('iso-8859-15')
         except UnicodeError:
             # Strange for some reason the name changes on play
-            _debug_('UnicodeError: %s' % [x for x in msgstring])
+            logger.debug('UnicodeError: %s', [xforxinmsgstring])
             #_debug_('%d' % [x for x in msgstring])
             #_debug_('%s' % [type(x) for x in msgstring])
 
         if self.last_message == msgstring:
             return
 
-        _debug_('message \"%s\"->\"%s\" cls=%s' % (self.last_message, msgstring, cls))
+        logger.debug('message \"%s\"->\"%s\" cls=%s', self.last_message, msgstring, cls)
         self.last_message = msgstring
 
         msgparts = self.split(msgstring, 7, self.maxStringLength)
-        _debug_('msgparts=%s' % (msgparts), 2)
+        logger.log( 9, 'msgparts=%s', msgparts)
 
         if cls:
             self.clear()
@@ -382,12 +382,12 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def icons(self):
         """Update icons to be shown"""
-        _debug_('device=%x media=%x recording=%x running=%x muted=%x volume=%x' % \
-            (self.device, self.media, self.recording, self.running, self.muted, self.volume), 2)
+        logger.log( 9, 'device=%x media=%x recording=%x running=%x muted=%x volume=%x', self.device, self.media, self.recording, self.running, self.muted, self.volume)
+
         self.bitmask = self.device | self.media | self.recording | self.running | self.muted | self.volume
         if self.bitmask == self.last_bitmask:
             return
-        _debug_('last_bitmask=\"%r\"->bitmask=\"%r\"' % (self.last_bitmask, self.bitmask), 2)
+        logger.log( 9, 'last_bitmask=\"%r\"->bitmask=\"%r\"', self.last_bitmask, self.bitmask)
         self.last_bitmask = self.bitmask
         self.send(self.msg(7,pack('I', self.bitmask)))
 
@@ -395,19 +395,19 @@ class PluginInterface(plugin.DaemonPlugin):
         """Sets the device"""
         if device != None:
             self.device = device
-        _debug_('device=%s, self.device=%s' % (device, self.device), 2)
+        logger.log( 9, 'device=%s, self.device=%s', device, self.device)
 
     def set_media(self, media=None):
         """Indicates if a CD/DVD is in the drive"""
         if media != None:
             self.media = media
-        _debug_('media=%s, self.media=%s' % (media, self.media))
+        logger.debug('media=%s, self.media=%s', media, self.media)
 
     def set_running(self, running=None):
         """Sets the running flag if running"""
         if running != None:
             self.running = running
-        _debug_('running=%s, self.running=%s' % (running, self.running), 2)
+        logger.log( 9, 'running=%s, self.running=%s', running, self.running)
 
     def set_recording(self, recording=None):
         """Sets the recoring flag if recoring"""
@@ -415,7 +415,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.recording = recording
         else:
             self.recording = (os.path.exists(self.tvlockfile) and Record) or 0
-        _debug_('recording=%s, self.recording=%s' % (recording, self.recording), 2)
+        logger.log( 9, 'recording=%s, self.recording=%s', recording, self.recording)
 
     def set_mixer(self, muted=None, volume=None):
         """Read the mixer state"""
@@ -430,13 +430,13 @@ class PluginInterface(plugin.DaemonPlugin):
             volume = self.mixer.getVolume()
         self.volume = int(((volume + 8.0) * 11.0) / 99.0) # 99 / 11 - 1 = 8
 
-        _debug_('muted=%s, self.muted=%s, volume=%s, self.volume=%s' % (muted, self.muted, volume, self.volume))
+        logger.debug('muted=%s, self.muted=%s, volume=%s, self.volume=%s', muted, self.muted, volume, self.volume)
 
     def widget_set(self, screen, widget, value):
         """Set the widget text"""
         #if widget != 'clock' and widget != 'time_v1' and widget != 'time_v2' and widget != 'time_v3' and widget != 'animation_v':
         if widget != 'clock' and widget != 'time_v2' and widget != 'time_v3' and widget != 'animation_v':
-            _debug_('screen=%s, widget=%s, value=%s' % (screen, widget, value))
+            logger.debug('screen=%s, widget=%s, value=%s', screen, widget, value)
         if screen == "welcome":
             pass
         elif screen == "menu":
@@ -467,7 +467,7 @@ class PluginInterface(plugin.DaemonPlugin):
         elif screen == "tv":
             self.set_device(Television)
         else:
-            _debug_('unknown screen screen=%s, widget=%s, value=%s' % (screen, widget, value), DERROR)
+            logger.error('unknown screen screen=%s, widget=%s, value=%s', screen, widget, value)
 
         if widget == "title":
             pass
@@ -498,7 +498,7 @@ class PluginInterface(plugin.DaemonPlugin):
         elif widget == "calendar":
             pass
         else:
-            _debug_('ERROR: unknown widget screen=%s, widget=%s, value=%s' % (screen, widget, value), DERROR)
+            logger.error('ERROR: unknown widget screen=%s, widget=%s, value=%s', screen, widget, value)
         self.icons()
 
     def __init__(self):
@@ -525,11 +525,11 @@ class PluginInterface(plugin.DaemonPlugin):
                 for (self.idVendor, self.idProduct) in self.usbIDs:
                     if dev.idVendor == self.idVendor and dev.idProduct == self.idProduct:
                         self.vfd = dev.open()
-                        _debug_('Found VFD on bus %s at device %s' % (bus.dirname,dev.filename), DINFO)
+                        logger.info('Found VFD on bus %s at device %s', bus.dirname, dev.filename)
                         break
 
         if not self.vfd:
-            _debug_("Cannot find VFD device", DERROR)
+            logger.error("Cannot find VFD device")
             self.disable = 1
             self.reason = "Cannot find VFD device"
             return
@@ -538,7 +538,7 @@ class PluginInterface(plugin.DaemonPlugin):
         # We need a mixer to set the volume level
         self.mixer = plugin.getbyname('MIXER')
         if not self.mixer:
-            _debug_("Cannot find MIXER", DERROR)
+            logger.error("Cannot find MIXER")
             self.disable = 1
             self.reason = "Cannot find MIXER"
             return
@@ -606,7 +606,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if not self.screens.has_key(sname):
             sname = 'menu'
 
-        _debug_('sname=%s, last_screen=%s' % (sname, self.last_screen), 2)
+        logger.log( 9, 'sname=%s, last_screen=%s', sname, self.last_screen)
         if sname != self.last_screen:
             # recreate screen
             # This is used to handle cases where the previous screen was dirty
@@ -741,10 +741,10 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 screens = layouts[ l ]
             except KeyError:
-                _debug_("Could not find screens for %d lines VFD!" % l, DERROR)
+                logger.error("Could not find screens for %d lines VFD!", l)
                 l -= 1
                 if l < 1:
-                    _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), DERROR)
+                    logger.error("No screens found for this VFD (%dx%d)!", self.height, self.width)
                     self.disable = 1
                     return
         # find a display with 'l' line and 'c' columns
@@ -752,10 +752,10 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 screens = layouts[ l ][ c ]
             except KeyError:
-                _debug_("Could not find screens for %d lines and %d columns VFD!" % (l, c), DERROR)
+                logger.error("Could not find screens for %d lines and %d columns VFD!", l, c)
                 c -= 1
                 if c < 1:
-                    _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), DERROR)
+                    logger.error("No screens found for this VFD (%dx%d)!", self.height, self.width)
                     self.disable = 1
                     return
 
@@ -765,7 +765,7 @@ class PluginInterface(plugin.DaemonPlugin):
         try:
             self.screens = screens = layouts[ l ][ c ]
         except KeyError:
-            _debug_("No screens found for this VFD (%dx%d)!" % (self.height, self.width), DERROR)
+            logger.error("No screens found for this VFD (%dx%d)!", self.height, self.width)
             self.disable = 1
             return
 
@@ -780,12 +780,12 @@ class PluginInterface(plugin.DaemonPlugin):
 
         for w in widgets:
             type, param, val = self.screens[ s ][ w ]
-            _debug_('self.screens[ %s ][ %s ]=%s' % (s,w,self.screens[ s ][ w ]), 2)
+            logger.log( 9, 'self.screens[ %s ][ %s ]=%s', s, w, self.screens[s][w])
 
 
     def eventhandler(self, event, menuw=None):
         update_bits = 0
-        _debug_('eventhandler(self, %s, %s) %s arg=%s' % (event, menuw, self, event.arg))
+        logger.debug('eventhandler(self, %s, %s) %s arg=%s', event, menuw, self, event.arg)
 
         if event == 'MIXER_MUTE':
             # it seems that the exent is received before the mixer has been set!
@@ -869,7 +869,7 @@ class PluginInterface(plugin.DaemonPlugin):
             pass
         else:
             #_debug_('eventhandler(self, %s, %s) %s arg=%s' % (event, menuw, self, event.arg))
-            _debug_('\"%s\" not handled' % (event))
+            logger.debug('\"%s\" not handled', event)
 
         if update_bits:
             self.icons()

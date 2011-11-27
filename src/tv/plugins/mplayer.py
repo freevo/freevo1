@@ -75,7 +75,7 @@ class MPlayer:
 
     def Play(self, mode, tuner_channel=None):
         """ """
-        _debug_('MPlayer.Play(mode=%r, tuner_channel=%r)' % (mode, tuner_channel), 2)
+        logger.log( 9, 'MPlayer.Play(mode=%r, tuner_channel=%r)', mode, tuner_channel)
         # Try to see if the channel is not tunable
         try:
             channel = int(tuner_channel)
@@ -144,8 +144,8 @@ class MPlayer:
                     if cur_std != new_std:
                         ivtv_dev.setstd(new_std)
                 except:
-                    _debug_('Error! Videogroup norm value "%s" not from NORMS: %s' \
-                        % (vg.tuner_norm,tv.v4l2.NORMS.keys()), DERROR)
+                    logger.error('Error! Videogroup norm value "%s" not from NORMS: %s', vg.tuner_norm, tv.v4l2.NORMS.keys())
+
                 ivtv_dev.close()
 
                 # Do not set the channel if negative
@@ -200,10 +200,10 @@ class MPlayer:
                 args['mode_args'] = config.MPLAYER_ARGS['tv'].split()
 
         else:
-            _debug_('Mode "%s" is not implemented' % mode, DERROR)
+            logger.error('Mode "%s" is not implemented', mode)
             return
 
-        _debug_('mplayer args = %r' % (args,))
+        logger.debug('mplayer args = %r', args)
 
         vo = ['%(vo)s' % args, '%(vo_opts)s' % args]
         vo = filter(len, vo)
@@ -262,7 +262,7 @@ class MPlayer:
         url = '%(url)s' % args
         command += [url]
 
-        _debug_('%r' % command)
+        logger.debug('%r', command)
 
         self.mode = mode
 
@@ -300,7 +300,7 @@ class MPlayer:
             mixer.setPcmVolume(mixer_vol)
 
         dialog.enable_overlay_display(AppTextDisplay(self.show_message))
-        _debug_('%s: started %s app' % (time.time(), self.mode))
+        logger.debug('%s: started %s app', time.time(), self.mode)
 
 
 
@@ -344,7 +344,7 @@ class MPlayer:
 
         elif event == em.PAUSE or event == em.PLAY:
             self.app.write('pause\n')
-            _debug_('%s: sending pause to mplayer' % (time.time()))
+            logger.debug('%s: sending pause to mplayer', time.time())
             return True
 
         elif event in [ em.TV_CHANNEL_UP, em.TV_CHANNEL_DOWN, em.TV_CHANNEL_LAST ] or s_event.startswith('INPUT_'):
@@ -377,7 +377,7 @@ class MPlayer:
                 nextchannum = self.fc.getManChannelNum(chan)
 
             nextvg = self.fc.getVideoGroup(nextchan, True)
-            _debug_('chan=%s, nextchannum=%s, nextchan=%s nextvg=%s' % (chan, nextchannum, nextchan, nextvg))
+            logger.debug('chan=%s, nextchannum=%s, nextchan=%s nextvg=%s', chan, nextchannum, nextchan, nextvg)
 
             if self.current_vg != nextvg:
                 self.Stop(channel_change=1)

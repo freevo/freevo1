@@ -50,8 +50,9 @@ class WeatherFetcher(Thread):
     def __init__(self, refreshinterval, metarcode, tempunits, cachefile):
         """ Initialise the thread """
         Thread.__init__(self)
-        _debug_('WeatherFetcher.__init__(refreshinterval=%r, metarcode=%r, tempunits=%r, cachefile=%r)' % (
-            refreshinterval, metarcode, tempunits, cachefile), 2)
+        logger.log( 9, 'WeatherFetcher.__init__(refreshinterval=%r, metarcode=%r, tempunits=%r, cachefile=%r)', 
+refreshinterval, metarcode, tempunits, cachefile)
+
         self.refreshinterval = refreshinterval
         self.metarcode = metarcode
         self.tempunits = tempunits
@@ -65,10 +66,10 @@ class WeatherFetcher(Thread):
         """
         Thread to fetch the weather and write the results to a cache file
         """
-        _debug_('WeatherFetcher(%r) thread started' % (self.metarcode,), 1)
+        logger.debug('WeatherFetcher(%r) thread started', self.metarcode)
         while not self.stopping:
             refreshtime = time.time() + self.refreshinterval
-            _debug_('WeatherFetcher(%r).run' % (self.metarcode,), 1)
+            logger.debug('WeatherFetcher(%r).run', self.metarcode)
             try:
                 rf = pymetar.ReportFetcher(self.metarcode)
                 rp = pymetar.ReportParser()
@@ -95,22 +96,22 @@ class WeatherFetcher(Thread):
                     cachefile.write(self.temperature + '\n')
                     cachefile.write(self.icon + '\n')
                     cachefile.close()
-                    _debug_('WeatherFetcher cache (%s %s)' % (self.temperature, self.icon), 1)
+                    logger.debug('WeatherFetcher cache (%s %s)', self.temperature, self.icon)
                 except IOError, why:
-                    _debug_('Failed to create %r: %s' % (self.cachefile, why), DWARNING)
+                    logger.warning('Failed to create %r: %s', self.cachefile, why)
 
             except Exception, why:
                 import traceback
                 traceback.print_exc()
-                _debug_(why, DERROR)
+                logger.error(why)
 
-            _debug_('WeatherFetcher(%r).ran' % (self.metarcode,), 1)
+            logger.debug('WeatherFetcher(%r).ran', self.metarcode)
 
             while time.time() < refreshtime:
                 if self.stopping:
                     break
                 time.sleep(1)
-        _debug_('WeatherFetcher(%r) thread finished' % (self.metarcode,), 1)
+        logger.debug('WeatherFetcher(%r) thread finished', self.metarcode)
 
 
 
@@ -129,7 +130,7 @@ class PluginInterface(IdleBarPlugin):
         """
         Initialise an instance of the PluginInterface
         """
-        _debug_('PluginInterface.__init__(zone=%r, units=%r)' % (zone, units), 2)
+        logger.log( 9, 'PluginInterface.__init__(zone=%r, units=%r)', zone, units)
         if not config.SYS_USE_NETWORK:
             self.reason = 'SYS_USE_NETWORK not enabled'
             return
@@ -153,7 +154,7 @@ class PluginInterface(IdleBarPlugin):
         """
         System Shutdown; stop the fetcher thread and wait for it to finish
         """
-        _debug_('shutdown()', 2)
+        logger.log( 9, 'shutdown()')
         self.fetcher.stopping = True
         self.fetcher.join()
 
@@ -163,7 +164,7 @@ class PluginInterface(IdleBarPlugin):
         We don't want to do this every 30 seconds, so we need
         to cache the date somewhere.
         """
-        _debug_('checkweather()', 2)
+        logger.log( 9, 'checkweather()')
         temperature, icon = '?', 'na.png'
         try:
             if os.path.isfile(self.cachefile):
@@ -172,7 +173,7 @@ class PluginInterface(IdleBarPlugin):
                 temperature, icon = newlist
                 cachefd.close()
         except Exception, why:
-            _debug_(why, DERROR)
+            logger.error(why)
         return temperature, icon
 
 
@@ -198,7 +199,7 @@ class PluginInterface(IdleBarPlugin):
         Draw the icon and temperature on the idlebar
         @returns: width of the icon
         """
-        _debug_('draw((type=%r, object=%r), x=%r, osd=%r)' % (type, object, x, osd), 2)
+        logger.log( 9, 'draw((type=%r, object=%r), x=%r, osd=%r)', type, object, x, osd)
         temp, icon = self.checkweather()
         image_file = os.path.join(config.ICON_DIR, 'weather', icon)
         w, h = imlib2.open(image_file).size

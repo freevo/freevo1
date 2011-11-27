@@ -136,7 +136,7 @@ class RegionScroller(Container):
 
 
     def scroll(self, direction):
-        _debug_('scrolldir: direction="%s"' % direction, 2)
+        logger.log( 9, 'scrolldir: direction="%s"', direction)
 
         if direction == INPUT_RIGHT:
             new_x = self.v_x + self.x_scroll_interval
@@ -221,7 +221,7 @@ class RegionScroller(Container):
         """
         GUIObject.set_position(self, left, top)
         if isinstance(self.border, Border):
-            _debug_("updating borders set_postion as well", 2)
+            logger.log( 9, "updating borders set_postion as well")
             self.border.set_position(left, top)
 
         # if self.show_h_scrollbar:

@@ -96,24 +96,24 @@ class PluginInterface(plugin.Plugin):
     """
 
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         plugin.Plugin.__init__(self)
         plugin.register(Recorder(), plugin.RECORD)
 
     def shutdown(self):
-        _debug_('PluginInterface.shutdown()')
+        logger.debug('PluginInterface.shutdown()')
 
 
 class Recorder:
     """
     """
     def __init__(self):
-        _debug_('Recorder.__init__()', 2)
+        logger.log( 9, 'Recorder.__init__()')
         # Disable this plugin if not loaded by record_server.
         if string.find(sys.argv[0], 'recordserver') == -1:
             return
 
-        _debug_('ACTIVATING VBI2SRT RECORD PLUGIN', DINFO)
+        logger.info('ACTIVATING VBI2SRT RECORD PLUGIN')
 
         self.vg = None
         self.fc = FreevoChannels()
@@ -125,12 +125,12 @@ class Recorder:
 
 
     def Record(self, rec_prog):
-        _debug_('Record(rec_prog=%r)' % (rec_prog,), 2)
+        logger.log( 9, 'Record(rec_prog=%r)', rec_prog)
         frequency = self.fc.chanSet(str(rec_prog.tunerid), False, 'record plugin')
 
         rec_prog.filename = tv_util.getProgFilename(rec_prog)
         rec_prog.filename = os.path.splitext(tv_util.getProgFilename(rec_prog))[0] + '.mpeg'
-        _debug_('filename=%r' % rec_prog.filename)
+        logger.debug('filename=%r', rec_prog.filename)
 
         self.vg = self.fc.getVideoGroup(rec_prog.tunerid, False)
 
@@ -146,16 +146,16 @@ class Recorder:
                        'pdc-start'  : rec_prog.pdc_start,
         }
 
-        _debug_('cl_options=%r' % cl_options)
-        _debug_('chan_index=%r' % self.fc.chan_index)
-        _debug_('vg.vdev=%r' % self.vg.vdev)
-        _debug_('vg.vvbi=%r' % self.vg.vvbi)
+        logger.debug('cl_options=%r', cl_options)
+        logger.debug('chan_index=%r', self.fc.chan_index)
+        logger.debug('vg.vdev=%r', self.vg.vdev)
+        logger.debug('vg.vvbi=%r', self.vg.vvbi)
         pagenum = None;
         try:
             pagenum = int(config.TV_CHANNELS[self.fc.chan_index][5])
         except:
             pagenum = None;
-        _debug_('pagenum=%r' % pagenum)
+        logger.debug('pagenum=%r', pagenum)
 
         if pagenum:
             # there is a bug in vbi2srt that causes out of sync subtitles when VPS is used
@@ -166,7 +166,7 @@ class Recorder:
             self.rec_command = \
                 'vbi2srt --verbose --video-in=%s --video-out=%s --vbi-device=%s --seconds=%s --vps=%s' % \
                 (self.vg.vdev, rec_prog.filename, self.vg.vvbi, rec_prog.rec_duration, rec_prog.pdc_start)
-        _debug_('rec_command=%r' % (self.rec_command,))
+        logger.debug('rec_command=%r', self.rec_command)
 
         self.thread.mode     = 'record'
         self.thread.prog     = rec_prog
@@ -176,7 +176,7 @@ class Recorder:
 
 
     def Stop(self):
-        _debug_('Stop()', 2)
+        logger.log( 9, 'Stop()')
         self.thread.mode = 'stop'
         self.thread.mode_flag.set()
 
@@ -186,11 +186,11 @@ class RecordApp(childapp.ChildApp):
     Record application class
     """
     def __init__(self, app):
-        _debug_('RecordApp.__init__(app=%r)' % (app), 2)
+        logger.log( 9, 'RecordApp.__init__(app=%r)', app)
         childapp.ChildApp.__init__(self, app, doeslogging=1)
 
     def kill(self):
-        _debug_('kill()', 2)
+        logger.log( 9, 'kill()')
         childapp.ChildApp.kill(self, signal.SIGINT)
 
 
@@ -199,7 +199,7 @@ class Record_Thread(threading.Thread):
     Record thread to handle the recording states
     """
     def __init__(self):
-        _debug_('Record_Thread.__init__()', 2)
+        logger.log( 9, 'Record_Thread.__init__()')
         threading.Thread.__init__(self)
 
         self.mode = 'idle'
@@ -210,9 +210,9 @@ class Record_Thread(threading.Thread):
         self.app = None
 
     def run(self):
-        _debug_('Record_Thread.run()', 2)
+        logger.log( 9, 'Record_Thread.run()')
         while 1:
-            _debug_('mode=%s' % self.mode)
+            logger.debug('mode=%s', self.mode)
             if self.mode == 'idle':
                 self.mode_flag.wait()
                 self.mode_flag.clear()
@@ -221,7 +221,7 @@ class Record_Thread(threading.Thread):
                 rc.post_event(Event('RECORD_START', arg=self.prog))
 
                 fc = FreevoChannels()
-                _debug_('channel %s' % fc.getChannel())
+                logger.debug('channel %s', fc.getChannel())
 
                 self.vg = fc.getVideoGroup(self.prog.tunerid, False)
 
@@ -229,29 +229,29 @@ class Record_Thread(threading.Thread):
 
                 v.init_settings()
 
-                _debug_('Using video device=%r' % self.vg.vdev)
+                logger.debug('Using video device=%r', self.vg.vdev)
 
-                _debug_('Setting Channel to %r' % self.prog.tunerid)
+                logger.debug('Setting Channel to %r', self.prog.tunerid)
                 fc.chanSet(str(self.prog.tunerid), False)
 
-                _debug_('command %r' % self.command)
+                logger.debug('command %r', self.command)
                 self.app = RecordApp(self.command)
-                _debug_('command pid: %s' % self.app.child.pid)
+                logger.debug('command pid: %s', self.app.child.pid)
 
                 while self.mode == 'record' and self.app.isAlive():
                     self.autokill -= 0.5
                     time.sleep(0.5)
                     if self.autokill <= 0:
-                        _debug_('autokill timeout, stopping recording')
+                        logger.debug('autokill timeout, stopping recording')
                         self.mode = 'stop'
 
                 if self.app.isAlive():
                     # might not want to do this is PDC is valid, programme may be delayed
-                    _debug_('past wait!!')
+                    logger.debug('past wait!!')
                     self.app.kill()
 
                 rc.post_event(Event('RECORD_STOP', arg=self.prog))
-                _debug_('finished recording')
+                logger.debug('finished recording')
 
                 self.mode = 'idle'
             else:

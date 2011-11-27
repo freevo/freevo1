@@ -76,18 +76,18 @@ class MPlayer:
         0 = unplayable
         """
         try:
-            _debug_('url=%r' % (item.url), 2)
-            _debug_('mode=%r' % (item.mode), 2)
-            _debug_('mimetype=%r' % (item.mimetype), 2)
+            logger.log( 9, 'url=%r', item.url)
+            logger.log( 9, 'mode=%r', item.mode)
+            logger.log( 9, 'mimetype=%r', item.mimetype)
         except Exception, e:
             pass
         if item.url.startswith('radio://'):
-            _debug_('%r unplayable' % (item.url))
+            logger.debug('%r unplayable', item.url)
             return 0
         if item.url.startswith('cdda://'):
-            _debug_('%r possible' % (item.url))
+            logger.debug('%r possible', item.url)
             return 1
-        _debug_('%r good' % (item.url))
+        logger.debug('%r good', item.url)
         return 2
 
 
@@ -109,7 +109,7 @@ class MPlayer:
         """
         play a audioitem with mplayer
         """
-        _debug_('%s.play(item=%r, playerGUI=%r)' % (self.__module__, item, playerGUI))
+        logger.debug('%s.play(item=%r, playerGUI=%r)', self.__module__, item, playerGUI)
         self.playerGUI = playerGUI
         filename       = item.filename
 
@@ -207,7 +207,7 @@ class MPlayer:
         try:
             for p in self.plugins:
                 if p.eventhandler(event):
-                    _debug_('%s handled by %s' % (event, p))
+                    logger.debug('%s handled by %s', event, p)
                     return True
         except Exception, why:
             import traceback
@@ -355,7 +355,7 @@ class MPlayerApp(childapp.ChildApp2):
         else:
             for keywords in self.STREAM_KEYWORDS:
                 if line.startswith(keywords[0]):
-                    _debug_("stream keyword found: %s %s" % (keywords[0], keywords[1]))
+                    logger.debug("stream keyword found: %s %s", keywords[0], keywords[1])
                     titleStart = len(keywords[0])
                     self.item.info[ keywords[1] ] = line[titleStart:]
                     break

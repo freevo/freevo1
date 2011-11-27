@@ -359,21 +359,21 @@ class XineIvtv:
             name = self.tuner.GetChannelName()
             start = time.localtime()
             self.StopTimer()
-            _debug_('XineIvtv.StartLiveRecording: Record from now on')
+            logger.debug('XineIvtv.StartLiveRecording: Record from now on')
         elif event == INPUT_2:
             # record from start of show
             self.recordmode = 1
             start_t, stop_t, name = self.tuner.GetInfo()
             start = time.localtime(start_t)
             self.StartTimer()
-            _debug_('XineIvtv.StartLiveRecording: Record from show start')
+            logger.debug('XineIvtv.StartLiveRecording: Record from show start')
         elif event == INPUT_3:
             # record from start of stream
             self.recordmode = 2
             name = self.tuner.GetChannelName()
             start = time.localtime()
             self.StopTimer()
-            _debug_('XineIvtv.StartLiveRecording: Record from stream start')
+            logger.debug('XineIvtv.StartLiveRecording: Record from stream start')
 
         if self.recordmode in [ 0, 1, 2 ]:
             # create fil ename and kick xine
@@ -383,7 +383,7 @@ class XineIvtv:
             filename = tvutil.progname2filename(filemask).rstrip(' -_:')
             self.xine.Record(self.recordmode, filename)
             self.xine.ShowMessage(_('Recording: %s' % String(name)))
-            _debug_('XineIvtv.StartLiveRecording: filename=%s' % String(filename))
+            logger.debug('XineIvtv.StartLiveRecording: filename=%s', String(filename))
 
 
     def StopLiveRecording(self):
@@ -394,7 +394,7 @@ class XineIvtv:
 
     def StartTimer(self):
         """ program the timer to start of next show on the current channel """
-        _debug_('XineIvtv.StartTimer: Start timer')
+        logger.debug('XineIvtv.StartTimer: Start timer')
 
         # set timer to mark the next program
         start_t, stop_t, prog_s = self.tuner.GetInfo()
@@ -404,20 +404,20 @@ class XineIvtv:
                 # add some padding in show record mode
                 stop_t = stop_t + config.TV_RECORD_PADDING_POST
             self.timer.start(stop_t)
-            _debug_('XineIvtv.StartTimer: Timer set to mark next program in: %s seconds' % stop_t)
+            logger.debug('XineIvtv.StartTimer: Timer set to mark next program in: %s seconds', stop_t)
         else:
             self.timer.stop()
-            _debug_('XineIvtv.StartTimer: Timer not set, stop_t not available')
+            logger.debug('XineIvtv.StartTimer: Timer not set, stop_t not available')
         self.tuner.ShowInfo()
 
     def StopTimer(self):
         """ stop timer """
-        _debug_('XineIvtv.StopTimer: Stop timer')
+        logger.debug('XineIvtv.StopTimer: Stop timer')
         self.timer.stop()
 
     def TimerHandler(self):
         """ handle timer event """
-        _debug_('XineIvtv.TimerHandler: Timer event, mark new show')
+        logger.debug('XineIvtv.TimerHandler: Timer event, mark new show')
         if self.recordmode in [ 1 ]:
             # stop recording when recording in show mode
             self.StopLiveRecording()
@@ -427,7 +427,7 @@ class XineIvtv:
 
     def Play(self, mode, channel=None, channel_change=0):
         """ Start the xine player """
-        _debug_('XineIvtv.Play(mode=%r, channel=%r, channel_change=%r)' % (mode, channel, channel_change), 1)
+        logger.debug('XineIvtv.Play(mode=%r, channel=%r, channel_change=%r)', mode, channel, channel_change)
 
         self.mode = mode
         rc.add_app(self)
@@ -446,22 +446,22 @@ class XineIvtv:
 
         dialog.enable_overlay_display(AppTextDisplay(self.xine.ShowMessage))
 
-        _debug_('Started %r app' % self.mode)
+        logger.debug('Started %r app', self.mode)
 
     def Stop(self):
         """ Stop the xine player """
-        _debug_('XineIvtv.Stop()', 1)
+        logger.debug('XineIvtv.Stop()')
         dialog.disable_overlay_display()
         self.mixer.Stop()
         self.tuner.Stop()
         self.xine.Stop()
         rc.remove_app(self)
         rc.post_event(PLAY_END)
-        _debug_('Stopped %r app' % self.mode)
+        logger.debug('Stopped %r app', self.mode)
 
     def eventhandler(self, event, menuw=None):
         """ Event handler """
-        _debug_('XineIvtv.eventhandler(event=%r)' % (event.name,), )
+        logger.debug('XineIvtv.eventhandler(event=%r)', event.name)
 
         if self.recordmode in [ 0, 1, 2 ]:
             # handle event while live recording is active
@@ -563,7 +563,7 @@ class XineIvtv:
             direction = 0
 
             if seeksteps == 0:
-                _debug_('Ignoring seek 0')
+                logger.debug('Ignoring seek 0')
             else:
                 if seeksteps < 0:
                     direction = -1
@@ -664,41 +664,41 @@ class TunerControl:
         """ push the current channel on the channel stack """
         if self.curr_channel is not None:
             self.stack.append(self.curr_channel)
-            _debug_('TunerControl: Pushed channel %s' % self.curr_channel)
-        _debug_('TunerControl: Channel stack = %s' % self.stack)
+            logger.debug('TunerControl: Pushed channel %s', self.curr_channel)
+        logger.debug('TunerControl: Channel stack = %s', self.stack)
 
     def UnpushChannel(self):
         """ remove the top channel from the channel stack """
         if len(self.stack) == 0:
-            _debug_('TunerControl: Channel stack is empty')
+            logger.debug('TunerControl: Channel stack is empty')
         else:
             channel = self.stack.pop()
-            _debug_('TunerControl: Unpushed channel %s' % channel)
-        _debug_('TunerControl: Channel stack = %s' % self.stack)
+            logger.debug('TunerControl: Unpushed channel %s', channel)
+        logger.debug('TunerControl: Channel stack = %s', self.stack)
 
     def PopChannel(self):
         """ pop the top channel from the channel stack and switch channel """
         if len(self.stack) == 0:
-            _debug_('TunerControl: Channel stack is empty')
+            logger.debug('TunerControl: Channel stack is empty')
         else:
             channel = self.stack.pop()
-            _debug_('TunerControl: Popped channel %s' % channel)
+            logger.debug('TunerControl: Popped channel %s', channel)
             self.SetVideoGroup(channel)
-        _debug_('TunerControl: Channel stack = %s' % self.stack)
+        logger.debug('TunerControl: Channel stack = %s', self.stack)
 
     def SwapChannel(self):
         """swap the current display channel and the top of the stack channel """
         if self.curr_channel is not None:
             toswap = self.curr_channel
             if len(self.stack) == 0:
-                _debug_('TunerControl: Channel stack is empty')
+                logger.debug('TunerControl: Channel stack is empty')
             else:
                 channel = self.stack.pop()
-                _debug_('TunerControl: Popped channel %s' % channel)
+                logger.debug('TunerControl: Popped channel %s', channel)
                 self.SetVideoGroup(channel)
                 self.stack.append(toswap)
-                _debug_('TunerControl: Pushed channel %s' % toswap)
-        _debug_('TunerControl: Channel stack = %s' % self.stack)
+                logger.debug('TunerControl: Pushed channel %s', toswap)
+        logger.debug('TunerControl: Channel stack = %s', self.stack)
 
 
     def SetChannelByName(self, channel=None, clearstack=False):
@@ -727,34 +727,34 @@ class TunerControl:
             pass
 
         if next_channel is None:
-            _debug_('TunerControl: Cannot find tuner channel %r in the TV channel listing' % channel, DWARNING)
+            logger.warning('TunerControl: Cannot find tuner channel %r in the TV channel listing', channel)
         else:
             self.SetChannelByIndex(channel_index + 1)
 
     def SetChannelByIndex(self, channel, tvlike=0):
         """ tune to a channel by index from the TV_CHANNELS list """
         next_channel = self.fc.getManChannel(channel, tvlike)
-        _debug_('TunerControl: Explicit channel selection by index = %r' % next_channel)
+        logger.debug('TunerControl: Explicit channel selection by index = %r', next_channel)
         self.PushChannel()
         self.SetVideoGroup(next_channel)
 
     def SetChannelByNumber(self, channel):
         """ tune to a channel by actual channel number """
-        _debug_('TunerControl: Explicit channel selection by number = %r' % channel)
+        logger.debug('TunerControl: Explicit channel selection by number = %r', channel)
         self.PushChannel()
         self.SetVideoGroup(channel)
 
     def NextChannel(self):
         """ jump to the next channel in the TV_CHANNELS list """
         next_channel = self.fc.getNextChannel()
-        _debug_('TunerControl: Next channel selection = %r' % next_channel)
+        logger.debug('TunerControl: Next channel selection = %r', next_channel)
         self.PushChannel()
         self.SetVideoGroup(next_channel)
 
     def PrevChannel(self):
         """ jump to the previous channel in the TV_CHANNELS list """
         prev_channel = self.fc.getPrevChannel()
-        _debug_('TunerControl: Previous channel selection = %r' % prev_channel)
+        logger.debug('TunerControl: Previous channel selection = %r', prev_channel)
         self.PushChannel()
         self.SetVideoGroup(prev_channel)
 
@@ -764,13 +764,13 @@ class TunerControl:
             channel_num = int(channel)
         except ValueError:
             channel_num = 0
-        _debug_('TunerControl: Channel: %r' % channel)
+        logger.debug('TunerControl: Channel: %r', channel)
         new_vg = self.fc.getVideoGroup(channel, True)
-        _debug_('TunerControl: Group: type=%r, desc=%r' % (new_vg.group_type, new_vg.desc))
-        _debug_('TunerControl: Input: type=%r, num=%r' % (new_vg.input_type, new_vg.input_num))
+        logger.debug('TunerControl: Group: type=%r, desc=%r', new_vg.group_type, new_vg.desc)
+        logger.debug('TunerControl: Input: type=%r, num=%r', new_vg.input_type, new_vg.input_num)
 
         if new_vg.group_type != 'ivtv':
-            _debug_('TunerControl: VideoGroup %s is not supported' % new_vg, DERROR)
+            logger.error('TunerControl: VideoGroup %s is not supported', new_vg)
             pop = AlertBox(text=_('This plugin only supports the ivtv video group!'))
             pop.show()
             return
@@ -781,7 +781,7 @@ class TunerControl:
 
         if switch_vg:
             # switch to a different video group
-            _debug_('TunerControl: Set VideoGroup: %s' % new_vg, DINFO)
+            logger.info('TunerControl: Set VideoGroup: %s', new_vg)
             ivtv_dev = ivtv.IVTV(new_vg.vdev)
             ivtv_dev.init_settings()
             self.xine.SetInput(new_vg.input_num)
@@ -801,11 +801,11 @@ class TunerControl:
 
             if freq != 0:
                 # channel has frequency
-                _debug_('TunerControl: Set frequency: %s' % freq)
+                logger.debug('TunerControl: Set frequency: %s', freq)
                 self.xine.SetFrequency(freq)
             else:
                 # channel has no frequency
-                _debug_('TunerControl: Channel has no frequency')
+                logger.debug('TunerControl: Channel has no frequency')
 
             self.curr_channel = channel
             self.xine.SeekEnd()
@@ -833,14 +833,14 @@ class TunerControl:
         except ValueError:
             pass
 
-        _debug_('SetAudioByChannel: Channel: %r TV_CHANNEL pos(%d)' % (channel, channel_index))
+        logger.debug('SetAudioByChannel: Channel: %r TV_CHANNEL pos(%d)', channel, channel_index)
         vg = self.fc.getVideoGroup(channel, True)
         try:
             ivtv_avol = vg.avol
         except AttributeError:
             ivtv_avol = 0
         if ivtv_avol <= 0:
-            _debug_('SetAudioByChannel: The tv_video group for %r doesn\'t set the volume' % channel)
+            logger.debug('SetAudioByChannel: The tv_video group for %r doesn\'t set the volume', channel)
         else:
             # Is there a specific volume level in TV_CHANNELS_VOLUME
             ivtv_dev = ivtv.IVTV(vg.vdev)
@@ -864,10 +864,10 @@ class TunerControl:
                 avol = 65535
             if avol < 0:
                 avol = 0
-            _debug_('SetAudioByChannel: Current PVR Sound level is : %s' % ivtv_dev.getctrl(0x00980905))
-            _debug_('SetAudioByChannel: Set the PVR Sound Level to : %s (%s * %s)' % (avol, ivtv_avol, avol_percent))
+            logger.debug('SetAudioByChannel: Current PVR Sound level is : %s', ivtv_dev.getctrl(0x00980905))
+            logger.debug('SetAudioByChannel: Set the PVR Sound Level to : %s (%s * %s)', avol, ivtv_avol, avol_percent)
             ivtv_dev.setctrl(0x00980905, avol)
-            _debug_('SetAudioByChannel: New PVR Sound level is : %s' % ivtv_dev.getctrl(0x00980905))
+            logger.debug('SetAudioByChannel: New PVR Sound level is : %s', ivtv_dev.getctrl(0x00980905))
 
 
 class MixerControl:
@@ -917,15 +917,15 @@ class XineApp(childapp.ChildApp2):
     """
     def __init__(self, app):
         """ XineApp constructor """
-        _debug_('XineApp.__init__(app=%r)' % (app,), 1)
+        logger.debug('XineApp.__init__(app=%r)', app)
         childapp.ChildApp2.__init__(self, app)
         self.exit_type = None
 
     def stdout_cb(self, line):
-        _debug_('XineApp.stdout_cb() = %r' % (line,), 1)
+        logger.debug('XineApp.stdout_cb() = %r', line)
 
     def write(self, line):
-        _debug_('XineApp.write = %r' % (line,), 1)
+        logger.debug('XineApp.write = %r', line)
         childapp.ChildApp2.write(self, line)
 
 
@@ -935,7 +935,7 @@ class XineControl:
     """
     def __init__(self):
         """ XineControl constructor """
-        _debug_('XineControl.__init__()', 1)
+        logger.debug('XineControl.__init__()')
         self.app = None
         self.session_id = 0
         self.notahead = False
@@ -948,15 +948,15 @@ class XineControl:
             xinecmd = ''
             self.fbxine = False
 
-        _debug_('XineControl: configuration overview')
-        _debug_('    config.CONF.xine = %r' % config.CONF.xine)
-        _debug_('    config.XINE_COMMAND = %r' % config.XINE_COMMAND)
-        _debug_('    config.XINE_ARGS_DEF = %r' % config.XINE_ARGS_DEF)
-        _debug_('    config.XINE_TV_VO_DEV = %r' % config.XINE_TV_VO_DEV)
-        _debug_('    config.XINE_TV_AO_DEV = %r' % config.XINE_TV_AO_DEV)
-        _debug_('    config.XINE_TV_TIMESHIFT_FILEMASK = %r' % config.XINE_TV_TIMESHIFT_FILEMASK)
-        _debug_('    effective xinecmd = %r' % xinecmd)
-        _debug_('    effective self.fbxine = %r' % self.fbxine)
+        logger.debug('XineControl: configuration overview')
+        logger.debug('    config.CONF.xine = %r', config.CONF.xine)
+        logger.debug('    config.XINE_COMMAND = %r', config.XINE_COMMAND)
+        logger.debug('    config.XINE_ARGS_DEF = %r', config.XINE_ARGS_DEF)
+        logger.debug('    config.XINE_TV_VO_DEV = %r', config.XINE_TV_VO_DEV)
+        logger.debug('    config.XINE_TV_AO_DEV = %r', config.XINE_TV_AO_DEV)
+        logger.debug('    config.XINE_TV_TIMESHIFT_FILEMASK = %r', config.XINE_TV_TIMESHIFT_FILEMASK)
+        logger.debug('    effective xinecmd = %r', xinecmd)
+        logger.debug('    effective self.fbxine = %r', self.fbxine)
 
         if self.fbxine:
             self.command = '%s %s --stdctl pvr://%s' % \
@@ -968,34 +968,34 @@ class XineControl:
 
     def ShowMessage(self, msg):
         """ display a message in the xine player """
-        _debug_('XineControl.ShowMessage=%r' % (msg,), 1)
+        logger.debug('XineControl.ShowMessage=%r', msg)
         if config.XINE_TV_INDENT_OSD:
             msg = '    %s' % msg
         self.app.write('OSDWriteText$%s\n' % String(msg))
 
     def ShowMenu(self, menu):
         """ display a menu in the xine player """
-        _debug_('XineControl.ShowMenu=%r' % (menu,), 1)
+        logger.debug('XineControl.ShowMenu=%r', menu)
         self.app.write("OSDShowCustomMenu$%s\n" % menu)
 
     def HideMenu(self):
         """ hide menu in the xine player """
-        _debug_('XineControl.HideMenu', 1)
+        logger.debug('XineControl.HideMenu')
         self.app.write("OSDHideCustomMenu\n")
 
     def SetInput(self, input):
         """ set a different input """
-        _debug_('XineControl.SetInput=%r' % (input,), 1)
+        logger.debug('XineControl.SetInput=%r', input)
         self.app.write('PVRSetInput#%s\n' % input)
 
     def SetFrequency(self, freq):
         """ set a different frequency """
-        _debug_('XineControl.SetFrequency=%r' % (freq,), 1)
+        logger.debug('XineControl.SetFrequency=%r', freq)
         self.app.write('PVRSetFrequency#%s\n' % freq)
 
     def SetMark(self):
         """ set a mark in the video stream """
-        _debug_('XineControl.SetMark()')
+        logger.debug('XineControl.SetMark()')
         if self.ispaused:
             self.Pause()
 
@@ -1004,7 +1004,7 @@ class XineControl:
 
     def Seek(self, direction, steps):
         """ Skip in stream """
-        _debug_('XineControl.Seek(direction=%r, steps=%r)' % (direction, steps))
+        logger.debug('XineControl.Seek(direction=%r, steps=%r)', direction, steps)
         if direction < 0:
             self.app.write('%s#%s\n' % ('SeekRelative-', steps))
         if direction > 0:
@@ -1015,7 +1015,7 @@ class XineControl:
         The notahead flag indicates if the user has used the pause or rewind
         buttons. That implies that the seek is needed.
         """
-        _debug_('XineControl.SeekEnd()')
+        logger.debug('XineControl.SeekEnd()')
         if self.ispaused:
             self.Pause()
         if self.notahead:
@@ -1024,25 +1024,25 @@ class XineControl:
 
     def Start(self):
         """ start playing """
-        _debug_('XineControl.Start()')
+        logger.debug('XineControl.Start()')
         self.app = XineApp(self.command)
         self.ispaused = False
 
     def Pause(self):
         """ pause playing """
-        _debug_('XineControl.Pause() / Unpause')
+        logger.debug('XineControl.Pause() / Unpause')
         self.app.write('pause\n')
         self.ispaused = not self.ispaused
         self.notahead = True
 
     def Record(self, mode, name):
         """ record stream """
-        _debug_('XineControl.Record(mode=%r, name=%r)' % (mode, name,))
+        logger.debug('XineControl.Record(mode=%r, name=%r)', mode, name)
         self.app.write('PVRSave#%s\n' % mode)
         self.app.write('PVRSetName$%s\n' % name)
 
     def Stop(self):
         """ stop playing """
-        _debug_('XineControl.Stop()')
+        logger.debug('XineControl.Stop()')
         self.app.stop('quit\n')
-        _debug_('XineControl: Xine ended')
+        logger.debug('XineControl: Xine ended')

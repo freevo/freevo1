@@ -234,7 +234,7 @@ class SnesItem(Item):
             if unzipped:
                 os.unlink(unzipped)
 
-            _debug_('SNES rom name: %s - %s -> %s' % (ord(self['romCountry']),os.path.basename(file), self['romName']))
+            logger.debug('SNES rom name: %s - %s -> %s', ord(self['romCountry']), os.path.basename(file), self['romName'])
 
             # Allocate the name according to the country by checking the rom name againts ASCII codes
             if snesromLicences.has_key(ord(self['romLic'])):
@@ -281,7 +281,7 @@ class SnesItem(Item):
                 break
             # Break now if CHECKSUM is OK
             if (romICHK | romCHK) == 0xFFFF:
-                _debug_('SNES rom header detected at offset : %d!!!!' % offset)
+                logger.debug('SNES rom header detected at offset : %d!!!!', offset)
                 break
         else:
             for offset in snesromFileOffset:
@@ -297,7 +297,7 @@ class SnesItem(Item):
                     break
                 # Some times, the ROM is OK, but the checksum is incorrect, so we do a very dummy ASCII detection
                 if match('[a-zA-Z0-9 ]{4}', romName[0:4]) != None:
-                    _debug_('SNES rom header detected by ASCII name : %d!!!!' % offset)
+                    logger.debug('SNES rom header detected by ASCII name : %d!!!!', offset)
                     break
         return (romName,romHL,romMem,romROM,romSRAM,romCountry,romLic,romVer,romICHK,romCHK)
 

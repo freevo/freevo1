@@ -116,7 +116,7 @@ class ApodcastItem(Item):
 
 
     def play(self, arg=None, menuw=None):
-        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
+        logger.debug('%s.play(arg=%r, menuw=%r)', self.__module__, arg, menuw)
         self.elapsed = 0
         if not self.menuw:
             self.menuw = menuw
@@ -130,7 +130,7 @@ class ApodcastItem(Item):
 
 
     def confirm (self, arg=None, menuw=None):
-        _debug_('confirm (self, arg=%r, menuw=%r)' % (arg, menuw))
+        logger.debug('confirm (self, arg=%r, menuw=%r)', arg, menuw)
         if menuw:
             menuw.menu_back()
 
@@ -231,7 +231,7 @@ class ApodcastMainMenuItem(MenuItem):
             print >> save, file
             save.close()
         except Exception, why:
-            _debug_('Cannot read url %r: %s' % (url, why), DWARNING)
+            logger.warning('Cannot read url %r: %s', url, why)
 
 
     def check_logo(self, logo_file):

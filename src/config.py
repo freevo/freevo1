@@ -416,7 +416,7 @@ if not IS_PROMPT:
         print '%s' % e
         logfile = '/dev/null'
 
-    logging.basicConfig(level=LOGGING, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    logging.basicConfig(level=LOGGING, format='%(asctime)s - %(threadName)s - %(name)s - %(levelname)s - %(message)s',
                         filename=logfile, filemode='a')
 
     old_stdout = sys.stdout

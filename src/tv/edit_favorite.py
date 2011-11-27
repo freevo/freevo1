@@ -69,8 +69,8 @@ class EditFavorite(PopupBox):
         @ivar height:  height in pixels, Integer
         @ivar context: context in which the object is instantiated
         """
-        _debug_('EditFavorite.__init__(parent=%r, subject=%r, left=%r, top=%r, width=%r, height=%r, context=%r)' % \
-            (parent, subject, left, top, width, height, context), 1)
+        logger.debug('EditFavorite.__init__(parent=%r, subject=%r, left=%r, top=%r, width=%r, height=%r, context=%r)', parent, subject, left, top, width, height, context)
+
 
         self.oldname = None
         if context:
@@ -192,7 +192,7 @@ class EditFavorite(PopupBox):
 
 
     def removeFavorite(self):
-        _debug_('removeFavorite()', 2)
+        logger.log( 9, 'removeFavorite()')
         (result, reason) = self.recordclient.removeFavoriteNow(self.oldname)
         if result:
             searcher = None
@@ -212,7 +212,7 @@ class EditFavorite(PopupBox):
 
 
     def eventhandler(self, event, menuw=None):
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
+        logger.log( 9, 'eventhandler(event=%r, menuw=%r)', event, menuw)
 
         if self.get_selected_child() == self.name_input:
             if event == em.INPUT_LEFT:

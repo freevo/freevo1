@@ -145,7 +145,7 @@ class YTFlashPlayer:
         eventhandler for mplayer control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-        _debug_('%s.eventhandler(event=%s)' % (self.__class__, event))
+        logger.debug('%s.eventhandler(event=%s)', self.__class__, event)
         
         if not self.app:
             return self.item.eventhandler(event)

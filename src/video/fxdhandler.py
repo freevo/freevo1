@@ -96,7 +96,7 @@ def parse_movie(fxd, node):
         try:
             item.image = vfs.abspath(os.path.join(dirname, str(item.image)))
         except UnicodeEncodeError:
-            _debug_('os.path.join(dirname=%r, item.image=%r)' % (dirname, item.image))
+            logger.debug('os.path.join(dirname=%r, item.image=%r)', dirname, item.image)
             raise
         image = item.image
 
@@ -202,7 +202,7 @@ def parse_movie(fxd, node):
             id, url, item.media_id, item.mplayer_options, player, is_playlist = parse_video_child(
                 fxd, video[0], dirname)
         except (IndexError, TypeError), why:
-            _debug_('%r is corrupt' % (fxd.filename,), DWARNING)
+            logger.warning('%r is corrupt', fxd.filename)
             raise
         if url.startswith('file://') and os.path.isfile(url[7:]):
             variables = item.info.get_variables()
@@ -365,7 +365,7 @@ def parse_mplayer_options(fxd, node):
     @returns: a dictionary of mplayer options
     """
     mplayer_options = {}
-    _debug_('parse_mplayer_mplayer_options(fxd=%r, node=%r)' % (fxd, node), 2)
+    logger.log( 9, 'parse_mplayer_mplayer_options(fxd=%r, node=%r)', fxd, node)
     item = VideoItem('', fxd.getattr(None, 'parent', None), parse=False)
     print 'item=%r' % (item.__dict__)
 

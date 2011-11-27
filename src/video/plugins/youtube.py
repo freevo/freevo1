@@ -151,7 +151,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     | YOUTUBE_REGION_CODE see http://code.google.com/apis/youtube/2.0/reference.html#Region_specific_feeds
     """
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         if not config.SYS_USE_NETWORK:
             self.reason = 'SYS_USE_NETWORK not enabled'
             return
@@ -164,7 +164,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
     def config(self):
         """returns the config variables used by this plugin"""
-        _debug_('config()', 2)
+        logger.log( 9, 'config()')
         return [
             ('YOUTUBE_VIDEOS', [("top_rated", "Top rated"),
                                 ("top_favorites", "Top favorites"),
@@ -183,7 +183,7 @@ class PluginInterface(plugin.MainMenuPlugin):
 
 
     def items(self, parent):
-        _debug_('items(parent=%r)' % (parent), 2)
+        logger.log( 9, 'items(parent=%r)', parent)
         return [ YoutubeVideo(parent) ]
 
 
@@ -262,7 +262,7 @@ class YoutubeVideo(Item):
     """Main Class"""
 
     def __init__(self, parent):
-        _debug_('YoutubeVideo.__init__(parent=%r)' % (parent), 2)
+        logger.log( 9, 'YoutubeVideo.__init__(parent=%r)', parent)
         # look for a default player
         for p in plugin.getbyname(plugin.VIDEO_PLAYER, True):
             if config.VIDEO_PREFERED_PLAYER == p.name:
@@ -275,13 +275,13 @@ class YoutubeVideo(Item):
 
     def actions(self):
         """Only one action, return user list"""
-        _debug_('actions()', 2)
+        logger.log( 9, 'actions()')
         return [ (self.userlist, 'Video youtube') ]
 
 
     def userlist(self, arg=None, menuw=None):
         """Menu for choose user"""
-        _debug_('userlist(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'userlist(arg=%r, menuw=%r)', arg, menuw)
         users = []
         for item in config.YOUTUBE_VIDEOS:
             users.append(menu.MenuItem(item[1], self.videolist, item))
@@ -290,14 +290,14 @@ class YoutubeVideo(Item):
 
 
     def search_video(self, arg=None, menuw=None):
-        _debug_('search_video(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'search_video(arg=%r, menuw=%r)', arg, menuw)
         txt = TextEntryScreen((_('Search'), self.search_list), _('Search'))
         txt.show(menuw)
 
 
     def videolist(self, arg=None, menuw=None):
         """Menu for video"""
-        _debug_('videolist(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'videolist(arg=%r, menuw=%r)', arg, menuw)
         video_type = "uploaded"
         if len(arg) > 2 and arg[2]:
             video_type = arg[2]
@@ -306,7 +306,7 @@ class YoutubeVideo(Item):
 
     def search_list(self, menuw, text=''):
         """Get the video list for a specific search"""
-        _debug_('search_list(self=%r, menuw=%r, text=%r)' % (self, menuw, text), 2)
+        logger.log( 9, 'search_list(self=%r, menuw=%r, text=%r)', self, menuw, text)
         text=text.replace(' ', '/')
         feed = 'http://gdata.youtube.com/feeds/videos/-/' + text
         menuw.pushmenu(self.get_feed_menu(feed))
@@ -354,7 +354,7 @@ def get_youtube_handler(request, ytid):
             while buf:
                 buf = out.read(1)
                 if buf =='\n' or buf == '\r':
-                    _debug_('DOWNLOAD: %r' % line)
+                    logger.debug('DOWNLOAD: %r', line)
                     line = ''
                 else:
                     line += buf

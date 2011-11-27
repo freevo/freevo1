@@ -314,7 +314,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     def __init__(self):
         """
         """
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         if not config.USE_NETWORK:
             self.reason = 'USE_NETWORK not enabled'
             return
@@ -349,7 +349,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     def config(self):
         """
         """
-        _debug_('config()', 2)
+        logger.log( 9, 'config()')
         return [
             ('ZONEMINDER_CONFIG', '/etc/zm.config', 'Location of the Zonminder configuration file'),
             ('ZONEMINDER_EVENTS_DIR', '/var/www/events', 'Location of the events'),
@@ -370,7 +370,7 @@ class PluginInterface(plugin.MainMenuPlugin):
     def items(self, parent):
         """
         """
-        _debug_('items(self, parent)', 2)
+        logger.log( 9, 'items(self, parent)')
         config.ZONEMINDER_SERVER_PASSWORD_HASH = self.zm.hashPassword(config.ZONEMINDER_SERVER_PASSWORD)
         return [ ZoneMinderMainMenu(parent, self.zm) ]
 

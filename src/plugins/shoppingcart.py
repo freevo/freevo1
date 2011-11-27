@@ -143,7 +143,7 @@ class PluginInterface(plugin.ItemPlugin):
             # only activate this for directory items
             return []
 
-        _debug_('item=%s, type=%s, cart=%s' % (item, item.type, self.cart), 2)
+        logger.log( 9, 'item=%s, type=%s, cart=%s', item, item.type, self.cart)
         if item.type == 'dir':
             if len(self.cart) > 0:
                 for c in self.cart:

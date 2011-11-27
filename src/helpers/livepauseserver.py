@@ -117,7 +117,7 @@ class RemoteBackend(LocalBackend):
             try:
                 self.client.rpc('send_event', to_send)
             except:
-                _debug_('Failure sending event to client!')
+                logger.debug('Failure sending event to client!')
 
     def disconnected(self):
         self.client = None
@@ -136,7 +136,7 @@ def main():
     if not hasattr(config, 'LIVE_PAUSE2_PORT'):
         config.LIVE_PAUSE2_PORT = MEDIA_SERVER_PORT
 
-    _debug_('socket=%r, secret=%r' % (socket, secret))
+    logger.debug('socket=%r, secret=%r', socket, secret)
 
     server = RemoteBackend()
 
@@ -147,9 +147,9 @@ def main():
 
     rpc.register(server)
 
-    _debug_('kaa.main starting')
+    logger.debug('kaa.main starting')
     kaa.main.run()
-    _debug_('kaa.main finished')
+    logger.debug('kaa.main finished')
 
 
 if __name__ == '__main__':
@@ -160,13 +160,13 @@ if __name__ == '__main__':
     sys.stderr = config.Logger(sys.argv[0] + ':stderr')
 
     try:
-        _debug_('main() starting')
+        logger.debug('main() starting')
         main()
-        _debug_('main() finished')
+        logger.debug('main() finished')
     except SystemExit:
-        _debug_('main() stopped')
+        logger.debug('main() stopped')
         pass
     except Exception, why:
         import traceback
         traceback.print_exc()
-        _debug_(why, DWARNING)
+        logger.warning(why)

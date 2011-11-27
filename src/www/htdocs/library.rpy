@@ -474,7 +474,7 @@ class LibraryResource(FreevoResource):
                     try:
                         info = metadata.parse(item)
                     except Exception, why:
-                        _debug_(why, DWARNING)
+                        logger.warning(why)
                         continue
                     len_file = os.stat(item)[6]
                     #check for fxd file and other info

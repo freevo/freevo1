@@ -82,7 +82,7 @@ class ImageItem(Item):
             except:
                 pass
 
-        _debug_("__getitem__(self=%s, key=%s, res=%r)" % (self.filename, key, Item.__getitem__(self, key)), 2)
+        logger.log( 9, "__getitem__(self=%s, key=%s, res=%r)", self.filename, key, Item.__getitem__(self, key))
         return Item.__getitem__(self, key)
 
 
@@ -90,7 +90,7 @@ class ImageItem(Item):
         """
         Returns the string how to sort this item
         """
-        _debug_("sort(self, mode=%s)" % (mode), 2)
+        logger.log( 9, "sort(self, mode=%s)", mode)
         if mode == 'date':
             return u'%s%s' % (os.stat(self.filename).st_ctime, Unicode(self.filename))
         return Unicode(self.filename)
@@ -100,7 +100,7 @@ class ImageItem(Item):
         """
         return a list of possible actions on this item.
         """
-        _debug_("actions(self)", 2)
+        logger.log( 9, "actions(self)")
         return [ ( self.view, _('View Image') ) ]
 
 
@@ -108,7 +108,7 @@ class ImageItem(Item):
         """
         caches (loads) the next image
         """
-        _debug_("cache(self)", 2)
+        logger.log( 9, "cache(self)")
         viewer.get_singleton().cache(self)
 
 
@@ -116,7 +116,7 @@ class ImageItem(Item):
         """
         view the image
         """
-        _debug_("view(self, arg=%s, menuw=%s)" % (arg, menuw), 2)
+        logger.log( 9, "view(self, arg=%s, menuw=%s)", arg, menuw)
         if not self.menuw:
             self.menuw = menuw
         self.parent.current_item = self

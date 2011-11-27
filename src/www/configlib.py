@@ -100,7 +100,7 @@ def getpid(name, arg):
 def GetItemsArray(cvalue):
     """
     """
-    _debug_('GetItemsArray(cvalue=%r)' % (cvalue), 2)
+    logger.log( 9, 'GetItemsArray(cvalue=%r)', cvalue)
     itemlist = None
     cmd = 'itemlist = ' + cvalue
     if CheckSyntax(cmd):
@@ -132,7 +132,7 @@ def ErrorMessage (setting_name, control_name,  ctrl_value):
 def isNumber(s):
     """
     """
-    _debug_('isNumber(s=%r) % (s)', 2)
+    logger.log( 9, 'isNumber(s=%r) % (s)')
     try:
         i = int(s)
         return True
@@ -143,7 +143,7 @@ def isNumber(s):
 def DirTypeVar(cname):
     """
     """
-    _debug_('FileTypeVar(cname)', 2)
+    logger.log( 9, 'FileTypeVar(cname)')
     vtype = cname.split('_')[-1]
     filevars = ['RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'FREEVO_LOGDIR', 'TV_LOGOS']
 
@@ -156,7 +156,7 @@ def DirTypeVar(cname):
 def FileTypeVarArray(cname):
     """
     """
-    _debug_('FileTypeVarArray(cname=%r)' % (cname), 2)
+    logger.log( 9, 'FileTypeVarArray(cname=%r)', cname)
     filevars = ['VIDEO_ITEMS', 'AUDIO_ITEMS', 'IMAGE_ITEMS', 'GAME_ITEMS']
 
     if cname in filevars:
@@ -167,7 +167,7 @@ def FileTypeVarArray(cname):
 def FileTypeVar(cname):
     """
     """
-    _debug_('FileTypeVar(cname)', 2)
+    logger.log( 9, 'FileTypeVar(cname)')
     vtype = cname.split('_')[-1]
     filetypes = ['PATH', 'DIR', 'FILE', 'DEVICE', 'CMD']
     filevars = ['XMLTV_GRABBER', 'RSS_AUDIO', 'RSS_VIDEO', 'RSS_FEEDS', 'XMLTV_SORT', 'LIRCRC']
@@ -182,7 +182,7 @@ def FileTypeVar(cname):
 def GetConfigFileName(config_file_name):
     """
     """
-    _debug_('GetConfigFileName(config_file_name=%r)' % config_file_name , 2)
+    logger.log( 9, 'GetConfigFileName(config_file_name=%r)', config_file_name)
     if not config_file_name:
         if (not config.__dict__.has_key('CONFIG_EDIT_FILE')):
             return None
@@ -200,7 +200,7 @@ def GetConfigFileName(config_file_name):
 def CheckSyntax(fvsetting):
     """
     """
-    _debug_('CheckSyntax(fvsetting=%r)' % ( fvsetting ), 2)
+    logger.log( 9, 'CheckSyntax(fvsetting=%r)', fvsetting)
 
     status = False
     try :
@@ -214,7 +214,7 @@ def CheckSyntax(fvsetting):
 def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
     """
     """
-    _debug_('CreateSelectBoxControl(cname, grps, cvalue, opts="")', 2)
+    logger.log( 9, 'CreateSelectBoxControl(cname, grps, cvalue, opts="")')
     ctrl = '<select name="%s" value="%s"  id="%s" %s >\n' % (cname,  cvalue, cname, opts)
     for grp in grps:
         if grp == cvalue:
@@ -228,8 +228,8 @@ def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
 def CreateHTMLinput(control_type, control_id, control_value, size = '',other_opts = ''):
     """
     """
-    _debug_('CreateHTMLinput(control_type=%r, control_id=%r, value=%r, control_size=%r, other_opts=%r)' % \
-            (control_type, control_id, control_value, size, other_opts ), 2)
+    logger.log( 9, 'CreateHTMLinput(control_type=%r, control_id=%r, value=%r, control_size=%r, other_opts=%r)', control_type, control_id, control_value, size, other_opts)
+
 
     html_input = '<input '
     html_input += 'type = "%s" ' % control_type
@@ -245,7 +245,7 @@ def CreateHTMLinput(control_type, control_id, control_value, size = '',other_opt
 def ReadConfig(cfile):
     """
     """
-    _debug_('ReadConfig(cfile=%r)' % (cfile), 2)
+    logger.log( 9, 'ReadConfig(cfile=%r)', cfile)
     lconf = cfile
     lconf_hld = open(lconf, 'r')
     fconf = lconf_hld.readlines()
@@ -256,7 +256,7 @@ def ReadConfig(cfile):
 def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
     """
     """
-    _debug_('CreateSelectBoxControl(cname, grps, cvalue, opts="")', 2)
+    logger.log( 9, 'CreateSelectBoxControl(cname, grps, cvalue, opts="")')
     ctrl = '<select name="%s" value="%s"  id="%s" %s >\n' % (cname,  cvalue, cname, opts)
     for grp in grps:
         if grp == cvalue:
@@ -270,7 +270,7 @@ def CreateSelectBoxControl(cname, grps, cvalue, opts=""):
 def GetConfigSetting(cfile, vname):
     """
     """
-    _debug_('GetConfigSetting(cfile=%r, vname=%r)' % (cfile, vname), 2)
+    logger.log( 9, 'GetConfigSetting(cfile=%r, vname=%r)', cfile, vname)
 
     lconf = ReadConfig(cfile)
     ret = ''
@@ -287,7 +287,7 @@ def GetConfigSetting(cfile, vname):
 def ReadConfigPlugins(cfile):
     """
     """
-    _debug_('ReadConfigPlugins(cfile=%r)' % (cfile), 2)
+    logger.log( 9, 'ReadConfigPlugins(cfile=%r)', cfile)
     rconf = ReadConfig(cfile)
     pluginlines = []
     cnt = 0
@@ -325,7 +325,7 @@ def Server_Running(server):
 def CreateNewLineControl():
     """
     """
-    _debug_('CreateNewLineControl()', 2)
+    logger.log( 9, 'CreateNewLineControl()')
     ctrl = '<div align="left">'
     ctrl += '<input  id="newname" name="newname" size="4"> ='
     ctrl += '<input  id="newvalue" name="newvalue" size="40">'

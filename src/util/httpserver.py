@@ -220,7 +220,7 @@ class RegExRequestHandler(BaseHTTPRequestHandler):
             self.connection.close()
 
     def log_message(self, format, *args):
-        _debug_(format % args, 2)
+        logger.log( 9, format, args)
 
 
 class LongPollHandler(object):
@@ -296,8 +296,6 @@ longpoll();
 </body>
 </html>
 """
-    def _debug_(text, l=0):
-        print text
 
     def html_handler(request):
         request.send_response(200)

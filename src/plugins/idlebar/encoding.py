@@ -51,7 +51,7 @@ class PluginInterface(plugin.DaemonPlugin):
     """
 
     def __init__(self):
-        _debug_('encoding.PluginInterface.__init__(self)', 2)
+        logger.log( 9, 'encoding.PluginInterface.__init__(self)')
         plugin.DaemonPlugin.__init__(self)
         #IdleBarPlugin.__init__(self)
         self.poll_interval = 1
@@ -94,7 +94,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def getimage(self, image, osd, cache=False):
-        _debug_('getimage(self, image, osd, cache=False)', 2)
+        logger.log( 9, 'getimage(self, image, osd, cache=False)')
         if image.find(config.ICON_DIR) == 0 and image.find(osd.settings.icon_dir) == -1:
             new_image = os.path.join(osd.settings.icon_dir, image[len(config.ICON_DIR)+1:])
             if os.path.isfile(new_image):
@@ -108,7 +108,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def settext(self):
-        _debug_('settext(self)', 2)
+        logger.log( 9, 'settext(self)')
         """
         set the text
         """
@@ -162,7 +162,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def calculatesizes(self, osd, font):
-        _debug_('calculatesizes(self, osd, font)', 2)
+        logger.log( 9, 'calculatesizes(self, osd, font)')
         """
         sizecalcs is not necessery on every pass
         """
@@ -171,13 +171,13 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.idlebar = plugin.getbyname('idlebar')
                 if self.idlebar:
                     self.idlebar_max = osd.width + osd.x
-                    _debug_('idlebar_max=%s, free_space=%s' % (self.idlebar_max, self.idlebar.free_space), 2)
+                    logger.log( 9, 'idlebar_max=%s, free_space=%s', self.idlebar_max, self.idlebar.free_space)
                     for p in plugin.get('idlebar'):
                         if hasattr(p, 'clock_left_position'):
                             self.idlebar_max = p.clock_left_position
 
                     if self.idlebar_max - self.idlebar.free_space < 250:
-                        _debug_('free space in idlebar to small, using normal detach')
+                        logger.debug('free space in idlebar to small, using normal detach')
                         self.idlebar = None
                     else:
                         # this doesn't work, but needs to for the detachbar
@@ -193,7 +193,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.calculate = False
             self.font_h = font.font.height
 
-            _debug_('osd.width=%s, osd.height=%s, osd.x=%s, osd.y=%s' % (osd.width, osd.height, osd.x, osd.y), 2)
+            logger.log( 9, 'osd.width=%s, osd.height=%s, osd.x=%s, osd.y=%s', osd.width, osd.height, osd.x, osd.y)
             screen_width = osd.width + 2*osd.x
             screen_height = osd.height + 2*osd.y
 
@@ -210,8 +210,8 @@ class PluginInterface(plugin.DaemonPlugin):
                     used_width = max(used_width, font.font.stringsize(text)) - 1
                     used_height += self.font_h
 
-            _debug_('screen_width=%s, screen_height=%s, used_width=%s, used_height=%s, font_h=%s' % \
-                (screen_width, screen_height, used_width, used_height, self.font_h), 2)
+            logger.log( 9, 'screen_width=%s, screen_height=%s, used_width=%s, used_height=%s, font_h=%s', screen_width, screen_height, used_width, used_height, self.font_h)
+
             self.boxw = used_width + (self.padding + self.boxborder) * 2
             self.boxh = used_height + (self.padding + self.boxborder) * 2
             self.bx = osd.x
@@ -233,10 +233,10 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def draw(self, (type, object), osd):
-        _debug_('draw(self, (type, object), osd)', 2)
+        logger.log( 9, 'draw(self, (type, object), osd)')
         now = time.time()
         duration = now - self.drawtime
-        _debug_("draw=%.2f, interval=%s, state=%s" % (duration, self.draw_interval, self.state), 2)
+        logger.log( 9, "draw=%.2f, interval=%s, state=%s", duration, self.draw_interval, self.state)
         self.drawtime = now
         self.lastdraw = now
 
@@ -244,8 +244,8 @@ class PluginInterface(plugin.DaemonPlugin):
         self.settext()
         self.calculatesizes(osd, self.font)
 
-        _debug_('self:bx=%s, by=%s, boxh=%s, boxw=%s, border=%s, padding=%s' % \
-            (self.bx, self.by, self.boxh, self.boxw, self.boxborder, self.padding), 2)
+        logger.log( 9, 'self:bx=%s, by=%s, boxh=%s, boxw=%s, border=%s, padding=%s', self.bx, self.by, self.boxh, self.boxw, self.boxborder, self.padding)
+
         if self.idlebar:
             osd.drawroundbox(self.bx, self.by, self.boxw, self.boxh,
                 (0xffffffffL, self.boxborder, 0x40ffff00L, 0))
@@ -255,7 +255,7 @@ class PluginInterface(plugin.DaemonPlugin):
             osd.drawroundbox(self.bx, self.by, self.boxw, self.boxh,
                 (0xf0ffffffL, self.boxborder, 0xb0000000L, self.boxborder))
 
-        _debug_('self:tx=%s, ty=%s, texth=%s, textw=%s' % (self.tx, self.ty, self.texth, self.textw), 2)
+        logger.log( 9, 'self:tx=%s, ty=%s, texth=%s, textw=%s', self.tx, self.ty, self.texth, self.textw)
         y = self.ty
         osd.write_text(self.jobs, self.font, None, self.tx, y, self.textw, self.font_h, 'center', 'center')
         if self.running:
@@ -282,8 +282,8 @@ class PluginInterface(plugin.DaemonPlugin):
         pollduration = now - self.lastpoll
         drawduration = now - self.lastdraw
         self.lastpoll = now
-        _debug_("poll(self): poll=%.2f, draw=%.2f, interval=%s, state=%s" % \
-            (pollduration, drawduration, self.draw_interval, self.state), 2)
+        logger.log( 9, "poll(self): poll=%.2f, draw=%.2f, interval=%s, state=%s", pollduration, drawduration, self.draw_interval, self.state)
+
         if drawduration >= self.draw_interval / 100:
             if skin.active():
                 skin.redraw()
@@ -297,6 +297,6 @@ class PluginInterface(plugin.DaemonPlugin):
 
 
     def update(self):
-        _debug_('update(self)', 2)
+        logger.log( 9, 'update(self)')
         bar = plugin.getbyname('idlebar')
         if bar: bar.poll()

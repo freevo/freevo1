@@ -199,7 +199,7 @@ class CommandChild(childapp.ChildApp2):
         """
         Save the stdout line to a file or buffer
         """
-        _debug_('CommandChild.stdout_cb(line=%r)' % (line,), 1)
+        logger.debug('CommandChild.stdout_cb(line=%r)', line)
         if self.outfd:
             self.outfd.write('<so> ' + line)
         else:
@@ -211,7 +211,7 @@ class CommandChild(childapp.ChildApp2):
         Override this method to receive stderr from the child app
         The function receives complete lines
         """
-        _debug_('CommandChild.stderr_cb(line=%r)' % (line,), 1)
+        logger.debug('CommandChild.stderr_cb(line=%r)', line)
         if self.outfd:
             self.outfd.write('<se> ' + line)
         else:

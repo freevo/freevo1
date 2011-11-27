@@ -180,7 +180,7 @@ def attr_font(node, attr, default):
                 if font: break
 
         if not font:
-            _debug_('can\'t find font "%s"' % font, DWARNING)
+            logger.warning('can\'t find font "%s"', font)
             font = config.OSD_DEFAULT_FONTNAME
         return font
     return default
@@ -199,7 +199,7 @@ def search_file(file, search_dirs):
         if vfs.isfile('%s.jpg' % dfile):
             return vfs.abspath('%s.jpg' % dfile)
 
-    _debug_('can\'t find image "%s"' % file, DWARNING)
+    logger.warning('can\'t find image "%s"', file)
     if config.DEBUG:
         print 'image search path is:'
         for s in search_dirs:
@@ -584,7 +584,7 @@ class Content(XML_data):
             if font.has_key(self.font):
                 self.font = font[self.font]
             else:
-                _debug_('can\'t find font "%s"' % self.font, DWARNING)
+                logger.warning('can\'t find font "%s"', self.font)
                 self.font = font['default']
         else:
             self.font = font['default']
@@ -647,7 +647,7 @@ class FormatText(XML_data):
             if font.has_key(self.font):
                 self.font = font[self.font]
             else:
-                _debug_('can\'t find font "%s"' % self.font, DWARNING)
+                logger.warning('can\'t find font "%s"', self.font)
                 self.font = font['default']
         else:
             self.font = font['default']
@@ -751,7 +751,7 @@ class Image(XML_data):
             if image_names.has_key(self.image):
                 self.filename = image_names[self.image]
             else:
-                _debug_('can\'t find image definition "%s"' % self.image, DWARNING)
+                logger.warning('can\'t find image definition "%s"', self.image)
 
         if self.filename:
             self.filename = search_file(self.filename, search_dirs)
@@ -1142,6 +1142,6 @@ class XMLSkin:
             return 1
 
         except:
-            _debug_('XML file "%s" corrupt' % (file,), DERROR)
+            logger.error('XML file "%s" corrupt', file)
             traceback.print_exc()
             return 0

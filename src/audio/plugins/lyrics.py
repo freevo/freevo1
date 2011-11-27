@@ -75,7 +75,7 @@ class PluginInterface(plugin.ItemPlugin):
                 LEOLYRICS_AUTH,
                 urllib.quote(self.item.info['artist'].encode('utf-8')),
                 urllib.quote(self.item.info['title'].encode('utf-8')))
-            _debug_(url,2)
+            logger.log( 9, url)
             info = urllib2.urlopen(url).read()
             result_code = re.search('.+<response code="(\d)">.+',info).group(1)
         except:

@@ -55,7 +55,7 @@ class TVGuide(Item):
     Class for TVGuide
     """
     def __init__(self, start_time, player, menuw):
-        _debug_('TVGuide.__init__(start_time=%r, player=%r, menuw=%r)' % (start_time, player, menuw), 2)
+        logger.log( 9, 'TVGuide.__init__(start_time=%r, player=%r, menuw=%r)', start_time, player, menuw)
         Item.__init__(self)
 
         # get skin definitions of the TVGuide
@@ -105,7 +105,7 @@ class TVGuide(Item):
 
     def update_schedules_cb(self, scheduledRecordings):
         """ """
-        _debug_('update_schedules_cb(scheduledRecordings=%r)' % (scheduledRecordings,), 2)
+        logger.log( 9, 'update_schedules_cb(scheduledRecordings=%r)', scheduledRecordings)
         #upsoon = '%s/upsoon' % (config.FREEVO_CACHEDIR)
         #if os.path.isfile(upsoon):
         #    os.unlink(upsoon)
@@ -116,11 +116,11 @@ class TVGuide(Item):
 
         reload the list of scheduled programs and check for overlapping
         """
-        _debug_('update_schedules(force=%r)' % (force,), 2)
+        logger.log( 9, 'update_schedules(force=%r)', force)
         if not force and self.last_update + 60 > time.time():
             return
 
-        _debug_('update schedule', 2)
+        logger.log( 9, 'update schedule')
         self.last_update = time.time()
         self.scheduled_programs = []
         self.overlap_programs = []
@@ -143,7 +143,7 @@ class TVGuide(Item):
         """
         Handles events in the tv guide
         """
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event.name, menuw), 2)
+        logger.log( 9, 'eventhandler(event=%r, menuw=%r)', event.name, menuw)
 
         ## MENU_CHANGE_STYLE
         if event == MENU_CHANGE_STYLE:
@@ -281,7 +281,7 @@ class TVGuide(Item):
 
     def show(self):
         """ show the guide"""
-        _debug_('show', 2)
+        logger.log( 9, 'show')
         if not self.visible:
             self.visible = 1
             self.refresh()
@@ -289,7 +289,7 @@ class TVGuide(Item):
 
     def hide(self):
         """ hide the guide"""
-        _debug_('hide', 2)
+        logger.log( 9, 'hide')
         if self.visible:
             self.visible = 0
             skin.clear()
@@ -301,10 +301,10 @@ class TVGuide(Item):
         This function is called automatically by freevo whenever this menu is
         opened or reopened.
         """
-        _debug_('refresh(force_update=True)', 2)
+        logger.log( 9, 'refresh(force_update=True)')
         if self.menuw.children:
             return
-        _debug_('tvguide: setting context to %s' % self.event_context, 2)
+        logger.log( 9, 'tvguide: setting context to %s', self.event_context)
         self.update(force_update)
         skin.draw(self.type, self, transition=self.transition)
         self.transition = skin.TRANSITION_NONE
@@ -316,7 +316,7 @@ class TVGuide(Item):
         This function updates the scheduled and overlap flags for
         all currently displayed programs.
         """
-        _debug_('update(force=False)', 2)
+        logger.log( 9, 'update(force=False)')
         self.update_schedules(force)
         if self.table:
             for t in self.table:
@@ -350,7 +350,7 @@ class TVGuide(Item):
         """
         jump to now in the tv guide.
         """
-        _debug_('jump_to_now(old_selected=%r)' % (old_selected,), 2)
+        logger.log( 9, 'jump_to_now(old_selected=%r)', old_selected)
         (year, mon, mday, hour, min, sec, wday, yday, isdst) = time.localtime()
         min = min > 30 and 30 or 0
         start_time = time.mktime((year, mon, mday, hour, min, sec, wday, yday, isdst))
@@ -373,7 +373,7 @@ class TVGuide(Item):
         """
         advance the tv guide by the number of hours that is passed in arg.
         """
-        _debug_('advance_tv_guide(hours=%r)' % (hours,), 2)
+        logger.log( 9, 'advance_tv_guide(hours=%r)', hours)
         new_start_time = self.start_time + (hours * 60 * 60)
         new_end_time =  self.stop_time + (hours * 60 * 60)
         start_channel = self.start_channel
@@ -395,7 +395,7 @@ class TVGuide(Item):
         This is neccessary we change the set of programs that have to be
         displayed, this is the case when the user moves around in the menu.
         """
-        _debug_('rebuild(start_time=%r, stop_time=%r, start_channel=%r, selected=%r)' % (start_time, stop_time, start_channel, selected), 2)
+        logger.log( 9, 'rebuild(start_time=%r, stop_time=%r, start_channel=%r, selected=%r)', start_time, stop_time, start_channel, selected)
         self.guide = tv.epg_xmltv.get_guide(popup=True)
         channels = self.guide.get_programs(start_time+1, stop_time-1)
 
@@ -470,7 +470,7 @@ class TVGuide(Item):
         """
         Move to the next program
         """
-        _debug_('change_program(value=%r, full_scan=%r)' % (value, full_scan), 2)
+        logger.log( 9, 'change_program(value=%r, full_scan=%r)', value, full_scan)
         start_time    = self.start_time
         stop_time     = self.stop_time
         start_channel = self.start_channel
@@ -539,7 +539,7 @@ class TVGuide(Item):
         """
         Move to the next channel
         """
-        _debug_('change_channel(value=%r)' % (value,), 2)
+        logger.log( 9, 'change_channel(value=%r)', value)
         start_time    = self.start_time
         stop_time     = self.stop_time
         start_channel = self.start_channel

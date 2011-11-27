@@ -289,7 +289,7 @@ def cache_cropdetect(defaults):
     global encjob
 
     def fxd_movie_read(fxd, node):
-        _debug_('fxd_movie_read=%r' % (fxd.user_data['filename'],), 2)
+        logger.log( 9, 'fxd_movie_read=%r', fxd.user_data['filename'])
         fileinfo = fxd.user_data['fileinfo']
         for filename in fileinfo.files:
             try:
@@ -331,7 +331,7 @@ def cache_cropdetect(defaults):
 
 
     def fxd_movie_write(fxd, node):
-        _debug_('fxd_movie_write', 2)
+        logger.log( 9, 'fxd_movie_write')
         encjob = fxd.user_data['encjob']
         if encjob is None:
             #print 'encjob failed'

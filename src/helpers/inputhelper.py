@@ -57,12 +57,12 @@ class Lirc:
     Class to handle lirc events
     """
     def __init__(self):
-        _debug_('Lirc.__init__()', 2)
+        logger.log( 9, 'Lirc.__init__()')
         try:
             global pylirc
             import pylirc
         except ImportError:
-            _debug_('PyLirc not found, lirc remote control disabled!', DWARNING)
+            logger.warning('PyLirc not found, lirc remote control disabled!')
             raise
 
         try:
@@ -71,10 +71,10 @@ class Lirc:
             else:
                 raise IOError
         except RuntimeError:
-            _debug_('Could not initialize PyLirc!', DWARNING)
+            logger.warning('Could not initialize PyLirc!')
             raise
         except IOError:
-            _debug_('%r not found!' % (config.LIRCRC), DWARNING)
+            logger.warning('%r not found!', config.LIRCRC)
             raise
 
         global PYLIRC
@@ -106,7 +106,7 @@ class Lirc:
         """
         (re-)initialize pylirc, e.g. after calling close()
         """
-        _debug_('Lirc.resume()', 2)
+        logger.log( 9, 'Lirc.resume()')
         fd = pylirc.init('freevo', config.LIRCRC)
 
         self.dispatcher = kaa.IOMonitor(self._handle_lirc_input)
@@ -124,7 +124,7 @@ class Lirc:
         """
         cleanup pylirc, close devices
         """
-        _debug_('Lirc.suspend()', 2)
+        logger.log( 9, 'Lirc.suspend()')
         self.dispatcher.unregister()
         pylirc.exit()
 
@@ -137,7 +137,7 @@ class Evdev:
         """
         init all specified devices
         """
-        _debug_('Evdev.__init__()', 2)
+        logger.log( 9, 'Evdev.__init__()')
         import evdev
         self._devs = []
 
@@ -167,11 +167,11 @@ class Evdev:
                         break
                 else:
                     e = None
-                    _debug_("Could not find device named '%s', possible are:\n  - %s" % \
-                        (name, '\n  - '.join(names)), DWARNING)
+                    logger.warning("Could not find device named '%s', possible are:\n  - %s", name, '\n  - '.join(names))
+
 
             if e is not None:
-                _debug_("Added input device '%s': %s" % (dev, e.get_name()), DINFO)
+                logger.info("Added input device '%s': %s", dev, e.get_name())
                 m = kaa.IOMonitor(self.__handle_event, e)
                 m.register(e._fd)
                 self._devs.append(m)
@@ -236,7 +236,7 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 fd = int(sys.argv[1])
-_debug_('Using pipe fd %d' % fd)
+logger.debug('Using pipe fd %d', fd)
 
 # Put fd in non-blocking mode
 flag = fcntl.fcntl(fd, fcntl.F_GETFL)

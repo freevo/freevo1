@@ -63,7 +63,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.device_name = config.JOY_DEVICE
             try:
                 self.joyfd = os.open(self.device_name, os.O_RDONLY|os.O_NONBLOCK)
-                _debug_('self.joyfd = %s' % self.joyfd, level=5)
+                logger.debug('self.joyfd = %s', self.joyfd)
             except OSError:
                 self.reason = 'unable to open device %r' % (self.device_name,)
                 return
@@ -72,16 +72,16 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.reason = 'Joystick input module disabled'
                 return
 
-            _debug_('JOY_DEV is deprecated, use JOY_DEVICE instead', DWARNING)
+            logger.warning('JOY_DEV is deprecated, use JOY_DEVICE instead')
             self.device_name = '/dev/input/js' + str((config.JOY_DEV - 1))
             try:
                 self.joyfd = os.open(self.device_name, os.O_RDONLY|os.O_NONBLOCK)
-                _debug_('self.joyfd = %s' % self.joyfd, level=5)
+                logger.debug('self.joyfd = %s', self.joyfd)
             except OSError:
                 self.device_name = '/dev/js' + str((config.JOY_DEV - 1))
                 try:
                     self.joyfd = os.open(self.device_name, os.O_RDONLY|os.O_NONBLOCK)
-                    _debug_('self.joyfd = %s' % self.joyfd, level=5)
+                    logger.debug('self.joyfd = %s', self.joyfd)
                 except OSError:
                     self.reason = 'unable to open device %r' % (self.device_name,)
                     return
@@ -90,7 +90,7 @@ class PluginInterface(plugin.DaemonPlugin):
         plugin.DaemonPlugin.__init__(self)
         self.plugin_name = 'JOY'
 
-        _debug_('Using joystick %s (%s) (sensitivity %s)' % (config.JOY_DEV, self.device_name, config.JOY_SENS), DINFO)
+        logger.info('Using joystick %s (%s) (sensitivity %s)', config.JOY_DEV, self.device_name, config.JOY_SENS)
 
         self.poll_interval  = 0.1
         self.poll_menu_only = False
@@ -120,7 +120,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         command = ''
         (r, w, e) = select.select([self.joyfd], [], [], 0)
-        _debug_('r=%r, w=%r, e=%r' % (r, w, e), 3)
+        logger.log( 8, 'r=%r, w=%r, e=%r', r, w, e)
 
         self.sensitivity = config.JOY_SENS
 
@@ -129,7 +129,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
         c = os.read(self.joyfd, 8)
         data = struct.unpack('IhBB', c)
-        _debug_('data=%r' % (data,), 2)
+        logger.log( 9, 'data=%r', data)
         if data[2] == 1 & data[1] == 1:
             button = 'button '+str((data[3] + 1))
             command = config.JOY_CMDS.get(button, '')
@@ -149,7 +149,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 command = config.JOY_CMDS['right']
 
         if command != '':
-            _debug_('Translation: "%s" -> "%s"' % (button, command))
+            logger.debug('Translation: "%s" -> "%s"', button, command)
             command = rc.key_event_mapper(command)
             if command:
                 if not config.JOY_LOCKFILE:
@@ -163,7 +163,7 @@ class PluginInterface(plugin.DaemonPlugin):
         # remove any pending events
         while 1:
             (r, w, e) = select.select([self.joyfd], [], [], 0)
-            _debug_('r=%r, w=%r, e=%r' % (r, w, e), 1)
+            logger.debug('r=%r, w=%r, e=%r', r, w, e)
             if not r:
                 break
             c = os.read(self.joyfd, 8)

@@ -159,7 +159,7 @@ class PluginInterface(plugin.ItemPlugin):
         """
         renames the item
         """
-        _debug_('rename %s to %s' % (self.item.name, newname), 2)
+        logger.log( 9, 'rename %s to %s', self.item.name, newname)
         oldname = self.item.name
         if self.item.rename(newname):
             AlertBox(text=_('Rename %s to %s.') % (oldname, newname)).show()

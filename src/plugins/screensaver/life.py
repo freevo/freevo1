@@ -54,7 +54,7 @@ class PluginInterface(ScreenSaverPlugin):
     A Life game screensaver
     """
     def __init__(self):
-        _debug_('PluginInterface.__init__()', 2)
+        logger.log( 9, 'PluginInterface.__init__()')
         ScreenSaverPlugin.__init__(self)
         self.plugin_name = 'screensaver.life'
         self.fps = config.LIFE_FPS
@@ -64,7 +64,7 @@ class PluginInterface(ScreenSaverPlugin):
         self.step = False
 
     def config(self):
-        _debug_('config()', 2)
+        logger.log( 9, 'config()')
         return [
             ('LIFE_FPS', 20, 'Frames per second'),
             ('LIFE_CELL_SIZE', 20, 'Size in pixels of each cell'),
@@ -72,7 +72,7 @@ class PluginInterface(ScreenSaverPlugin):
 
 
     def start(self, width, height):
-        _debug_('start(width=%r, height=%r)' % (width, height), 2)
+        logger.log( 9, 'start(width=%r, height=%r)', width, height)
         self.width = width
         self.height = height
         cell_w = width / config.LIFE_CELL_SIZE

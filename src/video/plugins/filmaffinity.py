@@ -142,7 +142,7 @@ class PluginInterface(plugin.ItemPlugin):
         quoted_name = urllib2.quote(name.strip())
 
         regexp_tag = re.compile('<[^>]+>', re.I)
-        _debug_('Request with: %s' % quoted_name)
+        logger.debug('Request with: %s', quoted_name)
         url = 'http://www.filmaffinity.com/es/search.php?stext=%s&stype=title' % quoted_name
         req = urllib2.Request(url, txdata, txheaders)
         searchstring = name
@@ -209,7 +209,7 @@ class PluginInterface(plugin.ItemPlugin):
         Set an filmaffinity number for object, and fetch data"""
 
         self.myurl = 'http://www.filmaffinity.com/' + urllib2.quote(urllib2.unquote(url))
-        _debug_("Now trying to get %s" % self.myurl)
+        logger.debug("Now trying to get %s", self.myurl)
         req = urllib2.Request(self.myurl, txdata, txheaders)
 
         try:
@@ -564,14 +564,14 @@ class PluginInterface(plugin.ItemPlugin):
         sinopsis = soup.find(text='SINOPSIS')
         if sinopsis:
             td = sinopsis.findNext('td')
-            _debug_('PLOT: %s' % td.contents)
+            logger.debug('PLOT: %s', td.contents)
             self.info['plot'] = '\n'.join([td.string for td in td.findAll(text=True)]).strip().encode('latin-1')
 
         genero = soup.find(text='GÉNERO')
         if genero:
             td = genero.findNext('td')
 
-            _debug_('GENRE: %s' % td.contents)
+            logger.debug('GENRE: %s', td.contents)
             
             self.info['genre'] = '/'.join([td.string for td in td.findAll('a')]).strip().encode('latin-1')
 

@@ -250,17 +250,17 @@ NORMS = {
 
 class Videodev:
     def __init__(self, device):
-        _debug_('Videodev.__init__(device=%r)' % (device,), 2)
+        logger.log( 9, 'Videodev.__init__(device=%r)', device)
         self.chanlist = None
         self.device = -1
         try:
             self.device = os.open(device, os.O_TRUNC)
         except OSError, why:
             #self.device = os.open(device, os.O_RDONLY)
-            _debug_('Cannot open video device %r: %s' % (device, why), DERROR)
+            logger.error('Cannot open video device %r: %s', device, why)
             return
 
-        _debug_('Video opened for %r' % device)
+        logger.debug('Video opened for %r', device)
         results           = self.querycap()
         self.driver       = results[0][:results[0].find('\0')]
         self.card         = results[1][:results[1].find('\0')]
@@ -273,66 +273,66 @@ class Videodev:
 
 
     def getdriver(self):
-        _debug_('getdriver()', 2)
+        logger.log( 9, 'getdriver()')
         return self.driver.strip('\0')
 
 
     def getversion(self):
-        _debug_('getversion()', 2)
+        logger.log( 9, 'getversion()')
         return self.version
 
 
     def getdevice(self):
-        _debug_('getdevice()', 2)
+        logger.log( 9, 'getdevice()')
         return self.device
 
 
     def close(self):
-        _debug_('close()', 2)
+        logger.log( 9, 'close()')
         os.close(self.device)
 
 
     def setchanlist(self, chanlist):
-        _debug_('setchanlist(chanlist=%r)' % (chanlist,), 2)
+        logger.log( 9, 'setchanlist(chanlist=%r)', chanlist)
         self.chanlist = freq.CHANLIST[chanlist]
 
 
     def querycap(self):
-        _debug_('querycap()', 2)
+        logger.log( 9, 'querycap()')
         val = struct.pack(QUERYCAP_ST, "", "", "", 0, 0)
         r = fcntl.ioctl(self.device, i32(QUERYCAP_NO), val)
         res = struct.unpack(QUERYCAP_ST, r)
-        _debug_('querycap: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'querycap: val=%r, %d, res=%r', val, len(val), res)
         return res
 
 
     def getfreq(self):
-        _debug_('getfreq()', 2)
+        logger.log( 9, 'getfreq()')
         val = struct.pack(FREQUENCY_ST, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
         res = struct.unpack(FREQUENCY_ST, r)
-        _debug_('getfreq: val=%r, r=%r, res=%r' % (val, r, res), 3)
+        logger.log( 8, 'getfreq: val=%r, r=%r, res=%r', val, r, res)
         (tuner, type, freq, ) = res
         return freq
 
 
     def getfreq2(self):
-        _debug_('getfreq2()', 2)
+        logger.log( 9, 'getfreq2()')
         val = struct.pack(FREQUENCY_ST, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GETFREQ_NO), val)
         res = struct.unpack(FREQUENCY_ST, r)
-        _debug_('getfreq2: val=%r, r=%s, res=%r' % (val, r, res), 3)
+        logger.log( 8, 'getfreq2: val=%r, r=%s, res=%r', val, r, res)
         return res
 
 
     def setchannel(self, channel):
-        _debug_('setchannel(channel=%r)' % (channel,), 2)
+        logger.log( 9, 'setchannel(channel=%r)', channel)
         freq = config.TV_FREQUENCY_TABLE.get(channel)
         if freq:
-            _debug_('Using custom frequency: chan="%s", freq="%s"' % (channel, freq))
+            logger.debug('Using custom frequency: chan="%s", freq="%s"', channel, freq)
         else:
             freq = self.chanlist[str(channel)]
-            _debug_('Using standard frequency: chan="%s", freq="%s"' % (channel, freq))
+            logger.debug('Using standard frequency: chan="%s", freq="%s"', channel, freq)
 
         freq *= 16
 
@@ -350,17 +350,17 @@ class Videodev:
 
 
     def setfreq_old(self, freq):
-        _debug_('setfreq_old(freq=%r)' % (freq,), 2)
+        logger.log( 9, 'setfreq_old(freq=%r)', freq)
         val = struct.pack("L", freq)
         r = fcntl.ioctl(self.device, i32(SETFREQ_NO_V4L), val)
-        _debug_('setfreq_old: val=%r, r=%r' % (val, r), 3)
+        logger.log( 8, 'setfreq_old: val=%r, r=%r', val, r)
 
 
     def setfreq(self, freq):
-        _debug_('setfreq(freq=%r)' % (freq,), 2)
+        logger.log( 9, 'setfreq(freq=%r)', freq)
         val = struct.pack(FREQUENCY_ST, long(0), long(2), freq)
         r = fcntl.ioctl(self.device, i32(SETFREQ_NO), val)
-        _debug_('setfreq: val=%r, r=%r' % (val, r), 3)
+        logger.log( 8, 'setfreq: val=%r, r=%r', val, r)
 
 
     def enuminput(self, num):
@@ -368,11 +368,11 @@ class Videodev:
         Enumerate a video device input
         @param num: is the input number
         """
-        _debug_('enuminput(num=%r)' % (num), 2)
+        logger.log( 9, 'enuminput(num=%r)', num)
         val = struct.pack(ENUMINPUT_ST, num, "", 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO), val)
         res = struct.unpack(ENUMINPUT_ST, r)
-        _debug_('enuminput: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'enuminput: val=%r, %d, res=%r', val, len(val), res)
         return res
 
     def enuminputs(self):
@@ -380,7 +380,7 @@ class Videodev:
         Enumerate all inputs
         @returns: a dict of the inputs index by name
         """
-        _debug_('enuminputs()', 2)
+        logger.log( 9, 'enuminputs()')
         res = {}
         num = 0
         try:
@@ -394,19 +394,19 @@ class Videodev:
         return res
 
     def getinput(self):
-        _debug_('getinput()', 2)
+        logger.log( 9, 'getinput()')
         val = struct.pack(INPUT_ST, 0)
         r = fcntl.ioctl(self.device, i32(GETINPUT_NO), val)
         res = struct.unpack(INPUT_ST, r)
-        _debug_('getinput: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'getinput: val=%r, %d, res=%r', val, len(val), res)
         return res[0]
 
 
     def setinput(self, value):
-        _debug_('setinput(value=%r)' % (value,), 2)
+        logger.log( 9, 'setinput(value=%r)', value)
         try:
             r = fcntl.ioctl(self.device, i32(SETINPUT_NO), struct.pack(INPUT_ST, value))
-            _debug_('setinput: val=%r, res=%r' % (struct.pack(INPUT_ST, value), r), 3)
+            logger.log( 8, 'setinput: val=%r, res=%r', struct.pack(INPUT_ST, value), r)
         except IOError:
             self.print_settings
             raise
@@ -416,7 +416,7 @@ class Videodev:
         """
         Get the TV input by name, eg: TELEVISION, s-video
         """
-        _debug_('getinputbyname(name=%r)' % (name,), 2)
+        logger.log( 9, 'getinputbyname(name=%r)', name)
         v_input = name.lower()
         return self.inputs[v_input]
 
@@ -425,27 +425,27 @@ class Videodev:
         """
         Set the TV input by name, eg: TELEVISION, s-video
         """
-        _debug_('setinputbyname(name=%r)' % (name,), 2)
+        logger.log( 9, 'setinputbyname(name=%r)', name)
         v_input = name.lower()
         try:
             (index, name, type, audioset, tuner, std, status) = self.inputs[v_input]
             self.setinput(index)
         except KeyError, e:
-            _debug_('setinputbyname failed: %s' % (e), DERROR)
-            _debug_('possible are: %r' % (self.inputs.keys()), DINFO)
+            logger.error('setinputbyname failed: %s', e)
+            logger.info('possible are: %r', self.inputs.keys())
             raise
-        _debug_('setinputbyname: %s->%s set' % (name, index))
+        logger.debug('setinputbyname: %s->%s set', name, index)
 
 
     def enumstd(self, num):
-        _debug_('enumstd(num=%r)' % (num,), 2)
+        logger.log( 9, 'enumstd(num=%r)', num)
         val = struct.pack(ENUMSTD_ST, num, 0, "", 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMSTD_NO), val)
         res = struct.unpack(ENUMSTD_ST, r)
         (index, id, name, numerator, denominator, framelines) = res
-        _debug_('enumstd: index=%r, id=0x%08x, name=%r, numerator=%r, denominator=%r, framelines=%r' % \
-            (index, id, name.strip('\0'), numerator, denominator, framelines), 2)
-        _debug_('enumstd: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 9, 'enumstd: index=%r, id=0x%08x, name=%r, numerator=%r, denominator=%r, framelines=%r', index, id, name.strip('\0'), numerator, denominator, framelines)
+
+        logger.log( 8, 'enumstd: val=%r, %d, res=%r', val, len(val), res)
         return res
 
 
@@ -454,7 +454,7 @@ class Videodev:
         Enumerate the TV standards
         @returns: a dict of the standards index by name
         """
-        _debug_('enumstds()', 2)
+        logger.log( 9, 'enumstds()')
         res = {}
         num = 0
         try:
@@ -472,11 +472,11 @@ class Videodev:
         """
         Get the current TV standard
         """
-        _debug_('getstd()', 2)
+        logger.log( 9, 'getstd()')
         val = struct.pack(STANDARD_ST, 0)
         r = fcntl.ioctl(self.device, i32(GETSTD_NO), val)
         res = struct.unpack(STANDARD_ST, r)
-        _debug_('getstd: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'getstd: val=%r, %d, res=%r', val, len(val), res)
         return res[0]
 
 
@@ -484,17 +484,17 @@ class Videodev:
         """
         Set the TV standard by number
         """
-        _debug_('setstd(value=%r)' % (value,), 2)
+        logger.log( 9, 'setstd(value=%r)', value)
         val = struct.pack(STANDARD_ST, value)
         r = fcntl.ioctl(self.device, i32(SETSTD_NO), val)
-        _debug_('setstd: val=%r, r=%r' % (val, r), 3)
+        logger.log( 8, 'setstd: val=%r, r=%r', val, r)
 
 
     def getstdbyname(self, name):
         """
         Get the TV standard by name, eg: PAL-BGH, secam-dk, etc
         """
-        _debug_('getstdbyname(name=%r)' % (name,), 2)
+        logger.log( 9, 'getstdbyname(name=%r)', name)
         v_norm = name.upper()
         return self.standards[v_norm]
 
@@ -503,83 +503,83 @@ class Videodev:
         """
         Set the TV standard by name, eg: PAL-BGH, secam-dk, etc
         """
-        _debug_('setstdbyname(name=%r)' % (name,), 2)
+        logger.log( 9, 'setstdbyname(name=%r)', name)
         v_norm = name.upper()
         tmp = self.getstd()
         try:
             self.setstd(NORMS[v_norm])
-            _debug_('setstdbyname: %s (0x%08X) set' % (name, NORMS[v_norm]), 3)
+            logger.log( 8, 'setstdbyname: %s (0x%08X) set', name, NORMS[v_norm])
         except KeyError, e:
-            _debug_('setstdbyname failed: %s' % (e), DERROR)
-            _debug_('possible are: %r' % (NORMS.keys()), DINFO)
+            logger.error('setstdbyname failed: %s', e)
+            logger.info('possible are: %r', NORMS.keys())
 
 
     def enuminput(self, num):
-        _debug_('enuminput(num=%r)' % (num,), 2)
+        logger.log( 9, 'enuminput(num=%r)', num)
         val = struct.pack(ENUMINPUT_ST, num, "", 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(ENUMINPUT_NO), val)
         res = struct.unpack(ENUMINPUT_ST, r)
-        _debug_('enuminput: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'enuminput: val=%r, %d, res=%r', val, len(val), res)
         return res
 
 
     def getfmt(self):
-        _debug_('getfmt()', 2)
+        logger.log( 9, 'getfmt()')
         val = struct.pack(FMT_ST, 1, 0, 0, 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GET_FMT_NO), val)
         res = struct.unpack(FMT_ST, r)
-        _debug_('getfmt: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'getfmt: val=%r, %d, res=%r', val, len(val), res)
         return res
 
 
     def setfmt(self, width, height):
-        _debug_('setfmt(width=%r, height=%r)' % (width, height), 2)
+        logger.log( 9, 'setfmt(width=%r, height=%r)', width, height)
         val = struct.pack(FMT_ST, 1L, width, height, 0L, 4L, 0L, 131072L, 0L)
         r = fcntl.ioctl(self.device, i32(SET_FMT_NO), val)
-        _debug_('setfmt: val=%r, r=%r' % (val, r), 3)
+        logger.log( 8, 'setfmt: val=%r, r=%r', val, r)
 
 
     def gettuner(self, num):
-        _debug_('gettuner(num=%r)' % (num,), 2)
+        logger.log( 9, 'gettuner(num=%r)', num)
         val = struct.pack(TUNER_ST, num, "", 0, 0, 0, 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(GET_TUNER_NO), val)
         res = struct.unpack(TUNER_ST, r)
-        _debug_('gettuner: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'gettuner: val=%r, %d, res=%r', val, len(val), res)
         return res
 
 
     def settuner(self, num, audmode):
-        _debug_('settuner(num=%r, audmode=%r)' % (num, audmode), 2)
+        logger.log( 9, 'settuner(num=%r, audmode=%r)', num, audmode)
         val = struct.pack(TUNER_ST, num, "", 0, 0, 0, 0, 0, audmode, 0, 0)
         r = fcntl.ioctl(self.device, i32(SET_TUNER_NO), val)
-        _debug_('settuner: val=%r, r=%r' % (val, r), 3)
+        logger.log( 8, 'settuner: val=%r, r=%r', val, r)
 
 
     def getaudio(self, num):
-        _debug_('getaudio(num=%r)' % (num,), 2)
+        logger.log( 9, 'getaudio(num=%r)', num)
         val = struct.pack(AUDIO_ST, num, "", 0, 0)
         r = fcntl.ioctl(self.device, i32(GET_AUDIO_NO), val)
         res = struct.unpack(AUDIO_ST, r)
-        _debug_('getaudio: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'getaudio: val=%r, %d, res=%r', val, len(val), res)
         return res
 
 
     def setaudio(self, num, mode):
-        _debug_('setaudio(num=%r, mode=%r)' % (num, mode), 2)
+        logger.log( 9, 'setaudio(num=%r, mode=%r)', num, mode)
         val = struct.pack(AUDIO_ST, num, "", mode, 0)
         r = fcntl.ioctl(self.device, i32(SET_AUDIO_NO), val)
-        _debug_('setaudio: val=%r, r=%r' % (val, r), 3)
+        logger.log( 8, 'setaudio: val=%r, r=%r', val, r)
 
 
     def getctrl(self, id):
         """
         Get the value of a control
         """
-        _debug_('getctrl(id=0x%08x)' % (id,), 2)
+        logger.log( 9, 'getctrl(id=0x%08x)', id)
         val = struct.pack(CTRL_ST, id, 0)
         r = fcntl.ioctl(self.device, i32(G_CTRL_NO), val)
         res = struct.unpack(CTRL_ST, r)
-        _debug_('getctrl: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'getctrl: val=%r, %d, res=%r', val, len(val), res)
         return res[1]
 
 
@@ -587,11 +587,11 @@ class Videodev:
         """
         Set the value of a control
         """
-        _debug_('setctrl(id=0x%08x, value=%r)' % (id, value), 2)
+        logger.log( 9, 'setctrl(id=0x%08x, value=%r)', id, value)
         val = struct.pack(CTRL_ST, id, value)
         r = fcntl.ioctl(self.device, i32(S_CTRL_NO), val)
         res = struct.unpack(CTRL_ST, r)
-        _debug_('setctrl: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'setctrl: val=%r, %d, res=%r', val, len(val), res)
 
 
     def getextctrl(self, id):
@@ -600,7 +600,7 @@ class Videodev:
         EXT_CTRL_type->id, res1, res2, value
         EXT_CTRLS_ST->class, count, error_idx, res1, res2, ptr
         """
-        _debug_('getextctrl(id=0x%08x)' % (id,), 2)
+        logger.log( 9, 'getextctrl(id=0x%08x)', id)
         extctrl = array.array('B')
         extctrl.fromstring(struct.pack(EXT_CTRL_ST, id, 0, 0, 0))
         extctrl_p = extctrl.buffer_info()[0]
@@ -609,11 +609,11 @@ class Videodev:
             r = fcntl.ioctl(self.device, i32(G_EXT_CTRLS_NO), val)
             res = struct.unpack(EXT_CTRLS_ST, r)
             extres = struct.unpack(EXT_CTRL_ST, extctrl.tostring())
-            _debug_('getextctrl: val=%r, %d, res=%r' % (val, len(val), res), 3)
-            _debug_('getextctrl: extctrl=%r, %d, extres=%s' % (extctrl.tostring(), len(extctrl), extres), 3)
+            logger.log( 8, 'getextctrl: val=%r, %d, res=%r', val, len(val), res)
+            logger.log( 8, 'getextctrl: extctrl=%r, %d, extres=%s', extctrl.tostring(), len(extctrl), extres)
         except IOError, e:
             extres = struct.unpack(EXT_CTRL_ST, extctrl.tostring())
-            _debug_('getextctrl(%s)=%s' % (id, e), DWARNING)
+            logger.warning('getextctrl(%s)=%s', id, e)
         return extres[3]
 
 
@@ -621,7 +621,7 @@ class Videodev:
         """
         Set the value of an external control
         """
-        _debug_('setextctrl(id=0x%08x, value=%r)' % (id, value), 2)
+        logger.log( 9, 'setextctrl(id=0x%08x, value=%r)', id, value)
         extctrl = array.array('B')
         extctrl.fromstring(struct.pack(EXT_CTRL_ST, id, 0, 0, value))
         extctrl_p = extctrl.buffer_info()[0]
@@ -630,30 +630,30 @@ class Videodev:
             r = fcntl.ioctl(self.device, i32(S_EXT_CTRLS_NO), val)
             res = struct.unpack(EXT_CTRLS_ST, r)
             extres = struct.unpack(EXT_CTRL_ST, extctrl.tostring())
-            _debug_('setextctrl: val=%r, %d, res=%r' % (val, len(val), res), 3)
-            _debug_('setextctrl: extctrl=%r, %d, extres=%s' % (extctrl.tostring(), len(extctrl), extres), 3)
+            logger.log( 8, 'setextctrl: val=%r, %d, res=%r', val, len(val), res)
+            logger.log( 8, 'setextctrl: extctrl=%r, %d, extres=%s', extctrl.tostring(), len(extctrl), extres)
         except IOError, e:
-            _debug_('setextctrl(%s) %r: %s' % (id, self.findcontrol(id), e), DWARNING)
+            logger.warning('setextctrl(%s) %r: %s', id, self.findcontrol(id), e)
 
 
     def querymenu(self, id, num):
-        _debug_('querymenu(id=0x%08x, num=%r)' % (id, num), 2)
+        logger.log( 9, 'querymenu(id=0x%08x, num=%r)', id, num)
         val = struct.pack(QUERYMENU_ST, id, num, "", 0)
         try:
             r = fcntl.ioctl(self.device, i32(QUERYMENU_NO), val)
             res = struct.unpack(QUERYMENU_ST, r)
-            _debug_('querymenu: val=%r, %d, res=%r' % (val, len(val), res), 3)
+            logger.log( 8, 'querymenu: val=%r, %d, res=%r', val, len(val), res)
         except IOError, e:
             res = struct.unpack(QUERYMENU_ST, val)
         return res
 
 
     def queryctrl(self, id):
-        _debug_('queryctrl(id=0x%08x)' % (id,), 2)
+        logger.log( 9, 'queryctrl(id=0x%08x)', id)
         val = struct.pack(QUERYCTRL_ST, id, 0, "", 0, 0, 0, 0, 0, 0, 0)
         r = fcntl.ioctl(self.device, i32(QUERYCTRL_NO), val)
         res = struct.unpack(QUERYCTRL_ST, r)
-        _debug_('queryctrl: val=%r, %d, res=%r' % (val, len(val), res), 3)
+        logger.log( 8, 'queryctrl: val=%r, %d, res=%r', val, len(val), res)
         (id, type, name, min, max, step, default, flags, res1, res2) = res
         name = name.strip('\0')
         if flags & 0x0001:
@@ -668,7 +668,7 @@ class Videodev:
 
 
     def printcontrol(self, res):
-        _debug_('printcontrol(res=%r)' % (res,), 2)
+        logger.log( 9, 'printcontrol(res=%r)', res)
         (id, type, name, min, max, step, default, flags, value) = res
         if flags & 0x0001:
             return
@@ -688,7 +688,7 @@ class Videodev:
         """
         converts a control to lowercase and replaces spaces with underscore, like v4l2-ctl
         """
-        _debug_('ctrlname(name=%r)' % (name,), 2)
+        logger.log( 9, 'ctrlname(name=%r)', name)
         return name.replace(' ', '_').lower()
 
 
@@ -696,7 +696,7 @@ class Videodev:
         """
         prints all the controls
         """
-        _debug_('listcontrols()', 2)
+        logger.log( 9, 'listcontrols()')
         id = V4L2_CTRL_FLAG_NEXT_CTRL
         while 1:
             try:
@@ -719,7 +719,7 @@ class Videodev:
 
 
     def enumcontrols(self):
-        _debug_('enumcontrols()', 2)
+        logger.log( 9, 'enumcontrols()')
         res = {}
         id = V4L2_CTRL_FLAG_NEXT_CTRL
         while 1:
@@ -753,7 +753,7 @@ class Videodev:
         """
         find a control by id
         """
-        _debug_('findcontrol(id=0x%08x)' % (id,), 2)
+        logger.log( 9, 'findcontrol(id=0x%08x)', id)
         for ctrl in self.controls.keys():
             if self.controls[ctrl][0] == id:
                 return ctrl
@@ -764,7 +764,7 @@ class Videodev:
         """
         get the control record by name
         """
-        _debug_('getcontrol(name=%r)' % (name,), 2)
+        logger.log( 9, 'getcontrol(name=%r)', name)
         key = self.ctrlname(name)
         if not self.controls.has_key(key):
             raise AttributeError('Cannot getcontrol \"%s\" does not exist' % (name))
@@ -776,7 +776,7 @@ class Videodev:
         """
         get the control record by name
         """
-        _debug_('setcontrol(name=%r, value=%r)' % (name, value), 2)
+        logger.log( 9, 'setcontrol(name=%r, value=%r)', name, value)
         key = self.ctrlname(name)
         if not self.controls.has_key(key):
             raise AttributeError('Cannot setcontrol \"%s\" does not exist' % (name))
@@ -793,12 +793,12 @@ class Videodev:
     def updatecontrol(self, name, value):
         """ set the control record by name
         """
-        _debug_('updatecontrol(name=%r, value=%r)' % (name, value), 2)
+        logger.log( 9, 'updatecontrol(name=%r, value=%r)', name, value)
         if self.getcontrol(name) == None:
             return
 
         oldvalue = self.getcontrol(name)
-        _debug_('%-30s: value %d->%d' % ('"'+name+'"', oldvalue, value))
+        logger.debug('%-30s: value %d->%d', '"' + name + '"', oldvalue, value)
         if value == oldvalue:
             return
 
@@ -808,7 +808,7 @@ class Videodev:
 
     def init_settings(self):
         """ initialise the V4L2 setting """
-        _debug_('init_settings()', 2)
+        logger.log( 9, 'init_settings()')
         if self.device < 0:
             return False
         (v_norm, v_input, v_clist, v_dev) = config.TV_SETTINGS.split()
@@ -824,7 +824,7 @@ class Videodev:
 
 
     def print_settings(self):
-        _debug_('print_settings()', 2)
+        logger.log( 9, 'print_settings()')
         print 'Driver: %s' % self.driver.strip('\0')
         print 'Card: %s' % self.card.strip('\0')
         print 'Version: %08x (%02u.%02u)' % (self.version, self.version / 256, self.version % 256)
@@ -860,7 +860,7 @@ class Videodev:
 
 class V4LGroup:
     def __init__(self):
-        _debug_('V4LGroup.__init__()', 2)
+        logger.log( 9, 'V4LGroup.__init__()')
         # Types:
         #   tv-v4l1 - video capture card with a tv tuner using v4l1
         #   tv-v4l2 - video capture card with a tv tuner using v4l2

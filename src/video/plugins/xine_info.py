@@ -119,7 +119,7 @@ class PluginInterface(plugin.DaemonPlugin):
                             raise
                     except:
                         self.handle = None
-                        _debug_('Cannot telnet to xine at 127.0.0.1:6789', DWARNING)
+                        logger.warning('Cannot telnet to xine at 127.0.0.1:6789')
 
                 # try to get xine time info
                 if self.handle is not None:

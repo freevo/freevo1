@@ -117,36 +117,36 @@ class PluginInterface(plugin.ItemPlugin):
         self.item = item
 
         if not hasattr(item, 'name'):
-            _debug_('cannot search for a cover as item has no name')
+            logger.debug('cannot search for a cover as item has no name')
             return []
 
         # don't allow this for items on an audio cd, only on the disc itself
         if item.type == 'audio' and item.parent and item.parent.type == 'audiocd':
-            _debug_('cannot search for a cover for a cd item "%s"', (item.name))
+            logger.debug('cannot search for a cover for a cd item "%s"', item.name)
             return []
 
         # don't allow this for items in a playlist
         if item.type == 'audio' and item.parent and item.parent.type == 'playlist':
-            _debug_('cannot search for a cover for a playlist item "%s"', (item.name))
+            logger.debug('cannot search for a cover for a playlist item "%s"', item.name)
             return []
 
         # do don't call this when we have an image
         if item.type == 'audiocd' and item.image:
-            _debug_('already have a cover for this cd "%s"', (item.name))
+            logger.debug('already have a cover for this cd "%s"', item.name)
             return []
 
         # do don't call this when we have an image
         if item.type == 'audio' and hasattr(item, 'filename') and item.filename and \
             vfs.isfile(os.path.join(os.path.join(os.path.dirname(item.filename), 'cover.jpg'))):
-            _debug_('already has a cover "%s"', (item.name))
+            logger.debug('already has a cover "%s"', item.name)
             return []
 
         if item.type in ('audio', 'audiocd', 'dir'):
-            _debug_('type=%r' % item.type)
-            _debug_('name=%r' % item['name'])
-            _debug_(hasattr(item, 'artist') and 'artist=%r' % item.getattr('artist') or 'NO artist')
-            _debug_(hasattr(item, 'album')  and 'album=%r'  % item.getattr('album')  or 'NO album')
-            _debug_(hasattr(item, 'title')  and 'title=%r'  % item.getattr('title')  or 'NO title')
+            logger.debug('type=%r', item.type)
+            logger.debug('name=%r', item['name'])
+            logger.debug(hasattr(item, 'artist') and 'artist=%r', item.getattr('artist') or 'NO artist')
+            logger.debug(hasattr(item, 'album') and 'album=%r', item.getattr('album') or 'NO album')
+            logger.debug(hasattr(item, 'title') and 'title=%r', item.getattr('title') or 'NO title')
             try:
                 if not hasattr(item, 'artist'):
                     if item.type in ('audio', 'dir') and not hasattr(item, 'album'):
@@ -164,14 +164,14 @@ class PluginInterface(plugin.ItemPlugin):
                         #        item.album = metadata.album
                         #        item.title = metadata.title
                         #        if item.artist and item.album:
-                        #            _debug_('%r - %r' % (item.artist, item.album))
+                        #            logger.debug('%r - %r', item.artist, item.album)
                         #            break
                         #    else:
-                        #        _debug_('No files in %r' % (item.dir,), DINFO)
+                        #        logger.info('No files in %r', item.dir)
                     if item.type in ('audiocd',) and not hasattr(item, 'title'):
                         item.title = item.name
             except Exception, why:
-                _debug_('%s: %s' % (item.name, why))
+                logger.debug('%s: %s', item.name, why)
                 traceback.print_exc()
 
             try:
@@ -182,21 +182,21 @@ class PluginInterface(plugin.ItemPlugin):
                     return [ (self.cover_search_file, _('Find a cover for this music'),
                                'imdb_search_or_cover_search') ]
                 else:
-                    _debug_(_("'coversearch' was disabled for this item! " \
-                        "'coversearch' needs an item with " \
-                        "Artist and Album (if it's a mp3 or ogg) or " \
-                        "Title (if it's a cd track) to be able to search. "  \
-                        "So you need a file with a ID3 tag (mp3) or an Ogg Info. "  \
-                        "Maybe you must fix this file (%s) tag?") % item.filename)
+                    logger.debug(_("'coversearch' was disabled for this item! ""'coversearch' needs an item with ""Artist and Album (if it's a mp3 or ogg) or ""Title (if it's a cd track) to be able to search. ""So you need a file with a ID3 tag (mp3) or an Ogg Info. ""Maybe you must fix this file (%s) tag?"), item.filename)
+
+
+
+
+
             except KeyError:
-                _debug_(_("Plugin 'coversearch' was disabled for this item! " \
-                    "'coversearch' needs an item with " \
-                    "Artist and Album (if it's a mp3 or ogg) or " \
-                    "Title (if it's a cd track) to be able to search. " \
-                    "So you need a file with a ID3 tag (mp3) or an Ogg Info. " \
-                    "Maybe you must fix this file (%s) tag?") % item.filename)
+                logger.debug(_("Plugin 'coversearch' was disabled for this item! ""'coversearch' needs an item with ""Artist and Album (if it's a mp3 or ogg) or ""Title (if it's a cd track) to be able to search. ""So you need a file with a ID3 tag (mp3) or an Ogg Info. ""Maybe you must fix this file (%s) tag?"), item.filename)
+
+
+
+
+
             except AttributeError:
-                _debug_(_("Unknown CD, cover searching is disabled"))
+                logger.debug(_("Unknown CD, cover searching is disabled"))
         return []
 
 
@@ -204,7 +204,7 @@ class PluginInterface(plugin.ItemPlugin):
         """
         search Amazon for this item
         """
-        _debug_('cover_search_file(arg=%r, menuw=%r)' % (arg, menuw), 1)
+        logger.debug('cover_search_file(arg=%r, menuw=%r)', arg, menuw)
         box = PopupBox(text=_('searching Amazon...'))
         box.show()
 
@@ -218,7 +218,7 @@ class PluginInterface(plugin.ItemPlugin):
         search_string = '%s %s' % (artist.encode(config.AMAZON_QUERY_ENCODING),
                                    album.encode(config.AMAZON_QUERY_ENCODING))
         search_string = re.sub('[\(\[].*[\)\]]', '', search_string)
-        _debug_('search_string=%r' % search_string)
+        logger.debug('search_string=%r', search_string)
         try:
             cover = amazon.ItemSearch(search_string, SearchIndex='Music', ResponseGroup='Images,ItemAttributes')
         except amazon.AWSException, why:
@@ -270,10 +270,10 @@ class PluginInterface(plugin.ItemPlugin):
                             m = urllib2.urlopen(item.LargeImage.URL)
                             imageFound = True
                         except urllib2.URLError, e:
-                            _debug_('URLError: %s' % (e), DINFO)
+                            logger.info('URLError: %s', e)
                         except urllib2.HTTPError, e:
                             # Amazon returned a 404
-                            _debug_('HTTPError: %s' % (e), DINFO)
+                            logger.info('HTTPError: %s', e)
                         if imageFound and (m.info()['Content-Length'] != '807'):
                             image = imlib2.open_from_memory(m.read())
                             items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url,
@@ -285,10 +285,10 @@ class PluginInterface(plugin.ItemPlugin):
                                 m = urllib2.urlopen(item.LargeImage.URL)
                                 imageFound = True
                             except urllib2.URLError, e:
-                                _debug_('URLError: %s' % (e), DINFO)
+                                logger.info('URLError: %s', e)
                             except urllib2.HTTPError, e:
                                 # Amazon returned a 404
-                                _debug_('HTTPError: %s' % (e), DINFO)
+                                logger.info('HTTPError: %s', e)
                             if imageFound and (m.info()['Content-Length'] != '807'):
                                 image = imlib2.open_from_memory(m.read())
                                 items += [ menu.MenuItem('%s (%sx%s)' % (title, width, height), self.cover_create, url,
@@ -343,7 +343,7 @@ class PluginInterface(plugin.ItemPlugin):
             image.crop((2, 2), (width-4, height-4)).save(filename)
             util.cache_image(filename)
         except Exception, why:
-            _debug_(why, DWARNING)
+            logger.warning(why)
 
         if self.item.type in ('audiocd', 'dir'):
             self.item.image = filename

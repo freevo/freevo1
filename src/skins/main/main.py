@@ -107,7 +107,7 @@ class Skin:
             if not config.SKIN_XML_FILE:
                 config.SKIN_XML_FILE = self.storage['SKIN_XML_FILE']
             else:
-                _debug_('skin forced to %s' % config.SKIN_XML_FILE, 2)
+                logger.log( 9, 'skin forced to %s', config.SKIN_XML_FILE)
         else:
             if not config.SKIN_XML_FILE:
                 config.SKIN_XML_FILE = config.SKIN_DEFAULT_XML_FILE
@@ -230,7 +230,7 @@ class Skin:
         set the basic skin fxd file
         """
         config.SKIN_XML_FILE = os.path.splitext(os.path.basename(name))[0]
-        _debug_('load basic skin settings: %s' % config.SKIN_XML_FILE)
+        logger.debug('load basic skin settings: %s', config.SKIN_XML_FILE)
 
         # try to find the skin xml file
         if not self.settings.load(name, clear=True):
@@ -240,7 +240,7 @@ class Skin:
         for dir in config.cfgfilepath:
             local_skin = '%s/local_skin.fxd' % dir
             if os.path.isfile(local_skin):
-                _debug_('Skin: Add local config %s to skin' % local_skin,2)
+                logger.log( 9, 'Skin: Add local config %s to skin', local_skin)
                 self.settings.load(local_skin)
                 break
 
@@ -257,7 +257,7 @@ class Skin:
         """
         return an object with new skin settings
         """
-        _debug_('load additional skin info: %s' % filename)
+        logger.debug('load additional skin info: %s', filename)
         if filename and vfs.isfile(vfs.join(filename, 'folder.fxd')):
             filename = vfs.abspath(os.path.join(filename, 'folder.fxd'))
 
@@ -476,7 +476,7 @@ class Skin:
         """
         Clean the screen
         """
-        _debug_('Skin.clear(osd_update=%r)' % (osd_update,))
+        logger.debug('Skin.clear(osd_update=%r)', osd_update)
         self.force_redraw = True
         osd.clearscreen(osd.COL_BLACK)
         if osd_update:
@@ -484,7 +484,7 @@ class Skin:
 
 
     def suspend(self):
-        _debug_('Skin.suspend()')
+        logger.debug('Skin.suspend()')
         if not self.suspended:
             self.suspended = True
             if self.timer:
@@ -492,7 +492,7 @@ class Skin:
 
 
     def resume(self):
-        _debug_('Skin.resume()')
+        logger.debug('Skin.resume()')
         if self.suspended:
             self.suspended = False
 
@@ -501,7 +501,7 @@ class Skin:
         """
         Redraw the current screen
         """
-        _debug_('Skin.redraw()', 3)
+        logger.log( 8, 'Skin.redraw()')
         if self.last_draw[0] and self.last_draw[1]:
             self.draw(self.last_draw[0], self.last_draw[1], self.last_draw[2])
 
@@ -518,7 +518,7 @@ class Skin:
         Draw the object.  object may be a menu widget, a table for the tv menu
         or an audio item for the audio player.
         """
-        _debug_('Skin.draw(type=%r, object=%r, menu=%r)' % (type, object, menu), 2)
+        logger.log( 9, 'Skin.draw(type=%r, object=%r, menu=%r)', type, object, menu)
         if self.suspended:
             return
 

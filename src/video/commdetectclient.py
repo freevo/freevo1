@@ -71,7 +71,7 @@ def connectionTest(teststr='testing'):
 
 def initCommDetectJob(source):
     """Initialize the commdetectjob."""
-    _debug_('initCommDetectJob(%s)' % (source))
+    logger.debug('initCommDetectJob(%s)', source)
     if not (source):
         return (False, "CommDetectClient: no source")
     try:

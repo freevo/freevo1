@@ -120,7 +120,7 @@ def scale_and_save_image(filename, scale):
     cache_dir = vfs.getoverlay(filename)
     cache_file = '%dx%d%s' % (skin.USABLE_WIDTH, skin.USABLE_HEIGHT, ext)
     cache_filename = os.path.join(cache_dir, cache_file)
-    _debug_('Looking for %s' % cache_filename)
+    logger.debug('Looking for %s', cache_filename)
     if vfs.exists(cache_filename) and vfs.mtime(cache_filename) > vfs.mtime(filename):
         return cache_filename
     image = imlib2.open_without_cache(filename)
@@ -333,18 +333,18 @@ def parse_color(node):
     global colors
     label = attr_str(node, 'label', '')
     value = attr_color(node, 'value', (0 , 0, 0), False)
-    _debug_('Color %s = %r' % (label, value), 2)
+    logger.log( 9, 'Color %s = %r', label, value)
     colors[label] = value
 
 def resolve_color(color):
-    _debug_('Resolving %r type = %r' % (color, type(color)), 2)
+    logger.log( 9, 'Resolving %r type = %r', color, type(color))
     if isinstance(color, str):
-        _debug_('Colors %r' %(colors.keys()), 2)
+        logger.log( 9, 'Colors %r', colors.keys())
         if color in colors:
-            _debug_('Resolved %s to %r' % (color, colors[color]), 2)
+            logger.log( 9, 'Resolved %s to %r', color, colors[color])
             return colors[color]
         else:
-            _debug_('Color %s not found!' % color, 2)
+            logger.log( 9, 'Color %s not found!', color)
             return (0, 0, 0)
     else:
         return color
@@ -394,9 +394,9 @@ def parse(filename):
             filename = vfs.join(config.SKIN_DIR, 'osd', filename)
 
     if not vfs.isfile(filename):
-        _debug_('Failed to load OSD skin file: %s' % filename)
+        logger.debug('Failed to load OSD skin file: %s', filename)
         return
-    _debug_('Loading OSD skin file %s' % filename)
+    logger.debug('Loading OSD skin file %s', filename)
     parser = util.fxdparser.FXD(filename)
     parser.set_handler('osds', osds_callback)
     parser.parse()

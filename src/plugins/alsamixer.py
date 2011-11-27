@@ -139,7 +139,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 self.setMainVolume(config.MIXER_VOLUME_MAX)
                 self.setOgainVolume(config.MIXER_VOLUME_MAX)
         else:
-            _debug_("No appropriate audio channel found for mixer")
+            logger.debug("No appropriate audio channel found for mixer")
 
         if config.MIXER_CONTROL_ALL:
             self.setLineinVolume(0)
@@ -169,7 +169,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if event in (MIXER_VOLUP, MIXER_VOLDOWN):
             step = event.arg
             if not isinstance(step, int):
-                _debug_("%s event type '%s' is not 'int'" % (event, step), DWARNING)
+                logger.warning("%s event type '%s' is not 'int'", event, step)
                 step = self.default_step
 
         # Handle volume control

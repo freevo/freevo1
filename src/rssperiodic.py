@@ -54,30 +54,30 @@ def getFileExtension(string):
 
 def isAudioItem(filename):
     string = getFileExtension(filename)
-    _debug_('%s' %(string), 5)
+    logger.log( 6, '%s', string)
     for suffix in config.AUDIO_SUFFIX:
-        _debug_('%s' %(suffix), 5)
+        logger.log( 6, '%s', suffix)
         if (cmp(string.lower(), suffix.lower()) == 0):
-            _debug_('True', 5)
+            logger.log( 6, 'True')
             return True
-    _debug_('False', 5)
+    logger.log( 6, 'False')
     return False
 
 
 def isVideoItem(filename):
     string = getFileExtension(filename)
-    _debug_('%s' %(string), 5)
+    logger.log( 6, '%s', string)
     for suffix in config.VIDEO_MPLAYER_SUFFIX:
-        _debug_('%s' %(suffix), 5)
+        logger.log( 6, '%s', suffix)
         if (cmp(string.lower(), suffix.lower()) == 0):
-            _debug_('True', 5)
+            logger.log( 6, 'True')
             return True
     for suffix in config.VIDEO_XINE_SUFFIX:
-        _debug_('%s' %(suffix), 5)
+        logger.log( 6, '%s', suffix)
         if (cmp(string.lower(), suffix.lower()) == 0):
-            _debug_('True', 5)
+            logger.log( 6, 'True')
             return True
-    _debug_('False', 5)
+    logger.log( 6, 'False')
     return False
 
 
@@ -185,11 +185,11 @@ def checkForExpiration():
             try:
                 os.remove(config.RSS_VIDEO+fxdfile)
             except OSError:
-                _debug_('removing the file %s failed' % (fxdfile))
+                logger.debug('removing the file %s failed', fxdfile)
             try:
                 os.remove(config.RSS_VIDEO+filename)
             except OSError:
-                _debug_('removing the file %s failed' % (filename))
+                logger.debug('removing the file %s failed', filename)
     for line in deletedItems:
         #try:
         downloadedFiles.remove(line)
@@ -216,7 +216,7 @@ def createFxd(item, filename):
         file.write('</freevo>\n')
         file.close()
     except IOError:
-        _debug_('Unable to write FXD file %s' % (ofile), DERROR)
+        logger.error('Unable to write FXD file %s', ofile)
     return ofile
 
 
@@ -224,13 +224,13 @@ def checkForUpdates():
     try:
         file = open(config.RSS_FEEDS, 'r')
     except IOError, why:
-        _debug_('Could not open configuration file %r: %s' % (config.RSS_FEEDS, why), DERROR)
+        logger.error('Could not open configuration file %r: %s', config.RSS_FEEDS, why)
         return
     try:
         if not os.path.isdir(config.RSS_DOWNLOAD):
             os.makedirs(config.RSS_DOWNLOAD)
     except OSError, why:
-        _debug_('Could not create the download directory %r: %s' % (config.RSS_DOWNLOAD, why), DERROR)
+        logger.error('Could not create the download directory %r: %s', config.RSS_DOWNLOAD, why)
         return
 
     for line in file:
@@ -242,7 +242,7 @@ def checkForUpdates():
             (url, numberOfDays) = re.split(';', line)
         except ValueError:
             continue
-        _debug_('Check %s for updates' % url)
+        logger.debug('Check %s for updates', url)
         try:
             feed = rssfeed.Feed(urllib.urlopen(url))
             for item in feed.items:
@@ -251,24 +251,24 @@ def checkForUpdates():
                 if int(diff.days) <= int(numberOfDays) and not re.search('None', item.url):
                     os.chdir(config.RSS_DOWNLOAD)
                     filename = os.path.basename(item.url)
-                    _debug_('%r -> %s' % (item.title, filename), 2)
+                    logger.log( 9, '%r -> %s', item.title, filename)
                     if len(glob.glob(filename)) == 0 and not checkForDup(item.url):
                         if re.search('torrent', item.url):
-                            _debug_('Running bittorrent download from %s' % item.url)
+                            logger.debug('Running bittorrent download from %s', item.url)
                             cmdlog = open(os.path.join(config.FREEVO_LOGDIR, 'rss-bittorrent.out'), 'a')
                             p = Popen('bittorrent-console %s' % (item.url), shell=True, stderr=cmdlog, stdout=cmdlog)
                             exitStatus = p.wait()
                             filename = re.sub('\.torrent', '', filename)
                         else:
-                            _debug_('Running wget download from %s' % (item.url))
+                            logger.debug('Running wget download from %s', item.url)
                             cmdlog = open(os.path.join(config.FREEVO_LOGDIR, 'rss-wget.out'), 'a')
                             p = Popen('wget -O %s %s' % (filename, item.url), shell=True, stderr=cmdlog, stdout=cmdlog)
                             exitStatus = p.wait()
                         if exitStatus:
-                            _debug_('Download failed - exit status %s.' % exitStatus)
+                            logger.debug('Download failed - exit status %s.', exitStatus)
                             os.remove(filename)
                         else:
-                            _debug_('Download completed (%s bytes)' % os.path.getsize(filename))
+                            logger.debug('Download completed (%s bytes)', os.path.getsize(filename))
                             meta = metadata.parse(filename)
                             if meta and meta.has_key('media'):
                                 if meta.media == 'MEDIA_AUDIO' or isAudioItem(filename):
@@ -277,22 +277,22 @@ def checkForUpdates():
                                         shutil.move(filename, config.RSS_AUDIO)
                                         shutil.move(fxdpath, config.RSS_AUDIO)
                                     except:
-                                        _debug_('failed to move %s to %s' % (filename, newpath))
+                                        logger.debug('failed to move %s to %s', filename, newpath)
                                 elif meta.media == 'MEDIA_VIDEO' or isVideoItem(filename):
                                     try:
                                         fxdpath = createFxd(item, filename)
                                         shutil.move(filename, config.RSS_VIDEO)
                                         shutil.move(fxdpath, config.RSS_VIDEO)
                                     except:
-                                        _debug_('failed to move %s to %s' % (filename, newpath))
+                                        logger.debug('failed to move %s to %s', filename, newpath)
                                 else:
-                                    _debug_('Cannot move %s as it media type is %s', (filename, meta.media))
+                                    logger.debug('Cannot move %s as it media type is %s', filename, meta.media)
                                     fxdpath = createFxd(item, filename)
                             else:
-                                _debug_('Cannot move %s as cannot determine its media type', (filename))
+                                logger.debug('Cannot move %s as cannot determine its media type', filename)
                             addFileToCache(item.url)
                             addFileToExpiration(filename, goodUntil)
         except SyntaxError:
-            _debug_('Unable to parse %s. May not be a RSS feed' % (url), DERROR)
+            logger.error('Unable to parse %s. May not be a RSS feed', url)
         except IOError:
-            _debug_('Unable to download %s. Connection may be down.' % (url), DWARNING)
+            logger.warning('Unable to download %s. Connection may be down.', url)

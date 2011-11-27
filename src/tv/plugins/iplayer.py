@@ -170,7 +170,7 @@ def update_get_iplayer():
     except:
         return
 
-    _debug_('get_iplayer: Current Version: %s Latest Version: %s' % (current_version, latest_version))
+    logger.debug('get_iplayer: Current Version: %s Latest Version: %s', current_version, latest_version)
 
     if latest_version == current_version:
         # No need to update as we already have the latest version
@@ -729,7 +729,7 @@ class IPlayerRequestHandler(BaseHTTPRequestHandler):
             self.send_error(500, 'Failed to start get_iplayer')
 
     def log_message(self, format, *args):
-        _debug_(format % args, 2)
+        logger.log( 9, format, args)
 
     def output(self, out):
         line = 'a'
@@ -757,7 +757,7 @@ class DownloadQueue:
         self.finished_callback = callback
 
     def add(self, type, pid, name, episode):
-        _debug_('Adding %s - %s (type %s pid %s) to the queue.' % (name, episode, type, pid))
+        logger.debug('Adding %s - %s (type %s pid %s) to the queue.', name, episode, type, pid)
         self.queue.append((type, pid, name, episode))
         if len(self.queue) == 1:
             self.event.set()
@@ -766,16 +766,16 @@ class DownloadQueue:
         if self.current_download and \
             self.current_download[0] == type and \
             self.current_download[1] == pid:
-            _debug_('Cancelling current download (type %s pid %s)' % (type, pid))
+            logger.debug('Cancelling current download (type %s pid %s)', type, pid)
             self.cancel_download = (type, pid)
             return
         else:
             for download in self.queue:
                 if download[0] == type and download[1] == pid:
-                    _debug_('Removing download (type %s pid %s)' % (type, pid))
+                    logger.debug('Removing download (type %s pid %s)', type, pid)
                     self.queue.remove(download)
                     return
-        _debug_('Failed to remove download not in queue (type %s pid %s)' % (type, pid))
+        logger.debug('Failed to remove download not in queue (type %s pid %s)', type, pid)
 
     def is_downloading(self, type, pid):
         if self.current_download and \
@@ -794,11 +794,11 @@ class DownloadQueue:
         return self.current_download or self.queue
 
     def pause(self):
-        _debug_('Pausing downloads')
+        logger.debug('Pausing downloads')
         self.paused = True
 
     def resume(self):
-        _debug_('Resuming downloads')
+        logger.debug('Resuming downloads')
         self.paused = False
         self.event.set()
 
@@ -812,15 +812,15 @@ class DownloadQueue:
                 self.event.clear()
     
             while self.paused:
-                _debug_('Downloads paused')
+                logger.debug('Downloads paused')
                 self.event.wait()
                 self.event.clear()
     
             if len(self.queue) > 0:
                 self.current_download = self.queue.pop()
-                _debug_('Starting download %s - %s (type %s pid %s)' % (self.current_download[2:] + self.current_download[:2]))
+                logger.debug('Starting download %s - %s (type %s pid %s)', self.current_download[2:] + self.current_download[:2])
                 status = self.download()
-                _debug_('Download status: %s' % status)
+                logger.debug('Download status: %s', status)
                 download = self.current_download
                 self.current_download = None
                 self.history.append(download + (status,))
@@ -915,14 +915,14 @@ class DownloadQueue:
         line = 'a'
         while line:
             line = out.readline()
-            _debug_('%r' % line, 2)
+            logger.log( 9, '%r', line)
             if line == 'INFO: skipping this programme':
                 self.status = 'failed'
-                _debug_('Download FAILED')
+                logger.debug('Download FAILED')
             elif line == 'ERROR: aborting get_iplayer' or \
                  line.startswith('ERROR: Failed to record '):
                 self.status = 'failed'
-                _debug_('Download FAILED')
+                logger.debug('Download FAILED')
             elif line.startswith('INFO: Recorded '):
                 self.filename = line[len('INFO: Recorded '):].strip()
             elif line.startswith('name:'):
@@ -934,7 +934,7 @@ class DownloadQueue:
             elif line.startswith('thumbnail:'):
                 self.thumbnail = line[10:].strip()
 
-            _debug_( 'DOWNLOAD: %r' % line)
+            logger.debug('DOWNLOAD: %r', line)
 
 download_queue = None
 

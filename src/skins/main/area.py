@@ -124,8 +124,8 @@ class Skin_Area:
         checks if redraws are needed and calls the two update functions
         for the different types of areas
         """
-        _debug_('Skin_Area.draw(settings=%r, obj=%r, menu=%r, display_style=%r, widget_type=%r, force_redraw=%r)' % \
-            (settings, obj, menu, display_style, widget_type, force_redraw), 3)
+        logger.log( 8, 'Skin_Area.draw(settings=%r, obj=%r, menu=%r, display_style=%r, widget_type=%r, force_redraw=%r)', settings, obj, menu, display_style, widget_type, force_redraw)
+
 
         self.display_style = display_style
         self.xml_settings  = settings
@@ -456,7 +456,7 @@ class Skin_Area:
                 try:
                     area = area.style[0]
                 except IndexError:
-                    _debug_('index error for %s %s' % (self.display_style, widget_type), DWARNING)
+                    logger.warning('index error for %s %s', self.display_style, widget_type)
                     raise
 
             if area[0] and (not self.use_text_view):
@@ -464,7 +464,7 @@ class Skin_Area:
             elif area[1]:
                 area = area[1]
             else:
-                _debug_('want to fall back, but no text view defined', DWARNING)
+                logger.warning('want to fall back, but no text view defined')
                 area = area[0]
 
         else:
@@ -489,7 +489,7 @@ class Skin_Area:
                 try:
                     area = area.areas[self.area_name]
                 except (KeyError, AttributeError):
-                    _debug_('no skin information for %s:%s' % (widget_type, self.area_name), DWARNING)
+                    logger.warning('no skin information for %s:%s', widget_type, self.area_name)
                     area = xml_skin.Area(self.area_name)
                     area.visible = False
 
@@ -625,12 +625,12 @@ class Skin_Area:
             if hasattr(content, 'x'):
                 x = content.x
             else:
-                _debug_('No content.x for %s' % (self.name), DWARNING)
+                logger.warning('No content.x for %s', self.name)
         if y == -1:
             if hasattr(content, 'y'):
                 y = content.y
             else:
-                _debug_('No content.y for %s' % (self.name), DWARNING)
+                logger.warning('No content.y for %s', self.name)
 
         if width == None:
             width  = content.width

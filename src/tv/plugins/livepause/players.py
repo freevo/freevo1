@@ -322,7 +322,7 @@ class Xine(Player):
         Pause Playback.
         """
         if self.app and not self.paused:
-            _debug_('Pausing')
+            logger.debug('Pausing')
             self.app.write('pause\n')
             self.paused = True
 
@@ -332,7 +332,7 @@ class Xine(Player):
         Resume Playback.
         """
         if self.app and self.paused:
-            _debug_('Resuming')
+            logger.debug('Resuming')
             self.app.write('pause\n')
             self.paused = False
 
@@ -433,7 +433,7 @@ class Mplayer(Player):
         Pause Playback.
         """
         if self.app and not self.paused:
-            _debug_('Pausing')
+            logger.debug('Pausing')
             self.app.write('pause\n')
             self.paused = True
 
@@ -443,7 +443,7 @@ class Mplayer(Player):
         Resume Playback.
         """
         if self.app and self.paused:
-            _debug_('Resuming')
+            logger.debug('Resuming')
             self.app.write('pause\n')
             self.paused = False
 
@@ -552,7 +552,7 @@ class Vlc(Player):
             sub_pid = self.sub_pids[index]
         else:
             sub_pid = index
-        _debug_('Setting subtitle track %d (pid %s)' % (index, sub_pid))
+        logger.debug('Setting subtitle track %d (pid %s)', index, sub_pid)
         self.app.send_command('strack %s' % sub_pid)
         self.current_sub_index = index
 
@@ -603,7 +603,7 @@ class Vlc(Player):
             audio_pid = self.audio_pids[index]
         else:
             audio_pid = index
-        _debug_('Setting audio track %d (pid %s)' % (index, audio_pid))
+        logger.debug('Setting audio track %d (pid %s)', index, audio_pid)
         self.app.send_command('atrack %s' % audio_pid)
         self.current_audio_index = index
 
@@ -630,7 +630,7 @@ class Vlc(Player):
         Pause Playback.
         """
         if self.app and not self.paused:
-            _debug_('Pausing')
+            logger.debug('Pausing')
             self.app.send_command('pause 0')
             self.paused = True
 
@@ -640,7 +640,7 @@ class Vlc(Player):
         Resume Playback.
         """
         if self.app and self.paused:
-            _debug_('Resuming')
+            logger.debug('Resuming')
             self.app.send_command('pause 0')
             self.paused = False
 
@@ -656,7 +656,7 @@ class Vlc(Player):
         Function to tell mplayer to display the specified text.
         """
         if self.app:
-            _debug_('display %s' % message)
+            logger.debug('display %s', message)
             self.app.send_command('marq-marquee %s' % message)
 
 

@@ -163,7 +163,7 @@ class PluginInterface(plugin.DaemonPlugin):
         Do something when receiving an event
         """
 
-        _debug_('%s: %s app got %s event' % (time.time(), self.plugin_name, event))
+        logger.debug('%s: %s app got %s event', time.time(), self.plugin_name, event)
         if event == OSD_MESSAGE:
             self.poll_counter = 1
             self.message = event.arg

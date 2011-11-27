@@ -60,19 +60,19 @@ class PluginInterface(plugin.ItemPlugin):
         if config.DEBUG >= 2:
             #testing stuff
             if hasattr(item, 'type'):
-                _debug_('item.type=\"%s\"' % (item.type))
+                logger.debug('item.type=\"%s\"', item.type)
             if hasattr(item, 'mode'):
-                _debug_('item.mode=\"%s\"' % (item.mode))
+                logger.debug('item.mode=\"%s\"', item.mode)
             if hasattr(item, 'info_type'):
-                _debug_('item.info_type=\"%s\"' % (item.info_type))
+                logger.debug('item.info_type=\"%s\"', item.info_type)
             if hasattr(item, 'name'):
-                _debug_('item.name=\"%s\"' % (item.name))
+                logger.debug('item.name=\"%s\"', item.name)
             if hasattr(item, 'filename'):
-                _debug_('item.filename=\"%s\"' % (item.filename))
+                logger.debug('item.filename=\"%s\"', item.filename)
             if hasattr(item, 'parentname'):
-                _debug_('item.parentname=\"%s\"' % (item.parentname))
+                logger.debug('item.parentname=\"%s\"', item.parentname)
             if hasattr(item, 'media') and hasattr(item.media, 'devicename'):
-                _debug_('item.media.devicename=\"%s\"' % (item.media.devicename))
+                logger.debug('item.media.devicename=\"%s\"', item.media.devicename)
 
         if item.type == 'video' and item.mode == 'dvd' and hasattr(item, 'info_type'):
             if item.info_type == "track": #and item.media and item.media.devicename:
@@ -122,7 +122,7 @@ class PluginInterface(plugin.ItemPlugin):
         #title = int(self.item.url[6:])
         fname = join(config.VIDEO_ITEMS[0][1], "%s_%s" % (self.item.parent.name, self.title))
         #_debug_('title=%s, fname=%s' % (title, fname))
-        _debug_('arg=%r' % (arg, ))
+        logger.debug('arg=%r', arg)
         #unwrap settings tupple
         vcodecnr, tgtsize, mpass, vbitrate, acodecnr, contnr = arg
 
@@ -192,7 +192,7 @@ class PluginInterface(plugin.ItemPlugin):
         self.menuw = menuw
         AlertBox(width=400, height=200, text=_("Encoding started"), handler=self.mopup).show()
 
-        _debug_("boe")
+        logger.debug("boe")
         #menuw.delete_menu()
         #menuw.delete_menu()
 

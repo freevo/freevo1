@@ -110,7 +110,7 @@ class Imap(MultiMail):
             imap.logout
             return unread
         except:
-            _debug_('IMAP exception')
+            logger.debug('IMAP exception')
             return 0
 
 
@@ -133,7 +133,7 @@ class Pop3(MultiMail):
             pop.quit
             return unread
         except:
-            _debug_('Error loading POP account')
+            logger.debug('Error loading POP account')
             return 0
 
 
@@ -177,5 +177,5 @@ class Maildir(MultiMail):
                 msg = md.next()
             return count
         else:
-            _debug_('Could not open maildir: %s, check settings.' % self.MAILBOX)
+            logger.debug('Could not open maildir: %s, check settings.', self.MAILBOX)
             return 0

@@ -134,7 +134,7 @@ class PluginInterface(plugin.MimetypePlugin):
                 file_id = String(parent.media.id) + file[len(os.path.join(parent.media.mountdir, '')):]
                 try:
                     x.mplayer_options = discset_information[file_id]
-                    _debug_('x.mplayer_options=%r' % x.mplayer_options)
+                    logger.debug('x.mplayer_options=%r', x.mplayer_options)
                 except KeyError:
                     pass
             items.append(x)
@@ -208,7 +208,7 @@ def hash_fxd_movie_database():
             print
             return 0
 
-    _debug_("Building the xml hash database...", 2)
+    logger.log( 9, "Building the xml hash database...")
 
     files = []
     if not config.VIDEO_ONLY_SCAN_DATADIR:
@@ -239,5 +239,5 @@ def hash_fxd_movie_database():
                 for fo in info.__fxd_files_options__:
                     discset_information[fo['file-id']] = fo['mplayer-options']
 
-    _debug_('done', 2)
+    logger.log( 9, 'done')
     return 1

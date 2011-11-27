@@ -67,8 +67,8 @@ class BaseAnimation:
         @ivar bg_wait   : initially wait for updated background before activating
         @ivar bg_redraw : set background to original screen bg when finished
         """
-        _debug_('__init__(rectstyle=%r, fps=%r, bg_update=%r, bg_wait=%r, bg_redraw=%r)' % \
-            (rectstyle, fps, bg_update, bg_wait, bg_redraw), 2)
+        logger.log( 9, '__init__(rectstyle=%r, fps=%r, bg_update=%r, bg_wait=%r, bg_redraw=%r)', rectstyle, fps, bg_update, bg_wait, bg_redraw)
+
 
         self.rect      = Rect(rectstyle)
         self.bg_update = bg_update
@@ -82,25 +82,25 @@ class BaseAnimation:
 
     def get_surface(self, width, height):
         """ Helper for creating surfaces """
-        _debug_('get_surface(width=%r, height=%r)' % (width, height), 2)
+        logger.log( 9, 'get_surface(width=%r, height=%r)', width, height)
         return Surface( (width, height), 0, 32)
 
 
     def get_osd(self):
         """ Helper for getting osd singleton """
-        _debug_('get_osd()', 2)
+        logger.log( 9, 'get_osd()')
         return osd.get_singleton()
 
 
     def set_fps(self, fps):
         """ Sets the desired fps """
-        _debug_('set_fps(fps=%r)' % (fps), 2)
+        logger.log( 9, 'set_fps(fps=%r)', fps)
         self.interval  = int(1000.0/float(fps))
 
 
     def set_screen_background(self):
         """ Update the background """
-        _debug_('set_screen_background()', 2)
+        logger.log( 9, 'set_screen_background()')
         if not self.background:
             self.background = osd.get_singleton().getsurface(rect=self.rect)
             self.updates = []
@@ -132,13 +132,13 @@ class BaseAnimation:
         """ Get the rectangle of the current object
         @returns: the rectangle tuple
         """
-        _debug_('get_rect()', 2)
+        logger.log( 9, 'get_rect()')
         return self.rect
 
 
     def start(self):
         """ Starts the animation """
-        _debug_('start()', 2)
+        logger.log( 9, 'start()')
         render.get_singleton().add_animation(self)
         if not self.bg_wait:
             self.active = True
@@ -146,13 +146,13 @@ class BaseAnimation:
 
     def stop(self):
         """ Stops the animation from being polled """
-        _debug_('stop()', 2)
+        logger.log( 9, 'stop()')
         self.active = False
 
 
     def remove(self):
         """ Flags the animation to be removed from the animation list """
-        _debug_('remove()', 2)
+        logger.log( 9, 'remove()')
         self.active = False
 
         # set the org. bg if we use this
@@ -169,7 +169,7 @@ class BaseAnimation:
         @note: If the rect passed damages our rect, but no actual blit is done
         on osd.screen, we'll end up with a copy of our animation in our bg. This is BAD.
         """
-        _debug_('damage(rectstyles=%r)' % (rectstyles), 2)
+        logger.log( 9, 'damage(rectstyles=%r)', rectstyles)
         if not (self.bg_redraw or self.bg_update) or rectstyles == None:
             return
 
@@ -182,12 +182,12 @@ class BaseAnimation:
                     self.active = True
 
                 self.updates.append(self.rect.clip(rect))
-                _debug_('Damaged, updating background')
+                logger.debug('Damaged, updating background')
 
 
     def poll(self, current_time):
         """ Poll the animations """
-        _debug_('poll(current_time=%r)' % (current_time), 2)
+        logger.log( 9, 'poll(current_time=%r)', current_time)
         if self.next_update < current_time:
             self.next_update = current_time + self.interval
 
@@ -200,5 +200,5 @@ class BaseAnimation:
 
     def draw(self):
         """ Overload to do stuff with the surface """
-        _debug_('draw()', 2)
+        logger.log( 9, 'draw()')
         pass

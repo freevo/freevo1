@@ -200,7 +200,7 @@ class HeadlinesSiteItem(Item):
 
         except:
             #unreachable or url error
-            _debug_('could not open %s' % self.url, DERROR)
+            logger.error('could not open %s', self.url)
             pass
 
         #write the file

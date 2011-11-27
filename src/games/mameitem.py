@@ -80,7 +80,7 @@ class MameItem(Item):
         if os.path.isfile(file + '.mame'):
             addargs = open(filename + '.mame').read().strip()
             command.extend(addargs.split())
-            _debug_('Read additional options = "%s"' % addargs)
+            logger.debug('Read additional options = "%s"', addargs)
 
         command.append(file)
 
@@ -108,7 +108,7 @@ class MameItem(Item):
 
 
     def play(self, arg=None, menuw=None):
-        _debug_('%s.play(arg=%r, menuw=%r)' % (self.__module__, arg, menuw))
+        logger.debug('%s.play(arg=%r, menuw=%r)', self.__module__, arg, menuw)
         self.parent.current_item = self
 
         if not self.menuw:
@@ -117,7 +117,7 @@ class MameItem(Item):
         if self.menuw.visible:
             self.menuw.hide()
 
-        _debug_("Playing:  %s" % self.filename)
+        logger.debug("Playing:  %s", self.filename)
 
         self.game_player.play(self, menuw)
 

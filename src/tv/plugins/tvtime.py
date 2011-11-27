@@ -95,9 +95,9 @@ class PluginInterface(plugin.Plugin):
         if data:
             data = re.search( "^(tvtime: )?Running tvtime (?P<major>\d+).(?P<minor>\d+).(?P<version>\d+).", data )
             if data:
-                _debug_("major is: %s" % data.group( "major" ))
-                _debug_("minor is: %s" % data.group( "minor" ))
-                _debug_("version is: %s" % data.group( "version" ))
+                logger.debug("major is: %s", data.group("major"))
+                logger.debug("minor is: %s", data.group("minor"))
+                logger.debug("version is: %s", data.group("version"))
                 self.major = int(data.group( "major" ))
                 self.minor = int(data.group( "minor" ))
                 self.minorversion = int(data.group( "version" ))
@@ -144,7 +144,7 @@ class PluginInterface(plugin.Plugin):
             return 1
 
         if not os.path.isfile(self.tvtimecache):
-            _debug_('no cache file')
+            logger.debug('no cache file')
             return 1
 
         (cachelconf, cachelconf_t, cachefconf_t) = self.readMtimeCache()
@@ -154,15 +154,15 @@ class PluginInterface(plugin.Plugin):
         cachefconf_t = cachefconf_t.rstrip()
 
         if not (cachelconf == self.mylocalconf):
-            _debug_('local_conf changed places')
+            logger.debug('local_conf changed places')
             return 1
 
         if (float(self.mylocalconf_t) > float(cachelconf_t)):
-            _debug_('local_conf modified')
+            logger.debug('local_conf modified')
             return 1
 
         if (float(self.myfconfig_t) > float(cachefconf_t)):
-            _debug_('fconfig modified')
+            logger.debug('fconfig modified')
             return 1
         return 0
 
@@ -212,7 +212,7 @@ class PluginInterface(plugin.Plugin):
             self.writeNewStationListXML(tvtimefile, tvnorm, norm)
 
     def mergeStationListXML(self, tvtimefile, tvnorm, norm):
-        _debug_("merging stationlist.xml")
+        logger.debug("merging stationlist.xml")
         try:
             os.rename(tvtimefile,tvtimefile+'.bak')
         except OSError:
@@ -284,7 +284,7 @@ class PluginInterface(plugin.Plugin):
 
 
     def writeNewStationListXML(self, tvtimefile, tvnorm, norm):
-        _debug_("writing new stationlist.xml")
+        logger.debug("writing new stationlist.xml")
         fp = open(tvtimefile,'wb')
         fp.write('<?xml version="1.0"?>\n')
         fp.write('<!DOCTYPE stationlist PUBLIC "-//tvtime//DTD stationlist 1.0//EN" "http://tvtime.sourceforge.net/DTD/stationlist1.dtd">\n')
@@ -322,17 +322,17 @@ class PluginInterface(plugin.Plugin):
         channel = str(channel)
 
         if config.TV_FREQUENCY_TABLE.has_key(channel):
-            _debug_("have a custom")
+            logger.debug("have a custom")
             return "Custom"
         elif (re.search('^\d+$', channel)):
-            _debug_("have number")
+            logger.debug("have number")
         if self.chanlists.has_key(config.CONF.chanlist):
-            _debug_("found chanlist in our list")
+            logger.debug("found chanlist in our list")
             return self.chanlists[config.CONF.chanlist]
         elif self.chans2band.has_key(channel):
-            _debug_("We know this channels band.")
+            logger.debug("We know this channels band.")
             return self.chans2band[channel]
-        _debug_("defaulting to USCABLE")
+        logger.debug("defaulting to USCABLE")
         return "US Cable"
 
     def createChannelsLookupTables(self):
@@ -431,7 +431,7 @@ class TVTime:
             else:
                 mychan = self.fc.chan_index
 
-            _debug_('starting channel is %s' % mychan)
+            logger.debug('starting channel is %s', mychan)
 
             command = '%s %s -k -I %s -n %s -d %s -f %s -c %s -i %s' % \
                 (config.TVTIME_CMD, outputplugin, w, s_norm, cf_device, 'freevo', mychan, cf_input)
@@ -480,7 +480,7 @@ class TVTime:
         elif mixer and config.MIXER_MAJOR_CTRL == 'PCM':
             mixer.setPcmVolume(mixer_vol)
 
-        _debug_('%s: started %s app' % (time.time(), self.mode))
+        logger.debug('%s: started %s app', time.time(), self.mode)
 
 
     def Stop(self, channel_change=0):
@@ -494,7 +494,7 @@ class TVTime:
         rc.remove_app(self)
 
     def eventhandler(self, event, menuw=None):
-        _debug_('%s: %s app got %s event' % (time.time(), self.mode, event))
+        logger.debug('%s: %s app got %s event', time.time(), self.mode, event)
         if event == em.STOP or event == em.PLAY_END:
             self.Stop()
             rc.post_event(em.PLAY_END)
@@ -509,7 +509,7 @@ class TVTime:
             elif event == em.TV_CHANNEL_DOWN:
                 nextchan = self.fc.getPrevChannel()
             nextvg = self.fc.getVideoGroup(nextchan, True)
-            _debug_("nextchan is %s" % nextchan)
+            logger.debug("nextchan is %s", nextchan)
 
             # XXX hazardous to your health. don't use tvtime with anything
             # other than one normal video_group.
@@ -591,18 +591,18 @@ class TVTimeApp(childapp.ChildApp2):
                    'F3' : em.MIXER_MUTE,
                    's' : em.STOP }
 
-        _debug_('TVTIME 1 KEY EVENT: "%s"' % str(list(line)))
+        logger.debug('TVTIME 1 KEY EVENT: "%s"', str(list(line)))
         if line == 'F10':
-            _debug_('TVTIME screenshot!')
+            logger.debug('TVTIME screenshot!')
             self.write('screenshot\n')
         elif line == 'z':
-            _debug_('TVTIME fullscreen toggle!')
+            logger.debug('TVTIME fullscreen toggle!')
             self.write('toggle_fullscreen\n')
             osd.toggle_fullscreen()
         else:
             event = events.get(line, None)
             if event is not None:
                 rc.post_event(event)
-                _debug_('posted translated tvtime event "%s"' % event)
+                logger.debug('posted translated tvtime event "%s"', event)
             else:
-                _debug_('tvtime cmd "%s" not found!' % line)
+                logger.debug('tvtime cmd "%s" not found!', line)

@@ -77,9 +77,9 @@ class PluginInterface(plugin.ItemPlugin):
         if result:
             (status, idnr) = initCommDetectJob(video.filename)
             (status, output) = listJobs()
-            _debug_(output, DINFO)
+            logger.info(output)
             (status, output) = queueIt(idnr, True)
-            _debug_(output, DINFO)
+            logger.info(output)
         else:
-            _debug_('commdetect server not running', DINFO)
+            logger.info('commdetect server not running')
         menuw.delete_menu(arg, menuw)

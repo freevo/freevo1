@@ -101,15 +101,15 @@ class PluginInterface(DaemonPlugin):
             elif isinstance(text, types.StringType):
                 text = Unicode(text).encode('iso-8859-15')
         except UnicodeError:
-            _debug_('UnicodeError: %s' % [x for x in text])
+            logger.debug('UnicodeError: %s', [xforxintext])
 
-        _debug_('festival.say %s' % text)
+        logger.debug('festival.say %s', text)
         self.fest.say(text)
 
 
     def eventhandler(self, event, menuw=None):
         """Catch events to speak corresponding text."""
-        _debug_('eventhandler(self, %s, %s) %s arg=%s' % (event, menuw, self, event.arg))
+        logger.debug('eventhandler(self, %s, %s) %s arg=%s', event, menuw, self, event.arg)
 
         if event.context is not None and event.context.endswith('menu'):
             sel = menuw.menustack[-1].selected
@@ -119,7 +119,7 @@ class PluginInterface(DaemonPlugin):
                 text = _('channel')+(' %s, %s, ' % (get_chan_displayname(sel.channel_id), strftime('%H %M', localtime(sel.start))))+_('program')+(' %s ' % sel.title)
                 self.speak(text)
             else:
-                _debug_('Selected by unknown event: ')+('%s', sel.__class__, dir(menuw.menustack[-1].selected))
+                logger.debug('Selected by unknown event: ')
 
 
     def shutdown(self):

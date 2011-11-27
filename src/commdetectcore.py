@@ -45,7 +45,7 @@ class CommDetectJob:
 
     def __init__(self, source, idnr):
         """Initialize class instance"""
-        _debug_('commdetectcore.CommDetectJob.__init__(%s)' % (source))
+        logger.debug('commdetectcore.CommDetectJob.__init__(%s)', source)
         self.source = source
         self.name = source
         self.idnr = idnr
@@ -168,21 +168,21 @@ class CommandThread(threading.Thread):
         self.command = command
         self.flushbuffer = 0
         self.finalfunc = finalfunc
-        _debug_('command=\"%s\"' % command)
+        logger.debug('command=\"%s\"', command)
 
     def run(self):
         self.pipe = popen2.Popen4(self.command)
         pid = self.pipe.pid
         self.parent.pid = copy(pid)
         totallines = []
-        _debug_("Mencoder running at PID %s" % self.pipe.pid)
+        logger.debug("Mencoder running at PID %s", self.pipe.pid)
         self.parent.busy = 1
         while 1:
             if self.flushbuffer:
                 line = self.pipe.fromchild.read(1000)
             else:
                 line = self.pipe.fromchild.readline()
-            _debug_(line)
+            logger.debug(line)
             if not line:
                 break
             else:
@@ -195,11 +195,11 @@ class CommandThread(threading.Thread):
         except:
             pass
         self.kill_pipe()
-        _debug_("Grabbing Blackframes from file")
+        logger.debug("Grabbing Blackframes from file")
         self.parent.grabBlackFrames()
-        _debug_("Finding Commercials")
+        logger.debug("Finding Commercials")
         self.parent.findCommercials()
-        _debug_("Writing edl file")
+        logger.debug("Writing edl file")
         self.parent.writeEdl()
         self.parent.busy = 2
         self.finalfunc()
@@ -230,7 +230,7 @@ class CommDetectQueue:
         """Start the queue"""
         if not self.running:
             self.running = True
-            _debug_("queue started", DINFO)
+            logger.info("queue started")
             self._runQueue()
 
     def listJobs(self):
@@ -250,24 +250,24 @@ class CommDetectQueue:
             self.running = False
             if hasattr(self,"currentjob"):
                 del self.currentjob
-            _debug_("queue empty, stopping processing...", DINFO)
+            logger.info("queue empty, stopping processing...")
             return
-        _debug_("runQueue callback data : %s" % line)
+        logger.debug("runQueue callback data : %s", line)
 
         #get the first queued object
         self.currentjob = self.qlist[0]
-        _debug_("PID %s" % self.currentjob.pid)
+        logger.debug("PID %s", self.currentjob.pid)
 
         if self.currentjob.busy == 0:
             #NEW
-            _debug_("Running Mencoder, to write the blackframes to a file")
+            logger.debug("Running Mencoder, to write the blackframes to a file")
             self.currentjob.busy = True
             self.currentjob._run(config.CONF.mencoder, \
                                 self.currentjob.cls[0], \
                                 self.currentjob.source, \
                                 0, \
                                 self._runQueue)
-            _debug_("Started job %s, PID %s" % (self.currentjob.idnr, self.currentjob.pid))
+            logger.debug("Started job %s, PID %s", self.currentjob.idnr, self.currentjob.pid)
 
         if self.currentjob.busy == 2:
             #DONE

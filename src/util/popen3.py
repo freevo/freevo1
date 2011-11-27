@@ -105,7 +105,7 @@ def waitpid(pid=0):
     """
     global dead_childs
     if pid == 0:
-        _debug_('main checking childs', 2)
+        logger.log( 9, 'main checking childs')
         try:
             pid = os.waitpid(pid, os.WNOHANG)[0]
         except OSError:
@@ -132,7 +132,7 @@ def waitpid(pid=0):
     if traceback.extract_stack()[0][0].find('thread') == -1:
         return os.waitpid(pid, os.WNOHANG)[0] == pid
 
-    _debug_('poll', 2)
+    logger.log( 9, 'poll')
     wait_lock.acquire()
     try:
         if pid in dead_childs:

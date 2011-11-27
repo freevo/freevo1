@@ -76,14 +76,14 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
         args.append(str(pos))
 
     command = [os.environ['FREEVO_SCRIPT'], '--execute=%s' % os.path.abspath(__file__) ] + args
-    _debug_(' '.join(command))
+    logger.debug(' '.join(command))
     p = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
     (stdout, stderr) = p.communicate()
     if p.returncode:
         for line in stdout.split():
-            _debug_(line)
+            logger.debug(line)
         for line in stderr.split():
-            _debug_(line, DINFO)
+            logger.info(line)
 
     if vfs.isfile(imagefile):
         try:
@@ -122,10 +122,10 @@ def snapshot(videofile, imagefile=None, pos=None, update=True, popup=None):
             else:
                 image.save(imagefile)
         except (OSError, IOError), why:
-            _debug_('snapshot: %s' % why, DERROR)
+            logger.error('snapshot: %s', why)
     else:
-        _debug_('no imagefile found for "%s"' % (Unicode(videofile)), DWARNING)
-        _debug_('%r' % imagefile, 2)
+        logger.warning('no imagefile found for "%s"', Unicode(videofile))
+        logger.log( 9, '%r', imagefile)
 
     if popup:
         pop.destroy()

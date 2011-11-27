@@ -115,7 +115,7 @@ class procstats(IdleBarPlugin):
         try:
             meminfo = file('/proc/meminfo', 'r').read().strip()
         except OSError:
-            _debug_('[procstats]: The file /proc/meminfo is not available', DWARNING)
+            logger.warning('[procstats]: The file /proc/meminfo is not available')
 
         if meminfo:
             i = 0
@@ -155,7 +155,7 @@ class procstats(IdleBarPlugin):
         try:
             self.getStats()
         except:
-            _debug_('[procstats]: Not working, this plugin is only tested with 2.4 and 2.6 kernels')
+            logger.debug('[procstats]: Not working, this plugin is only tested with 2.4 and 2.6 kernels')
 
         font = osd.get_font(config.OSD_IDLEBAR_FONT)
         widthtot = 0
@@ -231,8 +231,9 @@ class sensors(IdleBarPlugin):
             @param compute_expression: the expression to convert a raw value to a real value
             @param hotstack: is true when the sensor is above the max
             """
-            _debug_('__init__(sensor=%r, compute_expression=%r, hotstack=%r)' %
-                (sensor, compute_expression, hotstack), 2)
+            logger.log( 9, '__init__(sensor=%r, compute_expression=%r, hotstack=%r)', 
+(sensor, compute_expression, hotstack))
+
             self.pathform_path = config.SENSORS_PLATFORM_PATH
             self.i2cdev_path = config.SENSORS_I2CDEV_PATH
             self.kernel26 = False
@@ -248,7 +249,7 @@ class sensors(IdleBarPlugin):
                 try:
                     temperature = eval(self.compute_expression.replace ('@', str(rawvalue)))
                 except:
-                    _debug_('Compute expression does not evaluate', DERROR)
+                    logger.error('Compute expression does not evaluate')
                     temperature = rawvalue
                 return int(temperature)
 
@@ -507,7 +508,7 @@ class sensors2(IdleBarPlugin):
                 try:
                     temperature = eval(self.compute_expression.replace('@', str(rawvalue)))
                 except:
-                    _debug_('Cannot compute expression %r' % (self.compute_expression,), DERROR)
+                    logger.error('Cannot compute expression %r', self.compute_expression)
                     temperature = rawvalue
                 return int(temperature)
 
@@ -561,7 +562,7 @@ class sensors2(IdleBarPlugin):
 
     def __init__(self, *sensors):
         """ Initialize the plug-in """
-        _debug_('sensor.__init__(sensors=%r)' % (sensors,), 2)
+        logger.log( 9, 'sensor.__init__(sensors=%r)', sensors)
         for sens in sensors:
             if isinstance(sens, (tuple, list)):
                 if len(sens) < 3 or len(sens) > 4:

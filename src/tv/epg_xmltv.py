@@ -89,7 +89,7 @@ def get_guide(popup=False, XMLTV_FILE=None):
         got_cached_guide = False
         if (os.path.isfile(XMLTV_FILE) and
             os.path.isfile(pname) and (os.path.getmtime(pname) > os.path.getmtime(XMLTV_FILE))):
-            _debug_('XMLTV, reading cached file (%s)' % pname)
+            logger.debug('XMLTV, reading cached file (%s)', pname)
 
             if popup:
                 popup_dialog.show()
@@ -103,19 +103,19 @@ def get_guide(popup=False, XMLTV_FILE=None):
             try:
                 epg_ver = cached_guide.EPG_VERSION
             except AttributeError:
-                _debug_('EPG does not have a version number, must be reloaded')
+                logger.debug('EPG does not have a version number, must be reloaded')
 
             if epg_ver != EPG_VERSION:
-                _debug_('EPG version missmatch, must be reloaded')
+                logger.debug('EPG version missmatch, must be reloaded')
 
             elif cached_guide.timestamp != os.path.getmtime(XMLTV_FILE):
                 # Hmmm, weird, there is a pickled file newer than the TV.xml
                 # file, but the timestamp in it does not match the TV.xml
                 # timestamp. We need to reload!
-                _debug_('EPG: Pickled file timestamp mismatch, reloading!')
+                logger.debug('EPG: Pickled file timestamp mismatch, reloading!')
 
             else:
-                _debug_('XMLTV, got cached guide (version %s).' % epg_ver, DINFO)
+                logger.info('XMLTV, got cached guide (version %s).', epg_ver)
                 got_cached_guide = True
 
         if not got_cached_guide:
@@ -123,7 +123,7 @@ def get_guide(popup=False, XMLTV_FILE=None):
 
             
 
-            _debug_('XMLTV, trying to read raw file (%s)' % XMLTV_FILE)
+            logger.debug('XMLTV, trying to read raw file (%s)', XMLTV_FILE)
             try:
                 if popup:
                     popup_dialog.set_indeterminate(False)
@@ -145,7 +145,7 @@ def get_guide(popup=False, XMLTV_FILE=None):
                 # Replace config.XMLTV_FILE before we save the pickle in order
                 # to avoid timestamp confision.
                 if XMLTV_FILE != config.XMLTV_FILE:
-                    _debug_('copying %r -> %r' % (XMLTV_FILE, config.XMLTV_FILE), DINFO)
+                    logger.info('copying %r -> %r', XMLTV_FILE, config.XMLTV_FILE)
                     shutil.copyfile(XMLTV_FILE, config.XMLTV_FILE)
                     os.unlink(XMLTV_FILE)
                     cached_guide.timestamp = os.path.getmtime(config.XMLTV_FILE)
@@ -182,14 +182,14 @@ def load_guide(XMLTV_FILE=None, popup_dialog=None):
         gotfile = 1
         guide.timestamp = os.path.getmtime(XMLTV_FILE)
     else:
-        _debug_('XMLTV file (%s) missing!' % XMLTV_FILE)
+        logger.debug('XMLTV file (%s) missing!', XMLTV_FILE)
         gotfile = 0
     if popup_dialog:
         popup_dialog.update_progress(_('Reading channels'), 0.0)
     # Add the channels that are in the config list, or all if the
     # list is empty
     if config.TV_CHANNELS:
-        _debug_('Only adding channels in TV_CHANNELS to TvGuide')
+        logger.debug('Only adding channels in TV_CHANNELS to TvGuide')
 
         for data in config.TV_CHANNELS:
             (id, displayname, tunerid) = data[:3]
@@ -204,7 +204,7 @@ def load_guide(XMLTV_FILE=None, popup_dialog=None):
 
 
     else: # Add all channels in the XMLTV file
-        _debug_('Adding all channels to TvGuide')
+        logger.debug('Adding all channels to TvGuide')
 
         xmltv_channels = None
         if gotfile:
@@ -238,7 +238,7 @@ def load_guide(XMLTV_FILE=None, popup_dialog=None):
 
     xmltv_programs = None
     if gotfile:
-        _debug_('reading \"%s\" xmltv data' % XMLTV_FILE)
+        logger.debug('reading \"%s\" xmltv data', XMLTV_FILE)
         f = util.gzopen(XMLTV_FILE)
         xmltv_programs = xmltv.read_programmes(f)
         f.close()
@@ -251,7 +251,7 @@ def load_guide(XMLTV_FILE=None, popup_dialog=None):
     for chan in guide.chan_dict:
         needed_ids.append(chan)
 
-    _debug_('creating guide for %s' % needed_ids)
+    logger.debug('creating guide for %s', needed_ids)
     if popup_dialog:
         popup_dialog.update_progress(_('Processing programmes'), 0.50)
     for p in xmltv_programs:
@@ -305,7 +305,7 @@ def load_guide(XMLTV_FILE=None, popup_dialog=None):
                     # Fudging end time
                     stop = timestr2secs_utc(p['start'][0:8] + '235900' + p['start'][14:18])
             except EpgException, why:
-                _debug_('EpgException: %s' % (why,), DWARNING)
+                logger.warning('EpgException: %s', why)
                 continue
 
             # fix bad German titles to make favorites work
@@ -382,7 +382,7 @@ def timestr2secs_utc(timestr):
         if tz[0] == '+':
             adj_secs = - adj_secs
     else:
-        _debug_('Time spec %r has a timezone that cannot be parsed.' % timestr, DWARNING)
+        logger.warning('Time spec %r has a timezone that cannot be parsed.', timestr)
         try:
             secs = time.mktime(time.strptime(timestr, xmltv.date_format))
         except ValueError:

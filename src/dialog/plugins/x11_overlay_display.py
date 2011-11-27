@@ -77,11 +77,11 @@ class PluginInterface(plugin.Plugin):
 
 
     def shutdown(self):
-        _debug_('what is the correct way to stop kaa.display.x11?')
+        logger.debug('what is the correct way to stop kaa.display.x11?')
 
 
 def osd_shutdown():
-    _debug_('x11_overlay_display overrode OSD.shutdown()!')
+    logger.debug('x11_overlay_display overrode OSD.shutdown()!')
 
 if not reason:
     class X11GraphicsDisplay(GraphicsDisplay):

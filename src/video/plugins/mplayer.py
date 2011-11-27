@@ -95,21 +95,21 @@ class MPlayer:
         # this seems strange that it is 'possible' for dvd:// and 'good' for dvd
         # possible because dvd:// should be played with xine when available!
         if item.url[:6] in ('dvd://', 'vcd://') and item.url.endswith('/'):
-            _debug_('mplayer rating: %r possible' % (item.url), 2)
+            logger.log( 9, 'mplayer rating: %r possible', item.url)
             return 1
         if item.mode in ('dvd', 'vcd'):
-            _debug_('mplayer rating: %r good' % (item.url), 2)
+            logger.log( 9, 'mplayer rating: %r good', item.url)
             return 2
         if item.mode in ('http') and not item.filename and not item.media:
-            _debug_('mplayer rating: %r good' % (item.url), 2)
+            logger.log( 9, 'mplayer rating: %r good', item.url)
             return 2
         if item.mimetype in config.VIDEO_MPLAYER_SUFFIX:
-            _debug_('mplayer rating: %r good' % (item.url), 2)
+            logger.log( 9, 'mplayer rating: %r good', item.url)
             return 2
         if item.network_play:
-            _debug_('mplayer rating: %r possible' % (item.url), 2)
+            logger.log( 9, 'mplayer rating: %r possible', item.url)
             return 1
-        _debug_('mplayer rating: %r unplayable' % (item.url), 2)
+        logger.log( 9, 'mplayer rating: %r unplayable', item.url)
         return 0
 
 
@@ -117,9 +117,9 @@ class MPlayer:
         """
         play a videoitem with mplayer
         """
-        _debug_('options=%r' % (options,), 2)
+        logger.log( 9, 'options=%r', options)
         for k, v in item.__dict__.items():
-            _debug_('item[%s]=%r' % (k, v), 2)
+            logger.log( 9, 'item[%s]=%r', k, v)
 
         mode         = item.mode
         url          = item.url
@@ -149,9 +149,9 @@ class MPlayer:
 
         url=Unicode(url)
         try:
-            _debug_('MPlayer.play(): mode=%s, url=%s' % (mode, url))
+            logger.debug('MPlayer.play(): mode=%s, url=%s', mode, url)
         except UnicodeError:
-            _debug_('MPlayer.play(): [non-ASCII data]')
+            logger.debug('MPlayer.play(): [non-ASCII data]')
 
         if mode == 'file' and not os.path.isfile(url):
             # This event allows the videoitem which contains subitems to
@@ -164,10 +164,10 @@ class MPlayer:
 
         mode = item.mimetype
         if not config.MPLAYER_ARGS.has_key(mode):
-            _debug_('MPLAYER_ARGS not defined for %r, using default' % mode, DINFO)
+            logger.info('MPLAYER_ARGS not defined for %r, using default', mode)
             mode = 'default'
 
-        _debug_('mode=%s args=%s'% (mode, config.MPLAYER_ARGS[mode]))
+        logger.debug('mode=%s args=%s', mode, config.MPLAYER_ARGS[mode])
         # Build the MPlayer command
         args = {
             'nice': config.MPLAYER_NICE,
@@ -301,7 +301,7 @@ class MPlayer:
 
         # autocrop
         if config.MPLAYER_AUTOCROP and not item.network_play and args['fxd_args'].find('crop=') == -1:
-            _debug_('starting autocrop')
+            logger.debug('starting autocrop')
             (x1, y1, x2, y2) = (1000, 1000, 0, 0)
             crop_points = config.MPLAYER_AUTOCROP_START
             if not isinstance(crop_points, list):
@@ -312,7 +312,7 @@ class MPlayer:
 
             if x1 < 1000 and x2 < 1000:
                 args['vf'].append('crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1))
-                _debug_('crop=%s:%s:%s:%s' % (x2-x1, y2-y1, x1, y1))
+                logger.debug('crop=%s:%s:%s:%s', x2 - x1, y2 - y1, x1, y1)
 
         if item.subtitle_file:
             d, f = util.resolve_media_mountdir(item.subtitle_file)
@@ -385,7 +385,7 @@ class MPlayer:
         command += str('%(playlist)s' % args).split()
         command += ['%(url)s' % args]
 
-        _debug_(' '.join(command[1:]))
+        logger.debug(' '.join(command[1:]))
 
         #if plugin.getbyname('MIXER'):
             #plugin.getbyname('MIXER').reset()
@@ -424,7 +424,7 @@ class MPlayer:
         eventhandler for mplayer control. If an event is not bound in this
         function it will be passed over to the items eventhandler
         """
-        _debug_('%s.eventhandler(event=%s)' % (self.__class__, event))
+        logger.debug('%s.eventhandler(event=%s)', self.__class__, event)
         if not self.app:
             return self.item.eventhandler(event)
 
@@ -448,13 +448,13 @@ class MPlayer:
                 self.seek_timer.cancel()
                 self.seek *= 60
                 self.app.write('seek ' + str(self.seek) + ' 2\n')
-                _debug_("seek "+str(self.seek)+" 2\n")
+                logger.debug("seek " + str(self.seek) + " 2\n")
                 self.seek = 0
                 rc.set_app_context(self, 'video')
                 return True
 
             elif event == INPUT_EXIT:
-                _debug_('seek stopped')
+                logger.debug('seek stopped')
                 #self.app.write('seek stopped\n')
                 self.seek_timer.cancel()
                 self.seek = 0
@@ -529,8 +529,8 @@ class MPlayer:
 
                 # check again if seek is allowed
                 if self.item_length <= self.item.elapsed + event.arg + seek_safety_time:
-                    _debug_('unable to seek %s secs at time %s, length %s' % \
-                            (event.arg, self.item.elapsed, self.item_length))
+                    logger.debug('unable to seek %s secs at time %s, length %s', event.arg, self.item.elapsed, self.item_length)
+
 
                     dialog.show_message(_('Seeking not possible'))
                     return False
@@ -579,7 +579,7 @@ class MPlayer:
         self.app.write('osd_show_text "%s"\n' % message);
 
     def reset_seek(self):
-        _debug_('seek timeout')
+        logger.debug('seek timeout')
         self.seek = 0
         rc.set_app_context(self, 'video')
 
@@ -647,7 +647,7 @@ class MPlayer:
                 y1 = min(y1, int(m.group(4)))
                 x2 = max(x2, int(m.group(1)) + int(m.group(3)))
                 y2 = max(y2, int(m.group(2)) + int(m.group(4)))
-                _debug_('x1=%s x2=%s y1=%s y2=%s' % (x1, x2, y1, y2))
+                logger.debug('x1=%s x2=%s y1=%s y2=%s', x1, x2, y1, y2)
 
         child.wait()
         return (x1, y1, x2, y2)

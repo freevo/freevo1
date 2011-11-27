@@ -57,7 +57,7 @@ dbschema = """CREATE TABLE music (id INTEGER PRIMARY KEY, dirtitle VARCHAR(255),
 
 
 def make_query(filename, dirtitle):
-    _debug_('make_query(filename=%r, dirtitle=%r)' % (filename, dirtitle), 2)
+    logger.log( 9, 'make_query(filename=%r, dirtitle=%r)', filename, dirtitle)
     if not os.path.exists(filename):
         print "File %s does not exist" % (filename)
         return None
@@ -118,7 +118,7 @@ def make_query(filename, dirtitle):
 
 
 def addPathDB(path, dirtitle, type='*.mp3;*.ogg;*.flac', verbose=True):
-    _debug_('addPathDB(path=%r, dirtitle=%r, type=%r, verbose=%r)' % (path, dirtitle, type, verbose), 2)
+    logger.log( 9, 'addPathDB(path=%r, dirtitle=%r, type=%r, verbose=%r)', path, dirtitle, type, verbose)
 
     # Get some stuff ready
     count = 0

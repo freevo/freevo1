@@ -89,7 +89,7 @@ class Cache:
         save a modified cache file
         """
         if self.cache_modified:
-            _debug_('save cache %s' % self.current_cachefile, 2)
+            logger.log( 9, 'save cache %s', self.current_cachefile)
             util.save_pickle(self.current_objects, self.current_cachefile)
             self.cache_modified = False
             if config.MEDIAINFO_USE_MEMORY:
@@ -107,7 +107,7 @@ class Cache:
             self.save_cache()
 
         cachefile = self.__get_filename__(dirname)
-        _debug_('load cache %s' % cachefile, 2)
+        logger.log( 9, 'load cache %s', cachefile)
 
         if config.MEDIAINFO_USE_MEMORY and self.all_directories.has_key(cachefile):
             self.current_objects = self.all_directories[cachefile]
@@ -474,9 +474,9 @@ class Info:
                 if var != self.metadata or val not in bad_info:
                     if val is not None and val != '':
                         result = val
-                        _debug_('__getitem__(key=%r)=%r' % (key, result), 3)
+                        logger.log( 8, '__getitem__(key=%r)=%r', key, result)
                         return result
-        _debug_('__getitem__(key=%r)=%r' % (key, result), 3)
+        logger.log( 8, '__getitem__(key=%r)=%r', key, result)
         return result
 
 

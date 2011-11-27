@@ -57,7 +57,7 @@ def addPageRefresh(display_timer = True):
     display_style = 'display:none'
     if display_timer:
         display_style = 'display:""'
-    _debug_('addPageRefresh()', 2)
+    logger.log( 9, 'addPageRefresh()')
     prhtml = '<script type="text/JavaScript" src="scripts/encoding_web.js">window.onload=beginrefresh</script>\n'
     prhtml += '<span class="refresh" style=%s id="refresh" >Refresh In : ??</span>\n' % display_style
     return prhtml
@@ -66,7 +66,7 @@ def addPageRefresh(display_timer = True):
 def GetFileList(browse_dir, display_hidden = False):
     """
     """
-    _debug_('GetFileList(browse_dir=%r, dispay_hidden=%r)' % ( browse_dir, display_hidden ) , 2)
+    logger.log( 9, 'GetFileList(browse_dir=%r, dispay_hidden=%r)', browse_dir, display_hidden)
 
     file_list_ctrl = ''
     if not browse_dir:
@@ -136,7 +136,7 @@ def GetFileList(browse_dir, display_hidden = False):
 class CDBurn_WebResource(FreevoResource):
 
     def __init__(self):
-        _debug_('reencode.PluginInterface.__init__(self)')
+        logger.debug('reencode.PluginInterface.__init__(self)')
         self.profile = {}
         self.profile['container'] = config.REENCODE_CONTAINER
         self.profile['resolution'] = config.REENCODE_RESOLUTION
@@ -157,7 +157,7 @@ class CDBurn_WebResource(FreevoResource):
         self.ProfileList = ['xvid_low', 'xvid_high', 'iPod', 'Nokia770', 'DVD']
 
     def select_encoding_profile(self, arg=None, menuw=None):
-        _debug_('select_encoding_profile(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'select_encoding_profile(self, arg=%r, menuw=%r)', arg, menuw)
         if arg == 'xvid_low':
             self.profile['container'] = 'avi'
             self.profile['resolution'] = 'Optimal'
@@ -209,7 +209,7 @@ class CDBurn_WebResource(FreevoResource):
             self.profile['videofilter'] = 'None'
             self.profile['altprofile'] = None
         else:
-            _debug_('Unknown Profile "%s"' % (arg), DERROR)
+            logger.error('Unknown Profile "%s"', arg)
             self.error(_('Unknown Profile')+(' "%s"' % (arg)))
         return
 
@@ -255,14 +255,14 @@ class CDBurn_WebResource(FreevoResource):
 
 
     def create_job(self, menuw=None, arg=None):
-        _debug_('create_job(self, arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'create_job(self, arg=%r, menuw=%r)', arg, menuw)
 
         profile = arg
         job_status = 'Job Status'
 
         #we are going to create a job and send it to the encoding server, this can take some time while analyzing
         (status, resp) = self.server.initEncodingJob(self.source, self.output, self.title)
-        _debug_('initEncodingJob:status:%s resp:%s' % (status, resp))
+        logger.debug('initEncodingJob:status:%s resp:%s', status, resp)
 
         if not status:
             return 'initEncodingJob:status:%s resp:%s' % (status, resp)
@@ -270,7 +270,7 @@ class CDBurn_WebResource(FreevoResource):
         idnr = resp
 
         (status, resp) = self.server.setContainer(idnr, self.profile['container'])
-        _debug_('setContainer:status:%s resp:%s' % (status, resp))
+        logger.debug('setContainer:status:%s resp:%s', status, resp)
         if not status:
             self.error(resp)
             return
@@ -278,19 +278,19 @@ class CDBurn_WebResource(FreevoResource):
         multipass = self.profile['numpasses'] > 1
         (status, resp) = self.server.setVideoCodec(idnr, self.profile['videocodec'], 0, multipass,
             self.profile['videobitrate'], self.profile['altprofile'])
-        _debug_('setVideoCodec:status:%s resp:%s' % (status, resp))
+        logger.debug('setVideoCodec:status:%s resp:%s', status, resp)
         if not status:
             self.error(resp)
             return
 
         (status, resp) = self.server.setAudioCodec(idnr, self.profile['audiocodec'], self.profile['audiobitrate'])
-        _debug_('setAudioCodec:status:%s resp:%s' % (status, resp))
+        logger.debug('setAudioCodec:status:%s resp:%s', status, resp)
         if not status:
             self.error(resp)
             return
 
         (status, resp) = self.server.setNumThreads(idnr, self.profile['numthreads'])
-        _debug_('setNumThreads:status:%s resp:%s' % (status, resp))
+        logger.debug('setNumThreads:status:%s resp:%s', status, resp)
         if not status:
             self.error(resp)
             return
@@ -300,13 +300,13 @@ class CDBurn_WebResource(FreevoResource):
 
         #And finally, qeue and start the job
         (status, resp) = self.server.queueIt(idnr, True)
-        _debug_('queueIt:status:%s resp:%s' % (status, resp))
+        logger.debug('queueIt:status:%s resp:%s', status, resp)
 
         if not status:
             self.error(resp)
             return
 
-        _debug_('boe')
+        logger.debug('boe')
         #menuw.delete_menu()
         #menuw.delete_menu()
         return job_status
@@ -345,7 +345,7 @@ class CDBurn_WebResource(FreevoResource):
     def _render(self, request):
         """
         """
-        _debug_('_render(request)', 2)
+        logger.log( 9, '_render(request)')
         fv = HTMLResource()
         form = request.args
 

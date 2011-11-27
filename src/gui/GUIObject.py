@@ -71,7 +71,7 @@ class GUIObject:
         try:
             self.rect = Rect(self.left, self.top, self.width, self.height)
         except TypeError:
-            _debug_('Invalid Rect: left=%r, top=%r, width=%r, height=%r' % (left, top, width, height))
+            logger.debug('Invalid Rect: left=%r, top=%r, width=%r, height=%r', left, top, width, height)
 
         self.osd  = osd.get_singleton()
 
@@ -286,7 +286,7 @@ class GUIObject:
 
 
     def draw(self, update=False):
-        _debug_('GUIObject::draw %s' % self, 2)
+        logger.log( 9, 'GUIObject::draw %s', self)
 
         if self.is_visible() == 0:
             return False
@@ -440,7 +440,7 @@ class GUIObject:
                 child = self.children[0]
                 child.destroy() # the child will remove itself from children
 
-        _debug_('parent: %s' % self.parent, 2)
+        logger.log( 9, 'parent: %s', self.parent)
         if self.parent:
             self.parent.children.remove(self)
 

@@ -94,7 +94,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 try:
                     fcntl.ioctl(self.mixfd.fileno(), i32(self.SOUND_MIXER_WRITE_RECSRC), data)
                 except IOError, why:
-                    _debug_('Cannot set mixer "%s" line mask: %s' % (config.MIXER_DEVICE, why), DWARNING)
+                    logger.warning('Cannot set mixer "%s" line mask: %s', config.MIXER_DEVICE, why)
 
         if config.MIXER_MAJOR_CTRL == 'VOL':
             self.setMainVolume(config.MIXER_VOLUME_DEFAULT)
@@ -111,7 +111,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 # XXX Please tell if you have problems with this.
                 self.setOgainVolume(config.MIXER_VOLUME_MAX)
         else:
-            _debug_('No appropriate audio channel found for mixer', DWARNING)
+            logger.warning('No appropriate audio channel found for mixer')
 
         if config.MIXER_CONTROL_ALL:
             self.setLineinVolume(0)
@@ -125,7 +125,7 @@ class PluginInterface(plugin.DaemonPlugin):
         if event in (MIXER_VOLUP, MIXER_VOLDOWN):
             step = event.arg
             if not isinstance(step, int):
-                _debug_('%s event type "%s" is not "int"' % (event, step), DWARNING)
+                logger.warning('%s event type "%s" is not "int"', event, step)
                 step = self.default_step
 
         if event == MIXER_VOLUP:
@@ -174,7 +174,7 @@ class PluginInterface(plugin.DaemonPlugin):
             try:
                 fcntl.ioctl(self.mixfd.fileno(), i32(request), data)
             except IOError, why:
-                _debug_('Cannot set mixer "%s" volume: %s' % (config.MIXER_DEVICE, why), DWARNING)
+                logger.warning('Cannot set mixer "%s" volume: %s', config.MIXER_DEVICE, why)
 
     def getMuted(self):
         return(self.muted)

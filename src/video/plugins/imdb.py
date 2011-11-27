@@ -58,7 +58,7 @@ from gui.PopupBox import PopupBox
 try:
     import imdb
 except ImportError:
-    _debug_('It seems that you do not have imdbpy installed!', DERROR)
+    logger.error('It seems that you do not have imdbpy installed!')
 
 class PluginInterface(plugin.ItemPlugin):
     """
@@ -161,7 +161,7 @@ class PluginInterface(plugin.ItemPlugin):
                     print e
 
         except FxdImdb_Error, error:
-            _debug_('%s' % (error,), DWARNING)
+            logger.warning('%s', error)
             box.destroy()
             box = PopupBox(text=_('Connection to IMDB failed: ') + str(error))
             box.show()
@@ -225,7 +225,7 @@ class PluginInterface(plugin.ItemPlugin):
             self.fxd.retrieveImdbData(arg[0], self.fxd.ctitle[1], self.fxd.ctitle[2])
 
         except FxdImdb_Error, error:
-            _debug_('%s' % (error,), DWARNING)
+            logger.warning('%s', error)
             box.destroy()
             return
 

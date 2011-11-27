@@ -126,13 +126,13 @@ if __name__ == '__main__':
     opts, args = parse_options()
 
     try:
-        _debug_('main() starting')
+        logger.debug('main() starting')
         main()
-        _debug_('main() finished')
+        logger.debug('main() finished')
     except SystemExit:
-        _debug_('main() stopped')
+        logger.debug('main() stopped')
         pass
     except Exception, why:
         import traceback
         traceback.print_exc()
-        _debug_(why, DWARNING)
+        logger.warning(why)

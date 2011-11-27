@@ -879,11 +879,11 @@ class DiskManager(plugin.DaemonPlugin):
         # If the recordings dir is on a network mount inotify won't work
         # so resort to using a timer.
         if util.fileops.is_net_mount(config.TV_RECORD_DIR):
-            _debug_('DiskManager using timer as recordings dir is on a network mount')
+            logger.debug('DiskManager using timer as recordings dir is on a network mount')
             self.check_timer = kaa.Timer(self.check_recordings)
             self.check_timer.start(0.5)
         else:
-            _debug_('DiskManager using inotify')
+            logger.debug('DiskManager using inotify')
             util.inotify.watch(config.TV_RECORD_DIR).connect(self.check_recordings)
 
 
@@ -919,7 +919,7 @@ class DiskManager(plugin.DaemonPlugin):
                 changed = True
         except (OSError, IOError):
             # the directory is gone
-            _debug_('DiskManager: unable to read recordings directory')
+            logger.debug('DiskManager: unable to read recordings directory')
             return
 
         if changed:
@@ -1057,13 +1057,13 @@ class DiskManager(plugin.DaemonPlugin):
                 del series_table[name]
         clean_time = time.time() - clean_time
 
-        _debug_('Recordings Manager update_recordings times')
-        _debug_('cache_time     %f' % cache_time)
-        _debug_('parse_time     %f' % parse_time)
-        _debug_('rpitem_time    %f' % rpitem_time)
-        _debug_('series_time    %f' % series_time)
-        _debug_('segregate_time %f' % segregate_time)
-        _debug_('clean_time     %f' % clean_time)
+        logger.debug('Recordings Manager update_recordings times')
+        logger.debug('cache_time     %f', cache_time)
+        logger.debug('parse_time     %f', parse_time)
+        logger.debug('rpitem_time    %f', rpitem_time)
+        logger.debug('series_time    %f', series_time)
+        logger.debug('segregate_time %f', segregate_time)
+        logger.debug('clean_time     %f', clean_time)
 
         all_recordings = rpitems
 
@@ -1082,7 +1082,7 @@ class DiskManager(plugin.DaemonPlugin):
                 candidate = candidates.pop(0)
                 if (not candidate):
                     break
-                _debug_('deleting %s, because we are running out of space.' % (candidate.name), 2)
+                logger.log( 9, 'deleting %s, because we are running out of space.', candidate.name)
                 candidate.files.delete()
                 del(candidate)
 
@@ -1150,7 +1150,7 @@ def get_status_sort_order(watched, keep):
 def search_for_more(arg=None, menuw=None):
     parent, title = arg
     # this might take some time, thus we open a popup messages
-    _debug_(String('searching for: %s' % title), 2)
+    logger.log( 9, String('searching for: %s', title))
     pop = dialog.show_working_indicator(_('Searching, please wait...'))
 
     # do the search
@@ -1158,7 +1158,7 @@ def search_for_more(arg=None, menuw=None):
     pop.hide()
     if status:
         items = []
-        _debug_('search found %s matches' % len(matches), 2)
+        logger.log( 9, 'search found %s matches', len(matches))
         # sort by start times
         f = lambda a, b: cmp(a.start, b.start)
         matches.sort(f)

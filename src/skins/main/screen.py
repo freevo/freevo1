@@ -48,7 +48,7 @@ class SkinObjects:
     an area wants to draw
     """
     def __init__(self):
-        _debug_('SkinObjects.__init__()', 3)
+        logger.log( 8, 'SkinObjects.__init__()')
         self.bgimages   = []
         self.rectangles = []
         self.images     = []
@@ -61,7 +61,7 @@ class Screen:
     this call is a set of surfaces for the area to do it's job
     """
     def __init__(self):
-        _debug_('Screen.__init__()', 3)
+        logger.log( 8, 'Screen.__init__()')
         self.s_content      = osd.screen.convert()
         self.s_alpha        = self.s_content.convert_alpha()
         self.s_bg           = self.s_content.convert()
@@ -75,7 +75,7 @@ class Screen:
 
 
     def clear(self):
-        _debug_('clear()', 3)
+        logger.log( 8, 'clear()')
         self.update_bg      = None
         self.update_alpha   = []
         self.update_content = []
@@ -83,7 +83,7 @@ class Screen:
 
 
     def draw(self, obj):
-        _debug_('draw(obj=%r)' % (obj,), 3)
+        logger.log( 8, 'draw(obj=%r)', obj)
         self.drawlist.bgimages   += obj.bgimages
         self.drawlist.rectangles += obj.rectangles
         self.drawlist.images     += obj.images
@@ -96,7 +96,7 @@ class Screen:
 
 
     def update(self, layer, rect):
-        _debug_('update(layer=%r, rect=%r)' % (layer, rect), 3)
+        logger.log( 8, 'update(layer=%r, rect=%r)', layer, rect)
         if layer == 'content':
             self.update_content.append(rect)
         elif layer == 'alpha':
@@ -112,7 +112,7 @@ class Screen:
 
 
     def in_update(self, x1, y1, x2, y2, update_area, full=False):
-        _debug_('in_update(x1=%r, y1=%r, x2=%r, y2=%r, update_area=%r, full=%r)' % (x1, y1, x2, y2, update_area, full), 3)
+        logger.log( 8, 'in_update(x1=%r, y1=%r, x2=%r, y2=%r, update_area=%r, full=%r)', x1, y1, x2, y2, update_area, full)
         if full:
             for ux1, uy1, ux2, uy2 in update_area:
                 # if the area is not complete inside the area but is inside on
@@ -132,14 +132,14 @@ class Screen:
         """
         the main drawing function
         """
-        _debug_('show(force_redraw=%r)' % (force_redraw,), 3)
+        logger.log( 8, 'show(force_redraw=%r)', force_redraw)
         if osd.must_lock:
             # only lock s_alpha layer, because only there
             # are pixel operations (round rectangle)
             self.s_alpha.lock()
 
         if force_redraw:
-            _debug_('show, force update', 2)
+            logger.log( 9, 'show, force update')
             self.update_bg      = (0, 0, osd.width, osd.height)
             self.update_alpha   = []
             self.update_content = []

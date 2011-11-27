@@ -151,12 +151,12 @@ def open(name, mode='r'):
             if not os.path.isdir(os.path.dirname(overlay)):
                 os.makedirs(os.path.dirname(overlay), mode=04775)
         except IOError:
-            _debug_('error creating dir %s' % os.path.dirname(overlay), DWARNING)
+            logger.warning('error creating dir %s', os.path.dirname(overlay))
             raise IOError
         try:
             return file(overlay, mode)
         except IOError:
-            _debug_('error opening file %s' % overlay, DWARNING)
+            logger.warning('error opening file %s', overlay)
             raise IOError
 
 
@@ -174,12 +174,12 @@ def codecs_open(name, mode, encoding):
             if not os.path.isdir(os.path.dirname(overlay)):
                 os.makedirs(os.path.dirname(overlay))
         except IOError:
-            _debug_('error creating dir %s' % os.path.dirname(overlay), DWARNING)
+            logger.warning('error creating dir %s', os.path.dirname(overlay))
             raise IOError
         try:
             return codecs.open(overlay, mode, encoding=encoding)
         except IOError, e:
-            _debug_('error opening file %s' % overlay, DWARNING)
+            logger.warning('error opening file %s', overlay)
             raise IOError, e
 
 
@@ -214,7 +214,7 @@ def listdir(directory, handle_exception=True, include_dot_files=False, include_o
         return files
 
     except OSError, why:
-        _debug_('Cannot list dir %r: %s' % (directory, why), DWARNING)
+        logger.warning('Cannot list dir %r: %s', directory, why)
         traceback.print_exc()
         if not handle_exception:
             raise OSError

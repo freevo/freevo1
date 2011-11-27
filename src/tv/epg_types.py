@@ -46,7 +46,7 @@ class TvProgram:
     """
     def __init__(self, channel_id='', start=0, pdc_start=0, stop=2147483647, title='', sub_title='', desc='',
             categories=None, ratings=None):
-        _debug_('TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)' % (channel_id, start, stop, title), 2)
+        logger.log( 9, 'TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)', channel_id, start, stop, title)
         self.channel_id = channel_id
         self.start      = start
         self.pdc_start  = pdc_start
@@ -119,7 +119,7 @@ class TvProgram:
         """
         return the specific attribute as string or an empty string
         """
-        _debug_('getattr(attr=%r)' % (attr,), 3)
+        logger.log( 8, 'getattr(attr=%r)', attr)
         if attr == 'start':
             return Unicode(time.strftime(config.TV_TIME_FORMAT, time.localtime(self.start)))
         if attr == 'pdc_start':
@@ -139,7 +139,7 @@ class TvProgram:
         """
         Decode all internal strings from Unicode to String
         """
-        _debug_('utf2str()', 3)
+        logger.log( 8, 'utf2str()')
         ret = copy.copy(self)
         for var in dir(ret):
             if not var.startswith('_') and isinstance(getattr(ret, var), unicode):
@@ -151,7 +151,7 @@ class TvProgram:
         """
         Encode all internal strings from String to Unicode
         """
-        _debug_('str2utf()', 3)
+        logger.log( 8, 'str2utf()')
         ret = copy.copy(self)
         for var in dir(ret):
             if not var.startswith('_') and isinstance(getattr(ret, var), str):
@@ -165,7 +165,7 @@ class TvChannel:
     """
     def __init__(self, id, displayname, tunerid):
         """ Copy the programs that are inside the indicated time bracket """
-        _debug_('TvChannel.__init__(id=%r, displayname=%r, tunerid=%r)' % (id, displayname, tunerid), 2)
+        logger.log( 9, 'TvChannel.__init__(id=%r, displayname=%r, tunerid=%r)', id, displayname, tunerid)
         self.id = id
         self.displayname = displayname
         self.tunerid = tunerid
@@ -176,25 +176,25 @@ class TvChannel:
 
     def set_logo(self, logo):
         """ Sets the channels logo """
-        _debug_('TvChannel.set_logo(logo=%r)' % (logo,), 2)
+        logger.log( 9, 'TvChannel.set_logo(logo=%r)', logo)
         self.logo = logo
 
 
     def set_times(self, times):
         """ Sets the times list """
-        _debug_('TvChannel.set_times(times=%r)' % (times,), 2)
+        logger.log( 9, 'TvChannel.set_times(times=%r)', times)
         self.times = times
 
 
     def set_programs(self, programs):
         """ Sets the programs list """
-        _debug_('TvChannel.set_programs(programs=%r)' % (programs,), 2)
+        logger.log( 9, 'TvChannel.set_programs(programs=%r)', programs)
         self.programs = programs
 
 
     def sort(self):
         """ Sort the programs so that the earliest is first in the list """
-        _debug_('TvChannel.sort(), displayname=%r' % (self.displayname,), 2)
+        logger.log( 9, 'TvChannel.sort(), displayname=%r', self.displayname)
         f = lambda a, b: cmp(a.start, b.start)
         self.programs.sort(f)
 
@@ -219,7 +219,7 @@ class TvGuide:
     """
     """
     def __init__(self):
-        _debug_('TvGuide.__init__()', 2)
+        logger.log( 9, 'TvGuide.__init__()')
         self.timestamp = float(0)
         # These two types map to the same channel objects
         self.chan_dict = {}   # Channels mapped using the id
@@ -229,7 +229,7 @@ class TvGuide:
 
 
     def add_channel(self, channel):
-        _debug_('add_channel(channel=%r)' % (channel,), 2)
+        logger.log( 9, 'add_channel(channel=%r)', channel)
         if channel.id in self.chan_dict:
             return
         # Add the channel to both the dictionary and the list. This works
@@ -240,7 +240,7 @@ class TvGuide:
 
     def add_program(self, program):
         """ The channel must be present, or the program is silently dropped """
-        _debug_('add_program(program=%r)' % (program,), 2)
+        logger.log( 9, 'add_program(program=%r)', program)
         if program.channel_id not in self.chan_dict:
             return
         for category in program.categories:
@@ -250,13 +250,13 @@ class TvGuide:
         programs = self.chan_dict[program.channel_id].programs
         if len(programs) > 0:
             if programs[-1].start < program.stop and programs[-1].stop > program.start:
-                _debug_('invalid stop time: %r' % self.chan_dict[program.channel_id].programs[-1])
+                logger.debug('invalid stop time: %r', self.chan_dict[program.channel_id].programs[ - 1])
                 # the tv guide is corrupt, the last entry has a stop time higher than
                 # the next start time. Correct that by reducing the stop time of
                 # the last entry
                 self.chan_dict[program.channel_id].programs[-1].stop = program.start
             if programs[-1].start == programs[-1].stop:
-                _debug_('program has no duration %r' % self.chan_dict[program.channel_id].programs[-1])
+                logger.debug('program has no duration %r', self.chan_dict[program.channel_id].programs[ - 1])
                 # Oops, something is broken here
                 self.chan_dict[program.channel_id].programs = programs[:-1]
         self.chan_dict[program.channel_id].programs += [program]
@@ -273,14 +273,15 @@ class TvGuide:
         @param category: can be used to select only programs in the specified category
         @returns: a list of TV channels
         """
-        _debug_('get_programs(start=%r, stop=%r, channel_id=%r)' % (time.strftime('%H:%M', time.localtime(start)),
-            time.strftime('%H:%M', time.localtime(stop)), channel_id), 2)
+        logger.log( 9, 'get_programs(start=%r, stop=%r, channel_id=%r)', time.strftime('%H:%M', time.localtime(start)), 
+time.strftime('%H:%M', time.localtime(stop)), channel_id)
+
 
         global channel_cache
         if category is None:
             channels = channel_cache.cached(start, stop, channel_id)
             if channels is not None:
-                _debug_('cached channels=%r' % (channels,), 2)
+                logger.log( 9, 'cached channels=%r', channels)
                 return channels
 
             channel_cache.reset(start, stop, channel_id)
@@ -304,13 +305,13 @@ class TvGuide:
             if category is None:
                 channel_cache.add(chan.id, c)
 
-        _debug_('channels=%r' % (channels,), 2)
+        logger.log( 9, 'channels=%r', channels)
         return channels
 
 
     def sort(self):
         """ Sort all channel programs in time order """
-        _debug_('TvGuide.sort()', 2)
+        logger.log( 9, 'TvGuide.sort()')
         for chan in self.chan_list:
             chan.sort()
 
@@ -332,7 +333,7 @@ class ChannelCache:
     This class caches the list of channels for get_programs
     """
     def __init__(self):
-        _debug_('ChannelCache.__init__()', 2)
+        logger.log( 9, 'ChannelCache.__init__()')
         self.channel_id = None
         self.timestamp = float(0)
         self.start = None
@@ -345,7 +346,7 @@ class ChannelCache:
         """
         Reset the cache to empty
         """
-        _debug_('reset(start=%r, stop=%r, channel_id=%r)' % (start, stop, channel_id), 2)
+        logger.log( 9, 'reset(start=%r, stop=%r, channel_id=%r)', start, stop, channel_id)
         self.channel_id = channel_id
         if self.channel_id is None:
             self.timestamp = float(time.time())
@@ -359,7 +360,7 @@ class ChannelCache:
         """
         Add a channel to the cache
         """
-        _debug_('add(channel_id=%r, channel=%r)' % (channel_id, channel), 2)
+        logger.log( 9, 'add(channel_id=%r, channel=%r)', channel_id, channel)
         if self.channel_id is None:
             self.channel_ids.append(channel_id)
             self.channels.append(channel)
@@ -373,7 +374,7 @@ class ChannelCache:
         @param channel_id: the channel to fetch from the cache
         @returns: None if the cache is out of date otherwise the list of channels
         """
-        _debug_('cached(start=%r, stop=%r, channel_id=%r)' % (start, stop, channel_id), 2)
+        logger.log( 9, 'cached(start=%r, stop=%r, channel_id=%r)', start, stop, channel_id)
         if time.time() - self.timestamp > 20:
             #print 'cache is out of date: %r' % int(time.time() - self.timestamp)
             return None

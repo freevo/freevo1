@@ -43,7 +43,7 @@ from time import strftime
 try:
     import pylcd
 except:
-    _debug_(_('You need pylcd to run "lcd2x16" plugin.'), DERROR)
+    logger.error(_('You need pylcd to run "lcd2x16" plugin.'))
 
 class LcdFrame(object):
     def __init__(self, lcd, name, col, start, end):
@@ -115,7 +115,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lcd.screen_add('s')
             self.lcd.screen_set('s', '-priority foreground -heartbeat off')
         except:
-            _debug_(_('LCD plugin will not load! Maybe you don\'t have LCDd (lcdproc daemon) running?'), DERROR)
+            logger.error(_('LCD plugin will not load! Maybe you don\'t have LCDd (lcdproc daemon) running?'))
             return
 
         # prepare the lcd frames for different types
@@ -141,7 +141,7 @@ class PluginInterface(plugin.DaemonPlugin):
             self.lcd_title = self.lcd_menu_add[0] # use third line for titles, share with additional menu line
             self.lcd_player = self.lcd_menu_add[1] # use last line for player, share with additional menu line
         else:
-            _debug_(_('LCD not supported yet!'), DERROR)
+            logger.error(_('LCD not supported yet!'))
 
         # updating menu head
         self.lcd_head.draw('Freevo')
@@ -156,7 +156,7 @@ class PluginInterface(plugin.DaemonPlugin):
         """
         self.menu_clear()
         self.lcd_head.draw('Goodbye')        
-        _debug_('close()', 2)
+        logger.log( 9, 'close()')
 
     def menu_clear(self):
         """

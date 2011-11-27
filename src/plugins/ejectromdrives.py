@@ -79,7 +79,7 @@ class PluginInterface(plugin.ItemPlugin):
         ejects or closes tray
         """
         if self.item and self.item.media and hasattr(self.item.media, 'id'):
-            _debug_('Item is a CD-ROM drive')
+            logger.debug('Item is a CD-ROM drive')
             # Stop the running video or music in detached mode
             rc.post_event(em.Event(em.BUTTON, arg=em.STOP))
 
@@ -91,4 +91,4 @@ class PluginInterface(plugin.ItemPlugin):
             if isinstance(menuw.menustack[-1].selected, menu.MenuItem):
                 rc.post_event(em.MENU_BACK_ONE_MENU)
         else:
-            _debug_('Item is not a CD-ROM drive')
+            logger.debug('Item is not a CD-ROM drive')

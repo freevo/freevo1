@@ -86,7 +86,7 @@ class PluginInterface(plugin.DaemonPlugin):
                 if not self.active:
                     self.timer.start(config.AUTOSTART_TIMEOUT)
             elif config.AUTOSTART_TIMEOUT:
-                _debug_('Another event is closing the autostart plugin.', DINFO)
+                logger.info('Another event is closing the autostart plugin.')
                 self.event.unregister()
                 self.timer.stop()
                 self.active = False
@@ -94,7 +94,7 @@ class PluginInterface(plugin.DaemonPlugin):
 
     def _timer_handler(self):
         if self.active:
-            _debug_('Timeout reached without an event, posting events now.', DINFO)
+            logger.info('Timeout reached without an event, posting events now.')
             for e in config.AUTOSTART_EVENTS:
                 rc.post_event(Event(e))
             self.event.unregister()

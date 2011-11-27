@@ -52,8 +52,8 @@ from re import *
 
 class GenericItem(Item):
     def __init__(self, file, cmd=None, args=None, imgpath=None, parent=None):
-        _debug_('GenericItem.__init__(file=%r, cmd=%r, args=%r, imgpath=%r, parent=%r)' % \
-            (file, cmd, args, imgpath, parent), 2)
+        logger.log( 9, 'GenericItem.__init__(file=%r, cmd=%r, args=%r, imgpath=%r, parent=%r)', file, cmd, args, imgpath, parent)
+
         Item.__init__(self, parent)
         self.type  = 'generic'            # fix value
         self.set_url(file, info=True)
@@ -82,7 +82,7 @@ class GenericItem(Item):
         """
         Returns the string how to sort this item
         """
-        _debug_('sort(mode=%r)' % (mode), 2)
+        logger.log( 9, 'sort(mode=%r)', mode)
         return self.name
 
 
@@ -91,12 +91,12 @@ class GenericItem(Item):
 
 
     def actions(self):
-        _debug_('actions()', 2)
+        logger.log( 9, 'actions()')
         return [ ( self.play, 'Play' ) ]
 
 
     def play(self, arg=None, menuw=None):
-        _debug_('play(arg=%r, menuw=%r)' % (arg, menuw), 2)
+        logger.log( 9, 'play(arg=%r, menuw=%r)', arg, menuw)
         self.parent.current_item = self
 
         if not self.menuw:
@@ -105,18 +105,18 @@ class GenericItem(Item):
         if self.menuw.visible:
             self.menuw.hide()
 
-        _debug_("Playing:  %s" % self.filename)
+        logger.debug("Playing:  %s", self.filename)
 
         self.game_player.play(self, menuw)
 
 
     def stop(self, menuw=None):
-        _debug_('stop(menuw=%r)' % (menuw), 2)
+        logger.log( 9, 'stop(menuw=%r)', menuw)
         self.game_player.stop()
 
 
     def eventhandler(self, event, menuw=None):
-        _debug_('eventhandler(event=%r, menuw=%r)' % (event, menuw), 2)
+        logger.log( 9, 'eventhandler(event=%r, menuw=%r)', event, menuw)
 
         if event == em.STOP:
             self.stop()

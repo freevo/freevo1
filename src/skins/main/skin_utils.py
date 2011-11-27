@@ -96,8 +96,8 @@ def generate_cache_key(settings, item, width, height, force=0):
 
 
 def format_image(settings, item, width, height, force=False, anamorphic=False, flush_large_image=False):
-    _debug_('format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r, flush_large_image=%r)' % \
-        (settings, item, width, height, force, anamorphic, flush_large_image), 2)
+    logger.log( 9, 'format_image(settings=%r, item=%r, width=%r, height=%r, force=%r, anamorphic=%r, flush_large_image=%r)', settings, item, width, height, force, anamorphic, flush_large_image)
+
 
     cname = generate_cache_key(settings, item, width, height, force)
     cimage = format_imagecache[cname]
@@ -172,7 +172,7 @@ def format_image(settings, item, width, height, force=False, anamorphic=False, f
                     f.close()
                     if tags.has_key('Image Orientation'):
                         orientation = tags['Image Orientation']
-                        _debug_('%s orientation=%s' % (item['name'], tags['Image Orientation']))
+                        logger.debug('%s orientation=%s', item['name'], tags['Image Orientation'])
                         if str(orientation) == "Rotated 90 CCW":
                             item['rotation'] = 270
                         elif str(orientation) == "Rotated 180":
@@ -180,7 +180,7 @@ def format_image(settings, item, width, height, force=False, anamorphic=False, f
                         elif str(orientation) == "Rotated 90 CW":
                             item['rotation'] = 90
                 except Exception, e:
-                    _debug_('%s' % (e), DINFO)
+                    logger.info('%s', e)
 
             if image and item['rotation']:
                 # pygame reverses the image rotation
@@ -313,7 +313,7 @@ def text_or_icon(settings, string, x, width, font):
             format_imagecache[cname] = x_mod, cimage
             return x_mod, cimage
     except KeyError:
-        _debug_('no image %s' % l[2])
+        logger.debug('no image %s', l[2])
         pass
 
     mod_x = width - font.stringsize(l[3])
