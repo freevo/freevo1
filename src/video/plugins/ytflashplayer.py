@@ -121,6 +121,7 @@ class YTFlashPlayer:
         self.paused = False
         self.app = webbrowser.start_web_browser(url, self.__exited)
         rc.add_app(self)
+        dialog.enable_overlay_display(None)
         Event(PLAY_START, item).post()
 
 
@@ -132,6 +133,7 @@ class YTFlashPlayer:
             return
 
         self.app.stop()
+        dialog.disable_overlay_display()
 
 
     def __exited(self, code):
