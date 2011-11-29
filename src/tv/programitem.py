@@ -338,6 +338,9 @@ class ShowProgramDetails(ScrollableTextScreen):
                 # or just the description, if there is no subtitle
                 description = Unicode(prg.description)
 
+            if prg.prog.date:
+                description += u'\n\n' + _('Date : ') + prg.prog.date
+            
             # maybe there is more info to add (categories, advisories, ratings)
             if prg.categories:
                 description += u'\n'
@@ -353,6 +356,7 @@ class ShowProgramDetails(ScrollableTextScreen):
                 description += u'\n'
                 for system, value in prg.ratings.items():
                     description += u'\n' + _('Rating') + u'(' + system + u') : ' + value
+
 
         # that's all, we can show this to the user
         ScrollableTextScreen.__init__(self, 'tvguideinfo', description)
