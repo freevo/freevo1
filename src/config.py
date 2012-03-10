@@ -674,9 +674,7 @@ if HELPER and not IS_PROMPT:
             os.setgid(eval(gid))
             os.setuid(eval(uid))
     except Exception, why:
-        print why
-        sys.exit(1)
-
+        pass
 #
 # Setup logging
 #
