@@ -55,11 +55,6 @@ class PluginInterface(plugin.Plugin):
         logger.debug('PluginInterface.__init__()')
         plugin.Plugin.__init__(self)
         plugin.register(Recorder(), plugin.RECORD)
-        plugin.register(TVRecorder(), 'tv_recorder')
-
-class TVRecorder(SingleRecordingPlugin):
-    def __init__(self, channels):
-        SingleRecordingPlugin.__init__(self, channels)
 
 
 class Recorder:
