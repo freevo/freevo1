@@ -27,11 +27,12 @@
 import logging
 logger = logging.getLogger("freevo.util.tv_util")
 
+import string
+import time
+import os
 
-import sys, string, re
-import time, os, string
-
-import util, config, tv.epg_xmltv
+import config
+import tv.epg
 
 DEBUG = 0
 
@@ -96,14 +97,14 @@ def progRunning(prog):
     return False
 
 
-def getProgFilename(prog):
+def getProgFilename(prog, suffix=None):
     filename_array = { 'progname': String(prog.title),
                        'title'   : String(prog.sub_title) }
-
+    if suffix is None:
+        suffix = config.TV_RECORD_FILE_SUFFIX
     filemask = config.TV_RECORD_FILE_MASK % filename_array
     filemask = time.strftime(filemask, time.localtime(prog.start))
-    filename = os.path.join(config.TV_RECORD_DIR, progname2filename(filemask).rstrip(' -_:') + \
-        config.TV_RECORD_FILE_SUFFIX)
+    filename = os.path.join(config.TV_RECORD_DIR, progname2filename(filemask).rstrip(' -_:') + suffix)
     return filename
 
 
@@ -142,34 +143,36 @@ def descfsize(size):
 
 
 def get_chan_displayname(channel_id):
+    channel = tv.epg.channels_by_id[channel_id]
+    if channel:
+        return channel.displayname
 
-    for vals in config.TV_CHANNELS:
-        tv_channel_id, tv_display_name, tv_tuner_id = vals[:3]
-        if tv_channel_id == channel_id:
-            return tv_display_name
-
-    guide = tv.epg_xmltv.get_guide()
-    c = guide.chan_dict.get(channel_id)
-    if c:
-        return c.displayname
     # this shouldn't happen, but just in case
     return 'Unknown'
 
 
 def when_listings_expire():
-    guide = tv.epg_xmltv.get_guide()
+
     last = 0
     left = 0
+    now = time.time()
+    DAY = 24 * 60 * 60
+    tries = [ 14 * DAY, 7 * DAY, 3 * DAY, 0]
+    for offset in tries:
+        found_progs = False
+        for ch in tv.epg.get_programs(start=now + offset):
+            if ch.programs:
+                found_progs = True
+            for prog in ch.programs:
 
-    for ch in guide.chan_list:
-        for prog in ch.programs:
-            if prog.start > last: last = prog.start
+                if prog.start > last:
+                    last = prog.start
+        if found_progs:
+            break
 
-    if last > 0:
-        now = time.time()
-        if last > now:
-            left = int(last - now)
-            # convert to hours
-            left /= 3600
+    if last > 0 and last > now:
+        left = int(last - now)
+        # convert to hours
+        left /= 3600
 
     return left

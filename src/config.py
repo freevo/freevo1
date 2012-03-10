@@ -34,6 +34,8 @@ Try to find the freevo_config.py config file in the following places:
     3. ./freevo_config.py               Defaults from the freevo dist
 """
 import logging
+import plugin
+
 logger = logging.getLogger("freevo.config")
 
 import sys, os, time, re, string, pwd
@@ -92,11 +94,10 @@ class Logger:
     Class to create a logger object which will send messages to stdout and log them
     into a logfile
     """
-    def __init__(self, logger, logtype='(unknown)'):
-        self.lineno = 1
-        self.logtype = logtype
+    def __init__(self, logger, fp):
         self.logger = logger
         self.buffer = ''
+        self.fp = fp
 
 
     def write(self, msg):
@@ -106,22 +107,21 @@ class Logger:
         try:
             if isinstance(msg, unicode):
                 msg = msg.encode(LOCALE, 'replace')
-            sys.__stdout__.write(msg)
-            sys.__stdout__.flush()
+            self.fp.write(msg)
+            self.fp.flush()
             self.buffer += msg
             pos = self.buffer.find('\n')
             start_pos = 0
             while pos != -1:
                 self.logger.info('%s', self.buffer[start_pos:pos])
-                sys.__stdout__.flush()
-
                 start_pos = pos + 1
                 pos = self.buffer.find('\n', start_pos)
             if start_pos:
                 self.buffer = self.buffer[start_pos:]
-        finally:
-            if lock:
-                lock.release()
+        except:
+            logging.error('Logger', exc_info=True)
+        if lock:
+            lock.release()
         return
 
     def log(self, msg):
@@ -294,27 +294,29 @@ def print_help():
 # get information about what is started here:
 # helper = some script from src/helpers or is webserver or recordserver
 #
-HELPER          = 0
-IS_RECORDSERVER = 0
-IS_WEBSERVER    = 0
-IS_ENCODINGSERVER = 0
-IS_RSSSERVER = 0
-IS_PROMPT = 0
+HELPER          = False
+HELPER_APP      = None
+IS_RECORDSERVER = False
+IS_WEBSERVER    = False
+IS_ENCODINGSERVER = False
+IS_RSSSERVER = False
+IS_PROMPT = False
 
 __builtin__.__dict__['__freevo_app__'] = os.path.splitext(os.path.basename(sys.argv[0]))[0]
 
 if sys.argv[0].find('main.py') == -1:
-    HELPER = 1
+    HELPER = True
+    HELPER_APP = os.path.basename(sys.argv[0]).replace('.py','')
     if sys.argv[0].find('recordserver.py') != -1:
-        IS_RECORDSERVER = 1
+        IS_RECORDSERVER = True
     elif sys.argv[0].find('webserver.py') != -1:
-        IS_WEBSERVER = 1
+        IS_WEBSERVER = True
     elif sys.argv[0].find('encodingserver.py') != -1:
-        IS_ENCODINGSERVER = 1
+        IS_ENCODINGSERVER = True
     elif sys.argv[0].find('rssserver.py') != -1:
-        IS_RSSSERVER = 1
+        IS_RSSSERVER = True
     elif sys.argv[0] == '':
-        IS_PROMPT = 1
+        IS_PROMPT = True
 
 #
 # Send debug to stdout as well as to the logfile?
@@ -403,41 +405,6 @@ OS_CACHEDIR, FREEVO_CACHEDIR = make_freevodir('CACHEDIR', '/var/cache', '/var/db
 # Redirect stdout and stderr to stdout and /tmp/freevo.log
 #
 lock = RLock()
-#if not HELPER:
-if not IS_PROMPT:
-    try:
-        appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-        if not appname:
-            appname = 'prompt'
-        logfile = os.path.join(FREEVO_LOGDIR, '%s-%s.log' % (appname, os.getuid()))
-        fp = open(logfile, 'a')
-        fp.close()
-    except IOError, e:
-        print '%s' % e
-        logfile = '/dev/null'
-
-    logging.basicConfig(level=LOGGING, format='%(asctime)s - %(threadName)s - %(name)s - %(levelname)s - %(message)s',
-                        filename=logfile, filemode='a')
-
-    old_stdout = sys.stdout
-    old_stderr = sys.stderr
-    sys.stdout = Logger(logging.getLogger('stdout'), sys.argv[0] + ':stdout')
-    sys.stderr = Logger(logging.getLogger('stderr'), sys.argv[0] + ':stderr')
-    ts = time.asctime(time.localtime(time.time()))
-    sys.stdout.log('=' * 80)
-    sys.stdout.log('Freevo %s r%s started at %s' % (version.__version__, revision.__revision__, ts))
-    sys.stdout.log('-' * 80)
-
-
-def shutdown():
-    sys.stdout.log('-' * 80)
-    sys.stdout.log('Freevo %s r%s finished at %s' % (version.__version__, revision.__revision__, ts))
-    sys.stdout.log('=' * 80)
-    sys.stdout.close()
-    sys.stderr.close()
-    sys.stdout = old_stdout
-    sys.stderr = old_stderr
-
 
 def _stack_function_(message='', limit=None):
     import traceback
@@ -694,6 +661,58 @@ else:
     print 'configuration, Freevo will exit now.'
     sys.exit(0)
 
+#
+# Change UID/GID
+#
+
+if HELPER and not IS_PROMPT:
+    app = HELPER_APP.upper()
+    uid = app + '_UID'
+    gid = app + '_GID'
+    try:
+        if eval(uid) and os.getuid() == 0:
+            os.setgid(eval(gid))
+            os.setuid(eval(uid))
+    except Exception, why:
+        print why
+        sys.exit(1)
+
+#
+# Setup logging
+#
+if not IS_PROMPT:
+    try:
+        appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
+        if not appname:
+            appname = 'prompt'
+        logfile = os.path.join(FREEVO_LOGDIR, '%s-%s.log' % (appname, os.getuid()))
+        fp = open(logfile, 'a')
+        fp.close()
+    except IOError, e:
+        print '%s' % e
+        logfile = '/dev/null'
+
+    logging.basicConfig(level=LOGGING, format='%(asctime)s - %(threadName)s - %(name)s - %(levelname)s - %(message)s',
+        filename=logfile, filemode='a')
+
+    old_stdout = sys.stdout
+    old_stderr = sys.stderr
+    sys.stdout = Logger(logging.getLogger('stdout'), sys.stdout)
+    sys.stderr = Logger(logging.getLogger('stderr'), sys.stderr)
+    ts = time.asctime(time.localtime(time.time()))
+    sys.stdout.log('=' * 80)
+    sys.stdout.log('Freevo %s r%s started at %s' % (version.__version__, revision.__revision__, ts))
+    sys.stdout.log('-' * 80)
+
+
+def shutdown():
+    sys.stdout.log('-' * 80)
+    sys.stdout.log('Freevo %s r%s finished at %s' % (version.__version__, revision.__revision__, ts))
+    sys.stdout.log('=' * 80)
+    sys.stdout.close()
+    sys.stderr.close()
+    sys.stdout = old_stdout
+    sys.stderr = old_stderr
 
 # set the umask
 os.umask(UMASK)
@@ -909,132 +928,15 @@ if ROM_DRIVES == None:
 #
 REMOVABLE_MEDIA = []
 
-#
-# Auto detect xmltv channel list
-#
-
-def sortchannels(list, key):
-    # This should be more generic, but I couldn't get it
-    # to sort properly without specifying the nested array
-    # index for the tunerid and forcing 'int'
-    for l in list:
-        if len(l[key]) == 1:
-            l[key].append(('0', ))
-    nlist = map(lambda x, key = key: (string.split(x[key][1][0])[0], x), list)
-    nlist.sort()
-    return map(lambda (key, x): x, nlist)
-
-
-def detect_channels():
-    """
-    Auto detect a list of possible channels in the xmltv file
-    """
-    import codecs
-    try:
-        import cPickle as pickle
-    except ImportError:
-        import pickle
-
-    file = XMLTV_FILE
-
-    pname = os.path.join(FREEVO_CACHEDIR, 'xmltv_channels.pickle')
-
-    if not os.path.isfile(file):
-        if not HELPER:
-            print
-            print 'Error: can\'t find %s' % file
-            print 'Use xmltv to create this file or when you don\'t want to use the tv'
-            print 'module at all, add TV_CHANNELS = [] and plugin.remove(\'tv\') to your'
-            print 'local_conf.py. TVguide is deactivated now.'
-            print
-        return []
-
-    elif os.path.isfile(pname) and (os.path.getmtime(pname) > os.path.getmtime(file)):
-        try:
-            f = open(pname, 'r')
-            data = pickle.load(f)
-            f.close()
-            return data
-        except:
-            if not HELPER:
-                print 'Error: unable to read cachefile %s' % pname
-            return []
-
-    else:
-        from tv import xmltv
-        input = open(file, 'r')
-        tmp   = open('/tmp/xmltv_parser', 'w')
-        while(1):
-            line = input.readline()
-            if not line:
-                break
-            if line.find('<programme') > 0:
-                tmp.write('</tv>\n')
-                break
-            tmp.write(line)
-
-        input.close()
-        tmp.close()
-
-        tmp   = open('/tmp/xmltv_parser', 'r')
-        xmltv_channels = xmltv.read_channels(tmp)
-        tmp.close()
-
-        xmltv_channels = sortchannels(xmltv_channels, 'display-name')
-        chanlist = []
-
-        for a in xmltv_channels:
-            if (a['display-name'][1][0][0].isdigit()):
-                display_name = a['display-name'][0][0].encode(LOCALE, 'ignore')
-                tunerid = string.split(a['display-name'][1][0].encode(LOCALE, 'ignore'))[0]
-            else:
-                display_name = a['display-name'][1][0].encode(LOCALE, 'ignore')
-                tunerid = string.split(a['display-name'][0][0].encode(LOCALE, 'ignore'))[0]
-            id = a['id'].encode(LOCALE, 'ignore')
-
-            chanlist += [(id, display_name, tunerid)]
-
-        f = TV_CHANNELS_COMPARE
-        chanlist.sort(f)
-
-        try:
-            if os.path.isfile(pname):
-                os.unlink(pname)
-            f = open(pname, 'w')
-            pickle.dump(chanlist, f, 1)
-            f.close()
-        except IOError:
-            if not HELPER:
-                print 'Error: unable to save to cachefile %s' % pname
-
-        for c in chanlist:
-            if c[2] == 0:
-                print_list = 1
-                if not HELPER:
-                    print
-                    print 'Error: XMLTV auto detection failed'
-                    print 'Some channels in the channel list have no station id. Please add'
-                    print 'it by putting the list in your local_conf.py. Start '
-                    print '\'freevo tv_grab --help\' for more information'
-                    print
-                break
-        else:
-            if not HELPER:
-                print 'XMTV: Auto-detected channel list'
-
-        return chanlist
 
 
 if TV_CHANNELS == None and plugin.is_active('tv'):
-    # auto detect them
-    try:
-        TV_CHANNELS = detect_channels()
-    except Exception, e:
-        print
-        print 'Error in TV.xml file, unable to set TV_CHANNELS'
-        print e
-        print
-        TV_CHANNELS = []
+    print
+    print 'Error TV_CHANNELS is not set! Removing TV plugin'
+    print
+    TV_CHANNELS = []
+    p = plugin.is_active('tv')
+    plugin.remove(p[4])
 
 #
 # compile the regexp

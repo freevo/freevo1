@@ -68,47 +68,26 @@ except ImportError, why:
     sys.exit(0)
 
 
+kaa_modules = [('kaa-base', 'kaa', '0.99'),
+               ('kaa-metadata', 'kaa.metadata', '0.7'),
+               ('kaa-imlib2', 'kaa.imlib2', '0.2'),
+               ('kaa-epg', 'kaa.epg', '0.1')
+              ]
 # check if kaa.base is up to date to avoid bug reports for already fixed bugs
-v = 'unknown'
-try:
-    import kaa.version
-    if kaa.version.VERSION < 0.6:
-        v = kaa.version.VERSION
-        raise ImportError
-except (AttributeError, ImportError):
-    print 'Error: Installed kaa.base version (%s) is too old.' % v
-    print 'Please update kaa.base to version 0.4 or higher or get it with subversion'
-    print 'svn export svn://svn.freevo.org/kaa/trunk/base kaa/base'
-    print
-    sys.exit(0)
+for github_name, module_name, required_version in kaa_modules:
+    v = 'unknown'
+    try:
+        exec('import %s.version' % module_name)
+        v = eval('%s.version.VERSION' % module_name)
+        if v < required_version:
+            raise ImportError
+    except (AttributeError, ImportError):
+        print 'Error: Installed %s version (%s) is too old.' % (github_name,v)
+        print 'Please update %s to version 0.99 or higher.' % github_name
+        print 'Get it from http://github.com/freevo/%s' % github_name
+        print
+        sys.exit(0)
 
-# check if kaa.metadata is up to date to avoid bug reports for already fixed bugs
-v = 'unknown'
-try:
-    import kaa.metadata.version
-    if kaa.metadata.version.VERSION < 0.7:
-        v = kaa.metadata.version.VERSION
-        raise ImportError
-except ImportError:
-    print 'Error: Installed kaa.metadata version (%s) is too old.' % v
-    print 'Please update kaa.metadata to version 0.6 or higher or get it with subversion'
-    print 'svn export svn://svn.freevo.org/kaa/trunk/metadata kaa/metadata'
-    print
-    sys.exit(0)
-
-# check if kaa.imlib2 is up to date to avoid bug reports for already fixed bugs
-v = 'unknown'
-try:
-    import kaa.imlib2.version
-    if kaa.imlib2.version.VERSION < 0.2:
-        v = kaa.metadata.version.VERSION
-        raise ImportError
-except ImportError:
-    print 'Error: Installed kaa.imlib2 version (%s) is too old.' % v
-    print 'Please update kaa.imlib2 to version 0.1 or higher or get it with subversion'
-    print 'svn export svn://svn.freevo.org/kaa/trunk/imlib2 kaa/imlib2'
-    print
-    sys.exit(0)
 
 import osd     # The OSD class, used to communicate with the OSD daemon
 # Create the OSD object
@@ -327,7 +306,7 @@ class MainTread:
                             "could cause more errors until you restart" +
                             "Freevo.\n\n" +
                             "Logfile: %s\n\n") %
-                        (event, sys.stdout.logfile),
+                        (event, config.logfile),
                         width=osd.width-(config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT)-50,
                         handler=shutdown,
                         handler_message = _('shutting down...'))

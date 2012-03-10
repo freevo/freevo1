@@ -58,8 +58,8 @@ def grab():
 
         print 'caching data, this may take a while'
 
-        import tv.epg_xmltv
-        tv.epg_xmltv.get_guide(XMLTV_FILE=xmltvtmp)
+        import tv.epg
+        tv.epg.update(xmltvtmp)
     else:
         sys.stderr.write("\n")
         sys.stderr.write("ERROR: xmltv grabbing failed; %s returned exit code %d.\n" % (config.XMLTV_GRABBER, ec >> 8))

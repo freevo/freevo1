@@ -31,7 +31,8 @@
 import sys, time
 from time import strptime
 
-import tv.epg_xmltv, tv.epg_types
+import tv.epg
+import tv.epg_types
 
 from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
@@ -131,9 +132,8 @@ class ManualRecordResource(FreevoResource):
                         errormsg = _("Program would record for more than 1 day!") % MAXDAYS
 
         if errormsg or not action:
-            guide = tv.epg_xmltv.get_guide()
             channelselect = '<select name="chan">'
-            for ch in guide.chan_list:
+            for ch in tv.epg.channels:
                 if not ch.displayname:
                     ch.displayname="?"
                 channelselect = channelselect + '<option value="'+ch.id+'">'+ch.displayname+"\n"

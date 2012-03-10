@@ -455,22 +455,3 @@ class Favorite:
         s += '%-9s' % (self.onlyNew and 'only-new' or 'all-shows')
         return s
 
-
-
-class ScheduledTvProgram:
-    """
-    A scheduled TV programme (Not used)
-    """
-    LOW_QUALITY  = 1
-    MED_QUALITY  = 2
-    HIGH_QUALITY = 3
-
-    def __init__(self):
-        """ Construct a ScheduledTvProgram instance """
-        logger.log( 9, 'ScheduledTvProgram.__init__()')
-        self.tunerid      = None
-        self.isRecording  = False
-        self.isFavorite   = False
-        self.favoriteName = None
-        self.removed      = False
-        self.quality      = ScheduledTvProgram.HIGH_QUALITY

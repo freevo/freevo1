@@ -41,7 +41,7 @@ import plugin
 
 import event
 import rc
-from tv import epg_xmltv
+import tv.epg
 from util.tv_util import progname2filename
 import config
 
@@ -77,14 +77,9 @@ def _get_program(current_time, channel_id):
     """
     Get the program object from the EPG for channel_id at time current_time.
     """
-    for tv_channel_id, tv_display_name, tv_tuner_id in config.TV_CHANNELS:
-        if tv_tuner_id == channel_id:
-            channel_id = tv_channel_id
+    channel_id = tv.epg.channels_by_tuner_id[channel_id].id
 
-    channels = epg_xmltv.get_guide().get_programs(start=current_time,
-                                                 stop=current_time,
-                                                 channel_id=channel_id)
-
+    channels = tv.epg.get_programs(start=current_time, stop=current_time, channel_id=channel_id)
     if channels and channels[0] and channels[0].programs:
         return channels[0].programs[0]
     return None

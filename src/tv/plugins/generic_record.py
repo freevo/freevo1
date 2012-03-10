@@ -31,8 +31,7 @@ import logging
 logger = logging.getLogger("freevo.tv.plugins.generic_record")
 
 
-import sys, string
-import random
+import sys
 import time, os, string
 import threading
 import signal
@@ -45,7 +44,7 @@ import util.tv_util as tv_util
 
 from event import *
 from tv.channels import FreevoChannels
-
+from tv.server.record_server import SingleRecordingPlugin
 
 class PluginInterface(plugin.Plugin):
     """
@@ -56,6 +55,11 @@ class PluginInterface(plugin.Plugin):
         logger.debug('PluginInterface.__init__()')
         plugin.Plugin.__init__(self)
         plugin.register(Recorder(), plugin.RECORD)
+        plugin.register(TVRecorder(), 'tv_recorder')
+
+class TVRecorder(SingleRecordingPlugin):
+    def __init__(self, channels):
+        SingleRecordingPlugin.__init__(self, channels)
 
 
 class Recorder:

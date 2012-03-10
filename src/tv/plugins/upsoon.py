@@ -280,13 +280,6 @@ if __name__ == '__main__':
         server.findNextProgram(handler)
         kaa.main.run()
 
-    elif function == 'isplayerrunning':
-        def handler(result):
-            print 'isplayerrunning=%r' % (result,)
-            raise SystemExit
-        server.isPlayerRunning(handler)
-        kaa.main.run()
-
     else:
         fc = FreevoChannels()
         vg=fc.getVideoGroup('K10', False)

@@ -42,7 +42,7 @@ from programitem import ProgramItem
 
 import dialog
 
-import tv.epg_xmltv
+import tv.epg
 from tv.epg_types import TvProgram
 from tv.record_client import RecordClient
 
@@ -64,7 +64,8 @@ class TVGuide(Item):
         stop_time = start_time + self.hours_per_page * 60 * 60
 
         # constructing the guide takes some time
-        guide = tv.epg_xmltv.get_guide(popup=True)
+        guide = tv.epg
+        self.guide = guide
         # getting channels
         channels = guide.get_programs(start_time+1, stop_time-1)
         if not channels:
@@ -72,12 +73,13 @@ class TVGuide(Item):
             return
 
         # select the first available program
+
         selected = None
         for chan in channels:
             if chan.programs:
-                self.selected = chan.programs[0]
+                selected = chan.programs[0]
                 break
-
+        self.selected = selected
 
         self.recordclient = RecordClient()
         self.col_time = 30      # each col represents 30 minutes
@@ -97,7 +99,8 @@ class TVGuide(Item):
 
         self.event_context = 'tvmenu'
         self.transition = skin.TRANSITION_IN
-        self.rebuild(start_time, stop_time, guide.chan_list[0].id, selected)
+        print 'selected', selected
+        self.rebuild(start_time, stop_time, config.TV_CHANNELS[0][0], lambda  p: p == selected)
         
         menuw.pushmenu(self)
         
@@ -125,13 +128,9 @@ class TVGuide(Item):
         self.scheduled_programs = []
         self.overlap_programs = []
         self.favorite_programs = []
-        (status, scheduledRecordings) = self.recordclient.getScheduledRecordingsNow()
+        (status, progs) = self.recordclient.getScheduledRecordingsNow()
         if status:
-            util.misc.comingup(scheduledRecordings, True)
-            progs = scheduledRecordings.getProgramList()
-
-            for k in progs:
-                prog = progs[k]
+            for prog in progs:
                 self.scheduled_programs.append(prog.str2utf())
                 if prog.overlap:
                     self.overlap_programs.append(prog.str2utf())
@@ -157,30 +156,30 @@ class TVGuide(Item):
 
                 before = -1
                 after  = -1
-                for c in self.guide.chan_list:
+                for c in config.TV_CHANNELS:
                     if before >= 0 and after == -1:
                         before += 1
                     if after >= 0:
                         after += 1
-                    if c.id == start_channel:
+                    if c[0] == start_channel:
                         before = 0
-                    if c.id == selected.channel_id:
+                    if c[0] == selected.channel_id:
                         after = 0
 
                 if self.n_items <= before:
                     start_channel = selected.channel_id
 
                 if after < self.n_items:
-                    up = min(self.n_items -after, len(self.guide.chan_list)) - 1
-                    for i in range(len(self.guide.chan_list) - up):
-                        if self.guide.chan_list[i+up].id == start_channel:
-                            start_channel = self.guide.chan_list[i].id
+                    up = min(self.n_items -after, len(config.TV_CHANNELS) - 1)
+                    for i in range(len(config.TV_CHANNELS) - up):
+                        if config.TV_CHANNELS[i+up][0] == start_channel:
+                            start_channel = config.TV_CHANNELS[i][0]
                             break
 
                 stop_time = start_time + hours_per_page * 60 * 60
 
                 self.n_cols  = (stop_time - start_time) / 60 / self.col_time
-                self.rebuild(start_time, stop_time, start_channel, selected)
+                self.rebuild(start_time, stop_time, start_channel, lambda p: p == selected)
             return True
 
         ## MENU_UP: Move one channel up in the guide
@@ -198,7 +197,7 @@ class TVGuide(Item):
             self.change_program(-1)
             return True
 
-        ## MENU_RIGHT: Move to previous programm on this channel
+        ## MENU_RIGHT: Move to previous program on this channel
         elif event == MENU_RIGHT:
             self.change_program(1)
             return True
@@ -266,12 +265,12 @@ class TVGuide(Item):
             self.lastinput_time = newinput_time
 
             channel_no = int(newinput_value)-1
-            if channel_no < len(self.guide.chan_list):
-                self.start_channel = self.guide.chan_list[channel_no].id
+            if channel_no < len(config.TV_CHANNELS):
+                self.start_channel = config.TV_CHANNELS[channel_no][0]
             else:
                 self.lastinput_value = None
-
-            self.rebuild(self.start_time, self.stop_time, self.start_channel, self.selected)
+            s = self.selected
+            self.rebuild(self.start_time, self.stop_time, self.start_channel, lambda p : p == s)
             return True
 
         return False
@@ -324,13 +323,9 @@ class TVGuide(Item):
                     for p in t.programs:
                         if p in self.scheduled_programs:
                             p.scheduled = True
-                            # DO NOT change this to 'True' Twisted
-                            # does not support boolean objects and
-                            # it will break under Python 2.3
                         else:
                             p.scheduled = False
-                            # Same as above; leave as 'False' until
-                            # Twisted includes Boolean
+
                         if p in self.overlap_programs:
                             p.overlap = True
                         else:
@@ -362,7 +357,7 @@ class TVGuide(Item):
         programs = self.guide.get_programs(start_time+1, stop_time-1, old_selected.channel_id)
 
         if len(programs) > 0 and len(programs[0].programs) > 0:
-            selected = programs[0].programs[0]
+            selected = lambda p: p == programs[0].programs[0]
         else:
             selected = None
 
@@ -382,45 +377,41 @@ class TVGuide(Item):
         programs = self.guide.get_programs(new_start_time+1, new_end_time-1, self.start_channel)
 
         if len(programs) > 0 and len(programs[0].programs) > 0:
-            selected = programs[0].programs[0]
+            selected = lambda p: p == programs[0].programs[0]
         else:
             selected = None
 
         self.rebuild(new_start_time, new_end_time, start_channel, selected)
 
 
-    def rebuild(self, start_time, stop_time, start_channel, selected):
+    def rebuild(self, start_time, stop_time, start_channel, selected_fn):
         """ rebuild the guide
 
         This is neccessary we change the set of programs that have to be
         displayed, this is the case when the user moves around in the menu.
         """
-        logger.log( 9, 'rebuild(start_time=%r, stop_time=%r, start_channel=%r, selected=%r)', start_time, stop_time, start_channel, selected)
-        self.guide = tv.epg_xmltv.get_guide(popup=True)
+        logger.log( 9, 'rebuild(start_time=%r, stop_time=%r, start_channel=%r, selected_fn=%r)', start_time, stop_time, start_channel, selected_fn)
         channels = self.guide.get_programs(start_time+1, stop_time-1)
-
-        table = [ ]
 
         self.start_time    = start_time
         self.stop_time     = stop_time
         self.start_channel = start_channel
-        self.selected      = selected
 
         self.display_up_arrow   = False
         self.display_down_arrow = False
 
         # table header
-        table += [ ['Chan'] ]
+        header = ['Chan']
         for i in range(int(self.n_cols)):
-            table[0] += [ start_time + self.col_time * i * 60 ]
+            header.append( start_time + self.col_time * i * 60 )
 
-        table += [ self.selected ] # the selected program
+        table = [header, self.selected]
 
-        found_1stchannel = 0
+        found_1stchannel = False
         if stop_time == None:
-            found_1stchannel = 1
+            found_1stchannel = True
 
-        flag_selected = 0
+        flag_selected = False
 
         n = 0
         for chan in channels:
@@ -429,7 +420,7 @@ class TVGuide(Item):
                 break
 
             if start_channel != None and chan.id == start_channel:
-                found_1stchannel = 1
+                found_1stchannel = True
 
             if not found_1stchannel:
                 self.display_up_arrow = True
@@ -439,31 +430,38 @@ class TVGuide(Item):
                     prg = TvProgram(chan.id, 0, 0, 2147483647, CHAN_NO_DATA, desc='')
                     chan.programs = [ prg ]
 
-                for i in range(len(chan.programs)):
-                    if selected:
-                        if chan.programs[i] == selected:
-                            flag_selected = 1
+                if selected_fn:
+                    for p in chan.programs:
+                        if selected_fn(p):
+                            flag_selected = True
+                            self.selected = p
+                            table[1] = p
+                            break
 
-                table += [ chan ]
+                table.append(chan)
                 n += 1
 
-        if flag_selected == 0:
+        if not flag_selected:
             for i in range(2, len(table)):
-                if flag_selected == 1:
-                    break
-                else:
-                    if table[i].programs:
-                        for j in range(len(table[i].programs)):
-                            if table[i].programs[j].stop > start_time:
-                                self.selected = table[i].programs[j]
-                                table[1] = table[i].programs[j]
-                                flag_selected = 1
-                                break
+                if table[i].programs:
+                    for j in range(len(table[i].programs)):
+                        if table[i].programs[j].stop > start_time:
+                            self.selected = table[i].programs[j]
+                            table[1] = table[i].programs[j]
+                            flag_selected = True
+                            break
 
         self.table = table
-        # then we can refresh the display with this programs
-        #self.update()
+
         self.refresh(force_update=False)
+
+
+    def __find_channel(self, channel_id):
+        for i in xrange(2, len(self.table)):
+            channel = self.table[i]
+            if channel.id == channel_id:
+                return channel
+        return None
 
 
     def change_program(self, value, full_scan=False):
@@ -476,14 +474,16 @@ class TVGuide(Item):
         start_channel = self.start_channel
         last_prg      = self.selected
 
-        channel = self.guide.chan_dict[last_prg.channel_id]
         if full_scan:
-            all_programs = self.guide.get_programs(start_time-24*60*60, stop_time+24*60*60, channel.id)
+            if value > 0:
+                all_programs = self.guide.get_programs(stop_time, stop_time+24*60*60, last_prg.channel_id)[0]
+            else:
+                all_programs = self.guide.get_programs(start_time-24*60*60, start_time, last_prg.channel_id)[0]
         else:
-            all_programs = self.guide.get_programs(start_time+1, stop_time-1, channel.id)
+            all_programs = self.__find_channel(last_prg.channel_id)
 
         # Current channel programs
-        programs = all_programs[0].programs
+        programs = all_programs.programs
         if programs:
             for i in range(len(programs)):
                 if programs[i].title == last_prg.title and \
@@ -509,11 +509,6 @@ class TVGuide(Item):
                 else:
                     return self.change_program(value, True)
 
-            if prg.sub_title:
-                procdesc = '"' + prg.sub_title + '"\n' + prg.desc
-            else:
-                procdesc = prg.desc
-            to_info = (prg.title, procdesc)
             self.select_time = prg.start
 
             # set new (better) start / stop times
@@ -529,10 +524,9 @@ class TVGuide(Item):
                 start_time -= (self.col_time * 60)
                 stop_time -= (self.col_time * 60)
         else:
-            prg = TvProgram(channel.id, 0, 0, 2147483647, CHAN_NO_DATA, desc='')
-            to_info = CHAN_NO_DATA
+            prg = TvProgram(last_prg.channel_id, 0, 0, 2147483647, CHAN_NO_DATA, desc='')
 
-        self.rebuild(start_time, stop_time, start_channel, prg)
+        self.rebuild(start_time, stop_time, start_channel, lambda p: p == prg)
 
 
     def change_channel(self, value):
@@ -545,42 +539,22 @@ class TVGuide(Item):
         start_channel = self.start_channel
         last_prg      = self.selected
 
-        for i in range(len(self.guide.chan_list)):
-            if self.guide.chan_list[i].id == start_channel:
+        for i in range(len(config.TV_CHANNELS)):
+            if config.TV_CHANNELS[i][0] == start_channel:
                 start_pos = i
                 end_pos   = i + self.n_items
-            if self.guide.chan_list[i].id == last_prg.channel_id:
+            if config.TV_CHANNELS[i][0] == last_prg.channel_id:
                 break
 
-        channel_pos = min(len(self.guide.chan_list)-1, max(0, i+value))
+        channel_pos = min(len(config.TV_CHANNELS) - 1, max(0, i + value))
 
         if value < 0 and channel_pos >= 0 and channel_pos < start_pos:
-            start_channel = self.guide.chan_list[start_pos + value].id
+            start_channel = config.TV_CHANNELS[start_pos + value][0]
 
-        if value > 0 and channel_pos < len(self.guide.chan_list)-1 and channel_pos+1 >= end_pos:
-            start_channel = self.guide.chan_list[start_pos + value].id
+        if value > 0 and channel_pos < len(config.TV_CHANNELS)-1 and channel_pos+1 >= end_pos:
+            start_channel = config.TV_CHANNELS[start_pos + value][0]
 
-        channel = self.guide.chan_list[channel_pos]
+        channel_id = config.TV_CHANNELS[channel_pos][0]
 
-
-        programs = self.guide.get_programs(start_time+1, stop_time-1, channel.id)
-        programs = programs[0].programs
-
-        prg = None
-        if programs and len(programs) > 0:
-            for i in range(len(programs)):
-                if programs[i].stop > self.select_time and programs[i].stop > start_time:
-                    break
-
-            prg = programs[i]
-            if prg.sub_title:
-                procdesc = '"' + prg.sub_title + '"\n' + prg.desc
-            else:
-                procdesc = prg.desc
-
-            to_info = (prg.title, procdesc)
-        else:
-            prg = TvProgram(channel.id, 0, 0, 2147483647, CHAN_NO_DATA, desc='')
-            to_info = CHAN_NO_DATA
-
-        self.rebuild(start_time, stop_time, start_channel, prg)
+        self.rebuild(start_time, stop_time, start_channel, lambda p: p.stop > self.select_time and p.stop > start_time \
+                        and p.channel_id == channel_id)

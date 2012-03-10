@@ -38,7 +38,7 @@ from twisted.web import static
 import util.tv_util as tv_util
 import util
 import config
-import tv.epg_xmltv
+import tv.epg
 from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 from www.configlib import *
 
@@ -52,9 +52,9 @@ class GuideResource(FreevoResource):
         self.recordclient = RecordClientResource()
 
 
-    def GetChannelList(self, guide):
+    def GetChannelList(self):
         clist = []
-        for dchan in guide.chan_list:
+        for dchan in tv.epg.channels:
             clist.append(dchan.displayname)
         return clist
 
@@ -69,13 +69,6 @@ class GuideResource(FreevoResource):
         return bookedtime, schedule_prog
 
 
-    def GetChannel(self, display_channel, guide):
-        for dchan in guide.chan_list:
-            if display_channel == dchan.displayname:
-                chan = dchan
-        return chan
-
-
     def CreateChannelLine(self, prog):
         status = "programline"
 
@@ -86,7 +79,7 @@ class GuideResource(FreevoResource):
             program_tip = 'Scheduled Program : %s' %  Unicode(sch_prog.sub_title)
 
         if self.got_schedule:
-            (result, reason) = self.recordclient().isProgScheduledNow(prog, self.schedule)
+            (result, reason) = self.recordclient().isProgScheduledNow(prog)
             if result:
                 status = 'programlinerecord'
                 if self.currenttime > prog.start  and self.currenttime < prog.stop:
@@ -165,7 +158,7 @@ class GuideResource(FreevoResource):
     def GetChannelPrograms(self, channel):
         channel_programs = '<ul id="daylistcontainer">\n'
         current_day =''
-
+        channel = tv.epg.get_programs(start=self.currenttime, channel_id=channel.id)[0]
         for prog in channel.programs:
 
             if prog.stop > self.currenttime:
@@ -192,7 +185,6 @@ class GuideResource(FreevoResource):
         fv = HTMLResource()
         form = request.args
 
-        self.guide = tv.epg_xmltv.get_guide()
         (self.got_schedule, self.schedule) = self.recordclient().getScheduledRecordingsNow()
         self.currenttime = time.time()
 
@@ -206,20 +198,20 @@ class GuideResource(FreevoResource):
 
         display_channel = fv.formValue(form, 'channel')
         if not display_channel:
-            display_channel = self.guide.chan_list[0].displayname
+            display_channel = tv.epg.channels[0].displayname
         clist = []
 
         getprogramlist = fv.formValue(form, 'getprogramlist')
         if getprogramlist:
-            chan = self.GetChannel(getprogramlist, self.guide)
+            chan = tv.epg.channels_by_display_name[getprogramlist]
             fv.res = self.GetChannelPrograms(chan)
             return String(fv.res)
 
-        dchan = self.GetChannel(display_channel, self.guide)
+        dchan = tv.epg.channels_by_display_name[display_channel]
         fv.res += '<script language="JavaScript" type="text/JavaScript" src="scripts/guidechannel.js"></script>\n'
         js_onclick = "ChangeChannel(this)"
         ctrl_opts = 'onchange="%s"' % js_onclick
-        clist = self.GetChannelList(self.guide)
+        clist = self.GetChannelList()
         fv.res += CreateSelectBoxControl('channel', clist, display_channel, ctrl_opts)
 
         if not dchan.programs:

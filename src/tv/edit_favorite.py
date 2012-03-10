@@ -35,7 +35,7 @@ logger = logging.getLogger("freevo.tv.edit_favorite")
 from time import gmtime, strftime
 
 import config
-import tv.epg_xmltv
+import tv.epg
 from tv.record_client import RecordClient
 import event as em
 
@@ -103,8 +103,6 @@ class EditFavorite(PopupBox):
         if not self.left:     self.left   = self.osd.width/2 - self.width/2
         if not self.top:      self.top    = self.osd.height/2 - self.height/2
 
-        guide = epg_xmltv.get_guide()
-
         name = Label(_('Name')+':', self, Align.LEFT)
         self.name_input = LetterBoxGroup(text=self.fav.name)
         self.name_input.h_align = Align.NONE
@@ -121,7 +119,7 @@ class EditFavorite(PopupBox):
 
         i = 1
         chan_index = 0
-        for ch in guide.chan_list:
+        for ch in tv.epg.channels:
             #if ch.id == self.fav.channel_id:
             if ch.displayname == self.fav.channel:
                 chan_index = i

@@ -39,7 +39,6 @@ import osd     # The OSD class, used to communicate with the OSD daemon
 import rc      # The RemoteControl class.
 import event as em
 import childapp # Handle child applications
-import tv.epg_xmltv as epg # The Electronic Program Guide
 from tv.channels import FreevoChannels
 import tv.ivtv as ivtv
 import plugin

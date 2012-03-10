@@ -48,7 +48,6 @@ import util    # Various utilities
 import osd
 import rc      # The RemoteControl class.
 import childapp # Handle child applications
-import tv.epg_xmltv as epg # The Electronic Program Guide
 import event as em
 from tv.channels import FreevoChannels
 

@@ -111,14 +111,12 @@ class ProgramItem(Item):
         if self.recordclient.pingNow():
 
             # 'Schedule for recording' OR 'Remove from schedule'
-            (status, schedule) = self.recordclient.getScheduledRecordingsNow()
-            if status:
-                (status, reason) = self.recordclient.isProgScheduledNow(self.prog, schedule)
-                self.scheduled = status
-                if self.scheduled:
-                    items.append((self.remove_program, _('Remove from schedule')))
-                else:
-                    items.append((self.schedule_program, _('Schedule for recording')))
+            (status, reason) = self.recordclient.isProgScheduledNow(self.prog)
+            self.scheduled = status
+            if self.scheduled:
+                items.append((self.remove_program, _('Remove from schedule')))
+            else:
+                items.append((self.schedule_program, _('Schedule for recording')))
 
             # 'Add to favorites' OR 'Remove from favorites'
             (status, reason) = self.recordclient.isProgAFavoriteNow(self.prog)
@@ -211,7 +209,7 @@ class ProgramItem(Item):
             msgtext= _('"%s" has been scheduled for recording') % self.name
         elif status == 'conflict':
             msgtext=_('Conflict detected!')
-            self.resolve_conflict(menuw)
+            self.resolve_conflict(menuw, reason)
             return
         else:
             # something went wrong
@@ -283,14 +281,16 @@ class ProgramItem(Item):
         menuw.make_submenu(_('Program Menu'), self.actions(), self)
         menuw.show()
 
-    def resolve_conflict(self, menuw):
-        rating, conflictingProgs = self.recordclient.getConflicts(self.prog)
+    def resolve_conflict(self, menuw, conflictingProgs):
+        #rating, conflictingProgs = self.recordclient.getConflicts(self.prog)
         prog_text = self.prog.getattr('time') + u' ' + self.prog.title
         other_prog_text = u''
-        for cprog in conflictingProgs:
-            if other_prog_text:
-                other_prog_text += u'\n'
-            other_prog_text += cprog.getattr('time') + u' ' + cprog.title
+        for progs in conflictingProgs:
+            for cprog in progs:
+                if other_prog_text:
+                    other_prog_text += u'\n'
+                other_prog_text += cprog.getattr('time') + u' ' + cprog.title
+            other_prog_text += u'\n\n'
         self.conflict_info = _('%s\nConflicts with:\n%s') % (prog_text, other_prog_text)
         cancel_mi = menu.MenuItem(_('Cancel'), menuw.back_one_menu)
         if len(conflictingProgs) == 1:

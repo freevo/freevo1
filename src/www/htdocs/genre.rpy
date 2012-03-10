@@ -34,7 +34,7 @@ import sys, time, string
 import config
 import util
 from www.web_types import HTMLResource, FreevoResource, RecordClientResource
-import tv.epg_xmltv
+import tv.epg
 
 TRUE = 1
 FALSE = 0
@@ -89,17 +89,8 @@ class GenreResource(FreevoResource):
 
         category = fv.formValue(form, 'category')
 
-        guide = tv.epg_xmltv.get_guide()
-        (status, schedule) = self.recordclient().getScheduledRecordingsNow()
-        if not status:
-            fv.printMessagesFinish(['<b>'+_('ERROR')+'</b>: '+_('No program schedule')])
-            return String(fv.res)
+        allcategories = tv.epg.get_categories()
 
-        allcategories = []
-        for chan in guide.chan_list:
-            for prog in chan.programs:
-                if prog.categories:
-                    allcategories.extend(prog.categories)
         if allcategories:
             allcategories=util.unique(allcategories)
             allcategories.sort()
@@ -144,37 +135,38 @@ class GenreResource(FreevoResource):
 
         desc = ''
         gotdata = 0
-        for chan in guide.chan_list:
-            for prog in chan.programs:
-                if prog.stop > mfrguidestart and prog.start < mfrnextguide:
-                    status = 'program'
+        programs = tv.epg.search(category=category, time=(mfrguidestart, mfrnextguide))
+        for prog in programs:
+            if prog.stop > mfrguidestart and prog.start < mfrnextguide:
+                status = 'program'
 
-                    # match the category
-                    if category not in prog.categories:
-                        continue
+                # match the category
+                if category not in prog.categories:
+                    continue
 
-                    # figure out if in progress
+                # figure out if in progress
 
-                    # use counter to see if we have data
-                    gotdata += 1
-                    (result, reason) = self.recordclient().isProgScheduledNow(prog, schedule)
-                    if result:
-                        status = 'scheduled'
-                        really_now = time.time()
-                        if prog.start <= really_now and prog.stop >= really_now:
-                            # in the future we should REALLY see if it is
-                            # recording instead of just guessing
-                            status = 'recording'
+                # use counter to see if we have data
+                gotdata += 1
+                (result, reason) = self.recordclient().isProgScheduledNow(prog)
+                if result:
+                    status = 'scheduled'
+                    really_now = time.time()
+                    if prog.start <= really_now and prog.stop >= really_now:
+                        # in the future we should REALLY see if it is
+                        # recording instead of just guessing
+                        status = 'recording'
 
-                    fv.tableRowOpen('class="chanrow"')
-                    fv.tableCell(chan.displayname, 'class="channel"')
-                    popid = '%s:%s' % (prog.channel_id, prog.start)
+                fv.tableRowOpen('class="chanrow"')
+                chan = tv.epg.channels_by_id[prog.channel_id]
+                fv.tableCell(chan.displayname, 'class="channel"')
+                popid = '%s:%s' % (prog.channel_id, prog.start)
 
-                    fv.tableCell(prog.title+'&nbsp;&nbsp;-&nbsp;&nbsp;'+prog.desc, 'class="'+status+'" \
-                        onclick="guide_click(this, event)" id="%s"  width="80%%"' % popid )
-                    fv.tableCell(time.strftime('%H:%M', time.localtime(prog.start)), 'class="channel"')
-                    fv.tableCell(time.strftime('%H:%M', time.localtime(prog.stop)), 'class="channel"')
-                    fv.tableRowClose()
+                fv.tableCell(prog.title+'&nbsp;&nbsp;-&nbsp;&nbsp;'+prog.desc, 'class="'+status+'" \
+                    onclick="guide_click(this, event)" id="%s"  width="80%%"' % popid )
+                fv.tableCell(time.strftime('%H:%M', time.localtime(prog.start)), 'class="channel"')
+                fv.tableCell(time.strftime('%H:%M', time.localtime(prog.stop)), 'class="channel"')
+                fv.tableRowClose()
 
         if gotdata == 0:
             fv.tableRowOpen('class="chanrow"')

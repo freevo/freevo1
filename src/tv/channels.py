@@ -36,8 +36,9 @@ import time
 import os
 
 import config, plugin
-import tv.freq, tv.v4l2
-import epg_xmltv
+import tv.freq
+import tv.v4l2
+import tv.epg
 
 CHANNEL_ID = 0
 DISPLAY_NAME = 1
@@ -369,7 +370,7 @@ class FreevoChannels:
         chan_name = config.TV_CHANNELS[self.chan_index][1]
         chan_id = config.TV_CHANNELS[self.chan_index][0]
 
-        channels = epg_xmltv.get_guide().get_programs(time.time(), time.time(), chan_id)
+        channels = tv.epg.get_programs(time.time(), time.time(), chan_id)
 
         if channels and channels[0] and channels[0].programs:
             if showtime:
@@ -393,7 +394,7 @@ class FreevoChannels:
         chan_name = config.TV_CHANNELS[self.chan_index][1]
         chan_id = config.TV_CHANNELS[self.chan_index][0]
 
-        channels = epg_xmltv.get_guide().get_programs(time.time(), time.time(), chan_id)
+        channels = tv.epg.get_programs(time.time(), time.time(), chan_id)
 
         if channels and channels[0] and channels[0].programs:
             start_t = channels[0].programs[0].start

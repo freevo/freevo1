@@ -45,24 +45,6 @@ import kaa.rpc
 from kaa import EventHandler
 from kaa import AtTimer
 
-appname = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-appconf = appname.upper()
-
-# change uid
-if __name__ == '__main__':
-    config.DEBUG_STDOUT = 0
-    uid = 'config.'+appconf+'_UID'
-    gid = 'config.'+appconf+'_GID'
-    try:
-        if eval(uid) and os.getuid() == 0:
-            os.setgid(eval(gid))
-            os.setuid(eval(uid))
-            os.environ['USER'] = pwd.getpwuid(os.getuid())[0]
-            os.environ['HOME'] = pwd.getpwuid(os.getuid())[5]
-    except Exception, why:
-        print why
-        sys.exit(1)
-
 # The twisted modules will go away when all the recordserver clients
 # have been updated to use kaa.rpc
 
@@ -76,7 +58,7 @@ from video.encodingclient import EncodingClientActions
 import tv.record_types
 from tv.record_types import TYPES_VERSION
 from tv.record_types import ScheduledRecordings
-import tv.epg_xmltv
+import tv.epg
 import util.tv_util as tv_util
 import plugin
 import util.popen3
@@ -84,19 +66,6 @@ from tv.channels import FreevoChannels, CHANNEL_ID
 from util.videothumb import snapshot
 from event import *
 
-
-DEBUG = hasattr(config, 'DEBUG_'+appconf) and eval('config.DEBUG_'+appconf) or config.DEBUG
-LOGGING = hasattr(config, 'LOGGING_'+appconf) and eval('config.LOGGING_'+appconf) or config.LOGGING
-
-logfile = '%s-%s.log' % (os.path.join(config.FREEVO_LOGDIR, appname), os.getuid())
-sys.stdout = open(logfile, 'a')
-sys.stderr = sys.stdout
-
-logging.getLogger('').setLevel(LOGGING)
-logging.basicConfig(level=LOGGING, \
-    #datefmt='%a, %H:%M:%S', # datefmt does not support msecs :(
-    format='%(asctime)s %(levelname)-8s %(message)s', \
-    filename=logfile, filemode='a')
 
 try:
     import freevo.version as version
@@ -239,6 +208,10 @@ class RecordServer:
 
 
     @kaa.rpc.expose('getScheduledRecordings')
+    def _getScheduledRecordings(self):
+        schedule = self.getScheduledRecordings()
+        return schedule.program_list.values()
+
     def getScheduledRecordings(self):
         logger.log( 9, 'getScheduledRecordings()')
         file_ver = None
@@ -698,7 +671,7 @@ class RecordServer:
 
     def setTunerid(self, prog):
         logger.log( 9, 'setTunerid(prog=%r)', prog)
-        for chan in guide.chan_list:
+        for chan in tv.epg.channels:
             if prog.channel_id == chan.id:
                 prog.tunerid = chan.tunerid
                 logger.log( 9, '%s tuner: %s', prog, prog.tunerid)
@@ -710,7 +683,6 @@ class RecordServer:
         """
         """
         logger.log( 9, 'scheduleRecording(%r)', prog)
-        global guide
 
         if prog is None:
             return ('error', _('program is not set'))
@@ -718,8 +690,6 @@ class RecordServer:
         now = self.timenow()
         if now > prog.stop:
             return ('error', _('program cannot record as it is over'))
-
-        self.updateGuide()
 
         (isFav, favorite) = self.isProgAFavorite(prog)
         if isFav:
@@ -823,20 +793,13 @@ class RecordServer:
     @kaa.rpc.expose('findProg')
     def findProg(self, chan=None, start=None):
         logger.log( 9, 'findProg(chan=%r, start=%r', chan, start)
-        global guide
 
         if chan is None or start is None:
             return (False, None)
 
-        self.updateGuide()
-
-        for ch in guide.chan_list:
-            if chan == ch.id:
-                logger.info('CHANNEL MATCH: %s', ch.id)
-                for prog in ch.programs:
-                    if start == '%s' % prog.start:
-                        logger.info('PROGRAM MATCH 1: %s', prog)
-                        return (True, prog.utf2str())
+        progs = tv.epg.search(channel_id=chan.id, time=start)
+        if progs:
+            return (True, progs[0].utf2str())
 
         return (False, None)
 
@@ -844,56 +807,13 @@ class RecordServer:
     @kaa.rpc.expose('findMatches')
     def findMatches(self, find=None, movies_only=False):
         logger.log( 9, 'findMatches(find=%r, movies_only=%r)', find, movies_only)
-        global guide
 
-        matches = []
-        max_results = 500
-
-        if find:
-            find = Unicode(find).replace('(','\(').replace(')','\)').replace('.','\.')
-        elif not movies_only:
-            logger.info('nothing to find')
-            return (False, _('nothing to find'))
-
-        self.updateGuide()
-
-        pattern = '.*' + find + '\ *'
-        regex = re.compile(pattern, re.IGNORECASE)
-        now = self.timenow()
-
-        for ch in guide.chan_list:
-            for prog in ch.programs:
-                if now >= prog.stop:
-                    continue
-                if not find or regex.match(prog.title) or regex.match(prog.desc) or regex.match(prog.sub_title):
-                    if movies_only:
-                        # We can do better here than just look for the MPAA rating.
-                        # Suggestions are welcome.
-                        if 'MPAA' in prog.utf2str().getattr('ratings').keys():
-                            matches.append(prog.utf2str())
-                            logger.info('PROGRAM MATCH 2: %s', prog)
-                    else:
-                        matches.append(prog.utf2str())
-                        logger.info('PROGRAM MATCH 3: %s', prog)
-                if len(matches) >= max_results:
-                    break
-
+        matches = tv.epg.search(keyword=find)
         logger.info('Found %d matches.', len(matches))
 
         if len(matches) == 0:
             return (False, _('no programs match'))
         return (True, matches)
-
-
-    def updateGuide(self):
-        logger.log( 9, 'updateGuide()')
-        global guide
-        guide = tv.epg_xmltv.get_guide()
-
-
-    def addFavoritesToSchedule(self):
-        logger.log( 9, 'addFavoritesToSchedule()')
-        pass
 
 
     def timenow(self):
@@ -1179,7 +1099,6 @@ class RecordServer:
         fav.priority = priority
         fav.allowDuplicates = allowDuplicates
         fav.onlyNew = onlyNew
-
         schedule = self.getScheduledRecordings()
         schedule.addFavorite(fav)
         self.saveScheduledRecordings(schedule)
@@ -1346,21 +1265,19 @@ class RecordServer:
         return (True, _('favorite removed from schedule'))
 
 
-    @kaa.rpc.expose('addFavoriteToSchedule')
     def addFavoriteToSchedule(self, fav):
         logger.log( 9, 'addFavoriteToSchedule(fav=%r)', fav)
-        global guide
         favs = {}
         favs[fav.name] = fav
-
-        self.updateGuide()
-
-        for ch in guide.chan_list:
-            for prog in ch.programs:
-                (isFav, favorite) = self.isProgAFavorite(prog, favs)
-                if isFav:
-                    prog.isFavorite = favorite
-                    self.scheduleRecording(prog)
+        kwargs = {'title' : fav.title}
+        if fav.channel != u'ANY':
+            kwargs['channel_id'] = tv.epg.channels_by_display_name[fav.channel].id
+        progs = tv.epg.search(**kwargs)
+        for prog in progs:
+            (isFav, favorite) = self.isProgAFavorite(prog, favs)
+            if isFav:
+                prog.isFavorite = favorite
+                self.scheduleRecording(prog)
 
         return (True, _('favorite added to schedule'))
 
@@ -1370,16 +1287,6 @@ class RecordServer:
         #  TODO: do not re-add a prog to record if we have
         #        previously decided not to record it.
         logger.log( 9, 'updateFavoritesSchedule()')
-
-        global guide
-
-        self.updateGuide()
-
-        # First get the timeframe of the guide.
-        last = 0
-        for ch in guide.chan_list:
-            for prog in ch.programs:
-                if prog.start > last: last = prog.start
 
         schedule = self.getScheduledRecordings()
 
@@ -1395,14 +1302,20 @@ class RecordServer:
         for prog in progs.values():
             # if prog.start <= last and favorite:
             (isFav, favorite) = self.isProgAFavorite(prog, favs)
-            if prog.start <= last and isFav:
+            if isFav:
                 # do not yet remove programs currently being recorded:
                 isRec = hasattr(prog, 'isRecording') and prog.isRecording
                 if not isRec:
                     self.removeScheduledRecording(prog, mark_fav_deleted=False)
 
-        for ch in guide.chan_list:
-            for prog in ch.programs:
+        titles = []
+        for fav in favs.values():
+            if fav.title not in titles:
+                titles.append(fav.title)
+        for title in titles:
+
+            programs = tv.epg.search(title=title)
+            for prog in programs:
                 (isFav, favorite) = self.isProgAFavorite(prog, favs)
                 isDeleted = self.getScheduledRecordings().isFavoriteProgDeleted(prog, tv_util.getKey(prog))
                 isRec = hasattr(prog, 'isRecording') and prog.isRecording
@@ -1533,12 +1446,10 @@ def main():
     logger.debug('socket=%r, secret=%r', socket, secret)
 
     recordserver = RecordServer()
-
     try:
         rpc = kaa.rpc.Server(socket, secret)
     except Exception:
         raise
-
     rpc.register(recordserver)
 
     eh = EventHandler(recordserver.handleEvents)
@@ -1556,9 +1467,6 @@ if __name__ == '__main__':
     import socket
     import glob
 
-    sys.stdout = config.Logger(sys.argv[0] + ':stdout')
-    sys.stderr = config.Logger(sys.argv[0] + ':stderr')
-
     locks = glob.glob(os.path.join(config.FREEVO_CACHEDIR, 'record.*'))
     for f in locks:
         logger.info('removed old record lock %r', f)
@@ -1571,7 +1479,8 @@ if __name__ == '__main__':
     except SystemExit:
         logger.info('main() stopped')
         pass
-    except Exception, why:
+    except Exception:
+
+        logger.warning('Caught exception from main()',exc_info=True)
         import traceback
         traceback.print_exc()
-        logger.warning(why)

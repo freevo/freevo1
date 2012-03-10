@@ -35,7 +35,7 @@ import time
 import config
 import util.tv_util as tv_util
 import util
-import tv.epg_xmltv
+import tv.epg
 from twisted.web import static
 from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
@@ -49,12 +49,8 @@ class GuideResource(FreevoResource):
         self.recordclient = RecordClientResource()
 
 
-    def makecategorybox(self, chanlist):
-        allcategories = []
-        for chan in chanlist:
-            for prog in chan.programs:
-                if prog.categories:
-                    allcategories.extend(prog.categories)
+    def makecategorybox(self):
+        allcategories = tv.epg.get_categories()
         if allcategories:
             allcategories=util.unique(allcategories)
             allcategories.sort()
@@ -137,16 +133,14 @@ class GuideResource(FreevoResource):
         if mfrprevguide < now2:
             mfrprevguide = 0
 
-        guide = tv.epg_xmltv.get_guide()
-        (status, schedule) = self.recordclient().getScheduledRecordingsNow()
-        if status:
-            program_list = schedule.getProgramList()
 
         fv.printHeader(_('TV Guide'), config.WWW_STYLESHEET, config.WWW_JAVASCRIPT, selected=_('TV Guide'))
         fv.res += '<div id="content">\n';
         fv.res += '&nbsp;<br/>\n'
-        if schedule is None:
-            fv.printMessages([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is not available') ])
+
+        # TODO Warn when no server is available.
+        #if schedule is None:
+        #    fv.printMessages([ '<b>'+_('ERROR')+'</b>: '+_('Recording server is not available') ])
 
         desc = ''
 
@@ -154,7 +148,7 @@ class GuideResource(FreevoResource):
         fv.tableRowOpen('class="chanrow"')
         fv.tableCell('<form>'+_('Time')+':&nbsp;' + self.maketimejumpboxday(now) + self.maketimejumpboxoffset(now) +
             '<input type=submit value="'+_('View')+'"></form>', 'class="utilhead"')
-        categorybox =  self.makecategorybox(guide.chan_list)
+        categorybox =  self.makecategorybox()
         if categorybox:
             fv.tableCell('<form action="genre.rpy">'+_('Show')+'&nbsp;'+_('Category')+':&nbsp;'+categorybox+'<input type=submit value="'+_('Change')+'"></form>', 'class="utilhead"')
         fv.tableRowClose()
@@ -162,7 +156,8 @@ class GuideResource(FreevoResource):
 
         fv.tableOpen('id="guide" cols=\"%d\"' % (n_cols * cpb + 1))
         showheader = 0
-        for chan in guide.chan_list:
+        channels = tv.epg.get_programs(start=mfrguidestart, stop=mfrnextguide)
+        for chan in channels:
             #put guidehead every X rows
             if showheader % 15 == 0:
                 fv.tableRowOpen('class="chanrow"')
@@ -206,7 +201,7 @@ class GuideResource(FreevoResource):
                     status = 'program'
 
                     if status:
-                        (result, reason) = self.recordclient().isProgScheduledNow(prog, schedule)
+                        (result, reason) = self.recordclient().isProgScheduledNow(prog)
                         if result:
                             status = 'scheduled'
                             really_now = time.time()

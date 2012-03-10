@@ -41,13 +41,9 @@ import plugin
 
 import util.tv_util as tv_util
 
-# The Electronic Program Guide
-import tv.epg_xmltv
-
 from item import Item
 
 from tv.tvguide import TVGuide
-from directory import DirItem
 
 
 import dialog

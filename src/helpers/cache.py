@@ -518,8 +518,8 @@ def create_tv_pickle():
     print checking('caching xmltv database'),
     sys.__stdout__.flush()
 
-    import tv.epg_xmltv
-    tv.epg_xmltv.get_guide()
+    import tv.epg
+    tv.epg.update()
     print 'done'
 
 

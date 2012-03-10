@@ -42,7 +42,7 @@ import config
 import util
 import plugin
 import osd
-import tv.epg_xmltv
+import tv.epg
 
 from gui import sounds
 from item import Item
@@ -95,16 +95,10 @@ class SearchProgramMenu(plugin.Plugin):
         pdialog = ProgressDialog(_('Searching, please wait...'))
         pdialog.show()
         now = time.time()
-        guide = tv.epg_xmltv.get_guide()
-        total_channels = len(guide.chan_list)
+        programs = tv.epg.search(title=self.current_prog.prog.title, time=(now, 0))
         items = []
-        for i,ch in enumerate(guide.chan_list):
-            for prog in ch.programs:
-                if now >= prog.stop:
-                    continue
-                if prog.title.startswith(self.current_prog.prog.title):
-                    items.append(ProgramItem(self.current_prog, prog, context='more_programs'))
-            pdialog.update_progress(unicode(''), float(i)/float(total_channels))
+        for prog in programs:
+            items.append(ProgramItem(self.current_prog, prog, context='more_programs'))
 
         items.sort(lambda x,y: cmp(x.prog.start, y.prog.start))
         pdialog.hide()
@@ -131,31 +125,16 @@ class SearchPrograms(Item):
         if not text:
             dialog.show_alert(_('Please specify something to search for!'))
             return
-        title_only = False
         pdialog = ProgressDialog(_('Searching, please wait...'))
         pdialog.show()
 
-        guide = tv.epg_xmltv.get_guide()
-        regex = re.compile('.*' + text + '\ *', re.IGNORECASE)
-        now = time.time()
+        programs = tv.epg.search(keyword=text, time=(time.time(),0))
         items = []
-        total_channels = len(guide.chan_list)
-        for i,ch in enumerate(guide.chan_list):
-            for prog in ch.programs:
-                if now >= prog.stop:
-                    continue
-                if title_only:
-                    match = regex.match(prog.title)
-                else:
-                    match = regex.match(prog.title) or regex.match(prog.desc) \
-                        or regex.match(prog.sub_title)
+        for prog in programs:
+            items.append(ProgramItem(self.parent, prog, context='search'))
 
-                if match:
-                    items.append(ProgramItem(self.parent, prog, context='search'))
-
-                if len(items) >= MAX_RESULTS:
-                    break
-            pdialog.update_progress(unicode(''), float(i)/float(total_channels))
+            if len(items) >= MAX_RESULTS:
+                break
 
         items.sort(lambda x,y: cmp(x.prog.start, y.prog.start))
         pdialog.hide()

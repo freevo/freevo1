@@ -94,83 +94,6 @@ class RecordClientActions:
         return self.channel.rpc(cmd, *args, **kwargs)
 
 
-    @kaa.coroutine()
-    def pingCo(self):
-        now = time.time()
-        print self.timeit(now)+': pingCo started'
-        inprogress = self._recordserver_rpc('ping')
-        print self.timeit(now)+': pingCo.inprogress=%r' % inprogress
-        yield inprogress
-        print self.timeit(now)+': pingCo finished=%r' % (inprogress.result,)
-        yield inprogress.result
-
-
-    @kaa.coroutine()
-    def findNextProgramCo(self, isrecording=False):
-        """ """
-        now = time.time()
-        print self.timeit(now)+': findNextProgramCo(isrecording=%r) started' % (isrecording,)
-        inprogress = self._recordserver_rpc('findNextProgram', isrecording)
-        print self.timeit(now)+': findNextProgramCo.inprogress=%r' % inprogress
-        yield inprogress
-        print self.timeit(now)+': findNextProgramCo finished=%r' % (inprogress.result,)
-        yield inprogress.result
-
-
-    @kaa.coroutine()
-    def getScheduledRecordingsCo(self):
-        """ """
-        now = time.time()
-        print self.timeit(now)+': getScheduledRecordingsCo() started'
-        inprogress = self._recordserver_rpc('getScheduledRecordings')
-        print self.timeit(now)+': getScheduledRecordingsCo.inprogress=%r' % inprogress
-        yield inprogress
-        print self.timeit(now)+': getScheduledRecordingsCo finished=%r' % (inprogress.result,)
-        yield inprogress.result
-
-
-    @kaa.coroutine()
-    def getFavoritesCo(self):
-        """ """
-        now = time.time()
-        print self.timeit(now)+': getFavoritesCo() started'
-        inprogress = self._recordserver_rpc('getFavorites')
-        print self.timeit(now)+': getFavoritesCo.inprogress=%r' % inprogress
-        yield inprogress
-        print self.timeit(now)+': getFavoritesCo finished=%r' % (inprogress.result,)
-        yield inprogress.result
-
-
-    @kaa.coroutine()
-    def updateFavoritesScheduleCo(self):
-        """ """
-        now = time.time()
-        print self.timeit(now)+': updateFavoritesScheduleCo started'
-        inprogress = self._recordserver_rpc('updateFavoritesSchedule')
-        print self.timeit(now)+': updateFavoritesScheduleCo.inprogress=%r' % inprogress
-        yield inprogress
-        print self.timeit(now)+': updateFavoritesScheduleCo finished=%r' % (inprogress.result,)
-        yield inprogress.result
-
-
-    @kaa.coroutine()
-    def getNextProgramStartCo(self):
-        """
-        Get the next program using coroutines and yield the result.
-        This will be a slow call as the updateFavoritesSchedule can take a time
-        """
-        now = time.time()
-        print self.timeit(now)+': getNextProgramStartCo started'
-        inprogress = self._recordserver_rpc('updateFavoritesSchedule')
-        yield inprogress
-        print self.timeit(now)+': updateFavoritesSchedule.result=%r' % (inprogress.result,)
-        inprogress = self._recordserver_rpc('findNextProgram')
-        yield inprogress
-        print self.timeit(now)+': findNextProgram.result=%r' % (inprogress.result,)
-        print self.timeit(now)+': getNextProgramStartCo finished=%r' % (inprogress.result,)
-        yield inprogress.result
-
-
     def pingNow(self):
         """ Ping the recordserver to see if it is running """
         logger.log( 9, 'pingNow')
@@ -243,10 +166,10 @@ class RecordClientActions:
         return result
 
 
-    def isProgScheduledNow(self, prog, schedule=None):
+    def isProgScheduledNow(self, prog):
         """ See if a programme is a schedule """
-        logger.log( 9, 'isProgScheduledNow(prog=%r, schedule=%r)', prog, schedule)
-        inprogress = self._recordserver_rpc('isProgScheduled', prog, schedule)
+        logger.log( 9, 'isProgScheduledNow(prog=%r, schedule=%r)', prog)
+        inprogress = self._recordserver_rpc('isProgScheduled', prog)
         if inprogress is None:
             return (None, self.recordserverdown)
         inprogress.wait()
@@ -264,18 +187,6 @@ class RecordClientActions:
         inprogress.wait()
         result = inprogress.result
         logger.log( 9, 'isProgAFavoriteNow.result=%r', result)
-        return result
-
-
-    def clearFavoritesNow(self):
-        """ See if a programme is a favourite """
-        logger.log( 9, 'clearFavoritesNow()')
-        inprogress = self._recordserver_rpc('clearFavorites')
-        if inprogress is None:
-            return (None, self.recordserverdown)
-        inprogress.wait()
-        result = inprogress.result
-        logger.log( 9, 'clearFavoritesNow.result=%r', result)
         return result
 
 
@@ -405,22 +316,10 @@ class RecordClientActions:
         return True
 
 
-    def ping(self, callback):
-        """ See if the server is alive """
-        logger.log( 9, 'ping(callback=%r)', callback)
-        return self._server_rpc('ping', callback)
-
-
     def findNextProgram(self, callback, isrecording=False):
         """ Find the next program using a callback function """
         logger.log( 9, 'findNextProgram(callback=%r, isrecording=%r)', callback, isrecording)
         return self._server_rpc('findNextProgram', callback, isrecording)
-
-
-    def getScheduledRecordings(self, callback):
-        """ Get the scheduled recordings, using a callback function """
-        logger.log( 9, 'getScheduledRecordings(callback=%r)', callback)
-        return self._server_rpc('getScheduledRecordings', callback)
 
 
     def scheduleRecording(self, callback, prog):
@@ -433,25 +332,6 @@ class RecordClientActions:
         """ Update the favourites using a callback function """
         logger.log( 9, 'updateFavoritesSchedule(callback=%r)', callback)
         return self._server_rpc('updateFavoritesSchedule', callback)
-
-
-    def isPlayerRunning(self, callback):
-        """ Find out if a player is running, using a callback function """
-        logger.log( 9, 'isPlayerRunning(callback=%r)', callback)
-        return self._server_rpc('isPlayerRunning', callback)
-
-
-    def getFavorites(self, callback):
-        """ Get favourites """
-        logger.log( 9, 'getFavorites(callback=%r)', callback)
-        return self._server_rpc('getFavorites', callback)
-
-
-    def isProgAFavorite(self, callback, prog, favs=None):
-        """ See if a programme is a favourite """
-        logger.log( 9, 'isProgAFavorite(callback=%r, prog=%r, favs=%r)', callback, prog, favs)
-        return self._server_rpc('isProgAFavorite', callback, prog, favs)
-
 
 if __name__ == '__main__':
     config.DEBUG = 2

@@ -431,7 +431,7 @@ def htmlenties2txt(string, encoding="latin-1"):
     return string
 
 
-def comingup(scheduledRecordings=None, write=False):
+def comingup():
     """
     What's coming up in the TV recording schedule
     """
@@ -442,27 +442,14 @@ def comingup(scheduledRecordings=None, write=False):
 
     result = u''
 
-    #XXX this is bad as the cachefile is not updated on a write operation
-    cachefile = os.path.join(config.FREEVO_CACHEDIR, 'upsoon')
-    if scheduledRecordings is None:
-        # if the cached file exists and is younger than 10 mins
-        if os.path.exists(cachefile) and os.stat(cachefile)[ST_MTIME] >= time.time() - 600:
-            cache = codecs.open(cachefile, 'r', config.encoding)
-            for a in cache.readlines():
-                result = result + a
-            cache.close()
-            #print 'comingup:1:result=%r' % (result,)
-            return result
+    (status, schedule) = RecordClient().getScheduledRecordingsNow()
+    if status is None:
+        result = RecordClient().recordserverdown
+        return result
+    elif status is False:
+        result = _('No recordings are scheduled')
+        return result
 
-        (status, schedule) = RecordClient().getScheduledRecordingsNow()
-        if status is None:
-            result = RecordClient().recordserverdown
-            return result
-        elif status is False:
-            result = _('No recordings are scheduled')
-            return result
-    else:
-        schedule = scheduledRecordings
 
     progs = schedule.getProgramList()
 
@@ -515,12 +502,6 @@ def comingup(scheduledRecordings=None, write=False):
 
     if not result:
         result = _('No recordings are scheduled')
-
-    if os.path.isfile(cachefile):
-        os.unlink(cachefile)
-    cache = codecs.open(cachefile, 'w', config.encoding)
-    cache.write(result)
-    cache.close()
 
     return result
 

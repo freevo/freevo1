@@ -29,15 +29,12 @@
 #
 # -----------------------------------------------------------------------
 
-import sys, string
 import time
 
 from www.web_types import HTMLResource, FreevoResource
 
-import util.tv_util as tv_util
-import util
 import config
-import tv.epg_xmltv
+import tv.epg
 from twisted.web import static
 
 MAX_DESCRIPTION_CHAR = 1000
@@ -51,9 +48,7 @@ class ProgInfoResource(FreevoResource):
         chanid = id[:id.find(":")]
         starttime = int( id[id.find(":")+1:] )
 
-        guide = tv.epg_xmltv.get_guide()
-
-        chan = guide.chan_dict[chanid]
+        chan = tv.epg.get_programs(start=starttime,stop=starttime, channel_id=chanid)
         for prog in chan.programs:
             if prog.start == starttime:
                 break

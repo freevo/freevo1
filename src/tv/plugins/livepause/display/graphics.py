@@ -36,7 +36,7 @@ import os.path
 
 import kaa
 import time
-import tv.epg_xmltv
+import tv.epg
 from tv.plugins.livepause.display.base import OSD
 import dialog
 from dialog.dialogs import Dialog, InputDialog
@@ -139,9 +139,8 @@ class InfoDialog(InputDialog):
             if now > self.info_time:
                 self.info_time = now
 
-        guide = tv.epg_xmltv.get_guide()
-        tv_channel_id = self.__get_guide_channel(self.info_channel)
-        channels = guide.get_programs(self.info_time, self.info_time, tv_channel_id)
+        tv_channel_id = tv.epg.channels_by_display_name[self.info_channel].id
+        channels = tv.epg.get_programs(self.info_time, self.info_time, tv_channel_id)
         if channels and channels[0].programs:
             self.info_prog = channels[0].programs[0]
 
@@ -175,44 +174,24 @@ class InfoDialog(InputDialog):
         info_dict['current_time'] = time.localtime(info_dict['current_time'])
         return info_dict
 
-
-    def __get_guide_channel(self, channel):
-        result = ''
-
-        for entry in config.TV_CHANNELS:
-            if channel == entry[1]:
-                result = entry[0]
-                break
-
-        return result
+    def __find_channel(self, channel):
+        for i,ch in enumerate(tv.epg.channels):
+            if ch.displayname == channel:
+                return i
+        return -1
 
 
     def __get_previous_channel(self, channel):
-        result = ''
-        prev_channel = ''
+        i = self.__find_channel(channel)
 
-        for entry in config.TV_CHANNELS:
-            if channel == entry[1]:
-                result = prev_channel
-                break
-            prev_channel = entry[1]
-
-        return result
+        return tv.epg.channels[ i - 1].displayname
 
 
     def __get_next_channel(self, channel):
-        result = ''
-        return_next_channel = False
-
-        for entry in config.TV_CHANNELS:
-            if return_next_channel:
-                result = entry[1]
-                break
-
-            if channel == entry[1]:
-                return_next_channel = True
-
-        return result
+        i = self.__find_channel(channel) + 1
+        if i >= len(tv.epg.channels):
+            i = 0
+        return tv.epg.channels[i].displayname
 
 
 

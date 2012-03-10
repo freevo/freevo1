@@ -40,7 +40,7 @@ from item import Item
 from event import *
 from menu import MenuItem, Menu
 
-import tv.epg_xmltv
+import tv.epg
 from tv.programitem import ProgramItem
 
 class PluginInterface(plugin.MainMenuPlugin):
@@ -91,60 +91,17 @@ class CategoriesItem(Item):
         """
         build the items for the menu
         """
-        guide = tv.epg_xmltv.get_guide(popup=True)
         items = []
-        for category in sorted(guide.categories):
+        for category in sorted(tv.epg.get_categories()):
             items.append(CategoryItem(self, category))
 
-        if arg == 'update':
+        # normal menu build
+        item_menu = Menu(self.name, items, item_types='tv')
+        menuw.pushmenu(item_menu)
 
-            if not self.menu.choices:
-                selected_pos = -1
-            else:
-                # store the current selected item
-                selected_id  = self.menu.selected.id()
-                selected_pos = self.menu.choices.index(self.menu.selected)
+        self.menu  = item_menu
+        self.menuw = menuw
 
-            self.menu.choices = items
-            self.menu.selected = None
-
-            if selected_pos !=-1 and items:
-                for i in items:
-                    # find the selected item
-                    if Unicode(i.id()) == Unicode(selected_id):
-                        # item is still there, select it
-                        self.menu.selected = i
-                        break
-                if not self.menu.selected:
-                    # item is gone now, try to the selection close
-                    # to the old item
-                    pos = max(0, min(selected_pos-1, len(items)-1))
-                    self.menu.selected = items[pos]
-
-                self.menuw.rebuild_page()
-                self.menuw.refresh()
-            else:
-                self.menuw.init_page()
-                self.menuw.refresh()
-        else:
-            # normal menu build
-            item_menu = Menu(self.name, items, reload_func=self.reload, item_types='tv')
-            menuw.pushmenu(item_menu)
-
-            self.menu  = item_menu
-            self.menuw = menuw
-
-
-    # ======================================================================
-    # Helper methods
-    # ======================================================================
-
-    def reload(self):
-        """
-        Rebuilds the menu.
-        """
-        self.browse(arg='update')
-        return None
 
 class CategoryItem(Item):
     """
@@ -170,17 +127,15 @@ class CategoryItem(Item):
         """
         build the items for the menu
         """
-        guide = tv.epg_xmltv.get_guide(popup=True)
         showings = {}
 
-        for c in guide.get_programs(category=self.category):
-            for p in c.programs:
-                if p.title in showings:
-                    s = showings[p.title]
-                else:
-                    s = []
-                    showings[p.title] = s
-                s.append(ProgramItem(self, p))
+        for p in tv.epg.search(category=self.category):
+            if p.title in showings:
+                s = showings[p.title]
+            else:
+                s = []
+                showings[p.title] = s
+            s.append(ProgramItem(self, p))
         items = []
         for show in sorted(showings.keys()):
             s = showings[show]
@@ -189,55 +144,12 @@ class CategoryItem(Item):
             else:
                 items.append(s[0])
 
-        if arg == 'update':
+        item_menu = Menu(self.name, items, item_types='tv')
+        menuw.pushmenu(item_menu)
 
-            if not self.menu.choices:
-                selected_pos = -1
-            else:
-                # store the current selected item
-                selected_id  = self.menu.selected.id()
-                selected_pos = self.menu.choices.index(self.menu.selected)
+        self.menu  = item_menu
+        self.menuw = menuw
 
-            self.menu.choices = items
-            self.menu.selected = None
-
-            if selected_pos !=-1 and items:
-                for i in items:
-                    # find the selected item
-                    if Unicode(i.id()) == Unicode(selected_id):
-                        # item is still there, select it
-                        self.menu.selected = i
-                        break
-                if not self.menu.selected:
-                    # item is gone now, try to the selection close
-                    # to the old item
-                    pos = max(0, min(selected_pos-1, len(items)-1))
-                    self.menu.selected = items[pos]
-
-                self.menuw.rebuild_page()
-                self.menuw.refresh()
-            else:
-                self.menuw.init_page()
-                self.menuw.refresh()
-        else:
-            # normal menu build
-            item_menu = Menu(self.name, items, reload_func=self.reload, item_types='tv')
-            menuw.pushmenu(item_menu)
-
-            self.menu  = item_menu
-            self.menuw = menuw
-
-
-    # ======================================================================
-    # Helper methods
-    # ======================================================================
-
-    def reload(self):
-        """
-        Rebuilds the menu.
-        """
-        self.browse(arg='update')
-        return None
 
 class ProgamShowings(Item):
     def __init__(self, parent, name, programs):

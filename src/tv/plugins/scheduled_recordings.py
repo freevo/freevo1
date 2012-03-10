@@ -92,12 +92,9 @@ class ScheduledRecordingsItem(Item):
             AlertBox(self.recordclient.recordserverdown).show()
             return []
 
-        (status, schedule) = self.recordclient.getScheduledRecordingsNow()
+        (status, progs) = self.recordclient.getScheduledRecordingsNow()
         if status:
-            progs = schedule.getProgramList()
-
             f = lambda a, b: cmp(a.start, b.start)
-            progs = progs.values()
             progs.sort(f)
             for prog in progs:
                 items.append(ProgramItem(self, prog, context='schedule'))

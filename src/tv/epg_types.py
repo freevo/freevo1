@@ -40,25 +40,9 @@ import config
 # changes are made to the file format.
 EPG_VERSION = 7
 
-class TvProgram:
-    """
-    Holds information about a TV programme
-    """
-    def __init__(self, channel_id='', start=0, pdc_start=0, stop=2147483647, title='', sub_title='', desc='',
-            categories=None, ratings=None):
-        logger.log( 9, 'TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)', channel_id, start, stop, title)
-        self.channel_id = channel_id
-        self.start      = start
-        self.pdc_start  = pdc_start
-        self.stop       = stop
-        self.title      = title
-        self.desc       = desc
-        self.sub_title  = sub_title
-        self.ratings    = ratings or {}
-        self.advisories = []
-        self.categories = categories or []
-        self.date       = None
 
+class BaseTvProgram:
+    def __init__(self):
         # this information is added by the recordserver
         self.scheduled  = 0
         self.overlap    = 0
@@ -92,7 +76,7 @@ class TvProgram:
 
     def __eq__(self, other):
         """ equality method """
-        if not isinstance(other, TvProgram):
+        if not isinstance(other, BaseTvProgram):
             return False
         return self.start == other.start \
             and self.stop == other.stop \
@@ -102,7 +86,7 @@ class TvProgram:
 
     def __cmp__(self, other):
         """ compare function, return 0 if the objects are equal, <0 if less >0 if greater """
-        if not isinstance(other, TvProgram):
+        if not isinstance(other, BaseTvProgram):
             return 1
         if self.start != other.start:
             return self.start - other.start
@@ -157,6 +141,96 @@ class TvProgram:
             if not var.startswith('_') and isinstance(getattr(ret, var), str):
                 setattr(ret, var, Unicode(getattr(ret, var)))
         return ret
+
+
+class TvProgram(BaseTvProgram):
+    """
+    Holds information about a TV programme
+    """
+    def __init__(self, channel_id='', start=0, pdc_start=0, stop=2147483647, title='', sub_title='', desc='',
+                 categories=None, ratings=None):
+        logger.log( 9, 'TvProgram.__init__(channel_id=%r, start=%r, stop=%r, title=%r)', channel_id, start, stop, title)
+        self.channel_id = channel_id
+        self.start      = start
+        self.pdc_start  = pdc_start
+        self.stop       = stop
+        self.title      = title
+        self.desc       = desc
+        self.sub_title  = sub_title
+        self.ratings    = ratings or {}
+        self.advisories = []
+        self.categories = categories or []
+        self.date       = None
+
+
+class DbTvProgram(BaseTvProgram):
+    """
+    Holds information about a TV programme, extracted from kaa.epg.
+    """
+    def __init__(self, db_prog):
+        self.db_prog = db_prog
+        BaseTvProgram.__init__(self)
+
+
+    def __getattr__(self, item):
+        if item == 'channel_id':
+            return self.db_prog.channel.tuner_id[0]
+        if item in ('start', 'pdc_start'):
+            return time.mktime(self.db_prog.start.timetuple())
+        if item == 'stop':
+            return time.mktime(self.db_prog.stop.timetuple())
+        if item == 'title':
+            return self.db_prog.title
+        if item == 'desc':
+            desc = self.db_prog.description
+
+            if self.db_prog.credits:
+                desc += '\n'
+                desc += _('Credits:') + '\n\n'
+                actors = []
+                directors = []
+                for type,name,role in self.db_prog.credits:
+                    if type == 'actor':
+                        actors.append((name, role))
+                    if type == 'director':
+                        directors.append(name)
+
+                if directors:
+                    if len(directors) == 1:
+                        desc += _('Director : ') + directors[0] + '\n'
+                    else:
+                        desc += _('Directors : \n')
+                        for director in directors:
+                            desc += director + '\n'
+                    desc += '\n'
+
+                if actors:
+                    desc += _('Actors : \n')
+
+                    for actor, role in actors:
+                        if role:
+                            desc += u'%s : %s\n' % (actor, role)
+                        else:
+                            desc += actor + '\n'
+
+            return desc
+        if item == 'ratings':
+            return {}
+        if item == 'advisories':
+            return self.db_prog.advisories
+        if item == 'categories':
+            return self.db_prog.genres
+        if item == 'date':
+            if self.db_prog.year:
+                return str(self.db_prog.year)
+            return ''
+        raise AttributeError(item)
+
+    def __eq__(self, other):
+        """ equality method """
+        if isinstance(other, DbTvProgram):
+            return self.db_prog.db_id == other.db_prog.db_id
+        return BaseTvProgram.__eq__(self,other)
 
 
 class TvChannel:

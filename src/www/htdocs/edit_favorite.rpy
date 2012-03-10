@@ -32,7 +32,7 @@
 import sys, time, string
 
 import config
-import tv.epg_xmltv
+import tv.epg
 from tv.record_types import Favorite
 from www.web_types import HTMLResource, FreevoResource, RecordClientResource
 
@@ -112,7 +112,6 @@ class EditFavoriteResource(FreevoResource):
                 ])
             return String(fv.res)
 
-        guide = tv.epg_xmltv.get_guide()
 
         fv.printHeader(_('Edit Favorite'), 'styles/main.css', selected=_('Favorites'))
         fv.res += '&nbsp;<br/>\n'
@@ -165,7 +164,7 @@ class EditFavoriteResource(FreevoResource):
         cell += '>'+_('ANY CHANNEL')+'</option>\n'
 
         chan_index = 0
-        for ch in guide.chan_list:
+        for ch in tv.epg.channels:
             cell += '  <option value="%s"' % (ch.displayname)
             if ch.displayname == fav.channel:
                 cell += ' SELECTED'

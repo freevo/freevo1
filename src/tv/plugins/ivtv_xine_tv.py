@@ -45,7 +45,6 @@ import util
 import plugin
 import childapp
 import tv.ivtv as ivtv
-import tv.epg_xmltv as epg
 import util.tv_util as tvutil
 
 import dialog
