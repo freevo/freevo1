@@ -307,7 +307,7 @@ def is_active(name, arg=None):
     return None
 
 
-def init(callback = None):
+def init(callback=None, prefix=None):
     """
     load and init all the plugins
     """
@@ -323,6 +323,8 @@ def init(callback = None):
         current += 1
         if callback:
             callback(int((float(current) / len(__all_plugins__)) * 100))
+        if prefix and not name.startswith(prefix):
+            continue
         __load_plugin__(name, type, level, args, number)
 
     # sort plugins in extra function (exec doesn't like to be
