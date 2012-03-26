@@ -421,8 +421,10 @@ LOCAL_CONF_CHANGES = [
      Added SKIN_USE_PAGE_TRANSITIONS to select whether transitions between pages
      of menus etc are animated.
      Added SKIN_SCREEN_TRANSITION to select the style of transition.
-     """)
-
+     """),
+     (6.0,
+      """ add TVMANAGER_UID and _GID.
+      enable tv.server.favorites plugin.""")
 ]
 
 
@@ -864,6 +866,7 @@ plugin.activate('tv.categories', level=3)
 
 # TV menu plugin to view and edit favorites
 plugin.activate('tv.view_favorites', level=4)
+plugin.activate('tv.server.favorites')
 
 # TV menu plugin to view scheduled recordings
 plugin.activate('tv.scheduled_recordings', level=5)
@@ -1872,7 +1875,10 @@ RECORDSERVER_ATTIMER = 45
 # If the recordserver runs as root, set the uid to the given one
 # after startup. The gui must also match one of the users group ids
 RECORDSERVER_UID = 0
-RECORDSERVER_UID = 0
+RECORDSERVER_GID = 0
+
+TVMANAGER_UID = 0
+TVMANAGER_GID = 0
 
 # Remove old recordings if GB free is less than specified value
 RECORDSERVER_CLEANUP_THRESHOLD = 0

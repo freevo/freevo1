@@ -31,7 +31,7 @@ import logging
 logger = logging.getLogger("freevo.video.plugins.removecommercials")
 
 __author__ = 'Andrew Jeffery <short_rz at internode.on.net>'
-__revision__ = '$Rev$'.split()[1]
+__revision__ = '$Rev$'
 
 import os
 import plugin

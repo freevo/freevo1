@@ -32,8 +32,8 @@ logger = logging.getLogger("freevo.plugins.idlebar.remindicon")
 
 __author__ = "Christian Lyra"
 __version__ = "0.1"
-__svnversion__ = "$Revision$"[11:-2]
-__date__ = "$Date$"[7:-2]
+__svnversion__ = "$Revision$"
+__date__ = "$Date$"
 __copyright__ = "Copyright (c) 2007 Christian Lyra"
 __license__ = "GPL"
 

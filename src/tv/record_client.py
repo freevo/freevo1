@@ -54,13 +54,6 @@ def RecordClient():
     return _singleton
 
 
-
-class RecordClientException(Exception):
-    """ RecordClientException """
-    def __init__(self):
-        pass
-
-
 class RecordClientActions:
     """
     recordserver access class using kaa.rpc
@@ -120,6 +113,12 @@ class RecordClientActions:
 
     def getScheduledRecordingsNow(self):
         """ get the scheduled recordings, returning the scheduled recordings object """
+        try:
+            return (True, self.channel.rpc("getScheduledRecordings").wait())
+        except kaa.rpc.NotConnectedException:
+            print 'Record Server down...'
+            return (False, self.recordserverdown)
+
         logger.log( 9, 'getScheduledRecordingsNow()')
         inprogress = self._recordserver_rpc('getScheduledRecordings')
         if inprogress is None:
@@ -168,6 +167,8 @@ class RecordClientActions:
 
     def isProgScheduledNow(self, prog):
         """ See if a programme is a schedule """
+        return self.channel.rpc("isProgScheduled", prog).wait()
+
         logger.log( 9, 'isProgScheduledNow(prog=%r, schedule=%r)', prog)
         inprogress = self._recordserver_rpc('isProgScheduled', prog)
         if inprogress is None:
@@ -180,6 +181,8 @@ class RecordClientActions:
 
     def isProgAFavoriteNow(self, prog, favs=None):
         """ See if a programme is a favourite """
+        return self.channel.sync.isProgAFavorite(prog)
+
         logger.log( 9, 'isProgAFavoriteNow(prog=%r, favs=%r)', prog, favs)
         inprogress = self._recordserver_rpc('isProgAFavorite', prog, favs)
         if inprogress is None:

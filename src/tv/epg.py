@@ -33,6 +33,10 @@ for channel_details in config.TV_CHANNELS:
     channels_by_display_name[channel.displayname] = channel
 
 
+def get_grid(start, stop, channels):
+    pass
+
+
 def get_programs(start=0, stop=0, channel_id=None):
     kwargs = { 'time': (start,stop)}
 

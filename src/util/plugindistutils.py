@@ -89,13 +89,6 @@
 import os
 import sys
 
-try:
-    import freevo.version as version
-    import freevo.revision as revision
-except:
-    import version
-    import revision
-
 def package_finder(result, dirname, names):
     """
     os.path.walk helper for 'src'

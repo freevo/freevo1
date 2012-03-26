@@ -64,10 +64,8 @@ import kaa.metadata as mmpython
 
 try:
     import freevo.version as version
-    import freevo.revision as revision
 except:
     import version
-    import revision
 
 
 imdb_ctitle     = '/tmp/imdb-movies.list'

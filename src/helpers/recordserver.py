@@ -67,13 +67,6 @@ from util.videothumb import snapshot
 from event import *
 
 
-try:
-    import freevo.version as version
-    import freevo.revision as revision
-except:
-    import version
-    import revision
-
 logger.info('PLUGIN_RECORD: %s', config.plugin_record)
 
 plugin.init_special_plugin(config.plugin_record)
