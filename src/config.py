@@ -48,10 +48,8 @@ import logging
 
 try:
     import freevo.version as version
-    import freevo.revision as revision
 except:
     import version
-    import revision
 
 DINFO = 0
 DWARNING = -1
@@ -699,13 +697,13 @@ if not IS_PROMPT:
     sys.stderr = Logger(logging.getLogger('stderr'), sys.stderr)
     ts = time.asctime(time.localtime(time.time()))
     sys.stdout.log('=' * 80)
-    sys.stdout.log('Freevo %s r%s started at %s' % (version.__version__, revision.__revision__, ts))
+    sys.stdout.log('Freevo %s started at %s' % (version.version, ts))
     sys.stdout.log('-' * 80)
 
 
 def shutdown():
     sys.stdout.log('-' * 80)
-    sys.stdout.log('Freevo %s r%s finished at %s' % (version.__version__, revision.__revision__, ts))
+    sys.stdout.log('Freevo %s finished at %s' % (version.version, ts))
     sys.stdout.log('=' * 80)
     sys.stdout.close()
     sys.stderr.close()

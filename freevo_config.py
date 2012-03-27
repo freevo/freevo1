@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # System configuration
 # -----------------------------------------------------------------------
-# $Id$
+# $Id: freevo_config.py 11904 2011-11-12 22:26:54Z adam $
 #
 # Notes:
 #    This file contains the freevo settings. To change the settings

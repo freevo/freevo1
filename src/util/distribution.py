@@ -86,15 +86,9 @@ import sys
 import re
 
 try:
-    try:
-        import freevo.version as version
-        import freevo.revision as revision
-    except ImportError:
-        import version
-        import revision
+    import freevo.version as version
 except ImportError:
-    print 'If your using a subversion of Freevo'
-    print 'You may need run "./autogen.sh nodocs"'
+    import version
 
 # Get the real distutils (not the Freevo stuff)
 # This is a bad hack and will be removed when the distutils.py
@@ -144,7 +138,7 @@ def data_finder(result, dirname, names):
                        replace('./src/www', 'share/freevo').\
                        replace('./i18n', 'share/locale').\
                        replace('./contrib', 'share/freevo/contrib').\
-                       replace('./Docs', 'share/doc/freevo-%s' % version.__version__).\
+                       replace('./Docs', 'share/doc/freevo-%s' % version.version).\
                        replace('./helpers', 'share/freevo/helpers'), files))
     return result
 
@@ -160,7 +154,7 @@ def docbook_finder(result, dirname, names):
 
     if files and dirname.find('/.svn') == -1:
         result.append((dirname.replace('/html', ''). \
-                       replace('./Docs', 'share/doc/freevo-%s' % version.__version__), files))
+                       replace('./Docs', 'share/doc/freevo-%s' % version.version), files))
     return result
 
 

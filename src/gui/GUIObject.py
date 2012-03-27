@@ -44,7 +44,7 @@ in time.
 import logging
 logger = logging.getLogger("freevo.gui.GUIObject")
 __date__    = "$Date$"
-__version__ = "$Revision$".split()[1]
+__version__ = "$Revision$"
 __author__  = "Thomas Malt <thomas@malt.no>"
 
 
