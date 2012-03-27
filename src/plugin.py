@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # Plug-in interface
 # -----------------------------------------------------------------------
-# $Id$
+# $Id: plugin.py 11916 2012-03-10 09:08:10Z adam $
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -426,11 +426,6 @@ def getbyname(name, multiple_choises=0):
         return []
     return None
 
-def get_loaded_plugins():
-    """
-    return a list of all plugins that have been loaded.
-    """
-    return [p for p in __loaded_plugins__]
 
 def register(plugin, name, multiple_choises=0):
     """
@@ -498,7 +493,7 @@ __plugin_type_list__   = {}
 __named_plugins__      = {}
 __callbacks__          = {}
 __plugin_basedir__     = ''
-__loaded_plugins__     = []
+
 
 def __add_to_ptl__(type, object):
     """
@@ -530,28 +525,15 @@ def __find_plugin_file__(filename):
         return 'plugins.' + filename.replace('/', '.'), None
 
     if filename.find('/') > 0:
-        first_slash = filename.find('/')
-        special = filename[:first_slash]
-        plugins_filename = os.path.join(special, 'plugins', filename[first_slash + 1:])
-        full_filename = os.path.join(__plugin_basedir__, plugins_filename)
+        special = filename[:filename.find('/')]
+        filename = os.path.join(special, 'plugins', filename[filename.find('/')+1:])
+        full_filename = os.path.join(__plugin_basedir__, filename)
 
         if os.path.isfile(full_filename + '.py'):
-            return plugins_filename.replace('/', '.'), special
+            return filename.replace('/', '.'), special
 
         if os.path.isdir(full_filename):
-            return plugins_filename.replace('/', '.'), special
-
-        last_slash = filename.rfind('/')
-        special = filename[:last_slash]
-        plugins_filename = os.path.join(special, 'plugins', filename[last_slash + 1:])
-        full_filename = os.path.join(__plugin_basedir__, plugins_filename)
-
-        if os.path.isfile(full_filename + '.py'):
-            return plugins_filename.replace('/', '.'), special
-
-        if os.path.isdir(full_filename):
-            return plugins_filename.replace('/', '.'), special
-
+            return filename.replace('/', '.'), special
 
     return None, None
 
@@ -617,8 +599,6 @@ def __load_plugin__(name, type, level, args, number):
                 return
         else:
             p = name
-
-        __loaded_plugins__.append(p)
 
         p._number = number
         p._level = level
