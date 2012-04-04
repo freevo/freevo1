@@ -1094,7 +1094,11 @@ class DiskManager(plugin.DaemonPlugin):
         today = datetime.date.today()
 
         for recorded_item in all_recordings:
-            accessed = time.time() - os.stat(recorded_item.filename)[7]
+            try:
+                accessed = time.time() - os.stat(recorded_item.filename)[7]
+            except OSError:
+                logger.warn('OSError while stating file %s, already deleted?', recorded_item.filename)
+                continue
             if recorded_item.watched and not recorded_item.keep and (accessed > 3600):
                 watched_candidates.append(recorded_item)
 
