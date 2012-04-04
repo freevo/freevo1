@@ -31,6 +31,7 @@ import os
 import re
 import socket
 import urllib2
+import json
 
 from BeautifulSoup import BeautifulSoup
 import urlparse
@@ -44,6 +45,7 @@ import dialog
 
 import util.httpserver
 import util.webbrowser as webbrowser
+
 
 from event import *
 
@@ -196,7 +198,17 @@ class YTFlashPlayer:
         u.close()
 
         soup = BeautifulSoup(yt_page)
-        embed = soup.find(id='movie_player')
+        embed = None
+        swf = ''
+        for e in soup.findAll('script'):
+            if str(e.text).find('var swf = ') != -1:
+                swf = e.text
+                break
+        if swf:
+            sq = swf.find('"')
+            eq = swf.rfind('"')
+            embed = json.loads(swf[sq:eq+1])
+
         if embed is None:
             print '%s: failed to movie_player element'
             filename = url.replace('http://www.youtube.com/watch?v=', '')
