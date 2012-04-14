@@ -683,6 +683,8 @@ class Skin_Area:
                 h = w  * cimage.get_height() / cimage.get_width()
             if self.xml_settings.anamorphic:
                 w = w * 0.75
+            w = int(w)
+            h = int(h)
             if w > 0 and h > 0:
                 cimage = pygamesurface_imlib2_scale(cimage, (w, h))
             self.imagecache[cname] = cimage
