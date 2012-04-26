@@ -162,7 +162,6 @@ if (len(sys.argv) < 2 or sys.argv[1].lower() not in ('i18n', '--help', '--help-c
         print 'Docs/howto not found. Please run ./autogen.sh'
         sys.exit(0)
 
-import revision
 # only add files not in share and src
 
 data_files = []
