@@ -8,6 +8,11 @@
 #        You can donwload subtitles from the http://opensubtitles.org
 #        Check out the video.subtitles plugin for configuration options 
 #
+#        This code is partially based on lm.py that can be found on 
+#        https://github.com/RedRise/lm
+#        Copyright (C) 2012 Guillaume Garchery (polluxxx@gmail.com)
+#        Copyright (C) 2010 Jérôme Poisson (goffi@goffi.org)
+#
 # Todo:  none
 #
 # -----------------------------------------------------------------------
@@ -39,7 +44,7 @@ __license__          = 'GPL'
 
 # Module Imports
 import logging
-logger = logging.getLogger("freevo.video.plugins.opensubtitles")
+logger = logging.getLogger('freevo.video.plugins.opensubtitles')
 
 import os
 
@@ -139,7 +144,7 @@ class OpenSubtitles(Subtitles):
 
 
     def download(self):
-        _debug_("Downloading subtitles for %s in %s" % (self.vfile, self.lang), DINFO)
+        logger.info('Downloading subtitles for %s in %s', self.vfile, self.lang)
 
         refs = self.handler.search(self._build_query())
 
@@ -148,7 +153,7 @@ class OpenSubtitles(Subtitles):
                 # we narrow down to one only but best match
                 fltd = self._filter(refs['data'])
                 id = fltd['IDSubtitleFile']
-                _debug_( "Sub id to download: %s" % (id))
+                logger.debug('Sub id to download: %s', id)
 
                 # we get the sub file from opensubtitles
                 res = self.handler.download(id)
@@ -159,18 +164,18 @@ class OpenSubtitles(Subtitles):
                         self.data = sub['data']
                         self.fmt  = fltd['SubFormat']
                         self.compressed = True
-                        _debug_( "Downloaded subtitles id %s, lang %s, format %s" % \
-                                (id, self.lang, self.fmt), DINFO)
+                        logger.info('Downloaded subtitles id %s, lang %s, format %s', 
+                                     id, self.lang, self.fmt)
 
             else:
-                _debug_("No subtitles found: %s" % str(refs), DINFO)
+                logger.info('No subtitles found: %s', str(refs))
                 return False
 
         else:
-            _debug_("Failed to download subtitles: %s" % str(refs), DWARNING)
+            logger.warning('Failed to download subtitles: %s', str(refs))
             return False
 
-        _debug_("Downloaded subtitles for %s in %s" % (self.vfile, self.lang), DINFO)
+        logger.info('Downloaded subtitles for %s in %s', self.vfile, self.lang)
 
         return True
         
@@ -179,7 +184,7 @@ class OpenSubtitles(Subtitles):
         """
         Saves downloaded subtitles
         """
-        _debug_("Saving subtitles for %s in %s" % (self.vfile, self.lang), DINFO)
+        logger.info('Saving subtitles for %s in %s', self.vfile, self.lang)
 
         if self.compressed:
             self._decompress()
@@ -187,7 +192,7 @@ class OpenSubtitles(Subtitles):
         # we need to back up old subs if exist before we actually overwrite the old subs
         self.backup()
 
-        _debug_("Writing file %s" % (self.sfile))
+        logger.debug('Writing file %s', self.sfile)
 
         fp = codecs.open(self.sfile,'wb')
         fp.write(self.data)
@@ -203,7 +208,7 @@ class OpenSubtitles(Subtitles):
         sub_d = base64.standard_b64decode(self.data)
         sub_d = zlib.decompress(sub_d, 47)
         self.data = sub_d
-        _debug_("Decompressed subs for %s" % (self.lang))
+        logger.debug('Decompressed subs for %s', self.lang)
 
 
     def _build_query(self):
@@ -227,14 +232,16 @@ class OpenSubtitles(Subtitles):
             query.append({'sublanguageid':self.lang,
                                  'imdbid':imdbid})
 
-        _debug_("Built query %s" % str(query))
+        logger.debug('Built query %s', str(query))
         return query
 
 
     def _filter(self, subs):
-    # filters subs (list result of SearchSubtitles call)
-    # best found subtitles (hash match) or most downloaded subtitles
-    # @param subs: result['data'] of a SearchSubtitles XMLRPC call
+        """
+        filters subs (list result of SearchSubtitles call)
+        best found subtitles (hash match) or most downloaded subtitles
+        @param subs: result['data'] of a SearchSubtitles XMLRPC call
+        """
 
         keep = [ s for s in subs if s['MovieHash'] == self.hash ]
 
@@ -279,13 +286,13 @@ class OpenSubtitlesHandler(SubsHandler):
         hash  = self._hash(vfile_)
 
         if not hash:
-            _debug_("Hashing of %s failed, aborting..." % (vfile_), DWARNING)
+            logger.warning('Hashing of %s failed, aborting...', vfile_)
             return subs 
 
         info  = self._get_info(hash)
 
         if not info:
-            _debug_("Retrieving of the movie info for %s failed, aborting..." % (vfile_), DWARNING)
+            logger.warning('Retrieving of the movie info for %s failed, aborting...', vfile_)
             return subs
 
         for lang in langs:
@@ -307,10 +314,10 @@ class OpenSubtitlesHandler(SubsHandler):
 
             if self._status_ok(refs):
                 self._logout()
-                _debug_("Retrieved available subs details")
+                logger.debug('Retrieved available subs details')
                 return refs
 
-            _debug_("Failed to retrieved subs details")
+            logger.warning('Failed to retrieved subs details')
             self._logout()
 
         return None
@@ -324,7 +331,7 @@ class OpenSubtitlesHandler(SubsHandler):
                 # we pass a list of ids because opensubtitles expect this
                 res = self.server.DownloadSubtitles(self.token, [id])
             except Exception, e:
-                _debug_("Error downloading: %s" % (e), DWARNING)
+                logger.warning("Error downloading: %s" % (e), DWARNING)
                 self._logout()
                 return None 
 
@@ -332,7 +339,7 @@ class OpenSubtitlesHandler(SubsHandler):
                 return res
 
             # if we ever get here, something went seriously wrong
-            _debug_("Error downloading: empty result set", DWARNING)
+            logger.warning('Error downloading: empty result set')
             self._logout()
 
         return None
@@ -352,7 +359,7 @@ class OpenSubtitlesHandler(SubsHandler):
             hash = filesize
 
             if filesize < 65536 * 2:
-                _debug_("Hashing of %s failed: file size too small %d" % (vfile_, filesize), DWARNING)
+                logger.warning('Hashing of %s failed: file size too small %d', vfile_, filesize)
                 return None
 
             for x in range(65536/bytesize):
@@ -375,40 +382,40 @@ class OpenSubtitlesHandler(SubsHandler):
             return hash
 
         except (IOError, OSError), e:
-            _debug_("Hashing of %s failed: %s" % (vfile_, e), DWARNING)
+            logger.warning('Hashing of %s failed: %s', vfile_, e)
             return None
 
 
     def _status_ok(self, ans):
         status = False
         try:
-            if ans.has_key("status") and ans["status"] == "200 OK":
-                _debug_("opensubtitles answer status OK")
+            if ans.has_key('status') and ans['status'] == '200 OK':
+                logger.debug('opensubtitles answer status OK')
                 status = True
             else:
-                _debug_("opensubtitles answer status DOWN", DWARNING)
+                logger.warning('opensubtitles answer status DOWN')
 
         except Exception, e:
-            _debug_("Error %s" % e, DWARNING)
+            logger.warning('Error %s', e)
 
         finally:
             return status
 
 
-    def _login(self, user="", password=""):
+    def _login(self, user='', password=''):
         try:
             server = xmlrpclib.ServerProxy(OSUBS_DOMAIN)
             log    = server.LogIn(user,password, 'en', OSUBS_USER_AGENT)
 
             if self._status_ok(log):
-                _debug_("opensubtitles login OK")
+                logger.debug('opensubtitles login OK')
                 self.server = server
                 self.token  = log['token']
             else:
                 raise SubsError(str(log))
 
         except Exception, e:
-            _debug_("Failed to login to opensubtitles: %s" % (e), DWARNING)
+            logger.warning('Failed to login to opensubtitles: %s', e)
             return False
 
         return True
@@ -418,9 +425,9 @@ class OpenSubtitlesHandler(SubsHandler):
         if self.token:
             try:
                 self.server.LogOut(self.token)
-                _debug_("opensubtitles logout OK")
+                logger.debug('opensubtitles logout OK')
             except Exception, e:
-                _debug_("Failed to logout gracefully from opensubtitles: %s" % (e), DWARNING)
+                logger.warning('Failed to logout gracefully from opensubtitles: %s', e)
                 return False
         
         return True
@@ -430,7 +437,7 @@ class OpenSubtitlesHandler(SubsHandler):
     def _get_info(self, hash):
         data = None
         
-        _debug_("Requesting opensubtitle info for hash %s" % (hash))
+        logger.debug('Requesting opensubtitle info for hash %s', hash)
 
         try:
             self._login()
@@ -439,7 +446,7 @@ class OpenSubtitlesHandler(SubsHandler):
             self._logout()
 
         except Exception, e:
-            _debug_("Error when retrieving hash from opensubtitles %s" % (e), DWARNING)
+            logger.warning('Error when retrieving hash from opensubtitles %s', e)
             pass
 
         return data

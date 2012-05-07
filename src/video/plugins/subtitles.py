@@ -55,7 +55,7 @@ __license__          = 'GPL'
 
 # Module Imports
 import logging
-logger = logging.getLogger("freevo.video.plugins.subtitles")
+logger = logging.getLogger('freevo.video.plugins.subtitles')
 
 import os
 import glob
@@ -194,13 +194,13 @@ class Subtitles():
         Backs up existing subtitle files
         """
         if config.SUBS_FORCE_LANG_EXT == True:
-            self.sfile = "%s.%s.%s.%s" % (self.vbase, self.handler['id'], self.lang, self.fmt)
+            self.sfile = '%s.%s.%s.%s' % (self.vbase, self.handler['id'], self.lang, self.fmt)
         else:
-            self.sfile = "%s.%s.%s" % (self.vbase, self.handler['id'], self.fmt)
+            self.sfile = '%s.%s.%s' % (self.vbase, self.handler['id'], self.fmt)
 
         if not config.SUBS_FORCE_UPDATE and os.path.exists(self.sfile):
-            msg = "Skipping, subtitles %s aready exist and forced update is disabled" % (self.sfile)
-            _debug_(msg, DWARNING)
+            msg = 'Skipping, subtitles %s aready exist and forced update is disabled' % (self.sfile)
+            logger.warning(msg)
             raise SubsError(msg)
 
         if config.SUBS_FORCE_BACKUP and os.path.exists(self.sfile):
@@ -212,11 +212,11 @@ class Subtitles():
                 os.rename(self.sfile, vfile_bkp)
 
             except (IOError, OSError), e:
-                msg = "Skipping due to backup of `%s' as `%s' failure: %s" % (self.sfile, vfile_bkp, e)
-                _debug_(msg, DWARNING)
+                msg = 'Skipping due to backup of \'%s\' as \'%s\' failure: %s' % (self.sfile, vfile_bkp, e)
+                logger.warning(msg)
                 raise SubsError(msg)
             else:
-                _debug_("Old subtitle backed up as `%s'" % (vfile_bkp), DINFO)
+                logger.info('Old subtitle backed up as \'%s\'', vfile_bkp)
 
         return True
 
@@ -257,19 +257,19 @@ class PluginInterface(plugin.ItemPlugin):
         try:
             handlers = config.SUBS_HANDLERS
         except:
-            self.reason = 'Plugin \'video.subtitles\' activated but SUBS_HANDLERS not defined'
+            self.reason = 'Plugin \'video.subtitles\' activated but SUBS_HANDLERS not defined!'
             return
 
-        logger.info('Available Handlers : %s' % (handlers))
+        logger.info('Available Handlers : %s', handlers)
 
         for item in handlers:
             if not plugin.is_active(item):
-                logger.warning('Plugin %s listed as available but not activated, activating now!' % (item))
+                logger.warning('Plugin %s listed as available but not activated, activating now!', item)
                 plugin.activate(item)
 
             handler = plugin.getbyname(item)['handler']
             self.handlers[handler['id']] = handler
-            logger.info('Successfuly loaded subtitle handler %s' % (handler.name))
+            logger.info('Successfuly loaded subtitle handler %s', handler.name)
 
         plugin.ItemPlugin.__init__(self)
 
@@ -333,7 +333,7 @@ class PluginInterface(plugin.ItemPlugin):
         """
         base = os.path.splitext(file)[0]
 
-        return [n for n in glob.glob(base + ".*") \
+        return [n for n in glob.glob(base + '.*') \
             if os.path.splitext(n)[1] in config.SUBS_EXTS]
 
 
@@ -440,7 +440,7 @@ class PluginInterface(plugin.ItemPlugin):
                              self.subs_create_subs, ('all')))
 
         except (Exception), error:
-            _debug_('%s' % (error,), DERROR)
+            logger.error('%s' % (error,))
             box.destroy()
             box = PopupBox(text=_('Connection to service failed: ') + str(error))
             box.show()
@@ -550,11 +550,11 @@ class PluginInterface(plugin.ItemPlugin):
             else:
                 # we write only chosen subs
                 subs = self.subs[arg]
-                _debug_("Writing subs from %s for lang %s" % (subs.handler['name'], subs['lang']))
+                logger.debug('Writing subs from %s for lang %s', subs.handler['name'], subs['lang'])
                 subs.save()
                         
         except (Exception), error:
-            _debug_('%s' % (error,), DERROR)
+            logger.error('%s' % (error,))
             box.destroy()
             box = PopupBox(text=_(error))
             box.show()
@@ -581,11 +581,11 @@ class PluginInterface(plugin.ItemPlugin):
                     os.remove(subs)
             else:
                 # we delete only chosen subtitle file
-                _debug_("Deleting subtitle file %s" % (arg))
+                logger.debug('Deleting subtitle file %s', arg)
                 os.remove(arg)
 
         except (Exception), error:
-            _debug_('%s' % (error,), DERROR)
+            logger.error('%s' % (error,))
             box.destroy()
             box = PopupBox(text=_(error))
             box.show()

@@ -9,6 +9,9 @@
 #        with this plugin. Only two langgauges supported, Polish and English.
 #        Check out the video.subtitles plugin for more configuration options 
 #
+#        This code is based on some anonymous code found in the depths
+#        of the www :-)
+#
 # Todo:  none
 #
 # BTW:   napi is short in polish for napisy or subtitles in english :-)
@@ -42,7 +45,7 @@ __license__          = 'GPL'
 
 # Module Imports
 import logging
-logger = logging.getLogger("freevo.video.plugins.napiprojekt")
+logger = logging.getLogger('freevo.video.plugins.napiprojekt')
 
 import os
 import urllib
@@ -88,7 +91,7 @@ class PluginInterface(plugin.Plugin):
             return
         
         if not plugin.is_active('video.subtitles'):
-            self.reason = 'Plugin "video.subtitles" not active, activate it first in your local_config.py!'
+            self.reason = 'Plugin \'video.subtitles\' not active, activate it first in your local_config.py!'
             return
 
         self.handler = NapiHandler()
@@ -137,7 +140,7 @@ class NapiSubtitles(Subtitles):
 
 
     def download(self):
-        _debug_("Downloading subtitles for %s in %s" % (self.vfile, self.lang), DINFO)
+        logger.info('Downloading subtitles for %s in %s', self.vfile, self.lang)
 
         # TODO try to hash again, if not hashed already
         if not self.hash:
@@ -155,21 +158,21 @@ class NapiSubtitles(Subtitles):
                 http_code = data.getcode() 
             data = data.read()
         except (IOError, OSError), e:
-            _debug_("Fetching subtitles failed: %s" % (e), DWARNING)
+            logger.warning('Fetching subtitles failed: %s', e)
             return False
 
         if http_code != 200:
-            _debug_("Fetching subtitles failed, HTTP code: %s" % (str(http_code)), DWARNING)
+            logger.warning('Fetching subtitles failed, HTTP code: %s', str(http_code))
             return False
 
         if data.startswith('NPc'):
-            _debug_("Subtitles for %s in %s not found" % (self.vfile, self.lang), DWARNING)
+            logger.warning('Subtitles for %s in %s not found', self.vfile, self.lang)
             return False
             
         self.data = data
         self.compressed = True
        
-        _debug_("Downloaded subtitles for %s in %s" % (self.vfile, self.lang), DINFO)
+        logger.info('Downloaded subtitles for %s in %s', self.vfile, self.lang)
 
         return True
 
@@ -178,7 +181,7 @@ class NapiSubtitles(Subtitles):
         """
         Saves downloaded subtitles
         """
-        _debug_("Saving subtitles for %s in %s" % (self.vfile, self.lang), DINFO)
+        logger.info('Saving subtitles for %s in %s', self.vfile, self.lang)
        
         if self.compressed:
             self._decompress()
@@ -186,13 +189,13 @@ class NapiSubtitles(Subtitles):
         # we need to back up old subs if exist before we actually overwrite the old subs
         self.backup()
 
-        _debug_("Writing file %s" % (self.sfile), DINFO)
+        logger.info('Writing file %s', self.sfile)
 
         fp = codecs.open(self.sfile,'wb')
         fp.write(self.data)
         fp.close()
 
-        _debug_("Subtitle file %s written (%d bytes)" % (self.sfile, len(self.data)), DINFO)
+        logger.info('Subtitle file %s written (%d bytes)', self.sfile, len(self.data))
         
         return True
 
@@ -213,17 +216,17 @@ class NapiSubtitles(Subtitles):
             (so, se) = sa.communicate(self.data)
             self.data = so
             retcode = sa.returncode
-            _debug_("Executing cmd %s" % (' '.join(cmd)))
+            logger.debug('Executing cmd %s', ' '.join(cmd))
 
         except OSError, e:
             fp.close()
-            msg = "Skipping, subtitle decompression failed: %s" % (e)
-            _debug_(msg, DWARNING)
+            msg = 'Skipping, subtitle decompression failed: %s' % (e)
+            logger.warning(msg)
             raise SubsError(msg)
 
         fp.close()
 
-        _debug_("Decompressed subtitles for %s" % (self.lang))
+        logger.debug("Decompressed subtitles for %s" % (self.lang))
 
 
     def _f(self, z):
@@ -273,7 +276,7 @@ class NapiHandler(SubsHandler):
         hash  = self._hash(vfile)
 
         if not hash:
-            _debug_("Hashing of %s failed, aborting..." % (vfile), DWARNING)
+            logger.warning('Hashing of %s failed, aborting...', vfile)
             return subs
 
         for lang in langs:
@@ -297,7 +300,7 @@ class NapiHandler(SubsHandler):
         try:
             hash.update(open(vfile).read(10485760))
         except (IOError, OSError), e:
-            _debug_("Hashing failed: %s" % (e), DWARNING)
+            logger.warning('Hashing failed: %s', e)
             return None
 
         return hash    
