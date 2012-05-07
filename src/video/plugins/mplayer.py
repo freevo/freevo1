@@ -544,15 +544,27 @@ class MPlayer:
             return True
 
         if event == VIDEO_AVSYNC:
-            self.app.write('audio_delay %g\n' % event.arg);
+            self.app.write('audio_delay %g\n' % float(event.arg));
+            if config.MPLAYER_USE_OSD_SHOW_PROPS:
+                self.app.write('osd_show_property_text "Audio delay ${audio_delay}" 2000\n')
+            return True
+
+        if event == VIDEO_SUBSYNC:
+            self.app.write('sub_delay %g\n' % float(event.arg));
+            if config.MPLAYER_USE_OSD_SHOW_PROPS:
+                self.app.write('osd_show_property_text "Subtitles delay ${sub_delay}" 2000\n')
             return True
 
         if event == VIDEO_NEXT_AUDIOLANG:
             self.app.write('switch_audio\n')
+            if config.MPLAYER_USE_OSD_SHOW_PROPS:
+                self.app.write('osd_show_property_text "Audio ${switch_audio}" 2000\n')
             return True
 
         if event == VIDEO_NEXT_SUBTITLE:
             self.app.write('sub_select\n')
+            if config.MPLAYER_USE_OSD_SHOW_PROPS:
+                self.app.write('osd_show_property_text "Subtitles ${sub_file}" 2000\n')
             return True
 
         if event == OSD_MESSAGE:

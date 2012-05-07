@@ -8,7 +8,7 @@
 #        You can donwload subtitles from the http://napiprojekt.pl
 #        with this plugin. Only two langgauges supported, polish and english.
 #        Add following to your local_conf.py
-#        SUBS_LANGS = { 'pl': ('PL', 'Polish'), 'en': ('ENG', 'English') }
+#        SUBS_LANGS = { 'pol': ('Polish'), 'eng': ('English') }
 #        if you want both, polish and english subtitles, or just use the lang
 #        of your choice, either polish or english.
 #        SUBS_AUTOACCEPT = True

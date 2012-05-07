@@ -137,4 +137,4 @@ in your local_config.py:
 
 	# Prevents freevo from using mplayer's show_ext_prop_text to display
 	# current subs and audio track info on the screen
-	MPLAYER_DONT_USE_OSD_SHOW_PROPS = True
+	MPLAYER_USE_OSD_SHOW_PROPS = True

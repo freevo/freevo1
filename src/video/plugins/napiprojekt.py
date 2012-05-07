@@ -41,6 +41,9 @@ __version__          = 'Revision 0.1'
 __license__          = 'GPL' 
 
 # Module Imports
+import logging
+logger = logging.getLogger("freevo.video.plugins.napiprojekt")
+
 import os
 import urllib
 import tempfile

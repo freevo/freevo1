@@ -1706,7 +1706,7 @@ MPLAYER_OLDTVCHANNELCHANGE = False
 # subtitle and audio tracks. See Docs/plugins/subtitle.txt for details and
 # explanation.
 #
-MPLAYER_DONT_USE_OSD_SHOW_PROPS = 0
+MPLAYER_USE_OSD_SHOW_PROPS = True
 
 # ======================================================================
 # Xine settings:
