@@ -6,9 +6,7 @@
 #
 # Notes: opensubtitles plugin. 
 #        You can donwload subtitles from the http://opensubtitles.org
-#        OSUBS_LANGS = [ 'eng', 'ger' ...]
-#        to just use the lang of your choice
-#        Check out the video.subtitles plugin for more configuration options 
+#        Check out the video.subtitles plugin for configuration options 
 #
 # Todo:  none
 #
@@ -57,9 +55,6 @@ from subtitles import SubsHandler, SubsError, Subtitles
 
 # User agent is essential to request opensubtitles
 # be sure to update it before any change
-OSUBS_USER_AGENT = "OS Test User Agent"
-OSUBS_DOMAIN     = "http://api.opensubtitles.org/xml-rpc"
-OSUBS_LANGS      = [ 'pol', 'eng', 'ger', 'fre' ]
 
 class PluginInterface(plugin.Plugin):
     """
@@ -68,37 +63,22 @@ class PluginInterface(plugin.Plugin):
     
 
     Activate with:
-    | plugin.activate('video.napiprojekt')
+    | plugin.activate('video.opensubtitles')
     
     and make sure the SUBS_AVAILABLE_HANDLERS = [ ('opensubtitles'), ]
     is set for the main subtitles plugin to be able to use this plugin.
     Even if this plugin is not explicitly activated in the local_config.py, main
     video.subtitles plugin will activate it automagically, providing that 
-    SUBS_AVAILABLE_HANDLERS variable is properly initialised with 
-    'video.opensubtitles' plugin name.
+    SUBS_HANDLERS variable is properly initialised with 'video.opensubtitles' 
+    plugin name.
     
     and of course make sure the main subtitles plugin is activated too:
     | plugin.activate('video.subtitles')
 
-    Last but not least, by default this plugin supports only Polish, 
-    English, German and French subtitles. If you want other languages, 
-    please set the OSUBS_LANGS variable in your local_config.py so
-    this plugin recognises additional language codes etc. OSUBS_LANGS define 
-    capability of this plugin!
     OpenSubtitles.org supports so many different languages that it's impossible 
     to list all available language codes here.
     See http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes for the codes and 
     names, and http://opensubtitles.org for supported languages.
-    
-    Regardless of how many languages this plugin supports, only langauges as 
-    defined in SUBS_LANGS in the main 'video.subtitles' plugin will be 
-    retrieved. Basically, only intersect of these two variables, SUBS_LANGS 
-    and OSUBS_LANGS is retrived. If you are only interested in English 
-    subtitles, declare it in SUBS_LANGS, do not modify OSUBS_LANGS. 
-    If, for example, you are after Italian subtitles, you'd have to extend 
-    OSUBS_LANGS AND add language code and name in SUBS_LANGS.
-    
-    Uff, hope this is simple enough to follow.
     """
 
     def __init__(self):
@@ -120,8 +100,10 @@ class PluginInterface(plugin.Plugin):
     def config(self):
         """returns the config variables used by this plugin"""
         return [
-            ('OSUBS_LANGS', [ 'pol', 'eng', 'ger', 'fre' ],
-                'ISO 639-2 subtitle languages codes this plugin supports'),
+            (OSUBS_USER_AGENT, 'OS Test User Agent', 
+                'Opensubtitles User Agent String'),
+            (OSUBS_DOMAIN,     'http://api.opensubtitles.org/xml-rpc', 
+                'Opensubtitles domain'), 
         ]
 
 
@@ -273,12 +255,7 @@ class OpenSubtitlesHandler(SubsHandler):
         self.server = None
         self.token  = None
         
-        try:
-            langs = config.OSUBS_LANGS
-        except:
-            langs = OSUBS_LANGS
-            
-        SubsHandler.__init__(self, 'os', 'opensubtitles.org', langs)
+        SubsHandler.__init__(self, 'os', 'opensubtitles.org', [])
 
 
     def __getitem__(self, key):
@@ -293,7 +270,8 @@ class OpenSubtitlesHandler(SubsHandler):
     def get_subs(self, vfile_, langs_):
         subs  = {}
         # based on requested languages, create intersect of capabilites vs. request
-        langs = filter(lambda x: x in langs_, self.langs)
+        # langs = filter(lambda x: x in langs_, self.langs)
+        langs = langs_
 
         hash  = self._hash(vfile_)
 

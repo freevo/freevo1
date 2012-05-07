@@ -54,7 +54,11 @@ __version__          = 'Revision 0.1'
 __license__          = 'GPL' 
 
 # Module Imports
+import logging
+logger = logging.getLogger("freevo.video.plugins.subtitles")
+
 import os
+import glob
 from operator import itemgetter, attrgetter
 
 import menu
@@ -250,16 +254,22 @@ class PluginInterface(plugin.ItemPlugin):
         self.subs     = {}
         self.subfiles = []
 
-        _debug_('Available Handlers : %s' % (config.SUBS_AVAILABLE_HANDLERS), DINFO)
+        try:
+            handlers = config.SUBS_HANDLERS
+        except:
+            self.reason = 'Plugin \'video.subtitles\' activated but SUBS_HANDLERS not defined'
+            return
 
-        for item in config.SUBS_AVAILABLE_HANDLERS:
+        logger.info('Available Handlers : %s' % (handlers))
+
+        for item in handlers:
             if not plugin.is_active(item):
-                _debug_('Plugin %s listed as available but not activated, activating now!' % (item), DWARNING)
+                logger.warning('Plugin %s listed as available but not activated, activating now!' % (item))
                 plugin.activate(item)
 
             handler = plugin.getbyname(item)['handler']
             self.handlers[handler['id']] = handler
-            _debug_('Successfuly loaded subtitle handler %s' % (handler.name), DINFO)
+            logger.info('Successfuly loaded subtitle handler %s' % (handler.name))
 
         plugin.ItemPlugin.__init__(self)
 
@@ -271,7 +281,7 @@ class PluginInterface(plugin.ItemPlugin):
         return [
             ('SUBS_LANGS',          { 'pol': ('Polish'), 'eng': ('English'), 'ger': ('German') },
                 'Subtitles to download'),
-            ('SUBS_EXTS',           [ 'srt', 'sub', 'txt', 'ssa', 'smi', 'ass', 'mpl'], 
+            ('SUBS_EXTS',           [ '.srt', '.sub', '.txt', '.ssa', '.smi', '.ass', '.mpl'], 
                 'Known subtitles file extensions'),
             ('SUBS_AUTOACCEPT',     False, 
                 'Autoaccept all found subtitles, language coded filenames'),
@@ -313,6 +323,22 @@ class PluginInterface(plugin.ItemPlugin):
         """
         Check if any existing subitle files that match the pattern 
         """
+        return len(self.get_existing_subs(file))
+
+
+    def get_existing_subs(self, file):
+        """
+        Get all existing subitle files that match the pattern 
+        into the collection and return it.
+        """
+        base = os.path.splitext(file)[0]
+
+        return [n for n in glob.glob(base + ".*") \
+            if os.path.splitext(n)[1] in config.SUBS_EXTS]
+
+
+    """
+    def check_existing_subs(self, file):
         base    = os.path.splitext(file)[0]
         
         for ext in config.SUBS_EXTS:
@@ -342,10 +368,6 @@ class PluginInterface(plugin.ItemPlugin):
 
 
     def get_existing_subs(self, file):
-        """
-        Get all existing subitle files that match the pattern 
-        into the collection and return it.
-        """
         results = []
         base    = os.path.splitext(file)[0]
         
@@ -374,6 +396,7 @@ class PluginInterface(plugin.ItemPlugin):
                     
         return results
 
+    """
 
     def subs_search(self, arg=None, menuw=None):
         """

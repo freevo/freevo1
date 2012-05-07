@@ -57,7 +57,6 @@ except ImportError:
     from md5 import md5
 
 # http://www.joachim-bauch.de/projects/pylzma/
-NAPI_URL   = "http://napiprojekt.pl/unit_napisy/dl.php?l=%s&f=%s&t=%s&v=other&kolejka=false&nick=&pass=&napios=%s"
 NAPI_LANGS = [ 'pol', 'eng' ]
 
 from subtitles import SubsHandler, SubsError, Subtitles
@@ -105,6 +104,8 @@ class PluginInterface(plugin.Plugin):
                 'Maps ISO 639-2 lang code to the one used by napiprojekt.pl'), 
             ('NAPI_PWD', 'iBlm8NTigvru0Jr0',
                 'Password for the compressed file'), 
+            ('NAPI_URL'  'http://napiprojekt.pl/unit_napisy/dl.php?l=%s&f=%s&t=%s&v=other&kolejka=false&nick=&pass=&napios=%s',
+                'Napiprojekt fetch URL'),
         ]
 
 

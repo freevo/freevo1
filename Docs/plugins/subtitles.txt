@@ -28,7 +28,6 @@ decompress and save subtitles.
 By default the plugin support following subtitle langauges:
 
 	English
-	French
 	German
 	Polish
 		
@@ -96,7 +95,7 @@ of main Subtitles plugin as well as individual handlers (with default values):
 
 
 If you define SUBS_FORCE_LANG_EXT or SUBS_FORCE_HANDLER_ID make sure
-you use -fuzzines command line option with mplayer, so it'll use all 
+you use sub-fuzziness 1 command line option with mplayer, so it'll use all 
 locally available subtitles with extended filenames. 
 If you do not define both of those variables, even if you are presented 
 with a choice of multiple subfiles available and choose to save them all, 
@@ -138,4 +137,4 @@ in your local_config.py:
 
 	# Prevents freevo from using mplayer's show_ext_prop_text to display
 	# current subs and audio track info on the screen
-	MPLAYER_DONT_USE_EXT_PROPS = True
+	MPLAYER_DONT_USE_OSD_SHOW_PROPS = True
