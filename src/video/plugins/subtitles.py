@@ -237,7 +237,7 @@ class PluginInterface(plugin.ItemPlugin):
     etc.
 
     Make sure the 
-    | SUBS_AVAILABLE_HANDLERS = [ ('video.napiprojekt'), ('video.opensubtitles') ]
+    | SUBS_HANDLERS = [ ('video.napiprojekt'), ('video.opensubtitles') ]
     is set in your local_config.py for the this subtitles plugin 
     to be able to use the available handlers
 
@@ -307,8 +307,6 @@ class PluginInterface(plugin.ItemPlugin):
         else:
             subs = self.check_existing_subs(self.item.filename)
 
-        logger.info('Number of subs %d', subs)
-        
         if item.type == 'video' and item.mode == 'file':
             if subs and not config.SUBS_FORCE_BACKUP:
                 return [ ( self.subs_delete , _('Delete Subtitles'),   'subs_delete') ]

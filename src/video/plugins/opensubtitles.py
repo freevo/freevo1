@@ -73,7 +73,7 @@ class PluginInterface(plugin.Plugin):
     Activate with:
     | plugin.activate('video.opensubtitles')
     
-    and make sure the SUBS_AVAILABLE_HANDLERS = [ ('opensubtitles'), ]
+    and make sure the SUBS_HANDLERS = [ ('opensubtitles'), ]
     is set for the main subtitles plugin to be able to use this plugin.
     Even if this plugin is not explicitly activated in the local_config.py, main
     video.subtitles plugin will activate it automagically, providing that 

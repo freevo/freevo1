@@ -372,6 +372,16 @@ class MPlayer:
         if config.OSD_SINGLE_WINDOW:
             command += ['-wid', str(osd.video_window.id)]
             
+        # This ensures constant subtitle size, disable if you do not like this
+        # and want to have the size as designed by the sutitle creator.
+        # Unfortunately, subtitle size is heavilly dependant on the size of 
+        # the video, i.e. width/height so the size varies so much that is unusable
+        if config.MPLAYER_ASS_FONT_SCALE and mode not in ['dvd', 'default']:
+            v_height = float(item.getattr('height'))
+            v_width  = float(item.getattr('width'))
+            f_scale = (v_width / v_height) * config.MPLAYER_ASS_FONT_SCALE
+
+            command += ['-ass-font-scale', str(f_scale)]
 
         # use software scaler?
         #XXX these need to be in the arg list as the scaler will add vf args

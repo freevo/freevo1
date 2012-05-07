@@ -6,7 +6,7 @@
 #
 # Notes: napiprojekt plugin. 
 #        You can donwload subtitles from the http://napiprojekt.pl
-#        with this plugin. Only two langgauges supported, Polish and English.
+#        with this plugin. Only two langauges supported, Polish and English.
 #        Check out the video.subtitles plugin for more configuration options 
 #
 #        This code is based on some anonymous code found in the depths
@@ -77,7 +77,7 @@ class PluginInterface(plugin.Plugin):
     Activate with:
     | plugin.activate('video.napiprojekt')
     
-    and make sure the SUBS_AVAILABLE_HANDLERS = [ ('video.napiprojekt'), ]
+    and make sure the SUBS_HANDLERS = [ ('video.napiprojekt'), ]
     is set for the main subtitles plugin to be able to use this plugin
     
     and of course make sure the main subtitles plugin is activated too:

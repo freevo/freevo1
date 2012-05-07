@@ -461,6 +461,44 @@ CACHE_IMAGES = 1
 
 
 # ======================================================================
+# Freevo IMDB plugin:
+# ======================================================================
+# add imdb search to the video item menu
+# plugin.activate('video.imdb')
+
+# list of regexp to be ignored on a disc label
+# IMDB_REMOVE_FROM_LABEL = ('season[\._ -][0-9]+', 'disc[\._ -][0-9]+',
+                          'd[\._ -][0-9]+', 'german')
+# list of regexp to be ignored on a filename, match TV_RECORDMASK
+# IMDB_REMOVE_FROM_NAME = ['^[0-9]+-[0-9]+[ _][0-9]+\.[0-9]+[ _]']
+
+# list of words to ignore when searching based on a filename
+# IMDB_REMOVE_FROM_SEARCHSTRING = ()
+
+# format of the season/episode in the tv series title
+# IMDB_SEASON_EPISODE_FORMAT = "[%01dx%02d]"
+# IMDB_SEASON_EPISODE_FORMAT = "%01dx%02d"
+# IMDB_SEASON_EPISODE_FORMAT = "S%02dE%02d"
+
+# When searching for a movie title in imdb, should the result be
+# autoaccepted if it is only one hit?
+# 0 = show menu even if it is only one hit (gives you an opportunity to cancel)
+# 1 = autoaccept
+# IMDB_AUTOACCEPT_SINGLE_HIT = True
+
+# Use the local file lenght or runtime value from IMDB?
+# IMDB_USE_IMDB_RUNTIME = False
+
+# ======================================================================
+# Freevo Subtitles plugin:
+# ======================================================================
+# add subtitle search to the video item menu
+# plugin.activate('video.subtitles')
+# SUBS_HANDLERS = [('video.opensubtitles'), ('video.napiprojekt'), ]
+# SUBS_LANGS    = { 'eng': ('English'), }
+
+
+# ======================================================================
 # Freevo directory settings:
 # ======================================================================
 
@@ -1110,6 +1148,17 @@ CACHE_IMAGES = 1
 # (if this feature present in mplayer)
 # MPLAYER_HAS_FIELD_DOMINANCE = 1
 #
+# Do not use the osd_show_property_text slave mode command to display current 
+# subtitle and audio tracks. See Docs/plugins/subtitle.txt for details and
+# explanation.
+#
+# MPLAYER_USE_OSD_SHOW_PROPS = True
+
+# Set the ass-font-scale based on the aspect of the video, need to experiment with
+#this value. On 55 inch TV this looks good but your milege might vary here.
+# DO not forget to  configure properly ASS subs in the mplayer's config!
+# MPLAYER_ASS_FONT_SCALE  = 1.75
+
 # ======================================================================
 # Xine settings:
 # ======================================================================
