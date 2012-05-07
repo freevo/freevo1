@@ -264,7 +264,7 @@ class PluginInterface(plugin.ItemPlugin):
 
         for item in handlers:
             if not plugin.is_active(item):
-                logger.warning('Plugin %s listed as available but not activated, activating now!', item)
+                logger.warning('Plugin \'%s\' listed as available but not activated, activating now!', item)
                 plugin.activate(item)
 
             handler = plugin.getbyname(item)['handler']
@@ -307,6 +307,8 @@ class PluginInterface(plugin.ItemPlugin):
         else:
             subs = self.check_existing_subs(self.item.filename)
 
+        logger.info('Number of subs %d', subs)
+        
         if item.type == 'video' and item.mode == 'file':
             if subs and not config.SUBS_FORCE_BACKUP:
                 return [ ( self.subs_delete , _('Delete Subtitles'),   'subs_delete') ]
@@ -326,77 +328,21 @@ class PluginInterface(plugin.ItemPlugin):
         return len(self.get_existing_subs(file))
 
 
+
     def get_existing_subs(self, file):
         """
         Get all existing subitle files that match the pattern 
         into the collection and return it.
         """
-        base = os.path.splitext(file)[0]
+        # if there are literal chars like '[' or ']' in the filename then glob will 
+        # not match filenames. Need to replace them with '?'. Most likely it confuses
+        # regex inside glob
+        base = re.sub('[\]\[]+', '?', os.path.splitext(file)[0])
 
-        return [n for n in glob.glob(base + '.*') \
+        return [n for n in glob.glob(base + '*') \
             if os.path.splitext(n)[1] in config.SUBS_EXTS]
 
 
-    """
-    def check_existing_subs(self, file):
-        base    = os.path.splitext(file)[0]
-        
-        for ext in config.SUBS_EXTS:
-            for handler in self.handlers.values():
-                # check the simple filename first movie.txt etc.
-                vfile = "%s.%s" % (base, ext)
-                if os.path.exists(vfile):
-                    return True
-
-                # now bit more chalanging, filename  with the handler name, movie.os.txt
-                vfile = "%s.%s.%s" % (base, handler['id'], ext)
-                if os.path.exists(vfile):
-                    return True
-
-                for lang in config.SUBS_LANGS.keys():
-                    # yet another case, filename  with the lang, movie.en.txt
-                    vfile = "%s.%s.%s" % (base, lang, ext)
-                    if os.path.exists(vfile):
-                        return True
-
-                    # and finally, filename  with the handler name and lang, movie.os.en.txt
-                    vfile = "%s.%s.%s.%s" % (base, handler['id'], lang, ext)
-                    if os.path.exists(vfile):
-                        return True
-     
-        return False
-
-
-    def get_existing_subs(self, file):
-        results = []
-        base    = os.path.splitext(file)[0]
-        
-        for ext in config.SUBS_EXTS:
-            for handler in self.handlers.values():
-                # check the simple filename first movie.txt etc.
-                vfile = "%s.%s" % (base, ext)
-                if os.path.exists(vfile):
-                    results.append(vfile)
-
-                # now bit more chalanging, filename  with the handler name, movie.os.txt
-                vfile = "%s.%s.%s" % (base, handler['id'], ext)
-                if os.path.exists(vfile):
-                    results.append(vfile)
-
-                for lang in config.SUBS_LANGS.keys():
-                    # yet another case, filename  with the lang, movie.en.txt
-                    vfile = "%s.%s.%s" % (base, lang, ext)
-                    if os.path.exists(vfile):
-                        results.append(vfile)
-
-                    # and finally, filename  with the handler name and lang, movie.os.en.txt
-                    vfile = "%s.%s.%s.%s" % (base, handler['id'], lang, ext)
-                    if os.path.exists(vfile):
-                        results.append(vfile)
-                    
-        return results
-
-    """
 
     def subs_search(self, arg=None, menuw=None):
         """

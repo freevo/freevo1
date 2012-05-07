@@ -95,7 +95,7 @@ class PluginInterface(plugin.Plugin):
             return
         
         if not plugin.is_active('video.subtitles'):
-            self.reason = 'Plugin "video.subtitles" not active, activate it first in your local_config.py!'
+            self.reason = 'Plugin \'video.subtitles\' not active, activate it first in your local_config.py!'
             return
 
         self.handler = OpenSubtitlesHandler()
@@ -108,9 +108,9 @@ class PluginInterface(plugin.Plugin):
     def config(self):
         """returns the config variables used by this plugin"""
         return [
-            (OSUBS_USER_AGENT, 'OS Test User Agent', 
+            ('OSUBS_USER_AGENT', 'OS Test User Agent', 
                 'Opensubtitles User Agent String'),
-            (OSUBS_DOMAIN,     'http://api.opensubtitles.org/xml-rpc', 
+            ('OSUBS_DOMAIN',     'http://api.opensubtitles.org/xml-rpc', 
                 'Opensubtitles domain'), 
         ]
 
@@ -404,8 +404,8 @@ class OpenSubtitlesHandler(SubsHandler):
 
     def _login(self, user='', password=''):
         try:
-            server = xmlrpclib.ServerProxy(OSUBS_DOMAIN)
-            log    = server.LogIn(user,password, 'en', OSUBS_USER_AGENT)
+            server = xmlrpclib.ServerProxy(config.OSUBS_DOMAIN)
+            log    = server.LogIn(user,password, 'en', config.OSUBS_USER_AGENT)
 
             if self._status_ok(log):
                 logger.debug('opensubtitles login OK')

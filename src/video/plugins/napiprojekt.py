@@ -110,7 +110,7 @@ class PluginInterface(plugin.Plugin):
                 'Maps ISO 639-2 lang code to the one used by napiprojekt.pl'), 
             ('NAPI_PWD', 'iBlm8NTigvru0Jr0',
                 'Password for the compressed file'), 
-            ('NAPI_URL'  'http://napiprojekt.pl/unit_napisy/dl.php?l=%s&f=%s&t=%s&v=other&kolejka=false&nick=&pass=&napios=%s',
+            ('NAPI_URL', 'http://napiprojekt.pl/unit_napisy/dl.php?l=%s&f=%s&t=%s&v=other&kolejka=false&nick=&pass=&napios=%s',
                 'Napiprojekt fetch URL'),
         ]
 
@@ -148,7 +148,7 @@ class NapiSubtitles(Subtitles):
             
         data = None
 
-        url = NAPI_URL % \
+        url = config.NAPI_URL % \
             (config.NAPI_LANG_MAP[self.lang], self.hash.hexdigest(), self._f(self.hash.hexdigest()), os.name)
 
         http_code = 200
