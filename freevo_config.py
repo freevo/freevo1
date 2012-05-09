@@ -1712,6 +1712,41 @@ MPLAYER_USE_OSD_SHOW_PROPS = True
 # DO not forget to  configure properly ASS subs in the mplayer's config!
 MPLAYER_ASS_FONT_SCALE  = 1.75
 
+# This setting allows changing the monitor's refresh rate to the FPS of the movie.
+# This allows smooth playback on fast panels, like LED ones. On slow ones, LCDs or 
+# Plasmas this is not really necessary. Problem on LEDs is that the panel is so
+# fast that any frame drops etc are clearly visible with tearing and judder.
+# It's hard to play back 23.976 fps movie on 60 Hz refresh rate on the fast panel.
+# You work out the math here.
+#
+# Use this setting with caution, it's been tested on Nvidia card only, hence strange 
+# refresh values in the map below, 50 to 53. You need to find out what values match 
+# your card's setup but running following command "xrandr -r n" where n is the desired 
+# refresh rate and update the map. 
+# If you are lost now, it's most likely that you do not need this setting at all.
+# Also, you can google the answers on the web ;-)
+# You need python-xrandr package. This package can be found on the web but it has 
+# not been maintaned for years, abandoned and forgotten. It does work well though.
+# You can find it in contrib/runtime directory of the freevo distribution. Follow
+# instructions in the package to install.
+MPLAYER_RATE_SET_FROM_VIDEO = False
+MPLAYER_RATE_RESTORE        = True
+MPLAYER_RATE_DEFAULT        = (50.000, 53)
+MPLAYER_RATE_MAP            = { '23.976' : (23.976, 51),
+                                '24.000' : (23.976, 51),
+                                '25.000' : (50.000, 53),
+                                '29.970' : (59.940, 50),
+                                '50.000' : (50.000, 53),
+                                '59.940' : (59.940, 50)}
+
+# This setting allows delaying the audio when Monitor's refresh rate == Movie's FPS
+# It'll only be applied when MPLAYER_RATE_SET_FROM_VIDEO is set to True.
+# For whatever reason Mplayer does not sync the audio/video properly.
+# Your mileage might very here but I get best results by using Mplayer2.
+# Check it out at http://www.mplayer2.org/. It's a fork of the original Mplayer
+# with some significant updates/changes. 
+# Delay the audio by 200ms.
+MPLAYER_AUDIO_DELAY = -0.2
 
 # ======================================================================
 # Xine settings:
