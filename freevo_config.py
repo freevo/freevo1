@@ -789,6 +789,11 @@ IMDB_AUTOACCEPT_SINGLE_HIT = True
 # Use the local file lenght or runtime value from IMDB?
 IMDB_USE_IMDB_RUNTIME = False
 
+# add subtitle search to the video item menu
+plugin.activate('video.subtitles')
+SUBS_HANDLERS = [('video.opensubtitles'), ('video.napiprojekt'), ]
+SUBS_LANGS    = { 'eng': ('English'), }
+
 # delete file in menu
 plugin.activate('file_ops', level=20)
 
@@ -1695,6 +1700,18 @@ MPLAYER_VF_PROGRESSIVE = 'pp=de'
 # NOTE: You need to set this to 1 to be able to use the TV_CHANNEL_LAST feature.
 #
 MPLAYER_OLDTVCHANNELCHANGE = False
+
+# Do not use the osd_show_property_text slave mode command to display current 
+# subtitle and audio tracks. See Docs/plugins/subtitle.txt for details and
+# explanation.
+#
+MPLAYER_USE_OSD_SHOW_PROPS = True
+
+# Set the ass-font-scale based on the aspect of the video, need to experiment with
+#this value. On 55 inch TV this looks good but your milege might vary here.
+# DO not forget to  configure properly ASS subs in the mplayer's config!
+MPLAYER_ASS_FONT_SCALE  = 1.75
+
 
 # ======================================================================
 # Xine settings:
