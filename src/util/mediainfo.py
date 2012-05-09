@@ -306,6 +306,17 @@ class MMCache(Cache):
         return ret
 
 
+    def normalize(self, info):
+        """
+        we resolve fourcc values to the ones we can use
+        """
+        if info.has_key('video') and info.has_key('fps'):
+            fps = round(float(info['fps']), 3)
+            info['fps'] = '%.3f' % fps
+           
+        return info
+
+
     def create(self, filename):
         """
         create mmpython information about the given file
@@ -332,7 +343,7 @@ class MMCache(Cache):
 
             if info.has_key('video'):
                 for video in info['video']:
-                    for variable in ('width', 'height', 'length', 'aspect'):
+                    for variable in ('width', 'height', 'length', 'aspect', 'fps'):
                         if video.has_key(variable) and not \
                            (info.has_key(variable) and info[variable]):
                             info[variable] = video[variable]
@@ -345,7 +356,9 @@ class MMCache(Cache):
             if info.has_key('media') and info['media'] == 'MEDIA_DIRECTORY':
                 pass
 
+            info = self.normalize(info)
             return info
+
         return {}
 
 
