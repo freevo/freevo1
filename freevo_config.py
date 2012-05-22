@@ -415,7 +415,7 @@ LOCAL_CONF_CHANGES = [
      """ Added SHUTDOWN_NEW_STYLE_DIALOG to control whether the new shutdown dialog is used or the old
      multi-option menu.
      """),
-     (5.30,
+    (5.30,
      """ change FREEVO_USE_ALPHABLENDING to SKIN_USE_SCREEN_TRANSITIONS and add
      ability to select the transition style.
      Added SKIN_USE_PAGE_TRANSITIONS to select whether transitions between pages
@@ -1017,6 +1017,11 @@ DIRECTORY_ADD_RANDOM_PLAYLIST = [ 'audio' ]
 #
 DIRECTORY_AUTOPLAY_ITEMS      = [ ]
 
+# ----------------------------------------------------------------------
+# Archive plugin
+# ----------------------------------------------------------------------
+# It's enabled by default
+plugin.activate('archive')
 
 # ======================================================================
 # Freevo movie settings:
@@ -1242,6 +1247,24 @@ IMAGEVIEWER_AUTOPLAY = True
 # it's much faster
 #
 IMAGE_USE_EXIF_THUMBNAIL = 1
+
+#
+# Set this to percent value of how much the image will be scrolled when
+# zoomed in and moved around, default is 10%
+IMAGEVIEWER_SCROLL_FACTOR = 10
+
+#
+# Set this to true if the zoom level (factor) of the currently watched image
+# will be applied the the next loaded image; Default is True
+IMAGEVIEWER_KEEP_ZOOM_LEVEL = True
+
+#
+# Set this to true if you want to keep the same position as the currently 
+# watched image, will be applied the the next loaded image; Default is False
+# i.e. the image will be open and zoomed in (if IMAGEVIEWER_KEEP_ZOOM_LEVEL
+# is set) to the same exact position. Default is False, which means the next 
+# image will be renedered in the top left corner.
+IMAGEVIEWER_KEEP_ZOOM_POSITION = False
 
 
 # ======================================================================
