@@ -602,6 +602,15 @@ CACHE_IMAGES = 1
 #
 # DIRECTORY_AUTOPLAY_ITEMS      = [ ]
 
+# ----------------------------------------------------------------------
+# Archive plugin
+# ----------------------------------------------------------------------
+# It's enabled by default
+# plugin.activate('archive')
+#
+# To remove it uncomment following line
+# plugin.remove('archive')
+
 
 # ======================================================================
 # Freevo movie settings:
@@ -804,7 +813,18 @@ CACHE_IMAGES = 1
 #
 # IMAGEVIEWER_ASPECT = 1.0
 
+#
+# Set this to true if the zoom level (factor) of the currently watched image
+# will be applied the the next loaded image; Default is True
+# IMAGEVIEWER_KEEP_ZOOM_LEVEL = True
 
+#
+# Set this to true if you want to keep the same position as the currently 
+# watched image, will be applied the the next loaded image; Default is False
+# i.e. the image will be open and zoomed in (if IMAGEVIEWER_KEEP_ZOOM_LEVEL
+# is set) to the same exact position. Default is False, which means the next 
+# image will be renedered in the top left corner.
+# IMAGEVIEWER_KEEP_ZOOM_POSITION = False
 
 # ======================================================================
 # Freevo games settings:
