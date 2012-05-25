@@ -9,7 +9,7 @@
 #        with this plugin. Only two langauges supported, Polish and English.
 #        Check out the video.subtitles plugin for more configuration options 
 #
-#        This code is based on some anonymous code found in the depths
+#        This code is partially based on some anonymous code found in the depths
 #        of the www :-)
 #
 # Todo:  none
@@ -63,30 +63,25 @@ try:
 except ImportError:
     from md5 import md5
 
-# http://www.joachim-bauch.de/projects/pylzma/
 NAPI_LANGS = [ 'pol', 'eng' ]
 
-from subtitles import SubsHandler, SubsError, Subtitles
+from video.plugins.subtitles import SubtitlesPlugin, SubtitlesError, Subtitles
 
-class PluginInterface(plugin.Plugin):
+class PluginInterface(SubtitlesPlugin):
     """
     This is a handler plugin for http://napiprojekt.pl subtitle provider
     and is used by main subtitle plugin.
-    
     Only polish and english subtitles are supported by napiprojekt.pl
 
     Activate with:
-    | plugin.activate('video.napiprojekt')
-    
-    and make sure the SUBS_HANDLERS = [ ('video.napiprojekt'), ]
-    is set for the main subtitles plugin to be able to use this plugin
-    
+    | plugin.activate('video.subtitles.napiprojekt')
     and of course make sure the main subtitles plugin is activated too:
     | plugin.activate('video.subtitles')
-
     """
-
     def __init__(self):
+        """
+        Constructor
+        """
         if not config.SYS_USE_NETWORK:
             self.reason = 'SYS_USE_NETWORK not enabled'
             return
@@ -95,17 +90,23 @@ class PluginInterface(plugin.Plugin):
             self.reason = 'Plugin \'video.subtitles\' not active, activate it first in your local_config.py!'
             return
 
-        self.handler = NapiHandler()
-        
-        plugin.Plugin.__init__(self)
+        langs = []
 
-        plugin.register(self, 'video.napiprojekt')
+        try:
+            langs = config.NAPI_LANGS
+        except:
+            langs = NAPI_LANGS
+
+        SubtitlesPlugin.__init__(self, 'np', 'napiprojekt.pl', langs)
+        plugin.register(self, 'video.subtitles.napiprojekt')
 
 
     def config(self):
-        """returns the config variables used by this plugin"""
+        """
+        Returns the config variables used by this plugin
+        """
         return [
-            ('NAPI_LANGS', [ 'pol', 'eng', ], 
+            ('NAPI_LANGS', NAPI_LANGS, 
                 'All Supported by napiprojekt.pl ISO 639-2 subtitles language codes'),
             ('NAPI_LANG_MAP', { 'pol': ('PL'), 'eng': ('ENG') },
                 'Maps ISO 639-2 lang code to the one used by napiprojekt.pl'), 
@@ -116,39 +117,73 @@ class PluginInterface(plugin.Plugin):
         ]
 
 
-    def __getitem__(self, key):
+    def get_subs(self, vfile, langs_):
         """
-        Get the item's attribute.
-
-        @returns: the specific attribute
+        Get all available subtitles for the item
+        @returns: the collection of subtitles keyed by the subtitle id
         """
-        if key == 'name': 
-            return self.handler.name
-            
-        if key == 'id': 
-            return self.handler.id
+        # based on requested languages, create intersect of capabilites vs. request
+        langs = filter(lambda x: x in langs_, self.langs)
+        subs  = {}
+        hash  = self._hash(vfile)
 
-        if key == 'handler': 
-            return self.handler
+        if not hash:
+            logger.warning('Hashing of %s failed, aborting...', vfile)
+            return subs
 
-        return plugin.Plugin.__getitem__(self, key)        
+        for lang in langs:
+            sub = NapiSubtitles(self, vfile, lang, hash)
+            if not sub.download():
+                continue
+                
+            subs[sub['id']] = sub
+
+        return subs
+        
+
+    #
+    # Class' private methods below
+    #
+    def _hash(self, vfile):
+        """
+        Calculates the hash of chunk of of the video file
+        used in subsequent lookup at the remote server
+        """
+        hash  = md5()
+
+        try:
+            hash.update(open(vfile).read(10485760))
+        except (IOError, OSError), e:
+            logger.warning('Hashing failed: %s', e)
+            return None
+
+        return hash    
 
 
 class NapiSubtitles(Subtitles):
+    """
+    Specialised napiprojekt class that knows how to download, decompress 
+    and write subtitles from napiprojekt.pl
+    """
     def __init__(self, handler, vfile, lang, hash):
+        """
+        Constructor
+        """
         self.hash = hash
         Subtitles.__init__(self, handler, vfile, lang)
 
 
     def download(self):
-        logger.info('Downloading subtitles for %s in %s', self.vfile, self.lang)
+        """
+        Based on requested languages, downloads subtitles from the remote server
+        @return:    True if successful
+        """
+        logger.debug('Downloading subtitles for %s in %s', self.vfile, self.lang)
 
-        # TODO try to hash again, if not hashed already
         if not self.hash:
             return False
             
         data = None
-
         url = config.NAPI_URL % \
             (config.NAPI_LANG_MAP[self.lang], self.hash.hexdigest(), self._f(self.hash.hexdigest()), os.name)
 
@@ -201,11 +236,13 @@ class NapiSubtitles(Subtitles):
         return True
 
 
-    """
-    Class' private methods below
-    """
-
+    #
+    # Class' private methods below
+    #
     def _decompress(self):
+        """
+        Decompresses download data (napiprojekt uses 7Zip compression)
+        """
         fp = tempfile.NamedTemporaryFile('wb', suffix=".7z")
         tfp = fp.name
         fp.write(self.data)
@@ -223,7 +260,7 @@ class NapiSubtitles(Subtitles):
             fp.close()
             msg = 'Skipping, subtitle decompression failed: %s' % (e)
             logger.warning(msg)
-            raise SubsError(msg)
+            raise SubtitlesError(msg)
 
         fp.close()
 
@@ -231,6 +268,9 @@ class NapiSubtitles(Subtitles):
 
 
     def _f(self, z):
+        """
+        Magic number calculation
+        """
         idx = [ 0xe, 0x3,  0x6, 0x8, 0x2 ]
         mul = [   2,   2,    5,   4,   3 ]
         add = [   0, 0xd, 0x10, 0xb, 0x5 ]
@@ -246,64 +286,3 @@ class NapiSubtitles(Subtitles):
             b.append( ("%x" % (v*m))[-1] )
 
         return ''.join(b)
-
-
-class NapiHandler(SubsHandler):
-
-    def __init__(self):
-        langs = []
-        
-        try:
-            langs = config.NAPI_LANGS
-        except:
-            langs = NAPI_LANGS
-            
-        SubsHandler.__init__(self, 'np', 'napiprojekt.pl', langs)
-
-
-    def __getitem__(self, key):
-        """
-        Get the item's attribute.
-
-        @returns: the specific attribute
-        """
-        return SubsHandler.__getitem__(self, key)
-
-
-    def get_subs(self, vfile, langs_):
-        # based on requested languages, create intersect of capabilites vs. request
-        langs = filter(lambda x: x in langs_, self.langs)
-        subs  = {}
-        hash  = self._hash(vfile)
-
-        if not hash:
-            logger.warning('Hashing of %s failed, aborting...', vfile)
-            return subs
-
-        for lang in langs:
-            sub = NapiSubtitles(self, vfile, lang, hash)
-            if not sub.download():
-                continue
-                
-            subs[sub['id']] = sub
-
-        return subs
-        
-        #return [map(lambda x: x['lang'], self.subs)]
-        
-
-    """
-    Class' private methods below
-    """
-    def _hash(self, vfile):
-        hash  = md5()
-
-        try:
-            hash.update(open(vfile).read(10485760))
-        except (IOError, OSError), e:
-            logger.warning('Hashing failed: %s', e)
-            return None
-
-        return hash    
-
-

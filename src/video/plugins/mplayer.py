@@ -553,8 +553,6 @@ class MPlayer:
                 # check again if seek is allowed
                 if self.item_length <= self.item.elapsed + event.arg + seek_safety_time:
                     logger.debug('unable to seek %s secs at time %s, length %s', event.arg, self.item.elapsed, self.item_length)
-
-
                     dialog.show_message(_('Seeking not possible'))
                     return False
             

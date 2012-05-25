@@ -68,8 +68,8 @@ import plugin
 import re
 import time
 import util
-
-from gui.PopupBox import PopupBox
+import dialog
+import dialog.utils 
 
 HEAD = 'head'
 TAIL = 'tail'
@@ -81,28 +81,33 @@ def trunc(what, cnt, where=HEAD, ellipsis='...'):
 
 
 class Error(Exception):
-    """Base class for exceptions in Subs"""
+    """
+    Base class for exceptions in Subs
+    """
     def __str__(self):
         return self.message
     def __init__(self, message):
         self.message = message
 
 
-class SubsError(Error):
-    """used to raise Subtitle specific exceptions"""
+class SubtitlesError(Error):
+    """
+    used to raise Subtitle specific exceptions
+    """
     pass
 
 
-class SubsHandler():
+class SubtitlesPlugin(plugin.Plugin):
     """
-    Base Subtitles handler class definition including all methods that subclasses 
+    Base Subtitles Plugin handler class definition including all methods that subclasses 
     shall overwrite
     """
-    
     def __init__(self, id, name, langs):
+        plugin.Plugin.__init__(self)
         self.id    = id
         self.name  = name
         self.langs = langs
+        self._type = 'subtitles'
 
     
     def __getitem__(self, key):
@@ -116,20 +121,18 @@ class SubsHandler():
         if key == 'id': 
             return self.id
         
-        if key == 'langs': 
-            return self.langs
-            
         return ''
 
     
     def get_subs(self, vfile_, langs_):
         """
         Derived class must overwrite this method
-
         Get all available subtitles for the item
-        @returns: the collection of subtitles keyed by the subtitle id
+        @param vfile_ :   filename of the video file
+        @param langs_ :   requested languages
+        @returns:         the collection of subtitles keyed by the subtitle id
         """
-        pass
+        return {}
         
 
 class Subtitles():
@@ -149,27 +152,12 @@ class Subtitles():
     def __getitem__(self, key):
         """
         Get the item's attribute.
-
-        @returns: the specific attribute
+        @param key:  key
+        @returns:    the specific attribute
         """
         if key == 'id': 
             return hash((self.handler['id'], self.lang, self.vfile))
             
-        if key == 'handler': 
-            return self.handler
-        
-        if key == 'vfile': 
-            return self.vfile
-
-        if key == 'sfile': 
-            return self.sfile
-
-        if key == 'lang': 
-            return self.lang
-
-        if key == 'data': 
-            return self.data
-
 
     def download(self):
         """
@@ -202,7 +190,7 @@ class Subtitles():
         if not config.SUBS_FORCE_UPDATE and os.path.exists(self.sfile):
             msg = 'Skipping, subtitles %s aready exist and forced update is disabled' % (self.sfile)
             logger.warning(msg)
-            raise SubsError(msg)
+            raise SubtitlesError(msg)
 
         if config.SUBS_FORCE_BACKUP and os.path.exists(self.sfile):
             vfile_bkp = self.sfile + '.bkp'
@@ -215,7 +203,7 @@ class Subtitles():
             except (IOError, OSError), e:
                 msg = 'Skipping due to backup of \'%s\' as \'%s\' failure: %s' % (self.sfile, vfile_bkp, e)
                 logger.warning(msg)
-                raise SubsError(msg)
+                raise SubtitlesError(msg)
             else:
                 logger.info('Old subtitle backed up as \'%s\'', vfile_bkp)
 
@@ -228,19 +216,11 @@ class PluginInterface(plugin.ItemPlugin):
 
     Activate with:
     | plugin.activate('video.subtitles')
-    
     Make sure the suitable subtitles handler plugin is activated too:
-    | plugin.activate('video.napiprojekt')
-    
+    | plugin.activate('video.subtitles.napiprojekt')
     and/or
-    | plugin.activate('video.opensubtitles')
-    
+    | plugin.activate('video.subtitles.opensubtitles')
     etc.
-
-    Make sure the 
-    | SUBS_HANDLERS = [ ('video.napiprojekt'), ('video.opensubtitles') ]
-    is set in your local_config.py for the this subtitles plugin 
-    to be able to use the available handlers
 
     You can also set subs_search on a key (e.g. 't') by setting
     | EVENTS['menu']['t'] = Event(MENU_CALL_ITEM_ACTION, arg='subs_search')
@@ -255,24 +235,9 @@ class PluginInterface(plugin.ItemPlugin):
         self.subs     = {}
         self.subfiles = []
 
-        try:
-            handlers = config.SUBS_HANDLERS
-        except:
-            self.reason = 'Plugin \'video.subtitles\' activated but SUBS_HANDLERS not defined!'
-            return
-
-        logger.info('Available Handlers : %s', handlers)
-
-        for item in handlers:
-            if not plugin.is_active(item):
-                logger.warning('Plugin \'%s\' listed as available but not activated, activating now!', item)
-                plugin.activate(item)
-
-            handler = plugin.getbyname(item)['handler']
-            self.handlers[handler['id']] = handler
-            logger.info('Successfuly loaded subtitle handler %s', handler.name)
-
         plugin.ItemPlugin.__init__(self)
+        
+        self.handlers = self.get_handlers()
 
 
     def config(self):
@@ -280,7 +245,7 @@ class PluginInterface(plugin.ItemPlugin):
         Returns the config variables used by this plugin
         """
         return [
-            ('SUBS_LANGS',          { 'pol': ('Polish'), 'eng': ('English'), 'ger': ('German') },
+            ('SUBS_LANGS',          { 'eng': ('English') },
                 'Subtitles to download'),
             ('SUBS_EXTS',           [ '.srt', '.sub', '.txt', '.ssa', '.smi', '.ass', '.mpl'], 
                 'Known subtitles file extensions'),
@@ -342,6 +307,22 @@ class PluginInterface(plugin.ItemPlugin):
             if os.path.splitext(n)[1] in config.SUBS_EXTS]
 
 
+    def get_handlers(self):
+        """
+        Get all regitered subtitle plugins into the local dictionary
+        @return:    Hanlders dictionary keyed by the handler ID.
+        """
+        if self.handlers is None or len(self.handlers) < 1:
+            handlers = plugin.get('subtitles')
+            logger.info('Available subtitles handlers : %s', handlers)
+
+            for handler in handlers:
+                self.handlers[handler['id']] = handler
+                logger.info('Successfuly loaded subtitle handler %s', handler.name)
+
+        return self.handlers             
+        
+        
 
     def subs_search(self, arg=None, menuw=None):
         """
@@ -349,12 +330,12 @@ class PluginInterface(plugin.ItemPlugin):
         """
         self.subs = {}
         items     = []
+        dlg       = None
     
         try:
             #get the subtitles from each active handler
-            for handler in self.handlers.values():
-                box = PopupBox(text=_('Searching %s for subtitles...' % (handler['name'])))
-                box.show()
+            for handler in self.get_handlers().values():
+                dlg = dialog.utils.show_message(_('Searching %s...' % (handler['name'])), 'status', 0)
 
                 if self.item.subitems:
                     for i in range(len(self.item.subitems)):
@@ -362,38 +343,35 @@ class PluginInterface(plugin.ItemPlugin):
                 else:
                     self.subs.update(handler.get_subs(self.item.filename, config.SUBS_LANGS.keys()))
 
-                box.destroy()
-            
+                dialog.utils.hide_message(dlg)
+
             for subs in sorted(self.subs.values(), key=attrgetter('handler.id', 'lang', 'vfile')):
                 try:
-                    lang = config.SUBS_LANGS[subs['lang']]
+                    lang = config.SUBS_LANGS[subs.lang]
                     if self.item.subitems:
-                        items.append(menu.MenuItem(_('%s subtitles for "%s" (from %s)' % \
-                                     (lang, trunc(os.path.basename(subs['vfile']), 20), subs.handler['name'])),
+                        items.append(menu.MenuItem(_('%s subtitles for "%s" (%s from %s)' % \
+                                     (lang, trunc(os.path.basename(subs.vfile), 20), subs.fmt, subs.handler['name'])),
                                      self.subs_create_subs, (subs['id'])))
                     else:
-                        items.append(menu.MenuItem(_('%s subtitles (from %s)' % \
-                                     (lang, subs.handler['name'])),
+                        items.append(menu.MenuItem(_('%s subtitles (%s from %s)' % \
+                                     (lang, subs.fmt, subs.handler['name'])),
                                      self.subs_create_subs, (subs['id'])))
                     
-                except Unicode, e:
-                    print e
+                except (Unicode) as err:
+                    logger.warning(err)
 
             # if we have more then 1 set of subs, we give user an option to save all
             if len(self.subs) > 1:
                 items.insert(0, menu.MenuItem(_('Get all available subtitles listed below'),
                              self.subs_create_subs, ('all')))
 
-        except (Exception), error:
-            logger.error('%s' % (error,))
-            box.destroy()
-            box = PopupBox(text=_('Connection to service failed: ') + str(error))
-            box.show()
-            time.sleep(2)
-            box.destroy()
+        except (Exception), err:
+            dialog.utils.hide_message(dlg)
+            logger.error('%s' % (err))
+            dialog.utils.show_message(_('Connection to subtitle service failed'))
             return
 
-        if config.SUBS_AUTOACCEPT and len(items > 0):
+        if config.SUBS_AUTOACCEPT and len(items) > 0:
             self.subs_create_subs(arg=('all'), menuw=menuw)
             return
 
@@ -402,10 +380,7 @@ class PluginInterface(plugin.ItemPlugin):
             menuw.pushmenu(moviemenu)
             return
 
-        box = PopupBox(text=_('No subtitles available'))
-        box.show()
-        time.sleep(2)
-        box.destroy()
+        dialog.utils.show_message(_('No subtitles available'))
         return
 
 
@@ -422,6 +397,7 @@ class PluginInterface(plugin.ItemPlugin):
         if hasattr(self.item, 'subitems') and self.item.subitems:
             for i in range(len(self.item.subitems)):
                 self.subfiles.extend(self.get_existing_subs(self.item.subitems[i].filename))
+
         else:
             self.subfiles = self.get_existing_subs(self.item.filename)
 
@@ -429,6 +405,7 @@ class PluginInterface(plugin.ItemPlugin):
             try:
                 items.append(menu.MenuItem(_('%s' % (os.path.split(subfile)[1])),
                              self.subs_delete_subs, (subfile)))
+
             except Unicode, e:
                 print e
 
@@ -437,7 +414,7 @@ class PluginInterface(plugin.ItemPlugin):
             items.insert(0, menu.MenuItem(_('Delete all subtitle files listed below'),
                          self.subs_delete_subs, ('all')))
 
-        if config.SUBS_AUTOACCEPT and len(items > 0):
+        if config.SUBS_AUTOACCEPT and len(items) > 0:
             self.subs_delete_subs(arg='all', menuw=menuw)
             return
 
@@ -446,10 +423,7 @@ class PluginInterface(plugin.ItemPlugin):
             menuw.pushmenu(moviemenu)
             return
 
-        box = PopupBox(text=_('No subtitles to be deleted for %s' % (os.path.base(self.item.filename))))
-        box.show()
-        time.sleep(2)
-        box.destroy()
+        dialog.utils.show_message(_('No subtitles to be deleted'))
         return
 
 
@@ -484,60 +458,54 @@ class PluginInterface(plugin.ItemPlugin):
         """
         create subs for the item
         """
-        box = PopupBox(text=_('Saving subtitles...'))
-        box.show()
-
+        dlg = dialog.utils.show_message(_('Saving subtitles...'), 'status', 0)
+ 
         try:
             if arg == None or arg == 'all':
                 # we write all available subs
                 for subs in self.subs.values():
                     subs.save()
+
             else:
                 # we write only chosen subs
                 subs = self.subs[arg]
-                logger.debug('Writing subs from %s for lang %s', subs.handler['name'], subs['lang'])
+                logger.debug('Writing subs from %s for lang %s', subs.handler['name'], subs.lang)
                 subs.save()
                         
-        except (Exception), error:
-            logger.error('%s' % (error,))
-            box.destroy()
-            box = PopupBox(text=_(error))
-            box.show()
-            time.sleep(2)
+        except (Exception), err:
+            logger.error('%s' % (err))
+            dialog.utils.hide_message(dlg)
+            dlg = dialog.utils.show_message(_('Error while saving subtitles'))
             
         # reset subs
         self.subs = {}
-
         self.subs_menu_back(menuw)
-        box.destroy()
+        dialog.utils.hide_message(dlg)
  
 
     def subs_delete_subs(self, arg=None, menuw=None):
         """
         delete subtitle file(s) for the item
         """
-        box = PopupBox(text=_('Deleting subtitles...'))
-        box.show()
+        dlg = dialog.utils.show_message(_('Deleting subtitles...'), 'status', 0)
 
         try:
             if arg == None or arg == 'all':
                 # we delete all available subtitle files
                 for subs in self.subfiles:
                     os.remove(subs)
+
             else:
                 # we delete only chosen subtitle file
                 logger.debug('Deleting subtitle file %s', arg)
                 os.remove(arg)
 
         except (Exception), error:
-            logger.error('%s' % (error,))
-            box.destroy()
-            box = PopupBox(text=_(error))
-            box.show()
-            time.sleep(2)
+            logger.error('%s' % (err))
+            dialog.utils.hide_message(dlg)
+            dlg = dialog.utils.show_message(_('Error while deleting subtitles'))
             
         self.subfiles = []
-
         self.subs_menu_back(menuw)
-        box.destroy()
+        dialog.utils.hide_message(dlg)
  

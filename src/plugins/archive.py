@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # Freevo Archive file (zip, tar and rar) handling
 # -----------------------------------------------------------------------
-# $Id$
+# $Id: $
 #
 # Notes:  To use RAR file handling you must install both 'unrar' utility 
 #         and python rar module. This plugin has been tested with version 
@@ -319,11 +319,8 @@ class ArchiveItem(DirItem):
                     return None                    
 
                 try:
-                    # FIX ME It's more efficient to use symlinks but only on Windows. It's to complicated
-                    # to detect the system type and then make a decision if use symlinks or copy (for now)
-                    # maybe in the future ???
-                    # os.symlink(os.path.join(dir, normalize(image), os.path.join(dir, ('cover' + ext)))
-                    shutil.copy(os.path.join(dir, normalize(image)), os.path.join(dir, ('cover' + ext)))
+                    os.symlink(os.path.join(dir, normalize(image)), os.path.join(dir, ('cover' + ext)))
+                    #shutil.copy(os.path.join(dir, normalize(image)), os.path.join(dir, ('cover' + ext)))
                     logger.debug('Cover image %s, copied to %s', normalize(image), dir)
                 except (OSError, ShutilError) as exc:
                     logger.warning('Error while getting cover image for archive %s, %s', self.archive, exc)

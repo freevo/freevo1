@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # Freevo image viewer
 # -----------------------------------------------------------------------
-# $Id$
+# $Id: $
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -75,6 +75,7 @@ def get_singleton():
 class ImageZoomPosition():
     def __init__(self, pos_x = 0, pos_y = 0):
         """
+        Represents the current position/coordinates within the zoomed in image
         """
         logger.log(9, 'ImageZoomPosition.__init__()')
         self.pos_x = pos_x

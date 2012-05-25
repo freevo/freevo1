@@ -32,8 +32,8 @@
 import os.path
 
 import config
-
 import dialog
+from dialog.dialogs import MessageDialog 
 
 def get_xine_config_file():
     """
@@ -69,3 +69,42 @@ def get_xine_config_file():
             outfile.close()
 
     return config_file
+
+
+def show_message(message, name='message', duration=None):
+    """
+    Helper function that shows the skinnable osd message dialog
+    @param message:  message to be displayed
+    @param name:     name of the dialog used to load  appropriate skin object
+                     Default is ’message’, ‘status’ is also available. 
+                     See dialog/dialogs.py and osd skin definitions for available
+                     names/dialog types
+    @param duration: duration the msg is displayed. Default is None which defaults
+                     to the standard duration of the MessageDialog, currently 3 secs
+                     0 will display indefinitely, until hide_message() is called
+                     In this cae caller is responsible for cleaning up, either hide 
+                     and finish the dialog or call dialog.util.hide_message()!
+    @return:         instantiated MessageDialog object, needed for subsequent call
+                     to hide_message
+    """
+    dialog = MessageDialog(message)
+    dialog.name = name
+    if duration is None:
+        dialog.show()
+    else:
+        dialog.show(duration)
+    
+    return dialog
+    
+
+def hide_message(dialog):
+    """
+    Helper function that hides and finishes the osd message dialog, 
+    created by show_dialog()
+    @param dialog:   dialog object returned previously by show_dialog()
+    """
+    # check if we have a valid object and check the type too, in case
+    # someone passed us wrong type, to prevent runtime errors.
+    if dialog and isinstance(dialog, MessageDialog):
+        dialog.hide()
+        dialog.finish()

@@ -60,27 +60,15 @@ import config
 import plugin
 import time
 
-from subtitles import SubsHandler, SubsError, Subtitles
+from video.plugins.subtitles import SubtitlesPlugin, SubtitlesError, Subtitles
 
-# User agent is essential to request opensubtitles
-# be sure to update it before any change
-
-class PluginInterface(plugin.Plugin):
+class PluginInterface(SubtitlesPlugin):
     """
     This is a handler plugin for http://opensubtitles.org subtitle provider
     and is used by main subtitle plugin.
-    
 
     Activate with:
-    | plugin.activate('video.opensubtitles')
-    
-    and make sure the SUBS_HANDLERS = [ ('opensubtitles'), ]
-    is set for the main subtitles plugin to be able to use this plugin.
-    Even if this plugin is not explicitly activated in the local_config.py, main
-    video.subtitles plugin will activate it automagically, providing that 
-    SUBS_HANDLERS variable is properly initialised with 'video.opensubtitles' 
-    plugin name.
-    
+    | plugin.activate('video.subtitles.opensubtitles')
     and of course make sure the main subtitles plugin is activated too:
     | plugin.activate('video.subtitles')
 
@@ -99,189 +87,34 @@ class PluginInterface(plugin.Plugin):
             self.reason = 'Plugin \'video.subtitles\' not active, activate it first in your local_config.py!'
             return
 
-        self.handler = OpenSubtitlesHandler()
+        # opensubtitles XMLRPC server and token
+        self.server = None
+        self.token  = None
         
-        plugin.Plugin.__init__(self)
-
-        plugin.register(self, 'video.opensubtitles')
+        SubtitlesPlugin.__init__(self, 'os', 'opensubtitles.org', [])
+        plugin.register(self, 'video.subtitles.opensubtitles')
         
 
     def config(self):
-        """returns the config variables used by this plugin"""
+        """
+        Returns the config variables used by this plugin
+        User agent is essential to request opensubtitles
+        be sure to update it before any change
+        """
         return [
-            ('OSUBS_USER_AGENT', 'OS Test User Agent', 
+            ('OSUBS_USER_AGENT', 'Freevo v1.9', 
                 'Opensubtitles User Agent String'),
             ('OSUBS_DOMAIN',     'http://api.opensubtitles.org/xml-rpc', 
                 'Opensubtitles domain'), 
         ]
 
 
-    def __getitem__(self, key):
-        """
-        Get the item's attribute.
-
-        @returns: the specific attribute
-        """
-        if key == 'name': 
-            return 'video.opensubtitles'
-            
-        if key == 'id': 
-            return self.handler.id
-
-        if key == 'handler': 
-            return self.handler
-
-        return plugin.Plugin.__getitem__(self, key)     
-        
-
-class OpenSubtitles(Subtitles):
-    def __init__(self, handler, vfile, lang, hash, info):
-        Subtitles.__init__(self, handler, vfile, lang)
-
-        self.hash = hash
-        self.info = info
-        # default format from opensubtitles is srt
-        self.fmt  = 'srt'
-
-
-    def download(self):
-        logger.info('Downloading subtitles for %s in %s', self.vfile, self.lang)
-
-        refs = self.handler.search(self._build_query())
-
-        if refs:
-            if refs['data'] != False:
-                # we narrow down to one only but best match
-                fltd = self._filter(refs['data'])
-                id = fltd['IDSubtitleFile']
-                logger.debug('Sub id to download: %s', id)
-
-                # we get the sub file from opensubtitles
-                res = self.handler.download(id)
-
-                if res and res['data'] != 'False':
-                    for sub in res['data']:
-                        # we get the first result
-                        self.data = sub['data']
-                        self.fmt  = fltd['SubFormat']
-                        self.compressed = True
-                        logger.info('Downloaded subtitles id %s, lang %s, format %s', 
-                                     id, self.lang, self.fmt)
-
-            else:
-                logger.info('No subtitles found: %s', str(refs))
-                return False
-
-        else:
-            logger.warning('Failed to download subtitles: %s', str(refs))
-            return False
-
-        logger.info('Downloaded subtitles for %s in %s', self.vfile, self.lang)
-
-        return True
-        
-        
-    def save(self):
-        """
-        Saves downloaded subtitles
-        """
-        logger.info('Saving subtitles for %s in %s', self.vfile, self.lang)
-
-        if self.compressed:
-            self._decompress()
-            
-        # we need to back up old subs if exist before we actually overwrite the old subs
-        self.backup()
-
-        logger.debug('Writing file %s', self.sfile)
-
-        fp = codecs.open(self.sfile,'wb')
-        fp.write(self.data)
-        fp.close()
-
-        return True
-
-    """
-    Class' private methods below
-    """
-
-    def _decompress(self):
-        sub_d = base64.standard_b64decode(self.data)
-        sub_d = zlib.decompress(sub_d, 47)
-        self.data = sub_d
-        logger.debug('Decompressed subs for %s', self.lang)
-
-
-    def _build_query(self):
-        """
-        build a useful info dictionary and the list of queries
-        to be passed as argument to SearchSubtitles XMLRPC call
-        """
-        query = []
-
-        imdbid = self.info['MovieImdbID']
-        size   = os.path.getsize(self.vfile)
-        vfile  = os.path.basename(self.vfile)
-
-        if imdbid:
-            query.append({ 'sublanguageid':self.lang,
-                               'moviehash':str(self.hash),
-                           'moviebytesize':str(size)})
-
-            # even if hash is found in opensubtitles, we add
-            # another query with imdbid
-            query.append({'sublanguageid':self.lang,
-                                 'imdbid':imdbid})
-
-        logger.debug('Built query %s', str(query))
-        return query
-
-
-    def _filter(self, subs):
-        """
-        filters subs (list result of SearchSubtitles call)
-        best found subtitles (hash match) or most downloaded subtitles
-        @param subs: result['data'] of a SearchSubtitles XMLRPC call
-        """
-
-        keep = [ s for s in subs if s['MovieHash'] == self.hash ]
-
-        if len(keep) == 0:
-            keep = [ s for s in subs if s['IDMovieImdb'] == str(int(self.info['MovieImdbID']))]
-
-        if len(keep) > 0:
-            keep.sort( key=lambda k: k['SubDownloadsCnt'], reverse=True )
-
-            return keep[0]
-
-        return None
-
-
-class OpenSubtitlesHandler(SubsHandler):
-    """
-    friend class OpenSubtitles
-    """
-    def __init__(self):
-        # opensubtitles XMLRPC server and token
-        self.server = None
-        self.token  = None
-        
-        SubsHandler.__init__(self, 'os', 'opensubtitles.org', [])
-
-
-    def __getitem__(self, key):
-        """
-        Get the item's attribute.
-
-        @returns: the specific attribute
-        """
-        return SubsHandler.__getitem__(self, key)
-
-
     def get_subs(self, vfile_, langs_):
+        """
+        Get all available subtitles for the item
+        @returns: the collection of subtitles keyed by the subtitle id
+        """
         subs  = {}
-        # based on requested languages, create intersect of capabilites vs. request
-        # langs = filter(lambda x: x in langs_, self.langs)
         langs = langs_
 
         hash  = self._hash(vfile_)
@@ -304,11 +137,13 @@ class OpenSubtitlesHandler(SubsHandler):
             subs[sub['id']] = sub
 
         return subs
-        
-        #return [map(lambda x: x['lang'], self.subs)]
-        
+       
 
     def search(self, query):
+        """
+        search the opensubtitles given the query
+        @param id; opensubtitles sub id
+        """
         if self._login():
 
             refs = self.server.SearchSubtitles(self.token, query)
@@ -325,8 +160,11 @@ class OpenSubtitlesHandler(SubsHandler):
 
 
     def download(self, id):
-    # download a subtitles for a given id
-    # @param id; opensubtitle sub id
+        """
+        Based on requested languages, downloads subtitles from the remote server
+        @param id:  opensubtitle sub id
+        @return:    downloaded subtiltle data    
+        """
         if self._login():
             try:
                 # we pass a list of ids because opensubtitles expect this
@@ -346,10 +184,14 @@ class OpenSubtitlesHandler(SubsHandler):
         return None
 
 
-    """
-    Class' private methods below
-    """
+    #
+    # Class' private methods below
+    #
     def _hash(self, vfile_):
+        """
+        Calculates the hash of chunk of of the video file
+        used in subsequent lookup at the remote server
+        """
         try:
             longlongformat = 'q'  # long long
             bytesize = struct.calcsize(longlongformat)
@@ -388,6 +230,9 @@ class OpenSubtitlesHandler(SubsHandler):
 
 
     def _status_ok(self, ans):
+        """
+        Verify the connetion status
+        """
         status = False
         try:
             if ans.has_key('status') and ans['status'] == '200 OK':
@@ -404,6 +249,9 @@ class OpenSubtitlesHandler(SubsHandler):
 
 
     def _login(self, user='', password=''):
+        """
+        Login to the remote server
+        """
         try:
             server = xmlrpclib.ServerProxy(config.OSUBS_DOMAIN)
             log    = server.LogIn(user,password, 'en', config.OSUBS_USER_AGENT)
@@ -413,7 +261,7 @@ class OpenSubtitlesHandler(SubsHandler):
                 self.server = server
                 self.token  = log['token']
             else:
-                raise SubsError(str(log))
+                raise SubtitlesError(str(log))
 
         except Exception, e:
             logger.warning('Failed to login to opensubtitles: %s', e)
@@ -423,6 +271,9 @@ class OpenSubtitlesHandler(SubsHandler):
 
     
     def _logout(self):
+        """
+        Logout from the remote server
+        """
         if self.token:
             try:
                 self.server.LogOut(self.token)
@@ -434,8 +285,10 @@ class OpenSubtitlesHandler(SubsHandler):
         return True
 
     
-    # retrive general info for a list of movie hash
     def _get_info(self, hash):
+        """
+        Retrive general info for a list of movie hash
+        """
         data = None
         
         logger.debug('Requesting opensubtitle info for hash %s', hash)
@@ -453,12 +306,138 @@ class OpenSubtitlesHandler(SubsHandler):
         return data
 
 
+class OpenSubtitles(Subtitles):
+    """
+    Specialised opnsubtitles class that knows how to download, decompress 
+    and write subtitles from opensubtitles.org
+    """
+
+    def __init__(self, handler, vfile, lang, hash, info):
+        Subtitles.__init__(self, handler, vfile, lang)
+
+        self.hash = hash
+        self.info = info
+        # default format from opensubtitles is srt
+        self.fmt  = 'srt'
 
 
+    def download(self):
+        """
+        Based on requested languages, downloads subtitles from the remote server
+        @return:    True if successful
+        """
+        logger.debug('Downloading subtitles for %s in %s', self.vfile, self.lang)
+
+        refs = self.handler.search(self._build_query())
+
+        if refs:
+            if refs['data'] != False:
+                # we narrow down to one only but best match
+                fltd = self._filter(refs['data'])
+                id = fltd['IDSubtitleFile']
+                logger.debug('Sub id to download: %s', id)
+
+                # we get the sub file from opensubtitles
+                res = self.handler.download(id)
+
+                if res and res['data'] != 'False':
+                    for sub in res['data']:
+                        # we get the first result
+                        self.data = sub['data']
+                        self.fmt  = fltd['SubFormat']
+                        self.compressed = True
+                        logger.info('Downloaded subtitles id %s, lang %s, format %s', 
+                                     id, self.lang, self.fmt)
+
+            else:
+                logger.info('No subtitles found: %s', str(refs))
+                return False
+
+        else:
+            logger.warning('Failed to download subtitles: %s', str(refs))
+            return False
+
+        logger.info('Downloaded subtitles for %s in %s', self.vfile, self.lang)
+
+        return True
+        
+        
+    def save(self):
+        """
+        Saves downloaded subtitles
+        @return:      True if successful
+        """
+        logger.debug('Saving subtitles for %s in %s', self.vfile, self.lang)
+
+        if self.compressed:
+            self._decompress()
+            
+        # we need to back up old subs if exist before we actually overwrite the old subs
+        self.backup()
+
+        logger.debug('Writing file %s', self.sfile)
+
+        fp = codecs.open(self.sfile,'wb')
+        fp.write(self.data)
+        fp.close()
+
+        return True
+
+    #
+    # Class' private methods below
+    #
+    def _decompress(self):
+        """
+        Decompresses download data (napiprojekt uses 7Zip compression)
+        """
+        sub_d = base64.standard_b64decode(self.data)
+        sub_d = zlib.decompress(sub_d, 47)
+        self.data = sub_d
+        logger.debug('Decompressed subs for %s', self.lang)
 
 
+    def _build_query(self):
+        """
+        Build a useful info dictionary and the list of queries
+        to be passed as argument to SearchSubtitles XMLRPC call
+        @return:      constructed query
+        """
+        query = []
+
+        imdbid = self.info['MovieImdbID']
+        size   = os.path.getsize(self.vfile)
+        vfile  = os.path.basename(self.vfile)
+
+        if imdbid:
+            query.append({ 'sublanguageid':self.lang,
+                               'moviehash':str(self.hash),
+                           'moviebytesize':str(size)})
+
+            # even if hash is found in opensubtitles, we add
+            # another query with imdbid
+            query.append({'sublanguageid':self.lang,
+                                 'imdbid':imdbid})
+
+        logger.debug('Built query %s', str(query))
+        return query
 
 
+    def _filter(self, subs):
+        """
+        Filters subs (list result of SearchSubtitles call)
+        best found subtitles (hash match) or most downloaded subtitles
+        @param subs:  result['data'] of a SearchSubtitles XMLRPC call
+        @return:      filtered subtitle list
+        """
 
+        keep = [ s for s in subs if s['MovieHash'] == self.hash ]
 
+        if len(keep) == 0:
+            keep = [ s for s in subs if s['IDMovieImdb'] == str(int(self.info['MovieImdbID']))]
 
+        if len(keep) > 0:
+            keep.sort( key=lambda k: k['SubDownloadsCnt'], reverse=True )
+
+            return keep[0]
+
+        return None

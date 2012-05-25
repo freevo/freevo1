@@ -5,93 +5,74 @@ Plugin video.subtitles provides framework that allows individual
 plugins or handlers as I'd like to call them to download subtitles from 
 (currently) the follwoing sites:
 
-	http://napiprojekt.pl
-	http://opensubtitles.org
-	
+    http://napiprojekt.pl
+    http://opensubtitles.org
+    
 Subtitles plugin on it's own does not know how to download the sobtitles
 from these sites. It needs at least one specialised handler (napiprojekt
 or opensubtitles) registered for the download to work.
 
 To enable the plugin and the handlers all one needs to do is to insert 
-following lines into the local_config.py as a bare minimum:
+following lines into the local_config.py:
 
-	plugin.activate('video.subtitles')
-	SUBS_HANDLERS = ['video.napiprojekt', 'video.opensubtitles', ]
-
-The specialised plugins can be activated explicitly within the local_config.py
-but this is not necessary. Main Subtitles plugin will activate the plugins it 
-found from the entries in the SUBS_HANDLERS variable.
+    plugin.activate('video.subtitles')
+    plugin.activate('video.subtitles.napiprojekt')
+    plugin.activate('video.subtitles.opensubtitles')
 
 Each handler knows how to get a list available subtitles, download,
 decompress and save subtitles.
 
 By default the plugin support following subtitle langauges:
 
-	English
-	German
-	Polish
-		
+    English
+
+but it can easly configured to support additional langauges:
+
+    SUBS_LANGS = { 'eng': ('English'), 'ger': ('German'), }
+        
+This will only pull English and German subtitles. in the above dictionary,
+key represents the ISO 639-2 language code and value represents 
+the language name as used by the plugin to display on OSD, menus etc.
+
 NOTE: napirojekt only supports 2 languages, Polish and English!!!
 
 BTW; Subtitles plugin works with ISO 639-2 language codes.
 Vist http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes for details.
 
-If you want to narrow the list of the subtitles being pulled, declare 
-the following for example:
-
-	SUBS_LANGS = { 'eng': ('English'), 'ger': ('German'), }
-	
-This will only pull English and German subtitles. in the above dictionary,
-key represents the ISO 639-2 language code and value represents 
-the language name as used by the plugin to display on OSD, menus etc.
-
 User will be presented with the Menu of available Subtitle files in these 
 languages and will be allowed to make a choice which Subs to save to 
 the local filesystem.
 
-If you are interested only in the English subtitles, then:
-
-	SUBS_LANGS = { 'eng': ('English'), }
-
-If you require some other language, that the plugin is not configured with 
-by default, you'd need to tell the Plugin which language you require
-(only opensubtitles handler can be extended but napiprojekt supports only 
-two languages, Polish and English).
-
-For example:
-
-	SUBS_LANGS  = { 'eng': ('English'), 'ita': ('Italian'), }
-
 There are some other configuration variables that modify the behaviour
 of main Subtitles plugin as well as individual handlers (with default values):
 
-	# Blindly download all subs available, otherwise the 
-	# menu with available aubtitles will be presented and choice can be made
-	SUBS_AUTOACCEPT = False
+    # Blindly download all subs available, otherwise the 
+    # menu with available aubtitles will be presented and choice can be made
+    SUBS_AUTOACCEPT = False
 
-	# Override existing subtitle file (if exists)
-	SUBS_FORCE_UPDATE = True
+    # Override existing subtitle file (if exists)
+    SUBS_FORCE_UPDATE = True
 
-	# Backup old file if in update mode above
-	SUBS_FORCE_BACKUP = True
+    # Backup old file if in update mode above
+    SUBS_FORCE_BACKUP = True
 
-	# by default plugin will use follwing filename convention
-	# xxx.os.eng where os is the handler's ID (os or np)
-	# and eng is the language code of the subtitles.
+    # by default plugin will use follwing filename convention
+    # xxx.os.eng where os is the handler's ID (os or np)
+    # and eng is the language code of the subtitles.
 
-	# Force use of the subtitle lagnguage code in the filename i.e. xxx.eng.txt
-	SUBS_FORCE_LANG_EXT = True,
-	
-	# Force use of the subtitle handler id in the filename i.e. xxx.os.txt
-	SUBS_FORCE_HANDLER_ID = True,
-	
-	# opensubtitles user agent and domain
-	OSUBS_USER_AGENT = "Freevo v1.9"
-	OSUBS_DOMAIAN = "http://api.opensubtitles.org/xml-rpc"
-	
-	# napiprojekt URL and zip password
-	NAPI_URL = "http://napiprojekt.pl/unit_napisy/dl.php?l=%s&f=%s&t=%s&v=other&kolejka=false&nick=&pass=&napios=%s"
-	NAPI_PWD = "iBlm8NTigvru0Jr0"
+    # Force use of the subtitle lagnguage code in the filename i.e. xxx.eng.txt
+    SUBS_FORCE_LANG_EXT = True,
+    
+    # Force use of the subtitle handler id in the filename i.e. xxx.os.txt
+    SUBS_FORCE_HANDLER_ID = True,
+    
+    # opensubtitles user agent and domain
+    OSUBS_USER_AGENT = "Freevo v1.9"
+    OSUBS_DOMAIAN = "http://api.opensubtitles.org/xml-rpc"
+    
+    # napiprojekt URL and zip password
+    NAPI_URL = "http://napiprojekt.pl/unit_napisy/dl.php?l=%s&f=%s&t=%s&v=other&kolejka=false&nick=&pass=&napios=%s"
+    NAPI_PWD = "iBlm8NTigvru0Jr0"
 
 
 If you define SUBS_FORCE_LANG_EXT or SUBS_FORCE_HANDLER_ID make sure
@@ -113,11 +94,11 @@ Enjoy!
 -----
 TODO:
 -----
-	# By default opensubtitles handler downloads only one set of subs 
-	# for a give movie, the one most often downloaded. Often there are more
-	# that one set availabe for download, if you want to get a choice of more 
-	# that one set, increase the number below (not implemented yet).
-	OSUBS_MAX_SUBS = 1
+    # By default opensubtitles handler downloads only one set of subs 
+    # for a give movie, the one most often downloaded. Often there are more
+    # that one set availabe for download, if you want to get a choice of more 
+    # that one set, increase the number below (not implemented yet).
+    OSUBS_MAX_SUBS = 1
 
 -------
 PS/BTW:
@@ -135,6 +116,6 @@ This behaviour is enabled by default and if you do not like it and prefer
 mplayer to silently change subs then you can disable it by setting following 
 in your local_config.py:
 
-	# Prevents freevo from using mplayer's show_ext_prop_text to display
-	# current subs and audio track info on the screen
-	MPLAYER_USE_OSD_SHOW_PROPS = True
+    # Prevents freevo from using mplayer's show_ext_prop_text to display
+    # current subs and audio track info on the screen
+    MPLAYER_USE_OSD_SHOW_PROPS = True

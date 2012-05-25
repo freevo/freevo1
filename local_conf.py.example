@@ -494,7 +494,8 @@ CACHE_IMAGES = 1
 # ======================================================================
 # add subtitle search to the video item menu
 # plugin.activate('video.subtitles')
-# SUBS_HANDLERS = [('video.opensubtitles'), ('video.napiprojekt'), ]
+# plugin.activate('video.subtitles.napiprojekt')
+# plugin.activate('video.subtitles.opensubtitles')
 # SUBS_LANGS    = { 'eng': ('English'), }
 
 

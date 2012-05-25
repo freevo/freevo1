@@ -132,9 +132,9 @@
       <text name="Text1" x="10" y="100" width="480" height="25" expression="progress_text" font="message" align="center" valign="center" fgcolor="white"/>
       <image name="Image1" x="200" y="140" width="100" height="100" expression="indeterminate" scale="aspect" align="left" valign="top" srcexpr="'misc/osd_busy%02d' % (counter % 12)"/>
     </osd>
-    <osd name="status" x="25" y="490" width="750" height="40">
-      <image name="Background" x="0" y="0" width="750" height="40" expression="True" scale="both" align="left" valign="top" src="message_bg.png"/>
-      <text name="Message" x="5" y="0" width="740" height="40" expression="message" font="message" align="left" valign="center"/>
+    <osd name="status" x="200" y="200" width="400" height="200">
+      <image name="Background" x="0" y="0" width="400" height="200" expression="True" scale="both" align="left" valign="top" src="status_bg.png"/>
+      <text name="Message" x="5" y="5" width="390" height="190" expression="message" font="message" align="center" valign="center"/>
     </osd>
     <osd name="shutdown" x="150" y="200" width="500" height="300">
       <image name="background" x="0" y="0" width="500" height="300" expression="True" scale="both" align="left" valign="top" src="dialog_bg.png"/>

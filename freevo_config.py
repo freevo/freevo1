@@ -791,8 +791,9 @@ IMDB_USE_IMDB_RUNTIME = False
 
 # add subtitle search to the video item menu
 plugin.activate('video.subtitles')
-SUBS_HANDLERS = [('video.opensubtitles'), ('video.napiprojekt'), ]
-SUBS_LANGS    = { 'eng': ('English'), }
+plugin.activate('video.subtitles.napiprojekt')
+plugin.activate('video.subtitles.opensubtitles')
+SUBS_LANGS    = { 'eng': ('English') }
 
 # delete file in menu
 plugin.activate('file_ops', level=20)
