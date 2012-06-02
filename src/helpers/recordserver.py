@@ -441,7 +441,13 @@ class RecordServer:
                 schedule.markFavoriteProgAsDeleted(prog, tv_util.getKey(prog))
             self.saveScheduledRecordings(schedule)
 
+
     @kaa.rpc.expose('getConflicts')
+    def getConflicts(self, prog):
+        conflictRating, conflicts = self.checkForConflicts(prog)
+        return (conflictRating, [conflicts])
+
+
     def checkForConflicts(self, prog):
         logger.log( 9, 'checkForConflicts(prog=%r)', prog)
         progs = self.getScheduledRecordings().getProgramList()
@@ -458,6 +464,7 @@ class RecordServer:
                 conflictRating += 1
                 conflicts.append(otherprog)
         return (conflictRating, conflicts)
+
 
     def conflictResolution(self, prog):
         logger.log( 9, 'conflictResolution(prog=%r)', prog)
@@ -724,7 +731,7 @@ class RecordServer:
         else:
             conflicts,conflictingProgs = self.checkForConflicts(prog)
             if conflicts:
-                return ('conflict', _('program conflicts with existing scheduled programs.'))
+                return ('conflict', [conflictingProgs])
             prog = self.setTunerid(prog)
             logger.info('added %s to schedule', prog.title)
             self.addRecordingToSchedule(prog)
@@ -1318,6 +1325,23 @@ class RecordServer:
 
         schedule.unlock()
         return True
+
+
+    @kaa.rpc.expose('getGrid')
+    def getGrid(self, start, end, channels):
+        import tv.epg
+        schedule = self.getScheduledRecordings()
+        progs = schedule.getProgramList()
+        channels = tv.epg.get_programs(start, end, channels)
+        for channel in channels:
+            for prog in channel.programs:
+                for scheduled_prog in progs.values():
+                    if scheduled_prog.start == prog.start and scheduled_prog.channel_id == prog.channel_id:
+                        prog.scheduled = True
+                        prog.overlap = scheduled_prog.overlap
+                        if hasattr(scheduled_prog, 'isFavorite') and scheduled_prog.isFavorite:
+                            prog.favorite = True
+        return channels
 
 
     def create_fxd(self, rec_prog):

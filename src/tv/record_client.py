@@ -54,13 +54,6 @@ def RecordClient():
     return _singleton
 
 
-
-class RecordClientException(Exception):
-    """ RecordClientException """
-    def __init__(self):
-        pass
-
-
 class RecordClientActions:
     """
     recordserver access class using kaa.rpc

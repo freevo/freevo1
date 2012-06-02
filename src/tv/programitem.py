@@ -282,24 +282,25 @@ class ProgramItem(Item):
         menuw.show()
 
     def resolve_conflict(self, menuw, conflictingProgs):
-        #rating, conflictingProgs = self.recordclient.getConflicts(self.prog)
         prog_text = self.prog.getattr('time') + u' ' + self.prog.title
         other_prog_text = u''
+        menu_items = []
         for progs in conflictingProgs:
+            remove_text = ''
             for cprog in progs:
                 if other_prog_text:
                     other_prog_text += u'\n'
                 other_prog_text += cprog.getattr('time') + u' ' + cprog.title
+                if not remove_text:
+                    remove_text = cprog.title
+                else:
+                    remove_text += u', ' + cprog.title
             other_prog_text += u'\n\n'
-        self.conflict_info = _('%s\nConflicts with:\n%s') % (prog_text, other_prog_text)
-        cancel_mi = menu.MenuItem(_('Cancel'), menuw.back_one_menu)
-        if len(conflictingProgs) == 1:
-            schedule_text = _('Remove other program and schedule')
-        else:
-            schedule_text = _('Remove other programs and schedule')
+            menu_items.append(menu.MenuItem(_('Remove ') + remove_text, self.remove_and_schedule, progs))
+        self.conflict_info = _('How do you want to resolve the conflict?\n%s\nconflicts with\n%s') % (prog_text, other_prog_text)
+        menu_items.append(menu.MenuItem(_('Cancel scheduling ') + self.prog.title, menuw.back_one_menu))
 
-        schedule_mi = menu.MenuItem(schedule_text, self.remove_and_schedule, conflictingProgs)
-        conflict_menu = menu.Menu(_('Resovle Conflict'), [schedule_mi, cancel_mi], item_types='tv conflict menu')
+        conflict_menu = menu.Menu(_('Resovle Conflict'), menu_items, item_types='tv conflict menu')
         conflict_menu.infoitem = self
         menuw.delete_submenu(refresh = False)
         menuw.pushmenu(conflict_menu)

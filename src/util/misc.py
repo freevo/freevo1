@@ -435,14 +435,13 @@ def comingup():
     """
     What's coming up in the TV recording schedule
     """
-    logger.log( 9, 'comingup(scheduledRecordings=%r, write=%r)', scheduledRecordings, write)
     import time
     import codecs
     from tv.record_client import RecordClient
 
     result = u''
 
-    (status, schedule) = RecordClient().getScheduledRecordingsNow()
+    (status, progs) = RecordClient().getScheduledRecordingsNow()
     if status is None:
         result = RecordClient().recordserverdown
         return result
@@ -451,17 +450,13 @@ def comingup():
         return result
 
 
-    progs = schedule.getProgramList()
-
-    f = lambda a, b: cmp(a.start, b.start)
-    progl = progs.values()
-    progl.sort(f)
+    progs.sort(lambda a, b: cmp(a.start, b.start))
 
     today = []
     tomorrow = []
     later = []
 
-    for what in progl:
+    for what in progs:
         if time.localtime(what.start)[2] == time.localtime()[2]:
             today.append(what)
         if time.localtime(what.start)[2] == (time.localtime()[2] + 1):

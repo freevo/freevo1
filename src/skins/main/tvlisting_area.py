@@ -45,7 +45,6 @@ class TVListing_Area(Skin_Area):
 
     def __init__(self):
         Skin_Area.__init__(self, 'listing', imagecachesize=20)
-        self.last_choices = ( None, None )
         self.last_settings = None
         self.last_items_geometry = None
 
@@ -320,9 +319,9 @@ class TVListing_Area(Skin_Area):
                        prg.start == selected_prog.start and \
                        prg.stop == selected_prog.stop:
                         val = selected_val
-                    elif prg.overlap:
+                    elif hasattr(prg, 'overlap') and prg.overlap:
                         val = overlap_val
-                    elif prg.scheduled:
+                    elif hasattr(prg, 'scheduled') and prg.scheduled:
                         val = scheduled_val
                     elif now_time >= prg.start and now_time <= prg.stop:
                         val = current_val
