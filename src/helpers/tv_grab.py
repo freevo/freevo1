@@ -38,6 +38,8 @@ from optparse import Option, OptionParser, IndentedHelpFormatter
 
 import config
 
+import tv.epg
+
 def grab():
     if not config.XMLTV_GRABBER:
         print 'No program found to grab the listings. Please set XMLTV_GRABBER'
@@ -58,7 +60,6 @@ def grab():
 
         print 'caching data, this may take a while'
 
-        import tv.epg
         tv.epg.update(xmltvtmp)
     else:
         sys.stderr.write("\n")
@@ -82,8 +83,8 @@ if __name__ == '__main__':
         prog = os.path.basename(sys.argv[0])
         parser.prog = os.path.splitext(prog)[0]
         parser.description = "Downloads the listing for xmltv and cache the data"
-        parser.add_option('-q', '--query', action='store_true', default=False,
-            help='print a list of all stations. The list can be used to set TV_CHANNELS [default:%default]')
+        parser.add_option('-u', '--update', action='store_true', default=False,
+            help='Update the database only, do not attempt to retrieve listings. [default:%default]')
 
         opts, args = parser.parse_args()
         return opts, args
@@ -91,24 +92,10 @@ if __name__ == '__main__':
 
     opts, args = parse_options()
 
-    if opts.query:
-        print
-        print 'searching for station information'
-
-        chanlist = config.detect_channels()
-
-        print
-        print 'Possible list of tv channels. If you want to change the station'
-        print 'id, copy the next statement into your local_conf.py and edit it.'
-        print 'You can also remove lines or resort them'
-        print
-        print 'TV_CHANNELS = ['
-        for c in chanlist[:-1]:
-            print '    ( \'%s\', \'%s\', \'%s\' ), ' % c
-        print '    ( \'%s\', \'%s\', \'%s\' ) ] ' % chanlist[-1]
-        sys.exit(0)
-
-    grab()
+    if opts.update:
+        tv.epg.update(config.XMLTV_FILE)
+    else:
+        grab()
 
     import kaa
     from tv.record_client import RecordClient

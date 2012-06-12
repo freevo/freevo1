@@ -45,11 +45,8 @@ from item import Item
 
 from tv.tvguide import TVGuide
 
-
+import tv.epg
 import dialog
-
-TRUE = 1
-FALSE = 0
 
 
 def get_tunerid(channel_id):
@@ -132,4 +129,4 @@ class TVMenu(Item):
         if guide:
             guide.start(self.get_start_time(), start_tv, menuw)
         else:
-            TVGuide(self.get_start_time(), start_tv, menuw)
+            TVGuide(tv.epg.channels, self.get_start_time(), start_tv, menuw)

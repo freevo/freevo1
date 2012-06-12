@@ -181,6 +181,8 @@ class DbTvProgram(BaseTvProgram):
             return time.mktime(self.db_prog.stop.timetuple())
         if item == 'title':
             return self.db_prog.title
+        if item == 'sub_title':
+            return self.db_prog.subtitle
         if item == 'desc':
             desc = self.db_prog.description
 
