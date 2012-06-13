@@ -136,8 +136,8 @@ class PluginInterface(plugin.ItemPlugin):
         """
 
         items = []
-        dlg = dialog.utils.show_message(_('Searching IMDB...'), 'status', 0)
-
+        dlg = dialog.show_working_indicator(_('Searching IMDB...'))
+        
         if self.disc_set:
             self.searchstring = self.item.media.label
         else:
@@ -161,12 +161,12 @@ class PluginInterface(plugin.ItemPlugin):
 
         except FxdImdb_Error, error:
             logger.warning('%s', error)
-            dialog.utils.hide_message(dlg)
-            dialog.utils.show_message(_('Connection to IMDB failed'))
+            dlg.hide()
+            dialog.show_message(_('Connection to IMDB failed'))
             return
 
-        dialog.utils.hide_message(dlg)
-
+        dlg.hide()
+        
         if config.IMDB_AUTOACCEPT_SINGLE_HIT and len(items) == 1:
             self.imdb_create_fxd(arg=items[0].arg, menuw=menuw)
             return
@@ -176,7 +176,7 @@ class PluginInterface(plugin.ItemPlugin):
             menuw.pushmenu(moviemenu)
             return
 
-        dialog.utils.show_message(_('No information available from IMDB'))
+        dialog.show_message(_('No information available from IMDB'))
         return
 
 
@@ -211,14 +211,14 @@ class PluginInterface(plugin.ItemPlugin):
         """
         create fxd file for the item
         """
-        dlg = dialog.utils.show_message(_('Getting data...'), 'status', 0)
+        dlg = dialog.show_working_indicator(_('Getting data...'))
 
         try:
             self.fxd.retrieveImdbData(arg[0], self.fxd.ctitle[1], self.fxd.ctitle[2])
 
         except FxdImdb_Error, error:
             logger.warning('%s', error)
-            dialog.utils.hide_message(dlg)
+            dlg.hide()
             return
 
         #if this exists we got a cdrom/dvdrom
@@ -245,5 +245,5 @@ class PluginInterface(plugin.ItemPlugin):
         self.fxd.writeFxd()
         self.fxd = FxdImdb()
         self.imdb_menu_back(menuw)
-        dialog.utils.hide_message(dlg)
+        dlg.hide()
    
