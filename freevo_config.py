@@ -415,7 +415,7 @@ LOCAL_CONF_CHANGES = [
      """ Added SHUTDOWN_NEW_STYLE_DIALOG to control whether the new shutdown dialog is used or the old
      multi-option menu.
      """),
-     (5.30,
+    (5.30,
      """ change FREEVO_USE_ALPHABLENDING to SKIN_USE_SCREEN_TRANSITIONS and add
      ability to select the transition style.
      Added SKIN_USE_PAGE_TRANSITIONS to select whether transitions between pages
@@ -789,6 +789,12 @@ IMDB_AUTOACCEPT_SINGLE_HIT = True
 # Use the local file lenght or runtime value from IMDB?
 IMDB_USE_IMDB_RUNTIME = False
 
+# add subtitle search to the video item menu
+plugin.activate('video.subtitles')
+plugin.activate('video.subtitles.napiprojekt')
+plugin.activate('video.subtitles.opensubtitles')
+SUBS_LANGS    = { 'eng': ('English') }
+
 # delete file in menu
 plugin.activate('file_ops', level=20)
 
@@ -1017,6 +1023,11 @@ DIRECTORY_ADD_RANDOM_PLAYLIST = [ 'audio' ]
 #
 DIRECTORY_AUTOPLAY_ITEMS      = [ ]
 
+# ----------------------------------------------------------------------
+# Archive plugin
+# ----------------------------------------------------------------------
+# It's enabled by default
+plugin.activate('archive')
 
 # ======================================================================
 # Freevo movie settings:
@@ -1242,6 +1253,24 @@ IMAGEVIEWER_AUTOPLAY = True
 # it's much faster
 #
 IMAGE_USE_EXIF_THUMBNAIL = 1
+
+#
+# Set this to percent value of how much the image will be scrolled when
+# zoomed in and moved around, default is 10%
+IMAGEVIEWER_SCROLL_FACTOR = 10
+
+#
+# Set this to true if the zoom level (factor) of the currently watched image
+# will be applied the the next loaded image; Default is True
+IMAGEVIEWER_KEEP_ZOOM_LEVEL = True
+
+#
+# Set this to true if you want to keep the same position as the currently 
+# watched image, will be applied the the next loaded image; Default is False
+# i.e. the image will be open and zoomed in (if IMAGEVIEWER_KEEP_ZOOM_LEVEL
+# is set) to the same exact position. Default is False, which means the next 
+# image will be renedered in the top left corner.
+IMAGEVIEWER_KEEP_ZOOM_POSITION = False
 
 
 # ======================================================================
@@ -1695,6 +1724,53 @@ MPLAYER_VF_PROGRESSIVE = 'pp=de'
 # NOTE: You need to set this to 1 to be able to use the TV_CHANNEL_LAST feature.
 #
 MPLAYER_OLDTVCHANNELCHANGE = False
+
+# Do not use the osd_show_property_text slave mode command to display current 
+# subtitle and audio tracks. See Docs/plugins/subtitle.txt for details and
+# explanation.
+#
+MPLAYER_USE_OSD_SHOW_PROPS = True
+
+# Set the ass-font-scale based on the aspect of the video, need to experiment with
+#this value. On 55 inch TV this looks good but your milege might vary here.
+# DO not forget to  configure properly ASS subs in the mplayer's config!
+MPLAYER_ASS_FONT_SCALE  = 1.75
+
+# This setting allows changing the monitor's refresh rate to the FPS of the movie.
+# This allows smooth playback on fast panels, like LED ones. On slow ones, LCDs or 
+# Plasmas this is not really necessary. Problem on LEDs is that the panel is so
+# fast that any frame drops etc are clearly visible with tearing and judder.
+# It's hard to play back 23.976 fps movie on 60 Hz refresh rate on the fast panel.
+# You work out the math here.
+#
+# Use this setting with caution, it's been tested on Nvidia card only, hence strange 
+# refresh values in the map below, 50 to 53. You need to find out what values match 
+# your card's setup but running following command "xrandr -r n" where n is the desired 
+# refresh rate and update the map. 
+# If you are lost now, it's most likely that you do not need this setting at all.
+# Also, you can google the answers on the web ;-)
+# You need python-xrandr package. This package can be found on the web but it has 
+# not been maintaned for years, abandoned and forgotten. It does work well though.
+# You can find it in contrib/runtime directory of the freevo distribution. Follow
+# instructions in the package to install.
+MPLAYER_RATE_SET_FROM_VIDEO = False
+MPLAYER_RATE_RESTORE        = True
+MPLAYER_RATE_DEFAULT        = (50.000, 53)
+MPLAYER_RATE_MAP            = { '23.976' : (23.976, 51),
+                                '24.000' : (23.976, 51),
+                                '25.000' : (50.000, 53),
+                                '29.970' : (59.940, 50),
+                                '50.000' : (50.000, 53),
+                                '59.940' : (59.940, 50)}
+
+# This setting allows delaying the audio when Monitor's refresh rate == Movie's FPS
+# It'll only be applied when MPLAYER_RATE_SET_FROM_VIDEO is set to True.
+# For whatever reason Mplayer does not sync the audio/video properly.
+# Your mileage might very here but I get best results by using Mplayer2.
+# Check it out at http://www.mplayer2.org/. It's a fork of the original Mplayer
+# with some significant updates/changes. 
+# Delay the audio by 200ms.
+MPLAYER_AUDIO_DELAY = -0.2
 
 # ======================================================================
 # Xine settings:

@@ -2,7 +2,7 @@
 # -----------------------------------------------------------------------
 # Freevo image viewer
 # -----------------------------------------------------------------------
-# $Id$
+# $Id: $
 # -----------------------------------------------------------------------
 # Freevo - A Home Theater PC framework
 # Copyright (C) 2002 Krister Lagerstrom, et al.
@@ -47,11 +47,22 @@ from animation import render, Transition
 import pygame
 import kaa
 
+#
+# We define the best fit (fit the width of the screen), but this will have 
+# to be selected explicitly. By default, increasing and decreasing zoom levels 
+# via the IMAGE_ZOOM_LEVEL_UP and IMAGE_ZOOM_LEVEL_DOWN events will cycle 
+# between ZOOM_MIN_LEVEL and ZOOM_MAX_LEVEL where ZOOM_MIN_LEVEL is defined 
+# to be ZOOM_NO_ZOOM.
+ZOOM_BEST_FIT  = 0
+ZOOM_NO_ZOOM   = 1
+ZOOM_MIN_LEVEL = ZOOM_NO_ZOOM
+ZOOM_MAX_LEVEL = 9
+
 # Module variable that contains an initialized ImageViewer() object
 _singleton = None
 
 def get_singleton():
-    logger.log( 9, 'get_singleton()')
+    logger.log(9, 'get_singleton()')
     global _singleton
 
     # One-time init
@@ -61,31 +72,183 @@ def get_singleton():
     return _singleton
 
 
+class ImageZoomPosition():
+    def __init__(self, pos_x = 0, pos_y = 0):
+        """
+        Represents the current position/coordinates within the zoomed in image
+        """
+        logger.log(9, 'ImageZoomPosition.__init__()')
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+
+    
+    def reposition(self, zoom):
+        """
+        Recalculates the zoomed image position by the offset
+        """
+        self.pos_x = max(min(zoom.off_x + self.pos_x, 100), 0)
+        self.pos_y = max(min(zoom.off_y + self.pos_y, 100), 0)
+        
+        # offsets consumed, let's reset them
+        zoom.reset_offsets()
+
+
+    def reset(self):
+        """
+        Resets image coordinates
+        """
+        self.pos_x = 0
+        self.pos_y = 0
+        
+
+class ImageZoom():
+    def __init__(self, zoom = ZOOM_NO_ZOOM, off_x = 0, off_y = 0):
+        """
+        Represents the zoom level and the offsets from the 
+        current position within the zoomed in image.
+        """
+        logger.log(9, 'ImageZoom.__init__()')
+        # limit zoom range, allow setting explicitly the best fit zoom value of 0
+        self.zoom  = max(min(zoom, ZOOM_MAX_LEVEL), ZOOM_BEST_FIT)
+        self.off_x = off_x
+        self.off_y = off_y
+    
+    
+    def is_zoomed(self):
+        """
+        Returns True if images is zoomed in.
+        """
+        return self.zoom != 1
+
+
+    def is_best_fit(self):
+        """
+        Returns True if zoom is at best fit, i.e. screen width
+        """
+        return self.zoom == 0
+
+
+    def get_level(self):
+        """
+        Returns current zoom level        
+        """
+        return self.zoom
+
+
+    def set_level(self, zoom, rotation = 0):
+        """
+        Sets zoom level and rotates if necessary
+        """
+        self.zoom = zoom
+        self.rotate(rotation)
+
+
+    def rotate(self, rotation = 0):
+        """
+        Adjusts offsets if image is rotated
+        """
+        rotation = rotation % 360
+        
+        if rotation == 90:
+            self.off_x, self.off_y =  self.off_y, -self.off_x
+        elif rotation == 180:
+            self.off_x, self.off_y = -self.off_x, -self.off_y
+        elif rotation == 270:
+            self.off_x, self.off_y = -self.off_y,  self.off_x
+
+
+    def up(self):
+        """
+        Adjusts offsets if zoomed image is moved up
+        """
+        self.off_y = min(self.off_y + config.IMAGEVIEWER_SCROLL_FACTOR, 100) 
+
+
+    def down(self):
+        """
+        Adjusts offsets if zoomed image is moved down
+        """
+        self.off_y = max(self.off_y - config.IMAGEVIEWER_SCROLL_FACTOR, 100) 
+            
+
+    def right(self):
+        """
+        Adjusts offsets if zoomed image is moved to the right
+        """
+        self.off_x = min(self.off_x + config.IMAGEVIEWER_SCROLL_FACTOR, 100) 
+
+
+    def left(self):
+        """
+        Adjusts offsets if zoomed image is moved to the left
+        """
+        self.off_x = max(self.off_x - config.IMAGEVIEWER_SCROLL_FACTOR, 100) 
+
+
+    def inc(self):
+        """
+        Increments the zoom level up to highest zoom level of 9
+        """
+        self.zoom = min(self.zoom + 1, ZOOM_MAX_LEVEL)
+
+
+    def dec(self):
+        """
+        Decrements the zoom level down to lowest zoom level of 1
+        """
+        self.zoom = max(self.zoom - 1, ZOOM_MIN_LEVEL)
+
+
+    def reset_zoom(self):
+        """
+        Resets zoom to no zoom, i.e. zoom level 1
+        """
+        self.zoom = 1
+
+
+    def reset_offsets(self):
+        """
+        Resets image offsets
+        """
+        self.off_x = 0
+        self.off_y = 0
+
+
+    def reset(self):
+        """
+        Resets the object
+        """
+        self.reset_zoom()
+        self.reset_offsets()
+
+
 class ImageViewer(GUIObject):
 
     def __init__(self):
         logger.log( 9, 'ImageViewer.__init__()')
         GUIObject.__init__(self)
-        self.osd_mode = 0    # Draw file info on the image
-        self.zoom = 0   # Image zoom
-        self.zoom_btns = { str(IMAGE_NO_ZOOM):0, str(IMAGE_ZOOM_GRID1):1,
-                           str(IMAGE_ZOOM_GRID2):2, str(IMAGE_ZOOM_GRID3):3,
-                           str(IMAGE_ZOOM_GRID4):4, str(IMAGE_ZOOM_GRID5):5,
-                           str(IMAGE_ZOOM_GRID6):6, str(IMAGE_ZOOM_GRID7):7,
-                           str(IMAGE_ZOOM_GRID8):8, str(IMAGE_ZOOM_GRID9):9 }
-
-        self.slideshow   = config.IMAGEVIEWER_AUTOPLAY
-        self.duration    = config.IMAGEVIEWER_DURATION
+        self.osd_mode      = 0   # Draw file info on the image
+        self.rotation      = 0
+        self.zoom          = ImageZoom()
+        self.pos           = ImageZoomPosition()
+        self.last_zoom     = 1
+        self.slideshow     = config.IMAGEVIEWER_AUTOPLAY
+        self.duration      = config.IMAGEVIEWER_DURATION
         self.event_context = 'image'
-        self.last_image  = (None, None)
-        self.render      = render.get_singleton()
-        self.osd         = osd.get_singleton()
-        self.osd_height  = self.osd.height
-        self.osd_width   = self.osd.width * float(config.OSD_PIXEL_ASPECT)
+        self.last_image    = (None, None)
+        self.render        = render.get_singleton()
+        self.osd           = osd.get_singleton()
+        self.osd_height    = self.osd.height
+        self.osd_width     = self.osd.width * float(config.OSD_PIXEL_ASPECT)
+        self.timer         = None
+        self.blend         = None
+        self.__added_app   = False
+        self.zoom_btns     = { str(IMAGE_ZOOM_BEST_FIT):0, str(IMAGE_ZOOM_NO_ZOOM): 1,
+                               str(IMAGE_ZOOM_LEVEL_2): 2, str(IMAGE_ZOOM_LEVEL_3): 3,
+                               str(IMAGE_ZOOM_LEVEL_4): 4, str(IMAGE_ZOOM_LEVEL_5): 5,
+                               str(IMAGE_ZOOM_LEVEL_6): 6, str(IMAGE_ZOOM_LEVEL_7): 7,
+                               str(IMAGE_ZOOM_LEVEL_8): 8, str(IMAGE_ZOOM_LEVEL_9): 9 }
 
-        self.timer = None
-        self.blend = None
-        self.__added_app = False
         self.free_cache()
 
 
@@ -93,52 +256,65 @@ class ImageViewer(GUIObject):
         """
         free the current cache to save memory
         """
-        logger.log( 9, 'free_cache()')
+        logger.log(9, 'free_cache()')
         self.bitmapcache = util.objectcache.ObjectCache(3, desc='viewer')
         if self.parent and self.free_cache in self.parent.show_callbacks:
             self.parent.show_callbacks.remove(self.free_cache)
 
 
-    def view(self, item, zoom=0, rotation=0):
+    def view(self, item, zoom=None, rotation=0):
         """
         view an image
         """
-        logger.log( 9, 'view(item, zoom=%s, rotation=%s)', zoom, rotation)
+        logger.log(9, 'view(item, zoom=%r, rotation=%s)', zoom, rotation)
 
         if self.blend:
             self.blend.stop()
             self.blend.remove()
             self.blend = None
             
-        if zoom:
-            self.event_context    = 'image_zoom'
-        else:
-            self.event_context    = 'image'
-
-        filename = item.filename
-
-        self.fileitem = item
-        self.parent   = item.menuw
-
         if not self.free_cache in item.menuw.show_callbacks:
             item.menuw.show_callbacks.append(self.free_cache)
 
-        self.filename = filename
+        self.item     = item
+        self.filename = item.filename
+        self.parent   = item.menuw
+
+        if not zoom:
+            # This is a new image being displayed. Need to initialise few things
+            zoom = ImageZoom(zoom = self.last_zoom)
+            if not config.IMAGEVIEWER_KEEP_ZOOM_POSITION:
+                self.pos.reset()
+
+        self.zoom     = zoom
         self.rotation = rotation
 
-        if filename and len(filename) > 0:
-            image = self.osd.loadbitmap(filename, cache=self.bitmapcache)
+        if self.zoom.is_zoomed():
+            self.zoom.rotate(self.rotation)
+            self.pos.reposition(self.zoom)
+            self.event_context = 'image_zoom'
         else:
-            # Using Container-Image
-            image, w, h = item.loadimage()
+            self.pos.reset()
+            self.event_context = 'image'
+
+        rc.set_context(self.event_context)
+
+        if config.IMAGEVIEWER_KEEP_ZOOM_LEVEL:
+            self.last_zoom = self.zoom.get_level()
 
         if not self.__added_app:
             rc.add_app(self)
             self.__added_app = True
 
+        if self.filename and len(self.filename) > 0:
+            image = self.osd.loadbitmap(self.filename, cache=self.bitmapcache)
+        else:
+            # Using Container-Image
+            image, w, h = self.item.loadimage()
+
         if not image:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
-            self.osd.drawstringframed(_('Can\'t Open Image\n"%s"') % Unicode(filename),
+            self.osd.drawstringframed(_('Can\'t Open Image\n"%s"') % Unicode(self.filename),
                 config.OSD_OVERSCAN_LEFT + 20, config.OSD_OVERSCAN_TOP + 20,
                 self.osd.width - (config.OSD_OVERSCAN_LEFT+config.OSD_OVERSCAN_RIGHT) - 40,
                 self.osd.height - (config.OSD_OVERSCAN_TOP+config.OSD_OVERSCAN_BOTTOM) - 40,
@@ -147,154 +323,60 @@ class ImageViewer(GUIObject):
             self.osd.update()
             return
 
-        width, height = image.get_size()
-
         # Bounding box default values
         bbx = bby = bbw = bbh = 0
 
-        if zoom:
-            # Translate the 9-element grid to bounding boxes
-            if config.IMAGEVIEWER_REVERSED_IMAGES:
-                if self.rotation == 90:
-                    bb = { 1:(2,2), 2:(2,1), 3:(2,0),
-                           4:(1,2), 5:(1,1), 6:(1,0),
-                           7:(0,2), 8:(0,1), 9:(0,0) }
-                elif self.rotation == 180:
-                    bb = { 1:(2,0), 2:(1,0), 3:(0,0),
-                           4:(2,1), 5:(1,1), 6:(0,1),
-                           7:(2,2), 8:(1,2), 9:(0,2) }
-                elif self.rotation == 270:
-                    bb = { 1:(0,0), 2:(0,1), 3:(0,2),
-                           4:(1,0), 5:(1,1), 6:(1,2),
-                           7:(2,0), 8:(2,1), 9:(2,2) }
-                else:
-                    bb = { 1:(0,2), 2:(1,2), 3:(2,2),
-                           4:(0,1), 5:(1,1), 6:(2,1),
-                           7:(0,0), 8:(1,0), 9:(2,0) }
-            else:
-                if self.rotation == 90:
-                    bb = { 1:(2,0), 2:(2,1), 3:(2,2),
-                           4:(1,0), 5:(1,1), 6:(1,2),
-                           7:(0,0), 8:(0,1), 9:(0,2) }
-                elif self.rotation == 180:
-                    bb = { 1:(2,2), 2:(1,2), 3:(0,2),
-                           4:(2,1), 5:(1,1), 6:(0,1),
-                           7:(2,0), 8:(1,0), 9:(0,0) }
-                elif self.rotation == 270:
-                    bb = { 1:(0,2), 2:(0,1), 3:(0,0),
-                           4:(1,2), 5:(1,1), 6:(1,0),
-                           7:(2,2), 8:(2,1), 9:(2,0) }
-                else:
-                    bb = { 1:(0,0), 2:(1,0), 3:(2,0),
-                           4:(0,1), 5:(1,1), 6:(2,1),
-                           7:(0,2), 8:(1,2), 9:(2,2) }
+        # get the image width and height
+        width, height = image.get_size()
+        
+        # flip width and height for rotated images, we flip them back later on
+        if self.rotation % 180:
+            height, width = width, height
 
-            if isinstance(zoom, int):
-                h, v = bb[zoom]
-            else:
-                h, v = bb[zoom[0]]
+        scale_x = float(self.osd_width)  / width
+        scale_y = float(self.osd_height) / height
 
-            # Bounding box center
-            bbcx = ([1, 3, 5][h]) * width / 6
-            bbcy = ([1, 3, 5][v]) * height / 6
-
-            if self.rotation % 180:
-                # different calculations because image width is screen height
-                scale_x = float(self.osd_width) / (height / 3)
-                scale_y = float(self.osd_height) / (width / 3)
-                scale = min(scale_x, scale_y)
-
-                # read comment for the bbw and bbh calculations below
-                bbw = min(max((width / 3) * scale, self.osd_height), width) / scale
-                bbh = min(max((height / 3) * scale, self.osd_width), height) / scale
-
-            else:
-                scale_x = float(self.osd_width) / (width / 3)
-                scale_y = float(self.osd_height) / (height / 3)
-                scale = min(scale_x, scale_y)
-
-                # the bb width is the width / 3 * scale, to avoid black bars left
-                # and right exapand it to the osd_width but not if this is more than the
-                # image width (same for height)
-                bbw = min(max((width / 3) * scale, self.osd_width), width) / scale
-                bbh = min(max((height / 3) * scale, self.osd_height), height) / scale
-
-            # calculate the beginning of the bounding box
-            bbx = max(0, bbcx - bbw/2)
-            bby = max(0, bbcy - bbh/2)
-
-            if bbx + bbw > width:  bbx = width - bbw
-            if bby + bbh > height: bby = height - bbh
-
-            if self.rotation % 180:
-                new_h, new_w = bbw * scale, bbh * scale
-            else:
-                new_w, new_h = bbw * scale, bbh * scale
-
+        # we calc the zoom factor, either fit to width of the osd or straigh zoom level
+        if zoom.is_best_fit():
+            scale = max(scale_x, scale_y)
         else:
-            if self.rotation % 180:
-                height, width = width, height
+            scale = min(scale_x, scale_y) * zoom.get_level()
 
-            # scale_x = scale_y = 1.0
-            # if width > osd_width: scale_x = float(osd_width) / width
-            # if height > osd_height: scale_y = float(osd_height) / height
-            scale_x = float(self.osd_width) / width
-            scale_y = float(self.osd_height) / height
+        # calculate bounding box width and height
+        bbw = min(width  * scale, self.osd_width)  / scale
+        bbh = min(height * scale, self.osd_height) / scale
 
-            scale = min(scale_x, scale_y)
+        new_h, new_w = int(bbh * scale), int(bbw * scale)
 
-            new_w, new_h = int(scale*width), int(scale*height)
+        if self.rotation % 180:
+            # we flip widths and heights, both image and bb back for rotated images
+            bbw,    bbh   = bbh,   bbw
+            height, width = width, height
 
+        # calculate the beginning of the bounding box
+        bbx = ((width  - bbw) * self.pos.pos_x) / 100
+        bby = ((height - bbh) * self.pos.pos_y) / 100
 
-        # Now we have all necessary information about zoom yes/no and
-        # the kind of rotation
-
-        x = (self.osd_width - new_w) / 2
+        # now we have all necessary information to calc x and y
+        x = (self.osd_width  - new_w) / 2
         y = (self.osd_height - new_h) / 2
 
-        last_item,last_image = self.last_image
+        last_item, last_image = self.last_image
+        self.last_image = (item, (image, x, y, scale, bbx, bby, bbw, bbh, self.rotation))
 
+        logger.debug('x=%r, y=%r, scale=%.2f, bbx=%.2f, bby=%.2f, bbw=%.2f, bbh=%.2f, self.rotation=%r', 
+            x, y, scale, bbx, bby, bbw, bbh, self.rotation)
 
-        if not isinstance(zoom, int):
-            # change zoom based on rotation
-            if self.rotation == 90:
-                zoom = zoom[0], -zoom[2], zoom[1]
-            if self.rotation == 180:
-                zoom = zoom[0], -zoom[1], -zoom[2]
-            if self.rotation == 270:
-                zoom = zoom[0], zoom[2], -zoom[1]
+        # pygame rotates counterclockwise, we want clockwise, let's fix it
+        if self.rotation % 180:
+            rotation = (self.rotation + 180) % 360
 
-            # don't move outside the image
-            if bbx + zoom[1] < 0:
-                zoom = zoom[0], -bbx, zoom[2]
-            if bbx + zoom[1] > width - bbw:
-                zoom = zoom[0], width - (bbw + bbx), zoom[2]
-            if bby + zoom[2] < 0:
-                zoom = zoom[0], zoom[1], -bby
-            if bby + zoom[2] > height - bbh:
-                zoom = zoom[0], zoom[1], height - (bbh + bby)
-
-            # change bbx
-            bbx += zoom[1]
-            bby += zoom[2]
-
-        # save zoom, but revert the rotation mix up
-        if not isinstance(zoom, int) and self.rotation:
-            if self.rotation == 90:
-                zoom = zoom[0], zoom[2], -zoom[1]
-            if self.rotation == 180:
-                zoom = zoom[0], -zoom[1], -zoom[2]
-            if self.rotation == 270:
-                zoom = zoom[0], -zoom[2], zoom[1]
-        self.zoom = zoom
-
-        self.last_image  = (item, (image, x, y, scale, bbx, bby, bbw, bbh, self.rotation))
-
+        # and finally draw an image on screen
         if (last_image and last_item != item and config.IMAGEVIEWER_BLEND_MODE != None):
             screen = self.osd.screen.convert()
             screen.fill((0,0,0,0))
             screen.blit(self.osd.zoomsurface(image, scale, bbx, bby, bbw, bbh,
-                                        rotation=self.rotation).convert(), (x, y))
+                rotation=rotation).convert(), (x, y))
             # update the OSD
             self.drawosd(layer=screen)
 
@@ -304,11 +386,12 @@ class ImageViewer(GUIObject):
 
         else:
             self.osd.clearscreen(color=self.osd.COL_BLACK)
-            self.osd.drawsurface(image, x, y, scale, bbx, bby, bbw, bbh, rotation=self.rotation)
+            self.osd.drawsurface(image, x, y, scale, bbx, bby, bbw, bbh, rotation=rotation)
 
             # update the OSD
             self.drawosd()
             self.__drawn(item)
+
 
     def __drawn(self, item):
 
@@ -322,7 +405,6 @@ class ImageViewer(GUIObject):
         if self.duration and self.slideshow and not self.timer:
             self.timer = kaa.OneShotTimer(self.signalhandler)
             self.timer.start(self.duration)
-
 
         # stop slideshow at the end if configured
         try:
@@ -352,24 +434,24 @@ class ImageViewer(GUIObject):
 
 
     def redraw(self):
-        logger.log( 9, 'redraw()')
-        self.view(self.fileitem, zoom=self.zoom, rotation=self.rotation)
+        logger.log(9, 'redraw()')
+        self.view(self.item, zoom=self.zoom, rotation=self.rotation)
 
 
-    def cache(self, fileitem):
-        logger.log( 9, 'cache(fileitem.filename=%s)', fileitem.filename)
+    def cache(self, item):
+        logger.log(9, 'cache(item.filename=%s)', item.filename)
         # cache the next image (most likely we need this)
-        self.osd.loadbitmap(fileitem.filename, cache=self.bitmapcache)
+        self.osd.loadbitmap(item.filename, cache=self.bitmapcache)
 
 
     def signalhandler(self):
-        logger.log( 9, 'signalhandler()')
+        logger.log(9, 'signalhandler()')
         self.timer = None
         self.eventhandler(PLAY_END)
 
 
     def eventhandler(self, event, menuw=None):
-        logger.log( 9, 'eventhandler(event=%s, menuw=%s)', event, menuw)
+        logger.log(9, 'eventhandler(event=%s, menuw=%s)', event, menuw)
         # SELECT also should act as PLAY/PAUSE (-> could be done with event rerouting!?)
         if event == PAUSE or event == PLAY or (event == BUTTON and event.arg == 'SELECT'):
             if self.slideshow:
@@ -399,7 +481,8 @@ class ImageViewer(GUIObject):
                 self.blend = None
             rc.remove_app(self)
             self.__added_app = False
-            self.fileitem.eventhandler(event)
+            self.last_zoom = ZOOM_NO_ZOOM
+            self.item.eventhandler(event)
             return True
 
         # up and down will stop the slideshow and pass the
@@ -408,17 +491,24 @@ class ImageViewer(GUIObject):
             if self.timer:
                 self.timer.stop()
                 self.timer = None
-            self.fileitem.eventhandler(event)
+            self.item.eventhandler(event)
+            return True
+
+        elif event == IMAGE_MOVE:
+            coord = event.arg
+            self.zoom = ImageZoom(self.zoom.zoom, coord[0], coord[1])
+            self.view(self.item, zoom=self.zoom, rotation=self.rotation)
             return True
 
         # rotate image
         elif event == IMAGE_ROTATE:
             if event.arg == 'left':
                 self.rotation = (self.rotation - 90) % 360
+                self.view(self.item, zoom=self.zoom, rotation=self.rotation)
             else:
                 self.rotation = (self.rotation + 90) % 360
-            self.fileitem['rotation'] = self.rotation
-            self.view(self.fileitem, zoom=self.zoom, rotation=self.rotation)
+                self.view(self.item, zoom=self.zoom, rotation=self.rotation)
+                
             if self.timer:
                 self.timer.start(self.duration)
             return True
@@ -427,34 +517,48 @@ class ImageViewer(GUIObject):
         elif event == TOGGLE_OSD:
             self.osd_mode = (self.osd_mode + 1) % (len(config.IMAGEVIEWER_OSD) + 1)
             # Redraw
-            self.view(self.fileitem, zoom=self.zoom, rotation = self.rotation)
+            self.view(self.item, zoom=self.zoom, rotation = self.rotation)
             return True
 
-        # zoom to one third of the image
-        # 1 is upper left, 9 is lower right, 0 zoom off
-        elif str(event) in self.zoom_btns:
-            self.zoom = self.zoom_btns[str(event)]
+        # increment zoom level to max
+        elif event == IMAGE_ZOOM_LEVEL_UP:
+            if self.zoom.get_level() == ZOOM_MAX_LEVEL:
+                rc.post_event(Event(OSD_MESSAGE, arg=_('already at maximum zoom level'))) 
+            else:
+                self.zoom.inc()
+
             if self.timer:
                 self.timer.stop()
                 self.slideshow = False
 
-            if self.zoom:
-                # Zoom one third of the image, don't load the next
-                # image in the list
-                self.view(self.fileitem, zoom=self.zoom, rotation = self.rotation)
-            else:
-                # Display entire picture, don't load next image in case
-                # the user wants to zoom around some more.
-                self.view(self.fileitem, zoom=0, rotation=self.rotation)
+            # Zoom the image, don't load the next image in the list
+            self.view(self.item, zoom=self.zoom, rotation=self.rotation)
             return True
 
-        elif event == IMAGE_MOVE:
-            coord = event.arg
-            if isinstance(self.zoom, int):
-                self.zoom = self.zoom, coord[0], coord[1]
+        # decrement zoom level to min
+        elif event == IMAGE_ZOOM_LEVEL_DOWN:
+            if self.zoom.get_level() == ZOOM_MIN_LEVEL:
+                rc.post_event(Event(OSD_MESSAGE, arg=_('already at minimum zoom level'))) 
             else:
-                self.zoom = self.zoom[0], self.zoom[1] + coord[0], self.zoom[2] + coord[1]
-            self.view(self.fileitem, zoom=self.zoom, rotation=self.rotation)
+                self.zoom.dec()
+        
+            if self.timer:
+                self.timer.stop()
+                self.slideshow = False
+
+            # Zoom the image, don't load the next image in the list
+            self.view(self.item, zoom=self.zoom, rotation=self.rotation)
+            return True
+
+        # zoom to zoom level
+        elif str(event) in self.zoom_btns:
+            self.zoom.zoom = self.zoom_btns[str(event)]
+            if self.timer:
+                self.timer.stop()
+                self.slideshow = False
+
+            # Zoom the image, don't load the next image in the list
+            self.view(self.item, zoom=self.zoom, rotation=self.rotation)
             return True
 
         # save the image with the current rotation
@@ -472,7 +576,7 @@ class ImageViewer(GUIObject):
         elif event == IMAGE_TAG:
             if plugin.is_active('shoppingcart'):
                 try:
-                    plugin.get('item')[0].shuntItemInCart(self.fileitem)
+                    plugin.get('item')[0].shuntItemInCart(self.item)
                     return True
                 except Exception, e:
                     print 'getbyname(\'shoppingcart\')', e
@@ -492,11 +596,11 @@ class ImageViewer(GUIObject):
             return True
 
         else:
-            return self.fileitem.eventhandler(event)
+            return self.item.eventhandler(event)
 
 
     def drawosd(self, layer=None):
-        logger.log( 9, 'drawosd(layer=%s)', layer)
+        logger.log(9, 'drawosd(layer=%s)', layer)
 
         if not self.osd_mode:
             return
@@ -504,12 +608,12 @@ class ImageViewer(GUIObject):
         osdstring = []
 
         for strtag in config.IMAGEVIEWER_OSD[self.osd_mode-1]:
-            i = self.fileitem.getattr(strtag[1])
+            i = self.item.getattr(strtag[1])
             if i:
                 osdstring.append('%s %s' % (strtag[0], i))
             else:
-                if strtag[1] == 'date' and self.fileitem['timestamp']:
-                    osdstring.append('%s %s' % (strtag[0], datetime.datetime.fromtimestamp(self.fileitem['timestamp'])))
+                if strtag[1] == 'date' and self.item['timestamp']:
+                    osdstring.append('%s %s' % (strtag[0], datetime.datetime.fromtimestamp(self.item['timestamp'])))
 
         # If after all that there is nothing then tell the users that
         if osdstring == []:
@@ -553,3 +657,5 @@ class ImageViewer(GUIObject):
                                  ((len(prt_line) - line - 1) * 30))
             self.osd.drawstring(prt_line[line], 15 + config.OSD_OVERSCAN_LEFT, h,
                                 fgcolor=self.osd.COL_ORANGE, layer=layer)
+
+    

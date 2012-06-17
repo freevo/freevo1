@@ -38,10 +38,10 @@ logger = logging.getLogger("freevo.video.plugins.imdb")
 
 # based on original implementation by 'den_RDC (rdc@kokosnoot.com)'
 __author__           = 'den_RDC (rdc@kokosnoot.com)'
-__maintainer__       = 'Maciej Mike Urbaniak'
+__maintainer__       = 'Maciej Urbaniak'
 __maintainer_email__ = 'maciej@urbaniak.org'
-__version__          = 'Revision 0.2'
-__license__          = 'GPL' 
+__version__          = '$Revision$'
+__license__          = 'GPL'
 
 # Module Imports
 import os
@@ -51,9 +51,10 @@ import config
 import plugin
 import re
 import time
+import dialog
+import dialog.utils 
 
 from util.fxdimdb import FxdImdb, makeVideo, makePart, point_maker, FxdImdb_Error
-from gui.PopupBox import PopupBox
 
 try:
     import imdb
@@ -135,10 +136,8 @@ class PluginInterface(plugin.ItemPlugin):
         """
 
         items = []
-
-        box = PopupBox(text=_('Searching IMDB...'))
-        box.show()
-
+        dlg = dialog.show_working_indicator(_('Searching IMDB...'))
+        
         if self.disc_set:
             self.searchstring = self.item.media.label
         else:
@@ -162,15 +161,12 @@ class PluginInterface(plugin.ItemPlugin):
 
         except FxdImdb_Error, error:
             logger.warning('%s', error)
-            box.destroy()
-            box = PopupBox(text=_('Connection to IMDB failed: ') + str(error))
-            box.show()
-            time.sleep(2)
-            box.destroy()
+            dlg.hide()
+            dialog.show_message(_('Connection to IMDB failed'))
             return
 
-        box.destroy()
-
+        dlg.hide()
+        
         if config.IMDB_AUTOACCEPT_SINGLE_HIT and len(items) == 1:
             self.imdb_create_fxd(arg=items[0].arg, menuw=menuw)
             return
@@ -180,10 +176,7 @@ class PluginInterface(plugin.ItemPlugin):
             menuw.pushmenu(moviemenu)
             return
 
-        box = PopupBox(text=_('No information available from IMDB'))
-        box.show()
-        time.sleep(2)
-        box.destroy()
+        dialog.show_message(_('No information available from IMDB'))
         return
 
 
@@ -218,15 +211,14 @@ class PluginInterface(plugin.ItemPlugin):
         """
         create fxd file for the item
         """
-        box = PopupBox(text=_('Getting data...'))
-        box.show()
+        dlg = dialog.show_working_indicator(_('Getting data...'))
 
         try:
             self.fxd.retrieveImdbData(arg[0], self.fxd.ctitle[1], self.fxd.ctitle[2])
 
         except FxdImdb_Error, error:
             logger.warning('%s', error)
-            box.destroy()
+            dlg.hide()
             return
 
         #if this exists we got a cdrom/dvdrom
@@ -252,9 +244,6 @@ class PluginInterface(plugin.ItemPlugin):
 
         self.fxd.writeFxd()
         self.fxd = FxdImdb()
-        print 'About to go back'
         self.imdb_menu_back(menuw)
-        box.destroy()
-        print 'Box destroyed'
+        dlg.hide()
    
- 

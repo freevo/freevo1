@@ -49,6 +49,13 @@ osd = osd.get_singleton()
 from event import *
 
 
+if config.MPLAYER_RATE_SET_FROM_VIDEO:
+    try:
+        from xrandr import xrandr
+    except:
+        logger.error(String(_('ERROR')+': '+_('You need pyxrandr to set the monitor\'s refresh rate.')))
+
+
 class PluginInterface(plugin.Plugin):
     """
     Mplayer plugin for the video player.
@@ -299,6 +306,12 @@ class MPlayer:
             args['mc'] = '-mc %s' % str(int(item.info['delay'])+1)
             args['delay'] = '-delay -%s' % str(item.info['delay'])
 
+        # mplayer A/V is screwed up when setrting screen refresh rate to the same value as the movies FPS
+        # this does happen almost exclusively at 23.976 FPS. Let's try to fix it. 
+        if config.MPLAYER_RATE_SET_FROM_VIDEO and item.getattr('fps') in ['23.976', '24.000' ]:
+            args['mc'] = '-mc %s' % str(int(config.MPLAYER_AUDIO_DELAY)+1)
+            args['delay'] = '-delay %s' % str(config.MPLAYER_AUDIO_DELAY)
+
         # autocrop
         if config.MPLAYER_AUTOCROP and not item.network_play and args['fxd_args'].find('crop=') == -1:
             logger.debug('starting autocrop')
@@ -372,6 +385,16 @@ class MPlayer:
         if config.OSD_SINGLE_WINDOW:
             command += ['-wid', str(osd.video_window.id)]
             
+        # This ensures constant subtitle size, disable if you do not like this
+        # and want to have the size as designed by the sutitle creator.
+        # Unfortunately, subtitle size is heavilly dependant on the size of 
+        # the video, i.e. width/height so the size varies so much that is unusable
+        if config.MPLAYER_ASS_FONT_SCALE and mode not in ['dvd', 'default']:
+            v_height = float(item.getattr('height'))
+            v_width  = float(item.getattr('width'))
+            f_scale = (v_width / v_height) * config.MPLAYER_ASS_FONT_SCALE
+
+            command += ['-ass-font-scale', str(f_scale)]
 
         # use software scaler?
         #XXX these need to be in the arg list as the scaler will add vf args
@@ -530,8 +553,6 @@ class MPlayer:
                 # check again if seek is allowed
                 if self.item_length <= self.item.elapsed + event.arg + seek_safety_time:
                     logger.debug('unable to seek %s secs at time %s, length %s', event.arg, self.item.elapsed, self.item_length)
-
-
                     dialog.show_message(_('Seeking not possible'))
                     return False
             
@@ -544,15 +565,27 @@ class MPlayer:
             return True
 
         if event == VIDEO_AVSYNC:
-            self.app.write('audio_delay %g\n' % event.arg);
+            self.app.write('audio_delay %g\n' % float(event.arg));
+            if config.MPLAYER_USE_OSD_SHOW_PROPS:
+                self.app.write('osd_show_property_text "Audio delay ${audio_delay}" 2000\n')
+            return True
+
+        if event == VIDEO_SUBSYNC:
+            self.app.write('sub_delay %g\n' % float(event.arg));
+            if config.MPLAYER_USE_OSD_SHOW_PROPS:
+                self.app.write('osd_show_property_text "Subtitles delay ${sub_delay}" 2000\n')
             return True
 
         if event == VIDEO_NEXT_AUDIOLANG:
             self.app.write('switch_audio\n')
+            if config.MPLAYER_USE_OSD_SHOW_PROPS:
+                self.app.write('osd_show_property_text "Audio ${switch_audio}" 2000\n')
             return True
 
         if event == VIDEO_NEXT_SUBTITLE:
             self.app.write('sub_select\n')
+            if config.MPLAYER_USE_OSD_SHOW_PROPS:
+                self.app.write('osd_show_property_text "Subtitles ${sub_file}" 2000\n')
             return True
 
         if event == OSD_MESSAGE:
@@ -703,6 +736,29 @@ class MPlayerApp(childapp.ChildApp2):
 
         self.output_event = threading.Event()
         self.get_property_ans = None
+
+        if config.MPLAYER_RATE_SET_FROM_VIDEO:
+            # we set a monitor's refresh rate that matches the FPS of the movie
+            screen = xrandr.get_current_screen()
+
+            # first we save the current rate
+            self.rate = screen.get_current_rate()
+            logger.info('Current refresh rate: %s', self.rate)
+
+            fps = self.item.getattr('fps')
+            
+            if fps:
+                # get the rate mapping
+                rate = config.MPLAYER_RATE_MAP[fps]
+
+                if rate:
+                    screen.set_refresh_rate(rate[1])
+                    screen.apply_config()
+                else:
+                    logger.warning('Unable to set refresh rate to %s', fps)
+            else:
+                logger.warning('Unknown refresh rate: %s', fps)
+
         # init the child (== start the threads)
         childapp.ChildApp2.__init__(self, command, callback_use_rc=False)
 
@@ -712,6 +768,7 @@ class MPlayerApp(childapp.ChildApp2):
         self.write('get_property %s\n' % property)
         self.output_event.wait(config.MPLAYER_PROPERTY_TIMEOUT)
         return self.get_property_ans
+
 
     def stop_event(self):
         """
@@ -723,6 +780,25 @@ class MPlayerApp(childapp.ChildApp2):
             return USER_END
         else:
             return PLAY_END
+
+
+    def stop(self, cmd=''):
+        """
+        stop the child
+        """
+        # fist we call base class for cleanup
+        childapp.ChildApp2.stop(self, cmd)
+        
+        if config.MPLAYER_RATE_SET_FROM_VIDEO:
+            # now we reset the refresh rate to the default one
+            screen = xrandr.get_current_screen()
+
+            if config.MPLAYER_RATE_RESTORE:
+                screen.set_refresh_rate(self.rate)
+            else:
+                screen.set_refresh_rate(config.MPLAYER_RATE_DEFAULT[1])
+
+            screen.apply_config()
 
 
     def stdout_cb(self, line):

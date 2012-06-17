@@ -195,6 +195,7 @@ VIDEO_NEXT_SUBTITLE    = Event('VIDEO_NEXT_SUBTITLE')
 VIDEO_TOGGLE_INTERLACE = Event('VIDEO_TOGGLE_INTERLACE')
 VIDEO_NEXT_ANGLE       = Event('VIDEO_NEXT_ANGLE')
 VIDEO_AVSYNC           = Event('VIDEO_AVSYNC')
+VIDEO_SUBSYNC          = Event('VIDEO_SUBSYNC')
 STORE_BOOKMARK         = Event('STORE_BOOKMARK')
 MENU                   = Event('MENU')
 
@@ -220,18 +221,19 @@ AUDIO_LOG              = Event('AUDIO_LOG')
 #
 # Image module
 #
-
-IMAGE_ZOOM_GRID1       = Event('IMAGE_ZOOM_GRID1')
-IMAGE_ZOOM_GRID2       = Event('IMAGE_ZOOM_GRID2')
-IMAGE_ZOOM_GRID3       = Event('IMAGE_ZOOM_GRID3')
-IMAGE_ZOOM_GRID4       = Event('IMAGE_ZOOM_GRID4')
-IMAGE_ZOOM_GRID5       = Event('IMAGE_ZOOM_GRID5')
-IMAGE_ZOOM_GRID6       = Event('IMAGE_ZOOM_GRID6')
-IMAGE_ZOOM_GRID7       = Event('IMAGE_ZOOM_GRID7')
-IMAGE_ZOOM_GRID8       = Event('IMAGE_ZOOM_GRID8')
-IMAGE_ZOOM_GRID9       = Event('IMAGE_ZOOM_GRID9')
-
-IMAGE_NO_ZOOM          = Event('IMAGE_NO_ZOOM')
+IMAGE_ZOOM_LEVEL_1     = Event('IMAGE_ZOOM_LEVEL_1')
+IMAGE_ZOOM_LEVEL_2     = Event('IMAGE_ZOOM_LEVEL_2')
+IMAGE_ZOOM_LEVEL_3     = Event('IMAGE_ZOOM_LEVEL_3')
+IMAGE_ZOOM_LEVEL_4     = Event('IMAGE_ZOOM_LEVEL_4')
+IMAGE_ZOOM_LEVEL_5     = Event('IMAGE_ZOOM_LEVEL_5')
+IMAGE_ZOOM_LEVEL_6     = Event('IMAGE_ZOOM_LEVEL_6')
+IMAGE_ZOOM_LEVEL_7     = Event('IMAGE_ZOOM_LEVEL_7')
+IMAGE_ZOOM_LEVEL_8     = Event('IMAGE_ZOOM_LEVEL_8')
+IMAGE_ZOOM_LEVEL_9     = Event('IMAGE_ZOOM_LEVEL_9')
+IMAGE_ZOOM_BEST_FIT    = Event('IMAGE_ZOOM_BEST_FIT')
+IMAGE_ZOOM_NO_ZOOM     = Event('IMAGE_ZOOM_NO_ZOOM')
+IMAGE_ZOOM_LEVEL_UP    = Event('IMAGE_ZOOM_LEVEL_UP')
+IMAGE_ZOOM_LEVEL_DOWN  = Event('IMAGE_ZOOM_LEVEL_DOWN')
 
 IMAGE_ROTATE           = Event('IMAGE_ROTATE')
 IMAGE_SAVE             = Event('IMAGE_SAVE')
@@ -475,21 +477,23 @@ IMAGE_EVENTS = {
     'PAUSE'     : PAUSE,
     'LEFT'      : Event(IMAGE_ROTATE, arg='left'),
     'RIGHT'     : Event(IMAGE_ROTATE, arg='right'),
-    '1'         : IMAGE_ZOOM_GRID1,
-    '2'         : IMAGE_ZOOM_GRID2,
-    '3'         : IMAGE_ZOOM_GRID3,
-    '4'         : IMAGE_ZOOM_GRID4,
-    '5'         : IMAGE_ZOOM_GRID5,
-    '6'         : IMAGE_ZOOM_GRID6,
-    '7'         : IMAGE_ZOOM_GRID7,
-    '8'         : IMAGE_ZOOM_GRID8,
-    '9'         : IMAGE_ZOOM_GRID9,
-    '0'         : IMAGE_NO_ZOOM,
+    'UP'        : PLAYLIST_PREV,
+    'DOWN'      : PLAYLIST_NEXT,
+    '1'         : IMAGE_ZOOM_NO_ZOOM,
+    '2'         : IMAGE_ZOOM_LEVEL_2,
+    '3'         : IMAGE_ZOOM_LEVEL_3,
+    '4'         : IMAGE_ZOOM_LEVEL_4,
+    '5'         : IMAGE_ZOOM_LEVEL_5,
+    '6'         : IMAGE_ZOOM_LEVEL_6,
+    '7'         : IMAGE_ZOOM_LEVEL_7,
+    '8'         : IMAGE_ZOOM_LEVEL_8,
+    '9'         : IMAGE_ZOOM_LEVEL_9,
+    '0'         : IMAGE_ZOOM_BEST_FIT,
+    'PREV'      : IMAGE_ZOOM_LEVEL_DOWN,
+    'NEXT'      : IMAGE_ZOOM_LEVEL_UP,
     'DISPLAY'   : TOGGLE_OSD,
     'REC'       : IMAGE_SAVE,
     'ENTER'     : IMAGE_TAG,
-    'UP'        : PLAYLIST_PREV,
-    'DOWN'      : PLAYLIST_NEXT,
     'CH+'       : PLAYLIST_PREV,
     'CH-'       : PLAYLIST_NEXT
     }
@@ -499,20 +503,22 @@ IMAGE_ZOOM_EVENTS = {
     'EXIT'      : STOP,
     'PLAY'      : PLAY,
     'PAUSE'     : PAUSE,
-    'LEFT'      : Event(IMAGE_MOVE, arg=(-60,  0)),
-    'RIGHT'     : Event(IMAGE_MOVE, arg=( 60,  0)),
-    'UP'        : Event(IMAGE_MOVE, arg=(  0,-60)),
-    'DOWN'      : Event(IMAGE_MOVE, arg=(  0, 60)),
-    '1'         : IMAGE_ZOOM_GRID1,
-    '2'         : IMAGE_ZOOM_GRID2,
-    '3'         : IMAGE_ZOOM_GRID3,
-    '4'         : IMAGE_ZOOM_GRID4,
-    '5'         : IMAGE_ZOOM_GRID5,
-    '6'         : IMAGE_ZOOM_GRID6,
-    '7'         : IMAGE_ZOOM_GRID7,
-    '8'         : IMAGE_ZOOM_GRID8,
-    '9'         : IMAGE_ZOOM_GRID9,
-    '0'         : IMAGE_NO_ZOOM,
+    'LEFT'      : Event(IMAGE_MOVE, arg=( -10,   0)),
+    'RIGHT'     : Event(IMAGE_MOVE, arg=(  10,   0)),
+    'UP'        : Event(IMAGE_MOVE, arg=(   0, -10)),
+    'DOWN'      : Event(IMAGE_MOVE, arg=(   0,  10)),
+    '1'         : IMAGE_ZOOM_NO_ZOOM,
+    '2'         : IMAGE_ZOOM_LEVEL_2,
+    '3'         : IMAGE_ZOOM_LEVEL_3,
+    '4'         : IMAGE_ZOOM_LEVEL_4,
+    '5'         : IMAGE_ZOOM_LEVEL_5,
+    '6'         : IMAGE_ZOOM_LEVEL_6,
+    '7'         : IMAGE_ZOOM_LEVEL_7,
+    '8'         : IMAGE_ZOOM_LEVEL_8,
+    '9'         : IMAGE_ZOOM_LEVEL_9,
+    '0'         : IMAGE_ZOOM_BEST_FIT,
+    'PREV'      : IMAGE_ZOOM_LEVEL_DOWN,
+    'NEXT'      : IMAGE_ZOOM_LEVEL_UP,
     'DISPLAY'   : TOGGLE_OSD,
     'REC'       : IMAGE_SAVE,
     'CH+'       : PLAYLIST_PREV,
