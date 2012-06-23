@@ -46,6 +46,7 @@ __license__          = 'GPL'
 # Module Imports
 import os
 
+import kaa
 import menu
 import config
 import plugin
@@ -145,7 +146,11 @@ class PluginInterface(plugin.ItemPlugin):
     
         try:
             #guess the title from the filename
-            results = self.fxd.guessImdb(self.searchstring, self.disc_set)
+            lock = kaa.ThreadCallable(self.fxd.guessImdb, 
+                                      self.searchstring, 
+                                      self.disc_set)()
+            lock.wait()
+            results = lock.result            
             
             # loop through the results and create menu
             # should not use imdbpy objects here as imdbpy should be encapsulated by FxdImdb
@@ -214,7 +219,11 @@ class PluginInterface(plugin.ItemPlugin):
         dlg = dialog.show_working_indicator(_('Getting data...'))
 
         try:
-            self.fxd.retrieveImdbData(arg[0], self.fxd.ctitle[1], self.fxd.ctitle[2])
+            lock = kaa.ThreadCallable(self.fxd.retrieveImdbData, 
+                arg[0], 
+                self.fxd.ctitle[1], 
+                self.fxd.ctitle[2])()
+            lock.wait() 
 
         except FxdImdb_Error, error:
             logger.warning('%s', error)

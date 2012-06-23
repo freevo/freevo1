@@ -62,6 +62,7 @@ import os
 import glob
 from operator import itemgetter, attrgetter
 
+import kaa
 import menu
 import config
 import plugin
@@ -339,9 +340,17 @@ class PluginInterface(plugin.ItemPlugin):
 
                 if self.item.subitems:
                     for i in range(len(self.item.subitems)):
-                        self.subs.update(handler.get_subs(self.item.subitems[i].filename, config.SUBS_LANGS.keys()))
+                        lock = kaa.ThreadCallable(handler.get_subs, 
+                                                  self.item.subitems[i].filename, 
+                                                  config.SUBS_LANGS.keys())()
+                        lock.wait()
+                        self.subs.update(lock.result)
                 else:
-                    self.subs.update(handler.get_subs(self.item.filename, config.SUBS_LANGS.keys()))
+                    lock = kaa.ThreadCallable(handler.get_subs, 
+                                              self.item.filename, 
+                                              config.SUBS_LANGS.keys())()
+                    lock.wait()
+                    self.subs.update(lock.result)
 
                 dlg.hide()
 
