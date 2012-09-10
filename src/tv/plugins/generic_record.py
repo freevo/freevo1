@@ -44,7 +44,6 @@ import util.tv_util as tv_util
 
 from event import *
 from tv.channels import FreevoChannels
-from tv.server.record_server import SingleRecordingPlugin
 
 class PluginInterface(plugin.Plugin):
     """
