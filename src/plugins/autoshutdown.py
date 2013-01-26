@@ -748,9 +748,9 @@ def __get_scheduled_recording(index):
     except:
         raise ExNoRecordServer
     else:
-        scheduled_programs = []
-        if status:
-            proglist = schedule.getProgramList().values()
+        if status and schedule != []:
+            proglist = schedule
+
             if (index + 1) > len(proglist):
                 raise ExIndexNotAvailable
             else:
@@ -818,7 +818,7 @@ def __check_processes():
     else:
         delimiter='|'
         searchstring = delimiter.join(config.AUTOSHUTDOWN_PROCESS_LIST)
-        cmd = 'ps -eo cmd | egrep -v "grep" | egrep "(/|[[:space:]]|^)(%s)($|[[:space:]])"' % searchstring
+        cmd = 'ps -eo cmd | egrep -v "grep" | egrep "(/|[[:space:]]|^)(%s)($|[[:space:]])" >/dev/null' % searchstring
         result = __syscall(cmd)
         if result == 0:
             logger.debug('external process(es) running')
