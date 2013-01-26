@@ -243,7 +243,11 @@ flag = fcntl.fcntl(fd, fcntl.F_GETFL)
 fcntl.fcntl(fd, fcntl.F_SETFL, flag | os.O_NDELAY)
 
 
-inputs = [Lirc()]
+inputs = []
+try:
+    inputs.append(Lirc())
+except:
+    pass
 
 if config.EVENT_DEVS:
     try:
@@ -251,7 +255,10 @@ if config.EVENT_DEVS:
     except:
         pass
 
-stdin_dispatcher = kaa.IOMonitor(handle_stdin)
-stdin_dispatcher.register(sys.stdin)
+if len(inputs) > 0:
+    stdin_dispatcher = kaa.IOMonitor(handle_stdin)
+    stdin_dispatcher.register(sys.stdin)
 
-kaa.main.run()
+    kaa.main.run()
+else:
+    sys.stderr.write('No inputs to work, exit!')
