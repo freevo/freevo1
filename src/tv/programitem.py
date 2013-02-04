@@ -83,8 +83,16 @@ class ProgramItem(Item):
             self.scheduled = False
 
         self.favorite = False
-        self.allowDuplicates = prog.allowDuplicates
-        self.onlyNew = prog.onlyNew
+        if hasattr(prog, 'allowDuplicates'):
+            self.allowDuplicates = prog.allowDuplicates
+        else:
+            self.allowDuplicates = 1
+
+        if hasattr(prog, 'onlyNew'):
+            self.onlyNew = prog.onlyNew
+        else:
+            self.onlyNew = 0
+
         self.overlap = prog.overlap
 
         self.start = time.strftime(config.TV_DATETIME_FORMAT, time.localtime(prog.start))

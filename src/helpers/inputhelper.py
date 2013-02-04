@@ -138,77 +138,142 @@ class Evdev:
         init all specified devices
         """
         logger.log( 9, 'Evdev.__init__()')
+        global evdev
         import evdev
         self._devs = []
+        self._movements = {}
+        self._bufkeys = {}
+        self._lastkey = {}
+        self._devpath = {}
+        if (
+            config.EVENT_MULTIKEYS == True and
+            (config.EVDEV_MULTIKEYS_REPEAT == None or
+             config.EVDEV_MULTIKEYS_REPEAT < 0.05)
+           ):
+            config.EVDEV_MULTIKEYS_REPEAT = 0.05
+            logger.info("Set default config value EVDEV_MULTIKEYS_REPEAT: %r", 
+                config.EVDEV_MULTIKEYS_REPEAT)
 
         for dev in config.EVENT_DEVS:
-            e = None
+            self.initdev(dev)
 
-            if os.path.exists(dev):
+        logger.info("Added evdev devices: %r", self._devpath)
+
+
+    def initdev(self, dev):
+        """
+        init specified device
+        """
+        e = None
+
+        if os.path.exists(dev):
+            try:
+                e = evdev.evdev(dev)
+                self._devpath[e] = dev
+            except:
+                print "Problem opening event device '%s'" % dev
+
+        else:
+            names = []
+            name = dev
+            for dev in os.listdir('/dev/input'):
+                if not dev.startswith('event'):
+                    continue
+
                 try:
+                    dev = '/dev/input/' + dev
                     e = evdev.evdev(dev)
                 except:
-                    print "Problem opening event device '%s'" % dev
+                    continue
+
+                names.append(e.get_name())
+                if e.get_name() == name:
+                    break
             else:
-                names = []
-                name = dev
-                for dev in os.listdir('/dev/input'):
-                    if not dev.startswith('event'):
-                        continue
-
-                    try:
-                        dev = '/dev/input/' + dev
-                        e = evdev.evdev(dev)
-                    except:
-                        continue
-
-                    names.append(e.get_name())
-                    if e.get_name() == name:
-                        break
-                else:
-                    e = None
-                    logger.warning("Could not find device named '%s', possible are:\n  - %s", name, '\n  - '.join(names))
-
-
+                e = None
+                logger.warning("Could not find device named '%s', possible are:\n  - %s", name, '\n  - '.join(names))
+                
             if e is not None:
-                logger.info("Added input device '%s': %s", dev, e.get_name())
-                m = kaa.IOMonitor(self.__handle_event, e)
-                m.register(e._fd)
-                self._devs.append(m)
+                self._devpath[e] = name
 
-        self._movements = {}
+        if e is not None:
+            logger.info("Added input device '%s': %s, object: %r", dev, e.get_name(), e)
+            m = kaa.IOMonitor(self.__handle_event, e)
+            m.register(e._fd)
+            self._devs.append(m)
 
+            if config.EVENT_MULTIKEYS == True:
+                self._bufkeys[e] = None
+                self._lastkey[e] = None
+
+            self._movements[e] = {}
 
     def __handle_event(self, dev):
         """
         Handle evdev events
         """
-        event = dev.read()
+        try:
+            event = dev.read()
+        except:
+            logger.info("Lost input device, object: '%r'", dev)
+            try:
+                dev.close()
+            except:
+                pass
+
+            time.sleep(5)
+            try:
+                self.initdev(self._devpath[dev])
+            except:
+                pass
+
+            return
+
         if event is None:
             return
 
-        time, type, code, value = event
+        evtime, type, code, value = event
 
         if type == 'EV_KEY':
-            self._movements = {}
+            self._movements[dev] = {}
 
-            if config.EVENTMAP.has_key(code):
-                # 0 = release, 1 = press, 2 = repeat
-                if value > 0:
-                    post_key(config.EVENTMAP[code])
+            if config.EVENT_MULTIKEYS == True and value > 0:
+                if self._bufkeys[dev] is None:
+                    self._bufkeys[dev] = code
+                else:
+                    self._bufkeys[dev] = self._bufkeys[dev] + '+' + code
+            else:
+                if config.EVENTMAP.has_key(code):
+                    # 0 = release, 1 = press, 2 = repeat
+                    if value > 0:
+                        post_key(config.EVENTMAP[code])
+
+        elif type == 'EV_SYN':
+            if config.EVENT_MULTIKEYS == True:
+                bufkeys = self._bufkeys[dev]
+                self._bufkeys[dev] = None
+                if config.KEYSMAP.has_key(bufkeys) and config.EVENTMAP.has_key(config.KEYSMAP[bufkeys]):
+                    code = config.KEYSMAP[bufkeys]
+                    key = config.EVENTMAP[code]
+                    if self._lastkey[dev] == None:
+                        self._lastkey[dev] = [evtime, key]
+                    else:
+                        if self._lastkey[dev][1] <> key or (evtime - self._lastkey[dev][0]) > config.EVDEV_MULTIKEYS_REPEAT:
+                            self._lastkey[dev] = [evtime, key]
+                            post_key(key)
 
         elif type == 'EV_REL':
             if config.EVENTMAP.has_key(code):
-                if self._movements.has_key(code):
-                    self._movements[code] += value
+                if self._movements[dev].has_key(code):
+                    self._movements[dev][code] += value
                 else:
-                    self._movements[code] = value
+                    self._movements[dev][code] = value
 
-                if self._movements[code] < -10:
-                    self._movements = {}
+                if self._movements[dev][code] < -10:
+                    self._movements[dev] = {}
                     post_key(config.EVENTMAP[code][0])
-                elif self._movements[code] > 10:
-                    self._movements = {}
+                elif self._movements[dev][code] > 10:
+                    self._movements[dev] = {}
                     post_key(config.EVENTMAP[code][1])
 
 

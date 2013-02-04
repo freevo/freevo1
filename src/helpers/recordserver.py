@@ -1352,7 +1352,11 @@ class RecordServer:
         (filebase, fileext) = os.path.splitext(rec_prog.filename)
         fxd.setFxdFile(filebase, overwrite=True)
 
-        desc = rec_prog.desc.replace('\n\n','\n').replace('\n','&#10;')
+        if rec_prog.desc != None:
+            desc = rec_prog.desc.replace('\n\n','\n').replace('\n','&#10;')
+        else:
+            desc = None
+
         video = makeVideo('file', 'f1', os.path.basename(rec_prog.filename))
         fxd.setVideo(video)
         fxd.info['channel'] = fxd.str2XML(rec_prog.channel_id)
