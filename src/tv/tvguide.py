@@ -241,12 +241,15 @@ class TVGuide(Item):
         s = self.selected
         self.rebuild(self.start_time, self.stop_time, lambda p: p == s, force=True)
 
-    def __advance(self, start_time, stop_time):
+    def __advance(self, start_time, stop_time, old_selected = None):
         # we need to determine the program,
         # that is running now at the selected channel
+        if old_selected == None:
+            old_selected = self.selected
+
         programs = tv.epg.search(old_selected.channel_id, (start_time+1, stop_time-1))
 
-        if len(programs) > 0:
+        if programs != None and len(programs) > 0:
             selected = lambda p: p == programs[0]
         else:
             selected = None
@@ -263,7 +266,7 @@ class TVGuide(Item):
         min = min > 30 and 30 or 0
         start_time = time.mktime((year, mon, mday, hour, min, sec, wday, yday, isdst))
         stop_time = start_time + self.hours_per_page * 60 * 60
-        self.__advance(start_time, stop_time)
+        self.__advance(start_time, stop_time, old_selected)
 
 
     def advance_tv_guide(self, hours=0):
@@ -311,8 +314,6 @@ class TVGuide(Item):
 
             table = [header, self.selected]
 
-            flag_selected = False
-
             for chan in channels:
                 if not chan.programs:
                     prg = TvProgram(chan.id, 0, 0, 2147483647, CHAN_NO_DATA, desc='')
@@ -320,6 +321,8 @@ class TVGuide(Item):
                 table.append(chan)
 
             self.table = table
+
+        flag_selected = False
 
         selected_channel_offset = (self.selected_channel_idx - self.start_channel_idx) + 2
         if selected_fn:
