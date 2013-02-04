@@ -618,6 +618,16 @@ KEYMAP = DEFAULT_KEYMAP
 #
 EVENT_DEVS = []
 
+# MULTIKEYS support ======================================================
+# Set it True in case if your RC generates not only one-key keystrokes
+#EVENT_MULTIKEYS = True
+EVENT_MULTIKEYS = False
+
+# Minimal delay between two suquental presses
+# It makes sense only if EVENT_MULTIKEYS = True
+#EVDEV_MULTIKEYS_REPEAT=0.2
+# MULTIKEYS support ======================================================
+
 # Keymap to map input events to event strings. You can change current mappings
 # and add new ones here, e.g. EVENTMAP['KEY_COFFEE'] = 'SUBTITLE'. Key names
 # are defined by the Linux input layer (input.h). An axis is described by a
@@ -625,6 +635,100 @@ EVENT_DEVS = []
 # EVENTMAP['REL_Z'] = ('LEFT', 'RIGHT')
 #
 EVENTMAP = DEFAULT_EVENTMAP
+
+# MULTIKEYS support ======================================================
+# Set KEYSMAP and EVENTMAP to appropriate values to support your RC:
+#
+#KEYSMAP={}
+#
+#    in: real RC keys                                       out: pseudo RC key
+#
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_LEFTALT+KEY_2'] = 'GUIDE'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_LEFTALT+KEY_H'] = 'DISPLAY'
+#KEYSMAP['KEY_LEFTALT+KEY_F4'] = 'CLOSE'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_LEFTALT+KEY_3'] = 'MUSIC'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_LEFTALT+KEY_4'] = 'PICTURES'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_LEFTALT+KEY_5'] = 'VIDEOS'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_LEFTALT+KEY_1'] = 'DVDMENU'
+#KEYSMAP['KEY_UP'] = 'UP'
+#KEYSMAP['KEY_LEFT'] = 'LEFT'
+#KEYSMAP['KEY_RIGHT'] = 'RIGHT'
+#KEYSMAP['KEY_DOWN'] = 'DOWN'
+#KEYSMAP['KEY_BACK'] = 'EXIT'
+#KEYSMAP['KEY_ENTER'] = 'SELECT'
+#KEYSMAP['KEY_TAB'] = 'ENTER'
+#KEYSMAP['KEY_LEFTCTRL+KEY_B'] = 'REW'
+#KEYSMAP['KEY_LEFTCTRL+KEY_P'] = 'PLAY'
+#KEYSMAP['KEY_LEFTCTRL+KEY_F'] = 'FWD'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_B'] = 'SEEK_BEGIN'
+#KEYSMAP['KEY_LEFTCTRL+KEY_S'] = 'STOP'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_F'] = 'SEEK_END'
+#KEYSMAP['KEY_VOLUMEUP'] = 'VOL+'
+#KEYSMAP['KEY_VOLUMEDOWN'] = 'VOL-'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_LEFTALT+KEY_HOME'] = 'MENU'
+#KEYSMAP['KEY_PAGEUP'] = 'CH+'
+#KEYSMAP['KEY_PAGEDOWN'] = 'CH-'
+#KEYSMAP['KEY_MUTE'] = 'MUTE'
+#KEYSMAP['KEY_LEFTCTRL+KEY_R'] = 'REC'
+#KEYSMAP['KEY_1'] = 'NUM1'
+#KEYSMAP['KEY_2'] = 'NUM2'
+#KEYSMAP['KEY_3'] = 'NUM3'
+#KEYSMAP['KEY_4'] = 'NUM4'
+#KEYSMAP['KEY_5'] = 'NUM5'
+#KEYSMAP['KEY_6'] = 'NUM6'
+#KEYSMAP['KEY_7'] = 'NUM7'
+#KEYSMAP['KEY_8'] = 'NUM8'
+#KEYSMAP['KEY_9'] = 'NUM9'
+#KEYSMAP['KEY_0'] = 'NUM0'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_LEFTALT+KEY_F'] = 'SHUFFLE'
+#KEYSMAP['KEY_LEFTCTRL+KEY_LEFTSHIFT+KEY_LEFTALT+KEY_B'] = 'REPEAT'
+#
+#
+#
+#
+#EVENTMAP={}
+#    in: RC key  out: EVENT
+#EVENTMAP['GUIDE'] = 'GUIDE'
+#EVENTMAP['DISPLAY'] = 'DISPLAY'
+#EVENTMAP['CLOSE'] = 'CLOSE'
+#EVENTMAP['MUSIC'] = 'MUSIC'
+#EVENTMAP['PICTURES'] = 'PICTURES'
+#EVENTMAP['VIDEOS'] = 'VIDEOS'
+#EVENTMAP['DVDMENU'] = 'DVDMENU'
+#EVENTMAP['UP'] = 'UP'
+#EVENTMAP['LEFT'] = 'LEFT'
+#EVENTMAP['RIGHT'] = 'RIGHT'
+#EVENTMAP['DOWN'] = 'DOWN'
+#EVENTMAP['EXIT'] = 'EXIT'
+#EVENTMAP['SELECT'] = 'SELECT'
+#EVENTMAP['ENTER'] = 'ENTER'
+#EVENTMAP['REW'] = 'REW'
+#EVENTMAP['PLAY'] = 'PLAY'
+#EVENTMAP['FWD'] = 'FWD'
+#EVENTMAP['SEEK_BEGIN'] = 'SEEK_BEGIN'
+#EVENTMAP['STOP'] = 'STOP'
+#EVENTMAP['SEEK_END'] = 'SEEK_END'
+#EVENTMAP['VOL+'] = 'VOL+'
+#EVENTMAP['VOL-'] = 'VOL-'
+#EVENTMAP['MENU'] = 'MENU'
+#EVENTMAP['CH+'] = 'CH+'
+#EVENTMAP['CH-'] = 'CH-'
+#EVENTMAP['MUTE'] = 'MUTE'
+#EVENTMAP['REC'] = 'REC'
+#EVENTMAP['NUM1'] = 'NUM1'
+#EVENTMAP['NUM2'] = 'NUM2'
+#EVENTMAP['NUM3'] = 'NUM3'
+#EVENTMAP['NUM4'] = 'NUM4'
+#EVENTMAP['NUM5'] = 'NUM5'
+#EVENTMAP['NUM6'] = 'NUM6'
+#EVENTMAP['NUM7'] = 'NUM7'
+#EVENTMAP['NUM8'] = 'NUM8'
+#EVENTMAP['NUM9'] = 'NUM9'
+#EVENTMAP['NUM0'] = 'NUM0'
+#EVENTMAP['SHUFFLE'] = 'SHUFFLE'
+#EVENTMAP['REPEAT'] = 'REPEAT'
+#
+# MULTIKEYS support ======================================================
 
 # Use Internet resources to fetch information?
 # For example, Freevo can use CDDB for album information,

@@ -271,7 +271,7 @@ class evdev:
         try:
             buf = os.read(self._fd, struct.calcsize('LLHHi'))
         except OSError, (errno, str):
-            if errno in (11, 19):
+            if errno == 11:
                 return None
             raise
 
