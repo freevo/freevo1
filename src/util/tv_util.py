@@ -143,9 +143,8 @@ def descfsize(size):
 
 
 def get_chan_displayname(channel_id):
-    channel = tv.epg.channels_by_id[channel_id]
-    if channel:
-        return channel.displayname
+    if channel_id in tv.epg.channels_by_id and tv.epg.channels_by_id[channel_id]:
+        return tv.epg.channels_by_id[channel_id].displayname
 
     # this shouldn't happen, but just in case
     return 'Unknown'
