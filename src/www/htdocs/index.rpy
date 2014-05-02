@@ -71,7 +71,7 @@ class IndexResource(FreevoResource):
             fv.res += '<p class="normal">'+_('Your listings are up to date')+'</p>\n'
 
         if status:
-            progl = schedule.getProgramList().values()
+            progl = schedule
             f = lambda a, b: cmp(a.start, b.start)
             progl.sort(f)
             for prog in progl:
