@@ -46,7 +46,7 @@ class ProgInfoResource(FreevoResource):
         form = request.args
         id = fv.formValue(form, 'id')
         chanid = id[:id.find(":")]
-        starttime = int( id[id.find(":")+1:] )
+        starttime = float( id[id.find(":")+1:] )
 
         chan = tv.epg.get_programs(start=starttime,stop=starttime, channel_id=chanid)
         for prog in chan.programs:
