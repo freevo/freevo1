@@ -684,6 +684,9 @@ if not IS_PROMPT:
         logfile = os.path.join(FREEVO_LOGDIR, '%s-%s.log' % (appname, os.getuid()))
         fp = open(logfile, 'a')
         fp.close()
+        # simple log rotation.. should use logging.handlers.RotatingFileHandler
+        if os.path.exists(logfile) and os.path.getsize(logfile) > 2**22:
+            os.rename(logfile, logfile+'.0')
     except IOError, e:
         print '%s' % e
         logfile = '/dev/null'
