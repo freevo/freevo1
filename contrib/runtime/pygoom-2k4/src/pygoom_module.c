@@ -419,7 +419,7 @@ PyGoom_init(PyGoomObject *self, PyObject *args, PyObject *kwds)
             return -1;
         }
         self->mmap_area = mmap(0, sizeof(data_t), PROT_READ, MAP_SHARED, self->mmap_fd, 0);
-        if (! self->mmap_area) {
+        if (self->mmap_area == MAP_FAILED) {
             PyErr_Format(PyExc_IOError, "export file '%s' cannot be mapped", mmapfile);
             return -1;
         }
