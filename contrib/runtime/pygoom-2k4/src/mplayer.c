@@ -165,7 +165,7 @@ int data_import_init() {
 	}
 
 	mmap_area = mmap(0, sizeof(data_t), PROT_READ, MAP_SHARED, fd, 0 );
-	if (!mmap_area) {
+	if (mmap_area == MAP_FAILED) {
 		return -2;
 	}
 	mmap_area = mremap( mmap_area, sizeof( data_t ), sizeof( data_t ) + mmap_area->bs, 0 );
