@@ -185,9 +185,9 @@ def format_image(settings, item, width, height, force=False, anamorphic=False, f
             if image and item['rotation']:
                 # pygame reverses the image rotation
                 if config.IMAGEVIEWER_REVERSED_IMAGES:
-                    rotation = (360 - item['rotation']) % 360
-                else:
                     rotation = item['rotation']
+                else:
+                    rotation = (360 - item['rotation']) % 360
                 image = pygame.transform.rotate(image, rotation)
                 load_imagecache[imagefile] = image
 
