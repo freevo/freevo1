@@ -386,8 +386,11 @@ class Read_Thread(threading.Thread):
         self.callback_use_rc = callback_use_rc
         self.logger = None
         if appname and doeslogging:
-            t = time.strftime('%s')
-            logfile = os.path.join(config.FREEVO_LOGDIR, '%s-%s-%s-%s.log' % (appname, name, os.getuid(), t))
+            # similar to rfc 3339
+            t = time.strftime('%Y-%m-%d__%H-%M-%S')
+            if not os.path.isdir(os.path.join(config.FREEVO_LOGDIR, appname)):
+                os.mkdir(os.path.join(config.FREEVO_LOGDIR, appname))
+            logfile = os.path.join(config.FREEVO_LOGDIR, appname, '%s-%s-%s__%s.log' % (appname, name, os.getuid(), t))
             try:
                 try:
                     os.unlink(logfile)

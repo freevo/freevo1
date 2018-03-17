@@ -1167,7 +1167,7 @@ VIDEO_SHOW_DATA_DIR = None
 #
 VIDEO_MPLAYER_SUFFIX = [
     'avi', 'mpg', 'mpeg', 'wmv', 'bin', 'rm', 'divx', 'ogm', 'vob', 'asf',
-    'm2v', 'm2p', 'mp4', 'viv', 'nuv', 'mov', 'iso', 'nsv', 'mkv', 'ogg',
+    'm2v', 'm2p', 'mp4', 'viv', 'nuv', 'mov', 'iso', 'nsv', 'mkv',
     'ts', 'flv',
 ]
 
@@ -1903,12 +1903,12 @@ if CONF.display in ('dfbmga', 'directfb') and CONF.df_xine:
     XINE_VO_DEV = ''
     XINE_COMMAND = CONF.df_xine
 
-XINE_ARGS_DEF = "--no-lirc --post='pp:quality=10;expand'"
+XINE_ARGS_DEF = "--post='pp:quality=10;expand'"
 
 XINE_AO_DEV = 'oss'                     # alsa or oss
 
 # Set to False if xine doesn't have '--no-lirc' option
-XINE_HAS_NO_LIRC = True
+XINE_HAS_NO_LIRC = False
 
 # Set to True is xine supports get_time this enables the position to be saved
 XINE_BOOKMARK = False

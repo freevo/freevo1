@@ -699,12 +699,12 @@ class FxdImdb:
             return
 
         i.write("<?xml version=\"1.0\" ?>\n<freevo>\n")
-        i.write("  <copyright>\n" +
+        if self.id:
+            i.write("  <copyright>\n" +
                 "    The information in this file are from the Internet Movie Database (IMDb).\n" +
                 "    Please visit http://www.imdb.com for more information.\n")
-        if self.id:
             i.write("    <source url=\"http://www.imdb.com/title/tt%s\"/>\n" % self.id)
-        i.write("  </copyright>\n")
+            i.write("  </copyright>\n")
 
         i.write("  <disc-set title=\"%s\">\n" % self.str2XML(self.title))
         i.write("    <disc")
@@ -746,12 +746,12 @@ class FxdImdb:
 
         #header
         i.write("<?xml version=\"1.0\" ?>\n<freevo>\n")
-        i.write("  <copyright>\n")
-        i.write("    The information in this file are from the Internet Movie Database (IMDb).\n")
-        i.write("    Please visit http://www.imdb.com for more information.\n")
         if self.id:
+            i.write("  <copyright>\n")
+            i.write("    The information in this file are from the Internet Movie Database (IMDb).\n")
+            i.write("    Please visit http://www.imdb.com for more information.\n")
             i.write("    <source url=\"http://www.imdb.com/title/tt%s\"/>\n" % self.id)
-        i.write("  </copyright>\n")
+            i.write("  </copyright>\n")
         # write movie
         i.write("  <movie title=\"%s\">\n" % self.str2XML(self.title))
         #image

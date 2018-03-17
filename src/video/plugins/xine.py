@@ -197,8 +197,8 @@ class Xine:
         if item['deinterlace']:
             command.append('-D')
 
-        if not config.XINE_HAS_NO_LIRC and '--no-lirc' in command:
-            command.remove('--no-lirc')
+        if config.XINE_HAS_NO_LIRC:
+            command.append('--no-lirc')
 
         if config.OSD_SINGLE_WINDOW:
             command += ['-W', str(osd.video_window.id), '--no-mouse']

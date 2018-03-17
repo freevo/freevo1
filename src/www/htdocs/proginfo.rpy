@@ -46,16 +46,19 @@ class ProgInfoResource(FreevoResource):
         form = request.args
         id = fv.formValue(form, 'id')
         chanid = id[:id.find(":")]
-        starttime = int( id[id.find(":")+1:] )
+        starttime = float( id[id.find(":")+1:] )
 
-        chan = tv.epg.get_programs(start=starttime,stop=starttime, channel_id=chanid)
-        for prog in chan.programs:
+        prog = None
+        for prog in tv.epg.search(time=starttime, channel_id=chanid):
             if prog.start == starttime:
                 break
 
+        if prog == None:
+            return String('Internal Error')
+
         title = prog.title.strip().replace("'", "\\'").replace("\n", " ")
 
-        if prog.desc == '':
+        if not prog.desc :
             desc = (_('Sorry, the program description for %s is unavailable.')) \
                 % ('<b>'+prog.title+'</b>')
         else:
